@@ -4,13 +4,13 @@
 ### Setup
 Install frontend dependencies:
 ```shell
-docker-compose run frontend sh -c "npm  install --silent --lockfile-only"
+docker-compose run frontend sh -c "npm install --silent --lockfile-only"
 ```
 
 If you use an IDE, you most likely also want to install the frontend dependencies locally.
 Do do that, you will have to install node.js and run the following command:
 ```shell
-cd frontend && npm install
+cd frontend && npm install --lockfile-only
 ```
 Backend dependencies are automatically fetched on startup.
 
