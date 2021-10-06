@@ -3,6 +3,8 @@ import React from 'react'
 import Head from 'next/head'
 import { createGlobalStyle } from 'styled-components'
 
+import 'reset-css/reset.css'
+
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
