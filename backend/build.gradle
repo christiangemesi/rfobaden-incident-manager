@@ -35,7 +35,7 @@ test {
 }
 
 checkstyle {
-	toolVersion "8.36.2"
+	toolVersion "9.0"
 	configFile file("config/checkstyle/checkstyle.xml")
 	showViolations = true
 	ignoreFailures = false
