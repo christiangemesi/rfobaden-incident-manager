@@ -6,6 +6,8 @@ services:
     command: "npm run dev"
     ports:
       - "3000:3000"
+    expose:
+      - "3000"  
     volumes:
       - ./frontend:/app
       - frontend.node_modules:/app/node_modules
@@ -18,13 +20,32 @@ services:
     command: "sh run.sh"
     ports:
       - "3001:8080"
-      - "5005:5005"
+      - "5005:5005" 
+    expose:
+      - "3001" # Main port
+      - "5005" # Debugger port
     volumes:
       - ./backend:/app
       - backend.gradle-global:/root/.gradle
       - backend.gradle-local:/app/.gradle
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: "database"
+      MYSQL_USER: "user" # So root user isn"t used
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password" # Password for root access
+    ports:
+      - "3002:3306"
+    expose:
+      - "3002"
+    volumes:
+      - database:/var/lib/mysql
+  
 
 volumes:
   frontend.node_modules:
   backend.gradle-local:
   backend.gradle-global:
+  database:
