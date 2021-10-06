@@ -34,6 +34,6 @@
 
     // Require parentheses around parameters in arrow functions:
     //   (a, b, c) => expr
-    "arrow-parens": [ "error", "always" ],
+    "arrow-parens": [ "error", "always" ]
   }
 }
