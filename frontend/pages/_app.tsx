@@ -1,7 +1,8 @@
 import { AppProps } from 'next/app'
 import React from 'react'
 import Head from 'next/head'
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { defaultTheme } from '@/theme'
 
 import 'reset-css/reset.css'
 
@@ -14,7 +15,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <GlobalStyle />
-      <Component {...pageProps} />
+      <ThemeProvider theme={defaultTheme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   )
 }
@@ -25,5 +28,9 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
     min-height: 100%;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 `
