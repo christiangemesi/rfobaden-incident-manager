@@ -32,6 +32,8 @@ services:
       - ./backend:/app
       - backend.gradle-global:/root/.gradle
       - backend.gradle-local:/app/.gradle
+    depends_on: database
+        
   database:
     image: mysql:5.7
     restart: always
