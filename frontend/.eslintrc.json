@@ -1,34 +1,36 @@
 {
-  "extends": [ "eslint:recommended", "next/core-web-vitals"],
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "rules": {
     // Require single quotes.
-    "quotes": [ "error", "single" ],
+    "quotes": ["error", "single"],
 
     // Require double quotes in JSX.
-    "jsx-quotes": [ "error", "prefer-double" ],
+    "jsx-quotes": ["error", "prefer-double"],
 
     // Don't use semicolons.
-    "semi": [ "error", "never" ],
+    "semi": ["error", "never"],
 
     // Require dangling comma on multiline constructs.
-    "comma-dangle": [ "error", "always-multiline" ],
+    "comma-dangle": ["error", "always-multiline" ],
 
     // Require spaces around object:
     //   { key1: value1, key2: value2 }
-    "object-curly-spacing": [ "error", "always", {
+    "object-curly-spacing": ["error", "always", {
       "arraysInObjects": false,
       "objectsInObjects": false
     }],
 
-    // Require spaces around arrays:
-    //   [ element1, element2, element3 ]
-    "array-bracket-spacing": [ "error", "always", {
-      "objectsInArrays": false,
-      "arraysInArrays": false
-    }],
+    // Disallow spaces around arrays:
+    //  [element1, element2, element3]
+    "array-bracket-spacing": ["error", "never"],
 
     // Require parentheses around parameters in arrow functions:
     //   (a, b, c) => expr
-    "arrow-parens": [ "error", "always" ]
+    "arrow-parens": ["error", "always"]
   }
 }
