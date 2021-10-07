@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import UiGrid from '@/components/Ui/UiGrid/UiGrid'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import styled from 'styled-components'
 
