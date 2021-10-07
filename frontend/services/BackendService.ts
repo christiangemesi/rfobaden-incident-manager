@@ -10,10 +10,10 @@ const apiEndpoint = run(() => {
 })
 
 class BackendService {
-  create<T extends Model>(data: ModelData<T>): Promise<T>
-  create<D, T>(data: D): Promise<T>
-  async create<D, T>(data: D): Promise<T> {
-    const res = await fetch(`${apiEndpoint}/api/v1/users`, {
+  create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<T>
+  create<D, T>(resourceName: string, data: D): Promise<T>
+  async create<D, T>(resourceName: string, data: D): Promise<T> {
+    const res = await fetch(`${apiEndpoint}/api/v1/${resourceName}`, {
       method: 'post',
       body: JSON.stringify(data),
       mode: 'cors',

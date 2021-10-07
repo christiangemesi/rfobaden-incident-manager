@@ -28,7 +28,7 @@ const UserForm: React.VFC = () => {
   const handleSubmit = async () => {
     // TODO correct api type
     // TODO error handling
-    const res: { id: Id<User>, username: string } = await BackendService.create({
+    const res: { id: Id<User>, username: string } = await BackendService.create('users', {
       username: data.username,
       password: data.password,
     })

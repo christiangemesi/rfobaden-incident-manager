@@ -6,6 +6,7 @@ services:
     command: [ "npm", "run", "dev" ]
     environment:
       - NODE_ENV=development
+      - NEXT_PUBLIC_BACKEND_ENDPOINT=http://localhost:3001
     ports:
       - "3000:3000"
       - "3035:3035"
