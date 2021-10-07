@@ -23,7 +23,7 @@ const LoginForm: React.VFC = () => {
   const handleSubmit = async () => {
     // TODO correct api type
     // TODO error handling
-    const res: { id: Id<User>, username: string } = await BackendService.create({
+    const res: { id: Id<User>, username: string } = await BackendService.create('session', {
       username: data.username,
       password: data.password,
     })
