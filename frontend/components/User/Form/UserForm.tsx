@@ -4,15 +4,17 @@ import User from '@/models/User'
 import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
+import BackendService from '@/services/BackendService'
+import Id from '@/models/base/Id'
 
 const UserForm: React.VFC = () => {
-  const [data, form] = useForm<CreateUserData>(() => ({
-    name: '',
+  const [data, form] = useForm<LoginData>(() => ({
+    username: '',
     password: '',
     passwordRepeat: '',
   }))
   useValidate(form, (validate) => ({
-    name: [
+    username: [
       validate.notBlank(),
     ],
     password: [
@@ -24,11 +26,21 @@ const UserForm: React.VFC = () => {
     ],
   }))
 
-  const handleSubmit = () => {
-    console.log('submit', data)
+  const handleSubmit = async () => {
+    // TODO correct api type
+    // TODO error handling
+    const res: { id: Id<User>, username: string } = await BackendService.create({
+      username: data.username,
+      password: data.password,
+    })
+    const user: User = {
+      id: res.id,
+      name: res.username,
+    }
+    console.log(user)
   }
   const handleCancel = () => {
-    console.log('cancel')
+    UiForm.clear(form)
   }
 
   return (
@@ -37,7 +49,7 @@ const UserForm: React.VFC = () => {
         Benutzer erstellen
       </h1>
       <form>
-        <UiForm.Field field={form.name}>{(props) => (
+        <UiForm.Field field={form.username}>{(props) => (
           <UiTextInput {...props} label="Name" />
         )}</UiForm.Field>
         <UiForm.Field field={form.password}>{(props) => (
@@ -57,13 +69,8 @@ const UserForm: React.VFC = () => {
 }
 export default UserForm
 
-const SubmitButton = styled.button`
-  background-color: green;
-  color: white;
-  padding: 1rem 0.5rem;  
-`
-
-interface CreateUserData extends Omit<User, 'id'> {
+interface LoginData {
+  username: string
   password: string
   passwordRepeat: string
 }
