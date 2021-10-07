@@ -3,6 +3,30 @@ import UiFormField from './Field/UiFormField'
 
 const UiForm = {
   Field: UiFormField,
+  clear: <T,>(form: UiFormState<T>): void => {
+    const value = form[UiFormState_valueSymbol]
+    form[UiFormState_updateSymbol]((state) => {
+      const initialValue = {} as T
+      let newState = { ...state }
+      for (const key of Object.keys(value)) {
+        const field = newState[key]
+        ;(initialValue as unknown)[key] = field.initialValue
+        newState = {
+          ...newState,
+          [key]: {
+            ...field,
+            value: field.initialValue,
+            errors: [],
+            isInitial: true,
+          },
+        }
+      }
+      return {
+        ...newState,
+        [UiFormState_valueSymbol]: initialValue,
+      }
+    })
+  },
 }
 export default UiForm
 
@@ -84,7 +108,6 @@ export interface UiFormFieldState<T, V> {
   base: UiFormState<T>
   isInitial: boolean
 }
-
 
 interface Validator<T, V> {
   (value: V, record: T): true | string
