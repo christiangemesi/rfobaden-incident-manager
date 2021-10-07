@@ -1,11 +1,34 @@
-import React, { ChangeEvent, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import User from '@/models/User'
+import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
+import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
+import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 
 const UserForm: React.VFC = () => {
-  const [ name, setName ] = useState('')
-  const handleChange = (e: ChangeEvent) => {
-    const value = (e.target as HTMLInputElement).value
-    setName(value)
+  const [data, form] = useForm<CreateUserData>(() => ({
+    name: '',
+    password: '',
+    passwordRepeat: '',
+  }))
+  useValidate(form, (validate) => ({
+    name: [
+      validate.notBlank(),
+    ],
+    password: [
+      validate.notBlank(),
+    ],
+    passwordRepeat: [
+      validate.notBlank(),
+      (value, data) => value === data.password || 'muss mit Passwort übereinstimmen',
+    ],
+  }))
+
+  const handleSubmit = () => {
+    console.log('submit', data)
+  }
+  const handleCancel = () => {
+    console.log('cancel')
   }
 
   return (
@@ -14,27 +37,20 @@ const UserForm: React.VFC = () => {
         Benutzer erstellen
       </h1>
       <form>
-        <div>
-          <label>
-            Name<br />
-            <input type="text" name="name" value={name} onChange={handleChange} />
-          </label>
-        </div>
-        <div>
-          <label>
-            Passwort<br />
-            <input type="password" name="password" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Passwort wiederholen<br />
-            <input type="password" name="passwordRepeat" />
-          </label>
-        </div>
-        <SubmitButton type="button">
-          Bestätigen
-        </SubmitButton>
+        <UiForm.Field field={form.name}>{(props) => (
+          <UiTextInput {...props} label="Name" />
+        )}</UiForm.Field>
+        <UiForm.Field field={form.password}>{(props) => (
+          <UiTextInput {...props} label="Passwort" type="password" />
+        )}</UiForm.Field>
+        <UiForm.Field field={form.passwordRepeat}>{(props) => (
+          <UiTextInput {...props} label="Passwort wiederholen" type="password" />
+        )}</UiForm.Field>
+
+        <UiConfirmButtons
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
       </form>
     </div>
   )
@@ -46,3 +62,8 @@ const SubmitButton = styled.button`
   color: white;
   padding: 1rem 0.5rem;  
 `
+
+interface CreateUserData extends Omit<User, 'id'> {
+  password: string
+  passwordRepeat: string
+}

@@ -1,11 +1,12 @@
+import UiContainer from '@/components/Ui/Container/UiContainer'
 import UserForm from '@/components/User/Form/UserForm'
 import React from 'react'
 
 const BenutzerPage: React.VFC = () => {
   return (
-    <div>
+    <UiContainer>
       <UserForm />
-    </div>
+    </UiContainer>
   )
 }
 export default BenutzerPage
