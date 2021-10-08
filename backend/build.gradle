@@ -10,6 +10,8 @@ group = 'ch.rfobaden.incidentmanager'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+def springVersion = '2.5.5'
+
 repositories {
 	mavenCentral()
 }
@@ -18,11 +20,16 @@ apply plugin: 'application'
 mainClassName = 'ch.rfobaden.incidentmanager.backend.Application'
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	runtimeOnly 'mysql:mysql-connector-java'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
+
+	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+
+	developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
 }
 
 configurations {
