@@ -1,35 +1,6 @@
 import React, { Dispatch, useEffect, useMemo, useState } from 'react'
 import UiFormField from './Field/UiFormField'
 
-const UiForm = {
-  Field: UiFormField,
-  clear: <T,>(form: UiFormState<T>): void => {
-    const value = form[UiFormState_valueSymbol]
-    form[UiFormState_updateSymbol]((state) => {
-      const initialValue = {} as T
-      let newState = { ...state }
-      for (const key of Object.keys(value)) {
-        const field = newState[key]
-        ;(initialValue as unknown)[key] = field.initialValue
-        newState = {
-          ...newState,
-          [key]: {
-            ...field,
-            value: field.initialValue,
-            errors: [],
-            isInitial: true,
-          },
-        }
-      }
-      return {
-        ...newState,
-        [UiFormState_valueSymbol]: initialValue,
-      }
-    })
-  },
-}
-export default UiForm
-
 export const useForm = <T,>(getInitialValue: () => T): [T, UiFormState<T>] => {
   const [state, setState] = useState<UiFormState<T>>(() => {
     const value = getInitialValue()
@@ -109,6 +80,21 @@ export interface UiFormFieldState<T, V> {
   isInitial: boolean
 }
 
+export const setUiFormFieldValue = <T, V>(field: UiFormFieldState<T, V>, value: V): void => {
+  field.base[UiFormState_updateSymbol]((state) => ({
+    ...state,
+    [field.key]: {
+      ...state[field.key],
+      value,
+      isInitial: false,
+    },
+    [UiFormState_valueSymbol]: {
+      ...state[UiFormState_valueSymbol],
+      [field.key]: value,
+    },
+  }))
+}
+
 interface Validator<T, V> {
   (value: V, record: T): true | string
 }
@@ -116,8 +102,6 @@ interface Validator<T, V> {
 type FieldValidators<T> = {
   [K in keyof T]: Validator<T, T[K]>[]
 }
-
-
 
 export const validate = {
   notNull: <T, V extends unknown | null | undefined>(options: { message?: string } = {}): Validator<T, V> => (value) => {
@@ -168,3 +152,33 @@ export const validate = {
     return true
   },
 }
+
+const UiForm = {
+  Field: UiFormField,
+  clear: <T,>(form: UiFormState<T>): void => {
+    const value = form[UiFormState_valueSymbol]
+    form[UiFormState_updateSymbol]((state) => {
+      const initialValue = {} as T
+      let newState = { ...state }
+      for (const key of Object.keys(value)) {
+        const field = newState[key]
+        ;(initialValue as unknown)[key] = field.initialValue
+        newState = {
+          ...newState,
+          [key]: {
+            ...field,
+            value: field.initialValue,
+            errors: [],
+            isInitial: true,
+          },
+        }
+      }
+      return {
+        ...newState,
+        [UiFormState_valueSymbol]: initialValue,
+      }
+    })
+  },
+  set: setUiFormFieldValue,
+}
+export default UiForm
