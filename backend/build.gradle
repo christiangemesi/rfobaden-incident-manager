@@ -23,8 +23,6 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
 
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
-
 	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
