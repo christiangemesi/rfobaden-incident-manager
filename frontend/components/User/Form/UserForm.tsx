@@ -3,7 +3,7 @@ import User from '@/models/User'
 import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 
 const UserForm: React.VFC = () => {
@@ -28,7 +28,7 @@ const UserForm: React.VFC = () => {
   const handleSubmit = async () => {
     // TODO correct api type
     // TODO error handling
-    const res: { id: Id<User>, username: string } = await BackendService.create('users', {
+    const [res]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('users', {
       username: data.username,
       password: data.password,
     })
