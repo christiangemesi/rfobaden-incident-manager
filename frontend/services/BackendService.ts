@@ -23,7 +23,7 @@ class BackendService {
 
   find<T>(resourceName: string, id?: Id<T>): Promise<BackendResponse<T>> {
     return this.fetchApi({
-      path: `${resourceName}/${id}`,
+      path: `${resourceName}/${id ?? ''}`,
       method: 'get',
     })
   }
