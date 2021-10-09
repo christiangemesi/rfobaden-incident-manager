@@ -3,10 +3,29 @@ import React from 'react'
 import Head from 'next/head'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
+import { useAsync } from 'react-use'
+import BackendService from '@/services/BackendService'
+import SessionStore from '@/stores/SessionStore'
+import Model from '@/models/base/Model'
 
 import 'reset-css/reset.css'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+  useAsync(async () => {
+    const [currentUser, error] = await BackendService.find<Model & { username: string }>('session')
+    if (error !== null) {
+      if (error.status === 404) {
+        // No session present - user is not logged in.
+        return
+      }
+      throw error
+    }
+    SessionStore.setCurrentUser({
+      id: currentUser.id,
+      name: currentUser.username,
+    })
+  })
+
   return (
     <>
       <Head>
