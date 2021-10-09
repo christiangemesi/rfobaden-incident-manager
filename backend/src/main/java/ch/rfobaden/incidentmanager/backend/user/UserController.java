@@ -27,7 +27,6 @@ public class UserController {
 
     @GetMapping(value = "{userId}")
     public User getUserById(@PathVariable(value="userId") Long userId) {
-        System.out.println(userId);
         return userService.getUserById(userId);
     }
 

@@ -37,13 +37,13 @@ services:
       - database
 
   database:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: "database"
-      MYSQL_USER: "user" # So root user isn"t used
-      MYSQL_PASSWORD: "password"
-      MYSQL_ROOT_PASSWORD: "password" # Password for root access
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
     ports:
       - "3002:3306"
     expose:
