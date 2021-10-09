@@ -3,8 +3,9 @@ import User from '@/models/User'
 import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
+import SessionStore from '@/stores/SessionStore'
 
 const LoginForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
@@ -23,15 +24,23 @@ const LoginForm: React.VFC = () => {
   const handleSubmit = async () => {
     // TODO correct api type
     // TODO error handling
-    const res: { id: Id<User>, username: string } = await BackendService.create('session', {
+    const [res, error]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('session', {
       username: data.username,
       password: data.password,
+      isPersistent: true,
     })
-    const user: User = {
+    if (error !== null) {
+      if (error.status === 401) {
+        UiForm.set(form.password, '')
+        UiForm.setErrors(form.password, ['ist nicht korrekt'])
+        return
+      }
+      throw error
+    }
+    SessionStore.setCurrentUser({
       id: res.id,
       name: res.username,
-    }
-    console.log(user)
+    })
   }
   const handleCancel = () => {
     UiForm.clear(form)
