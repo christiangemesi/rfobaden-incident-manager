@@ -69,7 +69,7 @@ const StyledTd = styled.td`
 const StyledTdSmall = styled.td`
   width: 40px;
   padding: 5px;
-  [src=""]{
+  [src=""] {
     color: red;
   }
 `
