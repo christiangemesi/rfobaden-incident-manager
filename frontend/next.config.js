@@ -5,7 +5,11 @@ const config = {
   eslint: {
     dirs: [
       'components',
+      'models',
       'pages',
+      'services',
+      'stores',
+      'types',
       'utils',
     ],
   },
