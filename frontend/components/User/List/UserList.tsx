@@ -34,11 +34,11 @@ const UserList: React.VFC<Props> = ({ users }) => {
             </a>
           </StyledTdSmall>
           <StyledTdSmall>
-              <a>
-                {/*TODO path to icon */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="" alt="Löschen" title="Löschen"/>
-              </a>
+            <a>
+              {/*TODO path to icon */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="" alt="Löschen" title="Löschen"/>
+            </a>
           </StyledTdSmall>
         </StyledTr>
       ))}
