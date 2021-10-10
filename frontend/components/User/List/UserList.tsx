@@ -6,11 +6,42 @@ interface Props {
 }
 
 const UserList: React.VFC<Props> = ({ users }) => {
-  // TODO list users
   return (
-    <div>
-      {JSON.stringify(users)}
-    </div>
+    <StyledTable>
+      <StyledTr>
+        <StyledTh>
+          Benutzer
+        </StyledTh>
+        <StyledTh>
+
+        </StyledTh>
+        <StyledTh>
+
+        </StyledTh>
+      </StyledTr>
+      {users.map((user) => (
+        // eslint-disable-next-line react/jsx-key
+        <StyledTr>
+          <StyledTd>
+            {user['username']}
+          </StyledTd>
+          <StyledTdSmall>
+            <a>
+               {/*TODO path to icon */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="" alt="Bearbeiten" title="Bearbeiten"/>
+            </a>
+          </StyledTdSmall>
+          <StyledTdSmall>
+              <a>
+                {/*TODO path to icon */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="" alt="Löschen" title="Löschen"/>
+              </a>
+          </StyledTdSmall>
+        </StyledTr>
+      ))}
+    </StyledTable>
   )
 }
 export default UserList
