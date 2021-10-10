@@ -53,22 +53,22 @@ const StyledTable = styled.table`
 `
 const StyledTr = styled.tr`
   width: 100%;
-  :nth-child(2n){
-    background-color:lightgray;
+  :nth-child(2n) {
+    background-color: lightgray;
   }
 `
 const StyledTh = styled.th`
-  padding:5px;
-  font-weight:bold;
-  text-align:left;
+  padding: 5px;
+  font-weight: bold;
+  text-align: left;
 `
 const StyledTd = styled.td`
-  width:100%;
-  padding:5px;
+  width: 100%;
+  padding: 5px;
 `
 const StyledTdSmall = styled.td`
   width: 40px;
-  padding:5px;
+  padding: 5px;
   [src=""]{
     color: red;
   }
