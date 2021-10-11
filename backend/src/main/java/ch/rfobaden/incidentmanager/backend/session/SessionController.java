@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Consumer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,23 +55,15 @@ public final class SessionController {
         }
         var session = new Session(user.getId());
         var cookie = new Cookie(cookieName, Session.encode(session));
-        cookie.setHttpOnly(true);
-        cookie.setDomain(parseDomainFromRequest(request));
-        cookie.setPath("/api/v1/");
-        cookie.setSecure(request.isSecure());
-        if (data.isPersistent) {
-            // Keep it for 10 years.
-            cookie.setMaxAge(315_569_520);
-        } else {
-            // Session cookie - deleted when the browser is closed.
-            cookie.setMaxAge(-1);
-        }
-        response.addCookie(cookie);
-
-        // Add 'SameSite=Lax' to the session cookie.
-        // Spring does currently (2021.10.09) not support setting this attribute.
-        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
-        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
+        setCookie(cookie, request, response, () -> {
+            if (data.isPersistent) {
+                // Keep it for 10 years.
+                cookie.setMaxAge(315_569_520);
+            } else {
+                // Session cookie - deleted when the browser is closed.
+                cookie.setMaxAge(-1);
+            }
+        });
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -87,9 +80,9 @@ public final class SessionController {
         // If it does not, we respond with a 404.
         findSessionUser(session);
 
-        cookie.setValue(null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        setCookie(cookie, request, response, () -> {
+            cookie.setMaxAge(0);
+        });
 
         return ResponseEntity.noContent().build();
     }
@@ -103,14 +96,33 @@ public final class SessionController {
     }
 
     private static Cookie findCookie(HttpServletRequest request) {
-        var cookie = Arrays.stream(request.getCookies())
+        var cookies = request.getCookies();
+        if (cookies == null) {
+            cookies = new Cookie[0];
+        }
+        return Arrays.stream(cookies)
             .filter((it) -> it.getName().equals(cookieName))
             .findFirst()
-            .orElse(null);
-        if (cookie == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return cookie;
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "no active session"));
+    }
+
+    private static void setCookie(
+        Cookie cookie,
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Runnable configure
+    ) {
+        cookie.setHttpOnly(true);
+        cookie.setDomain(parseDomainFromRequest(request));
+        cookie.setPath("/api/v1/");
+        cookie.setSecure(request.isSecure());
+        configure.run();
+        response.addCookie(cookie);
+
+        // Add 'SameSite=Lax' to the session cookie.
+        // Spring does currently (2021.10.09) not support setting this attribute.
+        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
+        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
     }
 
     private static Session parseSessionFromCookie(Cookie cookie) {
