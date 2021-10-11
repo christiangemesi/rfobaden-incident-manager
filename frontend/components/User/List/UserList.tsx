@@ -27,18 +27,14 @@ const UserList: React.VFC<Props> = ({ users }) => {
             {user.username}
           </StyledTd>
           <StyledTdSmall>
-            <a>
-               {/*TODO path to icon */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="" alt="Bearbeiten" title="Bearbeiten"/>
-            </a>
+            <StyledButton type="button">
+              Bearbeiten
+            </StyledButton>
           </StyledTdSmall>
           <StyledTdSmall>
-            <a>
-              {/*TODO path to icon */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="" alt="Löschen" title="Löschen"/>
-            </a>
+            <StyledButton type="button">
+              Löschen
+            </StyledButton>
           </StyledTdSmall>
         </StyledTr>
       ))}
@@ -72,4 +68,8 @@ const StyledTdSmall = styled.td`
   [src=""] {
     color: red;
   }
+`
+const StyledButton = styled.button`
+  display: block;
+  width: 100%;
 `
