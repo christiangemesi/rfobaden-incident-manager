@@ -24,7 +24,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
         // eslint-disable-next-line react/jsx-key
         <StyledTr>
           <StyledTd>
-            {user['username']}
+            {user.username}
           </StyledTd>
           <StyledTdSmall>
             <a>
