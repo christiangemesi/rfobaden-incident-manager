@@ -44,6 +44,7 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   --gap-h: 0rem;
   
   position: relative;
+  ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
   ${({ order }) => mapOrder(order)}
 `
