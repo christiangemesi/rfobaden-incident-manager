@@ -2,6 +2,9 @@ package ch.rfobaden.incidentmanager.backend.user;
 
 import javax.persistence.*;
 
+/**
+ * This is a JPA Entity that will be represented in the database.
+ */
 @Entity
 @Table(name = "user")
 public class User {

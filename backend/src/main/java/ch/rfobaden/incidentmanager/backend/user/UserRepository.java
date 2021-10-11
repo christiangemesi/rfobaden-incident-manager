@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-// This is the data access layer
+/**
+ * This is the data access layer of the N-Tier pattern.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
