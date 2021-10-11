@@ -3,7 +3,7 @@ import LoginForm from '@/components/Login/Form/LoginForm'
 import React from 'react'
 import { useSession } from '@/stores/SessionStore'
 
-const LoginPage: React.VFC = () => {
+const AnmeldenPage: React.VFC = () => {
   const { currentUser } = useSession()
   return (
     <UiContainer>
