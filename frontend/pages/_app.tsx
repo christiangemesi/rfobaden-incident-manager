@@ -1,12 +1,13 @@
 import { AppProps } from 'next/app'
 import React from 'react'
 import Head from 'next/head'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
 import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
-import SessionStore from '@/stores/SessionStore'
+import SessionStore, { useSession } from '@/stores/SessionStore'
 import Model from '@/models/base/Model'
+import Link from 'next/link'
 
 import 'reset-css/reset.css'
 
@@ -26,6 +27,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     })
   })
 
+  const { currentUser } = useSession()
+  const logout = async () => {
+    await BackendService.delete('session')
+    SessionStore.clear()
+  }
+
   return (
     <>
       <Head>
@@ -35,6 +42,21 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <GlobalStyle />
       <ThemeProvider theme={defaultTheme}>
+        <SessionStateBar>
+          {currentUser === null ? (
+            <Link href="/anmelden">
+              <a>
+                <button type="button">
+                  → anmelden
+                </button>
+              </a>
+            </Link>
+          ) : (
+            <button type="button" onClick={logout}>
+              {currentUser.name} abmelden →
+            </button>
+          )}
+        </SessionStateBar>
         <Component {...pageProps} />
       </ThemeProvider>
     </>
@@ -64,4 +86,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     overflow-y: hidden;
   }
+`
+
+const SessionStateBar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.25rem;
 `
