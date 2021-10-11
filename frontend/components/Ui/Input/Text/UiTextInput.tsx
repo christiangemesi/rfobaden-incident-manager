@@ -21,8 +21,10 @@ const UiTextInput: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
 
   return (
-    <Label>
-      {label}
+    <StyledLabel>
+      <span>
+        {label}
+      </span>
       <StyledInput value={value} onChange={handleChange} type={type} />
       <Errors>
         {errors.map((error) => (
@@ -31,24 +33,40 @@ const UiTextInput: React.VFC<Props> = ({
           </div>
         ))}
       </Errors>
-    </Label>
+    </StyledLabel>
   )
 }
 export default UiTextInput
 
 const StyledInput = styled.input`
-
+  padding: 0.25rem;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+  outline: none;
+  
+  border: 1px solid gray;
+  :active, :focus {
+    border-color: cornflowerblue;
+  }
 `
 
 const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
   margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
+
+  // Affects only label text
+  & > span:first-child {
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
 `
 
 const Errors = styled.div`
   display: flex;
   align-items: flex-end;
   flex-direction: column;
+  color: red;
+  font-size: 0.9rem;
 `
