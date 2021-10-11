@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -127,7 +129,6 @@ public class UserControllerTest {
         //  verify(userService, times(1)).getUserById(userId);
     }
 
-    @Disabled
     @Test
     public void testAddNewUser() throws Exception {
         // TODO whyy is response body empty and addNewUser not called?
@@ -140,20 +141,20 @@ public class UserControllerTest {
 
         // When
         Mockito.when(userService.addNewUser(newUser)).thenReturn(createdUser);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/v1/users/")
+        var mockRequest = MockMvcRequestBuilders.post("/api/v1/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(newUser));
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isCreated());
-//                .andExpect(jsonPath("$").exists())
-//                .andExpect(jsonPath(".id", is(4)))
-//                .andExpect(jsonPath(".username", is("newUser")))
-//                .andExpect(jsonPath(".password", is("newPassword")));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id", is(4)))
+                .andExpect(jsonPath("$.username", is("newUser")))
+                .andExpect(jsonPath("$.password", is("newPassword")));
         // TODO why does this not work?
-        //verify(userService, times(1)).addNewUser(newUser);
+//        verify(userService, times(1)).addNewUser(newUser);
     }
 
     @Test

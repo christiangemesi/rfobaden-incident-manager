@@ -68,6 +68,7 @@ public class UserController {
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
         try {
             User created = userService.addNewUser(user);
+            System.out.println("created: " + created);
             return new ResponseEntity<>(created, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

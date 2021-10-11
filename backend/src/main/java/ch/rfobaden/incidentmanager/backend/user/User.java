@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,6 +41,25 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof User)) {
+            return false;
+        }
+        var that = (User) other;
+        return id == that.id
+            && Objects.equals(username, that.username)
+            && Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password);
     }
 
     public long getId() {
