@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/session")
@@ -36,17 +35,19 @@ public final class SessionController {
     }
 
     @GetMapping
-    public @ResponseBody User find(HttpServletRequest request) {
+    public @ResponseBody
+    User find(HttpServletRequest request) {
         var cookie = findCookie(request);
         var session = parseSessionFromCookie(cookie);
         return findSessionUser(session);
     }
 
     @PostMapping
-    public @ResponseBody ResponseEntity<User> create(
-        @RequestBody LoginData data,
-        HttpServletRequest request,
-        HttpServletResponse response
+    public @ResponseBody
+    ResponseEntity<User> create(
+            @RequestBody LoginData data,
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
         var user = userService.getUserByName(data.username).orElse(null);
         if (user == null || !Objects.equals(data.getPassword(), user.getPassword())) {
@@ -73,8 +74,8 @@ public final class SessionController {
         response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(user);
+                .status(HttpStatus.CREATED)
+                .body(user);
     }
 
     @DeleteMapping
@@ -96,17 +97,17 @@ public final class SessionController {
 
     private User findSessionUser(Session session) {
         var user = userService.getUserById(session.getUserId());
-        if (user == null) {
+        if (user.isPresent()) {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
-        return user;
+        return user.get();
     }
 
     private static Cookie findCookie(HttpServletRequest request) {
         var cookie = Arrays.stream(request.getCookies())
-            .filter((it) -> it.getName().equals(cookieName))
-            .findFirst()
-            .orElse(null);
+                .filter((it) -> it.getName().equals(cookieName))
+                .findFirst()
+                .orElse(null);
         if (cookie == null) {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
@@ -164,10 +165,10 @@ public final class SessionController {
         @Override
         public String toString() {
             return "LoginData{"
-                + "username='" + username + '\''
-                + ", password='" + password + '\''
-                + ", isPersistent=" + isPersistent
-                + '}';
+                    + "username='" + username + '\''
+                    + ", password='" + password + '\''
+                    + ", isPersistent=" + isPersistent
+                    + '}';
         }
     }
 }
