@@ -11,22 +11,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@DataJpaTest
-//@ExtendWith(SpringExtension.class)
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // To use MySQL
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // To use MySQL
 public class UserRepositoryTest {
 
-//    @Autowired
-//    private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // TODO get help with "Failed to load ApplicationContext" Exception
-//    @Test
-//    public void testAddUser() {
-//        //Given
-//        User newUser = new User("newUser", "newPassword");
-//        //When
-//        User savedUser = userRepository.save(newUser);
-//        //Then
-//        assertThat(savedUser.getId()).isGreaterThan(0);
-//    }
+    @Test
+    public void testAddUser() {
+        //Given
+        User newUser = new User("newUser", "newPassword");
+        //When
+        User savedUser = userRepository.save(newUser);
+        //Then
+        assertThat(savedUser.getId()).isGreaterThan(0);
+    }
 }
