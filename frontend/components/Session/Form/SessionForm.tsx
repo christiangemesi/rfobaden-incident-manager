@@ -5,12 +5,12 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
+import SessionStore from '@/stores/SessionStore'
 
-const UserForm: React.VFC = () => {
+const SessionForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
     username: '',
     password: '',
-    passwordRepeat: '',
   }))
   useValidate(form, (validate) => ({
     username: [
@@ -19,24 +19,28 @@ const UserForm: React.VFC = () => {
     password: [
       validate.notBlank(),
     ],
-    passwordRepeat: [
-      validate.notBlank(),
-      (value, data) => value === data.password || 'muss mit Passwort übereinstimmen',
-    ],
   }))
 
   const handleSubmit = async () => {
     // TODO correct api type
     // TODO error handling
-    const [res]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('users', {
+    const [res, error]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('session', {
       username: data.username,
       password: data.password,
+      isPersistent: true,
     })
-    const user: User = {
+    if (error !== null) {
+      if (error.status === 401) {
+        UiForm.set(form.password, '')
+        UiForm.setErrors(form.password, ['ist nicht korrekt'])
+        return
+      }
+      throw error
+    }
+    SessionStore.setCurrentUser({
       id: res.id,
       name: res.username,
-    }
-    console.log(user)
+    })
   }
   const handleCancel = () => {
     UiForm.clear(form)
@@ -45,7 +49,7 @@ const UserForm: React.VFC = () => {
   return (
     <div>
       <h1>
-        Benutzer erstellen
+        Anmeldung
       </h1>
       <form>
         <UiForm.Field field={form.username}>{(props) => (
@@ -54,10 +58,6 @@ const UserForm: React.VFC = () => {
         <UiForm.Field field={form.password}>{(props) => (
           <UiTextInput {...props} label="Passwort" type="password" />
         )}</UiForm.Field>
-        <UiForm.Field field={form.passwordRepeat}>{(props) => (
-          <UiTextInput {...props} label="Passwort wiederholen" type="password" />
-        )}</UiForm.Field>
-
         <UiConfirmButtons
           onSubmit={handleSubmit}
           onCancel={handleCancel}
@@ -66,10 +66,9 @@ const UserForm: React.VFC = () => {
     </div>
   )
 }
-export default UserForm
+export default SessionForm
 
 interface LoginData {
   username: string
   password: string
-  passwordRepeat: string
 }

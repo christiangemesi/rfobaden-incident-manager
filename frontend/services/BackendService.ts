@@ -14,23 +14,23 @@ const apiEndpoint = run(() => {
 })
 
 class BackendService {
-  list<T>(resourceName: string): Promise<T[]> {
+  list<T>(resourceName: string): Promise<BackendResponse<T[]>> {
     return this.fetchApi({
       path: resourceName,
       method: 'get',
     })
   }
 
-  find<T>(resourceName: string, id?: Id<T>): Promise<T> {
+  find<T>(resourceName: string, id?: Id<T>): Promise<BackendResponse<T>> {
     return this.fetchApi({
-      path: `${resourceName}/${id}`,
+      path: `${resourceName}/${id ?? ''}`,
       method: 'get',
     })
   }
 
-  create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<T>
-  create<D, T>(resourceName: string, data: D): Promise<T>
-  async create<D, T>(resourceName: string, data: D): Promise<T> {
+  create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<BackendResponse<T>>
+  create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
+  async create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>> {
     return this.fetchApi({
       path: resourceName,
       method: 'post',
@@ -38,20 +38,42 @@ class BackendService {
     })
   }
 
-  private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<T> {
+  private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
     const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
       method: options.method,
       body: JSON.stringify(options.body),
       mode: 'cors',
+      // Required for sending cross-origin cookies.
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
     })
     if (res.status < 200 || 299 < res.status) {
+      if (res.status >= 400 && res.status <= 499) {
+        // Error is caused by the client (us).
+        // Let the caller handle it.
+        const data: { message: string } = await res.json()
+        const error = new BackendError(res.status, data.message)
+        return [null, error]
+      }
       // TODO error handling
       throw new Error(`backend request failed: ${await res.text()}`)
     }
-    return await res.json()
+    const value: T = await res.json()
+    return [value, null]
   }
 }
 export default new BackendService()
+
+export type BackendResponse<T> =
+  | [null, BackendError]
+  | [T, null]
+
+export class BackendError extends Error {
+  constructor(public status: number, public error: string) {
+    super(`[${status}] ${error}`)
+  }
+}
+
+

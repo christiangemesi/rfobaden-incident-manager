@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Service Layer is responsible for business logic. This is part of the N-Tier pattern
@@ -28,5 +29,9 @@ public class UserService {
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId).get();
+    }
+
+    public Optional<User> getUserByName(String name) {
+        return userRepository.findOneByName(name);
     }
 }
