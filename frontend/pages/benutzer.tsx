@@ -3,7 +3,7 @@ import UserForm from '@/components/User/Form/UserForm'
 import React from 'react'
 import User from '@/models/User'
 import { GetServerSideProps } from 'next'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserList from '@/components/User/List/UserList'
 import Model from '@/models/base/Model'
 
@@ -22,13 +22,13 @@ const BenutzerPage: React.VFC<Props> = ({ users }) => {
 export default BenutzerPage
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const users: User[] = (await BackendService.list('users')).map((user: Model & { username: string }) => ({
-    id: user.id,
-    name: user.username,
-  }))
+  const [users]: BackendResponse<(Model & { username: string })[]> = (await BackendService.list('users'))
   return {
     props: {
-      users,
+      users: users.map((user) => ({
+        id: user.id,
+        name: user.username,
+      })),
     },
   }
 }
