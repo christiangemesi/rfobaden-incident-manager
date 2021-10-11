@@ -6,6 +6,7 @@ import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UserStore from '@/stores/UserStore'
 
 const UserForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
@@ -37,7 +38,7 @@ const UserForm: React.VFC = () => {
       id: res.id,
       name: res.username,
     }
-    console.log(user)
+    UserStore.save(user)
   }
   const handleCancel = () => {
     UiForm.clear(form)
