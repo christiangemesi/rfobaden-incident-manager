@@ -1,5 +1,6 @@
 import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
+import Id from '@/models/base/Id'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -16,6 +17,13 @@ class BackendService {
   list<T>(resourceName: string): Promise<T[]> {
     return this.fetchApi({
       path: resourceName,
+      method: 'get',
+    })
+  }
+
+  find<T>(resourceName: string, id?: Id<T>): Promise<T> {
+    return this.fetchApi({
+      path: `${resourceName}/${id}`,
       method: 'get',
     })
   }
