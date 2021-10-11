@@ -38,6 +38,14 @@ class BackendService {
     })
   }
 
+  async delete(resourceName: string, id?: Id<never>): Promise<BackendError | null> {
+    const [_data, error] = await this.fetchApi({
+      path: `${resourceName}/${id ?? ''}`,
+      method: 'delete',
+    })
+    return error
+  }
+
   private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
     const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
       method: options.method,
@@ -60,8 +68,11 @@ class BackendService {
       // TODO error handling
       throw new Error(`backend request failed: ${await res.text()}`)
     }
-    const value: T = await res.json()
-    return [value, null]
+    if (res.headers.get('content-type') === 'application/json') {
+      const value: T = await res.json()
+      return [value, null]
+    }
+    return [null, null]
   }
 }
 export default new BackendService()
