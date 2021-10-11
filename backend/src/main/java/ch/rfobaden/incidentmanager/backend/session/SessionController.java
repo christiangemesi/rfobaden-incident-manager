@@ -34,6 +34,34 @@ public final class SessionController {
         this.userService = userService;
     }
 
+    private static Cookie findCookie(HttpServletRequest request) {
+        var cookie = Arrays.stream(request.getCookies())
+                .filter((it) -> it.getName().equals(cookieName))
+                .findFirst()
+                .orElse(null);
+        if (cookie == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
+        }
+        return cookie;
+    }
+
+    private static Session parseSessionFromCookie(Cookie cookie) {
+        var token = cookie.getValue();
+        var session = Session.decode(token).orElse(null);
+        if (session == null) {
+            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
+        }
+        return session;
+    }
+
+    private static String parseDomainFromRequest(HttpServletRequest request) {
+        var host = URI.create(request.getRequestURL().toString()).getHost();
+        if (host.startsWith("www.")) {
+            return host.substring(4);
+        }
+        return host;
+    }
+
     @GetMapping
     public @ResponseBody
     User find(HttpServletRequest request) {
@@ -101,34 +129,6 @@ public final class SessionController {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
         return user.get();
-    }
-
-    private static Cookie findCookie(HttpServletRequest request) {
-        var cookie = Arrays.stream(request.getCookies())
-                .filter((it) -> it.getName().equals(cookieName))
-                .findFirst()
-                .orElse(null);
-        if (cookie == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return cookie;
-    }
-
-    private static Session parseSessionFromCookie(Cookie cookie) {
-        var token = cookie.getValue();
-        var session = Session.decode(token).orElse(null);
-        if (session == null) {
-            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
-        }
-        return session;
-    }
-
-    private static String parseDomainFromRequest(HttpServletRequest request) {
-        var host = URI.create(request.getRequestURL().toString()).getHost();
-        if (host.startsWith("www.")) {
-            return host.substring(4);
-        }
-        return host;
     }
 
     private static class LoginData {

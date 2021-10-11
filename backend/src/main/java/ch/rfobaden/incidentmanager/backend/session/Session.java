@@ -6,6 +6,12 @@ import java.util.Base64;
 import java.util.Optional;
 
 public final class Session {
+    private final long userId;
+
+    public Session(long userId) {
+        this.userId = userId;
+    }
+
     public static String encode(Session session) {
         try {
             var decodedToken = Long.toString(session.getUserId());
@@ -31,12 +37,6 @@ public final class Session {
         return Optional.of(new Session(userId));
     }
 
-    private final long userId;
-
-    public Session(long userId) {
-        this.userId = userId;
-    }
-
     public long getUserId() {
         return userId;
     }
@@ -44,7 +44,7 @@ public final class Session {
     @Override
     public String toString() {
         return "Session{"
-            + "userId=" + userId
-            + '}';
+                + "userId=" + userId
+                + '}';
     }
 }

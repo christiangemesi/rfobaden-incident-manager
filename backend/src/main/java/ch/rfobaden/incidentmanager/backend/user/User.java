@@ -1,6 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * This is a JPA Entity that will be represented in the database.

@@ -23,11 +23,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addNewUser(User user) throws IllegalArgumentException{
+    public User addNewUser(User user) throws IllegalArgumentException {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long userId) throws IllegalArgumentException{
+    public Optional<User> getUserById(Long userId) throws IllegalArgumentException {
         return userRepository.findById(userId);
     }
 
