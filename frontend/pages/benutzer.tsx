@@ -6,6 +6,7 @@ import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserList from '@/components/User/List/UserList'
 import Model from '@/models/base/Model'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   users: User[]
@@ -14,8 +15,20 @@ interface Props {
 const BenutzerPage: React.VFC<Props> = ({ users }) => {
   return (
     <UiContainer>
-      <UserForm />
-      <UserList users={users} />
+      <h1>
+        Benutzer verwalten
+      </h1>
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          <UserForm />
+        </UiGrid.Col>
+      </UiGrid>
+
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+          <UserList users={users} />
+        </UiGrid.Col>
+      </UiGrid>
     </UiContainer>
   )
 }

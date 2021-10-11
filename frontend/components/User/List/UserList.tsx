@@ -45,6 +45,9 @@ export default UserList
 const StyledTable = styled.table`
   display: block;
   width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 0.25rem;
+  margin-top: 2rem;
 `
 const StyledTr = styled.tr`
   width: 100%;
@@ -53,20 +56,18 @@ const StyledTr = styled.tr`
   }
 `
 const StyledTh = styled.th`
-  padding: 5px;
+  padding: 0.5rem;
+  vertical-align: middle;
   font-weight: bold;
   text-align: left;
 `
 const StyledTd = styled.td`
   width: 100%;
-  padding: 5px;
+  padding: 0.5rem;
+  vertical-align: middle;
 `
-const StyledTdSmall = styled.td`
+const StyledTdSmall = styled(StyledTd)`
   width: 40px;
-  padding: 5px;
-  [src=""] {
-    color: red;
-  }
 `
 const StyledButton = styled.button`
   display: block;

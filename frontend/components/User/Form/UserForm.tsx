@@ -5,6 +5,7 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 const UserForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
@@ -44,9 +45,6 @@ const UserForm: React.VFC = () => {
 
   return (
     <div>
-      <h1>
-        Benutzer erstellen
-      </h1>
       <form>
         <UiForm.Field field={form.username}>{(props) => (
           <UiTextInput {...props} label="Name" />
