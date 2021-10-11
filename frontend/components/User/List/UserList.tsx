@@ -21,8 +21,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
         </StyledTh>
       </StyledTr>
       {users.map((user) => (
-        // eslint-disable-next-line react/jsx-key
-        <StyledTr>
+        <StyledTr key={user.id}>
           <StyledTd>
             {user.username}
           </StyledTd>
