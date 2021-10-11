@@ -6,6 +6,8 @@ import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import SessionStore from '@/stores/SessionStore'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import styled from 'styled-components'
 
 const SessionForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
@@ -48,21 +50,25 @@ const SessionForm: React.VFC = () => {
 
   return (
     <div>
-      <h1>
-        Anmeldung
-      </h1>
-      <form>
-        <UiForm.Field field={form.username}>{(props) => (
-          <UiTextInput {...props} label="Name" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.password}>{(props) => (
-          <UiTextInput {...props} label="Passwort" type="password" />
-        )}</UiForm.Field>
-        <UiConfirmButtons
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
-      </form>
+      <CenteredGrid>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          <h1>
+            Anmelden
+          </h1>
+          <form>
+            <UiForm.Field field={form.username}>{(props) => (
+              <UiTextInput {...props} label="Name" />
+            )}</UiForm.Field>
+            <UiForm.Field field={form.password}>{(props) => (
+              <UiTextInput {...props} label="Passwort" type="password" />
+            )}</UiForm.Field>
+            <UiConfirmButtons
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+            />
+          </form>
+        </UiGrid.Col>
+      </CenteredGrid>
     </div>
   )
 }
@@ -72,3 +78,10 @@ interface LoginData {
   username: string
   password: string
 }
+
+const CenteredGrid = styled(UiGrid)`
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  margin-top: -4rem;
+`

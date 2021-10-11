@@ -44,6 +44,7 @@ export default App
 
 const GlobalStyle = createGlobalStyle`
   html, body, #__next {
+    font-family: sans-serif;
     width: 100%;
     height: 100%;
     min-height: 100%;
@@ -51,5 +52,16 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+  }
+  
+  h1 {
+    font-family: serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  body {
+    overflow-y: hidden;
   }
 `
