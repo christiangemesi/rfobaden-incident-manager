@@ -7,7 +7,7 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import SessionStore from '@/stores/SessionStore'
 
-const LoginForm: React.VFC = () => {
+const SessionForm: React.VFC = () => {
   const [data, form] = useForm<LoginData>(() => ({
     username: '',
     password: '',
