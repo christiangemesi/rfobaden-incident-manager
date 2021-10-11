@@ -23,7 +23,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
       {users.map((user) => (
         <StyledTr key={user.id}>
           <StyledTd>
-            {user.username}
+            {user.name}
           </StyledTd>
           <StyledTdSmall>
             <StyledButton type="button">
