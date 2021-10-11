@@ -49,7 +49,7 @@ const SessionForm: React.VFC = () => {
   return (
     <div>
       <h1>
-        Login
+        Anmeldung
       </h1>
       <form>
         <UiForm.Field field={form.username}>{(props) => (
@@ -66,7 +66,7 @@ const SessionForm: React.VFC = () => {
     </div>
   )
 }
-export default LoginForm
+export default SessionForm
 
 interface LoginData {
   username: string

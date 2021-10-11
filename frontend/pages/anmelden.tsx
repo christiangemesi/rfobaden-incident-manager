@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import LoginForm from '@/components/Login/Form/LoginForm'
+import SessionForm from '@/components/Session/Form/SessionForm'
 import React from 'react'
 import { useSession } from '@/stores/SessionStore'
 
@@ -7,7 +7,7 @@ const AnmeldenPage: React.VFC = () => {
   const { currentUser } = useSession()
   return (
     <UiContainer>
-      <LoginForm />
+      <SessionForm />
       {currentUser === null ? (
         'not logged in'
       ) : (
@@ -18,4 +18,4 @@ const AnmeldenPage: React.VFC = () => {
     </UiContainer>
   )
 }
-export default LoginPage
+export default AnmeldenPage
