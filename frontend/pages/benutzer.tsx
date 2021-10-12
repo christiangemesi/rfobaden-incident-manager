@@ -6,16 +6,39 @@ import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserList from '@/components/User/List/UserList'
 import Model from '@/models/base/Model'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import { useEffectOnce } from 'react-use'
+import UserStore, { useUsers } from '@/stores/UserStore'
 
 interface Props {
-  users: User[]
+  data: {
+    users: User[]
+  }
 }
 
-const BenutzerPage: React.VFC<Props> = ({ users }) => {
+const BenutzerPage: React.VFC<Props> = ({ data }) => {
+  useEffectOnce(() => {
+    UserStore.saveAll(data.users)
+  })
+
+  const users = useUsers()
+
   return (
     <UiContainer>
-      <UserForm />
-      <UserList users={users} />
+      <h1>
+        Benutzer verwalten
+      </h1>
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          <UserForm />
+        </UiGrid.Col>
+      </UiGrid>
+
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+          <UserList users={users} />
+        </UiGrid.Col>
+      </UiGrid>
     </UiContainer>
   )
 }
@@ -25,10 +48,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const [users]: BackendResponse<(Model & { username: string })[]> = (await BackendService.list('users'))
   return {
     props: {
-      users: users.map((user) => ({
-        id: user.id,
-        name: user.username,
-      })),
+      data: {
+        users: users.map((user) => ({
+          id: user.id,
+          name: user.username,
+        })),
+      },
     },
   }
 }

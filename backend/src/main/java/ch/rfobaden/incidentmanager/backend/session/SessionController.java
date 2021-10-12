@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Objects;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "api/v1/session")
@@ -34,15 +34,93 @@ public final class SessionController {
         this.userService = userService;
     }
 
-    private static Cookie findCookie(HttpServletRequest request) {
-        var cookie = Arrays.stream(request.getCookies())
-                .filter((it) -> it.getName().equals(cookieName))
-                .findFirst()
-                .orElse(null);
-        if (cookie == null) {
+    @GetMapping
+    public @ResponseBody User find(HttpServletRequest request) {
+        var cookie = findCookie(request);
+        var session = parseSessionFromCookie(cookie);
+        return findSessionUser(session);
+    }
+
+    @PostMapping
+    public @ResponseBody ResponseEntity<User> create(
+        @RequestBody LoginData data,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
+        var user = userService.getUserByName(data.username).orElse(null);
+        if (user == null || !Objects.equals(data.getPassword(), user.getPassword())) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
+        }
+        var session = new Session(user.getId());
+        var cookie = new Cookie(cookieName, Session.encode(session));
+        setCookie(cookie, request, response, () -> {
+            if (data.isPersistent) {
+                // Keep it for 10 years.
+                cookie.setMaxAge(315_569_520);
+            } else {
+                // Session cookie - deleted when the browser is closed.
+                cookie.setMaxAge(-1);
+            }
+        });
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(user);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(HttpServletRequest request, HttpServletResponse response) {
+        var cookie = findCookie(request);
+
+        var session = parseSessionFromCookie(cookie);
+
+        // Load the session user just to ensure that it exists.
+        // If it does not, we respond with a 404.
+        findSessionUser(session);
+
+        setCookie(cookie, request, response, () -> {
+            cookie.setMaxAge(0);
+        });
+
+        return ResponseEntity.noContent().build();
+    }
+
+    private User findSessionUser(Session session) {
+        var user = userService.getUserById(session.getUserId()).orElse(null);
+        if (user == null) {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
-        return cookie;
+        return user;
+    }
+
+    private static Cookie findCookie(HttpServletRequest request) {
+        var cookies = request.getCookies();
+        if (cookies == null) {
+            cookies = new Cookie[0];
+        }
+        return Arrays.stream(cookies)
+            .filter((it) -> it.getName().equals(cookieName))
+            .findFirst()
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "no active session"));
+    }
+
+    private static void setCookie(
+        Cookie cookie,
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Runnable configure
+    ) {
+        cookie.setHttpOnly(true);
+        cookie.setDomain(parseDomainFromRequest(request));
+        cookie.setPath("/api/v1/");
+        cookie.setSecure(request.isSecure());
+        configure.run();
+        response.addCookie(cookie);
+
+        // Add 'SameSite=Lax' to the session cookie.
+        // Spring does currently (2021.10.09) not support setting this attribute.
+        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
+        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
     }
 
     private static Session parseSessionFromCookie(Cookie cookie) {
@@ -60,75 +138,6 @@ public final class SessionController {
             return host.substring(4);
         }
         return host;
-    }
-
-    @GetMapping
-    public @ResponseBody
-    User find(HttpServletRequest request) {
-        var cookie = findCookie(request);
-        var session = parseSessionFromCookie(cookie);
-        return findSessionUser(session);
-    }
-
-    @PostMapping
-    public @ResponseBody
-    ResponseEntity<User> create(
-            @RequestBody LoginData data,
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        var user = userService.getUserByName(data.username).orElse(null);
-        if (user == null || !Objects.equals(data.getPassword(), user.getPassword())) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
-        }
-        var session = new Session(user.getId());
-        var cookie = new Cookie(cookieName, Session.encode(session));
-        cookie.setHttpOnly(true);
-        cookie.setDomain(parseDomainFromRequest(request));
-        cookie.setPath("/api/v1/");
-        cookie.setSecure(request.isSecure());
-        if (data.isPersistent) {
-            // Keep it for 10 years.
-            cookie.setMaxAge(315_569_520);
-        } else {
-            // Session cookie - deleted when the browser is closed.
-            cookie.setMaxAge(-1);
-        }
-        response.addCookie(cookie);
-
-        // Add 'SameSite=Lax' to the session cookie.
-        // Spring does currently (2021.10.09) not support setting this attribute.
-        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
-        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(user);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Void> delete(HttpServletRequest request, HttpServletResponse response) {
-        var cookie = findCookie(request);
-
-        var session = parseSessionFromCookie(cookie);
-
-        // Load the session user just to ensure that it exists.
-        // If it does not, we respond with a 404.
-        findSessionUser(session);
-
-        cookie.setValue(null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    private User findSessionUser(Session session) {
-        var user = userService.getUserById(session.getUserId());
-        if (user.isPresent()) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return user.get();
     }
 
     private static class LoginData {
@@ -165,10 +174,10 @@ public final class SessionController {
         @Override
         public String toString() {
             return "LoginData{"
-                    + "username='" + username + '\''
-                    + ", password='" + password + '\''
-                    + ", isPersistent=" + isPersistent
-                    + '}';
+                + "username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", isPersistent=" + isPersistent
+                + '}';
         }
     }
 }
