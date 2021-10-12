@@ -3,6 +3,7 @@ import User from '@/models/User'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
+import Id from '@/models/base/Id'
 
 interface Props {
   users: User[]
