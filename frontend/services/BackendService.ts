@@ -28,13 +28,6 @@ class BackendService {
     })
   }
 
-  delete<T>(resourceName: string, id?: Id<T>): Promise<BackendResponse<T>> {
-    return this.fetchApi({
-      path: `${resourceName}/${id ?? ''}`,
-      method: 'delete',
-    })
-  }
-
   create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<BackendResponse<T>>
   create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
   async create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>> {
