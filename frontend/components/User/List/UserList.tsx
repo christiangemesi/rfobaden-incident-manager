@@ -7,9 +7,10 @@ interface Props {
   users: User[]
 }
 
-const handleDelete = (userId: number) => {
+const handleDelete = async (userId: Id<User>) => {
   console.log(`deleting user with id ${userId}`)
-  BackendService.delete("users", userId)
+  await BackendService.delete('users', userId)
+  UserStore.remove(userId)
 }
 
 const UserList: React.VFC<Props> = ({ users }) => {
