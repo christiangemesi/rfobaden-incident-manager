@@ -64,7 +64,7 @@ public class UserRepositoryTest {
         userRepository.save(user1);
         userRepository.save(user2);
         // When
-        // TODO Why not workkkkk when run together kekw
+        // TODO Why not workkkkk when run together
         Optional<User> foundUser = userRepository.findById(userId);
         // Then
         assertTrue(foundUser.isPresent());
@@ -88,11 +88,10 @@ public class UserRepositoryTest {
         List<User> users = userRepository.findAll();
         assertThat(users.size()).isEqualTo(3);
         // When
-        // TODO Why not workkkkk when run together kekw
+        // TODO Why not workkkkk when run together
         userRepository.deleteById(userId);
         users = userRepository.findAll();
         // Then
         assertThat(users).hasSize(2).contains(user1, user3);
     }
-
 }

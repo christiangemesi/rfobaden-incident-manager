@@ -1,9 +1,15 @@
 import React from 'react'
 import User from '@/models/User'
 import styled from 'styled-components'
+import BackendService from '@/services/BackendService'
 
 interface Props {
   users: User[]
+}
+
+const handleDelete = (userId: number) => {
+  console.log(`deleting user with id ${userId}`)
+  BackendService.delete("users", userId)
 }
 
 const UserList: React.VFC<Props> = ({ users }) => {
@@ -31,7 +37,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
             </StyledButton>
           </StyledTdSmall>
           <StyledTdSmall>
-            <StyledButton type="button">
+            <StyledButton type="button" onClick={() => handleDelete(user.id)}>
               Löschen
             </StyledButton>
           </StyledTdSmall>
