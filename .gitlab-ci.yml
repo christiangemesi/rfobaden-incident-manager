@@ -3,6 +3,7 @@ stages:
 
 
 frontend.eslint:
+  stage: lint
   image: node:16-alpine3.11
   script:
     - >
