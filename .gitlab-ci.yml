@@ -6,13 +6,17 @@ services:
   - name: docker:20.10.9-dind-alpine3.14
     alias: dockerhost
 
-before_script:
-  - docker-compose run --no-deps --detach frontend sh
-  - docker-compose run --no-deps --detach backend sh
-  - docker-compose exec frontend "npm install"
+setup:
+  stage: .pre
+  script:
+    - docker-compose run --no-deps --detach frontend sh
+    - docker-compose run --no-deps --detach backend sh
+    - docker-compose exec frontend "npm install"
 
-after_script:
-  - docker-compose down
+teardown:
+  stage: .post
+  script:
+    - docker-compose down
 
 stages:
   - lint
