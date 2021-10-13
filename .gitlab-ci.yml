@@ -1,6 +1,6 @@
 image:
   name: docker/compose:1.29.2
-  entrypoint: ["sh -c"]
+  entrypoint: ["sh", "-c"]
 
 stages:
   - lint
@@ -8,4 +8,4 @@ stages:
 eslint:
   stage: lint
   script:
-    - docker compose run frontend sh -c "npm install && npm run lint"
+    - docker compose run frontend "npm install && npm run lint"
