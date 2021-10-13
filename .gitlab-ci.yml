@@ -6,23 +6,13 @@ services:
   - name: docker:20.10.9-dind-alpine3.14
     alias: dockerhost
 
-setup:
-  stage: .pre
-  script:
-    - docker-compose run --no-deps frontend sh -c "npm install"
-
-teardown:
-  stage: .post
-  script:
-    - docker-compose down
-
 stages:
   - lint
 
 eslint:
   stage: lint
   script:
-    - docker-compose run --no-deps frontend sh -c "npm run lint"
+    - docker-compose run --no-deps frontend sh -c "npm install && npm run lint"
 
 variables:
   DOCKER_HOST: tcp://dockerhost:2375
