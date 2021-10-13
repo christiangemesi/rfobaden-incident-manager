@@ -1,11 +1,26 @@
-image: node:16-alpine3.11
+stages:
+  - lint
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "master"
+
+frontend.eslint:
+  stage: lint
+  image: node:16-alpine3.11
+  script:
+    - cd frontend
+    - npm install --quiet
+    - npm run lint
+
+backend.checkstyle:
+  stage: lint
+  image: gradle:7.2.0-jdk11
+  script:
+    - cd backend
+    - gradle --no-daemon checkstyleMain checkstyleTest
 
 cache:
   paths:
+    - backend/.gradle
     - frontend/node_modules/
-
-test_async:
-  script:
-    - cd frontend
-    - npm install
-    - npm run lint
