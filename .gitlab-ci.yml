@@ -3,7 +3,8 @@ image:
   entrypoint: ["sh", "-c"]
 
 services:
-  - docker:20.10.9-dind
+  - name: docker:20.10.9-dind
+    alias: dockerhost
 
 before_script:
   - docker info
@@ -17,5 +18,7 @@ eslint:
     - docker-compose run frontend "npm install && npm run lint"
 
 variables:
-  DOCKER_HOST: tcp://docker:2375
+  DOCKER_HOST: tcp://dockerhost:2375
   DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  
