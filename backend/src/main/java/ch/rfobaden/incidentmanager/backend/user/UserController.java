@@ -34,12 +34,8 @@ public class UserController {
      * HTTP status code 204 No Content if there are no users.
      */
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getUsers();
-        if (users.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        else
-            return new ResponseEntity<>(users, HttpStatus.OK);
+    public List<User> getUsers() {
+        return userService.getUsers();
     }
 
     /**
