@@ -17,4 +17,5 @@ eslint:
     - docker-compose run frontend "npm install && npm run lint"
 
 variables:
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
