@@ -1,9 +1,9 @@
 image:
-  name: docker:20.10.9-alpine3.14
+  name: docker:20.10.9
   entrypoint: ["sh", "-c"]
 
 services:
-  - 20.10.9-dind-alpine3.14
+  - 20.10.9-dind
 
 before_script:
   - docker info
