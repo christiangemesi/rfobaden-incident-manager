@@ -1,15 +1,11 @@
-image: node:16-alpine3.11
+image:
+  name: docker/compose:1.29.2
+  entrypoint: ["sh -c"]
 
 stages:
   - lint
 
-cache:
-  paths:
-    - frontend/node_modules/
-
 eslint:
   stage: lint
   script:
-    - cd frontend
-    - npm install
-    - npm run lint
+    - docker compose run web "npm install && npm run lint"
