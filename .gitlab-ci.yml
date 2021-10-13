@@ -10,7 +10,7 @@ setup:
   script:
     - docker-compose run --no-deps --detach frontend sh
     - docker-compose run --no-deps --detach backend sh
-    - docker-compose exec frontend "npm install"
+    - docker-compose exec frontend sh -c "npm install"
 
 teardown:
   stage: .post
