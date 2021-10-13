@@ -1,6 +1,5 @@
 image:
   name: docker:20.10.9
-  entrypoint: ["sh", "-c"]
 
 services:
   - name: docker:20.10.9-dind
@@ -15,7 +14,7 @@ stages:
 eslint:
   stage: lint
   script:
-    - docker-compose run frontend "npm install && npm run lint"
+    - docker compose run frontend sh -c "npm install && npm run lint"
 
 variables:
   DOCKER_HOST: tcp://dockerhost:2375
