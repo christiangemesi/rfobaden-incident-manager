@@ -1,26 +1,12 @@
-image:
-  name: docker/compose:alpine-1.29.2
-  entrypoint: [""]
-
-services:
-  - name: docker:20.10.9-dind-alpine3.14
-    alias: dockerhost
-
 stages:
   - lint
 
-eslint:
-  stage: lint
-  script:
-    - docker-compose run --no-deps frontend sh -c "npm install && npm run lint"
 
-teardown:
-  stage: .post
+frontend.eslint:
+  image: node:16-alpine3.11
   script:
-    - docker ps | grep -cache-
-
-variables:
-  DOCKER_HOST: tcp://dockerhost:2375
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  
+    - >
+      cd frontend
+      npm install --quiet
+      npm run lint
+      
