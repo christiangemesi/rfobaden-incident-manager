@@ -3,7 +3,7 @@ image:
   entrypoint: ["sh", "-c"]
 
 services:
-  - 20.10.9-dind
+  - docker:20.10.9-dind
 
 before_script:
   - docker info
