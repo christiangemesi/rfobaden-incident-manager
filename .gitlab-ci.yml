@@ -1,10 +1,6 @@
 stages:
   - lint
 
-only:
-  - master
-  - development
-
 frontend.eslint:
   stage: lint
   image: node:16-alpine3.11
@@ -12,13 +8,19 @@ frontend.eslint:
     - cd frontend
     - npm install --quiet
     - npm run lint
-      
+  only:
+    - master
+    - development
+
 backend.checkstyle:
   stage: lint
   image: gradle:7.2.0-jdk11
   script:
     - cd backend
     - gradle --no-daemon checkstyleMain checkstyleTest
+  only:
+    - master
+    - development
 
 cache:
   paths:
