@@ -8,9 +8,7 @@ services:
 setup:
   stage: .pre
   script:
-    - docker-compose run --no-deps --detach frontend sh
-    - docker-compose run --no-deps --detach backend sh
-    - docker-compose exec frontend sh -c "npm install"
+    - docker-compose run --no-deps frontend "npm install"
 
 teardown:
   stage: .post
@@ -23,7 +21,7 @@ stages:
 eslint:
   stage: lint
   script:
-    - docker-compose exec frontend sh -c "npm run lint"
+    - docker-compose run --no-deps frontend "npm run lint"
 
 variables:
   DOCKER_HOST: tcp://dockerhost:2375
