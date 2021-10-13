@@ -1,6 +1,5 @@
 image:
   name: docker/compose:alpine-1.29.2
-  entrypoint: ["sh", "-c"]
 
 services:
   - name: docker:20.10.9-dind-alpine3.14
@@ -24,7 +23,7 @@ stages:
 eslint:
   stage: lint
   script:
-    - docker-compose exec frontend "npm run lint"
+    - docker-compose exec frontend sh -c "npm run lint"
 
 variables:
   DOCKER_HOST: tcp://dockerhost:2375
