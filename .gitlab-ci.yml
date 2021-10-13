@@ -1,6 +1,10 @@
 stages:
   - lint
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "development || $CI_COMMIT_BRANCH == 'master'"
+
 frontend.eslint:
   stage: lint
   image: node:16-alpine3.11
@@ -8,9 +12,6 @@ frontend.eslint:
     - cd frontend
     - npm install --quiet
     - npm run lint
-  only:
-    - master
-    - development
 
 backend.checkstyle:
   stage: lint
@@ -18,9 +19,6 @@ backend.checkstyle:
   script:
     - cd backend
     - gradle --no-daemon checkstyleMain checkstyleTest
-  only:
-    - master
-    - development
 
 cache:
   paths:
