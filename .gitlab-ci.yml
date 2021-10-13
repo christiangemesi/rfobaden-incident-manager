@@ -1,6 +1,12 @@
 image:
-  name: docker/compose:1.29.2
+  name: docker:20.10.9-alpine3.14
   entrypoint: ["sh", "-c"]
+
+services:
+  - 20.10.9-dind-alpine3.14
+
+before_script:
+  - docker info
 
 stages:
   - lint
@@ -9,3 +15,6 @@ eslint:
   stage: lint
   script:
     - docker-compose run frontend "npm install && npm run lint"
+
+variables:
+  DOCKER_DRIVER: overlay2
