@@ -8,8 +8,7 @@ cache:
     - frontend/node_modules/
 
 eslint:
-  stage:
-    - lint
+  stage: lint
   script:
     - cd frontend
     - npm install
