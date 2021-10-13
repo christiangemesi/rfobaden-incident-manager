@@ -1,6 +1,10 @@
 stages:
   - lint
 
+cache:
+  paths:
+    - backend/.gradle
+    - frontend/node_modules/
 
 frontend.eslint:
   stage: lint
