@@ -8,4 +8,4 @@ stages:
 eslint:
   stage: lint
   script:
-    - docker compose run web sh -c "npm install && npm run lint"
+    - docker compose run frontend sh -c "npm install && npm run lint"
