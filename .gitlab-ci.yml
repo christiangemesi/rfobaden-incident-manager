@@ -1,0 +1,11 @@
+image: node:16-alpine3.11
+
+cache:
+  paths:
+    - node_modules/
+
+test_async:
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
