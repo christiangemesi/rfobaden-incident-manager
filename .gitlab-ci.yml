@@ -1,5 +1,6 @@
 image:
   name: docker/compose:alpine-1.29.2
+  entrypoint: [""]
 
 services:
   - name: docker:20.10.9-dind-alpine3.14
