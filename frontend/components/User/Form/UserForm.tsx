@@ -1,15 +1,14 @@
 import React from 'react'
 import User from '@/models/User'
-import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserStore from '@/stores/UserStore'
+import { useForm, useValidate } from '@/components/Ui/Form'
+import UiForm from '@/components/Ui/Form/UiForm'
 
 const UserForm: React.VFC = () => {
-  const [data, form] = useForm<LoginData>(() => ({
+  const form = useForm<LoginData>(() => ({
     username: '',
     password: '',
     passwordRepeat: '',
@@ -27,7 +26,7 @@ const UserForm: React.VFC = () => {
     ],
   }))
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data: LoginData) => {
     // TODO correct api type
     // TODO error handling
     const [res]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('users', {
@@ -39,9 +38,6 @@ const UserForm: React.VFC = () => {
       name: res.username,
     }
     UserStore.save(user)
-  }
-  const handleCancel = () => {
-    UiForm.clear(form)
   }
 
   return (
@@ -56,11 +52,7 @@ const UserForm: React.VFC = () => {
         <UiForm.Field field={form.passwordRepeat}>{(props) => (
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
-
-        <UiConfirmButtons
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
+        <UiForm.Buttons form={form} onSubmit={handleSubmit} />
       </form>
     </div>
   )

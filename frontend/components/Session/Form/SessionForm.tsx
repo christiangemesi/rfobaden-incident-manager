@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react'
 import User from '@/models/User'
-import UiForm, { useForm, useValidate } from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import { setFormField, useForm, useValidate } from '@/components/Ui/Form'
+import UiForm from '@/components/Ui/Form/UiForm'
 
 const SessionForm: React.VFC = () => {
-  const [data, form] = useForm<LoginData>(() => ({
+  const form = useForm<LoginData>(() => ({
     username: '',
     password: '',
   }))
@@ -32,7 +32,7 @@ const SessionForm: React.VFC = () => {
     }
   }, [router, currentUser])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data: LoginData) => {
     // TODO correct api type
     // TODO error handling
     const [res, error]: BackendResponse<{ id: Id<User>, username: string }> = await BackendService.create('session', {
@@ -42,8 +42,10 @@ const SessionForm: React.VFC = () => {
     })
     if (error !== null) {
       if (error.status === 401) {
-        UiForm.set(form.password, '')
-        UiForm.setErrors(form.password, ['ist nicht korrekt'])
+        setFormField(form.password, {
+          value: '',
+          errors: ['ist nicht korrekt'],
+        })
         return
       }
       throw error
@@ -52,9 +54,6 @@ const SessionForm: React.VFC = () => {
       id: res.id,
       name: res.username,
     })
-  }
-  const handleCancel = () => {
-    UiForm.clear(form)
   }
 
   return (
@@ -71,10 +70,7 @@ const SessionForm: React.VFC = () => {
             <UiForm.Field field={form.password}>{(props) => (
               <UiTextInput {...props} label="Passwort" type="password" />
             )}</UiForm.Field>
-            <UiConfirmButtons
-              onSubmit={handleSubmit}
-              onCancel={handleCancel}
-            />
+            <UiForm.Buttons form={form} onSubmit={handleSubmit} />
           </form>
         </UiGrid.Col>
       </CenteredGrid>
