@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.session;
+package ch.rfobaden.incidentmanager.backend.entities;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

@@ -1,8 +1,9 @@
-package ch.rfobaden.incidentmanager.backend.session;
+package ch.rfobaden.incidentmanager.backend.controllers;
 
-import ch.rfobaden.incidentmanager.backend.ApiException;
-import ch.rfobaden.incidentmanager.backend.user.User;
-import ch.rfobaden.incidentmanager.backend.user.UserService;
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.entities.Session;
+import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

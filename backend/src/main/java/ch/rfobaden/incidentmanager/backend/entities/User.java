@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.user;
+package ch.rfobaden.incidentmanager.backend.entities;
 
 import java.util.Objects;
 import javax.persistence.Entity;

@@ -1,6 +1,8 @@
-package ch.rfobaden.incidentmanager.backend.user;
+package ch.rfobaden.incidentmanager.backend.controllers;
 
-import ch.rfobaden.incidentmanager.backend.ApiException;
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

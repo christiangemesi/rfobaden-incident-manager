@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.rfobaden.incidentmanager.backend.entities.Session;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend;
+package ch.rfobaden.incidentmanager.backend.errors;
 
 import org.springframework.http.HttpStatus;
 
