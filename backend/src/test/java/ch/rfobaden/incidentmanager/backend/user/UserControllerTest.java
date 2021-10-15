@@ -1,5 +1,12 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import ch.rfobaden.incidentmanager.backend.controllers.UserController;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
@@ -21,13 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
     @Autowired
@@ -40,14 +40,14 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-    private final User USER1 = new User(1, "user1", "password1");
-    private final User USER2 = new User(2, "user2", "password2");
-    private final User USER3 = new User(3, "user3", "password3");
+    private final User user1 = new User(1, "user1", "password1");
+    private final User user2 = new User(2, "user2", "password2");
+    private final User user3 = new User(3, "user3", "password3");
 
     @Test
     public void testGetAllUsers() throws Exception {
         // Given
-        List<User> users = new ArrayList<>(Arrays.asList(USER1, USER2, USER3));
+        List<User> users = new ArrayList<>(Arrays.asList(user1, user2, user3));
 
         // When
         Mockito.when(userService.getUsers()).thenReturn(users);
@@ -85,8 +85,9 @@ public class UserControllerTest {
         long userId = 2;
 
         // When
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(USER2));
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/v1/users/" + userId);
+        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(user2));
+        MockHttpServletRequestBuilder mockRequest =
+            MockMvcRequestBuilders.get("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -103,8 +104,10 @@ public class UserControllerTest {
         long userId = 4;
 
         // When
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.empty());
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/v1/users/" + userId);
+        Mockito.when(userService.getUserById(userId))
+            .thenReturn(Optional.empty());
+        MockHttpServletRequestBuilder mockRequest =
+            MockMvcRequestBuilders.get("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -147,7 +150,8 @@ public class UserControllerTest {
 
         // When
         Mockito.when(userService.deleteUserById(userId)).thenReturn(true);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
+        MockHttpServletRequestBuilder mockRequest =
+            MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -163,7 +167,8 @@ public class UserControllerTest {
 
         // When
         Mockito.when(userService.deleteUserById(userId)).thenReturn(false);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
+        MockHttpServletRequestBuilder mockRequest =
+            MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)

@@ -11,12 +11,9 @@
     </JSCodeStyleSettings>
     <JavaCodeStyleSettings>
       <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
       <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
-        <value>
-          <package name="java.awt" withSubpackages="false" static="false" />
-          <package name="javax.swing" withSubpackages="false" static="false" />
-          <package name="org.junit.jupiter.api.Assertions" withSubpackages="false" static="true" />
-        </value>
+        <value />
       </option>
       <option name="IMPORT_LAYOUT_TABLE">
         <value>

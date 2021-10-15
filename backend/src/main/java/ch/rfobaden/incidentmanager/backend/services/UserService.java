@@ -37,9 +37,6 @@ public class UserService {
         return userRepository.findOneByName(name);
     }
 
-    /**
-     * @return if the user has been deleted
-     */
     public boolean deleteUserById(Long userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);

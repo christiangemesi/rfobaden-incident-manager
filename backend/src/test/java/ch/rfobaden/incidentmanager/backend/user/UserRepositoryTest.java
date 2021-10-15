@@ -1,5 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import org.junit.jupiter.api.Disabled;
@@ -9,9 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -83,12 +83,16 @@ public class UserRepositoryTest {
         User user1 = new User("user1", "password1");
         User user2 = new User("user2", "password2");
         User user3 = new User("user3", "password3");
-        Long userId = 2L;
+
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
+
         List<User> users = userRepository.findAll();
         assertThat(users.size()).isEqualTo(3);
+
+        Long userId = 2L;
+
         // When
         // TODO Why not workkkkk when run together
         userRepository.deleteById(userId);

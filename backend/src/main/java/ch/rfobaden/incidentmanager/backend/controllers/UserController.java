@@ -35,10 +35,7 @@ public class UserController {
         return userService.getUsers();
     }
 
-    /**
-     * @return HTTP status code 200 OK with the found user, or
-     *     HTTP status code 404 Not Found if no user exists with the given userId.
-     */
+
     @GetMapping(value = "{userId}")
     public User getUserById(@PathVariable(value = "userId") Long userId) {
         return userService.getUserById(userId).orElseThrow(() -> (
@@ -51,9 +48,6 @@ public class UserController {
         return userService.addNewUser(user);
     }
 
-    /**
-     * @throws ApiException HTTP status code 404 Not Found if no user exists with the given userId
-     */
     @DeleteMapping(value = "{userId}")
     public void deleteUserById(@PathVariable(value = "userId") Long userId) {
         if (!userService.deleteUserById(userId)) {
