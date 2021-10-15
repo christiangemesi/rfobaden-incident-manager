@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Consumer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,7 +86,7 @@ public final class SessionController {
     }
 
     private User findSessionUser(Session session) {
-        var user = userService.getUserById(session.getUserId());
+        var user = userService.getUserById(session.getUserId()).orElse(null);
         if (user == null) {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }

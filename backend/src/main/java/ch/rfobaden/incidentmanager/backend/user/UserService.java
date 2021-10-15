@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/*
- * Service Layer is responsible for business logic. This is part of the N-Tier pattern
+/**
+ * Service Layer is responsible for business logic. This is part of the N-Tier pattern.
  */
-@Service // this is the same as @Component but better for semantic
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
@@ -27,11 +27,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId).get();
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     public Optional<User> getUserByName(String name) {
         return userRepository.findOneByName(name);
+    }
+
+    /**
+     * @return if the user has been deleted
+     */
+    public boolean deleteUserById(Long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,42 +1,54 @@
 import React from 'react'
 import User from '@/models/User'
 import styled from 'styled-components'
+import BackendService from '@/services/BackendService'
+import UserStore from '@/stores/UserStore'
+import Id from '@/models/base/Id'
 
 interface Props {
   users: User[]
 }
 
+const handleDelete = async (userId: Id<User>) => {
+  await BackendService.delete('users', userId)
+  UserStore.remove(userId)
+}
+
 const UserList: React.VFC<Props> = ({ users }) => {
   return (
     <StyledTable>
-      <StyledTr>
-        <StyledTh>
-          Benutzer
-        </StyledTh>
-        <StyledTh>
+      <thead>
+        <StyledTr>
+          <StyledTh>
+            Benutzer
+          </StyledTh>
+          <StyledTh>
 
-        </StyledTh>
-        <StyledTh>
+          </StyledTh>
+          <StyledTh>
 
-        </StyledTh>
-      </StyledTr>
-      {users.map((user) => (
-        <StyledTr key={user.id}>
-          <StyledTd>
-            {user.name}
-          </StyledTd>
-          <StyledTdSmall>
-            <StyledButton type="button">
-              Bearbeiten
-            </StyledButton>
-          </StyledTdSmall>
-          <StyledTdSmall>
-            <StyledButton type="button">
-              Löschen
-            </StyledButton>
-          </StyledTdSmall>
+          </StyledTh>
         </StyledTr>
-      ))}
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <StyledTr key={user.id}>
+            <StyledTd>
+              {user.name}
+            </StyledTd>
+            <StyledTdSmall>
+              <StyledButton type="button">
+                Bearbeiten
+              </StyledButton>
+            </StyledTdSmall>
+            <StyledTdSmall>
+              <StyledButton type="button" onClick={() => handleDelete(user.id)}>
+                Löschen
+              </StyledButton>
+            </StyledTdSmall>
+          </StyledTr>
+        ))}
+      </tbody>
     </StyledTable>
   )
 }
