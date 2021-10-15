@@ -66,7 +66,7 @@ To manually lint the backend, run:
 gradle checkstyleMain checkstyleTest
 
 # in docker:
-docker-compose run --no-deps backend gradle --no-daemon checkstyleMain checkstyleTest
+docker-compose run --no-deps backend sh -c  "gradle --no-daemon checkstyleMain checkstyleTest"
 ```
 
 To manually lint the frontend, run:
@@ -75,7 +75,7 @@ To manually lint the frontend, run:
 npm run lint
 
 # in docker
-docker-compose run --no-deps frontend npm run lint
+docker-compose run --no-deps frontend sh -c "npm run lint"
 ```
 
 ### Cleanup
