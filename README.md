@@ -14,6 +14,10 @@ cd frontend && npm install
 ```
 Backend dependencies are automatically fetched on startup.
 
+### Using Checkstyle plugin in IntelliJ IDEA
+1. Download the Checkstyle plugin in the settings.
+2. Add the Configuration under `Settings->Tools->Checkstyle->Configuration File->+` select `backend/config/checkstyle.xml` file.
+
 ### Usage
 Start the application:
 ```shell
