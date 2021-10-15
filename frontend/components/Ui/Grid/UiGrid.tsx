@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import React, { CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { Breakpoint, Themed } from '@/theme'
 import StyleHelper from '@/utils/helpers/style.helper'
 
@@ -66,6 +66,7 @@ type Order = number | null | {
   [K in Breakpoint]?: Order
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapSize = (size: ColSizeProp | undefined): any => {
   if (size === undefined || size === true) {
     return colSizeStyles.default
@@ -86,6 +87,7 @@ const mapSize = (size: ColSizeProp | undefined): any => {
   `)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapOrder = (order: Order | null | undefined): any => {
   if (order == undefined) {
     return ''

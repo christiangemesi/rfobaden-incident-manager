@@ -2,9 +2,8 @@ import { useSetState } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
 import Update from '@/utils/update'
 import { useEffect } from 'react'
-import UiFormField from '@/components/Ui/Form/Field/UiFormField'
 
-export const useForm = <T>(getInitialValue: () => T, deps: unknown[] = []): UiFormFieldsState<T> => {
+export const useForm = <T>(getInitialValue: () => T): UiFormFieldsState<T> => {
   const [form, setForm] = useSetState<UiFormState<T>>(useStatic(() => {
     const value = getInitialValue()
     return {

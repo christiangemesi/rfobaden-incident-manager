@@ -1,2 +1,2 @@
-type Id<T> = number
+type Id<_T> = number
 export default Id

@@ -21,10 +21,12 @@ const UiTextInput: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
 
   return (
-    <StyledLabel>
-      <span>
-        {label}
-      </span>
+    <Label>
+      {label !== null && (
+        <span>
+          {label}
+        </span>
+      )}
       <StyledInput value={value} onChange={handleChange} type={type} />
       <Errors>
         {errors.map((error) => (
@@ -33,7 +35,7 @@ const UiTextInput: React.VFC<Props> = ({
           </div>
         ))}
       </Errors>
-    </StyledLabel>
+    </Label>
   )
 }
 export default UiTextInput

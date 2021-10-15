@@ -1,6 +1,5 @@
 import React from 'react'
 import UiGrid from '../../Grid/UiGrid'
-import styled from 'styled-components'
 import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
@@ -33,8 +32,3 @@ const UiConfirmButtons: React.VFC<Props> = ({
   )
 }
 export default UiConfirmButtons
-
-const StyledButton = styled.button`
-  display: block;
-  width: 100%;
-`
