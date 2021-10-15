@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
-import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

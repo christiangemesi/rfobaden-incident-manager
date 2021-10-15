@@ -1,7 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
 import ch.rfobaden.incidentmanager.backend.controllers.UserController;
-import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.util.UserSerializerNoId;
 import com.fasterxml.jackson.databind.ObjectMapper;

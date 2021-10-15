@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

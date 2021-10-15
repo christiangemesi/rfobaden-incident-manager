@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.user;
 
-import ch.rfobaden.incidentmanager.backend.entities.User;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

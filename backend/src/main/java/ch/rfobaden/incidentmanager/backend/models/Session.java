@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.entities;
+package ch.rfobaden.incidentmanager.backend.models;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
