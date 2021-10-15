@@ -1,6 +1,5 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import StringHelper from '@/utils/helpers/StringHelper'
-import styled from 'styled-components'
+import StringHelper from '@/utils/helpers/string.helper'
 
 class StyleHelper {
   tag<P>(name: keyof JSX.IntrinsicElements): React.VFC<P & StyledProps>

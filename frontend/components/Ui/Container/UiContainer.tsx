@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
-import StyleHelper from '@/utils/helpers/StyleHelper'
+import StyleHelper from '@/utils/helpers/style.helper'
 import { Themed } from '@/theme'
 
 interface Props {

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React, { CSSProperties, ReactNode } from 'react'
 import { Breakpoint, Themed } from '@/theme'
-import StyleHelper from '@/utils/helpers/StyleHelper'
+import StyleHelper from '@/utils/helpers/style.helper'
 
 interface Props {
   gap?: number

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import { EventHandler, ReactNode, MouseEvent, CSSProperties } from 'react'
-import StyleHelper from '@/utils/helpers/StyleHelper'
+import StyleHelper from '@/utils/helpers/style.helper'
 
 interface Props {
   /**
