@@ -23,11 +23,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addNewUser(User user) throws IllegalArgumentException {
+    public User addNewUser(User user) {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long userId) throws IllegalArgumentException {
+    public Optional<User> getUserById(Long userId) {
         return userRepository.findById(userId);
     }
 
@@ -37,9 +37,8 @@ public class UserService {
 
     /**
      * @return if the user has been deleted
-     * @throws IllegalArgumentException when the userId is null
      */
-    public boolean deleteUserById(Long userId) throws IllegalArgumentException {
+    public boolean deleteUserById(Long userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
             return true;

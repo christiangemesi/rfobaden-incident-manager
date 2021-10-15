@@ -3,9 +3,7 @@ package ch.rfobaden.incidentmanager.backend.user;
 import ch.rfobaden.incidentmanager.backend.util.UserSerializerNoId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +20,6 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -73,8 +70,9 @@ public class UserControllerTest {
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isNoContent())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
         verify(userService, times(1)).getUsers();
     }
 
@@ -108,30 +106,13 @@ public class UserControllerTest {
         // Then
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.message", is("user not found")));
         verify(userService, times(1)).getUserById(userId);
     }
 
     @Test
-    public void testGetUserByIdNull() throws Exception {
-        // Given
-        Long userId = null;
-
-        // When
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.empty());
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/v1/users/" + userId);
-
-        // Then
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").doesNotExist());
-        // TODO why does this not work?
-        //  verify(userService, times(1)).getUserById(userId);
-    }
-
-    @Test
     public void testAddNewUser() throws Exception {
-        // TODO whyy is response body empty and addNewUser not called?
         // Given
         User newUser = new User("newUser", "newPassword");
         User createdUser = new User(4, "newUser", "newPassword");
@@ -148,34 +129,12 @@ public class UserControllerTest {
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id", is(4)))
                 .andExpect(jsonPath("$.username", is("newUser")))
                 .andExpect(jsonPath("$.password", is("newPassword")));
-        // TODO why does this not work?
-//        verify(userService, times(1)).addNewUser(newUser);
-    }
-
-    @Test
-    public void testAddNewUserNull() throws Exception {
-        // Given
-        User newUser = null;
-
-        // When
-        Mockito.when(userService.addNewUser(newUser)).thenThrow(IllegalArgumentException.class);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/v1/users/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(newUser));
-
-        // Then
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").doesNotExist());
-
-        // TODO why does this not work?
-        //verify(userService, times(1)).addNewUser(newUser);
+        verify(userService, times(1)).addNewUser(newUser);
     }
 
     @Test
@@ -189,13 +148,13 @@ public class UserControllerTest {
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
         verify(userService, times(1)).deleteUserById(userId);
     }
 
     @Test
-    public void deletePatientByIdNotFound() throws Exception {
+    public void testDeleteUserByIdNotFound() throws Exception {
         // Given
         long userId = 4;
 
@@ -206,24 +165,8 @@ public class UserControllerTest {
         // Then
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.message", is("user not found")));
         verify(userService, times(1)).deleteUserById(userId);
-    }
-
-    @Test
-    public void deletePatientByIdNull() throws Exception {
-        // Given
-        Long userId = null;
-
-        // When
-        Mockito.when(userService.deleteUserById(userId)).thenThrow(IllegalArgumentException.class);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
-
-        // Then
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").doesNotExist());
-        // TODO why does this not work?
-        //verify(userService, times(1)).deleteUserById(userId);
     }
 }
