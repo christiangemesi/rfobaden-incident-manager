@@ -82,10 +82,6 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     margin-bottom: 1rem;
   }
-  
-  body {
-    overflow-y: hidden;
-  }
 `
 
 const SessionStateBar = styled.div`
