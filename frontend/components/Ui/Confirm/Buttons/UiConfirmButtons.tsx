@@ -1,13 +1,18 @@
 import React from 'react'
 import UiGrid from '../../Grid/UiGrid'
 import styled from 'styled-components'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
+  allowSubmit?: boolean
+  allowCancel?: boolean
   onSubmit?: () => void
   onCancel?: () => void
 }
 
 const UiConfirmButtons: React.VFC<Props> = ({
+  allowSubmit = true,
+  allowCancel = true,
   onSubmit: doSubmit,
   onCancel: doCancel,
 }) => {
@@ -15,14 +20,14 @@ const UiConfirmButtons: React.VFC<Props> = ({
   return (
     <UiGrid gap={0.5}>
       <UiGrid.Col size={8}>
-        <StyledButton type="button" onClick={doSubmit}>
+        <UiButton isFull isDisabled={!allowSubmit} onClick={doSubmit}>
           Bestätigen
-        </StyledButton>
+        </UiButton>
       </UiGrid.Col>
       <UiGrid.Col>
-        <StyledButton type="button" onClick={doCancel}>
+        <UiButton isFull isDisabled={!allowCancel} onClick={doCancel}>
           Abbrechen
-        </StyledButton>
+        </UiButton>
       </UiGrid.Col>
     </UiGrid>
   )
