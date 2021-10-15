@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller contains all the API mapping. This is part of the N-Tier pattern.
@@ -44,12 +46,15 @@ public class UserController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User addNewUser(@RequestBody User user) {
         return userService.addNewUser(user);
     }
 
     @DeleteMapping(value = "{userId}")
-    public void deleteUserById(@PathVariable(value = "userId") Long userId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserById(
+        @PathVariable(value = "userId") Long userId) {
         if (!userService.deleteUserById(userId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "user not found");
         }

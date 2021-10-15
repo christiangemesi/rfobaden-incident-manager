@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -36,14 +37,15 @@ public final class SessionController {
     }
 
     @GetMapping
-    public @ResponseBody User find(HttpServletRequest request) {
+    public User find(HttpServletRequest request) {
         var cookie = findCookie(request);
         var session = parseSessionFromCookie(cookie);
         return findSessionUser(session);
     }
 
     @PostMapping
-    public @ResponseBody ResponseEntity<User> create(
+    @ResponseStatus(HttpStatus.CREATED)
+    public User create(
         @RequestBody LoginData data,
         HttpServletRequest request,
         HttpServletResponse response
@@ -63,14 +65,12 @@ public final class SessionController {
                 cookie.setMaxAge(-1);
             }
         });
-
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(user);
+        return user;
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> delete(HttpServletRequest request, HttpServletResponse response) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(HttpServletRequest request, HttpServletResponse response) {
         var cookie = findCookie(request);
 
         var session = parseSessionFromCookie(cookie);
@@ -82,8 +82,6 @@ public final class SessionController {
         setCookie(cookie, request, response, () -> {
             cookie.setMaxAge(0);
         });
-
-        return ResponseEntity.noContent().build();
     }
 
     private User findSessionUser(Session session) {
