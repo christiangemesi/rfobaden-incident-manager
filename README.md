@@ -4,7 +4,7 @@
 ### Setup
 Install frontend dependencies:
 ```shell
-docker-compose run frontend --no-deps sh -c "npm install"
+docker-compose run --no-deps frontend sh -c "npm install"
 ```
 
 If you use an IDE, you most likely also want to install the frontend dependencies locally.
