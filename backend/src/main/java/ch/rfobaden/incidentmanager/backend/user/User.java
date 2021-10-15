@@ -36,11 +36,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "User{"
+                + "id="
+                + id
+                + ", username='" + username + '\''
+                + ", password='" + password + '\''
+                + '}';
     }
 
     @Override
@@ -53,8 +54,8 @@ public class User {
         }
         var that = (User) other;
         return id == that.id
-            && Objects.equals(username, that.username)
-            && Objects.equals(password, that.password);
+                && Objects.equals(username, that.username)
+                && Objects.equals(password, that.password);
     }
 
     @Override

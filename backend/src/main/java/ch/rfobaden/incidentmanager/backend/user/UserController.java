@@ -35,7 +35,7 @@ public class UserController {
 
     /**
      * @return HTTP status code 200 OK with the found user, or
-     * HTTP status code 404 Not Found if no user exists with the given userId.
+     *     HTTP status code 404 Not Found if no user exists with the given userId.
      */
     @GetMapping(value = "{userId}")
     public User getUserById(@PathVariable(value = "userId") Long userId) {
@@ -50,8 +50,7 @@ public class UserController {
     }
 
     /**
-     * @return HTTP status code 200 OK if the user was deleted, or
-     * HTTP status code 404 Not Found if no user exists with the given userId, or
+     * @throws ApiException HTTP status code 404 Not Found if no user exists with the given userId
      */
     @DeleteMapping(value = "{userId}")
     public void deleteUserById(@PathVariable(value = "userId") Long userId) {

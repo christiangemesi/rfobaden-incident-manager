@@ -18,7 +18,8 @@ public class UserSerializerNoId extends StdSerializer<User> {
     }
 
     @Override
-    public void serialize(User value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(User value, JsonGenerator gen, SerializerProvider provider)
+            throws IOException {
         gen.writeStartObject();
         gen.writeStringField("username", value.getUsername());
         gen.writeStringField("password", value.getPassword());

@@ -15,7 +15,8 @@ public final class Session {
     public static String encode(Session session) {
         try {
             var decodedToken = Long.toString(session.getUserId());
-            return Base64.getEncoder().encodeToString(decodedToken.getBytes(StandardCharsets.UTF_8.toString()));
+            return Base64.getEncoder()
+                    .encodeToString(decodedToken.getBytes(StandardCharsets.UTF_8.toString()));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException("failed to base64 encode session", e);
         }
