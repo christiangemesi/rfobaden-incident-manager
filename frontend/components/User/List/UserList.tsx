@@ -10,7 +10,6 @@ interface Props {
 }
 
 const handleDelete = async (userId: Id<User>) => {
-  console.log(`deleting user with id ${userId}`)
   await BackendService.delete('users', userId)
   UserStore.remove(userId)
 }
