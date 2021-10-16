@@ -1,7 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import org.apache.tomcat.jni.Local;
-
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -21,7 +19,7 @@ public class Incident {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    private User creator;
+    private long creatorId;
     private String description;
     private String closeReason;
     private boolean isClosed;
@@ -33,21 +31,25 @@ public class Incident {
     private LocalDate endDate;
     //todo Location and attachments have not been added yet, is that okay?
 
-    public Incident(long id, String title, User creator, String description, LocalDate startDate) {
+    public Incident() {
+    }
+
+    public Incident(long id, String title, long creatorId,
+                    String description, LocalDate startDate) {
         setId(id);
         setTitle(title);
-        setCreator(creator);
+        setCreatorId(creatorId);
         setDescription(description);
         setStartDate(startDate);
         setCreationDate(LocalDate.now());
     }
 
-    public Incident(long id, String title, User creator, String description) {
-        this(id, title, creator, description, LocalDate.now());
+    public Incident(long id, String title, long creatorId, String description) {
+        this(id, title, creatorId, description, LocalDate.now());
     }
 
-    public Incident(long id, String title, User creator) {
-        this(id, title, creator, "");
+    public Incident(long id, String title, long creatorId) {
+        this(id, title, creatorId, "");
 
     }
 
@@ -67,12 +69,12 @@ public class Incident {
         this.title = title;
     }
 
-    public User getCreator() {
-        return creator;
+    public long getCreatorId() {
+        return creatorId;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setCreatorId(long creatorId) {
+        this.creatorId = creatorId;
     }
 
     public String getDescription() {
@@ -134,7 +136,7 @@ public class Incident {
     @Override
     public int hashCode() {
         // TODO Check hash values
-        return Objects.hash(id, title, creator, creationDate);
+        return Objects.hash(id, title, creatorId, creationDate);
     }
 
     @Override
@@ -148,7 +150,7 @@ public class Incident {
         var that = (Incident) other;
         return id == that.id
                 && Objects.equals(title, that.title)
-                && Objects.equals(creator, that.creator)
+                && Objects.equals(creatorId, that.creatorId)
                 && Objects.equals(creationDate, that.creationDate);
     }
 
@@ -159,7 +161,7 @@ public class Incident {
                 + "id="
                 + id
                 + ", Title='" + title + '\''
-                + ", Creator='" + creator.getUsername() + '\''
+                + ", CreatorId='" + creatorId + '\''
                 + ", Creation Date ='" + creationDate.toString() + '\''
                 + '}';
     }
