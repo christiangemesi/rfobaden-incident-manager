@@ -16,5 +16,5 @@ import java.util.Optional;
 public interface IncidentRepository extends JpaRepository<Incident, Long> {
     //todo is title correct?
     @Query("SELECT incident FROM Incident incident WHERE LOWER(incident.title) = LOWER(:title)")
-    Optional<Incident> findOneByName(@Param("title") String title);
+    Optional<Incident> findOneByTitle(@Param("title") String title);
 }
