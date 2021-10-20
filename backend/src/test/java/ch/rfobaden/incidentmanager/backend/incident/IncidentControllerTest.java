@@ -7,16 +7,11 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ch.rfobaden.incidentmanager.backend.incident.UserController;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
-import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.util.IncidentSerializerNoId;
-import ch.rfobaden.incidentmanager.backend.util.UserSerializerNoId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,15 +41,20 @@ class IncidentControllerTest {
     @MockBean
     IncidentService incidentService;
 
-    private final Incident incidentUnused = new Incident(0,"incident1",1,"This is an incident", LocalDate.now());
-    private final Incident incident1 = new Incident(1,"incident1",1,"This is an incident", LocalDate.now());
-    private final Incident incident2 = new Incident(2,"incident2",1,"This is an incident", LocalDate.now());
-    private final Incident incident3 = new Incident(3,"incident3",1,"This is an incident", LocalDate.now());
+    private final Incident incidentUnused = new Incident(0, "incident1", 1,
+            "This is an incident", LocalDate.now());
+    private final Incident incident1 = new Incident(1, "incident1", 1,
+            "This is an incident", LocalDate.now());
+    private final Incident incident2 = new Incident(2, "incident2", 1,
+            "This is an incident", LocalDate.now());
+    private final Incident incident3 = new Incident(3, "incident3", 1,
+            "This is an incident", LocalDate.now());
 
     @Test
     public void testGetAllIncidents() throws Exception {
         // Given
-        List<Incident> incidentsList = new ArrayList<>(Arrays.asList(incident1, incident2, incident3));
+        List<Incident> incidentsList = new ArrayList<>(Arrays.asList(incident1,
+                incident2, incident3));
 
         // When
         Mockito.when(incidentService.getIncidents()).thenReturn(incidentsList);
@@ -92,7 +92,8 @@ class IncidentControllerTest {
         long incidentId = 2;
 
         // When
-        Mockito.when(incidentService.getIncidentByID(incidentId)).thenReturn(Optional.of(incident2));
+        Mockito.when(incidentService.getIncidentByID(incidentId))
+                .thenReturn(Optional.of(incident2));
         MockHttpServletRequestBuilder mockRequest =
                 MockMvcRequestBuilders.get("/api/v1/incidents/" + incidentId);
 
@@ -129,8 +130,9 @@ class IncidentControllerTest {
     //doesnt work idk why 201 response instead of 200
     public void testAddNewIncident() throws Exception {
         // Given
-        Incident newIncident = new Incident("incident4",1,"This is an incident", LocalDate.now());
-        Incident createdIncident = new Incident(4,"incident4",1,"This is an incident", LocalDate.now());
+        Incident newIncident = new Incident("incident4", 1, "This is an incident", LocalDate.now());
+        Incident createdIncident = new Incident(4, "incident4", 1,
+                "This is an incident", LocalDate.now());
         // Register custom mapper
         module.addSerializer(Incident.class, new IncidentSerializerNoId());
         mapper.registerModule(module);
@@ -148,10 +150,11 @@ class IncidentControllerTest {
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id", is(4)))
                 .andExpect(jsonPath("$.title", is("incident4")));
-        verify(incidentService, times(1)).addNewIncident(newIncident);
+        verify(incidentService, times(1)).addNewIncident(createdIncident);
     }
 
     @Test
+    //todo 204 request
     public void testDeleteIncidentById() throws Exception {
         // Given
         long incidentId = 2;
@@ -159,7 +162,7 @@ class IncidentControllerTest {
         // When
         Mockito.when(incidentService.deleteIncidentByID(incidentId)).thenReturn(true);
         MockHttpServletRequestBuilder mockRequest =
-                MockMvcRequestBuilders.delete("/api/v1/users/" + incidentId);
+                MockMvcRequestBuilders.delete("/api/v1/incidents/" + incidentId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -169,20 +172,20 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testDeleteUserByIdNotFound() throws Exception {
+    public void testDeleteIncidentByIdNotFound() throws Exception {
         // Given
         long incidentId = 4;
 
         // When
         Mockito.when(incidentService.deleteIncidentByID(incidentId)).thenReturn(false);
         MockHttpServletRequestBuilder mockRequest =
-                MockMvcRequestBuilders.delete("/api/v1/users/" + incidentId);
+                MockMvcRequestBuilders.delete("/api/v1/incidents/" + incidentId);
 
         // Then
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.message", is("user not found")));
+                .andExpect(jsonPath("$.message", is("incident not found")));
         verify(incidentService, times(1)).deleteIncidentByID(incidentId);
     }
 
