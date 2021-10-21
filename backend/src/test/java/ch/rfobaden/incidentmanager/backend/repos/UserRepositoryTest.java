@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.user;
+package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
