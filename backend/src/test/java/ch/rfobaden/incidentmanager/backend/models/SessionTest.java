@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.session;
+package ch.rfobaden.incidentmanager.backend.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
