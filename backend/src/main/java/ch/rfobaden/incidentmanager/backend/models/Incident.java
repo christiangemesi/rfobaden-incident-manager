@@ -159,30 +159,46 @@ public class Incident {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Incident incident = (Incident) o;
-        return id == incident.id && isClosed == incident.isClosed && title.equals(incident.title) && authorId.equals(incident.authorId) && Objects.equals(description, incident.description) && Objects.equals(closeReason, incident.closeReason) && createdAt.equals(incident.createdAt) && updatedAt.equals(incident.updatedAt) && startedAt.equals(incident.startedAt) && Objects.equals(endsAt, incident.endsAt);
+        return id == incident.id
+            && isClosed == incident.isClosed
+            && title.equals(incident.title)
+            && authorId.equals(incident.authorId)
+            && Objects.equals(description, incident.description)
+            && Objects.equals(closeReason, incident.closeReason)
+            && createdAt.equals(incident.createdAt)
+            && updatedAt.equals(incident.updatedAt)
+            && startsAt.equals(incident.startsAt)
+            && Objects.equals(endsAt, incident.endsAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, authorId, description, closeReason, isClosed, createdAt, updatedAt, startedAt, endsAt);
+        return Objects.hash(
+            id, title, authorId, description, closeReason,
+            isClosed, createdAt, updatedAt, startsAt, endsAt
+        );
     }
 
     @Override
     public String toString() {
-        return "Incident{" +
-            "id=" + id +
-            ", title=" + title +
-            ", authorId=" + authorId +
-            ", description=" + description +
-            ", closeReason=" + closeReason +
-            ", isClosed=" + isClosed +
-            ", creationDate=" + createdAt +
-            ", updateDate=" + updatedAt +
-            ", startDate=" + startedAt +
-            ", endDate=" + endsAt +
-            '}';
+        return "Incident{"
+            + "id=" + id
+            + ", title=" + title
+            + ", authorId=" + authorId
+            + ", description=" + description
+            + ", closeReason=" + closeReason
+            + ", isClosed=" + isClosed
+            + ", creationDate=" + createdAt
+            + ", updateDate=" + updatedAt
+            + ", startDate=" + startsAt
+            + ", endDate=" + endsAt
+            + '}';
     }
 }
