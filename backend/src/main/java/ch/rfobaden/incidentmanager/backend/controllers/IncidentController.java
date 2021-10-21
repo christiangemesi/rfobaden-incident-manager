@@ -38,7 +38,7 @@ public class IncidentController {
     }
 
     @GetMapping("{incidentId}")
-    public Incident getIncidentById(@PathVariable(value = "incidentId") Long incidentId) {
+    public Incident getIncidentById(@PathVariable("incidentId") Long incidentId) {
         return incidentService.getIncidentById(incidentId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
         ));
@@ -50,10 +50,10 @@ public class IncidentController {
         return incidentService.addNewIncident(incident);
     }
 
-    @DeleteMapping(value = "{incidentId}")
+    @DeleteMapping("{incidentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIncidentById(
-            @PathVariable(value = "incidentId") Long incidentId) {
+            @PathVariable("incidentId") Long incidentId) {
         if (!incidentService.deleteIncidentById(incidentId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
         }
