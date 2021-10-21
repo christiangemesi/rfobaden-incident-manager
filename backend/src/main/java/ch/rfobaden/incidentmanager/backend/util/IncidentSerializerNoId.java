@@ -27,10 +27,10 @@ public class IncidentSerializerNoId extends StdSerializer<Incident> {
         gen.writeStringField("closeReason", value.getCloseReason());
         gen.writeBooleanField("isClosed", value.isClosed());
         //todo is it fine to wrap Date to string?
-        gen.writeStringField("creationDate", String.valueOf(value.getCreationDate()));
-        gen.writeStringField("updateDate", String.valueOf(value.getCreationDate()));
-        gen.writeStringField("startDate", String.valueOf(value.getCreationDate()));
-        gen.writeStringField("endDate", String.valueOf(value.getCreationDate()));
+        gen.writeStringField("creationDate", String.valueOf(value.getCreatedAt()));
+        gen.writeStringField("updateDate", String.valueOf(value.getCreatedAt()));
+        gen.writeStringField("startDate", String.valueOf(value.getCreatedAt()));
+        gen.writeStringField("endDate", String.valueOf(value.getCreatedAt()));
 
         gen.writeEndObject();
     }

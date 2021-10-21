@@ -33,15 +33,14 @@ public class Incident {
 
     //todo should Date be in the variable name?
     @Column(nullable = false)
-    private LocalDate creationDate;
+    private LocalDate createdAt;
 
     @Column(nullable = false)
-    private LocalDate updateDate;
+    private LocalDate updatedAt;
 
-    @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDate startedAt;
 
-    private LocalDate endDate;
+    private LocalDate endsAt;
 
     //todo Location and attachments have not been added yet, is that okay?
 
@@ -49,24 +48,24 @@ public class Incident {
     }
 
     public Incident(long id, String title, long authorId,
-                    String description, LocalDate startDate) {
+                    String description, LocalDate startedAt) {
         setId(id);
         setTitle(title);
         setAuthorId(authorId);
         setDescription(description);
-        setStartDate(startDate);
-        setCreationDate(LocalDate.now());
-        setUpdateDate(LocalDate.now());
+        setStartedAt(startedAt);
+        setCreatedAt(LocalDate.now());
+        setUpdatedAt(LocalDate.now());
     }
 
     public Incident(String title, long authorId,
-                    String description, LocalDate startDate) {
+                    String description, LocalDate startedAt) {
         setTitle(title);
         setAuthorId(authorId);
         setDescription(description);
-        setStartDate(startDate);
-        setCreationDate(LocalDate.now());
-        setUpdateDate(LocalDate.now());
+        setStartedAt(startedAt);
+        setCreatedAt(LocalDate.now());
+        setUpdatedAt(LocalDate.now());
     }
 
     public Incident(long id, String title, long authorId, String description) {
@@ -126,36 +125,36 @@ public class Incident {
         isClosed = closed;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
+    public LocalDate getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdateDate() {
-        return updateDate;
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateDate(LocalDate updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getStartedAt() {
+        return startedAt;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setStartedAt(LocalDate startedAt) {
+        this.startedAt = startedAt;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getEndsAt() {
+        return endsAt;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setEndsAt(LocalDate endsAt) {
+        this.endsAt = endsAt;
     }
 
     @Override
@@ -163,12 +162,12 @@ public class Incident {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Incident incident = (Incident) o;
-        return id == incident.id && isClosed == incident.isClosed && title.equals(incident.title) && authorId.equals(incident.authorId) && Objects.equals(description, incident.description) && Objects.equals(closeReason, incident.closeReason) && creationDate.equals(incident.creationDate) && updateDate.equals(incident.updateDate) && startDate.equals(incident.startDate) && Objects.equals(endDate, incident.endDate);
+        return id == incident.id && isClosed == incident.isClosed && title.equals(incident.title) && authorId.equals(incident.authorId) && Objects.equals(description, incident.description) && Objects.equals(closeReason, incident.closeReason) && createdAt.equals(incident.createdAt) && updatedAt.equals(incident.updatedAt) && startedAt.equals(incident.startedAt) && Objects.equals(endsAt, incident.endsAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, authorId, description, closeReason, isClosed, creationDate, updateDate, startDate, endDate);
+        return Objects.hash(id, title, authorId, description, closeReason, isClosed, createdAt, updatedAt, startedAt, endsAt);
     }
 
     @Override
@@ -180,10 +179,10 @@ public class Incident {
             ", description=" + description +
             ", closeReason=" + closeReason +
             ", isClosed=" + isClosed +
-            ", creationDate=" + creationDate +
-            ", updateDate=" + updateDate +
-            ", startDate=" + startDate +
-            ", endDate=" + endDate +
+            ", creationDate=" + createdAt +
+            ", updateDate=" + updatedAt +
+            ", startDate=" + startedAt +
+            ", endDate=" + endsAt +
             '}';
     }
 }
