@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "11e2da6b-eda2-4332-98e0-f0a4d2847a15",
+		"_postman_id": "e57a47d0-cbf7-4d32-a857-1805470a2620",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -38,7 +38,7 @@
 							"query": [
 								{
 									"key": "",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
