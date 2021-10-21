@@ -22,8 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,44 +29,50 @@ import java.util.Optional;
 public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    ObjectMapper mapper;
-
-    SimpleModule module = new SimpleModule();
 
     @MockBean
     UserService userService;
+
+    ObjectMapper requestMapper = new ObjectMapper();
 
     private final User user1 = new User(1, "user1", "password1");
     private final User user2 = new User(2, "user2", "password2");
     private final User user3 = new User(3, "user3", "password3");
 
+    {
+        // Add module to requestMapper which maps user without ids.
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(User.class, new UserSerializerNoId());
+        requestMapper.registerModule(module);
+    }
+
     @Test
     public void testGetAllUsers() throws Exception {
         // Given
-        List<User> users = new ArrayList<>(Arrays.asList(user1, user2, user3));
+        List<User> users = List.of(user1, user2, user3);
+        Mockito.when(userService.getUsers())
+            .thenReturn(users);
 
         // When
-        Mockito.when(userService.getUsers()).thenReturn(users);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/v1/users");
+        var request = MockMvcRequestBuilders.get("/api/v1/users");
 
         // Then
-        mockMvc.perform(mockRequest)
+        mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[2].username", is("user3")));
+                .andExpect(jsonPath("$", hasSize(users.size())))
+                .andExpect(jsonPath("$[2].username", is(users.get(2).getUsername())));
         verify(userService, times(1)).getUsers();
     }
 
     @Test
     public void testGetAllUsersEmpty() throws Exception {
         // Given
-        List<User> users = new ArrayList<>();
+        Mockito.when(userService.getUsers())
+            .thenReturn(List.of());
 
         // When
-        Mockito.when(userService.getUsers()).thenReturn(users);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/v1/users");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/users");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -81,32 +85,32 @@ public class UserControllerTest {
     @Test
     public void testGetUserById() throws Exception {
         // Given
-        long userId = 2;
+        var user = user2;
+        Mockito.when(userService.getUserById(user.getId()))
+            .thenReturn(Optional.of(user));
 
         // When
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(user2));
-        MockHttpServletRequestBuilder mockRequest =
-            MockMvcRequestBuilders.get("/api/v1/users/" + userId);
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/users/" + user.getId());
 
         // Then
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id", is(2)))
-                .andExpect(jsonPath("$.username", is("user2")));
-        verify(userService, times(1)).getUserById(userId);
+                .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
+                .andExpect(jsonPath("$.username", is(user.getUsername())))
+                .andExpect(jsonPath("$.password", is(user.getPassword())));
+        verify(userService, times(1)).getUserById(user.getId());
     }
 
     @Test
     public void testGetUserByIdNotFound() throws Exception {
         // Given
         long userId = 4;
-
-        // When
         Mockito.when(userService.getUserById(userId))
             .thenReturn(Optional.empty());
-        MockHttpServletRequestBuilder mockRequest =
-            MockMvcRequestBuilders.get("/api/v1/users/" + userId);
+
+        // When
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -120,25 +124,23 @@ public class UserControllerTest {
     public void testAddNewUser() throws Exception {
         // Given
         User newUser = new User("newUser", "newPassword");
-        User createdUser = new User(4, "newUser", "newPassword");
-        // Register custom mapper
-        module.addSerializer(User.class, new UserSerializerNoId());
-        mapper.registerModule(module);
+        User createdUser = new User(4, newUser.getUsername(), newUser.getPassword());
+        Mockito.when(userService.addNewUser(newUser))
+            .thenReturn(createdUser);
 
         // When
-        Mockito.when(userService.addNewUser(newUser)).thenReturn(createdUser);
         var mockRequest = MockMvcRequestBuilders.post("/api/v1/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(newUser));
+                .content(requestMapper.writeValueAsString(newUser));
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id", is(4)))
-                .andExpect(jsonPath("$.username", is("newUser")))
-                .andExpect(jsonPath("$.password", is("newPassword")));
+                .andExpect(jsonPath("$.id", is(createdUser.getId()), Long.class))
+                .andExpect(jsonPath("$.username", is(newUser.getUsername())))
+                .andExpect(jsonPath("$.password", is(newUser.getPassword())));
         verify(userService, times(1)).addNewUser(newUser);
     }
 
@@ -146,15 +148,16 @@ public class UserControllerTest {
     public void testDeleteUserById() throws Exception {
         // Given
         long userId = 2;
+        Mockito.when(userService.deleteUserById(userId))
+            .thenReturn(true);
 
         // When
-        Mockito.when(userService.deleteUserById(userId)).thenReturn(true);
         MockHttpServletRequestBuilder mockRequest =
             MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
 
         // Then
         mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
         verify(userService, times(1)).deleteUserById(userId);
     }
@@ -163,9 +166,10 @@ public class UserControllerTest {
     public void testDeleteUserByIdNotFound() throws Exception {
         // Given
         long userId = 4;
+        Mockito.when(userService.deleteUserById(userId))
+            .thenReturn(false);
 
         // When
-        Mockito.when(userService.deleteUserById(userId)).thenReturn(false);
         MockHttpServletRequestBuilder mockRequest =
             MockMvcRequestBuilders.delete("/api/v1/users/" + userId);
 
