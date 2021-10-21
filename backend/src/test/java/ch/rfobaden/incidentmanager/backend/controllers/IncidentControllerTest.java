@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.incident;
+package ch.rfobaden.incidentmanager.backend.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.incident;
+package ch.rfobaden.incidentmanager.backend.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ch.rfobaden.incidentmanager.backend.controllers.UserController;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.util.UserSerializerNoId;

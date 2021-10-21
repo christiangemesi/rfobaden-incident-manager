@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controller;
+package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
