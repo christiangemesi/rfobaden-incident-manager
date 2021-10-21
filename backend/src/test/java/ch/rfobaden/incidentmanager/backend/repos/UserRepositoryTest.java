@@ -1,17 +1,13 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.rfobaden.incidentmanager.backend.models.User;
-import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
-import java.util.Optional;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -21,9 +17,9 @@ public class UserRepositoryTest {
 
     @Test
     public void testRepositoryIsEmpty() {
-        // Given
         // When
         List<User> users = userRepository.findAll();
+
         // Then
         assertThat(users).isEmpty();
     }
@@ -31,73 +27,59 @@ public class UserRepositoryTest {
     @Test
     public void testAddUser() {
         // Given
-        User newUser = new User("newUser", "newPassword");
+        var username = "myTestUsername";
+        var password = "myTestPassword";
+
         // When
-        User savedUser = userRepository.save(newUser);
+        User user = userRepository.save(new User(
+            username, password
+        ));
+
         // Then
-        assertThat(savedUser.getId()).isGreaterThan(0);
-        assertThat(savedUser).hasFieldOrPropertyWithValue("username", "newUser");
-        assertThat(savedUser).hasFieldOrPropertyWithValue("password", "newPassword");
+        assertThat(user.getId()).isGreaterThan(0);
+        assertThat(user.getUsername()).isEqualTo(username);
+        assertThat(user.getPassword()).isEqualTo(password);
     }
 
     @Test
     public void testGetUsers() {
         // Given
-        User user1 = new User("user1", "password1");
-        User user2 = new User("user2", "password2");
-        User user3 = new User("user3", "password3");
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
+        User user1 = userRepository.save(new User("user1", "password1"));
+        User user2 = userRepository.save(new User("user2", "password2"));
+        User user3 = userRepository.save(new User("user3", "password3"));
+
         // When
         List<User> users = userRepository.findAll();
+
         // Then
         assertThat(users).hasSize(3).contains(user1, user2, user3);
     }
 
-    @Disabled
     @Test
     public void testGetUserById() {
         // Given
-        userRepository.deleteAll();
-        User user1 = new User("user1", "password1");
-        User user2 = new User("user2", "password2");
-        Long userId = 2L;
-        userRepository.save(user1);
-        userRepository.save(user2);
+        userRepository.save(new User("user1", "password1"));
+        User user2 = userRepository.save(new User("user2", "password2"));
+
         // When
-        // TODO Why not workkkkk when run together
-        Optional<User> foundUser = userRepository.findById(userId);
+        User user = userRepository.findById(user2.getId()).orElse(null);
+
         // Then
-        assertTrue(foundUser.isPresent());
-        assertThat(foundUser.get().getId()).isEqualTo(userId);
-        assertThat(foundUser.get()).hasFieldOrPropertyWithValue("username", "user2");
-        assertThat(foundUser.get()).hasFieldOrPropertyWithValue("password", "password2");
+        assertThat(user).isNotNull();
+        assertThat(user).isEqualTo(user2);
     }
 
-    @Disabled
     @Test
     public void testDeleteUserById() {
         // Given
-        userRepository.deleteAll();
-        User user1 = new User("user1", "password1");
-        User user2 = new User("user2", "password2");
-        User user3 = new User("user3", "password3");
-
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-
-        List<User> users = userRepository.findAll();
-        assertThat(users.size()).isEqualTo(3);
-
-        Long userId = 2L;
+        User user1 = userRepository.save(new User("user1", "password1"));
+        User user2 = userRepository.save(new User("user2", "password2"));
+        User user3 = userRepository.save(new User("user3", "password3"));
 
         // When
-        // TODO Why not workkkkk when run together
-        userRepository.deleteById(userId);
-        users = userRepository.findAll();
+        userRepository.deleteById(user2.getId());
+
         // Then
-        assertThat(users).hasSize(2).contains(user1, user3);
+        assertThat(userRepository.findAll()).hasSize(2).contains(user1, user3);
     }
 }
