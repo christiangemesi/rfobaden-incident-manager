@@ -17,23 +17,32 @@ public class Incident {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private Long authorId;
+
     private String description;
+
     private String closeReason;
+
     @Column(nullable = false)
     private boolean isClosed;
 
     //todo should Date be in the variable name?
     @Column(nullable = false)
     private LocalDate creationDate;
+
     @Column(nullable = false)
     private LocalDate updateDate;
+
     @Column(nullable = false)
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     //todo Location and attachments have not been added yet, is that okay?
 
     public Incident() {
