@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers;
+package ch.rfobaden.incidentmanager.backend.controller;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller contains all the API mapping. This is part of the N-Tier pattern.

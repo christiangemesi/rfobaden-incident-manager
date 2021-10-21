@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Service Layer is responsible for business logic. This is part of the N-Tier pattern.
- */
+
 @Service
 public class IncidentService {
 
@@ -30,15 +28,11 @@ public class IncidentService {
         return incidentRepository.save(incident);
     }
 
-    public Optional<Incident> getIncidentByID(Long incidentId) {
+    public Optional<Incident> getIncidentById(Long incidentId) {
         return incidentRepository.findById(incidentId);
     }
 
-    public Optional<Incident> getIncidentByTitle(String title) {
-        return incidentRepository.findOneByTitle(title);
-    }
-
-    public boolean deleteIncidentByID(Long incidentId) {
+    public boolean deleteIncidentById(Long incidentId) {
         if (incidentRepository.existsById(incidentId)) {
             incidentRepository.deleteById(incidentId);
             return true;

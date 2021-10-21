@@ -2,31 +2,36 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * This is a JPA Entity that will be represented in the database.
- */
 @Entity
 @Table(name = "incident")
 public class Incident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private long id;
+    @Column(nullable = false)
     private String title;
-    private long creatorId;
+    @Column(nullable = false)
+    private Long authorId;
     private String description;
     private String closeReason;
+    @Column(nullable = false)
     private boolean isClosed;
 
     //todo should Date be in the variable name?
+    @Column(nullable = false)
     private LocalDate creationDate;
+    @Column(nullable = false)
     private LocalDate updateDate;
+    @Column(nullable = false)
     private LocalDate startDate;
     private LocalDate endDate;
     //todo Location and attachments have not been added yet, is that okay?
@@ -34,22 +39,33 @@ public class Incident {
     public Incident() {
     }
 
-    public Incident(long id, String title, long creatorId,
+    public Incident(long id, String title, long authorId,
                     String description, LocalDate startDate) {
         setId(id);
         setTitle(title);
-        setCreatorId(creatorId);
+        setAuthorId(authorId);
         setDescription(description);
         setStartDate(startDate);
         setCreationDate(LocalDate.now());
+        setUpdateDate(LocalDate.now());
     }
 
-    public Incident(long id, String title, long creatorId, String description) {
-        this(id, title, creatorId, description, LocalDate.now());
+    public Incident(String title, long authorId,
+                    String description, LocalDate startDate) {
+        setTitle(title);
+        setAuthorId(authorId);
+        setDescription(description);
+        setStartDate(startDate);
+        setCreationDate(LocalDate.now());
+        setUpdateDate(LocalDate.now());
     }
 
-    public Incident(long id, String title, long creatorId) {
-        this(id, title, creatorId, "");
+    public Incident(long id, String title, long authorId, String description) {
+        this(id, title, authorId, description, LocalDate.now());
+    }
+
+    public Incident(long id, String title, long authorId) {
+        this(id, title, authorId, "");
 
     }
 
@@ -69,12 +85,12 @@ public class Incident {
         this.title = title;
     }
 
-    public long getCreatorId() {
-        return creatorId;
+    public long getAuthorId() {
+        return authorId;
     }
 
-    public void setCreatorId(long creatorId) {
-        this.creatorId = creatorId;
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
     }
 
     public String getDescription() {
@@ -134,35 +150,31 @@ public class Incident {
     }
 
     @Override
-    public int hashCode() {
-        // TODO Check hash values
-        return Objects.hash(id, title, creatorId, creationDate);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Incident incident = (Incident) o;
+        return id == incident.id && isClosed == incident.isClosed && title.equals(incident.title) && authorId.equals(incident.authorId) && Objects.equals(description, incident.description) && Objects.equals(closeReason, incident.closeReason) && creationDate.equals(incident.creationDate) && updateDate.equals(incident.updateDate) && startDate.equals(incident.startDate) && Objects.equals(endDate, incident.endDate);
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof Incident)) {
-            return false;
-        }
-        var that = (Incident) other;
-        return id == that.id
-                && Objects.equals(title, that.title)
-                && Objects.equals(creatorId, that.creatorId)
-                && Objects.equals(creationDate, that.creationDate);
+    public int hashCode() {
+        return Objects.hash(id, title, authorId, description, closeReason, isClosed, creationDate, updateDate, startDate, endDate);
     }
 
     @Override
     public String toString() {
-        // TODO add more values
-        return "Incident {"
-                + "id="
-                + id
-                + ", Title='" + title + '\''
-                + ", CreatorId='" + creatorId + '\''
-                + ", Creation Date ='" + creationDate.toString() + '\''
-                + '}';
+        return "Incident{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", authorId=" + authorId +
+            ", description='" + description + '\'' +
+            ", closeReason='" + closeReason + '\'' +
+            ", isClosed=" + isClosed +
+            ", creationDate=" + creationDate +
+            ", updateDate=" + updateDate +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            '}';
     }
 }

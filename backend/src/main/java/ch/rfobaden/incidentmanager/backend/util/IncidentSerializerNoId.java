@@ -20,8 +20,18 @@ public class IncidentSerializerNoId extends StdSerializer<Incident> {
     public void serialize(Incident value, JsonGenerator gen, SerializerProvider provider)
             throws IOException {
         gen.writeStartObject();
-        //todo should all variables be serialized?
+        gen.writeNumberField("Id", value.getId());
         gen.writeStringField("title", value.getTitle());
+        gen.writeNumberField("author", value.getAuthorId());
+        gen.writeStringField("description", value.getDescription());
+        gen.writeStringField("closeReason", value.getCloseReason());
+        gen.writeBooleanField("isClosed", value.isClosed());
+        //todo is it fine to wrap Date to string?
+        gen.writeStringField("creationDate", String.valueOf(value.getCreationDate()));
+        gen.writeStringField("updateDate", String.valueOf(value.getCreationDate()));
+        gen.writeStringField("startDate", String.valueOf(value.getCreationDate()));
+        gen.writeStringField("endDate", String.valueOf(value.getCreationDate()));
+
         gen.writeEndObject();
     }
 

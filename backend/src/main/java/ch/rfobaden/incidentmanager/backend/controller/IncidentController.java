@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers;
+package ch.rfobaden.incidentmanager.backend.controller;
 
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
@@ -33,13 +33,13 @@ public class IncidentController {
     }
 
     @GetMapping
-    public List<Incident> getIncident() {
+    public List<Incident> getIncidents() {
         return incidentService.getIncidents();
     }
 
-    @GetMapping(value = "{userId}")
+    @GetMapping("{incidentId}")
     public Incident getIncidentById(@PathVariable(value = "incidentId") Long incidentId) {
-        return incidentService.getIncidentByID(incidentId).orElseThrow(() -> (
+        return incidentService.getIncidentById(incidentId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
         ));
     }
@@ -54,7 +54,7 @@ public class IncidentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIncidentById(
             @PathVariable(value = "incidentId") Long incidentId) {
-        if (!incidentService.deleteIncidentByID(incidentId)) {
+        if (!incidentService.deleteIncidentById(incidentId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
         }
     }

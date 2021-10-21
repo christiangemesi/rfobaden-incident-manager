@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers.handlers;
+package ch.rfobaden.incidentmanager.backend.controller.handlers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import org.springframework.http.ResponseEntity;
