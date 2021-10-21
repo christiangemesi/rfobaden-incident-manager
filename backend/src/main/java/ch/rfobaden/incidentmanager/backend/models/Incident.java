@@ -175,10 +175,10 @@ public class Incident {
     public String toString() {
         return "Incident{" +
             "id=" + id +
-            ", title='" + title + '\'' +
+            ", title=" + title +
             ", authorId=" + authorId +
-            ", description='" + description + '\'' +
-            ", closeReason='" + closeReason + '\'' +
+            ", description=" + description +
+            ", closeReason=" + closeReason +
             ", isClosed=" + isClosed +
             ", creationDate=" + creationDate +
             ", updateDate=" + updateDate +
