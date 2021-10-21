@@ -34,7 +34,6 @@ public class Incident {
     @JsonProperty("isClosed")
     private boolean isClosed;
 
-    //todo should Date be in the variable name?
     @Column(nullable = false)
     private LocalDate createdAt;
 
@@ -44,8 +43,6 @@ public class Incident {
     private LocalDate startsAt;
 
     private LocalDate endsAt;
-
-    //todo Location and attachments have not been added yet, is that okay?
 
     public Incident() {
     }
