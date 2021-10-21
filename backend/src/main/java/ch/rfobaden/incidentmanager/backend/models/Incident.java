@@ -31,7 +31,6 @@ public class Incident {
     private String closeReason;
 
     @Column(nullable = false)
-    @JsonProperty("isClosed")
     private boolean isClosed;
 
     @Column(nullable = false)
@@ -100,6 +99,7 @@ public class Incident {
         this.closeReason = closeReason;
     }
 
+    @JsonProperty("isClosed")
     public boolean isClosed() {
         return isClosed;
     }
