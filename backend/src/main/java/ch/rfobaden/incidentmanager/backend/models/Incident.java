@@ -38,7 +38,7 @@ public class Incident {
     @Column(nullable = false)
     private LocalDate updatedAt;
 
-    private LocalDate startedAt;
+    private LocalDate startsAt;
 
     private LocalDate endsAt;
 
