@@ -4,15 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.rfobaden.incidentmanager.backend.models.Incident;
-import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @DataJpaTest
 public class IncidentRepositoryTest {
@@ -22,9 +19,9 @@ public class IncidentRepositoryTest {
 
     @Test
     public void testRepositoryIsEmpty() {
-        // Given
         // When
         List<Incident> incidents = incidentRepository.findAll();
+
         // Then
         assertThat(incidents).isEmpty();
     }
@@ -32,87 +29,81 @@ public class IncidentRepositoryTest {
     @Test
     public void testAddIncident() {
         // Given
-        Incident newIncident = new Incident(1, "incident1", 1,
-                "This is an incident", LocalDate.now());
+        var title = "My Incident";
+        var authorId = 42L;
+        var description = "This is an awesome description";
+        var closeReason = "Do i need a reason?";
+        var isClosed = false;
+        var createdAt = LocalDate.now();
+        var updatedAt = LocalDate.now();
+        var startsAt = LocalDate.now().minusDays(10);
+        var endsAt = LocalDate.now().plusDays(10);
+
         // When
-        Incident savedIncident = incidentRepository.save(newIncident);
+        var data = new Incident();
+        data.setTitle(title);
+        data.setAuthorId(authorId);
+        data.setDescription(description);
+        data.setCloseReason(closeReason);
+        data.setClosed(isClosed);
+        data.setCreatedAt(createdAt);
+        data.setUpdatedAt(updatedAt);
+        data.setStartsAt(startsAt);
+        data.setEndsAt(endsAt);
+        Incident incident = incidentRepository.save(data);
+
         // Then
-        assertThat(savedIncident.getId()).isGreaterThan(0);
-        assertThat(savedIncident).hasFieldOrPropertyWithValue("title", "incident1");
-        assertThat(savedIncident).hasFieldOrPropertyWithValue("description", "This is an incident");
-        //todo test other fields or properties
+        assertThat(incident.getId()).isGreaterThan(0);
+        assertThat(incident.getTitle()).isEqualTo(title);
+        assertThat(incident.getAuthorId()).isEqualTo(authorId);
+        assertThat(incident.getDescription()).isEqualTo(description);
+        assertThat(incident.getCloseReason()).isEqualTo(closeReason);
+        assertThat(incident.isClosed()).isEqualTo(isClosed);
+        assertThat(incident.getCreatedAt()).isEqualTo(createdAt);
+        assertThat(incident.getUpdatedAt()).isEqualTo(updatedAt);
+        assertThat(incident.getStartsAt()).isEqualTo(startsAt);
+        assertThat(incident.getEndsAt()).isEqualTo(endsAt);
     }
 
-    @Disabled
     @Test
     public void testGetIncidents() {
         // Given
-        Incident incident1 = new Incident(1, "incident1", 1,
-                "This is an incident", LocalDate.now());
-        Incident incident2 = new Incident(2, "incident2", 1,
-                "This is an incident", LocalDate.now());
-        Incident incident3 = new Incident(3, "incident3", 1,
-                "This is an incident", LocalDate.now());
-        incidentRepository.save(incident1);
-        incidentRepository.save(incident2);
-        incidentRepository.save(incident3);
+        Incident incident1 = incidentRepository.save(new Incident("Incident 1", 11L));
+        Incident incident2 = incidentRepository.save(new Incident("Incident 2", 22L));
+        Incident incident3 = incidentRepository.save(new Incident("Incident 3", 33L));
+
         // When
-        //todo why not work when run together?
         List<Incident> incidents = incidentRepository.findAll();
+
         // Then
         assertThat(incidents).hasSize(3).contains(incident1, incident2, incident3);
     }
 
-    @Disabled
     @Test
     public void testGetIncidentById() {
         // Given
-        incidentRepository.deleteAll();
-        Incident incident1 = new Incident(1, "incident1", 1,
-                "This is an incident", LocalDate.now());
-        Incident incident2 = new Incident(2, "incident2", 1,
-                "This is an incident", LocalDate.now());
-        Long incidentId = 2L;
-        incidentRepository.save(incident1);
-        incidentRepository.save(incident2);
+        incidentRepository.save(new Incident("Incident 1", 42L));
+        Incident incident2 = incidentRepository.save(new Incident("Incident 2", 81L));
+
         // When
-        Optional<Incident> foundIncident = incidentRepository.findById(incidentId);
+        Incident incident = incidentRepository.findById(incident2.getId()).orElse(null);
+
         // Then
-        assertTrue(foundIncident.isPresent());
-        assertThat(foundIncident.get().getId()).isEqualTo(incidentId);
-        assertThat(foundIncident.get()).hasFieldOrPropertyWithValue("title", "incident2");
-        assertThat(foundIncident.get()).hasFieldOrPropertyWithValue("description", "This is an incident");
+        assertThat(incident).isNotNull();
+        assertThat(incident).isEqualTo(incident2);
     }
 
-    @Disabled
     @Test
     public void testDeleteIncidentById() {
         // Given
-        incidentRepository.deleteAll();
-        Incident incident1 = new Incident(1, "incident1", 1,
-                "This is an incident", LocalDate.now());
-        Incident incident2 = new Incident(2, "incident2", 1,
-                "This is an incident", LocalDate.now());
-        Incident incident3 = new Incident(3, "incident3", 1,
-                "This is an incident", LocalDate.now());
-
-        incidentRepository.save(incident1);
-        incidentRepository.save(incident2);
-        incidentRepository.save(incident3);
-
-        List<Incident> incidents = incidentRepository.findAll();
-        assertThat(incidents.size()).isEqualTo(3);
-
-        Long incidentId = 2L;
+        Incident incident1 = incidentRepository.save(new Incident("incident1", 11L));
+        Incident incident2 = incidentRepository.save(new Incident("incident2", 22L));
+        Incident incident3 = incidentRepository.save(new Incident("incident3", 33L));
 
         // When
-        // TODO Why not workkkkk when run together
-        incidentRepository.deleteById(incidentId);
-        incidents = incidentRepository.findAll();
+        incidentRepository.deleteById(incident2.getId());
+
         // Then
-        assertThat(incidents).hasSize(2).contains(incident1, incident3);
+        assertThat(incidentRepository.findAll()).hasSize(2).contains(incident1, incident3);
     }
-
-
-
 }

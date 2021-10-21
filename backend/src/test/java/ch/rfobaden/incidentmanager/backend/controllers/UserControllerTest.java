@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,18 +34,11 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-    ObjectMapper requestMapper = new ObjectMapper();
+    ObjectMapper requestMapper = Jackson2ObjectMapperBuilder.json().build();
 
     private final User user1 = new User(1, "user1", "password1");
     private final User user2 = new User(2, "user2", "password2");
     private final User user3 = new User(3, "user3", "password3");
-
-    {
-        // Add module to requestMapper which maps user without ids.
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(User.class, new UserSerializerNoId());
-        requestMapper.registerModule(module);
-    }
 
     @Test
     public void testGetAllUsers() throws Exception {
