@@ -142,11 +142,11 @@ public class Incident {
     }
 
     public LocalDate getStartedAt() {
-        return startedAt;
+        return startsAt;
     }
 
     public void setStartedAt(LocalDate startedAt) {
-        this.startedAt = startedAt;
+        this.startsAt = startedAt;
     }
 
     public LocalDate getEndsAt() {
