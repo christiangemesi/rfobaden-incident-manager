@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -16,7 +18,7 @@ public class Incident {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private long id;
+    private Long id = -1L;
 
     @Column(nullable = false)
     private String title;
@@ -29,6 +31,7 @@ public class Incident {
     private String closeReason;
 
     @Column(nullable = false)
+    @JsonProperty("isClosed")
     private boolean isClosed;
 
     //todo should Date be in the variable name?
@@ -47,34 +50,17 @@ public class Incident {
     public Incident() {
     }
 
-    public Incident(long id, String title, long authorId,
-                    String description, LocalDate startedAt) {
-        setId(id);
-        setTitle(title);
-        setAuthorId(authorId);
-        setDescription(description);
-        setStartedAt(startedAt);
-        setCreatedAt(LocalDate.now());
-        setUpdatedAt(LocalDate.now());
+    public Incident(String title, Long authorId) {
+        this(-1L, title, authorId);
     }
 
-    public Incident(String title, long authorId,
-                    String description, LocalDate startedAt) {
-        setTitle(title);
-        setAuthorId(authorId);
-        setDescription(description);
-        setStartedAt(startedAt);
-        setCreatedAt(LocalDate.now());
-        setUpdatedAt(LocalDate.now());
-    }
-
-    public Incident(long id, String title, long authorId, String description) {
-        this(id, title, authorId, description, LocalDate.now());
-    }
-
-    public Incident(long id, String title, long authorId) {
-        this(id, title, authorId, "");
-
+    public Incident(Long id, String title, Long authorId) {
+        this.id = id;
+        this.title = title;
+        this.authorId = authorId;
+        this.isClosed = false;
+        this.createdAt = LocalDate.now();
+        this.updatedAt = this.createdAt;
     }
 
     public long getId() {
@@ -141,12 +127,12 @@ public class Incident {
         this.updatedAt = updatedAt;
     }
 
-    public LocalDate getStartedAt() {
+    public LocalDate getStartsAt() {
         return startsAt;
     }
 
-    public void setStartedAt(LocalDate startedAt) {
-        this.startsAt = startedAt;
+    public void setStartsAt(LocalDate startsAt) {
+        this.startsAt = startsAt;
     }
 
     public LocalDate getEndsAt() {
@@ -166,15 +152,15 @@ public class Incident {
             return false;
         }
         Incident incident = (Incident) o;
-        return id == incident.id
+        return Objects.equals(id, incident.getId())
             && isClosed == incident.isClosed
-            && title.equals(incident.title)
-            && authorId.equals(incident.authorId)
+            && Objects.equals(title, incident.title)
+            && Objects.equals(authorId, incident.authorId)
             && Objects.equals(description, incident.description)
             && Objects.equals(closeReason, incident.closeReason)
-            && createdAt.equals(incident.createdAt)
-            && updatedAt.equals(incident.updatedAt)
-            && startsAt.equals(incident.startsAt)
+            && Objects.equals(createdAt, incident.createdAt)
+            && Objects.equals(updatedAt, incident.updatedAt)
+            && Objects.equals(startsAt, incident.startsAt)
             && Objects.equals(endsAt, incident.endsAt);
     }
 
