@@ -28,6 +28,10 @@ public class IncidentService {
         return incidentRepository.save(incident);
     }
 
+    public Incident closeIncident(Incident incident) {
+        return incidentRepository.save(incident);
+    }
+
     public Optional<Incident> getIncidentById(Long incidentId) {
         return incidentRepository.findById(incidentId);
     }

@@ -53,6 +53,16 @@ public class IncidentController {
         return incidentService.addNewIncident(incident);
     }
 
+    @PostMapping("{incidentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident closeIncident(@PathVariable("incidentId") Long incidentId,@RequestBody Incident incident){
+        Incident currentIncident = getIncidentById(incidentId);
+        currentIncident.setUpdatedAt(LocalDate.now());
+        currentIncident.setCloseReason(incident.getCloseReason());
+        currentIncident.setClosed(true);
+        return incidentService.closeIncident(currentIncident);
+    }
+
     @DeleteMapping("{incidentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIncidentById(
