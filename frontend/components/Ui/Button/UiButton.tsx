@@ -26,10 +26,14 @@ interface Props {
 
 const UiButton = styled(StyleHelper.tag('button', ({
   isDisabled = false,
+  type = 'button',
   tooltip,
+  onClick,
 }: Props) => ({
   disabled: isDisabled,
   title: tooltip,
+  type,
+  onClick,
 })))`
   display: flex;
   align-items: center;
