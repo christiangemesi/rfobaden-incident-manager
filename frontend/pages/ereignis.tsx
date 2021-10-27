@@ -16,7 +16,6 @@ interface Props {
 
 const EreignisPage: React.VFC<Props> = ({ data }) => {
     useEffectOnce(() => {
-        console.log(data.incidents)
         IncidentStore.saveAll(data.incidents.map(parseIncident))
     })
 
