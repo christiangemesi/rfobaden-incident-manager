@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,14 +35,14 @@ public class Incident {
     private boolean isClosed;
 
     @Column(nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
-    private LocalDate startsAt;
+    private LocalDateTime startsAt;
 
-    private LocalDate endsAt;
+    private LocalDateTime endsAt;
 
     public Incident() {
     }
@@ -55,7 +56,7 @@ public class Incident {
         this.title = title;
         this.authorId = authorId;
         this.isClosed = false;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
         this.updatedAt = this.createdAt;
     }
 
@@ -108,35 +109,35 @@ public class Incident {
         isClosed = closed;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public LocalDate getStartsAt() {
+    public LocalDateTime getStartsAt() {
         return startsAt;
     }
 
-    public void setStartsAt(LocalDate startsAt) {
+    public void setStartsAt(LocalDateTime startsAt) {
         this.startsAt = startsAt;
     }
 
-    public LocalDate getEndsAt() {
+    public LocalDateTime getEndsAt() {
         return endsAt;
     }
 
-    public void setEndsAt(LocalDate endsAt) {
+    public void setEndsAt(LocalDateTime endsAt) {
         this.endsAt = endsAt;
     }
 

@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,7 +68,7 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testGetAllUsersEmpty() throws Exception {
+    public void testGetAllIncidentsEmpty() throws Exception {
         // Given
         Mockito.when(incidentService.getIncidents())
             .thenReturn(List.of());
@@ -84,7 +85,7 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testGetUserById() throws Exception {
+    public void testGetIncidentsById() throws Exception {
         // Given
         var incident = incident2;
         Mockito.when(incidentService.getIncidentById(incident.getId()))
@@ -102,7 +103,7 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testGetUserByIdNotFound() throws Exception {
+    public void testGetIncidentByIdNotFound() throws Exception {
         // Given
         long incidentId = 4;
         Mockito.when(incidentService.getIncidentById(incidentId))
@@ -120,15 +121,16 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testAddNewUser() throws Exception {
+    public void testAddNewIncident() throws Exception {
         // Given
         var newIncident = new Incident("Incident Title 1", 11L);
         var createdIncident = new Incident(4L, newIncident.getTitle(), newIncident.getAuthorId());
-        Mockito.when(incidentService.addNewIncident(newIncident))
+        createdIncident.setCreatedAt(newIncident.getCreatedAt());
+        createdIncident.setUpdatedAt(newIncident.getUpdatedAt());
+        Mockito.when(incidentService.addNewIncident(any()))
             .thenReturn(createdIncident);
 
         // When
-        System.out.println(newIncident);
         var mockRequest = MockMvcRequestBuilders.post("/api/v1/incidents/")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
@@ -139,11 +141,11 @@ class IncidentControllerTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.id", Long.class).value(createdIncident.getId()));
-        verify(incidentService, times(1)).addNewIncident(newIncident);
+        verify(incidentService, times(1)).addNewIncident(any());
     }
 
     @Test
-    public void testDeleteUserById() throws Exception {
+    public void testDeleteIncidentById() throws Exception {
         // Given
         long incidentId = 2;
         Mockito.when(incidentService.deleteIncidentById(incidentId))
@@ -161,7 +163,7 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testDeleteUserByIdNotFound() throws Exception {
+    public void testDeleteIncidentByIdNotFound() throws Exception {
         // Given
         long incidentId = 4;
         Mockito.when(incidentService.deleteIncidentById(incidentId))

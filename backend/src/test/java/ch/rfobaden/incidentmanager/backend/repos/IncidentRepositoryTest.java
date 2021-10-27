@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @DataJpaTest
@@ -34,10 +35,10 @@ public class IncidentRepositoryTest {
         var description = "This is an awesome description";
         var closeReason = "Do i need a reason?";
         var isClosed = false;
-        var createdAt = LocalDate.now();
-        var updatedAt = LocalDate.now();
-        var startsAt = LocalDate.now().minusDays(10);
-        var endsAt = LocalDate.now().plusDays(10);
+        LocalDateTime createdAt = LocalDateTime.now();
+        LocalDateTime updatedAt = LocalDateTime.now();
+        LocalDateTime startsAt = LocalDateTime.now().minusDays(10);
+        LocalDateTime endsAt = LocalDateTime.now().plusDays(10);
 
         // When
         var data = new Incident();

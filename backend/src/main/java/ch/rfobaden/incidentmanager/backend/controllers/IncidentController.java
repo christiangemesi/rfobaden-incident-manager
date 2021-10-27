@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -48,8 +49,8 @@ public class IncidentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Incident addNewIncident(@RequestBody Incident incident) {
-        incident.setCreatedAt(LocalDate.now());
-        incident.setUpdatedAt(LocalDate.now());
+        incident.setCreatedAt(LocalDateTime.now());
+        incident.setUpdatedAt(LocalDateTime.now());
         return incidentService.addNewIncident(incident);
     }
 
