@@ -123,7 +123,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"title\",\n    \"closeReason\": \"\",\n    \"authorId\": \"1\",\n    \"description\": \"description\"\n}",
+							"raw": "{\n    \"title\": \"title\",\n    \"authorId\": \"1\",\n    \"description\": \"description\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,11 +193,11 @@
 				{
 					"name": "Close Incident",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"title\",\n    \"closeReason\": \"Finished\"\n}",
+							"raw": "{\n    \"closeReason\": \"Finished\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -205,7 +205,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/1",
+							"raw": "http://localhost:3001/api/v1/incidents/2/close",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -215,7 +215,8 @@
 								"api",
 								"v1",
 								"incidents",
-								"1"
+								"2",
+								"close"
 							]
 						}
 					},
