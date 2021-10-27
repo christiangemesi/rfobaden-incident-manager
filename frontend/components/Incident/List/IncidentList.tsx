@@ -38,6 +38,12 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
                         {incident.title}
                     </StyledTd>
                     <StyledTd>
+                        {incident.createdAt.toLocaleString()}
+                    </StyledTd>
+                    <StyledTd>
+                        {incident.updatedAt.toLocaleString()}
+                    </StyledTd>
+                    <StyledTd>
                         {incident.isClosed ? 'Closed' : 'Open'}
                     </StyledTd>
                     <StyledTdSmall>
