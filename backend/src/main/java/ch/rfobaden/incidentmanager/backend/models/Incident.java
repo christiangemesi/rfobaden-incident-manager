@@ -39,6 +39,8 @@ public class Incident {
     @Column(nullable = false)
     private LocalDate updatedAt;
 
+    private LocalDate closedAt;
+
     private LocalDate startsAt;
 
     private LocalDate endsAt;
@@ -124,6 +126,14 @@ public class Incident {
         this.updatedAt = updatedAt;
     }
 
+    public LocalDate getClosedAt() {
+        return closedAt;
+    }
+
+    public void setClosedAt(LocalDate closedAt) {
+        this.closedAt = closedAt;
+    }
+
     public LocalDate getStartsAt() {
         return startsAt;
     }
@@ -157,6 +167,7 @@ public class Incident {
             && Objects.equals(closeReason, incident.closeReason)
             && Objects.equals(createdAt, incident.createdAt)
             && Objects.equals(updatedAt, incident.updatedAt)
+            && Objects.equals(closedAt, incident.closedAt)
             && Objects.equals(startsAt, incident.startsAt)
             && Objects.equals(endsAt, incident.endsAt);
     }
@@ -165,7 +176,7 @@ public class Incident {
     public int hashCode() {
         return Objects.hash(
             id, title, authorId, description, closeReason,
-            isClosed, createdAt, updatedAt, startsAt, endsAt
+            isClosed, createdAt, updatedAt, closedAt, startsAt, endsAt
         );
     }
 
@@ -180,6 +191,7 @@ public class Incident {
             + ", isClosed=" + isClosed
             + ", creationDate=" + createdAt
             + ", updateDate=" + updatedAt
+            + ", closedDate=" + closedAt
             + ", startDate=" + startsAt
             + ", endDate=" + endsAt
             + '}';
