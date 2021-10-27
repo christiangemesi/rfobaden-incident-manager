@@ -22,9 +22,8 @@ const UiFormButtons = <T,>({
   const handleSubmit = useCallback(async () => {
     if (isValid) {
       await pushSubmit(value)
-      clearForm(fields)
     }
-  }, [fields, isValid, value, pushSubmit])
+  }, [isValid, value, pushSubmit])
 
   const handleCancel = useCallback(async () => {
     if (pushCancel !== undefined) {
