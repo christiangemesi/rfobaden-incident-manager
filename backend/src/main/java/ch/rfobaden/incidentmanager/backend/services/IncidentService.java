@@ -6,6 +6,7 @@ import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +25,33 @@ public class IncidentService {
         return incidentRepository.findAll();
     }
 
-    public Incident addNewIncident(Incident incident) {
-        return incidentRepository.save(incident);
-    }
-
-    public Incident closeIncident(Incident incident) {
-        return incidentRepository.save(incident);
-    }
-
     public Optional<Incident> getIncidentById(Long incidentId) {
         return incidentRepository.findById(incidentId);
+    }
+
+    public Incident addNewIncident(Incident incident) {
+        incident.setCreatedAt(LocalDate.now());
+        incident.setUpdatedAt(LocalDate.now());
+        return incidentRepository.save(incident);
+    }
+
+    public Incident updateIncident(Long incidentId, Incident incident) {
+        if (incident.getId() != incidentId) {
+            throw new IllegalArgumentException("body id differs from parameter id");
+        }
+        incident.setUpdatedAt(LocalDate.now());
+        return incidentRepository.save(incident);
+    }
+
+    public Optional<Incident> closeIncident(Long incidentId, String closeReason) {
+        Incident incident = getIncidentById(incidentId).orElse(null);
+        if (incident == null) {
+            return Optional.empty();
+        }
+        incident.setClosedAt(LocalDate.now());
+        incident.setCloseReason(closeReason);
+        incident.setClosed(true);
+        return Optional.of(updateIncident(incidentId, incident));
     }
 
     public boolean deleteIncidentById(Long incidentId) {
