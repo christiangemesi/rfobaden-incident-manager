@@ -35,12 +35,16 @@ public class IncidentService {
         return incidentRepository.save(incident);
     }
 
-    public Incident updateIncident(Long incidentId, Incident incident) {
+    public Optional<Incident> updateIncident(Long incidentId, Incident incident) {
+        Incident incidentOfId = getIncidentById(incidentId).orElse(null);
+        if (incidentOfId == null) {
+            return Optional.empty();
+        }
         if (incident.getId() != incidentId) {
             throw new IllegalArgumentException("body id differs from parameter id");
         }
         incident.setUpdatedAt(LocalDate.now());
-        return incidentRepository.save(incident);
+        return Optional.of(incidentRepository.save(incident));
     }
 
     public Optional<Incident> closeIncident(Long incidentId, String closeReason) {
@@ -51,7 +55,7 @@ public class IncidentService {
         incident.setClosedAt(LocalDate.now());
         incident.setCloseReason(closeReason);
         incident.setClosed(true);
-        return Optional.of(updateIncident(incidentId, incident));
+        return updateIncident(incidentId, incident);
     }
 
     public boolean deleteIncidentById(Long incidentId) {

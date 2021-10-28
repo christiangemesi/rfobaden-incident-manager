@@ -160,7 +160,7 @@ class IncidentControllerTest {
         Mockito.when(incidentService.getIncidentById(currentIncidentId))
             .thenReturn(Optional.of(currentIncident));
         Mockito.when(incidentService.updateIncident(currentIncidentId, currentIncident))
-            .thenReturn(closedIncident);
+            .thenReturn(Optional.of(closedIncident));
 
         // When
         var mockRequest =
