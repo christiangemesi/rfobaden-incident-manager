@@ -185,21 +185,21 @@ class IncidentControllerTest {
         Long incidentId = 4L;
         Mockito.when(incidentService.getIncidentById(incidentId))
             .thenCallRealMethod();
-        var closeDate = new IncidentController.CloseIncidentData();
+        var closeData = new IncidentController.CloseIncidentData();
 
         // When
         var mockRequest =
             MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId + "/close")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(requestMapper.writeValueAsString(closeDate));
+            .content(requestMapper.writeValueAsString(closeData));
 
         // Then
         mockMvc.perform(mockRequest)
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.message", is("incident not found")));
-        verify(incidentService, times(1)).closeIncident(incidentId, closeDate.getCloseReason());
+        verify(incidentService, times(1)).closeIncident(incidentId, closeData.getCloseReason());
     }
 
     @Test

@@ -53,8 +53,10 @@ public class IncidentController {
 
     @PutMapping("{incidentId}/close")
     @ResponseStatus(HttpStatus.OK)
-    public Incident closeIncident(@PathVariable("incidentId") Long incidentId,
-                                  @RequestBody CloseIncidentData closeData) {
+    public Incident closeIncident(
+        @PathVariable("incidentId") Long incidentId,
+        @RequestBody CloseIncidentData closeData
+    ) {
         return incidentService.closeIncident(incidentId, closeData.getCloseReason())
             .orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
