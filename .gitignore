@@ -143,3 +143,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Visual Strudio Local history
+.localhistory*
+.lh*

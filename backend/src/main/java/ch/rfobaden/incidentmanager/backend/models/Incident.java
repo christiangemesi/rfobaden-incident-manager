@@ -2,7 +2,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -43,6 +42,8 @@ public class Incident {
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
+
+    private LocalDateTime closedAt;
 
     public Incident() {
     }
@@ -141,6 +142,14 @@ public class Incident {
         this.endsAt = endsAt;
     }
 
+    public LocalDateTime getClosedAt() {
+        return closedAt;
+    }
+
+    public void setClosedAt(LocalDateTime closedAt) {
+        this.closedAt = closedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -158,6 +167,7 @@ public class Incident {
             && Objects.equals(closeReason, incident.closeReason)
             && Objects.equals(createdAt, incident.createdAt)
             && Objects.equals(updatedAt, incident.updatedAt)
+            && Objects.equals(closedAt, incident.closedAt)
             && Objects.equals(startsAt, incident.startsAt)
             && Objects.equals(endsAt, incident.endsAt);
     }
@@ -166,7 +176,7 @@ public class Incident {
     public int hashCode() {
         return Objects.hash(
             id, title, authorId, description, closeReason,
-            isClosed, createdAt, updatedAt, startsAt, endsAt
+            isClosed, createdAt, updatedAt, closedAt, startsAt, endsAt
         );
     }
 
@@ -181,6 +191,7 @@ public class Incident {
             + ", isClosed=" + isClosed
             + ", creationDate=" + createdAt
             + ", updateDate=" + updatedAt
+            + ", closedDate=" + closedAt
             + ", startDate=" + startsAt
             + ", endDate=" + endsAt
             + '}';

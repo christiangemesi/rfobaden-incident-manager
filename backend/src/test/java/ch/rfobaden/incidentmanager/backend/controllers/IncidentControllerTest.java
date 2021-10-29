@@ -85,7 +85,7 @@ class IncidentControllerTest {
     }
 
     @Test
-    public void testGetIncidentsById() throws Exception {
+    public void testGetIncidentById() throws Exception {
         // Given
         var incident = incident2;
         Mockito.when(incidentService.getIncidentById(incident.getId()))
@@ -142,6 +142,67 @@ class IncidentControllerTest {
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.id", Long.class).value(createdIncident.getId()));
         verify(incidentService, times(1)).addNewIncident(any());
+    }
+
+    @Test
+    public void testCloseIncident() throws Exception {
+        // Given
+        var currentIncident = incident1;
+        var currentIncidentId = currentIncident.getId();
+        var closeDate = new IncidentController.CloseIncidentData();
+        closeDate.setCloseReason("Finish");
+        var closedIncident = new Incident(
+            currentIncidentId,
+            currentIncident.getTitle(),
+            currentIncident.getAuthorId()
+        );
+        closedIncident.setClosed(true);
+        closedIncident.setCloseReason(closeDate.getCloseReason());
+        Mockito.when(incidentService.closeIncident(currentIncidentId, closeDate.getCloseReason()))
+            .thenCallRealMethod();
+        Mockito.when(incidentService.getIncidentById(currentIncidentId))
+            .thenReturn(Optional.of(currentIncident));
+        Mockito.when(incidentService.updateIncident(currentIncidentId, currentIncident))
+            .thenReturn(Optional.of(closedIncident));
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId + "/close")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(requestMapper.writeValueAsString(closeDate));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.isClosed").value(closedIncident.isClosed()))
+            .andExpect(jsonPath("$.closeReason").value(closedIncident.getCloseReason()));
+        verify(incidentService, times(1))
+            .closeIncident(currentIncidentId, closeDate.getCloseReason());
+    }
+
+    @Test
+    public void testCloseIncidentByIdNotFound() throws Exception {
+        // Given
+        Long incidentId = 4L;
+        Mockito.when(incidentService.getIncidentById(incidentId))
+            .thenCallRealMethod();
+        var closeData = new IncidentController.CloseIncidentData();
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId + "/close")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(requestMapper.writeValueAsString(closeData));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.message", is("incident not found")));
+        verify(incidentService, times(1)).closeIncident(incidentId, closeData.getCloseReason());
     }
 
     @Test

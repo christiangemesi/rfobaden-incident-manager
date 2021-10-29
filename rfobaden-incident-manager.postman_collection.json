@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c1881a59-4cad-4a07-a87f-9719d28fc3d1",
+		"_postman_id": "228c6ea8-d825-4361-b616-280db9e29bf4",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -185,6 +185,38 @@
 								"v1",
 								"incidents",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Incident",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"closeReason\": \"Finished\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/2/close",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"2",
+								"close"
 							]
 						}
 					},
