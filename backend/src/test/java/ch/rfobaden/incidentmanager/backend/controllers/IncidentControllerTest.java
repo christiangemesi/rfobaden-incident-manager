@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -124,7 +125,9 @@ class IncidentControllerTest {
         // Given
         var newIncident = new Incident("Incident Title 1", 11L);
         var createdIncident = new Incident(4L, newIncident.getTitle(), newIncident.getAuthorId());
-        Mockito.when(incidentService.addNewIncident(newIncident))
+        createdIncident.setCreatedAt(newIncident.getCreatedAt());
+        createdIncident.setUpdatedAt(newIncident.getUpdatedAt());
+        Mockito.when(incidentService.addNewIncident(any()))
             .thenReturn(createdIncident);
 
         // When
@@ -138,7 +141,7 @@ class IncidentControllerTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.id", Long.class).value(createdIncident.getId()));
-        verify(incidentService, times(1)).addNewIncident(newIncident);
+        verify(incidentService, times(1)).addNewIncident(any());
     }
 
     @Test

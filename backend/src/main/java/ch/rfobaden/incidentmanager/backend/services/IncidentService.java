@@ -6,7 +6,7 @@ import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +30,8 @@ public class IncidentService {
     }
 
     public Incident addNewIncident(Incident incident) {
-        incident.setCreatedAt(LocalDate.now());
-        incident.setUpdatedAt(LocalDate.now());
+        incident.setCreatedAt(LocalDateTime.now());
+        incident.setUpdatedAt(LocalDateTime.now());
         return incidentRepository.save(incident);
     }
 
@@ -43,7 +43,7 @@ public class IncidentService {
         if (incident.getId() != incidentId) {
             throw new IllegalArgumentException("body id differs from parameter id");
         }
-        incident.setUpdatedAt(LocalDate.now());
+        incident.setUpdatedAt(LocalDateTime.now());
         return Optional.of(incidentRepository.save(incident));
     }
 
@@ -52,7 +52,7 @@ public class IncidentService {
         if (incident == null) {
             return Optional.empty();
         }
-        incident.setClosedAt(LocalDate.now());
+        incident.setClosedAt(LocalDateTime.now());
         incident.setCloseReason(closeReason);
         incident.setClosed(true);
         return updateIncident(incidentId, incident);

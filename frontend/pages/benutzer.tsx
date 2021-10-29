@@ -45,7 +45,7 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
 export default BenutzerPage
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const [users]: BackendResponse<(Model & { username: string })[]> = (await BackendService.list('users'))
+  const [users]: BackendResponse<(Model & { username: string })[]> = await BackendService.list('users')
   return {
     props: {
       data: {

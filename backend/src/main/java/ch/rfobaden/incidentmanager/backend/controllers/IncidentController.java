@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Controller contains all the API mapping. This is part of the N-Tier pattern.
- */
 @RestController
 @RequestMapping(path = "api/v1/incidents")
 public class IncidentController {
@@ -73,7 +70,6 @@ public class IncidentController {
 
     static class CloseIncidentData {
         private String closeReason;
-
 
         public String getCloseReason() {
             return closeReason;
