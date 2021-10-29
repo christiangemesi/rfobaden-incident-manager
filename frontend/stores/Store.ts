@@ -103,6 +103,9 @@ export const createModelStore = <T extends Model>() => <S>(
     createUseRecord(store),
   ]
 }
+
+const privateKey = Symbol('Store.private')
+
 interface Store<T> {
   readonly [privateKey]: {
     state: T
@@ -121,8 +124,6 @@ type SetState<T> = Dispatch<T | ((value: T) => T)>
 interface CreateActions<T, S> {
   (getState: () => T, setState: SetState<T>): S
 }
-
-const privateKey = Symbol('Store.private')
 
 interface ModelStoreState<T> {
   records: Record<Id<T>, T>

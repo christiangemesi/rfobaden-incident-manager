@@ -22,6 +22,8 @@ interface Props {
   onClick?: EventHandler<MouseEvent>
   className?: string
   style?: CSSProperties
+
+  type?: 'button' | 'submit',
 }
 
 const UiButton = styled(StyleHelper.tag('button', ({

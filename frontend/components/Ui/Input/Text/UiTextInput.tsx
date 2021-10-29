@@ -15,7 +15,9 @@ const UiTextInput: React.VFC<Props> = ({
   errors = [],
 }) => {
   const handleChange = useCallback((e: ChangeEvent) => {
-    setValue((e.target as HTMLInputElement).value)
+    if (setValue) {
+      setValue((e.target as HTMLInputElement).value)
+    }
   }, [setValue])
 
   const Label = label == null ? 'div' : StyledLabel

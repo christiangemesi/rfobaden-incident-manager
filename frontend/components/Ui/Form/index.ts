@@ -23,17 +23,17 @@ export const useForm = <T>(getInitialValue: () => T): UiFormFieldsState<T> => {
   }))
 
   form.update = setForm
-  form.fields[UiFormField_base] = form
+  ;(form.fields as unknown as UiFormChild<T>)[UiFormChild_baseKey] = form
   for (const key of Object.keys(form.fields)) {
     const field = form.fields[key]
-    field[UiFormField_base] = form
+    ;(field as unknown as UiFormChild<T>)[UiFormChild_baseKey] = form
   }
 
   return form.fields
 }
 
 export const clearForm = <T>(fields: UiFormFieldsState<T>): void => {
-  const form = fields[UiFormField_base] as UiFormState<T>
+  const form = getUiFormBase(fields)
   form.update((state) => {
     const newFields = { ...state.fields }
     for (const key of Object.keys(newFields)) {
@@ -61,7 +61,7 @@ export const setFormField = <T, K extends keyof T>(
     errors?: string[],
   },
 ): void => {
-  const form = field[UiFormField_base] as UiFormState<T>
+  const form = getUiFormBase(field)
   form.update((state) => {
     const currentField = state.fields[field.key]
     return {
@@ -88,7 +88,7 @@ export const useValidate = <T>(
   fields: UiFormFieldsState<T>,
   makeValidators: (v: typeof validate) => FieldValidators<T>
 ): void => {
-  const form = fields[UiFormField_base] as UiFormState<T>
+  const form = getUiFormBase(fields)
 
   const validators = useStatic(() => makeValidators(validate))
 
@@ -111,7 +111,7 @@ export const useValidate = <T>(
         const message = validate(form.value[key], form.value)
         if (message !== true) {
           errorCount += 1
-          fieldUpdates[key].errors.push(message)
+          fieldUpdates[key].errors?.push(message)
         }
       }
     }
@@ -153,7 +153,15 @@ export interface UiFormFieldState<T, K extends keyof T> {
   skipNextValidation: boolean
 }
 
-export const UiFormField_base = Symbol('FormField.base')
+
+const UiFormChild_baseKey = Symbol('UiFormChild.base')
+interface UiFormChild<T> {
+  [UiFormChild_baseKey]: UiFormState<T>
+}
+
+export const getUiFormBase = <T>(field: UiFormFieldsState<T> | UiFormFieldState<T, keyof T>): UiFormState<T> => (
+  (field as unknown as UiFormChild<T>)[UiFormChild_baseKey]
+)
 
 const buildFields = <T>(value: T): UiFormFieldsState<T> => {
   const fields = {} as UiFormFieldsState<T>
