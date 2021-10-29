@@ -2,14 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import Id from '@/models/base/Id'
 import Incident from '@/models/Incident'
+import BackendService from '@/services/BackendService'
+import IncidentStore from '@/stores/IncidentStore'
 
 interface Props {
     incidents: Incident[]
 }
 
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
-    const handleDelete = (incidentId: Id<Incident>) => {
-        console.log('Deleting incident: ' + incidentId)
+    const handleDelete = async (incidentId: Id<Incident>) => {
+        await BackendService.delete('incidents', incidentId)
+        IncidentStore.remove(incidentId)
     }
 
     const handleClose = (incidentId: Id<Incident>) => {
