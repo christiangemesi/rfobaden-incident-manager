@@ -2,15 +2,14 @@ import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 import Id from '@/models/base/Id'
 
-const endpointEnvVar = 'NEXT_PUBLIC_BACKEND_ENDPOINT'
-
 const apiEndpoint = run(() => {
   if (!process.browser) {
     return 'http://backend:8080'
   }
-  const value = process.env[endpointEnvVar]
+  console.log(process.env)
+  const value = process.env['NEXT_PUBLIC_BACKEND_ENDPOINT']
   if (value === undefined) {
-    throw new Error(`undefined environment variable: ${endpointEnvVar}`)
+    return ''
   }
   if (value.endsWith('/')) {
     return value.substr(0, value.length - 1)
