@@ -14,7 +14,7 @@ interface Props {
     }
 }
 
-const EreignisPage: React.VFC<Props> = ({ data }) => {
+const EreignissePage: React.VFC<Props> = ({ data }) => {
     useEffectOnce(() => {
         IncidentStore.saveAll(data.incidents.map(parseIncident))
     })
@@ -34,7 +34,7 @@ const EreignisPage: React.VFC<Props> = ({ data }) => {
         </UiContainer>
     )
 }
-export default EreignisPage
+export default EreignissePage
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
     const [incidents]: BackendResponse<Incident[]> = await BackendService.list('incidents')
