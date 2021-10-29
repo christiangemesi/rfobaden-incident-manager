@@ -33,7 +33,7 @@ services:
       - TZ=Europe/Zurich
     volumes:
       - ./backend:/app
-      - backend.gradle-global:/root/.gradle
+      - backend.gradle-global:/home/gradle/.gradle
       - backend.gradle-local:/app/.gradle
       - /etc/localtime:/etc/localtime:ro
 

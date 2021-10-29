@@ -1,4 +1,9 @@
 #!/bin/bash
 gradle --stop
-gradle build --continuous --quiet &
-gradle bootRun --project-cache-dir=/tmp/cache
+gradle build --continuous \
+  -x Test \
+  -x checkstyleMain \
+  -x checkstyleTest \
+  -x jar \
+  &
+gradle bootRun --no-build-cache
