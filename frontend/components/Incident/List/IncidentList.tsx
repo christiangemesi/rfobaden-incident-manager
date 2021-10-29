@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Id from '@/models/base/Id'
-import Incident from '@/models/Incident'
-import BackendService from '@/services/BackendService'
+import Incident, { parseIncident } from '@/models/Incident'
+import BackendService, { BackendResponse } from '@/services/BackendService'
+import IncidentStore from '@/stores/IncidentStore'
 
 interface Props {
     incidents: Incident[]
@@ -13,9 +14,16 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
         console.log('Deleting incident: ' + incidentId)
     }
 
-    const handleClose = (incidentId: Id<Incident>) => {
-        console.log('Closing incident: ' + incidentId)
+    const handleClose = async (incidentId: Id<Incident>) => {
         const closeReason = prompt('Please enter the close reason', '')
+        const [incident, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incidentId}/close`, {
+            closeReason: closeReason,
+        })
+        if (error !== null) {
+            throw error
+        }
+        IncidentStore.remove(incidentId)
+        IncidentStore.save(parseIncident(incident))
     }
 
     return (
