@@ -38,6 +38,21 @@ class BackendService {
     })
   }
 
+  async update<T>(resourceName: string, id: Id<T>, data: ModelData<T>): Promise<BackendResponse<T>>
+  async update<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
+  async update<D, T>(resourceName: string, idOrData: unknown, data?: D): Promise<BackendResponse<T>> {
+    const [path, body] = data === undefined ? (
+      [resourceName, idOrData as D]
+    ) : (
+      [`${resourceName}/${idOrData}`, data]
+    )
+    return this.fetchApi({
+      path,
+      body,
+      method: 'put',
+    })
+  }
+
   async delete(resourceName: string, id?: Id<never>): Promise<BackendError | null> {
     const [_data, error] = await this.fetchApi({
       path: `${resourceName}/${id ?? ''}`,
