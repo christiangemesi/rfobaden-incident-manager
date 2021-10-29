@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Id from '@/models/base/Id'
 import Incident from '@/models/Incident'
+import BackendService from '@/services/BackendService'
 
 interface Props {
     incidents: Incident[]
@@ -14,6 +15,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
 
     const handleClose = (incidentId: Id<Incident>) => {
         console.log('Closing incident: ' + incidentId)
+        const closeReason = prompt('Please enter the close reason', '')
     }
 
     return (
