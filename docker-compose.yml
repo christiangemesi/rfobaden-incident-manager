@@ -31,7 +31,7 @@ services:
       - "5005" # Debugger port
     volumes:
       - ./backend:/app
-      - backend.gradle-global:/root/.gradle
+      - backend.gradle-global:/home/gradle/.gradle
       - backend.gradle-local:/app/.gradle
     depends_on:
       - database
