@@ -49,7 +49,8 @@ Instead, changes are monitored and automatically applied to running instances.
 
 **The frontend** reloads code in-place, which means that code is changed at runtime, at a very high speed.  
 **The backend** needs to restart itself everytime, which means it is a lot slower when reloading.
-Also, the backend reload does not trigger on file save, but only on build.
+
+> _On windows only_, the backend reload does not trigger on file save, but only on build.
 Because of this, you need to either manually execute a `gradle build` after every change
 (which defeats the entire point of hot reloading), or you configure your IDE to build on save.
 For Intellij, activate the option `Build project automatically`
