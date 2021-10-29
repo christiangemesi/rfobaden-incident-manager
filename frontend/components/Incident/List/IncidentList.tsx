@@ -7,15 +7,15 @@ interface Props {
     incidents: Incident[]
 }
 
-const handleDelete = (incidentId: Id<Incident>) => {
-    console.log('Deleting incident: ' + incidentId)
-}
-
-const handleClose = (incidentId: Id<Incident>) => {
-    console.log('Closing incident: ' + incidentId)
-}
-
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
+    const handleDelete = (incidentId: Id<Incident>) => {
+        console.log('Deleting incident: ' + incidentId)
+    }
+
+    const handleClose = (incidentId: Id<Incident>) => {
+        console.log('Closing incident: ' + incidentId)
+    }
+
     return (
         <StyledTable>
             <thead>

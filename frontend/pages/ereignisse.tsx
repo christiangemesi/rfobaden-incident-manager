@@ -37,7 +37,7 @@ const EreignisPage: React.VFC<Props> = ({ data }) => {
 export default EreignisPage
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-    const [incidents]: BackendResponse<Incident[]> = (await BackendService.list('incidents'))
+    const [incidents]: BackendResponse<Incident[]> = await BackendService.list('incidents')
     return {
         props: {
             data: {

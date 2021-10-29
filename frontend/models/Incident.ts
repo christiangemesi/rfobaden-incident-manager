@@ -17,13 +17,13 @@ export const parseIncident = (data: unknown): Incident => {
     const incident = data as Incident
     return {
         ...incident,
-        createdAt: parseIfNotNull(incident.createdAt),
-        updatedAt: parseIfNotNull(incident.updatedAt),
-        startsAt: parseIfNotNull(incident.startsAt),
-        endsAt: parseIfNotNull(incident.endsAt),
+        createdAt: parseDateOrNull(incident.createdAt),
+        updatedAt: parseDateOrNull(incident.updatedAt),
+        startsAt: parseDateOrNull(incident.startsAt),
+        endsAt: parseDateOrNull(incident.endsAt),
     }
 }
 
-const parseIfNotNull = (date: Date | null): Date | null => {
+const parseDateOrNull = (date: Date | null): Date | null => {
     return date === null ? null : parseDate(date)
 }
