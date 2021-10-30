@@ -6,7 +6,6 @@ const apiEndpoint = run(() => {
   if (!process.browser) {
     return 'http://backend:8080'
   }
-  console.log(process.env)
   const value = process.env['NEXT_PUBLIC_BACKEND_ENDPOINT']
   if (value === undefined) {
     return ''
