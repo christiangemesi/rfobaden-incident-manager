@@ -1,7 +1,7 @@
 import { useSetState } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
-import Update from '@/utils/update'
 import { useEffect } from 'react'
+import Update from '@/utils/update'
 
 export const useForm = <T>(getInitialValue: () => T): UiFormFieldsState<T> => {
   const [form, setForm] = useSetState<UiFormState<T>>(useStatic(() => {
@@ -65,6 +65,7 @@ export const setFormField = <T, K extends keyof T>(
   form.update((state) => {
     const currentField = state.fields[field.key]
     return {
+      ...state,
       value: {
         ...state.value,
         [field.key]: options.value === undefined ? state.value[field.key] : options.value,

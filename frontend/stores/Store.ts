@@ -1,7 +1,8 @@
-import { Dispatch, useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useEffectOnce, useIsomorphicLayoutEffect } from 'react-use'
 import Model from '@/models/base/Model'
 import Id from '@/models/base/Id'
+import { PartialUpdate, PartialUpdateFn } from '@/utils/update'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]
@@ -20,12 +21,21 @@ export const useStore = <T>(store: Store<T>): T => {
   return globalState
 }
 
-const createUseRecords = <T>(store: ModelStore<T>) => (): T[] => {
+interface UseRecords<T> {
+  (ids?: Id<T>[]): T[]
+}
+
+const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (ids) => {
   const [records, setRecords] = useState([] as T[])
   const state = useStore(store)
+  const idSet = useMemo(() => ids === undefined ? null : new Set(ids), [ids])
   useEffect(() => {
-    setRecords(Object.values(state.records))
-  }, [state])
+    let records = Object.values(state.records)
+    if (idSet !== null) {
+      records = records.filter(({ id }) => idSet.has(id))
+    }
+    setRecords(records)
+  }, [state, idSet])
   return records
 }
 
@@ -37,8 +47,12 @@ const createUseRecord = <T>(store: ModelStore<T>) => (id: Id<T>): T | null => {
 export const createStore = <T, S>(initialState: T, actions: CreateActions<T, S>): Store<T> & S => {
   let state = initialState
   const setters = [] as Array<(value: T) => void>
-  const setState: SetState<T> = (update): void => {
-    state = typeof update === 'function' ? (update as (state: T) => T)(state) : update
+  const setState: PartialUpdate<T> = (update) => {
+    const partialState = typeof update === 'function' ? (update as PartialUpdateFn<T>)(state) : update
+    state = {
+      ...state,
+      ...partialState,
+    }
     setters.forEach((set) => set(state))
   }
 
@@ -58,13 +72,28 @@ export const createStore = <T, S>(initialState: T, actions: CreateActions<T, S>)
 
 export const createModelStore = <T extends Model>() => <S>(
   actions: S,
-): [ModelStore<T> & S, () => T[], (id: Id<T>) => T | null] => {
+): [ModelStore<T> & S, UseRecords<T>, (id: Id<T>) => T | null] => {
   const initialState: ModelStoreState<T> = {
     records: {},
   }
-  const store = createStore(initialState, (getState, setState) => {
+  const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     return {
       ...actions,
+      list(ids?: Id<T>[]): T[] {
+        const { records } = getState()
+        if (ids === undefined) {
+          return Object.values(records)
+        }
+        const result = [] as T[]
+        for (const id of ids) {
+          result.push(records[id])
+        }
+        return result
+      },
+      find(id: Id<T>): T | null {
+        const { records } = getState()
+        return records[id] ?? null
+      },
       save(record: T) {
         setState((state) => ({
           records: {
@@ -94,6 +123,9 @@ export const createModelStore = <T extends Model>() => <S>(
           }
         })
       },
+
+      // Will be overwritten by `createStore`, but required here to satisfy the type checker.
+      [privateKey]: undefined as unknown as Store<ModelStoreState<T>>[typeof privateKey],
     }
   })
 
@@ -114,16 +146,18 @@ interface Store<T> {
 }
 
 interface ModelStore<T> extends Store<ModelStoreState<T>> {
+  list(ids?: Id<T>[]): T[]
+  find(id: Id<T>): T | null
   save(record: T): void
   saveAll(records: Iterable<T>): void
   remove(id: Id<T>): void
 }
 
-type SetState<T> = Dispatch<T | ((value: T) => T)>
 
 interface CreateActions<T, S> {
-  (getState: () => T, setState: SetState<T>): S
+  (getState: () => T, setState: PartialUpdate<T>): S
 }
+
 
 interface ModelStoreState<T> {
   records: Record<Id<T>, T>
