@@ -82,6 +82,27 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     margin-bottom: 1rem;
   }
+  
+  @media print {
+    @page {
+      size: auto;
+      margin: 0;
+    }
+    
+    #__next {
+      display: none;
+    }
+    
+    .printable {
+      position: relative;
+    }
+  }
+  
+  .printable {
+    position: absolute;
+    right: 100%;
+    bottom: 100%;
+  }
 `
 
 const SessionStateBar = styled.div`
