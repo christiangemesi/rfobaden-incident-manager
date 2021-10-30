@@ -24,6 +24,6 @@ export const parseIncident = (data: unknown): Incident => {
     }
 }
 
-export const parseDateOrNull = (date: Date | null): Date | null => {
+const parseDateOrNull = (date: Date | null): Date | null => {
     return date === null ? null : parseDate(date)
 }

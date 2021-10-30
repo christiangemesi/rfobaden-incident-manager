@@ -1,17 +1,23 @@
 import React from 'react'
 import { useForm, useValidate } from '@/components/Ui/Form'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Incident, { parseDateOrNull } from '@/models/Incident'
 import IncidentStore from '@/stores/IncidentStore'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import { parseDate } from '@/models/Date'
+import Incident, { parseIncident } from '@/models/Incident'
+import { ModelData } from '@/models/base/Model'
 
 const IncidentForm: React.VFC = () => {
-  const form = useForm<IncidentData>(() => ({
+  const form = useForm<ModelData<Incident>>(() => ({
     title: '',
     description: '',
-    startsAt: '',
+    authorId: -1,
+    closeReason: null,
+    isClosed: false,
+    startsAt: null,
+    createdAt: null,
+    updatedAt: null,
+    endsAt: null,
   }))
 
   useValidate(form, (validate) => ({
@@ -19,37 +25,29 @@ const IncidentForm: React.VFC = () => {
       validate.notBlank(),
     ],
     description: [
-      // TODO: No validation yet
+      validate.notBlank({ allowNull: true }),
     ],
-    startsAt: [
-      // TODO: No validation yet
-    ],
+    startsAt: [],
+    authorId: [],
+    closeReason: [],
+    isClosed: [],
+    createdAt: [],
+    updatedAt: [],
+    endsAt: [],
   }))
 
-  const handleSubmit = async (data: IncidentData) => {
+  const handleSubmit = async (incidentData: ModelData<Incident>) => {
     // TODO correct api type
     // TODO error handling
-    const [res]: BackendResponse<Incident> = await BackendService.create('incidents', {
-      title: data.title,
-      description: data.description,
-      startsAt: new Date('' + data.startsAt),
+    const [data]: BackendResponse<Incident> = await BackendService.create('incidents', {
+      title: incidentData.title,
+      description: incidentData.description,
 
       // TODO: make authorId dynamic
       authorId: 1,
     })
 
-    const incident: Incident = {
-      id: res.id,
-      title: res.title,
-      description: res.description,
-      authorId: res.authorId,
-      closeReason: res.closeReason,
-      isClosed: res.isClosed,
-      createdAt: parseDate(res.createdAt),
-      updatedAt: parseDate(res.updatedAt),
-      startsAt: parseDateOrNull(res.startsAt),
-      endsAt: parseDateOrNull(res.endsAt),
-    }
+    const incident = parseIncident(data)
     IncidentStore.save(incident)
   }
 
@@ -62,9 +60,6 @@ const IncidentForm: React.VFC = () => {
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextInput {...props} label="Beschreibung"/>
         )}</UiForm.Field>
-        <UiForm.Field field={form.startsAt}>{(props) => (
-          <UiTextInput {...props} label="Start Datum (2019-01-16)"/>
-        )}</UiForm.Field>
         <UiForm.Buttons form={form} onSubmit={handleSubmit}/>
       </form>
     </div>
@@ -72,9 +67,3 @@ const IncidentForm: React.VFC = () => {
 }
 
 export default IncidentForm
-
-interface IncidentData {
-  title: string
-  description: string
-  startsAt: string
-}

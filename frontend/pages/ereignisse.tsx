@@ -28,10 +28,13 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         Ereignis verwalten
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
+          <IncidentForm/>
+        </UiGrid.Col>
+      </UiGrid>
+      <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
           <IncidentList incidents={incidents}/>
-          {/*TODO Make some space between*/}
-          <IncidentForm/>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>
