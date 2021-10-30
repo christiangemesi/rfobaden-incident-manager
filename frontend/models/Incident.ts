@@ -4,7 +4,7 @@ import { parseDate } from '@/models/Date'
 export default interface Incident extends Model {
     title: string
     authorId: number
-    description: string
+    description: string | null
     closeReason: string | null
     isClosed: boolean
     createdAt: Date

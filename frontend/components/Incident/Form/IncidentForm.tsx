@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import UiForm from '@/components/Ui/Form/UiForm'
@@ -10,13 +10,11 @@ import { ModelData } from '@/models/base/Model'
 const IncidentForm: React.VFC = () => {
   const form = useForm<ModelData<Incident>>(() => ({
     title: '',
-    description: '',
+    description: null,
     authorId: -1,
     closeReason: null,
     isClosed: false,
     startsAt: null,
-    createdAt: null,
-    updatedAt: null,
     endsAt: null,
   }))
 
@@ -31,24 +29,17 @@ const IncidentForm: React.VFC = () => {
     authorId: [],
     closeReason: [],
     isClosed: [],
-    createdAt: [],
-    updatedAt: [],
     endsAt: [],
   }))
 
   const handleSubmit = async (incidentData: ModelData<Incident>) => {
     // TODO correct api type
     // TODO error handling
-    const [data]: BackendResponse<Incident> = await BackendService.create('incidents', {
-      title: incidentData.title,
-      description: incidentData.description,
-
-      // TODO: make authorId dynamic
-      authorId: 1,
-    })
+    const [data]: BackendResponse<Incident> = await BackendService.create('incidents', incidentData)
 
     const incident = parseIncident(data)
     IncidentStore.save(incident)
+    clearForm(form)
   }
 
   return (
