@@ -6,69 +6,69 @@ import BackendService from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 
 interface Props {
-    incidents: Incident[]
+  incidents: Incident[]
 }
 
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
-    const handleDelete = async (incidentId: Id<Incident>) => {
-        await BackendService.delete('incidents', incidentId)
-        IncidentStore.remove(incidentId)
-    }
+  const handleDelete = async (incidentId: Id<Incident>) => {
+    await BackendService.delete('incidents', incidentId)
+    IncidentStore.remove(incidentId)
+  }
 
-    const handleClose = (incidentId: Id<Incident>) => {
-        console.log('Closing incident: ' + incidentId)
-    }
+  const handleClose = (incidentId: Id<Incident>) => {
+    console.log('Closing incident: ' + incidentId)
+  }
 
-    return (
-        <StyledTable>
-            <thead>
-            <StyledTr>
-                <StyledTh>
-                    Ereignis
-                </StyledTh>
-                <StyledTh>
+  return (
+    <StyledTable>
+      <thead>
+      <StyledTr>
+        <StyledTh>
+          Ereignis
+        </StyledTh>
+        <StyledTh>
 
-                </StyledTh>
-                <StyledTh>
+        </StyledTh>
+        <StyledTh>
 
-                </StyledTh>
-            </StyledTr>
-            </thead>
-            <tbody>
-            {incidents.map((incident) => (
-                <StyledTr key={incident.id}>
-                    <StyledTd>
-                        {incident.title}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.createdAt.toLocaleString()}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.updatedAt.toLocaleString()}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.isClosed ? 'Closed' : 'Open'}
-                    </StyledTd>
-                    <StyledTdSmall>
-                        <StyledButton type="button">
-                            Bearbeiten
-                        </StyledButton>
-                    </StyledTdSmall>
-                    <StyledTdSmall>
-                        <StyledButton type="button" onClick={() => handleClose(incident.id)}>
-                            Schliessen
-                        </StyledButton>
-                    </StyledTdSmall>
-                    <StyledTdSmall>
-                        <StyledButton type="button" onClick={() => handleDelete(incident.id)}>
-                            Löschen
-                        </StyledButton>
-                    </StyledTdSmall>
-                </StyledTr>
-            ))}
-            </tbody>
-        </StyledTable>
-    )
+        </StyledTh>
+      </StyledTr>
+      </thead>
+      <tbody>
+      {incidents.map((incident) => (
+        <StyledTr key={incident.id}>
+          <StyledTd>
+            {incident.title}
+          </StyledTd>
+          <StyledTd>
+            {incident.createdAt.toLocaleString()}
+          </StyledTd>
+          <StyledTd>
+            {incident.updatedAt.toLocaleString()}
+          </StyledTd>
+          <StyledTd>
+            {incident.isClosed ? 'Closed' : 'Open'}
+          </StyledTd>
+          <StyledTdSmall>
+            <StyledButton type="button">
+              Bearbeiten
+            </StyledButton>
+          </StyledTdSmall>
+          <StyledTdSmall>
+            <StyledButton type="button" onClick={() => handleClose(incident.id)}>
+              Schliessen
+            </StyledButton>
+          </StyledTdSmall>
+          <StyledTdSmall>
+            <StyledButton type="button" onClick={() => handleDelete(incident.id)}>
+              Löschen
+            </StyledButton>
+          </StyledTdSmall>
+        </StyledTr>
+      ))}
+      </tbody>
+    </StyledTable>
+  )
 }
 export default IncidentList
 
