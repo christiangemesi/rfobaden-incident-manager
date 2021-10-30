@@ -18,7 +18,7 @@ const UiFormField = <T, K extends keyof T>({ field, children }: Props<T, K>): JS
     isInitial,
   } = field
 
-  const setValue = useCallback((newValue: T[K]) => {
+  const setValue = useCallback((newValue: T[K] | null) => {
     setForm((form) => {
       return {
         ...form,
@@ -64,7 +64,7 @@ export default memo(UiFormField, (prev, next) => (
 
 export interface UiFormInputProps<T> {
   value?: T
-  onChange?: Dispatch<T>
+  onChange?: Dispatch<T | null>
   errors?: string[]
 }
 
