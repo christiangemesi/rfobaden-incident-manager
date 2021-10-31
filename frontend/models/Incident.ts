@@ -17,8 +17,8 @@ export const parseIncident = (data: unknown): Incident => {
     const incident = data as Incident
     return {
         ...incident,
-        createdAt: parseDateOrNull(incident.createdAt),
-        updatedAt: parseDateOrNull(incident.updatedAt),
+        createdAt: parseDate(incident.createdAt),
+        updatedAt: parseDate(incident.updatedAt),
         startsAt: parseDateOrNull(incident.startsAt),
         endsAt: parseDateOrNull(incident.endsAt),
     }

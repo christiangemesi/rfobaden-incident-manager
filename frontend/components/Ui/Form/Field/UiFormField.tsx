@@ -1,5 +1,5 @@
 import React, { Dispatch, memo, ReactNode, useCallback, useMemo } from 'react'
-import { UiFormField_base, UiFormFieldState, UiFormState } from '@/components/Ui/Form'
+import { getUiFormBase, UiFormFieldState } from '@/components/Ui/Form'
 
 interface Props<T, K extends keyof T> {
   field: UiFormFieldState<T, K>
@@ -7,7 +7,7 @@ interface Props<T, K extends keyof T> {
 }
 
 const UiFormField = <T, K extends keyof T>({ field, children }: Props<T, K>): JSX.Element => {
-  const form = field[UiFormField_base] as UiFormState<T>
+  const form = getUiFormBase(field)
   const {
     value: { [field.key]: value },
     update: setForm,
@@ -18,7 +18,7 @@ const UiFormField = <T, K extends keyof T>({ field, children }: Props<T, K>): JS
     isInitial,
   } = field
 
-  const setValue = useCallback((newValue: T[K]) => {
+  const setValue = useCallback((newValue: T[K] | null) => {
     setForm((form) => {
       return {
         ...form,
@@ -60,11 +60,11 @@ const UiFormField = <T, K extends keyof T>({ field, children }: Props<T, K>): JS
 }
 export default memo(UiFormField, (prev, next) => (
   prev.field === next.field
-)) as typeof UiFormField
+)) as unknown as typeof UiFormField
 
 export interface UiFormInputProps<T> {
   value?: T
-  onChange?: Dispatch<T>
+  onChange?: Dispatch<T | null>
   errors?: string[]
 }
 

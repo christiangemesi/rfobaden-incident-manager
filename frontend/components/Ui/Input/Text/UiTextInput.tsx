@@ -2,7 +2,7 @@ import React, { ChangeEvent, useCallback } from 'react'
 import { UiFormInputProps } from '@/components/Ui/Form/Field/UiFormField'
 import styled from 'styled-components'
 
-interface Props extends UiFormInputProps<string> {
+interface Props extends UiFormInputProps<string | null> {
   label?: string
   type?: 'text' | 'password'
 }
@@ -14,8 +14,15 @@ const UiTextInput: React.VFC<Props> = ({
   type = 'text',
   errors = [],
 }) => {
-  const handleChange = useCallback((e: ChangeEvent) => {
-    setValue((e.target as HTMLInputElement).value)
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (setValue) {
+      const newValue = e.target.value
+      if (newValue.length === 0) {
+        setValue(null)
+      } else {
+        setValue(newValue)
+      }
+    }
   }, [setValue])
 
   const Label = label == null ? 'div' : StyledLabel
@@ -27,7 +34,7 @@ const UiTextInput: React.VFC<Props> = ({
           {label}
         </span>
       )}
-      <StyledInput value={value} onChange={handleChange} type={type} />
+      <StyledInput value={value ?? ''} onChange={handleChange} type={type} />
       <Errors>
         {errors.map((error) => (
           <div key={error}>

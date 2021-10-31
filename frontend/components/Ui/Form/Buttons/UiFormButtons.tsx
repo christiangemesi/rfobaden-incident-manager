@@ -1,4 +1,4 @@
-import { clearForm, UiFormField_base, UiFormFieldsState, UiFormState } from '@/components/Ui/Form'
+import { clearForm, getUiFormBase, UiFormFieldsState } from '@/components/Ui/Form'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import { useCallback } from 'react'
 
@@ -13,7 +13,7 @@ const UiFormButtons = <T,>({
   onSubmit: pushSubmit,
   onCancel: pushCancel,
 }: Props<T>): JSX.Element => {
-  const form = fields[UiFormField_base] as UiFormState<T>
+  const form = getUiFormBase(fields)
   const {
     value,
     isValid,

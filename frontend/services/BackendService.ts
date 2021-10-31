@@ -7,6 +7,9 @@ const apiEndpoint = run(() => {
     return 'http://backend:8080'
   }
   const value = process.env['NEXT_PUBLIC_BACKEND_ENDPOINT']
+  if (value === undefined) {
+    return ''
+  }
   if (value.endsWith('/')) {
     return value.substr(0, value.length - 1)
   }
@@ -78,7 +81,7 @@ class BackendService {
         // Let the caller handle it.
         const data: { message: string } = await res.json()
         const error = new BackendError(res.status, data.message)
-        return [null, error]
+        return [null as unknown as T, error]
       }
       // TODO error handling
       throw new Error(`backend request failed: ${await res.text()}`)
@@ -87,14 +90,12 @@ class BackendService {
       const value: T = await res.json()
       return [value, null]
     }
-    return [null, null]
+    return [null as unknown as T, null]
   }
 }
 export default new BackendService()
 
-export type BackendResponse<T> =
-  | [null, BackendError]
-  | [T, null]
+export type BackendResponse<T> = [T, BackendError | null]
 
 export class BackendError extends Error {
   constructor(public status: number, public error: string) {

@@ -10,8 +10,9 @@ interface Props {
 }
 
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
-    const handleDelete = (incidentId: Id<Incident>) => {
-        console.log('Deleting incident: ' + incidentId)
+    const handleDelete = async (incidentId: Id<Incident>) => {
+        await BackendService.delete('incidents', incidentId)
+        IncidentStore.remove(incidentId)
     }
 
     const handleClose = async (incidentId: Id<Incident>) => {
