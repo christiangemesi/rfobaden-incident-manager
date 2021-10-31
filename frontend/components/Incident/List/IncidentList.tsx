@@ -22,7 +22,6 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
         if (error !== null) {
             throw error
         }
-        IncidentStore.remove(incidentId)
         IncidentStore.save(parseIncident(incident))
     }
 
