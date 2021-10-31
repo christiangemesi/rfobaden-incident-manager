@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Id from '@/models/base/Id'
-import Incident from '@/models/Incident'
-import BackendService from '@/services/BackendService'
+import Incident, { parseIncident } from '@/models/Incident'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import * as ReactDOM from 'react-dom'
@@ -46,8 +46,16 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
     IncidentStore.remove(incident.id)
   }
 
-  const handleClose = () => {
-    console.log('Closing incident: ' + incident.id)
+
+  const handleClose = async () => {
+    const closeReason = prompt('Please enter the close reason', '')
+    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
+      closeReason: closeReason,
+    })
+    if (error !== null) {
+      throw error
+    }
+    IncidentStore.save(parseIncident(data))
   }
 
   const [printer, setPrinter] = useState<ReactNode>()
