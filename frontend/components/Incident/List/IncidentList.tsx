@@ -69,7 +69,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
       return <IncidentView innerRef={ref} incident={incident} />
     }
     setPrinter(ReactDOM.createPortal((
-      <div id="printable" style={{ margin: '4rem' }}>
+      <div id="print-only" style={{ margin: '4rem' }}>
         <Printer />
       </div>
     ), document.body))

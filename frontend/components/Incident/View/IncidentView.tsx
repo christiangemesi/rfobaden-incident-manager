@@ -43,6 +43,9 @@ const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
             <Info name="zuletzt bearbeitet am">
               {incident.updatedAt.toLocaleString()}
             </Info>
+            <Info name="gedruckt am" className="print-only">
+              {new Date().toLocaleString()}
+            </Info>
           </UiGrid.Col>
         </UiGrid>
       </div>
@@ -57,11 +60,12 @@ export default IncidentView
 interface InfoProp {
   name: string
   children: ReactNode
+  className?: string
 }
 
-const Info: React.VFC<InfoProp> = ({ name, children }) => {
+const Info: React.VFC<InfoProp> = ({ name, children, className }) => {
   return (
-    <UiGrid gap={1}>
+    <UiGrid gap={1} className={className}>
       <UiGrid.Col size={6} style={{ textAlign: 'right' }}>
         <span style={{ fontWeight: 600 }}>
           {name}
