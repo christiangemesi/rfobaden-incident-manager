@@ -9,12 +9,12 @@ interface Props {
   users: User[]
 }
 
-const handleDelete = async (userId: Id<User>) => {
-  await BackendService.delete('users', userId)
-  UserStore.remove(userId)
-}
-
 const UserList: React.VFC<Props> = ({ users }) => {
+  const handleDelete = async (userId: Id<User>) => {
+    await BackendService.delete('users', userId)
+    UserStore.remove(userId)
+  }
+
   return (
     <StyledTable>
       <thead>
