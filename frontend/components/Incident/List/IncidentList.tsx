@@ -1,83 +1,118 @@
-import React from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Id from '@/models/base/Id'
 import Incident, { parseIncident } from '@/models/Incident'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
+import IncidentView from '@/components/Incident/View/IncidentView'
+import * as ReactDOM from 'react-dom'
+import { useUpdateEffect } from 'react-use'
 
 interface Props {
-    incidents: Incident[]
+  incidents: Incident[]
 }
 
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
-    const handleDelete = async (incidentId: Id<Incident>) => {
-        await BackendService.delete('incidents', incidentId)
-        IncidentStore.remove(incidentId)
-    }
-
-    const handleClose = async (incidentId: Id<Incident>) => {
-        const closeReason = prompt('Please enter the close reason', '')
-        const [incident, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incidentId}/close`, {
-            closeReason: closeReason,
-        })
-        if (error !== null) {
-            throw error
-        }
-        IncidentStore.save(parseIncident(incident))
-    }
-
-    return (
-        <StyledTable>
-            <thead>
-            <StyledTr>
-                <StyledTh>
-                    Ereignis
-                </StyledTh>
-                <StyledTh>
-
-                </StyledTh>
-                <StyledTh>
-
-                </StyledTh>
-            </StyledTr>
-            </thead>
-            <tbody>
-            {incidents.map((incident) => (
-                <StyledTr key={incident.id}>
-                    <StyledTd>
-                        {incident.title}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.createdAt.toLocaleString()}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.updatedAt.toLocaleString()}
-                    </StyledTd>
-                    <StyledTd>
-                        {incident.isClosed ? 'Closed' : 'Open'}
-                    </StyledTd>
-                    <StyledTdSmall>
-                        <StyledButton type="button">
-                            Bearbeiten
-                        </StyledButton>
-                    </StyledTdSmall>
-                    <StyledTdSmall>
-                        <StyledButton type="button" onClick={() => handleClose(incident.id)}>
-                            Schliessen
-                        </StyledButton>
-                    </StyledTdSmall>
-                    <StyledTdSmall>
-                        <StyledButton type="button" onClick={() => handleDelete(incident.id)}>
-                            Löschen
-                        </StyledButton>
-                    </StyledTdSmall>
-                </StyledTr>
-            ))}
-            </tbody>
-        </StyledTable>
-    )
+  return (
+    <StyledTable>
+      <thead>
+      <StyledTr>
+        <StyledTh>
+          Ereignis
+        </StyledTh>
+        <StyledTh>
+        </StyledTh>
+        <StyledTh>
+        </StyledTh>
+      </StyledTr>
+      </thead>
+      <tbody>
+      {incidents.map((incident) => (
+        <IncidentListItem key={incident.id} incident={incident} />
+      ))}
+      </tbody>
+    </StyledTable>
+  )
 }
 export default IncidentList
+
+interface IncidentListItemProps {
+  incident: Incident
+}
+
+const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
+  const handleDelete = async () => {
+    await BackendService.delete('incidents', incident.id)
+    IncidentStore.remove(incident.id)
+  }
+
+
+  const handleClose = async () => {
+    const closeReason = prompt('Please enter the close reason', '')
+    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
+      closeReason: closeReason,
+    })
+    if (error !== null) {
+      throw error
+    }
+    IncidentStore.save(parseIncident(data))
+  }
+
+  const [printer, setPrinter] = useState<ReactNode>()
+  const handlePrint = () => {
+    const Printer: React.VFC = () => {
+      const ref = useRef<HTMLDivElement | null>(null)
+      useEffect(() => {
+        window.print()
+        setPrinter(undefined)
+      }, [ref])
+      return <IncidentView innerRef={ref} incident={incident} />
+    }
+    setPrinter(ReactDOM.createPortal((
+      <div id="print-only" style={{ margin: '4rem' }}>
+        <Printer />
+      </div>
+    ), document.body))
+  }
+
+  return (
+    <StyledTr>
+      <StyledTd>
+        {incident.title}
+      </StyledTd>
+      <StyledTd>
+        {incident.createdAt.toLocaleString()}
+      </StyledTd>
+      <StyledTd>
+        {incident.updatedAt.toLocaleString()}
+      </StyledTd>
+      <StyledTd>
+        {incident.isClosed ? 'Closed' : 'Open'}
+      </StyledTd>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          Bearbeiten
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button" onClick={handleDelete}>
+          Schliessen
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button" onClick={handleClose}>
+          Löschen
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button" onClick={handlePrint}>
+          Drucken
+          {printer}
+        </StyledButton>
+      </StyledTdSmall>
+    </StyledTr>
+  )
+}
 
 const StyledTable = styled.table`
   display: block;
