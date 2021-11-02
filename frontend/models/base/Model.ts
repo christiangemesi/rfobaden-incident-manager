@@ -4,4 +4,4 @@ export default interface Model {
   id: Id<this>
 }
 
-export type ModelData<T> = Omit<T, 'id'>
+export type ModelData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>
