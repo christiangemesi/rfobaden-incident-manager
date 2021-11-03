@@ -6,6 +6,9 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    // Require indentation of 2 spaces.
+    "indent": ["error", 2],
+
     // Require single quotes.
     "quotes": ["error", "single"],
 

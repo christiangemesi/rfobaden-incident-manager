@@ -14,16 +14,16 @@ export default interface Incident extends Model {
 }
 
 export const parseIncident = (data: unknown): Incident => {
-    const incident = data as Incident
-    return {
-        ...incident,
-        createdAt: parseDate(incident.createdAt),
-        updatedAt: parseDate(incident.updatedAt),
-        startsAt: parseDateOrNull(incident.startsAt),
-        endsAt: parseDateOrNull(incident.endsAt),
-    }
+  const incident = data as Incident
+  return {
+    ...incident,
+    createdAt: parseDate(incident.createdAt),
+    updatedAt: parseDate(incident.updatedAt),
+    startsAt: parseDateOrNull(incident.startsAt),
+    endsAt: parseDateOrNull(incident.endsAt),
+  }
 }
 
 const parseDateOrNull = (date: Date | null): Date | null => {
-    return date === null ? null : parseDate(date)
+  return date === null ? null : parseDate(date)
 }

@@ -16,20 +16,20 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
   return (
     <StyledTable>
       <thead>
-      <StyledTr>
-        <StyledTh>
+        <StyledTr>
+          <StyledTh>
           Ereignis
-        </StyledTh>
-        <StyledTh>
-        </StyledTh>
-        <StyledTh>
-        </StyledTh>
-      </StyledTr>
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+        </StyledTr>
       </thead>
       <tbody>
-      {incidents.map((incident) => (
-        <IncidentListItem key={incident.id} incident={incident} />
-      ))}
+        {incidents.map((incident) => (
+          <IncidentListItem key={incident.id} incident={incident} />
+        ))}
       </tbody>
     </StyledTable>
   )
