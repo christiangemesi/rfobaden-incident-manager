@@ -1,12 +1,10 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Id from '@/models/base/Id'
 import Incident, { parseIncident } from '@/models/Incident'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import * as ReactDOM from 'react-dom'
-import { useUpdateEffect } from 'react-use'
 
 interface Props {
   incidents: Incident[]

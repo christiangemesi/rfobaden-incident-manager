@@ -4,4 +4,4 @@ export default interface User extends Model {
   name: string
 }
 
-export const parseUser = (data: unknown) => data as User
+export const parseUser = (data: unknown): User => data as User
