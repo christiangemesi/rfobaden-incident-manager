@@ -48,14 +48,16 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
 
 
   const handleClose = async () => {
-    const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, '')
-    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
-      closeReason: closeReason,
-    })
-    if (error !== null) {
-      throw error
+    const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, 'Fertig')
+    if (closeReason != null && closeReason != '') {
+      const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
+        closeReason: closeReason,
+      })
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
     }
-    IncidentStore.save(parseIncident(data))
   }
 
   const [printer, setPrinter] = useState<ReactNode>()
