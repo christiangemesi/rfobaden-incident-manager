@@ -40,20 +40,24 @@ interface IncidentListItemProps {
 
 const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
   const handleDelete = async () => {
-    await BackendService.delete('incidents', incident.id)
-    IncidentStore.remove(incident.id)
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+      await BackendService.delete('incidents', incident.id)
+      IncidentStore.remove(incident.id)
+    }
   }
 
 
   const handleClose = async () => {
-    const closeReason = prompt('Please enter the close reason', '')
-    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
-      closeReason: closeReason,
-    })
-    if (error !== null) {
-      throw error
+    const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, 'Fertig')
+    if (closeReason != null && closeReason.length !== 0) {
+      const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
+        closeReason: closeReason,
+      })
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
     }
-    IncidentStore.save(parseIncident(data))
   }
 
   const [printer, setPrinter] = useState<ReactNode>()
@@ -93,12 +97,12 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleDelete}>
+        <StyledButton type="button" onClick={handleClose}>
           Schliessen
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleClose}>
+        <StyledButton type="button" onClick={handleDelete}>
           Löschen
         </StyledButton>
       </StyledTdSmall>
