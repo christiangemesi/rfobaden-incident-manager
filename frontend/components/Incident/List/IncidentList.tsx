@@ -40,7 +40,7 @@ interface IncidentListItemProps {
 
 const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}"`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       IncidentStore.remove(incident.id)
     }
@@ -49,7 +49,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
 
   const handleClose = async () => {
     const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, 'Fertig')
-    if (closeReason != null && closeReason != '') {
+    if (closeReason != null && closeReason.length !== 0) {
       const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
         closeReason: closeReason,
       })
