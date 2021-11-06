@@ -43,7 +43,7 @@ public class ReportService {
         return Optional.of(reportRepository.save(report));
     }
 
-    public boolean deleteReport(Long reportId) {
+    public boolean deleteReportById(Long reportId) {
         if (reportRepository.existsById(reportId)) {
             reportRepository.deleteById(reportId);
             return true;
