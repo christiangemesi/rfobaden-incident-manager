@@ -43,8 +43,16 @@ public class Report {
     public Report() {
     }
 
-    public Report(Long id, String title) {
+    public Report(String title, Long authorId) {
+        this(-1L, title, authorId);
+    }
 
+    public Report(Long id, String title, Long authorId) {
+        this.id = id;
+        this.title = title;
+        this.authorId = authorId;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = createdAt;
     }
 
     public Long getId() {
