@@ -1,11 +1,7 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+
 import Report, { parseReport } from '@/models/Report'
-
 import styled from 'styled-components'
-
 import BackendService, { BackendResponse } from '@/services/BackendService'
-
-import * as ReactDOM from 'react-dom'
 import ReportStore from '@/stores/ReportStore'
 
 interface Props {

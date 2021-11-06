@@ -1,6 +1,5 @@
 import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
-import Incident from '@/models/Incident'
 
 export default interface Report extends Model {
   title: string
@@ -14,14 +13,14 @@ export default interface Report extends Model {
   endsAt: Date | null
 }
 
-export const parseReport = (data: unknown): Incident => {
-  const incident = data as Incident
+export const parseReport = (data: unknown): Report => {
+  const report = data as Report
   return {
-    ...incident,
-    createdAt: parseDate(incident.createdAt),
-    updatedAt: parseDate(incident.updatedAt),
-    startsAt: parseDateOrNull(incident.startsAt),
-    endsAt: parseDateOrNull(incident.endsAt),
+    ...report,
+    createdAt: parseDate(report.createdAt),
+    updatedAt: parseDate(report.updatedAt),
+    startsAt: parseDateOrNull(report.startsAt),
+    endsAt: parseDateOrNull(report.endsAt),
   }
 }
 
