@@ -1,47 +1,69 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.encryption.BcryptEncryptionService;
+import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
-/**
- * Service Layer is responsible for business logic. This is part of the N-Tier pattern.
- */
 @Service
-public class UserService {
+public class UserService extends ModelRepositoryService<User, UserRepository> {
+    private final UserCredentialsService credentialsService;
 
-    private final UserRepository userRepository;
+    private final EncryptionService encryptionService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(
+        UserRepository repository,
+        UserCredentialsService credentialsService,
+        BcryptEncryptionService encryptionService
+    ) {
+        super(repository);
+        this.credentialsService = credentialsService;
+        this.encryptionService = encryptionService;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
-    public User addNewUser(User user) {
-        return userRepository.save(user);
+    @Override
+    public User create(User newUser) {
+        var user = super.create(newUser);
+
+        var plainPassword = generatePassword(10);
+        var credentials = new UserCredentials();
+        credentials.setId(user.getId());
+        credentials.setEncryptedPassword(encryptionService.encrypt(plainPassword));
+        credentialsService.create(credentials);
+
+        // TODO send the generated email to the user by mail.
+        // Log the password for now so we can actually now what it is.
+        System.out.println("Password for " + user.getEmail() + ": " + plainPassword);
+
+
+        return user;
     }
 
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
-    }
+    private static final String PASSWORD_CHARS =
+        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
 
-    public Optional<User> getUserByName(String name) {
-        return userRepository.findOneByName(name);
-    }
-
-    public boolean deleteUserById(Long userId) {
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
-            return true;
+    private static String generatePassword(int length) {
+        var random = new Random();
+        StringBuilder builder = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            var nextChar = PASSWORD_CHARS.charAt(random.nextInt(PASSWORD_CHARS.length()));
+            builder.append(nextChar);
         }
-        return false;
+        System.out.println("password: " + builder.toString());
+        return builder.toString();
     }
+
+
 }
