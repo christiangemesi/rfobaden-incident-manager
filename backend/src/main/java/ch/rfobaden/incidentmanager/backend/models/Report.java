@@ -120,7 +120,14 @@ public class Report {
             return false;
         }
         Report report = (Report) o;
-        return id.equals(report.id) && Objects.equals(incident, report.incident) && Objects.equals(incidentId, report.incidentId) && title.equals(report.title) && authorId.equals(report.authorId) && Objects.equals(description, report.description) && createdAt.equals(report.createdAt) && Objects.equals(updatedAt, report.updatedAt);
+        return Objects.equals(id, report.id)
+            && Objects.equals(incident, report.incident)
+            && Objects.equals(incidentId, report.incidentId)
+            && Objects.equals(title, report.title)
+            && Objects.equals(authorId, report.authorId)
+            && Objects.equals(description, report.description)
+            && Objects.equals(createdAt, report.createdAt)
+            && Objects.equals(updatedAt, report.updatedAt);
     }
 
     @Override
