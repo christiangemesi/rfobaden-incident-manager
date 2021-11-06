@@ -26,7 +26,7 @@ public class ReportService {
         return reportRepository.findById(reportId);
     }
 
-    public Report createReport(Report report) {
+    public Report addNewReport(Report report) {
         // TODO set date / time attr
         return reportRepository.save(report);
     }
