@@ -42,7 +42,7 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
-        return reportService.createReport(report);
+        return reportService.addNewReport(report);
     }
 
     @DeleteMapping("{reportId}")
