@@ -146,3 +146,6 @@ Temporary Items
 # Visual Strudio Local history
 .localhistory*
 .lh*
+
+# Local idea remote target configuration
+.idea/remote-targets.xml
