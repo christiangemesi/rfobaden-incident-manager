@@ -72,7 +72,7 @@ public final class UserCredentials extends Model {
         return "UserCredentials{"
             + "id='" + getId() + '\''
             + ", encryptedPassword='" + encryptedPassword + '\''
-            + ", user='" + user.getId() + '\''
+            + ", user='" + getUserId()  + '\''
             + ", lastSignInAt='" + lastSignInAt + '\''
             + ", lastPasswordChangeAt='" + lastPasswordChangeAt + '\''
             + ", createdAt='" + getCreatedAt() + '\''
