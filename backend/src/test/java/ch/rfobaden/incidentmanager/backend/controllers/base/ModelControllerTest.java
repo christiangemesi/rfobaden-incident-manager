@@ -14,7 +14,6 @@ import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +39,6 @@ public abstract class ModelControllerTest<
 
     @MockBean
     protected TService service;
-
-    @Autowired
-    protected Faker faker;
 
     @Autowired
     protected ModelGenerator<TModel> generator;
@@ -115,7 +111,7 @@ public abstract class ModelControllerTest<
     @Test
     public void testFind_notFound() throws Exception {
         // Given
-        var id = faker.random().nextLong();
+        var id = generator.generateId();
         Mockito.when(service.find(id))
             .thenReturn(Optional.empty());
 
@@ -201,7 +197,7 @@ public abstract class ModelControllerTest<
         var record = generator.generatePersisted();
 
         // When
-        var mockRequest = MockMvcRequestBuilders.put(basePath + faker.random().nextLong())
+        var mockRequest = MockMvcRequestBuilders.put(basePath + generator.generateId())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(record));
@@ -252,7 +248,8 @@ public abstract class ModelControllerTest<
         mockMvc.perform(mockRequest)
             .andExpect(status().isPreconditionRequired())
             .andExpect(jsonPath("$").exists())
-            .andExpect(jsonPath("$.message").value("update conflict: the resource has already been modified"));
+            .andExpect(jsonPath("$.message")
+                .value("update conflict: the resource has already been modified"));
         verify(service, times(1)).update(record);
     }
 
