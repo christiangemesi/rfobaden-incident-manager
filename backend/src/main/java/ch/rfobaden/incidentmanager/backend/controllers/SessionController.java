@@ -4,6 +4,8 @@ import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Session;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
+import ch.rfobaden.incidentmanager.backend.services.encryption.BcryptEncryptionService;
+import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +30,15 @@ public final class SessionController {
 
     private final UserService userService;
 
+    private final EncryptionService encryptionService;
+
     @Autowired
-    public SessionController(UserService userService) {
+    public SessionController(
+        UserService userService,
+        BcryptEncryptionService encryptionService
+    ) {
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping
@@ -48,10 +55,16 @@ public final class SessionController {
         HttpServletRequest request,
         HttpServletResponse response
     ) {
-        var user = userService.getUserByName(data.username).orElse(null);
-        if (user == null || !Objects.equals(data.getPassword(), user.getPassword())) {
+        var user = userService.findByEmail(data.email).orElse(null);
+        if (user == null) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
         }
+
+        var encryptedPassword = user.getCredentials().getEncryptedPassword();
+        if (!encryptionService.matches(data.password, encryptedPassword)) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
+        }
+
         var session = new Session(user.getId());
         var cookie = new Cookie(cookieName, Session.encode(session));
         setCookie(cookie, request, response, () -> {
@@ -83,8 +96,8 @@ public final class SessionController {
     }
 
     private User findSessionUser(Session session) {
-        var user = userService.getUserById(session.getUserId()).orElse(null);
-        if (user == null) {
+        var user = userService.find(session.getUserId()).orElse(null);
+        if (user == null || user.getCredentials().getUpdatedAt().isAfter(session.getCreatedAt())) {
             throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
         return user;
@@ -138,17 +151,16 @@ public final class SessionController {
     }
 
     private static class LoginData {
-        private String username;
+        private String email;
         private String password;
         private boolean isPersistent;
 
-
-        public String getUsername() {
-            return username;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUsername(String username) {
-            this.username = username;
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public String getPassword() {
@@ -166,15 +178,6 @@ public final class SessionController {
 
         public void setPersistent(boolean persistent) {
             isPersistent = persistent;
-        }
-
-        @Override
-        public String toString() {
-            return "LoginData{"
-                + "username='" + username + '\''
-                + ", password='" + password + '\''
-                + ", isPersistent=" + isPersistent
-                + '}';
         }
     }
 }
