@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(path = "api/v1/session")
 public final class SessionController {
-    private static final String cookieName = "rfobaden.incidentmanager.session.token";
+    public static final String COOKIE_NAME = "rfobaden.incidentmanager.session.token";
 
     private final UserService userService;
 
@@ -66,7 +66,7 @@ public final class SessionController {
         }
 
         var session = new Session(user.getId());
-        var cookie = new Cookie(cookieName, Session.encode(session));
+        var cookie = new Cookie(COOKIE_NAME, Session.encode(session));
         setCookie(cookie, request, response, () -> {
             if (data.isPersistent) {
                 // Keep it for 10 years.
@@ -109,7 +109,7 @@ public final class SessionController {
             cookies = new Cookie[0];
         }
         return Arrays.stream(cookies)
-            .filter((it) -> it.getName().equals(cookieName))
+            .filter((it) -> it.getName().equals(COOKIE_NAME))
             .findFirst()
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "no active session"));
     }
@@ -150,7 +150,7 @@ public final class SessionController {
         return host;
     }
 
-    private static class LoginData {
+    public static final class LoginData {
         private String email;
         private String password;
         private boolean isPersistent;
