@@ -2,58 +2,78 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.rfobaden.incidentmanager.backend.models.Session;
+import ch.rfobaden.incidentmanager.backend.models.base.PojoTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Optional;
 
-/**
- * Tests for {@link Session}.
- *
- * @author Daniel von Atzigen
- */
-public class SessionTest {
+@SpringBootTest
+public class SessionTest extends PojoTest<Session> {
+    @Test
+    public void testEncodeAndDecode() {
+        // Given
+        var session = generator.generate();
 
-    /**
-     * Test for {@link Session#encode(Session)} and {@link Session#decode(String)}.
-     */
-    @ParameterizedTest()
-    @MethodSource("getValidIds")
-    public void testEncodeAndDecode(long id) {
-        var session = new Session(id);
+        // When
         var token = Session.encode(session);
-
-        assertThat(token).isNotEmpty();
-
         var decodedSession = Session.decode(token).orElse(null);
+
+        // Then
+        assertThat(token).isNotEmpty();
         assertThat(decodedSession).isEqualTo(session);
     }
 
-    /**
-     * Test {@link Session#decode(String)} with an invalid token.
-     */
     @Test
-    public void testDecodeInvalidToken() {
+    public void testDecode_invalidToken() {
+        // When
         var session = Session.decode("I'll fail all the time");
+
+        // Then
         assertThat(session).isEqualTo(Optional.empty());
     }
 
-    /**
-     * Test {@link Session#decode(String)} with a token not containing a valid id.
-     */
     @Test
-    public void testDecodeInvalidTokenContent() {
+    public void testDecode_invalidTokenContent() {
+        // Given
         var token = Base64.getEncoder()
             .encodeToString("Fake it till you make it".getBytes(StandardCharsets.UTF_8));
-        var session = Session.decode(token);
-        assertThat(session).isEqualTo(Optional.empty());
+
+        // When
+        var result = Session.decode(token);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.empty());
     }
 
-    private static long[] getValidIds() {
-        return new long[] { 0, 1, 42, -10, Long.MAX_VALUE, Long.MIN_VALUE };
+    @Test
+    public void testDecode_invalidUserId() {
+        // Given
+        var decodedToken = "not user id;" + LocalDateTime.now();
+        var token = Base64.getEncoder()
+            .encodeToString(decodedToken.getBytes(StandardCharsets.UTF_8));
+
+        // When
+        var result = Session.decode(token);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void testDecode_invalidCreatedAt() {
+        // Given
+        var decodedToken = "1;not a date time";
+        var token = Base64.getEncoder()
+            .encodeToString(decodedToken.getBytes(StandardCharsets.UTF_8));
+
+        // When
+        var result = Session.decode(token);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.empty());
     }
 }
