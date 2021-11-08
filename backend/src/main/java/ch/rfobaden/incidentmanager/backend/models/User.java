@@ -1,12 +1,13 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -24,6 +25,13 @@ public final class User extends Model {
 
     @Column(nullable = false)
     private Role role;
+
+    @OneToOne(
+        optional = false,
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL
+    )
+    private UserCredentials credentials;
 
     public String getEmail() {
         return email;
@@ -55,6 +63,16 @@ public final class User extends Model {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @JsonIgnore
+    public UserCredentials getCredentials() {
+        return credentials;
+    }
+
+    @JsonIgnore
+    public void setCredentials(UserCredentials credentials) {
+        this.credentials = credentials;
     }
 
     @Override
