@@ -9,23 +9,20 @@ import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class UserService extends ModelRepositoryService<User, UserRepository> {
-    private final UserCredentialsService credentialsService;
-
     private final EncryptionService encryptionService;
 
     @Autowired
     public UserService(
         UserRepository repository,
-        UserCredentialsService credentialsService,
         BcryptEncryptionService encryptionService
     ) {
         super(repository);
-        this.credentialsService = credentialsService;
         this.encryptionService = encryptionService;
     }
 
@@ -35,18 +32,24 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
 
     @Override
     public User create(User newUser) {
-        var user = super.create(newUser);
+        if (newUser.getCredentials() != null) {
+            throw new IllegalArgumentException("credentials will be overwritten and must be null");
+        }
 
-        var plainPassword = generatePassword(10);
         var credentials = new UserCredentials();
-        credentials.setId(user.getId());
+        var plainPassword = generatePassword(10);
         credentials.setEncryptedPassword(encryptionService.encrypt(plainPassword));
-        credentialsService.create(credentials);
+        credentials.setCreatedAt(LocalDateTime.now());
+        credentials.setUpdatedAt(credentials.getCreatedAt());
+        credentials.setLastPasswordChangeAt(credentials.getCreatedAt());
+        credentials.setUser(newUser);
+        newUser.setCredentials(credentials);
+
+        var user = super.create(newUser);
 
         // TODO send the generated email to the user by mail.
         // Log the password for now so we can actually now what it is.
         System.out.println("Password for " + user.getEmail() + ": " + plainPassword);
-
 
         return user;
     }
@@ -61,7 +64,6 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
             var nextChar = PASSWORD_CHARS.charAt(random.nextInt(PASSWORD_CHARS.length()));
             builder.append(nextChar);
         }
-        System.out.println("password: " + builder.toString());
         return builder.toString();
     }
 
