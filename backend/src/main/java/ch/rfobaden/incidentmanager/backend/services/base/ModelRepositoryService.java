@@ -1,10 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.services.base;
 
-import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +11,8 @@ import java.util.Optional;
 
 public abstract class ModelRepositoryService<
     TModel extends Model,
-    TRepository extends JpaRepository<TModel, Long>> implements ModelService<TModel> {
+    TRepository extends JpaRepository<TModel, Long>
+    > implements ModelService<TModel> {
 
     protected final TRepository repository;
 
@@ -33,6 +32,9 @@ public abstract class ModelRepositoryService<
 
     @Override
     public TModel create(TModel record) {
+        if (record.getId() != null) {
+            throw new IllegalArgumentException("id will be overwritten and must be null");
+        }
         if (record.getCreatedAt() != null) {
             throw new IllegalArgumentException("createdAt must not be set");
         }
@@ -46,9 +48,6 @@ public abstract class ModelRepositoryService<
 
     @Override
     public Optional<TModel> update(TModel record) {
-        if (record.getCreatedAt() != null) {
-            throw new IllegalArgumentException("createdAt must not be set");
-        }
         if (record.getUpdatedAt() == null) {
             throw new IllegalArgumentException("updatedAt must be set");
         }
@@ -57,10 +56,14 @@ public abstract class ModelRepositoryService<
         if (existingRecord == null) {
             return Optional.empty();
         }
-        if (!Objects.equals(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
-            throw new UpdateConflictException("record " + record.getId() + " has already been modified");
+        if (!Objects.equals(existingRecord.getCreatedAt(), record.getCreatedAt())) {
+            throw new IllegalArgumentException("createdAt differs from persisted value");
         }
-        record.setCreatedAt(existingRecord.getCreatedAt());
+        if (!Objects.equals(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
+            throw new UpdateConflictException(
+                "record " + record.getId() + " has already been modified"
+            );
+        }
         record.setUpdatedAt(LocalDateTime.now());
         return Optional.of(repository.save(record));
     }
