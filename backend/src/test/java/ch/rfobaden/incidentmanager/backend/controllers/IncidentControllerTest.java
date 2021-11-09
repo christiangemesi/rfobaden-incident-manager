@@ -208,15 +208,13 @@ class IncidentControllerTest {
     @Test
     public void testReopenIncident() throws Exception {
         // Given
-        var closeData = new IncidentController.CloseIncidentData();
-        closeData.setCloseReason("Finish");
         var closedIncident = new Incident(
             incident1.getId(),
             incident1.getTitle(),
             incident1.getAuthorId()
         );
         closedIncident.setClosed(true);
-        closedIncident.setCloseReason(closeData.getCloseReason());
+        closedIncident.setCloseReason("Finish");
         var closedIncidentId = closedIncident.getId();
         var reopenedIncident = new Incident(
             incident1.getId(),
@@ -237,8 +235,7 @@ class IncidentControllerTest {
         var mockRequest =
             MockMvcRequestBuilders.put("/api/v1/incidents/" + closedIncidentId + "/reopen")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(requestMapper.writeValueAsString(""));
+                .accept(MediaType.APPLICATION_JSON);
 
         // Then
         mockMvc.perform(mockRequest)
