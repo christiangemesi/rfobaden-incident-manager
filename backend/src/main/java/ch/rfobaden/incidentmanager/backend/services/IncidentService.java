@@ -59,8 +59,14 @@ public class IncidentService {
     }
 
     public Optional<Incident> reopenIncident(Long incidentId) {
-        // TODO
-        return Optional.empty();
+        Incident incident = getIncidentById(incidentId).orElse(null);
+        if (incident == null) {
+            return Optional.empty();
+        }
+        incident.setClosedAt(null);
+        incident.setCloseReason("");
+        incident.setClosed(false);
+        return updateIncident(incidentId, incident);
     }
 
     public boolean deleteIncidentById(Long incidentId) {
