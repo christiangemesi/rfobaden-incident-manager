@@ -48,6 +48,15 @@ public class IncidentController {
         return incidentService.addNewIncident(incident);
     }
 
+    @PutMapping("{incidentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident updateIncident(
+        @PathVariable("incidentId") Long incidentId,
+        @RequestBody Incident incident
+    ) {
+        return null; // TODO
+    }
+
     @PutMapping("{incidentId}/close")
     @ResponseStatus(HttpStatus.OK)
     public Incident closeIncident(
