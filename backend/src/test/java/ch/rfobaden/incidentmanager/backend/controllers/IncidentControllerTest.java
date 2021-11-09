@@ -149,16 +149,16 @@ class IncidentControllerTest {
         // Given
         var currentIncident = incident1;
         var currentIncidentId = currentIncident.getId();
-        var closeDate = new IncidentController.CloseIncidentData();
-        closeDate.setCloseReason("Finish");
+        var closeData = new IncidentController.CloseIncidentData();
+        closeData.setCloseReason("Finish");
         var closedIncident = new Incident(
             currentIncidentId,
             currentIncident.getTitle(),
             currentIncident.getAuthorId()
         );
         closedIncident.setClosed(true);
-        closedIncident.setCloseReason(closeDate.getCloseReason());
-        Mockito.when(incidentService.closeIncident(currentIncidentId, closeDate.getCloseReason()))
+        closedIncident.setCloseReason(closeData.getCloseReason());
+        Mockito.when(incidentService.closeIncident(currentIncidentId, closeData.getCloseReason()))
             .thenCallRealMethod();
         Mockito.when(incidentService.getIncidentById(currentIncidentId))
             .thenReturn(Optional.of(currentIncident));
@@ -170,7 +170,7 @@ class IncidentControllerTest {
             MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId + "/close")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(requestMapper.writeValueAsString(closeDate));
+            .content(requestMapper.writeValueAsString(closeData));
 
         // Then
         mockMvc.perform(mockRequest)
@@ -179,7 +179,7 @@ class IncidentControllerTest {
             .andExpect(jsonPath("$.isClosed").value(closedIncident.isClosed()))
             .andExpect(jsonPath("$.closeReason").value(closedIncident.getCloseReason()));
         verify(incidentService, times(1))
-            .closeIncident(currentIncidentId, closeDate.getCloseReason());
+            .closeIncident(currentIncidentId, closeData.getCloseReason());
     }
 
     @Test
@@ -203,6 +203,72 @@ class IncidentControllerTest {
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.message", is("incident not found")));
         verify(incidentService, times(1)).closeIncident(incidentId, closeData.getCloseReason());
+    }
+
+    @Test
+    public void testReopenIncident() throws Exception {
+        // Given
+        var closeData = new IncidentController.CloseIncidentData();
+        closeData.setCloseReason("Finish");
+        var closedIncident = new Incident(
+            incident1.getId(),
+            incident1.getTitle(),
+            incident1.getAuthorId()
+        );
+        closedIncident.setClosed(true);
+        closedIncident.setCloseReason(closeData.getCloseReason());
+        var closedIncidentId = closedIncident.getId();
+        var reopenedIncident = new Incident(
+            incident1.getId(),
+            incident1.getTitle(),
+            incident1.getAuthorId()
+        );
+        closedIncident.setClosed(false);
+        closedIncident.setCloseReason("");
+        Mockito.when(incidentService.reopenIncident(closedIncidentId))
+            .thenCallRealMethod();
+        Mockito.when(incidentService.getIncidentById(closedIncidentId))
+            .thenReturn(Optional.of(closedIncident));
+        Mockito.when(incidentService.updateIncident(closedIncidentId, closedIncident))
+            .thenReturn(Optional.of(reopenedIncident));
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + closedIncidentId + "/reopen")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestMapper.writeValueAsString(""));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.isClosed").value(reopenedIncident.isClosed()))
+            .andExpect(jsonPath("$.closeReason").isEmpty());
+        verify(incidentService, times(1))
+            .reopenIncident(closedIncidentId);
+    }
+
+    @Test
+    public void testReopenIncidentByIdNotFound() throws Exception {
+        // Given
+        Long incidentId = 4L;
+        Mockito.when(incidentService.getIncidentById(incidentId))
+            .thenCallRealMethod();
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId + "/reopen")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(requestMapper.writeValueAsString(""));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.message", is("incident not found")));
+        verify(incidentService, times(1)).reopenIncident(incidentId);
     }
 
     @Test
