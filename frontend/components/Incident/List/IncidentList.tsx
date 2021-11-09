@@ -61,7 +61,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
   }
 
   const handleReopen = async () => {
-    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/reopen`,{})
+    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/reopen`, {})
     if (error !== null) {
       throw error
     }
