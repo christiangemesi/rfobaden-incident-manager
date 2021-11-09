@@ -14,6 +14,14 @@ public abstract class Generator<T> {
         return generate(amount, this::generate);
     }
 
+    protected static <T> List<T> generate(int amount, Supplier<T> generate) {
+        var records = new ArrayList<T>(amount);
+        for (int i = 0; i < amount; i++) {
+            records.add(generate.get());
+        }
+        return records;
+    }
+
     /**
      * Shallow copy of a value, using reflection.
      * Not very pretty, not entirely safe, definitely only usable in testing.
@@ -67,13 +75,5 @@ public abstract class Generator<T> {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("failed to copy", e);
         }
-    }
-
-    protected static <T> List<T> generate(int amount, Supplier<T> generate) {
-        var records = new ArrayList<T>(amount);
-        for (int i = 0; i < amount; i++) {
-            records.add(generate.get());
-        }
-        return records;
     }
 }
