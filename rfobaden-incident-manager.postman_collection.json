@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "228c6ea8-d825-4361-b616-280db9e29bf4",
+		"_postman_id": "a74702f0-d427-43bf-9693-9ace0b11e5aa",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -123,7 +123,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"title 2\",\n    \"closeReason\": \"\",\n    \"authorId\": \"3\",\n    \"description\": \"description\"\n}",
+							"raw": "{\n    \"title\": \"title\",\n    \"authorId\": \"1\",\n    \"description\": \"description\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -191,6 +191,37 @@
 					"response": []
 				},
 				{
+					"name": "Edit Incident",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"title new\",\n    \"authorId\": \"1\",\n    \"description\": \"description lorem ipsum\",\n    \"endsAt\":[\n            2021,\n            11,\n            9,\n            0,\n            0\n        ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Close Incident",
 					"request": {
 						"method": "PUT",
@@ -217,6 +248,38 @@
 								"incidents",
 								"2",
 								"close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reopen Incident",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/2/reopen",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"2",
+								"reopen"
 							]
 						}
 					},
