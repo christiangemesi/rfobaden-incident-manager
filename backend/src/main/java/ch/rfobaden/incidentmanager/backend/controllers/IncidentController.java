@@ -54,7 +54,10 @@ public class IncidentController {
         @PathVariable("incidentId") Long incidentId,
         @RequestBody Incident incident
     ) {
-        return null; // TODO
+        return incidentService.updateIncident(incidentId, incident)
+            .orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+            ));
     }
 
     @PutMapping("{incidentId}/close")
