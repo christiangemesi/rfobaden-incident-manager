@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -104,14 +105,11 @@ public final class SessionController {
     }
 
     private static Cookie findCookie(HttpServletRequest request) {
-        var cookies = request.getCookies();
-        if (cookies == null) {
-            cookies = new Cookie[0];
+        var cookie = WebUtils.getCookie(request, COOKIE_NAME);
+        if (cookie == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
-        return Arrays.stream(cookies)
-            .filter((it) -> it.getName().equals(COOKIE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "no active session"));
+        return cookie;
     }
 
     private static void setCookie(
