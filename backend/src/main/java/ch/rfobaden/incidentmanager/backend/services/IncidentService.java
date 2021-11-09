@@ -58,6 +58,11 @@ public class IncidentService {
         return updateIncident(incidentId, incident);
     }
 
+    public Optional<Incident> reopenIncident(Long incidentId) {
+        // TODO
+        return Optional.empty();
+    }
+
     public boolean deleteIncidentById(Long incidentId) {
         if (incidentRepository.existsById(incidentId)) {
             incidentRepository.deleteById(incidentId);

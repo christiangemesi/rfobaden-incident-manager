@@ -60,6 +60,14 @@ public class IncidentController {
             ));
     }
 
+    @PutMapping("{incidentId}/reopen")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident reopenIncident(
+        @PathVariable("incidentId") Long incidentId
+    ) {
+        return null; // TODO
+    }
+
     @DeleteMapping("{incidentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIncidentById(@PathVariable("incidentId") Long incidentId) {
