@@ -159,7 +159,7 @@ class IncidentControllerTest {
         incidentData.setDescription("New Description");
         incidentData.setEndsAt(LocalDateTime.of(2021, Month.APRIL, 15, 20, 10, 0));
         var updatedIncident = new Incident(
-            incidentData.getId(),
+            currentIncidentId,
             incidentData.getTitle(),
             incidentData.getAuthorId()
         );
@@ -172,7 +172,7 @@ class IncidentControllerTest {
 
         // When
         var mockRequest =
-            MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId + "/close")
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(requestMapper.writeValueAsString(incidentData));
@@ -183,8 +183,7 @@ class IncidentControllerTest {
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.title").value(updatedIncident.getTitle()))
             .andExpect(jsonPath("$.description").value(updatedIncident.getDescription()))
-            .andExpect(jsonPath("$.startsAt").value(updatedIncident.getStartsAt()))
-            .andExpect(jsonPath("$.endsAt").value(updatedIncident.getEndsAt()));
+            .andExpect(jsonPath("$.isClosed").value(updatedIncident.isClosed()));
         verify(incidentService, times(1))
             .updateIncident(currentIncidentId, incidentData);
     }
