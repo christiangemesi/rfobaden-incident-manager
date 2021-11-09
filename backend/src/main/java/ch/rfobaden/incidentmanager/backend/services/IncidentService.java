@@ -64,7 +64,7 @@ public class IncidentService {
             return Optional.empty();
         }
         incident.setClosedAt(null);
-        incident.setCloseReason("");
+        incident.setCloseReason(null);
         incident.setClosed(false);
         return updateIncident(incidentId, incident);
     }
