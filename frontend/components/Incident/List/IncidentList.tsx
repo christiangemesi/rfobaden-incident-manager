@@ -105,15 +105,15 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        {incident.isClosed ?
+        {incident.isClosed ? (
           <StyledButton type="button" onClick={handleReopen}>
             Öffnen
           </StyledButton>
-          :
+        ) : (
           <StyledButton type="button" onClick={handleClose}>
             Schliessen
           </StyledButton>
-        }
+        )}
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleDelete}>
