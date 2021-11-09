@@ -121,7 +121,7 @@ public final class SessionController {
         Runnable configure
     ) {
         cookie.setHttpOnly(true);
-        cookie.setDomain(parseDomainFromRequest(request));
+        cookie.setDomain(parseServerDomainFromRequest(request));
         cookie.setPath("/api/v1/");
         cookie.setSecure(request.isSecure());
         configure.run();
@@ -142,7 +142,7 @@ public final class SessionController {
         return session;
     }
 
-    private static String parseDomainFromRequest(HttpServletRequest request) {
+    private static String parseServerDomainFromRequest(HttpServletRequest request) {
         var host = URI.create(request.getRequestURL().toString()).getHost();
         if (host.startsWith("www.")) {
             return host.substring(4);
