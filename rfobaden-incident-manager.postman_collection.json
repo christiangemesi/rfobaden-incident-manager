@@ -205,7 +205,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/3",
+							"raw": "http://localhost:3001/api/v1/incidents/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -215,7 +215,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -236,7 +236,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/2/close",
+							"raw": "http://localhost:3001/api/v1/incidents/1/close",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -246,7 +246,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"2",
+								"1",
 								"close"
 							]
 						}
@@ -268,7 +268,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/2/reopen",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reopen",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -278,7 +278,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"2",
+								"1",
 								"reopen"
 							]
 						}
