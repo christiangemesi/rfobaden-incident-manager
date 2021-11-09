@@ -137,7 +137,7 @@ public final class SessionController {
         var token = cookie.getValue();
         var session = Session.decode(token).orElse(null);
         if (session == null) {
-            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
+            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
         }
         return session;
     }
