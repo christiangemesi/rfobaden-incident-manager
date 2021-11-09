@@ -254,7 +254,7 @@ class IncidentControllerTest {
         // Given
         Long incidentId = 4L;
         Mockito.when(incidentService.getIncidentById(incidentId))
-            .thenCallRealMethod();
+            .thenReturn(Optional.empty());
 
         // When
         var mockRequest =
