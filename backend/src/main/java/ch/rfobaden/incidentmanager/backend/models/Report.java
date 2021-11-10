@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -95,6 +97,7 @@ public class Report {
         this.id = id;
     }
 
+    @JsonProperty
     public void setIncident(Incident incident) {
         this.incident = incident;
     }

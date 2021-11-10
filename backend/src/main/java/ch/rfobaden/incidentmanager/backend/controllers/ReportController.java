@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/report")
+@RequestMapping(path = "/api/v1/reports")
 public class ReportController {
 
     private final ReportService reportService;
 
+    private final IncidentService incidentService;
+
     @Autowired
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, IncidentService incidentService) {
         this.reportService = reportService;
+        this.incidentService = incidentService;
     }
 
     @GetMapping
@@ -42,7 +46,13 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
-        System.out.println(report);
+        // TODO check if incidentId exists
+        // TODO check if incident exists
+
+        // throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
+
+        var incident = incidentService.getIncidentById(report.getIncidentId()).orElseThrow();
+        report.setIncident(incident);
         return reportService.addNewReport(report);
     }
 

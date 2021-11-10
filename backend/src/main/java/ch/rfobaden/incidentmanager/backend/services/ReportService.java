@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,8 @@ public class ReportService {
 
     public Report addNewReport(Report report) {
         // TODO set date / time attr
+        report.setCreatedAt(LocalDateTime.now());
+        report.setUpdatedAt(LocalDateTime.now());
         return reportRepository.save(report);
     }
 
