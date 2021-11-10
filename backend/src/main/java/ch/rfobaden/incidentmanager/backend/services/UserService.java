@@ -61,7 +61,7 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
         var credentials = user.getCredentials();
         credentials.setEncryptedPassword(encryptionService.encrypt(password));
         credentials.setUpdatedAt(LocalDateTime.now());
-        credentials.setLastPasswordChangeAt(LocalDateTime.now());
+        credentials.setLastPasswordChangeAt(credentials.getUpdatedAt());
         return Optional.of(repository.save(user));
     }
 

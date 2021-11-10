@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionCookieHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Session;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -41,16 +42,30 @@ public final class UserController extends ModelController<User, UserService> {
         user = service.updatePassword(user, data.password).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "record not found")
         ));
-        cookieHelper.setCookie(session, request, response, (newCookie) -> {
+
+        // Set new session, so the token stays valid.
+        // Sessions of other clients will be invalid from here on out.
+        var newSession = new Session(user.getId());
+        cookieHelper.setCookie(newSession, request, response, (newCookie) -> {
             newCookie.setMaxAge(cookie.getMaxAge());
         });
         return user;
     }
 
     public static final class PasswordData {
-        private final String password;
+        private String password;
+
+        public PasswordData() {}
 
         public PasswordData(String password) {
+            this.password = password;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
             this.password = password;
         }
     }
