@@ -146,3 +146,6 @@ Temporary Items
 # Visual Strudio Local history
 .localhistory*
 .lh*
+
+# jpa plugin intellij
+.idea/jpa-buddy.xml
