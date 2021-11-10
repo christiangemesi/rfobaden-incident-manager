@@ -23,6 +23,9 @@ const UserList: React.VFC<Props> = ({ users }) => {
             Benutzer
           </StyledTh>
           <StyledTh>
+            E-Mail
+          </StyledTh>
+          <StyledTh>
 
           </StyledTh>
           <StyledTh>
@@ -33,9 +36,16 @@ const UserList: React.VFC<Props> = ({ users }) => {
       <tbody>
         {users.map((user) => (
           <StyledTr key={user.id}>
-            <StyledTd>
-              {user.name}
+            <StyledTd style={{ width: 0 }}>
+              {user.firstName} {user.lastName}
             </StyledTd>
+            <StyledTd>
+              {user.email}
+            </StyledTd>
+            <StyledTd>
+
+            </StyledTd>
+
             <StyledTdSmall>
               <StyledButton type="button">
                 Bearbeiten
@@ -74,12 +84,13 @@ const StyledTh = styled.th`
   text-align: left;
 `
 const StyledTd = styled.td`
-  width: 100%;
   padding: 0.5rem;
   vertical-align: middle;
+  width: 100%;
+  white-space: nowrap;
 `
 const StyledTdSmall = styled(StyledTd)`
-  width: 40px;
+  width: 0;
 `
 const StyledButton = styled.button`
   display: block;

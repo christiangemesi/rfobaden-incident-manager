@@ -1,19 +1,25 @@
 import { AppProps } from 'next/app'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
-import { useAsync } from 'react-use'
+import { useAsync, useToggle } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
-import Model from '@/models/base/Model'
 import Link from 'next/link'
 
 import 'reset-css/reset.css'
+import User, { parseUser } from '@/models/User'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+  console.log(process.env.NODE_ENV)
+
+  const [hasSession, setHasSession] = useState(false)
   useAsync(async () => {
-    const [currentUser, error] = await BackendService.find<Model & { username: string }>('session')
+    const [currentUser, error] = await BackendService.find<User>('session')
+    setHasSession(true)
     if (error !== null) {
       if (error.status === 404) {
         // No session present - user is not logged in.
@@ -21,10 +27,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       }
       throw error
     }
-    SessionStore.setCurrentUser({
-      id: currentUser.id,
-      name: currentUser.username,
-    })
+    SessionStore.setCurrentUser(parseUser(currentUser))
   })
 
   const { currentUser } = useSession()
@@ -32,6 +35,13 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     await BackendService.delete('session')
     SessionStore.clear()
   }
+
+  const component = useMemo(() => {
+    if (!hasSession) {
+      return <React.Fragment />
+    }
+    return <Component {...pageProps} />
+  }, [Component, pageProps, hasSession])
 
   return (
     <>
@@ -52,12 +62,25 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
               </a>
             </Link>
           ) : (
-            <button type="button" onClick={logout}>
-              {currentUser.name} abmelden →
-            </button>
+            <UiGrid gap={1}>
+              <UiGrid.Col>
+                <Link href="/profil">
+                  <a>
+                    <UiButton type="button">
+                      {currentUser.firstName} {currentUser.lastName}
+                    </UiButton>
+                  </a>
+                </Link>
+              </UiGrid.Col>
+              <UiGrid.Col size="auto">
+                <UiButton onClick={logout}>
+                  abmelden →
+                </UiButton>
+              </UiGrid.Col>
+            </UiGrid>
           )}
         </SessionStateBar>
-        <Component {...pageProps} />
+        {component}
       </ThemeProvider>
     </>
   )
@@ -78,6 +101,10 @@ const GlobalStyle = createGlobalStyle`
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 1rem;
+  }
+  
+  button {
+    cursor: pointer;
   }
 
   @media print {
