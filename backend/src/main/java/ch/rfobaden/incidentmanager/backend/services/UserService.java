@@ -54,6 +54,20 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
         return user;
     }
 
+    public Optional<User> updatePassword(Long id, String password) {
+        if (password == null || password.trim().length() == 0) {
+            throw new IllegalArgumentException("password must not be empty");
+        }
+        var user = find(id).orElse(null);
+        if (user == null) {
+            return Optional.empty();
+        }
+        var credentials = user.getCredentials();
+        credentials.setEncryptedPassword(encryptionService.encrypt(password));
+        credentials.setUpdatedAt(LocalDateTime.now());
+        return Optional.of(repository.save(user));
+    }
+
     private static final String PASSWORD_CHARS =
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
 
