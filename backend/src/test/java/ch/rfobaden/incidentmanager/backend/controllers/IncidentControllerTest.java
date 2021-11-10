@@ -215,7 +215,6 @@ class IncidentControllerTest {
         );
         closedIncident.setClosed(true);
         closedIncident.setCloseReason("Finish");
-        var closedIncidentId = closedIncident.getId();
         var reopenedIncident = new Incident(
             incident1.getId(),
             incident1.getTitle(),
@@ -224,16 +223,16 @@ class IncidentControllerTest {
         closedIncident.setClosed(false);
         reopenedIncident.setClosed(false);
         reopenedIncident.setCloseReason(null);
-        Mockito.when(incidentService.reopenIncident(closedIncidentId))
+        Mockito.when(incidentService.reopenIncident(closedIncident.getId()))
             .thenCallRealMethod();
-        Mockito.when(incidentService.getIncidentById(closedIncidentId))
+        Mockito.when(incidentService.getIncidentById(closedIncident.getId()))
             .thenReturn(Optional.of(closedIncident));
-        Mockito.when(incidentService.updateIncident(closedIncidentId, closedIncident))
+        Mockito.when(incidentService.updateIncident(closedIncident.getId(), closedIncident))
             .thenReturn(Optional.of(reopenedIncident));
 
         // When
         var mockRequest =
-            MockMvcRequestBuilders.put("/api/v1/incidents/" + closedIncidentId + "/reopen")
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + closedIncident.getId() + "/reopen")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -244,7 +243,7 @@ class IncidentControllerTest {
             .andExpect(jsonPath("$.isClosed").value(reopenedIncident.isClosed()))
             .andExpect(jsonPath("$.closeReason").isEmpty());
         verify(incidentService, times(1))
-            .reopenIncident(closedIncidentId);
+            .reopenIncident(closedIncident.getId());
     }
 
     @Test
