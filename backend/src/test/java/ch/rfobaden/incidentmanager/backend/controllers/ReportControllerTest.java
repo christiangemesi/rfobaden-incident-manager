@@ -48,7 +48,7 @@ public class ReportControllerTest {
             .thenReturn(reports);
 
         // When
-        var request = MockMvcRequestBuilders.get("api/v1/reports");
+        var request = MockMvcRequestBuilders.get("/api/v1/reports");
 
         // Then
         mockMvc.perform(request)
@@ -68,7 +68,7 @@ public class ReportControllerTest {
             .thenReturn(List.of());
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -86,7 +86,7 @@ public class ReportControllerTest {
             .thenReturn(Optional.of(report));
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -104,7 +104,7 @@ public class ReportControllerTest {
             .thenReturn(Optional.empty());
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -125,7 +125,7 @@ public class ReportControllerTest {
             .thenReturn(createdReport);
 
         // When
-        var mockRequest = MockMvcRequestBuilders.post("api/vi/reports")
+        var mockRequest = MockMvcRequestBuilders.post("/api/vi/reports")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(requestMapper.writeValueAsString(newReport));
@@ -147,7 +147,7 @@ public class ReportControllerTest {
 
         // When
         MockHttpServletRequestBuilder mockRequest =
-            MockMvcRequestBuilders.delete("api/v1/reports/" + reportId);
+            MockMvcRequestBuilders.delete("/api/v1/reports/" + reportId);
 
         // Then
         mockMvc.perform(mockRequest)
@@ -165,7 +165,7 @@ public class ReportControllerTest {
 
         // When
         MockHttpServletRequestBuilder mockRequest =
-            MockMvcRequestBuilders.delete("api/v1/reports/" + reportId);
+            MockMvcRequestBuilders.delete("/api/v1/reports/" + reportId);
 
         // Then
         mockMvc.perform(mockRequest)

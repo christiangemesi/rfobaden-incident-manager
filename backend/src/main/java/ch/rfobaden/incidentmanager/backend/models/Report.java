@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -22,10 +24,8 @@ public class Report {
 
     // TODO check
     @ManyToOne
-    @JoinColumn(name = "incident")
+    @JoinColumn(name = "incident", nullable = false)
     private Incident incident;
-    // or
-    private Long incidentId;
 
     @Column(nullable = false)
     private String title;
@@ -59,12 +59,16 @@ public class Report {
         return id;
     }
 
+    @JsonIgnore
     public Incident getIncident() {
         return incident;
     }
 
     public Long getIncidentId() {
-        return incidentId;
+        if (incident == null) {
+            return null;
+        }
+        return incident.getId();
     }
 
     public String getTitle() {
@@ -93,10 +97,6 @@ public class Report {
 
     public void setIncident(Incident incident) {
         this.incident = incident;
-    }
-
-    public void setIncidentId(Long incidentId) {
-        this.incidentId = incidentId;
     }
 
     public void setTitle(String title) {
@@ -129,31 +129,29 @@ public class Report {
         }
         Report report = (Report) o;
         return Objects.equals(id, report.id)
-            && Objects.equals(incident, report.incident)
-            && Objects.equals(incidentId, report.incidentId)
-            && Objects.equals(title, report.title)
-            && Objects.equals(authorId, report.authorId)
-            && Objects.equals(description, report.description)
-            && Objects.equals(createdAt, report.createdAt)
-            && Objects.equals(updatedAt, report.updatedAt);
+                && Objects.equals(getIncidentId(), report.getIncidentId())
+                && Objects.equals(title, report.title)
+                && Objects.equals(authorId, report.authorId)
+                && Objects.equals(description, report.description)
+                && Objects.equals(createdAt, report.createdAt)
+                && Objects.equals(updatedAt, report.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, incident, incidentId, title, authorId, description, createdAt, updatedAt);
+        return Objects.hash(id, getIncidentId(), title, authorId, description, createdAt, updatedAt);
     }
 
     @Override
     public String toString() {
         return "Report{"
-            + "id=" + id
-            + ", incident=" + incident
-            + ", incidentId=" + incidentId
-            + ", title='" + title + '\''
-            + ", authorId=" + authorId
-            + ", description='" + description + '\''
-            + ", createdAt=" + createdAt
-            + ", updatedAt=" + updatedAt
-            + '}';
+                + "id=" + id
+                + ", incidentId=" + getIncidentId()
+                + ", title='" + title + '\''
+                + ", authorId=" + authorId
+                + ", description='" + description + '\''
+                + ", createdAt=" + createdAt
+                + ", updatedAt=" + updatedAt
+                + '}';
     }
 }

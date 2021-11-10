@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/report")
+@RequestMapping(path = "/api/v1/report")
 public class ReportController {
 
     private final ReportService reportService;
@@ -42,6 +42,7 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
+        System.out.println(report);
         return reportService.addNewReport(report);
     }
 
