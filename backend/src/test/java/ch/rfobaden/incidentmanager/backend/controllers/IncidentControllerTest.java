@@ -223,7 +223,7 @@ class IncidentControllerTest {
         );
         closedIncident.setClosed(false);
         reopenedIncident.setClosed(false);
-        reopenedIncident.setCloseReason("");
+        reopenedIncident.setCloseReason(null);
         Mockito.when(incidentService.reopenIncident(closedIncidentId))
             .thenCallRealMethod();
         Mockito.when(incidentService.getIncidentById(closedIncidentId))
