@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
-import static ch.rfobaden.incidentmanager.backend.controllers.SessionController.COOKIE_NAME;
+import static ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionCookieHelper.COOKIE_NAME;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

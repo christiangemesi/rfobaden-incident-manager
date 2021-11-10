@@ -2,15 +2,10 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,8 +17,6 @@ public final class UserCredentials extends Model {
 
     @Column(nullable = false)
     private String encryptedPassword;
-
-    private LocalDateTime lastSignInAt;
 
     @Column(nullable = false)
     private LocalDateTime lastPasswordChangeAt;
@@ -51,14 +44,6 @@ public final class UserCredentials extends Model {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public LocalDateTime getLastSignInAt() {
-        return lastSignInAt;
-    }
-
-    public void setLastSignInAt(LocalDateTime lastSignInAt) {
-        this.lastSignInAt = lastSignInAt;
-    }
-
     public LocalDateTime getLastPasswordChangeAt() {
         return lastPasswordChangeAt;
     }
@@ -73,7 +58,6 @@ public final class UserCredentials extends Model {
             + "id='" + getId() + '\''
             + ", encryptedPassword='" + encryptedPassword + '\''
             + ", user='" + getUserId()  + '\''
-            + ", lastSignInAt='" + lastSignInAt + '\''
             + ", lastPasswordChangeAt='" + lastPasswordChangeAt + '\''
             + ", createdAt='" + getCreatedAt() + '\''
             + ", updatedAt='" + getUpdatedAt() + '\''
@@ -90,7 +74,6 @@ public final class UserCredentials extends Model {
         }
         var that = (UserCredentials) other;
         return equalsModel(that)
-            && Objects.equals(lastSignInAt, that.lastSignInAt)
             && Objects.equals(lastPasswordChangeAt, that.lastPasswordChangeAt)
             && Objects.equals(encryptedPassword, that.encryptedPassword)
             && Objects.equals(getUserId(), that.getUserId());
@@ -99,7 +82,7 @@ public final class UserCredentials extends Model {
     @Override
     public int hashCode() {
         return Objects.hash(
-            modelHashCode(), lastSignInAt, lastPasswordChangeAt, encryptedPassword, getUserId()
+            modelHashCode(), lastPasswordChangeAt, encryptedPassword, getUserId()
         );
     }
 }

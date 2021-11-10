@@ -80,7 +80,6 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
         assertThat(credentials.getLastPasswordChangeAt())
             .isNotNull()
             .isEqualTo(credentials.getCreatedAt());
-        assertThat(credentials.getLastSignInAt()).isNull();
 
         verify(repository, times(1)).save(newUser);
     }
