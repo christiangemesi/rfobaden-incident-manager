@@ -20,10 +20,10 @@ public abstract class ModelRepositoryTest<
     > {
 
     @Autowired
-    private TRepository repository;
+    protected TRepository repository;
 
     @Autowired
-    private ModelGenerator<TModel> generator;
+    protected ModelGenerator<TModel> generator;
 
     @BeforeEach
     public void setup() {
