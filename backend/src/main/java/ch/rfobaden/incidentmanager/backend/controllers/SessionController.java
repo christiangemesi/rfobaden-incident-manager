@@ -1,25 +1,23 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionCookieHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Session;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
-import ch.rfobaden.incidentmanager.backend.services.encryption.BcryptEncryptionService;
 import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.WebUtils;
 
-import java.net.URI;
-import java.util.Arrays;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,26 +25,27 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(path = "api/v1/session")
 public final class SessionController {
-    public static final String COOKIE_NAME = "rfobaden.incidentmanager.session.token";
+    private final SessionCookieHelper cookieHelper;
 
     private final UserService userService;
 
     private final EncryptionService encryptionService;
 
-    @Autowired
     public SessionController(
+        SessionCookieHelper cookieHelper,
         UserService userService,
-        BcryptEncryptionService encryptionService
+        EncryptionService encryptionService
     ) {
+        this.cookieHelper = cookieHelper;
         this.userService = userService;
         this.encryptionService = encryptionService;
     }
 
     @GetMapping
     public User find(HttpServletRequest request) {
-        var cookie = findCookie(request);
-        var session = parseSessionFromCookie(cookie);
-        return findSessionUser(session);
+        var cookie = cookieHelper.findCookie(request);
+        var session = cookieHelper.parseSessionFromCookie(cookie);
+        return cookieHelper.findSessionUser(session);
     }
 
     @PostMapping
@@ -67,8 +66,7 @@ public final class SessionController {
         }
 
         var session = new Session(user.getId());
-        var cookie = new Cookie(COOKIE_NAME, Session.encode(session));
-        setCookie(cookie, request, response, () -> {
+        cookieHelper.setCookie(session, request, response, (cookie) -> {
             if (data.isPersistent) {
                 // Keep it for 10 years.
                 cookie.setMaxAge(315_569_520);
@@ -83,69 +81,16 @@ public final class SessionController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(HttpServletRequest request, HttpServletResponse response) {
-        var cookie = findCookie(request);
-
-        var session = parseSessionFromCookie(cookie);
+        var cookie = cookieHelper.findCookie(request);
+        var session = cookieHelper.parseSessionFromCookie(cookie);
 
         // Load the session user just to ensure that it exists.
         // If it does not, we respond with a 404.
-        findSessionUser(session);
+        cookieHelper.findSessionUser(session);
 
-        setCookie(cookie, request, response, () -> {
-            cookie.setMaxAge(0);
+        cookieHelper.setCookie(session, request, response, (newCookie) -> {
+            newCookie.setMaxAge(0);
         });
-    }
-
-    private User findSessionUser(Session session) {
-        var user = userService.find(session.getUserId()).orElse(null);
-        if (user == null || user.getCredentials().getUpdatedAt().isAfter(session.getCreatedAt())) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return user;
-    }
-
-    private static Cookie findCookie(HttpServletRequest request) {
-        var cookie = WebUtils.getCookie(request, COOKIE_NAME);
-        if (cookie == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return cookie;
-    }
-
-    private static void setCookie(
-        Cookie cookie,
-        HttpServletRequest request,
-        HttpServletResponse response,
-        Runnable configure
-    ) {
-        cookie.setHttpOnly(true);
-        cookie.setDomain(parseServerDomainFromRequest(request));
-        cookie.setPath("/api/v1/");
-        cookie.setSecure(request.isSecure());
-        configure.run();
-        response.addCookie(cookie);
-
-        // Add 'SameSite=Lax' to the session cookie.
-        // Spring does currently (2021.10.09) not support setting this attribute.
-        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
-        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
-    }
-
-    private static Session parseSessionFromCookie(Cookie cookie) {
-        var token = cookie.getValue();
-        var session = Session.decode(token).orElse(null);
-        if (session == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return session;
-    }
-
-    private static String parseServerDomainFromRequest(HttpServletRequest request) {
-        var host = URI.create(request.getRequestURL().toString()).getHost();
-        if (host.startsWith("www.")) {
-            return host.substring(4);
-        }
-        return host;
     }
 
     public static final class LoginData {
