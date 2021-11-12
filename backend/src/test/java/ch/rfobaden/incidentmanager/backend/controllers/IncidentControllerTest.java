@@ -257,8 +257,7 @@ class IncidentControllerTest {
         var mockRequest =
             MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId + "/reopen")
             .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(requestMapper.writeValueAsString(""));
+            .accept(MediaType.APPLICATION_JSON);
 
         // Then
         mockMvc.perform(mockRequest)
