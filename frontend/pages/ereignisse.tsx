@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -20,6 +20,12 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
+  useState()
+
+  const handleEdit = async () => {
+    return
+  }
+
   const incidents = useIncidents()
 
   return (
@@ -28,13 +34,13 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         Ereignis verwalten
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
-          <IncidentForm/>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          {/*<IncidentForm incident={incident}/>*/}{/*TODO ---*/}
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <IncidentList incidents={incidents}/>
+          <IncidentList incidents={incidents} onEdit={handleEdit}/>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

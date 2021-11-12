@@ -8,26 +8,27 @@ import * as ReactDOM from 'react-dom'
 
 interface Props {
   incidents: Incident[]
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentList: React.VFC<Props> = ({ incidents }) => {
+const IncidentList: React.VFC<Props> = ({ incidents, onEdit }) => {
   return (
     <StyledTable>
       <thead>
-        <StyledTr>
-          <StyledTh>
+      <StyledTr>
+        <StyledTh>
           Ereignis
-          </StyledTh>
-          <StyledTh>
-          </StyledTh>
-          <StyledTh>
-          </StyledTh>
-        </StyledTr>
+        </StyledTh>
+        <StyledTh>
+        </StyledTh>
+        <StyledTh>
+        </StyledTh>
+      </StyledTr>
       </thead>
       <tbody>
-        {incidents.map((incident) => (
-          <IncidentListItem key={incident.id} incident={incident} />
-        ))}
+      {incidents.map((incident) => (
+        <IncidentListItem key={incident.id} incident={incident} onEdit={onEdit}/>
+      ))}
       </tbody>
     </StyledTable>
   )
@@ -36,20 +37,16 @@ export default IncidentList
 
 interface IncidentListItemProps {
   incident: Incident
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
+const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit }) => {
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       IncidentStore.remove(incident.id)
     }
-  }
-
-  const handleUpdate = async () => {
-    IncidentStore.find(incident.id)
-
   }
 
   const handleClose = async () => {
@@ -73,11 +70,11 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         window.print()
         setPrinter(undefined)
       }, [ref])
-      return <IncidentView innerRef={ref} incident={incident} />
+      return <IncidentView innerRef={ref} incident={incident}/>
     }
     setPrinter(ReactDOM.createPortal((
       <div id="print-only" style={{ margin: '4rem' }}>
-        <Printer />
+        <Printer/>
       </div>
     ), document.body))
   }
@@ -97,7 +94,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         {incident.isClosed ? 'Closed' : 'Open'}
       </StyledTd>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleUpdate}>
+        <StyledButton type="button" onClick={() => onEdit(incident)}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>
