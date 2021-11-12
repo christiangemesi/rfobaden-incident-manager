@@ -1,23 +1,21 @@
 import React from 'react'
-import EreignissePage from '@/pages/ereignisse'
 import ReportList from '@/components/Report/List/ReportList'
 import Report from '@/models/Report'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import IncidentList from '@/components/Incident/List/IncidentList'
 
 const MeldungenPage: React.VFC = () => {
   const reports: Report[] = [
     {
-      title: 'Wie gehts', description: 'babbaba', assigneeId: -1, id: 0,
+      title: 'Meldung 0: ', description: 'Lorem ipsum dolor sit amet, ... ', assigneeId: -1, id: 0,
     },
 
     {
-      title: 'Wie gehts', description: 'babbaba', assigneeId: -1, id: 1,
+      title: 'Meldung 1: ', description: 'Lorem ipsum dolor sit amet, ... ', assigneeId: -1, id: 1,
     },
 
     {
-      title: 'Wie gehts', description: 'babbaba', assigneeId: -1, id: 2,
+      title: 'Meldung 2: ', description: 'Lorem ipsum dolor sit amet, ... ', assigneeId: -1, id: 2,
     },
   ]
 
