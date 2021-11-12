@@ -11,25 +11,22 @@ const ReportList: React.VFC<Props> = ({ reports }) => {
     <div>
       <StyledTable>
         <thead>
-          <StyledTr>
-            <StyledTh>
+        <StyledTr>
+          <StyledTh>
             Meldung
-            </StyledTh>
-            <StyledTh>
-            </StyledTh>
-          </StyledTr>
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+        </StyledTr>
         </thead>
         <tbody>
-          <thead>
-            {reports.map((report) => (
-            // <IncidentListItem key={incident.id} incident={incident}/>
-              <div key={report.id}>
-                {report.title}
-                {report.description}
-                {report.assigneeId}
-              </div>
-            ))}
-          </thead>
+        <thead>
+        {reports.map((report) => (
+          <ReportListItem key={report.id} report={report}/>
+        ))}
+        </thead>
         </tbody>
       </StyledTable>
     </div>
@@ -38,11 +35,11 @@ const ReportList: React.VFC<Props> = ({ reports }) => {
 
 export default ReportList
 
-interface IncidentListItemProps {
+interface ReportListItemProps {
   report: Report
 }
 
-const IncidentListItem: React.VFC<IncidentListItemProps> = ({ report }) => {
+const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
 
   return (
     <StyledTr>
@@ -50,11 +47,37 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ report }) => {
         {report.title}
       </StyledTd>
       <StyledTd>
-        {report.description}
+        {report.incident.title}
+      </StyledTd>
+      <StyledTd>
+        {report.createdAt.toLocaleString()}
+      </StyledTd>
+      <StyledTd>
+        {report.updatedAt.toLocaleString()}
       </StyledTd>
       <StyledTd>
         {report.assigneeId}
       </StyledTd>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          Bearbeiten
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          Schliessen
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          Löschen
+        </StyledButton>
+      </StyledTdSmall>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          Drucken
+        </StyledButton>
+      </StyledTdSmall>
     </StyledTr>
   )
 }
@@ -83,4 +106,11 @@ const StyledTd = styled.td`
   width: 100%;
   padding: 0.5rem;
   vertical-align: middle;
+`
+const StyledTdSmall = styled(StyledTd)`
+  width: 40px;
+`
+const StyledButton = styled.button`
+  display: block;
+  width: 100%;
 `
