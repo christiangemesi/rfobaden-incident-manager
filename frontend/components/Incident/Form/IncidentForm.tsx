@@ -8,18 +8,20 @@ import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
 
 interface Props {
-  incident: Incident
+  incident: Incident | null
+  onClose?: () => void
 }
 
-const IncidentForm: React.VFC<Props> = ({ incident }) => {
+const IncidentForm: React.VFC<Props> = ({ incident, onClose = null }) => {
   const form = useForm<ModelData<Incident>>(() => ({
-    title: '',
-    description: null,
-    authorId: -1,
-    closeReason: null,
-    isClosed: false,
-    startsAt: null,
-    endsAt: null,
+    title: incident?.title ?? '',
+    description: incident?.description ?? null,
+    authorId: incident?.authorId ?? -1,
+    closeReason: incident?.closeReason ?? null,
+    isClosed: incident?.isClosed ?? false,
+    closedAt: incident?.closedAt ?? null,
+    startsAt: incident?.startsAt ?? null,
+    endsAt: incident?.endsAt ?? null,
   }))
 
   useValidate(form, (validate) => ({
@@ -32,6 +34,7 @@ const IncidentForm: React.VFC<Props> = ({ incident }) => {
     startsAt: [],
     authorId: [],
     closeReason: [],
+    closedAt: [],
     isClosed: [],
     endsAt: [],
   }))
@@ -41,8 +44,11 @@ const IncidentForm: React.VFC<Props> = ({ incident }) => {
     // TODO error handling
     const [data]: BackendResponse<Incident> = await BackendService.create('incidents', incidentData)
 
-    const incident = parseIncident(data)
-    IncidentStore.save(incident)
+    const newIncident = parseIncident(data)
+    IncidentStore.save(newIncident)
+    if (onClose !== null) {
+      onClose()
+    }
     clearForm(form)
   }
 
@@ -50,10 +56,10 @@ const IncidentForm: React.VFC<Props> = ({ incident }) => {
     <div>
       <form>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" value={incident.title}/>
+          <UiTextInput {...props} label="Titel"/>
         )}</UiForm.Field>
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung" value={incident.description}/>
+          <UiTextInput {...props} label="Beschreibung"/>
         )}</UiForm.Field>
         <UiForm.Buttons form={form} onSubmit={handleSubmit}/>
       </form>
