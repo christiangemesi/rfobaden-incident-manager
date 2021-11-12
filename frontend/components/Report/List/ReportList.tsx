@@ -47,7 +47,7 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
         {report.title}
       </StyledTd>
       <StyledTd>
-        {report.incident.title}
+        {report.incident}
       </StyledTd>
       <StyledTd>
         {report.createdAt.toLocaleString()}

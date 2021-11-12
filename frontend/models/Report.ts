@@ -7,7 +7,7 @@ import { parseDate } from './Date'
 export default interface Report extends Model {
   title: string
   description: string | null
-  incident: Incident
+  incident: Id<Incident>
   authorId: Id<User>
   assigneeId: Id<User>
   createdAt: Date
