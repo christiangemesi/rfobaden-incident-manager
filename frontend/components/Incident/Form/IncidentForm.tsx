@@ -7,7 +7,11 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
 
-const IncidentForm: React.VFC = () => {
+interface Props {
+  incident: Incident
+}
+
+const IncidentForm: React.VFC<Props> = ({ incident }) => {
   const form = useForm<ModelData<Incident>>(() => ({
     title: '',
     description: null,
@@ -46,10 +50,10 @@ const IncidentForm: React.VFC = () => {
     <div>
       <form>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel"/>
+          <UiTextInput {...props} label="Titel" value={incident.title}/>
         )}</UiForm.Field>
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung"/>
+          <UiTextInput {...props} label="Beschreibung" value={incident.description}/>
         )}</UiForm.Field>
         <UiForm.Buttons form={form} onSubmit={handleSubmit}/>
       </form>
