@@ -11,6 +11,7 @@ export default interface Incident extends Model {
     updatedAt: Date
     startsAt: Date | null
     endsAt: Date | null
+    closedAt: Date | null
 }
 
 export const parseIncident = (data: unknown): Incident => {
@@ -21,6 +22,7 @@ export const parseIncident = (data: unknown): Incident => {
     updatedAt: parseDate(incident.updatedAt),
     startsAt: parseDateOrNull(incident.startsAt),
     endsAt: parseDateOrNull(incident.endsAt),
+    closedAt: parseDateOrNull(incident.closedAt),
   }
 }
 
