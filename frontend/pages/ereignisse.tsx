@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -20,10 +20,14 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
-  useState()
+  const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
 
-  const handleEdit = async () => {
-    return
+  const clearCurrentIncident = async () => {
+    setCurrentIncident(null)
+  }
+
+  const handleEdit = async (incident: Incident) => {
+    setCurrentIncident(incident)
   }
 
   const incidents = useIncidents()
@@ -35,7 +39,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          {/*<IncidentForm incident={incident}/>*/}{/*TODO ---*/}
+          <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={clearCurrentIncident}/>
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
