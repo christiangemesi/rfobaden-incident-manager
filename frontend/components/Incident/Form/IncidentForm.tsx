@@ -40,9 +40,11 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose = null }) => {
   }))
 
   const handleSubmit = async (incidentData: ModelData<Incident>) => {
-    // TODO correct api type
-    // TODO error handling
-    const [data]: BackendResponse<Incident> = await BackendService.create('incidents', incidentData)
+    const [data]: BackendResponse<Incident> = incident === null ? (
+      await BackendService.create('incidents', incidentData)
+    ) : (
+      await BackendService.update('incidents', incident.id, incidentData)
+    )
 
     const newIncident = parseIncident(data)
     IncidentStore.save(newIncident)
