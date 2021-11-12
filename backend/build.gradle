@@ -36,6 +36,8 @@ dependencies {
 
 	developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
 
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
@@ -49,6 +51,9 @@ configurations {
 
 	checkstyleConfig
 }
+
+compileJava.inputs.files(processResources)
+compileTestJava.inputs.files(processTestResources)
 
 test {
 	useJUnitPlatform()
