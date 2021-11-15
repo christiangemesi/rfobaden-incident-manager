@@ -1,6 +1,7 @@
 import User from '@/models/User'
 import { createStore, useStore } from '@/stores/Store'
 import Session from '@/models/Session'
+import UserStore from '@/stores/UserStore'
 
 const initialState: Session = {
   currentUser: null,
@@ -10,6 +11,7 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
   setSession(token: string, currentUser: User) {
     currentToken = token
     localStorage.setItem(storageKey, token)
+    UserStore.save(currentUser)
     setState((state) => ({
       ...state,
       currentUser,
