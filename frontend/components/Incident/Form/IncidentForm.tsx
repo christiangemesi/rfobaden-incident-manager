@@ -12,7 +12,7 @@ interface Props {
   onClose?: () => void
 }
 
-const IncidentForm: React.VFC<Props> = ({ incident, onClose = null }) => {
+const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null }) => {
   const form = useForm<ModelData<Incident>>(() => ({
     title: incident?.title ?? '',
     description: incident?.description ?? null,
@@ -48,22 +48,22 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose = null }) => {
 
     const newIncident = parseIncident(data)
     IncidentStore.save(newIncident)
-    if (onClose !== null) {
-      onClose()
-    }
     clearForm(form)
+    if (handleClose !== null) {
+      handleClose()
+    }
   }
 
   return (
     <div>
       <form>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel"/>
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung"/>
+          <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit}/>
+        <UiForm.Buttons form={form} onSubmit={handleSubmit} />
       </form>
     </div>
   )

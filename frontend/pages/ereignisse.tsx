@@ -20,6 +20,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
+  const incidents = useIncidents()
+
   const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
 
   const clearCurrentIncident = async () => {
@@ -30,8 +32,6 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     setCurrentIncident(incident)
   }
 
-  const incidents = useIncidents()
-
   return (
     <UiContainer>
       <h1>
@@ -39,12 +39,12 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={clearCurrentIncident}/>
+          <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={clearCurrentIncident} />
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <IncidentList incidents={incidents} onEdit={handleEdit}/>
+          <IncidentList incidents={incidents} onEdit={handleEdit} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

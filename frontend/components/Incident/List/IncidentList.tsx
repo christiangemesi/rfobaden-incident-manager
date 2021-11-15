@@ -11,24 +11,24 @@ interface Props {
   onEdit: (incident: Incident) => void
 }
 
-const IncidentList: React.VFC<Props> = ({ incidents, onEdit }) => {
+const IncidentList: React.VFC<Props> = ({ incidents, onEdit: handleEdit }) => {
   return (
     <StyledTable>
       <thead>
-      <StyledTr>
-        <StyledTh>
-          Ereignis
-        </StyledTh>
-        <StyledTh>
-        </StyledTh>
-        <StyledTh>
-        </StyledTh>
-      </StyledTr>
+        <StyledTr>
+          <StyledTh>
+            Ereignis
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+          <StyledTh>
+          </StyledTh>
+        </StyledTr>
       </thead>
       <tbody>
-      {incidents.map((incident) => (
-        <IncidentListItem key={incident.id} incident={incident} onEdit={onEdit}/>
-      ))}
+        {incidents.map((incident) => (
+          <IncidentListItem key={incident.id} incident={incident} onEdit={handleEdit} />
+        ))}
       </tbody>
     </StyledTable>
   )
@@ -40,7 +40,7 @@ interface IncidentListItemProps {
   onEdit: (incident: Incident) => void
 }
 
-const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit }) => {
+const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: handleEdit }) => {
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
@@ -70,11 +70,11 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit }
         window.print()
         setPrinter(undefined)
       }, [ref])
-      return <IncidentView innerRef={ref} incident={incident}/>
+      return <IncidentView innerRef={ref} incident={incident} />
     }
     setPrinter(ReactDOM.createPortal((
       <div id="print-only" style={{ margin: '4rem' }}>
-        <Printer/>
+        <Printer />
       </div>
     ), document.body))
   }
@@ -94,7 +94,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit }
         {incident.isClosed ? 'Closed' : 'Open'}
       </StyledTd>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={() => onEdit(incident)}>
+        <StyledButton type="button" onClick={() => handleEdit(incident)}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>
