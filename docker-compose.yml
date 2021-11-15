@@ -38,7 +38,8 @@ services:
       - backend.gradle-global:/home/gradle/.gradle
       - backend.gradle-local:/app/.gradle
       - /etc/localtime:/etc/localtime:ro
-
+    tmpfs:
+      - /app/build
     depends_on:
       - database
 
