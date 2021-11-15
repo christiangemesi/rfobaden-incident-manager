@@ -1,14 +1,5 @@
-image: docker:git
-services:
-  - docker:dind
-
 stages:
   - lint
-  - analyze
-  - build
-
-variables:
-  DOCKER_DRIVER: overlay
 
 workflow:
   rules:
@@ -29,29 +20,6 @@ backend.checkstyle:
     - cd backend
     - gradle --no-daemon checkstyleMain checkstyleTest
 
-sonarQube:
-  stage: analyze
-  image: sonarsource/sonar-scanner-cli:latest
-  script:
-    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL
-      -Dsonar.login=$SONAR_TOKEN
-      -Dsonar.projectKey=$SONAR_PROJECT_KEY
-      -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
-  only:
-    - master
-    - development
-
-build-container:
-  stage: build
-  image: tmaier/docker-compose:latest
-  script:
-    - cd docker
-    - docker-compose up -d --build
-  only:
-    - master
-    - development
-
 cache:
   paths:
     - backend/.gradle
-    - frontend/node_modules/
