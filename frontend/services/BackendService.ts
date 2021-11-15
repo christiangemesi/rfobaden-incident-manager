@@ -86,8 +86,8 @@ class BackendService {
       if (res.status >= 400 && res.status <= 499) {
         // Error is caused by the client (us).
         // Let the caller handle it.
-        const data: { message: string } = await res.json()
-        const error = new BackendError(res.status, data.message)
+        const data: { message: string, fields: BackendErrorFields | undefined } = await res.json()
+        const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
       // TODO error handling
@@ -105,7 +105,30 @@ export default new BackendService()
 export type BackendResponse<T> = [T, BackendError | null]
 
 export class BackendError extends Error {
-  constructor(public status: number, public error: string) {
-    super(`[${status}] ${error}`)
+  constructor(public status: number, public error: string, public fields: BackendErrorFields | null) {
+    super(`[${status}] ${error}${BackendError.makeFieldsMessage(fields)}`)
   }
+
+  private static makeFieldsMessage(fields: BackendErrorFields | null): string {
+    if (fields == null) {
+      return ''
+    }
+    let message = ''
+    for (const field of Object.keys(fields)) {
+      if (message.length !== 0) {
+        message += ', '
+      }
+      const value = fields[field]
+      if (Array.isArray(value)) {
+        message += `${field}: [${value.join(', ')}]`
+      } else {
+        message += `${field}: ${this.makeFieldsMessage(value)}`
+      }
+    }
+    return ` (${message})`
+  }
+}
+
+export interface BackendErrorFields {
+  [field: string]: string[] | BackendErrorFields
 }
