@@ -1,6 +1,7 @@
 import { clearForm, getUiFormBase, UiFormFieldsState } from '@/components/Ui/Form'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import { useCallback } from 'react'
+import { useMountedState } from 'react-use'
 
 interface Props<T> {
   form: UiFormFieldsState<T>
@@ -18,6 +19,7 @@ const UiFormButtons = <T,>({
     value,
     isValid,
   } = form
+  const isMounted = useMountedState()
 
   const handleSubmit = useCallback(async () => {
     if (isValid) {
@@ -29,10 +31,14 @@ const UiFormButtons = <T,>({
     if (pushCancel !== undefined) {
       await pushCancel()
     }
+
+    // Wait for updates to the view to happen before clearing the form.
     setTimeout(() => {
-      clearForm(fields)
+      if (isMounted()) {
+        clearForm(fields)
+      }
     })
-  }, [fields, pushCancel])
+  }, [pushCancel, fields, isMounted])
 
   return (
     <UiConfirmButtons
