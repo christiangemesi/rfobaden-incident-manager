@@ -21,9 +21,11 @@ const ProfilPage: React.VFC = () => {
               <UserPasswordForm user={user} onClose={togglePasswordForm} />
             </UiGrid.Col>
           ) : (
-            <UiButton onClick={togglePasswordForm}>
-              Passwort ändern
-            </UiButton>
+            <div>
+              <UiButton onClick={togglePasswordForm}>
+                Passwort ändern
+              </UiButton>
+            </div>
           )}
         </UiGrid>
       </UiContainer>

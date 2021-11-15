@@ -1,15 +1,18 @@
 import React from 'react'
-import User from '@/models/User'
-import { useForm, useValidate } from '@/components/Ui/Form'
+import User, { parseUser } from '@/models/User'
+import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
+import BackendService from '@/services/BackendService'
+import { SessionResponse } from '@/models/Session'
+import SessionStore from '@/stores/SessionStore'
 
 interface Props {
   user: User
   onClose?: () => void
 }
 
-const UserPasswordForm: React.VFC<Props> = ({ user, onClose }) => {
+const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
     password: '',
     passwordRepeat: '',
@@ -23,10 +26,16 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose }) => {
     ],
   }))
 
-  const handleSubmit = (formData: FormData) => {
-    // const [data] = await BackendService.create<User>('users', formData)
-    // UserStore.save(parseUser(data))
-    // clearForm(form)
+  const handleSubmit = async (formData: FormData) => {
+    const [data, error] = await BackendService.update<FormData, SessionResponse>(`users/${user.id}/password`, formData)
+    if (error !== null) {
+      throw error
+    }
+    SessionStore.setSession(data.token, parseUser(data.user))
+    clearForm(form)
+    if (handleClose) {
+      handleClose()
+    }
   }
 
   return (
@@ -41,7 +50,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose }) => {
         <UiForm.Buttons
           form={form}
           onSubmit={handleSubmit}
-          onCancel={onClose}
+          onCancel={handleClose}
         />
       </form>
     </div>
