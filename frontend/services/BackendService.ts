@@ -1,6 +1,7 @@
 import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 import Id from '@/models/base/Id'
+import { getSessionToken } from '@/stores/SessionStore'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -65,15 +66,21 @@ class BackendService {
   }
 
   private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    const token = getSessionToken()
+    if (token !== null) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
       method: options.method,
       body: JSON.stringify(options.body),
       mode: 'cors',
       // Required for sending cross-origin cookies.
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
     })
     if (res.status < 200 || 299 < res.status) {
       if (res.status >= 400 && res.status <= 499) {
@@ -102,5 +109,3 @@ export class BackendError extends Error {
     super(`[${status}] ${error}`)
   }
 }
-
-

@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { setFormField, useForm, useValidate } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
+import { SessionResponse } from '@/models/Session'
 
 const SessionForm: React.VFC = () => {
   const form = useForm<LoginData>(() => ({
@@ -34,9 +35,7 @@ const SessionForm: React.VFC = () => {
   }, [router, currentUser])
 
   const handleSubmit = async (formData: LoginData) => {
-    // TODO correct api type
-    // TODO error handling
-    const [data, error]: BackendResponse<User> = await BackendService.create('session', {
+    const [data, error]: BackendResponse<SessionResponse> = await BackendService.create('session', {
       ...formData,
       isPersistent: true,
     })
@@ -50,7 +49,7 @@ const SessionForm: React.VFC = () => {
       }
       throw error
     }
-    SessionStore.setCurrentUser(parseUser(data))
+    SessionStore.setSession(data.token, parseUser(data.user))
   }
 
   return (

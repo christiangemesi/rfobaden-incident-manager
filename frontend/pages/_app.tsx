@@ -3,45 +3,50 @@ import React, { useMemo, useState } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
-import { useAsync, useToggle } from 'react-use'
+import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
-import SessionStore, { useSession } from '@/stores/SessionStore'
+import SessionStore, { getSessionToken, useSession } from '@/stores/SessionStore'
 import Link from 'next/link'
 
 import 'reset-css/reset.css'
-import User, { parseUser } from '@/models/User'
+import { parseUser } from '@/models/User'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiButton from '@/components/Ui/Button/UiButton'
+import { SessionResponse } from '@/models/Session'
+import { useRouter } from 'next/router'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  console.log(process.env.NODE_ENV)
-
-  const [hasSession, setHasSession] = useState(false)
   useAsync(async () => {
-    const [currentUser, error] = await BackendService.find<User>('session')
-    setHasSession(true)
+    const token = getSessionToken()
+    if (token === null) {
+      return
+    }
+    const [data, error] = await BackendService.find<SessionResponse>('session')
     if (error !== null) {
-      if (error.status === 404) {
-        // No session present - user is not logged in.
-        return
-      }
       throw error
     }
-    SessionStore.setCurrentUser(parseUser(currentUser))
+    if (data.user === null) {
+      SessionStore.clear()
+      return
+    }
+    SessionStore.setSession(data.token, parseUser(data.user))
   })
 
   const { currentUser } = useSession()
+
+  const router = useRouter()
   const logout = async () => {
-    await BackendService.delete('session')
     SessionStore.clear()
+
+    // Should probably not do this everytime, but only if we are on a page
+    // which only signed in users can access. There's currently no nice way to detect this,
+    // so we just do it for every page.
+    await router.push('/')
   }
 
   const component = useMemo(() => {
-    if (!hasSession) {
-      return <React.Fragment />
-    }
     return <Component {...pageProps} />
-  }, [Component, pageProps, hasSession])
+  }, [Component, pageProps])
 
   return (
     <>
