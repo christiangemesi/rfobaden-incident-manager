@@ -18,7 +18,7 @@ import java.util.Objects;
 public abstract class ModelController<
     TModel extends Model,
     TService extends ModelService<TModel>
-    > {
+    > extends AppController {
 
     protected final TService service;
 

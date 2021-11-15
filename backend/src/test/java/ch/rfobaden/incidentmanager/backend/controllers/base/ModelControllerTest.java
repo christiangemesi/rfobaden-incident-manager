@@ -8,17 +8,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,11 +29,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Import(TestConfig.class)
 public abstract class ModelControllerTest<
     TModel extends Model,
     TService extends ModelService<TModel>
-    > {
+    > extends AppControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
@@ -52,6 +51,8 @@ public abstract class ModelControllerTest<
             throw new IllegalArgumentException("basePath has to end with '/'");
         }
         this.basePath = basePath;
+
+        System.out.println(service);
     }
 
     @Test

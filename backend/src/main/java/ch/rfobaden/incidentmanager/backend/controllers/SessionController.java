@@ -1,101 +1,102 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
-import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionCookieHelper;
+import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Session;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
-import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @RestController
+@Validated
 @RequestMapping(path = "api/v1/session")
-public final class SessionController {
-    private final SessionCookieHelper cookieHelper;
+public class SessionController extends AppController {
+    private final AuthenticationManager authManager;
 
     private final UserService userService;
 
-    private final EncryptionService encryptionService;
+    private final JwtHelper jwtHelper;
 
     public SessionController(
-        SessionCookieHelper cookieHelper,
+        AuthenticationManager authManager,
         UserService userService,
-        EncryptionService encryptionService
-    ) {
-        this.cookieHelper = cookieHelper;
+        JwtHelper jwtHelper) {
+        this.authManager = authManager;
         this.userService = userService;
-        this.encryptionService = encryptionService;
+        this.jwtHelper = jwtHelper;
     }
 
     @GetMapping
-    public User find(HttpServletRequest request) {
-        var cookie = cookieHelper.findCookie(request);
-        var session = cookieHelper.parseSessionFromCookie(cookie);
-        return cookieHelper.findSessionUser(session);
+    public SessionData find(HttpServletRequest request) {
+        return getCurrentUser().map((user) -> {
+            var token = request.getHeader("Authorization").substring(7);
+            return new SessionData(token, user);
+        }).orElseGet(() -> {
+            // Making this a 404 (or any other 4XX) would be preferable,
+            // but many browsers show these errors in the console, which we do not want
+            // to happen if we just want to check if the user is logged in.
+            return new SessionData(null, null);
+        });
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(
+    public SessionData create(
         @RequestBody LoginData data,
         HttpServletRequest request,
         HttpServletResponse response
     ) {
-        var user = userService.findByEmail(data.email).orElse(null);
-        if (user == null) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
-        }
-
-        var encryptedPassword = user.getCredentials().getEncryptedPassword();
-        if (!encryptionService.matches(data.password, encryptedPassword)) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
-        }
-
-        var session = new Session(user.getId());
-        cookieHelper.setCookie(session, request, response, (cookie) -> {
-            if (data.isPersistent) {
-                // Keep it for 10 years.
-                cookie.setMaxAge(315_569_520);
-            } else {
-                // Session cookie - deleted when the browser is closed.
-                cookie.setMaxAge(-1);
-            }
-        });
-        return user;
+        var user = authenticate(data);
+        var token = jwtHelper.encodeUser(user);
+        return new SessionData(token, user);
     }
 
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(HttpServletRequest request, HttpServletResponse response) {
-        var cookie = cookieHelper.findCookie(request);
-        var session = cookieHelper.parseSessionFromCookie(cookie);
-
-        // Load the session user just to ensure that it exists.
-        // If it does not, we respond with a 404.
-        cookieHelper.findSessionUser(session);
-
-        cookieHelper.setCookie(session, request, response, (newCookie) -> {
-            newCookie.setMaxAge(0);
-        });
+    private User authenticate(LoginData data) {
+        try {
+            var token = new UsernamePasswordAuthenticationToken(
+                data.getEmail(),
+                data.getPassword()
+            );
+            var auth = authManager.authenticate(token);
+            return ((WebSecurityConfig.DetailsWrapper) auth.getPrincipal()).getUser();
+        } catch (DisabledException e) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "user is disabled");
+        } catch (LockedException e) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "user is locked");
+        } catch (BadCredentialsException e) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
+        }
     }
 
+    @Validated
     public static final class LoginData {
+        @Email
+        @NotBlank
         private String email;
+
+        @NotBlank
         private String password;
+
         private boolean isPersistent;
 
         public String getEmail() {
@@ -121,6 +122,25 @@ public final class SessionController {
 
         public void setPersistent(boolean persistent) {
             isPersistent = persistent;
+        }
+    }
+
+    public static final class SessionData {
+        private final String token;
+        private final User user;
+
+        public SessionData(String token, User user) {
+            this.token = token;
+            this.user = user;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        public String getToken() {
+            return token;
+        }
+
+        public User getUser() {
+            return user;
         }
     }
 }

@@ -12,7 +12,7 @@ public class UserCredentialsGenerator extends ModelGenerator<UserCredentials> {
     public UserCredentials generateNew() {
         var credentials = new UserCredentials();
         credentials.setEncryptedPassword(faker.crypto().md5());
-        credentials.setLastPasswordChangeAt(LocalDateTime.now());
+        credentials.setLastPasswordChangeAt(LocalDateTime.now().minusDays(2));
         return credentials;
     }
 }

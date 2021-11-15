@@ -4,26 +4,26 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
-import ch.rfobaden.incidentmanager.backend.services.encryption.BcryptEncryptionService;
-import ch.rfobaden.incidentmanager.backend.services.encryption.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class UserService extends ModelRepositoryService<User, UserRepository> {
-    private final EncryptionService encryptionService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(
         UserRepository repository,
-        BcryptEncryptionService encryptionService
+        PasswordEncoder passwordEncoder
     ) {
         super(repository);
-        this.encryptionService = encryptionService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -38,7 +38,7 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
 
         var credentials = new UserCredentials();
         var plainPassword = generatePassword(10);
-        credentials.setEncryptedPassword(encryptionService.encrypt(plainPassword));
+        credentials.setEncryptedPassword(passwordEncoder.encode(plainPassword));
         credentials.setCreatedAt(LocalDateTime.now());
         credentials.setUpdatedAt(credentials.getCreatedAt());
         credentials.setLastPasswordChangeAt(credentials.getCreatedAt());
@@ -59,10 +59,31 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
             throw new IllegalArgumentException("password must not be empty");
         }
         var credentials = user.getCredentials();
-        credentials.setEncryptedPassword(encryptionService.encrypt(password));
+        credentials.setEncryptedPassword(passwordEncoder.encode(password));
         credentials.setUpdatedAt(LocalDateTime.now());
         credentials.setLastPasswordChangeAt(credentials.getUpdatedAt());
+        validate(user);
         return Optional.of(repository.save(user));
+    }
+
+    @Override
+    protected void validate(User user, Violations violations) {
+        // Validate that the email is unique.
+        // This will also be handled by the database, but it then causes an exception
+        // from which we can't form a message usable by the frontend - the main cause for
+        // this is the SQL exception not stating which field caused the error.
+        if (isPersisted(user)) {
+            var emailCount = repository.countByEmail(user.getEmail());
+            if (emailCount != 0) {
+                violations.add("email", "must be unique");
+            }
+        } else {
+            var persistedRecord = repository.findByEmail(user.getEmail()).orElse(null);
+            if (persistedRecord != null
+                && !Objects.equals(persistedRecord.getId(), user.getId())) {
+                violations.add("email", "must be unique");
+            }
+        }
     }
 
     private static final String PASSWORD_CHARS =
@@ -77,6 +98,4 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
         }
         return builder.toString();
     }
-
-
 }

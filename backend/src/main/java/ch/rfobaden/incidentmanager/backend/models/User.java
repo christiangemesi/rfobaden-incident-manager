@@ -1,28 +1,37 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user")
 public final class User extends Model {
+    @Email
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank
     @Column(nullable = false)
     private String firstName;
 
+    @NotBlank
     @Column(nullable = false)
     private String lastName;
 
+    @Enumerated
     @Column(nullable = false)
     private Role role;
 
@@ -31,6 +40,7 @@ public final class User extends Model {
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL
     )
+    @Valid
     private UserCredentials credentials;
 
     public String getEmail() {
