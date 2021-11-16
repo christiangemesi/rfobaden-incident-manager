@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -42,14 +44,21 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handle(MethodArgumentNotValidException e) {
-        var errors = new HashMap<String, String>();
+    public ResponseEntity<FieldErrorsResponse> handle(MethodArgumentNotValidException e) {
+        var errors = new HashMap<String, List<String>>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
             var fieldName = ((FieldError) error).getField();
             var errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            var fieldErrors = errors.computeIfAbsent(fieldName, (k) -> new ArrayList<>());
+            fieldErrors.add(errorMessage);
         });
-        return errors;
+
+        @SuppressWarnings("unchecked")
+        var errorObjects = (Map<String, Object>) (Map<String, ?>) errors;
+        return new ResponseEntity<>(
+            new FieldErrorsResponse(errorObjects),
+            HttpStatus.UNPROCESSABLE_ENTITY
+        );
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -88,6 +97,23 @@ public class ApiExceptionHandler {
         public String getMessage() {
             return message;
         }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof ErrorResponse)) {
+                return false;
+            }
+            var that = (ErrorResponse) other;
+            return Objects.equals(message, that.message);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(message);
+        }
     }
 
     public static class FieldErrorsResponse extends ErrorResponse {
@@ -100,6 +126,26 @@ public class ApiExceptionHandler {
 
         public Map<String, Object> getFields() {
             return fields;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof FieldErrorsResponse)) {
+                return false;
+            }
+            var that = (FieldErrorsResponse) other;
+            if (!super.equals(that)) {
+                return false;
+            }
+            return Objects.equals(fields, that.fields);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(super.hashCode(), fields);
         }
     }
 }

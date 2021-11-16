@@ -1,16 +1,17 @@
 package ch.rfobaden.incidentmanager.backend.errors;
 
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 
 public class ValidationException extends RuntimeException {
-    private final ModelRepositoryService.Violations violations;
+    private final Violations violations;
 
-    public ValidationException(ModelRepositoryService.Violations violations) {
+    public ValidationException(Violations violations) {
         super("validation failed");
         this.violations = violations;
     }
 
-    public ModelRepositoryService.Violations getViolations() {
+    public Violations getViolations() {
         return violations;
     }
 }

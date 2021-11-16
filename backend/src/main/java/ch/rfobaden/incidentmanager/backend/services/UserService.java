@@ -4,6 +4,7 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
