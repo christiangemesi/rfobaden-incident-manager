@@ -113,17 +113,19 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
         // Given
         var user = generator.generatePersisted();
         var newPassword = faker.internet().password();
+        Mockito.when(repository.findById(user.getId()))
+            .thenReturn(Optional.of(user));
         Mockito.when(repository.save(user))
             .thenReturn(user);
         var startedAt = LocalDateTime.now();
 
         // When
-        var result = service.updatePassword(user, newPassword).orElse(null);
+        var result = service.updatePassword(user.getId(), newPassword).orElse(null);
 
         // Then
         assertThat(result)
             .isNotNull()
-            .isEqualTo(result);
+            .isEqualTo(user);
 
         var credentials = result.getCredentials();
         assertThat(credentials.getUpdatedAt()).isAfter(startedAt);
@@ -137,7 +139,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
         var user = generator.generatePersisted();
 
         // When
-        var result = catchThrowable(() -> service.updatePassword(user, ""));
+        var result = catchThrowable(() -> service.updatePassword(user.getId(), null));
 
         // Then
         assertThat(result)
@@ -151,7 +153,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
         var user = generator.generatePersisted();
 
         // When
-        var result = catchThrowable(() -> service.updatePassword(user, ""));
+        var result = catchThrowable(() -> service.updatePassword(user.getId(), ""));
 
         // Then
         assertThat(result)
