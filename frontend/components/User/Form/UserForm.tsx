@@ -4,7 +4,7 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import UserStore from '@/stores/UserStore'
-import { useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 
 const UserForm: React.VFC = () => {
@@ -38,6 +38,7 @@ const UserForm: React.VFC = () => {
       name: res.username,
     }
     UserStore.save(user)
+    clearForm(form)
   }
 
   return (

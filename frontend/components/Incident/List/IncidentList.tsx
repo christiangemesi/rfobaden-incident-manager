@@ -40,7 +40,7 @@ interface IncidentListItemProps {
 
 const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       IncidentStore.remove(incident.id)
     }
