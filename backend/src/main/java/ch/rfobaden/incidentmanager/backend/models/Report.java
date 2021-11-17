@@ -24,7 +24,6 @@ public class Report {
     @Column(nullable = false)
     private Long id = -1L;
 
-    // TODO check
     @ManyToOne
     @JoinColumn(name = "incident", nullable = false)
     private Incident incident;
@@ -35,12 +34,31 @@ public class Report {
     @Column(nullable = false)
     private Long authorId;
 
+    private Long assigneeId;
+
     private String description;
+
+    private String adendum;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private LocalDateTime startsAt;
+
+    private LocalDateTime endsAt;
+
+    private LocalDateTime closedAt;
+
+    private boolean isClosed;
+
+    private String closeReason;
+
+    private String location;
+
+    // TODO: type
+    private String priority;
 
     public Report() {
     }

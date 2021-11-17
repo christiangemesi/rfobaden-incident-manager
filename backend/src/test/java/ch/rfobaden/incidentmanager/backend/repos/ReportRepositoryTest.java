@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,12 @@ public class ReportRepositoryTest {
         var description = "This is a awesome description";
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
+        Incident incident = new Incident(1L, "title", 0L);
 
         // When
         var data = new Report();
         data.setTitle(title);
+//        data.setIncident(incident);
         data.setAuthorId(authorId);
         data.setDescription(description);
         data.setCreatedAt(createdAt);

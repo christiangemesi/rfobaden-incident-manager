@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ public class ReportControllerTest {
     @MockBean
     ReportService reportService;
 
+    @MockBean
+    IncidentService incidentService;
+
     ObjectMapper requestMapper = Jackson2ObjectMapperBuilder.json().build();
 
     private final Report report1 = new Report(1L, "Report Title 1", 11L);
@@ -48,7 +52,7 @@ public class ReportControllerTest {
             .thenReturn(reports);
 
         // When
-        var request = MockMvcRequestBuilders.get("/api/v1/reports");
+        var request = MockMvcRequestBuilders.get("/api/v1/reports/");
 
         // Then
         mockMvc.perform(request)
@@ -68,7 +72,7 @@ public class ReportControllerTest {
             .thenReturn(List.of());
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports/");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -86,7 +90,7 @@ public class ReportControllerTest {
             .thenReturn(Optional.of(report));
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports/");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -104,7 +108,7 @@ public class ReportControllerTest {
             .thenReturn(Optional.empty());
 
         // When
-        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports");
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/reports/");
 
         // Then
         mockMvc.perform(mockRequest)
@@ -125,7 +129,7 @@ public class ReportControllerTest {
             .thenReturn(createdReport);
 
         // When
-        var mockRequest = MockMvcRequestBuilders.post("/api/vi/reports")
+        var mockRequest = MockMvcRequestBuilders.post("/api/vi/reports/")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(requestMapper.writeValueAsString(newReport));
