@@ -1,13 +1,5 @@
-image: docker:git
-services:
-  - docker:dind
-
-variables:
-  DOCKER_DRIVER: overlay
-
 stages:
   - lint
-  - build
 
 workflow:
   rules:
@@ -27,13 +19,6 @@ backend.checkstyle:
   script:
     - cd backend
     - gradle --no-daemon checkstyleMain checkstyleTest
-
-build.container:
-  stage: build
-  image: tmaier/docker-compose:latest
-  script:
-    - cd docker
-    - docker-compose up -d --build
 
 cache:
   paths:
