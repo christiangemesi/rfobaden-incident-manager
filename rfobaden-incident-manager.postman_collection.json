@@ -197,7 +197,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"title new\",\n    \"authorId\": \"1\",\n    \"description\": \"description lorem ipsum\",\n    \"endsAt\":[\n            2021,\n            11,\n            9,\n            0,\n            0\n        ]\n}",
+							"raw": "{\n    \"title\": \"title new\",\n    \"authorId\": 1,\n    \"description\": \"description lorem ipsum\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

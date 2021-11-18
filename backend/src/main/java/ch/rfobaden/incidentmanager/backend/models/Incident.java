@@ -18,7 +18,7 @@ public class Incident {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long id = -1L;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -49,7 +49,7 @@ public class Incident {
     }
 
     public Incident(String title, Long authorId) {
-        this(-1L, title, authorId);
+        this(null, title, authorId);
     }
 
     public Incident(Long id, String title, Long authorId) {
@@ -61,11 +61,11 @@ public class Incident {
         this.updatedAt = this.createdAt;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
