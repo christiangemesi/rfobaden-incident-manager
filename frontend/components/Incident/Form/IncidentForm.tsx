@@ -63,7 +63,7 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null 
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit} />
+        <UiForm.Buttons form={form} onSubmit={handleSubmit} onCancel={handleClose ?? undefined} />
       </form>
     </div>
   )
