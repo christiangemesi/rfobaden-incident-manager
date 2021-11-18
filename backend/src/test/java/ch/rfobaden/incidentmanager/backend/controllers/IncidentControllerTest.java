@@ -241,7 +241,7 @@ class IncidentControllerTest {
             MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId + "/close")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(requestMapper.writeValueAsString(closeDate));
+                .content(requestMapper.writeValueAsString(closeData));
 
         // Then
         mockMvc.perform(mockRequest)
