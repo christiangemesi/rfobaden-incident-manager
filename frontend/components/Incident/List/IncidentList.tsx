@@ -62,6 +62,17 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: 
     }
   }
 
+  const handleReopen = async () => {
+    const reopen = confirm(`Wollen sie das "${incident.title}" erneut öffnen?`)
+    if (reopen) {
+      const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/reopen`, {})
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
+    }
+  }
+
   const [printer, setPrinter] = useState<ReactNode>()
   const handlePrint = () => {
     const Printer: React.VFC = () => {
@@ -99,9 +110,15 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: 
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleClose}>
-          Schliessen
-        </StyledButton>
+        {incident.isClosed ? (
+          <StyledButton type="button" onClick={handleReopen}>
+            Öffnen
+          </StyledButton>
+        ) : (
+          <StyledButton type="button" onClick={handleClose}>
+            Schliessen
+          </StyledButton>
+        )}
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleDelete}>

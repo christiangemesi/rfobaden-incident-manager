@@ -72,6 +72,15 @@ public class IncidentController {
             ));
     }
 
+    @PutMapping("{incidentId}/reopen")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident reopenIncident(@PathVariable("incidentId") Long incidentId) {
+        return incidentService.reopenIncident(incidentId)
+            .orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+            ));
+    }
+
     @DeleteMapping("{incidentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIncidentById(@PathVariable("incidentId") Long incidentId) {

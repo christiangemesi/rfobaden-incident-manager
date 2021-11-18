@@ -62,6 +62,17 @@ public class IncidentService {
         return updateIncident(incidentId, incident);
     }
 
+    public Optional<Incident> reopenIncident(Long incidentId) {
+        Incident incident = getIncidentById(incidentId).orElse(null);
+        if (incident == null) {
+            return Optional.empty();
+        }
+        incident.setClosedAt(null);
+        incident.setCloseReason(null);
+        incident.setClosed(false);
+        return updateIncident(incidentId, incident);
+    }
+
     public boolean deleteIncidentById(Long incidentId) {
         if (incidentRepository.existsById(incidentId)) {
             incidentRepository.deleteById(incidentId);
