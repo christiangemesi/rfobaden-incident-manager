@@ -8,7 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,9 +42,12 @@ public class ReportControllerTest {
 
     ObjectMapper requestMapper = Jackson2ObjectMapperBuilder.json().build();
 
-    private final Report report1 = new Report(1L, "Report Title 1", 11L);
-    private final Report report2 = new Report(2L, "Report Title 2", 22L);
-    private final Report report3 = new Report(3L, "Report Title 3", 33L);
+    private final Incident incident = new Incident();
+    private final User author = new User();
+
+    private final Report report1 = new Report(1L, "Report Title 1", author, incident);
+    private final Report report2 = new Report(2L, "Report Title 2", author, incident);
+    private final Report report3 = new Report(3L, "Report Title 3", author, incident);
 
     @Test
     public void testGetAllReports() throws Exception {
@@ -121,8 +126,8 @@ public class ReportControllerTest {
     @Test
     public void testAddNewReport() throws Exception {
         // Given
-        var newReport = new Report("Report Title 1", 11L);
-        var createdReport = new Report(4L, newReport.getTitle(), newReport.getAuthorId());
+        var newReport = new Report(1L, "Report Title 1", author, incident);
+        var createdReport = new Report(2L, "Report Title 1", author, incident);
         createdReport.setCreatedAt(newReport.getCreatedAt());
         createdReport.setUpdatedAt(newReport.getUpdatedAt());
         Mockito.when(reportService.addNewReport(any()))

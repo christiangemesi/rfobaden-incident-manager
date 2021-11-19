@@ -36,7 +36,6 @@ public class Report {
     @JoinColumn(name = "incident", nullable = false)
     private Incident incident;
 
-
     @Column(nullable = false)
     private String title;
 
@@ -69,7 +68,7 @@ public class Report {
     }
 
     public Report(Long id, String title, User author, Incident incident) {
-        this(-1L, title, author, incident, LocalDateTime.now());
+        this(id, title, author, incident, LocalDateTime.now());
     }
 
     public Report(Long id, String title, User author, Incident incident, LocalDateTime startsAt) {
