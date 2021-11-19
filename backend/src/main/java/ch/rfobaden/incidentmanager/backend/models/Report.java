@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,14 +27,14 @@ public class Report {
     private Long id = -1L;
 
     @OneToOne
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(nullable = false)
     private User author;
 
     @OneToOne
     private User assignedTo;
 
     @ManyToOne
-    @JoinColumn(name = "incident", nullable = false)
+    @JoinColumn(name = "incident_id", nullable = false)
     private Incident incident;
 
     @Column(nullable = false)
@@ -46,6 +47,7 @@ public class Report {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     private LocalDateTime startsAt;
@@ -53,7 +55,7 @@ public class Report {
     private LocalDateTime endsAt;
 
     @OneToMany
-    @JoinColumn(name = "closures")
+    @JoinColumn(name = "report")
     private List<Closure> closures;
 
     private String location;
@@ -68,16 +70,19 @@ public class Report {
     }
 
     public Report(Long id, String title, User author, Incident incident) {
-        this(id, title, author, incident, LocalDateTime.now());
+        this(id, title, " ", author, incident, LocalDateTime.now());
     }
 
-    public Report(Long id, String title, User author, Incident incident, LocalDateTime startsAt) {
+    public Report(Long id, String title, String description, User author,
+                  Incident incident, LocalDateTime startsAt) {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.author = author;
         this.incident = incident;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = createdAt;
+        this.startsAt = startsAt;
     }
 
     public Long getId() {
@@ -112,6 +117,10 @@ public class Report {
             return null;
         }
         return assignedTo.getId();
+    }
+
+    public void setAssignedTo(User assignee) {
+        this.assignedTo = assignee;
     }
 
     @JsonIgnore
@@ -209,5 +218,55 @@ public class Report {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Report report = (Report) o;
+        return id.equals(report.id)
+                && author.equals(report.author)
+                && assignedTo.equals(report.assignedTo)
+                && incident.equals(report.incident)
+                && title.equals(report.title)
+                && description.equals(report.description)
+                && adendum.equals(report.adendum)
+                && createdAt.equals(report.createdAt)
+                && updatedAt.equals(report.updatedAt)
+                && startsAt.equals(report.startsAt)
+                && endsAt.equals(report.endsAt)
+                && closures.equals(report.closures)
+                && location.equals(report.location)
+                && priority == report.priority;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, author, assignedTo, incident, title, description,
+                adendum, createdAt, updatedAt, startsAt, endsAt, closures, location, priority);
+    }
+
+    @Override
+    public String toString() {
+        return "Report{"
+                + "id=" + id
+                + ", author=" + author
+                + ", assignedTo=" + assignedTo
+                + ", title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", adendum='" + adendum + '\''
+                + ", createdAt=" + createdAt
+                + ", updatedAt=" + updatedAt
+                + ", startsAt=" + startsAt
+                + ", endsAt=" + endsAt
+                + ", closures=" + closures
+                + ", location='" + location + '\''
+                + ", priority=" + priority
+                + '}';
     }
 }
