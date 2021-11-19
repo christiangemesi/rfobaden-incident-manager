@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React from 'react'
+import React, { useState } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -22,19 +22,29 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 
   const incidents = useIncidents()
 
+  const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
+
+  const clearCurrentIncident = async () => {
+    setCurrentIncident(null)
+  }
+
+  const handleEdit = async (incident: Incident) => {
+    setCurrentIncident(incident)
+  }
+
   return (
     <UiContainer>
       <h1>
         Ereignis verwalten
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
-          <IncidentForm/>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={clearCurrentIncident} />
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <IncidentList incidents={incidents}/>
+          <IncidentList incidents={incidents} onEdit={handleEdit} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

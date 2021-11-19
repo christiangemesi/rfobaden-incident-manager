@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -40,9 +41,12 @@ public class IncidentService {
         if (incidentOfId == null) {
             return Optional.empty();
         }
-        if (incident.getId() != incidentId) {
+        if (incident.getId() == null) {
+            incident.setId(incidentId);
+        } else if (!Objects.equals(incident.getId(), incidentId)) {
             throw new IllegalArgumentException("body id differs from parameter id");
         }
+        incident.setCreatedAt(incidentOfId.getCreatedAt());
         incident.setUpdatedAt(LocalDateTime.now());
         return Optional.of(incidentRepository.save(incident));
     }
