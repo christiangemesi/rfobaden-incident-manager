@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -56,7 +58,7 @@ public class Report {
 
     @OneToMany
     @JoinColumn(name = "report")
-    private List<Closure> closures;
+    private Set<Closure> closures;
 
     private String location;
 
@@ -65,24 +67,29 @@ public class Report {
     public Report() {
     }
 
+    // TODO: only fields with non-null params
     public Report(String title, User author, Incident incident) {
         this(-1L, title, author, incident);
     }
 
+
     public Report(Long id, String title, User author, Incident incident) {
-        this(id, title, " ", author, incident, LocalDateTime.now());
+        this(id, title, " ", author, null, incident, LocalDateTime.now(), Priority.MEDIUM);
     }
 
-    public Report(Long id, String title, String description, User author,
-                  Incident incident, LocalDateTime startsAt) {
+    // TODO: I can't decide, how much ctor's are necessary, and with which params?!
+    public Report(Long id, String title, String description, User author, User assignedTo,
+                  Incident incident, LocalDateTime startsAt, Priority priority) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.author = author;
+        this.assignedTo = assignedTo;
         this.incident = incident;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = createdAt;
         this.startsAt = startsAt;
+        this.priority = priority;
     }
 
     public Long getId() {
@@ -196,12 +203,26 @@ public class Report {
         this.endsAt = endsAt;
     }
 
-    public List<Closure> getClosures() {
-        return closures;
+    public Set<Closure> getClosures() {
+        return Collections.unmodifiableSet(closures);
     }
 
-    public void setClosures(List<Closure> closures) {
+    // TODO: delete setClosures?
+    public void setClosures(Set<Closure> closures) {
         this.closures = closures;
+    }
+
+    public boolean addClosure(Closure closure) {
+        return closures.add(closure);
+    }
+
+    public boolean removeClosure(Closure closure) {
+        return closures.remove(closure);
+    }
+
+    // TODO: unnecessary
+    public void clearClosures() {
+        closures.clear();
     }
 
     public String getLocation() {
@@ -219,6 +240,7 @@ public class Report {
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -255,8 +277,9 @@ public class Report {
     public String toString() {
         return "Report{"
                 + "id=" + id
-                + ", author=" + author
-                + ", assignedTo=" + assignedTo
+                + ", author=" + getAuthorId()
+                + ", assignedToId=" + getAssigneeId()
+                + ", incidentId=" + getIncidentId()
                 + ", title='" + title + '\''
                 + ", description='" + description + '\''
                 + ", adendum='" + adendum + '\''
