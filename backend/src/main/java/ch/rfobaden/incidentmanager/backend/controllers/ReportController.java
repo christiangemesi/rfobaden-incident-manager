@@ -1,19 +1,13 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,15 +40,18 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
+        // TODO : Are the following checks done with the getIncidentById() request?
         // TODO check if incidentId exists
-        // TODO check if incident exists
-
-        // throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
-
-        var incident = incidentService.getIncidentById(report.getIncidentId()).orElseThrow();
+        // TODO check if incident exist
+        var incident = incidentService.getIncidentById(report.getIncidentId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "incident not found"));
         report.setIncident(incident);
         return reportService.addNewReport(report);
     }
+
+    // TODO: Add close method
+    @PutMapping("{reportId}/close")
+
 
     @DeleteMapping("{reportId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
