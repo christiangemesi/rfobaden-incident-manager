@@ -19,7 +19,6 @@ const UiFormButtons = <T,>({
     value,
     isValid,
   } = form
-  const isMounted = useMountedState()
 
   const handleSubmit = useCallback(async () => {
     if (isValid) {
@@ -28,17 +27,11 @@ const UiFormButtons = <T,>({
   }, [isValid, value, pushSubmit])
 
   const handleCancel = useCallback(async () => {
+    clearForm(fields)
     if (pushCancel !== undefined) {
       await pushCancel()
     }
-
-    // Wait for updates to the view to happen before clearing the form.
-    setTimeout(() => {
-      if (isMounted()) {
-        clearForm(fields)
-      }
-    })
-  }, [pushCancel, fields, isMounted])
+  }, [pushCancel, fields])
 
   return (
     <UiConfirmButtons
