@@ -8,15 +8,16 @@ import * as ReactDOM from 'react-dom'
 
 interface Props {
   incidents: Incident[]
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentList: React.VFC<Props> = ({ incidents }) => {
+const IncidentList: React.VFC<Props> = ({ incidents, onEdit: handleEdit }) => {
   return (
     <StyledTable>
       <thead>
         <StyledTr>
           <StyledTh>
-          Ereignis
+            Ereignis
           </StyledTh>
           <StyledTh>
           </StyledTh>
@@ -26,7 +27,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
       </thead>
       <tbody>
         {incidents.map((incident) => (
-          <IncidentListItem key={incident.id} incident={incident} />
+          <IncidentListItem key={incident.id} incident={incident} onEdit={handleEdit} />
         ))}
       </tbody>
     </StyledTable>
@@ -36,16 +37,17 @@ export default IncidentList
 
 interface IncidentListItemProps {
   incident: Incident
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
+const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: handleEdit }) => {
+
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       IncidentStore.remove(incident.id)
     }
   }
-
 
   const handleClose = async () => {
     const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, 'Fertig')
@@ -103,7 +105,7 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         {incident.isClosed ? 'Closed' : 'Open'}
       </StyledTd>
       <StyledTdSmall>
-        <StyledButton type="button">
+        <StyledButton type="button" onClick={() => handleEdit(incident)}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>

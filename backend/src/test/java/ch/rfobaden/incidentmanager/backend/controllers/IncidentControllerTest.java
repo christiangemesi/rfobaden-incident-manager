@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,6 +150,75 @@ class IncidentControllerTest extends AppControllerTest {
     }
 
     @Test
+    public void testUpdateIncident() throws Exception {
+        // Given
+        var currentIncident = incident1;
+        var currentIncidentId = currentIncident.getId();
+        var incidentData = new Incident(
+            currentIncidentId,
+            "New Title",
+            currentIncident.getAuthorId()
+        );
+        incidentData.setDescription("New Description");
+        incidentData.setEndsAt(LocalDateTime.of(2021, Month.APRIL, 15, 20, 10, 0));
+        var updatedIncident = new Incident(
+            currentIncidentId,
+            incidentData.getTitle(),
+            incidentData.getAuthorId()
+        );
+        updatedIncident.setDescription(incidentData.getDescription());
+        updatedIncident.setEndsAt(incidentData.getEndsAt());
+        Mockito.when(incidentService.getIncidentById(currentIncidentId))
+            .thenReturn(Optional.of(currentIncident));
+        Mockito.when(incidentService.updateIncident(currentIncidentId, incidentData))
+            .thenReturn(Optional.of(updatedIncident));
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestMapper.writeValueAsString(incidentData));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.title").value(updatedIncident.getTitle()))
+            .andExpect(jsonPath("$.description").value(updatedIncident.getDescription()))
+            .andExpect(jsonPath("$.isClosed").value(updatedIncident.isClosed()));
+        verify(incidentService, times(1))
+            .updateIncident(currentIncidentId, incidentData);
+    }
+
+    @Test
+    public void testUpdateIncidentByIdNotFound() throws Exception {
+        // Given
+        Long incidentId = 4L;
+        Mockito.when(incidentService.getIncidentById(incidentId))
+            .thenCallRealMethod();
+        var incident = new Incident(
+            incident1.getId(),
+            incident1.getTitle(),
+            incident1.getAuthorId()
+        );
+
+        // When
+        var mockRequest =
+            MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestMapper.writeValueAsString(incident));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.message", is("incident not found")));
+        verify(incidentService, times(1)).updateIncident(incidentId, incident);
+    }
+
+    @Test
     public void testCloseIncident() throws Exception {
         // Given
         var currentIncident = incident1;
@@ -171,9 +242,9 @@ class IncidentControllerTest extends AppControllerTest {
         // When
         var mockRequest =
             MockMvcRequestBuilders.put("/api/v1/incidents/" + currentIncidentId + "/close")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(requestMapper.writeValueAsString(closeData));
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestMapper.writeValueAsString(closeData));
 
         // Then
         mockMvc.perform(mockRequest)
@@ -196,9 +267,9 @@ class IncidentControllerTest extends AppControllerTest {
         // When
         var mockRequest =
             MockMvcRequestBuilders.put("/api/v1/incidents/" + incidentId + "/close")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(requestMapper.writeValueAsString(closeData));
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(requestMapper.writeValueAsString(closeData));
 
         // Then
         mockMvc.perform(mockRequest)
