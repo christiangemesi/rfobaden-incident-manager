@@ -9,6 +9,8 @@ public class Closure {
 
     private LocalDateTime closedAt;
 
+    private boolean isClosed;
+
     public Closure() {
     }
 
@@ -33,6 +35,14 @@ public class Closure {
         this.closedAt = closedAt;
     }
 
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -42,12 +52,14 @@ public class Closure {
             return false;
         }
         Closure closure = (Closure) o;
-        return reason.equals(closure.reason) && closedAt.equals(closure.closedAt);
+        return reason.equals(closure.reason)
+                && closedAt.equals(closure.closedAt)
+                && isClosed == closure.isClosed;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reason, closedAt);
+        return Objects.hash(reason, closedAt, isClosed);
     }
 
     @Override
@@ -55,6 +67,7 @@ public class Closure {
         return "Closure{"
                 + "reason='" + reason + '\''
                 + ", closedAt=" + closedAt
+                + ", isClosed=" + isClosed
                 + '}';
     }
 }
