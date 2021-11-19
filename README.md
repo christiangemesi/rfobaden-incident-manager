@@ -102,7 +102,7 @@ docker volume rm rfobaden-incident-manager_database
 ```bash
 # locally
 cd backend
-gradle clean test
+gradle clean test --rerun-tasks
 
 # in docker
 docker compose run --no-deps backend gradle test
