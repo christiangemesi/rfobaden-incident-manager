@@ -2,9 +2,21 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 // TODO check class name
+@Entity
 public class Closure {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
+    private Long id = -1L;
+
     private String reason;
 
     private LocalDateTime closedAt;
@@ -17,6 +29,14 @@ public class Closure {
     public Closure(String closeReason) {
         this.reason = closeReason;
         this.closedAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getReason() {
@@ -52,7 +72,8 @@ public class Closure {
             return false;
         }
         Closure closure = (Closure) o;
-        return reason.equals(closure.reason)
+        return id.equals(closure.id)
+                && reason.equals(closure.reason)
                 && closedAt.equals(closure.closedAt)
                 && isClosed == closure.isClosed;
     }
