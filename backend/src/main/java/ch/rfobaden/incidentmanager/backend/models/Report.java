@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -77,7 +74,7 @@ public class Report {
         this(id, title, " ", author, null, incident, LocalDateTime.now(), Priority.MEDIUM);
     }
 
-    // TODO: I can't decide, how much ctor's are necessary, and with which params?!
+    // TODO: How do I decide which different ctor's are necessary...?
     public Report(Long id, String title, String description, User author, User assignedTo,
                   Incident incident, LocalDateTime startsAt, Priority priority) {
         this.id = id;
@@ -90,6 +87,7 @@ public class Report {
         this.updatedAt = createdAt;
         this.startsAt = startsAt;
         this.priority = priority;
+        closures = new HashSet<>();
     }
 
     public Long getId() {
@@ -204,6 +202,9 @@ public class Report {
     }
 
     public Set<Closure> getClosures() {
+        if (Objects.isNull(closures)) {
+            return null;
+        }
         return Collections.unmodifiableSet(closures);
     }
 
@@ -213,10 +214,16 @@ public class Report {
     }
 
     public boolean addClosure(Closure closure) {
+        if (Objects.isNull(closure)) {
+            return false;
+        }
         return closures.add(closure);
     }
 
     public boolean removeClosure(Closure closure) {
+        if (Objects.isNull(closure)) {
+            return false;
+        }
         return closures.remove(closure);
     }
 
