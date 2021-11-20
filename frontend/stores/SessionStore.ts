@@ -15,6 +15,9 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
   setSession(token: string, currentUser: User) {
     currentToken = token
     localStorage.setItem(storageKey, token)
+    SessionStore.setCurrentUser(currentUser)
+  },
+  setCurrentUser(currentUser: User) {
     UserStore.save(currentUser)
     setState({
       session: {
