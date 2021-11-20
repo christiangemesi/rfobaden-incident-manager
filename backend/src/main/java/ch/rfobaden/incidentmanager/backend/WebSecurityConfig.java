@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend;
 
+import ch.rfobaden.incidentmanager.backend.controllers.filters.ExceptionHandlerFilter;
 import ch.rfobaden.incidentmanager.backend.controllers.filters.JwtAuthFilter;
 import ch.rfobaden.incidentmanager.backend.controllers.handlers.ApiExceptionHandler;
 import ch.rfobaden.incidentmanager.backend.models.User;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -38,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthFilter authFilter;
 
+    private final ExceptionHandlerFilter expectionHandlerFiler;
+
     private final UserService userService;
 
     private final DetailsWrapperService detailsWrapperService;
@@ -48,11 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public WebSecurityConfig(
         JwtAuthFilter authFilter,
+        ExceptionHandlerFilter expectionHandlerFiler,
         UserService userService,
         ApiExceptionHandler exceptionHandler,
         PasswordEncoder passwordEncoder
     ) {
         this.authFilter = authFilter;
+        this.expectionHandlerFiler = expectionHandlerFiler;
         this.userService = userService;
         this.exceptionHandler = exceptionHandler;
         this.passwordEncoder = passwordEncoder;
@@ -76,7 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .csrf().disable()
+            .cors()
+            .and().csrf().disable()
+
             // .authorizeRequests().antMatchers("/authenticate").permitAll().
             // all other requests need to be authenticated
             .authorizeRequests().anyRequest().permitAll()
@@ -89,7 +95,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add a filter to validate the tokens with every request
         httpSecurity
-            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(expectionHandlerFiler, authFilter.getClass());
     }
 
     @Bean
