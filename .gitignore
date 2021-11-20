@@ -147,9 +147,6 @@ Temporary Items
 .localhistory*
 .lh*
 
-# Local IDEA remote target configuration
-.idea/remote-targets.xml
-
 # IntelliJ JPA-Buddy plugin configuration
 .idea/jpa-buddy.xml
 
