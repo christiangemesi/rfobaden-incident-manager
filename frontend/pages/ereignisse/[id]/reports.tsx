@@ -17,7 +17,7 @@ interface Props {
 
 const ReportsPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
-
+    //TODO when backend is done
     //ReportStore.saveAll(data.reports.map(parseReport))
     ReportStore.saveAll([
       {

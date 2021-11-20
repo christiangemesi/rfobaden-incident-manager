@@ -1,18 +1,28 @@
 import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
 import Incident from '@/models/Incident'
+import User from '@/models/User'
+
 
 export default interface Report extends Model {
-  title: string
+  id: number
   authorId: number
+  assignedTo: User
+  incident: Incident
+  title: string
   description: string | null
-  closeReason: string | null
-  isClosed: boolean
+  adendum: string | null
   createdAt: Date
   updatedAt: Date
   startsAt: Date | null
+  closures: Set<Report>
+  location: string | null
+  //TODO change to Priority when possible
+  priority: string | null
+  closedAt: Date | null
+  closeReason: string | null
+  isClosed: boolean
   endsAt: Date | null
-  incident: Incident
 
 }
 

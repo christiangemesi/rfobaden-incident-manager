@@ -6,6 +6,8 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
+import User from '@/models/User'
+import Incident from '@/models/Incident'
 
 const ReportForm: React.VFC = () => {
   const form = useForm<ModelData<Report>>(() => ({
@@ -33,8 +35,6 @@ const ReportForm: React.VFC = () => {
   }))
 
   const handleSubmit = async (reportData: ModelData<Report>) => {
-    // TODO correct api type
-    // TODO error handling
     const [data]: BackendResponse<Report> = await BackendService.create('reports', reportData)
 
     const report = parseReport(data)
@@ -42,6 +42,7 @@ const ReportForm: React.VFC = () => {
     clearForm(form)
   }
 
+  //TODO should i already add new fields and stuff?
   return (
     <div>
       <form>
@@ -55,6 +56,7 @@ const ReportForm: React.VFC = () => {
       </form>
     </div>
   )
+
 
 }
 export default ReportForm
