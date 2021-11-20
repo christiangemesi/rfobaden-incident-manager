@@ -1,9 +1,8 @@
-
+import React from 'react'
 import Report, { parseReport } from '@/models/Report'
 import styled from 'styled-components'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
-import { ReactNode } from 'react'
 
 interface Props {
   reports: Report[]
@@ -41,7 +40,7 @@ interface ReportListItemProps {
 
 const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${report.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
       await BackendService.delete('reports', report.id)
       ReportStore.remove(report.id)
     }
@@ -59,24 +58,6 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
       ReportStore.save(parseReport(data))
     }
   }
-
-  //TODO create as soon as Arian created ViewReport
-  //    const [printer, setPrinter] = useState<ReactNode>()
-  //    const handlePrint = () => {
-  //      const Printer: React.VFC = () => {
-  //        const ref = useRef<HTMLDivElement | null>(null)
-  //        useEffect(() => {
-  //          window.print()
-  //          setPrinter(undefined)
-  //        }, [ref])
-  //        return <IncidentView innerRef={ref} incident={incident} />
-  //      }
-  //      setPrinter(ReactDOM.createPortal((
-  //        <div id="print-only" style={{ margin: '4rem' }}>
-  //          <Printer />
-  //        </div>
-  //      ), document.body))
-  //    }
 
   return (
     <StyledTr>
@@ -109,21 +90,15 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
       </StyledTdSmall>
 
       <StyledTdSmall>
-        <StyledButton type="button" >
-            View Report
-        </StyledButton>
-      </StyledTdSmall>
-
-      <StyledTdSmall>
-        <StyledButton type="button" >
+        <StyledTd>
           Priority
-        </StyledButton>
+        </StyledTd>
       </StyledTdSmall>
 
       <StyledTdSmall>
-        <StyledButton type="button" >
+        <StyledTd>
           Assignee
-        </StyledButton>
+        </StyledTd>
       </StyledTdSmall>
 
     </StyledTr>

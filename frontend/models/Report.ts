@@ -1,6 +1,6 @@
 import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
-import Incident from '@/models/Incident'
+import Incident, { parseIncident } from '@/models/Incident'
 import User from '@/models/User'
 
 
@@ -34,6 +34,7 @@ export const parseReport = (data: unknown): Report => {
     updatedAt: parseDate(report.updatedAt),
     startsAt: parseDateOrNull(report.startsAt),
     endsAt: parseDateOrNull(report.endsAt),
+    incident: parseIncident(report.incident),
   }
 }
 
