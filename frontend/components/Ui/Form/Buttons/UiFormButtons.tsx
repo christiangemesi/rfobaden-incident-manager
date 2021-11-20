@@ -1,7 +1,6 @@
 import { clearForm, getUiFormBase, UiFormFieldsState } from '@/components/Ui/Form'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 import { useCallback } from 'react'
-import { useMountedState } from 'react-use'
 
 interface Props<T> {
   form: UiFormFieldsState<T>
@@ -31,7 +30,7 @@ const UiFormButtons = <T,>({
     if (pushCancel !== undefined) {
       await pushCancel()
     }
-  }, [pushCancel, fields])
+  }, [fields, pushCancel])
 
   return (
     <UiConfirmButtons
