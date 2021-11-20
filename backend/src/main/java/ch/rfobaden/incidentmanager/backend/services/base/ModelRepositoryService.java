@@ -69,7 +69,7 @@ public abstract class ModelRepositoryService<
         if (existingRecord == null) {
             return Optional.empty();
         }
-        if (!Objects.equals(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
+        if (!isSameDateTime(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
             throw new UpdateConflictException(
                 "record " + record.getId() + " has already been modified"
             );
@@ -97,5 +97,12 @@ public abstract class ModelRepositoryService<
 
     protected static boolean isPersisted(Model record) {
         return record.getId() == null;
+    }
+
+    private boolean isSameDateTime(LocalDateTime a, LocalDateTime b) {
+        return Objects.equals(
+            a.minusNanos(a.getNano()),
+            b.minusNanos(b.getNano())
+        );
     }
 }
