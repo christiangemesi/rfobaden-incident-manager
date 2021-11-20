@@ -10,7 +10,7 @@ const ProfilPage: React.VFC = () => {
   const [showPasswordForm, togglePasswordForm] = useToggle(false)
   return (
     <SessionOnly>{({ currentUser: user }) => (
-      <UiContainer >
+      <UiContainer>
         <h1>
           {user.firstName} {user.lastName}
         </h1>
