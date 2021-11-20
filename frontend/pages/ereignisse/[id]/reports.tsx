@@ -57,7 +57,7 @@ const ReportsPage: React.VFC<Props> = ({ data }) => {
 export default ReportsPage
 interface Query {
   id: string
-  [x: string]: stringgit
+  [x: string]: string
 }
 export const getServerSideProps: GetServerSideProps<Props, Query> = async (ctx) => {
   const incidentId = ctx.params === undefined ? NaN : parseInt(ctx.params.id)
