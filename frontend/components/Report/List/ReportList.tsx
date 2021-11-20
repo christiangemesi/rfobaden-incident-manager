@@ -3,6 +3,7 @@ import Report, { parseReport } from '@/models/Report'
 import styled from 'styled-components'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
+import { ReactNode } from 'react'
 
 interface Props {
   reports: Report[]
@@ -36,6 +37,7 @@ export default ReportList
 interface ReportListItemProps {
   report: Report
 }
+
 
 const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
   const handleDelete = async () => {
@@ -105,12 +107,25 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
             Löschen
         </StyledButton>
       </StyledTdSmall>
-      <StyledTdSmall>
 
+      <StyledTdSmall>
         <StyledButton type="button" >
-            AddFunctionAsSoonAsArianCreatedViewReport
+            View Report
         </StyledButton>
       </StyledTdSmall>
+
+      <StyledTdSmall>
+        <StyledButton type="button" >
+          Priority
+        </StyledButton>
+      </StyledTdSmall>
+
+      <StyledTdSmall>
+        <StyledButton type="button" >
+          Assignee
+        </StyledButton>
+      </StyledTdSmall>
+
     </StyledTr>
   )
 }

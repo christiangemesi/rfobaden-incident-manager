@@ -1,15 +1,13 @@
-import Report, { parseReport } from '@/models/Report'
+import Report from '@/models/Report'
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import ReportStore, { useReports } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-
 import ReportList from '@/components/Report/List/ReportList'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-
 
 interface Props {
   data: {
@@ -19,7 +17,21 @@ interface Props {
 
 const ReportsPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
-    ReportStore.saveAll(data.reports.map(parseReport))
+
+    //ReportStore.saveAll(data.reports.map(parseReport))
+    ReportStore.saveAll([
+      {
+        title: 'string',
+        authorId: 0,
+        description: 'string',
+        closeReason: 'string',
+        isClosed: false,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        startsAt: Date.now(),
+        endsAt: Date.now(),
+      },
+    ])
   })
 
   const reports = useReports()
@@ -43,13 +55,24 @@ const ReportsPage: React.VFC<Props> = ({ data }) => {
   )
 }
 export default ReportsPage
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+interface Query {
+  id: string
+  [x: string]: stringgit
+}
+export const getServerSideProps: GetServerSideProps<Props, Query> = async (ctx) => {
+  const incidentId = ctx.params === undefined ? NaN : parseInt(ctx.params.id)
+  if(isNaN(incidentId)){
+    return {
+      notFound: true,
+    }
+  }
   const [reports]: BackendResponse<Report[]> = await BackendService.list('reports')
   return {
     props: {
       data: {
-        reports,
+        reports: reports.filter((report) => {
+          return report.incident.id === incidentId
+        }),
       },
     },
   }
