@@ -23,6 +23,10 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     }
     const [data, error] = await BackendService.find<SessionResponse>('session')
     if (error !== null) {
+      if (error.status === 401) {
+        SessionStore.clear()
+        return
+      }
       throw error
     }
     if (data.user === null) {
