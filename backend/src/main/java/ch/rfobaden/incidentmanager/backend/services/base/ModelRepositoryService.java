@@ -69,15 +69,13 @@ public abstract class ModelRepositoryService<
         if (existingRecord == null) {
             return Optional.empty();
         }
-        if (!Objects.equals(existingRecord.getCreatedAt(), record.getCreatedAt())) {
-            throw new IllegalArgumentException("createdAt differs from persisted value");
-        }
         if (!Objects.equals(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
             throw new UpdateConflictException(
                 "record " + record.getId() + " has already been modified"
             );
         }
         record.setUpdatedAt(LocalDateTime.now());
+        record.setCreatedAt(existingRecord.getCreatedAt());
         validate(record);
         return Optional.of(repository.save(record));
     }
