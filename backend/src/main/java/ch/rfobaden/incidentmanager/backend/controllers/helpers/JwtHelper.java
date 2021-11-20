@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 @Component
 @EnableConfigurationProperties(JwtHelper.Props.class)
@@ -51,32 +50,34 @@ public class JwtHelper {
     }
 
     public Optional<User> decodeUser(String token) {
-        return decode(token, (jwt) -> {
-            var body = jwt.getBody();
+        var jwt = decode(token).orElse(null);
+        if (jwt == null) {
+            return Optional.empty();
+        }
+        var body = jwt.getBody();
 
-            long userId;
-            try {
-                userId = Long.parseLong(body.getSubject());
-            } catch (NumberFormatException e) {
-                return null;
-            }
+        long userId;
+        try {
+            userId = Long.parseLong(body.getSubject());
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
 
-            var user = userService.find(userId).orElse(null);
-            if (user == null) {
-                return null;
-            }
+        var user = userService.find(userId).orElse(null);
+        if (user == null) {
+            return Optional.empty();
+        }
 
-            var issuedAt = body.getIssuedAt().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        var issuedAt = body.getIssuedAt().toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime();
 
-            // Invalidate the token if the password has been changed since the tokens creation.
-            if (user.getCredentials().getLastPasswordChangeAt().isAfter(issuedAt)) {
-                return null;
-            }
+        // Invalidate the token if the password has been changed since the tokens' creation.
+        if (user.getCredentials().getLastPasswordChangeAt().isAfter(issuedAt)) {
+            return Optional.empty();
+        }
 
-            return user;
-        });
+        return Optional.of(user);
     }
 
     public String encode(Consumer<JwtBuilder> build) {
@@ -87,10 +88,9 @@ public class JwtHelper {
         return builder.signWith(secretKey).compact();
     }
 
-    public <T> Optional<T> decode(String token, Function<Jws<Claims>, T> parse) {
-        Jws<Claims> jwt;
+    public Optional<Jws<Claims>> decode(String token) {
         try {
-            jwt = jwtParser.parseClaimsJws(token);
+            return Optional.of(jwtParser.parseClaimsJws(token));
         } catch (UnsupportedJwtException e) {
             return Optional.empty();
         } catch (MalformedJwtException e) {
@@ -104,8 +104,6 @@ public class JwtHelper {
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
-
-        return Optional.ofNullable(parse.apply(jwt));
     }
 
     private static Key parseKey(String jwtSecret) {

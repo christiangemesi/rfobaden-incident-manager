@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Import;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
-import java.util.function.Function;
 
 @SpringBootTest
 @Import(TestConfig.class)
@@ -52,7 +51,7 @@ public class JwtHelperTest {
         var token = jwtHelper.encode((jwt) -> {});
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNotNull();
@@ -61,7 +60,7 @@ public class JwtHelperTest {
     @Test
     public void testDecode_nullToken() {
         // When
-        var result = jwtHelper.decode(null, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(null).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -70,7 +69,7 @@ public class JwtHelperTest {
     @Test
     public void testDecode_emptyToken() {
         // When
-        var result = jwtHelper.decode("", Function.identity()).orElse(null);
+        var result = jwtHelper.decode("").orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -82,7 +81,7 @@ public class JwtHelperTest {
         var token = " ".repeat(10);
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -94,7 +93,7 @@ public class JwtHelperTest {
         var token = faker.beer().name();
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -108,7 +107,7 @@ public class JwtHelperTest {
         );
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -122,7 +121,7 @@ public class JwtHelperTest {
         );
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -134,7 +133,7 @@ public class JwtHelperTest {
         var token = Jwts.builder().signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256)).compact();
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -146,7 +145,7 @@ public class JwtHelperTest {
         var token = Jwts.builder().compact();
 
         // When
-        var result = jwtHelper.decode(token, Function.identity()).orElse(null);
+        var result = jwtHelper.decode(token).orElse(null);
 
         // Then
         assertThat(result).isNull();
@@ -177,6 +176,18 @@ public class JwtHelperTest {
 
         // Then
         assertThat(result).isEqualTo(user);
+    }
+
+    @Test
+    public void testDecodeUser_expiredToken() {
+        // Given
+        var token = jwtHelper.encode((jwt) -> jwt.setExpiration(new Date()));
+
+        // When
+        var result = jwtHelper.decodeUser(token).orElse(null);
+
+        // Then
+        assertThat(result).isNull();
     }
 
     @Test
