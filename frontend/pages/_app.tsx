@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'

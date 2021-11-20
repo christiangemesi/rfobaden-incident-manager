@@ -43,7 +43,7 @@ const UiSelectInput = <T,>({
     if (setValue) {
       setValue(option)
     }
-  }, [optionMapping])
+  }, [optionMapping, setValue])
 
   const Label = label == null ? 'div' : StyledLabel
 
@@ -60,7 +60,7 @@ const UiSelectInput = <T,>({
       >
         {[...optionMapping.entries()].map(([optionValue, option]) => (
           <option key={optionValue} value={optionValue}>
-            {getOptionValue(option)}
+            {getOptionName(option)}
           </option>
         ))}
       </StyledSelect>
