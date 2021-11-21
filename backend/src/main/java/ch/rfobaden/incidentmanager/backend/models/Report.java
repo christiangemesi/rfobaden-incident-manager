@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "report")
-public class Report {
+public class Report implements Completable {
 
     enum Priority {
         LOW, MEDIUM, HIGH
@@ -152,8 +152,8 @@ public class Report {
         return addendum;
     }
 
-    public void setAddendum(String adendum) {
-        this.addendum = adendum;
+    public void setAddendum(String addendum) {
+        this.addendum = addendum;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -204,6 +204,20 @@ public class Report {
         this.priority = priority;
     }
 
+    @Override
+    public void close(String reason) {
+        Completion c = new Completion(reason);
+        c.setPrevious(completion);
+        completion = c;
+        this.isComplete = true;
+    }
+
+    @Override
+    public void reopen() {
+        if (completion != null) {
+            isComplete = false;
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -214,7 +228,8 @@ public class Report {
             return false;
         }
         Report report = (Report) o;
-        return id.equals(report.id)
+        return isComplete == report.isComplete
+                && id.equals(report.id)
                 && author.equals(report.author)
                 && assignee.equals(report.assignee)
                 && incident.equals(report.incident)
@@ -232,25 +247,25 @@ public class Report {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, assignee, incident, title, description,
-                addendum, createdAt, updatedAt, startsAt, endsAt, completion, location, priority);
+        return Objects.hash(id, author, assignee, incident, title, description, addendum,
+                createdAt, updatedAt, startsAt, endsAt, completion, isComplete, location, priority);
     }
 
     @Override
     public String toString() {
         return "Report{"
                 + "id=" + id
-                + ", author=" + getAuthorId()
-                + ", assignedToId=" + getAssigneeId()
-                + ", incidentId=" + getIncidentId()
+                + ", author=" + author
+                + ", assignee=" + assignee
+                + ", incident=" + incident
                 + ", title='" + title + '\''
                 + ", description='" + description + '\''
-                + ", adendum='" + addendum + '\''
+                + ", addendum='" + addendum + '\''
                 + ", createdAt=" + createdAt
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
-                + ", endsAt=" + endsAt
-                + ", completions=" + completion
+                + ", completion=" + completion
+                + ", isComplete=" + isComplete
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';

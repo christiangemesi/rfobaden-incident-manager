@@ -2,9 +2,13 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
-// TODO check class name
 @Entity
 public class Completion {
 
@@ -23,8 +27,8 @@ public class Completion {
     public Completion() {
     }
 
-    public Completion(String closeReason) {
-        this.reason = closeReason;
+    public Completion(String reason) {
+        this.reason = reason;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -44,15 +48,21 @@ public class Completion {
         this.reason = reason;
     }
 
-    public LocalDateTime getClosedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setClosedAt(LocalDateTime closedAt) {
-        this.createdAt = closedAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
+    public Completion getPrevious() {
+        return previous;
+    }
 
+    public void setPrevious(Completion previous) {
+        this.previous = previous;
+    }
 
     @Override
     public boolean equals(Object o) {
