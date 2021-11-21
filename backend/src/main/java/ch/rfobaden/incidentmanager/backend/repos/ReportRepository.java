@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,4 +17,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Optional<Report> findByIncidentIdAndId(
             @Param("incidentId") Long incidentId, @Param("id") Long id
     );
+
+    @Query("SELECT report FROM Report report WHERE report.incident.id = :incidentId")
+    Optional<List<Report>> findAllByIncidentId(@Param("incidentId") Long incidentId);
 }

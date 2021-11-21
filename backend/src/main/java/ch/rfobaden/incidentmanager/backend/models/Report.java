@@ -207,7 +207,7 @@ public class Report implements Completable {
     }
 
     @Override
-    public void close(String reason) {
+    public void setCompletion(String reason) {
         Completion c = new Completion(reason);
         c.setPrevious(completion);
         completion = c;
@@ -215,10 +215,18 @@ public class Report implements Completable {
     }
 
     @Override
-    public void reopen() {
-        if (completion != null) {
-            isComplete = false;
-        }
+    public Completion getCompletion() {
+        return completion;
+    }
+
+    @Override
+    public void setComplete(boolean state) {
+        isComplete = state;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return isComplete;
     }
 
     @Override

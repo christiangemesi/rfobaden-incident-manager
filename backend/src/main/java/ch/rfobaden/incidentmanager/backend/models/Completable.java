@@ -1,7 +1,11 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 public interface Completable {
-    void close(String reason);
+    void setCompletion(String reason);
 
-    void reopen();
+    Completion getCompletion();
+
+    void setComplete(boolean state);
+
+    boolean isComplete();
 }

@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Completable;
 import ch.rfobaden.incidentmanager.backend.models.Completion;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
@@ -38,6 +39,10 @@ public class ReportService {
         return reportRepository.findByIncidentIdAndId(incidentId, reportId);
     }
 
+    public Optional<List<Report>> getAllReportsOfIncidentById(Long incidentId) {
+        return reportRepository.findAllByIncidentId(incidentId);
+    }
+
     public Report addNewReport(Report report) {
         boolean incidentExists = incidentRepository.existsById(report.getIncidentId());
         Incident incidentOfId = incidentRepository.findById(report.getIncidentId()).orElse(null);
@@ -67,7 +72,7 @@ public class ReportService {
         if (report == null) {
             return Optional.empty();
         }
-        report.close(completion.getReason());
+        report.setCompletion(completion.getReason());
         return updateReport(reportId, report);
     }
 
@@ -76,7 +81,7 @@ public class ReportService {
         if (report == null) {
             return Optional.empty();
         }
-        report.reopen();
+        report.setComplete(true);
         return updateReport(reportId, report);
     }
 
@@ -87,4 +92,6 @@ public class ReportService {
         }
         return false;
     }
+
+
 }

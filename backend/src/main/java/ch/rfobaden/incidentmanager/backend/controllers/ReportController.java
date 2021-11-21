@@ -32,7 +32,9 @@ public class ReportController {
     }
 
     @GetMapping({"{reportId}"})
-    public Report getReportById(@PathVariable("incidentId") Long incidentId, @PathVariable("reportId") Long reportId) {
+    public Report getReportById(
+            @PathVariable("incidentId") Long incidentId, @PathVariable("reportId") Long reportId
+    ) {
         return reportService.getReportOfIncidentById(incidentId, reportId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "report not found")
         ));
