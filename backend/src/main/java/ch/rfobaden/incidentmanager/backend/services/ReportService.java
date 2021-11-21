@@ -34,6 +34,10 @@ public class ReportService {
         return reportRepository.findById(reportId);
     }
 
+    public Optional<Report> getReportOfIncidentById(Long incidentId, Long reportId) {
+        return reportRepository.findByIncidentIdAndId(incidentId, reportId);
+    }
+
     public Report addNewReport(Report report) {
         boolean incidentExists = incidentRepository.existsById(report.getIncidentId());
         Incident incidentOfId = incidentRepository.findById(report.getIncidentId()).orElse(null);

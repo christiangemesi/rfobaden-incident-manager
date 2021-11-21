@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,11 +29,11 @@ public class Report implements Completable {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     private User author;
 
-    @OneToOne
+    @ManyToOne
     private User assignee;
 
     @ManyToOne
@@ -56,14 +57,16 @@ public class Report implements Completable {
 
     private LocalDateTime endsAt;
 
-    @OneToOne
-    @JoinColumn(name = "report")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "completion_id")
     private Completion completion;
 
+    @Column(nullable = false)
     private boolean isComplete;
 
     private String location;
 
+    @Column(nullable = false)
     private Priority priority = Priority.MEDIUM;
 
     public Report() {
@@ -75,7 +78,6 @@ public class Report implements Completable {
         this.author = author;
         this.incident = incident;
     }
-
 
     public Long getId() {
         return id;

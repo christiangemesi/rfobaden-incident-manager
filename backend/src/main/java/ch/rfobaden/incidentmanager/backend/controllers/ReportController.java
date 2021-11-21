@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/reports")
+@RequestMapping(path = "api/v1/incidents/{incidentId}/reports")
 public class ReportController {
 
     private final ReportService reportService;
@@ -32,8 +32,8 @@ public class ReportController {
     }
 
     @GetMapping({"{reportId}"})
-    public Report getReportById(@PathVariable("reportId") Long reportId) {
-        return reportService.getReportById(reportId).orElseThrow(() -> (
+    public Report getReportById(@PathVariable("incidentId") Long incidentId, @PathVariable("reportId") Long reportId) {
+        return reportService.getReportOfIncidentById(incidentId, reportId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "report not found")
         ));
     }
@@ -41,6 +41,7 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
+
         return reportService.addNewReport(report);
     }
 
