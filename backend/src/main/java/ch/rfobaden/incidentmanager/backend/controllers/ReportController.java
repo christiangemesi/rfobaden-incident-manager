@@ -1,14 +1,23 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.controllers.data.CompletionData;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Completion;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
-import ch.rfobaden.incidentmanager.backend.services.IncidentService;
+import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,23 +27,34 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    private final IncidentService incidentService;
+    private final IncidentRepository incidentRepository;
 
     @Autowired
-    public ReportController(ReportService reportService, IncidentService incidentService) {
+    public ReportController(ReportService reportService, IncidentRepository incidentRepository) {
         this.reportService = reportService;
-        this.incidentService = incidentService;
+        this.incidentRepository = incidentRepository;
     }
 
     @GetMapping
-    public List<Report> getReports() {
-        return reportService.getReports();
+    public List<Report> getReports(@PathVariable("incidentId") Long incidentId) {
+        if (!incidentRepository.existsById(incidentId)) {
+            throw new IllegalArgumentException("incident not found");
+        }
+        return reportService.getAllReportsOfIncidentById(incidentId).orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "report not found")
+        ));
     }
 
     @GetMapping({"{reportId}"})
     public Report getReportById(
             @PathVariable("incidentId") Long incidentId, @PathVariable("reportId") Long reportId
     ) {
+        boolean incidentExists = incidentRepository.existsById(incidentId);
+        Incident incidentOfId = incidentRepository.findById(incidentId).orElse(null);
+        if (!incidentExists || incidentOfId == null) {
+            throw new IllegalArgumentException("incident not found");
+        }
+
         return reportService.getReportOfIncidentById(incidentId, reportId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "report not found")
         ));
@@ -42,24 +62,24 @@ public class ReportController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Report addNewReport(@RequestBody Report report) {
-
+    public Report addNewReport(@Param("incidentId") Long incidentId, @RequestBody Report report) {
+        if (!incidentRepository.existsById(incidentId)) {
+            throw new IllegalArgumentException("incident not found");
+        }
         return reportService.addNewReport(report);
     }
 
     @PutMapping("{reportId}/close")
     @ResponseStatus(HttpStatus.OK)
     public Report closeReport(
+            @PathVariable("incidentId") Long incidentId,
             @PathVariable("reportId") Long reportId,
-            /* TODO: check close mechanism -> in IncidentController is a inner static class,
-                    so I guess that is not the final approach to close incidents, reports, ...
-                    Should we use the Completion class here or should we export the
-                    CloseIncidentData class out of the controller and rename it?
-                    Or something else?
-            */
-            @RequestBody Completion completion
+            @RequestBody CompletionData completionData
     ) {
-        return reportService.closeReport(reportId, completion)
+        if (!incidentRepository.existsById(incidentId)) {
+            throw new IllegalArgumentException("incident not found");
+        }
+        return reportService.closeReport(reportId, completionData)
                 .orElseThrow(() -> (
                         new ApiException(HttpStatus.NOT_FOUND, "incident not found")
                 ));
@@ -68,16 +88,33 @@ public class ReportController {
     @PutMapping("{reportId}/reopen")
     @ResponseStatus(HttpStatus.OK)
     public Report reopenReport(
-            @PathVariable("reportId") Long reportId) {
-        return reportService.reopenReport(reportId)
-                .orElseThrow(() -> (
-                        new ApiException(HttpStatus.NOT_FOUND, "incident not found")
-                ));
+            @PathVariable("incidentId") Long incidentId,
+            @PathVariable("reportId") Long reportId
+    ) {
+        if (!incidentRepository.existsById(incidentId)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
+        }
+
+        Report report = reportService.getReportById(reportId).orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "report not found")
+        ));
+
+        if (!report.getIncidentId().equals(incidentId)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "no report with incident id found");
+        }
+        return reportService.reopenReport(report).orElseThrow(
+                () -> new ApiException(HttpStatus.NOT_FOUND, "report not found"));
     }
 
     @DeleteMapping("{reportId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteReportById(@PathVariable("reportId") Long reportId) {
+    public void deleteReportById(
+            @PathVariable("incidentId") Long incidentId,
+            @PathVariable("reportId") Long reportId
+    ) {
+        if (!incidentRepository.existsById(incidentId)) {
+            throw new IllegalArgumentException("incident not found");
+        }
         if (!reportService.deleteReportById(reportId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "report not found");
         }
