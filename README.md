@@ -1,10 +1,12 @@
 # RFO Baden - Incident Manager
 
+[TOC]
+
 ## Development
 ### Setup
 Install frontend dependencies:
 ```shell
-docker-compose run --no-deps frontend sh -c "npm install"
+docker compose run --no-deps frontend sh -c "npm install"
 ```
 
 If you use an IDE, you most likely also want to install the frontend dependencies locally.
@@ -26,17 +28,17 @@ For local development, make sure to have installed JDK 11+ and gradle 7+.
 ### Usage
 Start the application:
 ```shell
-docker-compose up
+docker compose up
 ```
 
 Start only the backend:
 ```shell
-docker-compose up backend
+docker compose up backend
 ```
 
 Stop the application:
 ```shell
-docker-compose down
+docker compose down
 ```
 
 The frontend is served on `localhost:3000`.  
@@ -67,7 +69,7 @@ To manually lint the backend, run:
 gradle checkstyleMain checkstyleTest
 
 # in docker:
-docker-compose run --no-deps backend sh -c  "gradle --no-daemon checkstyleMain checkstyleTest"
+docker compose run --no-deps backend sh -c  "gradle --no-daemon checkstyleMain checkstyleTest"
 ```
 
 To manually lint the frontend, run:
@@ -76,7 +78,7 @@ To manually lint the frontend, run:
 npm run lint
 
 # in docker
-docker-compose run --no-deps frontend sh -c "npm run lint"
+docker compose run --no-deps frontend sh -c "npm run lint"
 ```
 
 ### Cleanup
@@ -93,3 +95,19 @@ Drop the database:
 ```shell
 docker volume rm rfobaden-incident-manager_database
 ```
+
+## Testing
+> Tests can also be run locally, without requiring a docker container.
+
+```bash
+# locally
+cd backend
+gradle clean test --rerun-tasks
+
+# in docker
+docker compose run --no-deps backend gradle test
+```
+
+Tests can also be run inside Intellij, which also offers built-in coverage testing.
+For this to work correctly, make sure to go to `File > Settings... > Build, Execution & Deployment > Build Tools > Gradle`,
+where you can configure `Build and run using:` as `Gradle (default)` and `Run tests using:` as `Intellij IDEA`.

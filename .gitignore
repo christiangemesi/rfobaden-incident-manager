@@ -143,6 +143,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Visual Strudio Local history
+# Visual Studio Local history
 .localhistory*
 .lh*
+
+# IntelliJ JPA-Buddy plugin configuration
+.idea/jpa-buddy.xml
+
+# Intellij compiler configuration
+#   Ignored because it contains references to the local environment
+#   and has to be different for every user.
+.idea/compiler.xml

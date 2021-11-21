@@ -23,4 +23,3 @@ backend.checkstyle:
 cache:
   paths:
     - backend/.gradle
-    - frontend/node_modules/

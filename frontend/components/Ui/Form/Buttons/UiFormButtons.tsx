@@ -26,12 +26,10 @@ const UiFormButtons = <T,>({
   }, [isValid, value, pushSubmit])
 
   const handleCancel = useCallback(async () => {
+    clearForm(fields)
     if (pushCancel !== undefined) {
       await pushCancel()
     }
-    setTimeout(() => {
-      clearForm(fields)
-    })
   }, [fields, pushCancel])
 
   return (

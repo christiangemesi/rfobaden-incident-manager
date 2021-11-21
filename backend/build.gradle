@@ -45,6 +45,15 @@ test {
 	useJUnitPlatform()
 }
 
+tasks.withType(Test) {
+	testLogging {
+		exceptionFormat "full"
+		events "started", "skipped", "passed", "failed"
+		showStandardStreams false
+	}
+}
+
+
 checkstyle {
 	toolVersion "9.0"
 	configFile file("config/checkstyle/checkstyle.xml")

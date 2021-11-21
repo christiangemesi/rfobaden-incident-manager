@@ -8,15 +8,16 @@ import * as ReactDOM from 'react-dom'
 
 interface Props {
   incidents: Incident[]
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentList: React.VFC<Props> = ({ incidents }) => {
+const IncidentList: React.VFC<Props> = ({ incidents, onEdit: handleEdit }) => {
   return (
     <StyledTable>
       <thead>
         <StyledTr>
           <StyledTh>
-          Ereignis
+            Ereignis
           </StyledTh>
           <StyledTh>
           </StyledTh>
@@ -26,7 +27,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
       </thead>
       <tbody>
         {incidents.map((incident) => (
-          <IncidentListItem key={incident.id} incident={incident} />
+          <IncidentListItem key={incident.id} incident={incident} onEdit={handleEdit} />
         ))}
       </tbody>
     </StyledTable>
@@ -36,16 +37,17 @@ export default IncidentList
 
 interface IncidentListItemProps {
   incident: Incident
+  onEdit: (incident: Incident) => void
 }
 
-const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
+const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: handleEdit }) => {
+
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       IncidentStore.remove(incident.id)
     }
   }
-
 
   const handleClose = async () => {
     const closeReason = prompt(`Wieso schliessen sie das "${incident.title}"?`, 'Fertig')
@@ -53,6 +55,17 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
       const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, {
         closeReason: closeReason,
       })
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
+    }
+  }
+
+  const handleReopen = async () => {
+    const reopen = confirm(`Wollen sie das "${incident.title}" erneut öffnen?`)
+    if (reopen) {
+      const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/reopen`, {})
       if (error !== null) {
         throw error
       }
@@ -92,14 +105,20 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident }) => {
         {incident.isClosed ? 'Closed' : 'Open'}
       </StyledTd>
       <StyledTdSmall>
-        <StyledButton type="button">
+        <StyledButton type="button" onClick={() => handleEdit(incident)}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleClose}>
-          Schliessen
-        </StyledButton>
+        {incident.isClosed ? (
+          <StyledButton type="button" onClick={handleReopen}>
+            Öffnen
+          </StyledButton>
+        ) : (
+          <StyledButton type="button" onClick={handleClose}>
+            Schliessen
+          </StyledButton>
+        )}
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleDelete}>
