@@ -2,11 +2,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 // TODO check class name
 @Entity
@@ -15,13 +11,14 @@ public class Completion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long id = -1L;
+    private Long id;
 
     private String reason;
 
     private LocalDateTime createdAt;
 
-    private boolean isClosed;
+    @OneToOne
+    private Completion previous;
 
     public Completion() {
     }
@@ -55,13 +52,7 @@ public class Completion {
         this.createdAt = closedAt;
     }
 
-    public boolean isClosed() {
-        return isClosed;
-    }
 
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,13 +65,12 @@ public class Completion {
         Completion completion = (Completion) o;
         return id.equals(completion.id)
                 && reason.equals(completion.reason)
-                && createdAt.equals(completion.createdAt)
-                && isClosed == completion.isClosed;
+                && createdAt.equals(completion.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reason, createdAt, isClosed);
+        return Objects.hash(reason, createdAt);
     }
 
     @Override
@@ -88,7 +78,6 @@ public class Completion {
         return "Completion{"
                 + "reason='" + reason + '\''
                 + ", closedAt=" + createdAt
-                + ", isClosed=" + isClosed
                 + '}';
     }
 }

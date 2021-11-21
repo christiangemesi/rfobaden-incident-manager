@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,13 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "report")
 public class Report {
+
+    enum Priority {
+        LOW, MEDIUM, HIGH
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +33,7 @@ public class Report {
     private User author;
 
     @OneToOne
-    private User assignedTo;
+    private User assignee;
 
     @ManyToOne
     @JoinColumn(name = "incident_id", nullable = false)
@@ -56,42 +56,26 @@ public class Report {
 
     private LocalDateTime endsAt;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "report")
-    private Set<Completion> completions;
+    private Completion completion;
+
+    private boolean isComplete;
 
     private String location;
 
-    private Priority priority;
+    private Priority priority = Priority.MEDIUM;
 
     public Report() {
     }
 
-    // TODO: only fields with non-null params
-    public Report(String title, User author, Incident incident) {
-        this(-1L, title, author, incident);
-    }
-
-
     public Report(Long id, String title, User author, Incident incident) {
-        this(id, title, " ", author, null, incident, LocalDateTime.now(), Priority.MEDIUM);
-    }
-
-    // TODO: How do I decide which different ctor's are necessary...?
-    public Report(Long id, String title, String description, User author, User assignedTo,
-                  Incident incident, LocalDateTime startsAt, Priority priority) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.author = author;
-        this.assignedTo = assignedTo;
         this.incident = incident;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = createdAt;
-        this.startsAt = startsAt;
-        this.priority = priority;
-        completions = new HashSet<>();
     }
+
 
     public Long getId() {
         return id;
@@ -116,19 +100,19 @@ public class Report {
         this.author = author;
     }
 
-    public User getAssignedTo() {
-        return assignedTo;
+    public User getAssignee() {
+        return assignee;
     }
 
     public Long getAssigneeId() {
-        if (assignedTo == null) {
+        if (assignee == null) {
             return null;
         }
-        return assignedTo.getId();
+        return assignee.getId();
     }
 
-    public void setAssignedTo(User assignee) {
-        this.assignedTo = assignee;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
     @JsonIgnore
@@ -204,37 +188,6 @@ public class Report {
         this.endsAt = endsAt;
     }
 
-    public Set<Completion> getClosures() {
-        if (Objects.isNull(completions)) {
-            return null;
-        }
-        return Collections.unmodifiableSet(completions);
-    }
-
-    // TODO: delete setClosures?
-    public void setClosures(Set<Completion> completions) {
-        this.completions = completions;
-    }
-
-    public boolean addClosure(Completion completion) {
-        if (Objects.isNull(completion)) {
-            return false;
-        }
-        return completions.add(completion);
-    }
-
-    public boolean removeClosure(Completion completion) {
-        if (Objects.isNull(completion)) {
-            return false;
-        }
-        return completions.remove(completion);
-    }
-
-    // TODO: unnecessary
-    public void clearClosures() {
-        completions.clear();
-    }
-
     public String getLocation() {
         return location;
     }
@@ -263,7 +216,7 @@ public class Report {
         Report report = (Report) o;
         return id.equals(report.id)
                 && author.equals(report.author)
-                && assignedTo.equals(report.assignedTo)
+                && assignee.equals(report.assignee)
                 && incident.equals(report.incident)
                 && title.equals(report.title)
                 && description.equals(report.description)
@@ -272,15 +225,15 @@ public class Report {
                 && updatedAt.equals(report.updatedAt)
                 && startsAt.equals(report.startsAt)
                 && endsAt.equals(report.endsAt)
-                && completions.equals(report.completions)
+                && completion.equals(report.completion)
                 && location.equals(report.location)
                 && priority == report.priority;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, assignedTo, incident, title, description,
-                addendum, createdAt, updatedAt, startsAt, endsAt, completions, location, priority);
+        return Objects.hash(id, author, assignee, incident, title, description,
+                addendum, createdAt, updatedAt, startsAt, endsAt, completion, location, priority);
     }
 
     @Override
@@ -297,9 +250,12 @@ public class Report {
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
                 + ", endsAt=" + endsAt
-                + ", completions=" + completions
+                + ", completions=" + completion
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';
     }
 }
+
+
+
