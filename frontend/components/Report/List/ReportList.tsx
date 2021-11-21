@@ -11,36 +11,36 @@ const ReportList: React.VFC<Props> = ({ reports }) => {
     <div>
       <StyledTable>
         <thead>
-        <StyledTr>
-          <StyledTh>
-            Meldung
-          </StyledTh>
-          <StyledTh>
-          </StyledTh>
-          <StyledTh>
-          </StyledTh>
-        </StyledTr>
+          <StyledTr>
+            <StyledTh>
+              Meldung
+            </StyledTh>
+            <StyledTh>
+            </StyledTh>
+            <StyledTh>
+            </StyledTh>
+          </StyledTr>
         </thead>
         <tbody>
-        <thead>
-        {reports.map((report) => (
-          <ReportListItem key={report.id} report={report}/>
-        ))}
-        </thead>
+          <thead>
+            {reports.map((report) => (
+              <ReportListItem key={report.id} report={report} />
+            ))}
+          </thead>
         </tbody>
       </StyledTable>
     </div>
   )
 }
-
 export default ReportList
+
+
 
 interface ReportListItemProps {
   report: Report
 }
 
 const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
-
   return (
     <StyledTr>
       <StyledTd>
