@@ -229,19 +229,19 @@ public class Report implements Completable {
         }
         Report report = (Report) o;
         return isComplete == report.isComplete
-                && id.equals(report.id)
-                && author.equals(report.author)
-                && assignee.equals(report.assignee)
-                && incident.equals(report.incident)
-                && title.equals(report.title)
-                && description.equals(report.description)
-                && addendum.equals(report.addendum)
-                && createdAt.equals(report.createdAt)
-                && updatedAt.equals(report.updatedAt)
-                && startsAt.equals(report.startsAt)
-                && endsAt.equals(report.endsAt)
-                && completion.equals(report.completion)
-                && location.equals(report.location)
+                && Objects.equals(id, report.id)
+                && Objects.equals(author, report.author)
+                && Objects.equals(assignee, report.assignee)
+                && Objects.equals(incident, report.incident)
+                && Objects.equals(title, report.title)
+                && Objects.equals(description, report.description)
+                && Objects.equals(addendum, report.addendum)
+                && Objects.equals(createdAt, report.createdAt)
+                && Objects.equals(updatedAt, report.updatedAt)
+                && Objects.equals(startsAt, report.startsAt)
+                && Objects.equals(endsAt, report.endsAt)
+                && Objects.equals(completion, report.completion)
+                && Objects.equals(location, report.location)
                 && priority == report.priority;
     }
 
