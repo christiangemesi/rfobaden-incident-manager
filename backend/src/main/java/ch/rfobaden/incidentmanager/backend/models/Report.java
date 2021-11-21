@@ -247,8 +247,9 @@ public class Report implements Completable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, assignee, incident, title, description, addendum,
-                createdAt, updatedAt, startsAt, endsAt, completion, isComplete, location, priority);
+        return Objects.hash(id, author, getAssigneeId(), getIncidentId(), title,
+                description, addendum, createdAt, updatedAt, startsAt,
+                endsAt, completion, isComplete, location, priority);
     }
 
     @Override
@@ -256,15 +257,14 @@ public class Report implements Completable {
         return "Report{"
                 + "id=" + id
                 + ", author=" + author
-                + ", assignee=" + assignee
-                + ", incident=" + incident
+                + ", assigneeId=" + getAssigneeId()
+                + ", incidentId=" + getIncidentId()
                 + ", title='" + title + '\''
                 + ", description='" + description + '\''
                 + ", addendum='" + addendum + '\''
                 + ", createdAt=" + createdAt
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
-                + ", completion=" + completion
                 + ", isComplete=" + isComplete
                 + ", location='" + location + '\''
                 + ", priority=" + priority
