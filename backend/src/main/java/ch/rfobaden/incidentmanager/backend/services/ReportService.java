@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Completion;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
@@ -55,6 +56,24 @@ public class ReportService {
         }
         report.setUpdatedAt(LocalDateTime.now());
         return Optional.of(reportRepository.save(report));
+    }
+
+    public Optional<Report> closeReport(Long reportId, Completion completion) {
+        Report report = reportRepository.findById(reportId).orElse(null);
+        if (report == null) {
+            return Optional.empty();
+        }
+        report.close(completion.getReason());
+        return updateReport(reportId, report);
+    }
+
+    public Optional<Report> reopenReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElse(null);
+        if (report == null) {
+            return Optional.empty();
+        }
+        report.reopen();
+        return updateReport(reportId, report);
     }
 
     public boolean deleteReportById(Long reportId) {
