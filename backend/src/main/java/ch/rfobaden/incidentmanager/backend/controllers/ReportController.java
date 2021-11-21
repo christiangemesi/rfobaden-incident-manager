@@ -40,12 +40,6 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Report addNewReport(@RequestBody Report report) {
-        // TODO : Are the following checks done with the getIncidentById() request?
-        // TODO check if incidentId exists
-        // TODO check if incident exist
-        var incident = incidentService.getIncidentById(report.getIncidentId())
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "incident not found"));
-        report.setIncident(incident);
         return reportService.addNewReport(report);
     }
 

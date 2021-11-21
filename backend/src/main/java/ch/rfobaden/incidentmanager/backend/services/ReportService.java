@@ -1,12 +1,15 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -14,9 +17,12 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
 
+    private final IncidentRepository incidentRepository;
+
     @Autowired
-    public ReportService(ReportRepository reportRepository) {
+    public ReportService(ReportRepository reportRepository, IncidentRepository incidentRepository) {
         this.reportRepository = reportRepository;
+        this.incidentRepository = incidentRepository;
     }
 
     public List<Report> getReports() {
@@ -28,21 +34,26 @@ public class ReportService {
     }
 
     public Report addNewReport(Report report) {
-        // TODO set date / time attr
+        boolean incidentExists = incidentRepository.existsById(report.getIncidentId());
+        Incident incidentOfId = incidentRepository.findById(report.getIncidentId()).orElse(null);
+        if (!incidentExists || incidentOfId == null) {
+            throw new IllegalArgumentException("incident not found");
+        }
+        report.setIncident(incidentOfId);
         report.setCreatedAt(LocalDateTime.now());
         report.setUpdatedAt(LocalDateTime.now());
         return reportRepository.save(report);
     }
 
     public Optional<Report> updateReport(Long reportId, Report report) {
-        Report reportById = reportRepository.findById(reportId).orElse(null);
-        if (reportById == null) {
+        Report reportOfId = reportRepository.findById(reportId).orElse(null);
+        if (reportOfId == null) {
             return Optional.empty();
         }
-//        if (reportById.getId != report.getId()) {
-//            throw new IllegalArgumentException("body id differs from parameter id"");
-//        }
-        // TODO set update date
+        if (!Objects.equals(report.getIncidentId(), reportId)) {
+            throw new IllegalArgumentException("body id differ from parameter id");
+        }
+        report.setUpdatedAt(LocalDateTime.now());
         return Optional.of(reportRepository.save(report));
     }
 
