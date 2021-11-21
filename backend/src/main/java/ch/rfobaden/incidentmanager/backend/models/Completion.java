@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 // TODO check class name
 @Entity
-public class Closure {
+public class Completion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,16 +19,16 @@ public class Closure {
 
     private String reason;
 
-    private LocalDateTime closedAt;
+    private LocalDateTime createdAt;
 
     private boolean isClosed;
 
-    public Closure() {
+    public Completion() {
     }
 
-    public Closure(String closeReason) {
+    public Completion(String closeReason) {
         this.reason = closeReason;
-        this.closedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -48,11 +48,11 @@ public class Closure {
     }
 
     public LocalDateTime getClosedAt() {
-        return closedAt;
+        return createdAt;
     }
 
     public void setClosedAt(LocalDateTime closedAt) {
-        this.closedAt = closedAt;
+        this.createdAt = closedAt;
     }
 
     public boolean isClosed() {
@@ -71,23 +71,23 @@ public class Closure {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Closure closure = (Closure) o;
-        return id.equals(closure.id)
-                && reason.equals(closure.reason)
-                && closedAt.equals(closure.closedAt)
-                && isClosed == closure.isClosed;
+        Completion completion = (Completion) o;
+        return id.equals(completion.id)
+                && reason.equals(completion.reason)
+                && createdAt.equals(completion.createdAt)
+                && isClosed == completion.isClosed;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reason, closedAt, isClosed);
+        return Objects.hash(reason, createdAt, isClosed);
     }
 
     @Override
     public String toString() {
-        return "Closure{"
+        return "Completion{"
                 + "reason='" + reason + '\''
-                + ", closedAt=" + closedAt
+                + ", closedAt=" + createdAt
                 + ", isClosed=" + isClosed
                 + '}';
     }

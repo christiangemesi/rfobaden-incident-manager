@@ -26,7 +26,7 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long id = -1L;
+    private Long id;
 
     @OneToOne
     @JoinColumn(nullable = false)
@@ -44,7 +44,7 @@ public class Report {
 
     private String description;
 
-    private String adendum;
+    private String addendum;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -58,7 +58,7 @@ public class Report {
 
     @OneToMany
     @JoinColumn(name = "report")
-    private Set<Closure> closures;
+    private Set<Completion> completions;
 
     private String location;
 
@@ -90,7 +90,7 @@ public class Report {
         this.updatedAt = createdAt;
         this.startsAt = startsAt;
         this.priority = priority;
-        closures = new HashSet<>();
+        completions = new HashSet<>();
     }
 
     public Long getId() {
@@ -164,12 +164,12 @@ public class Report {
         this.description = description;
     }
 
-    public String getAdendum() {
-        return adendum;
+    public String getAddendum() {
+        return addendum;
     }
 
-    public void setAdendum(String adendum) {
-        this.adendum = adendum;
+    public void setAddendum(String adendum) {
+        this.addendum = adendum;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -204,35 +204,35 @@ public class Report {
         this.endsAt = endsAt;
     }
 
-    public Set<Closure> getClosures() {
-        if (Objects.isNull(closures)) {
+    public Set<Completion> getClosures() {
+        if (Objects.isNull(completions)) {
             return null;
         }
-        return Collections.unmodifiableSet(closures);
+        return Collections.unmodifiableSet(completions);
     }
 
     // TODO: delete setClosures?
-    public void setClosures(Set<Closure> closures) {
-        this.closures = closures;
+    public void setClosures(Set<Completion> completions) {
+        this.completions = completions;
     }
 
-    public boolean addClosure(Closure closure) {
-        if (Objects.isNull(closure)) {
+    public boolean addClosure(Completion completion) {
+        if (Objects.isNull(completion)) {
             return false;
         }
-        return closures.add(closure);
+        return completions.add(completion);
     }
 
-    public boolean removeClosure(Closure closure) {
-        if (Objects.isNull(closure)) {
+    public boolean removeClosure(Completion completion) {
+        if (Objects.isNull(completion)) {
             return false;
         }
-        return closures.remove(closure);
+        return completions.remove(completion);
     }
 
     // TODO: unnecessary
     public void clearClosures() {
-        closures.clear();
+        completions.clear();
     }
 
     public String getLocation() {
@@ -267,12 +267,12 @@ public class Report {
                 && incident.equals(report.incident)
                 && title.equals(report.title)
                 && description.equals(report.description)
-                && adendum.equals(report.adendum)
+                && addendum.equals(report.addendum)
                 && createdAt.equals(report.createdAt)
                 && updatedAt.equals(report.updatedAt)
                 && startsAt.equals(report.startsAt)
                 && endsAt.equals(report.endsAt)
-                && closures.equals(report.closures)
+                && completions.equals(report.completions)
                 && location.equals(report.location)
                 && priority == report.priority;
     }
@@ -280,7 +280,7 @@ public class Report {
     @Override
     public int hashCode() {
         return Objects.hash(id, author, assignedTo, incident, title, description,
-                adendum, createdAt, updatedAt, startsAt, endsAt, closures, location, priority);
+                addendum, createdAt, updatedAt, startsAt, endsAt, completions, location, priority);
     }
 
     @Override
@@ -292,12 +292,12 @@ public class Report {
                 + ", incidentId=" + getIncidentId()
                 + ", title='" + title + '\''
                 + ", description='" + description + '\''
-                + ", adendum='" + adendum + '\''
+                + ", adendum='" + addendum + '\''
                 + ", createdAt=" + createdAt
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
                 + ", endsAt=" + endsAt
-                + ", closures=" + closures
+                + ", completions=" + completions
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';
