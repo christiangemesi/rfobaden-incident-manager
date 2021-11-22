@@ -18,6 +18,8 @@ services:
       - frontend.node_modules:/app/node_modules
     depends_on:
       - backend
+    tmpfs:
+      - /app/.next:mode=777,uid=1000,gid=1000
 
   backend:
     image: gradle:7.2.0-jdk11
@@ -36,7 +38,8 @@ services:
       - backend.gradle-global:/home/gradle/.gradle
       - backend.gradle-local:/app/.gradle
       - /etc/localtime:/etc/localtime:ro
-
+    tmpfs:
+      - /app/build
     depends_on:
       - database
 

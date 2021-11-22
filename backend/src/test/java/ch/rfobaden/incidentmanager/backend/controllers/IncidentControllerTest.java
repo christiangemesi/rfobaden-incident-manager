@@ -8,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ch.rfobaden.incidentmanager.backend.TestConfig;
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +32,7 @@ import java.util.Optional;
 
 
 @WebMvcTest(IncidentController.class)
-class IncidentControllerTest {
+class IncidentControllerTest extends AppControllerTest {
     @Autowired
     MockMvc mockMvc;
 

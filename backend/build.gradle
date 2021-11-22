@@ -10,26 +10,38 @@ group = 'ch.rfobaden.incidentmanager'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-def springVersion = '2.5.5'
+def springVersion = '2.5.6'
 
 repositories {
 	mavenCentral()
 }
 
 apply plugin: 'application'
+
 mainClassName = 'ch.rfobaden.incidentmanager.backend.Application'
 
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 
 	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
-
 	testImplementation 'com.h2database:h2:1.4.200'
+	testImplementation 'com.github.javafaker:javafaker:1.0.2'
+
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
 
 	developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 }
 
 configurations {
@@ -40,6 +52,9 @@ configurations {
 
 	checkstyleConfig
 }
+
+compileJava.inputs.files(processResources)
+compileTestJava.inputs.files(processTestResources)
 
 test {
 	useJUnitPlatform()

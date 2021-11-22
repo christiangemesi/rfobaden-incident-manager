@@ -1,85 +1,51 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepositoryTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
+import java.util.Locale;
 
 @DataJpaTest
-public class UserRepositoryTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
+public class UserRepositoryTest extends ModelRepositoryTest<User, UserRepository> {
     @Test
-    public void testRepositoryIsEmpty() {
+    public void testFindByEmail() {
+        // Given
+        var record = repository.save(generator.generatePersisted());
+
         // When
-        List<User> users = userRepository.findAll();
+        var result = repository.findByEmail(record.getEmail()).orElse(null);
 
         // Then
-        assertThat(users).isEmpty();
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(record);
     }
 
     @Test
-    public void testAddUser() {
+    public void testFindByEmail_ignoreCase() {
         // Given
-        var username = "myTestUsername";
-        var password = "myTestPassword";
+        var record = repository.save(generator.generatePersisted());
 
         // When
-        User user = userRepository.save(new User(
-            username, password
-        ));
+        var result = repository.findByEmail(record.getEmail().toUpperCase()).orElse(null);
 
         // Then
-        assertThat(user.getId()).isGreaterThan(0);
-        assertThat(user.getUsername()).isEqualTo(username);
-        assertThat(user.getPassword()).isEqualTo(password);
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(record);
     }
 
     @Test
-    public void testGetUsers() {
+    public void testFindByEmail_notFound() {
         // Given
-        User user1 = userRepository.save(new User("user1", "password1"));
-        User user2 = userRepository.save(new User("user2", "password2"));
-        User user3 = userRepository.save(new User("user3", "password3"));
+        var record = generator.generatePersisted();
 
         // When
-        List<User> users = userRepository.findAll();
+        var result = repository.findByEmail(record.getEmail());
 
         // Then
-        assertThat(users).hasSize(3).contains(user1, user2, user3);
-    }
-
-    @Test
-    public void testGetUserById() {
-        // Given
-        userRepository.save(new User("user1", "password1"));
-        User user2 = userRepository.save(new User("user2", "password2"));
-
-        // When
-        User user = userRepository.findById(user2.getId()).orElse(null);
-
-        // Then
-        assertThat(user).isNotNull();
-        assertThat(user).isEqualTo(user2);
-    }
-
-    @Test
-    public void testDeleteUserById() {
-        // Given
-        User user1 = userRepository.save(new User("user1", "password1"));
-        User user2 = userRepository.save(new User("user2", "password2"));
-        User user3 = userRepository.save(new User("user3", "password3"));
-
-        // When
-        userRepository.deleteById(user2.getId());
-
-        // Then
-        assertThat(userRepository.findAll()).hasSize(2).contains(user1, user3);
+        assertThat(result).isEmpty();
     }
 }

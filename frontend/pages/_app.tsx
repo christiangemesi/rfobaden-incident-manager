@@ -1,37 +1,52 @@
 import { AppProps } from 'next/app'
-import React from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
 import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
-import SessionStore, { useSession } from '@/stores/SessionStore'
-import Model from '@/models/base/Model'
+import SessionStore, { getSessionToken, useSession } from '@/stores/SessionStore'
 import Link from 'next/link'
 
 import 'reset-css/reset.css'
+import { parseUser } from '@/models/User'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiButton from '@/components/Ui/Button/UiButton'
+import { SessionResponse } from '@/models/Session'
+import { useRouter } from 'next/router'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
-    const [currentUser, error] = await BackendService.find<Model & { username: string }>('session')
+    const token = getSessionToken()
+    if (token === null) {
+      return
+    }
+    const [data, error] = await BackendService.find<SessionResponse>('session')
     if (error !== null) {
-      if (error.status === 404) {
-        // No session present - user is not logged in.
-        return
-      }
       throw error
     }
-    SessionStore.setCurrentUser({
-      id: currentUser.id,
-      name: currentUser.username,
-    })
+    if (data.user === null) {
+      SessionStore.clear()
+      return
+    }
+    SessionStore.setSession(data.token, parseUser(data.user))
   })
 
   const { currentUser } = useSession()
+
+  const router = useRouter()
   const logout = async () => {
-    await BackendService.delete('session')
     SessionStore.clear()
+
+    // Should probably not do this everytime, but only if we are on a page
+    // which only signed in users can access. There's currently no nice way to detect this,
+    // so we just do it for every page.
+    await router.push('/')
   }
+
+  const component = useMemo(() => {
+    return <Component {...pageProps} />
+  }, [Component, pageProps])
 
   return (
     <>
@@ -52,12 +67,25 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
               </a>
             </Link>
           ) : (
-            <button type="button" onClick={logout}>
-              {currentUser.name} abmelden →
-            </button>
+            <UiGrid gap={1}>
+              <UiGrid.Col>
+                <Link href="/profil">
+                  <a>
+                    <UiButton type="button">
+                      {currentUser.firstName} {currentUser.lastName}
+                    </UiButton>
+                  </a>
+                </Link>
+              </UiGrid.Col>
+              <UiGrid.Col size="auto">
+                <UiButton onClick={logout}>
+                  abmelden →
+                </UiButton>
+              </UiGrid.Col>
+            </UiGrid>
           )}
         </SessionStateBar>
-        <Component {...pageProps} />
+        {component}
       </ThemeProvider>
     </>
   )
@@ -78,6 +106,10 @@ const GlobalStyle = createGlobalStyle`
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 1rem;
+  }
+  
+  button {
+    cursor: pointer;
   }
 
   @media print {

@@ -19,7 +19,7 @@ const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
       </h1>
       {author !== null && (
         <div>
-          Erstellt von {author.name}
+          Erstellt von {author.firstName} {author.lastName}
         </div>
       )}
       <div style={{ width: '100%' }}>

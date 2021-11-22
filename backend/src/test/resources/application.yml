@@ -6,3 +6,8 @@ spring:
     password:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+jwt:
+  # The JWT secret key.
+  # CHANGE THIS IN PRODUCTION, and KEEP IT SECRET!
+  secret: "9OXZSztg+yrDtpP+0tW4BRrXMALxUwlMQojsJMEtSJ4="
