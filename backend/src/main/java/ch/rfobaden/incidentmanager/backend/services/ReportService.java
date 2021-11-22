@@ -20,12 +20,9 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
 
-    private final IncidentRepository incidentRepository;
-
     @Autowired
-    public ReportService(ReportRepository reportRepository, IncidentRepository incidentRepository) {
+    public ReportService(ReportRepository reportRepository) {
         this.reportRepository = reportRepository;
-        this.incidentRepository = incidentRepository;
     }
 
     public List<Report> getReports() {
@@ -45,41 +42,24 @@ public class ReportService {
     }
 
     public Report addNewReport(Report report) {
-        boolean incidentExists = incidentRepository.existsById(report.getIncidentId());
-        Incident incidentOfId = incidentRepository.findById(report.getIncidentId()).orElse(null);
-        if (!incidentExists || incidentOfId == null) {
-            throw new IllegalArgumentException("incident not found");
-        }
-        report.setIncident(incidentOfId);
         report.setCreatedAt(LocalDateTime.now());
         report.setUpdatedAt(LocalDateTime.now());
         return reportRepository.save(report);
     }
 
-    public Optional<Report> updateReport(Long reportId, Report report) {
-        Report reportOfId = reportRepository.findById(reportId).orElse(null);
-        if (reportOfId == null) {
-            return Optional.empty();
-        }
-        if (!Objects.equals(report.getIncidentId(), reportId)) {
-            throw new IllegalArgumentException("body id differ from parameter id");
-        }
+    public Optional<Report> updateReport(Report report) {
         report.setUpdatedAt(LocalDateTime.now());
         return Optional.of(reportRepository.save(report));
     }
 
-    public Optional<Report> closeReport(Long reportId, CompletionData completionData) {
-        Report report = reportRepository.findById(reportId).orElse(null);
-        if (report == null) {
-            return Optional.empty();
-        }
+    public Optional<Report> closeReport(Report report, CompletionData completionData) {
         report.setCompletion(completionData.getReason());
-        return updateReport(reportId, report);
+        return updateReport(report);
     }
 
     public Optional<Report> reopenReport(Report report) {
         report.setComplete(true);
-        return updateReport(report.getId(), report);
+        return updateReport(report);
     }
 
     public boolean deleteReportById(Long reportId) {

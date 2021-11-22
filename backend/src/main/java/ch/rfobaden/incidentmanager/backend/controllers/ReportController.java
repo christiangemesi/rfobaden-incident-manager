@@ -68,9 +68,12 @@ public class ReportController {
             @PathVariable("incidentId") Long incidentId,
             @RequestBody Report report
     ) {
-        if (!incidentRepository.existsById(incidentId)) {
+        boolean incidentExists = incidentRepository.existsById(incidentId);
+        Incident incidentOfId = incidentRepository.findById(incidentId).orElse(null);
+        if (!incidentExists || incidentOfId == null) {
             throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
         }
+        report.setIncident(incidentOfId);
         return reportService.addNewReport(report);
     }
 
@@ -81,8 +84,8 @@ public class ReportController {
             @PathVariable("reportId") Long reportId,
             @RequestBody CompletionData completionData
     ) {
-        existsReportOfIncidentId(incidentId, reportId);
-        return reportService.closeReport(reportId, completionData)
+        Report report = existsReportOfIncidentId(incidentId, reportId);
+        return reportService.closeReport(report, completionData)
                 .orElseThrow(() -> (
                         new ApiException(HttpStatus.NOT_FOUND, "incident not found")
                 ));
