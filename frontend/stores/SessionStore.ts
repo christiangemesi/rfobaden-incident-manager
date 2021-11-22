@@ -3,19 +3,27 @@ import { createStore, useStore } from '@/stores/Store'
 import Session from '@/models/Session'
 import UserStore from '@/stores/UserStore'
 
-const initialState: Session = {
-  currentUser: null,
+interface SessionState {
+  session: Session | null
+}
+
+const initialState: SessionState = {
+  session: null,
 }
 
 const SessionStore = createStore(initialState, (getState, setState) => ({
   setSession(token: string, currentUser: User) {
     currentToken = token
     localStorage.setItem(storageKey, token)
+    SessionStore.setCurrentUser(currentUser)
+  },
+  setCurrentUser(currentUser: User) {
     UserStore.save(currentUser)
-    setState((state) => ({
-      ...state,
-      currentUser,
-    }))
+    setState({
+      session: {
+        currentUser,
+      },
+    })
   },
   clear() {
     currentToken = null
@@ -25,9 +33,13 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
 }))
 export default SessionStore
 
-export const useSession = (): Session => (
-  useStore(SessionStore)
-)
+
+export const useSession = (): Session => {
+  const { session } = useStore(SessionStore)
+  return session === null
+    ? { currentUser: null }
+    : session
+}
 
 const storageKey = 'session.token'
 

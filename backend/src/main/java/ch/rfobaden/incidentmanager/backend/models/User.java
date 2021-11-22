@@ -1,12 +1,15 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
@@ -31,16 +34,13 @@ public final class User extends Model {
     @Column(nullable = false)
     private String lastName;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @OneToOne(
-        optional = false,
-        fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL
-    )
     @Valid
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserCredentials credentials;
 
     public String getEmail() {
@@ -82,7 +82,10 @@ public final class User extends Model {
 
     @JsonIgnore
     public void setCredentials(UserCredentials credentials) {
-        this.credentials = credentials;
+        if (this.credentials != credentials) {
+            this.credentials = credentials;
+            credentials.setUser(this);
+        }
     }
 
     @Override

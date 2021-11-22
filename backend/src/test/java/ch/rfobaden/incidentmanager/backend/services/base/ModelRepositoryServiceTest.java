@@ -233,26 +233,6 @@ public abstract class ModelRepositoryServiceTest<
     }
 
     @Test
-    public void testUpdate_createdAtChanged() {
-        // Given
-        var record = generator.generatePersisted();
-        var updatedRecord = generator.copy(record);
-        updatedRecord.setCreatedAt(LocalDateTime.now());
-
-        Mockito.when(repository.findById(record.getId()))
-            .thenReturn(Optional.of(record));
-
-        // When
-        var result = catchThrowable(() -> service.update(updatedRecord));
-
-        // Then
-        assertThat(result)
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("createdAt differs from persisted value");
-        verify(repository, never()).save(any());
-    }
-
-    @Test
     public void testDelete() {
         // Given
         var id = generator.generateId();

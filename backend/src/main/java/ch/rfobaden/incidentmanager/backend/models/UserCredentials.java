@@ -13,7 +13,7 @@ import javax.validation.constraints.Null;
 @Entity
 @Table(name = "user_credentials")
 public final class UserCredentials extends Model {
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "credentials", cascade = CascadeType.ALL)
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
     @Column(nullable = false)
@@ -27,7 +27,10 @@ public final class UserCredentials extends Model {
     }
 
     public void setUser(User user) {
-        this.user = user;
+        if (this.user != user) {
+            this.user = user;
+            user.setCredentials(this);
+        }
     }
 
     public Long getUserId() {

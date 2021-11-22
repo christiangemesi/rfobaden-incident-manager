@@ -5,7 +5,6 @@ import { GetServerSideProps } from 'next'
 import BackendService from '@/services/BackendService'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import User, { parseUser } from '@/models/User'
-import Model from '@/models/base/Model'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import UserStore from '@/stores/UserStore'
@@ -50,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) =
     }
     throw error
   }
-  const [author, authorError] = await BackendService.find<Model & { username: string } | null>('users', incident.authorId)
+  const [author, authorError] = await BackendService.find<User | null>('users', incident.authorId)
   if (authorError !== null && authorError.status !== 404) {
     throw error
   }
@@ -60,10 +59,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) =
       id,
       data: {
         incident,
-        author: author === null ? null : {
-          ...author,
-          name: author.username,
-        },
+        author,
       },
     },
   }

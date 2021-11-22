@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
+
 @Import(TestConfig.class)
 public abstract class ModelRepositoryTest<
     TModel extends Model,
@@ -97,29 +99,17 @@ public abstract class ModelRepositoryTest<
     @Test
     public void testSave_update() {
         // Given
-        var record1 = generator.generatePersisted();
-        var record2 = generator.generatePersisted();
+        var newRecord = generator.generatePersisted();
+        var createdRecord = repository.save(generator.copy(newRecord));
+        var editedRecord = generator.copy(createdRecord);
+        editedRecord.setUpdatedAt(LocalDateTime.now());
 
         // When
-        var result1 = repository.save(record1);
-        record1.setId(result1.getId());
-        record2.setId(result1.getId());
-
-        var result2 = repository.save(record2);
-        var findResult = repository.findById(record1.getId()).orElse(null);
+        var updatedRecord = repository.save(editedRecord);
 
         // Then
-        assertThat(result1).isNotNull();
-        assertThat(result2).isNotNull();
-        assertThat(findResult).isNotNull();
-
-        assertThat(result1.getId())
-            .isEqualTo(result2.getId())
-            .isEqualTo(findResult.getId());
-
-        assertThat(result1).isEqualTo(record1);
-        assertThat(result2).isEqualTo(record2);
-        assertThat(findResult).isEqualTo(result2);
+        assertThat(repository.findById(createdRecord.getId()).orElse(null))
+            .isEqualTo(updatedRecord);
     }
 
     @Test

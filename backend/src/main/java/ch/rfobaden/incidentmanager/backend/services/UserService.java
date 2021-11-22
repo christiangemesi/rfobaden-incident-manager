@@ -43,7 +43,6 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
         credentials.setCreatedAt(LocalDateTime.now());
         credentials.setUpdatedAt(credentials.getCreatedAt());
         credentials.setLastPasswordChangeAt(credentials.getCreatedAt());
-        credentials.setUser(newUser);
         newUser.setCredentials(credentials);
 
         var user = super.create(newUser);

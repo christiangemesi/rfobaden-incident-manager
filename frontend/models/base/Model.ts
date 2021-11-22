@@ -9,6 +9,8 @@ export default interface Model {
 
 export type ModelData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>
 
+export type UpdateData<T> = Omit<T, 'id' | 'createdAt'>
+
 export const parseModel = (data: unknown): Model => {
   const record = data as Model
   return {
