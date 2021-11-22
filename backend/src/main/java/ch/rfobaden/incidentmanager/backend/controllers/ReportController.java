@@ -7,7 +7,6 @@ import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/incidents/{incidentId}/reports")
@@ -50,10 +50,12 @@ public class ReportController {
             @PathVariable("incidentId") Long incidentId, @PathVariable("reportId") Long reportId
     ) {
         boolean incidentExists = incidentRepository.existsById(incidentId);
+        // TODO: I still not fully understand why this check is necessary
         Incident incidentOfId = incidentRepository.findById(incidentId).orElse(null);
         if (!incidentExists || incidentOfId == null) {
-            throw new IllegalArgumentException("incident not found");
+            throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
         }
+        existsReportOfIncidentId(incidentId, reportId);
 
         return reportService.getReportOfIncidentById(incidentId, reportId).orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "report not found")
@@ -62,9 +64,12 @@ public class ReportController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Report addNewReport(@Param("incidentId") Long incidentId, @RequestBody Report report) {
+    public Report addNewReport(
+            @PathVariable("incidentId") Long incidentId,
+            @RequestBody Report report
+    ) {
         if (!incidentRepository.existsById(incidentId)) {
-            throw new IllegalArgumentException("incident not found");
+            throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
         }
         return reportService.addNewReport(report);
     }
@@ -76,9 +81,7 @@ public class ReportController {
             @PathVariable("reportId") Long reportId,
             @RequestBody CompletionData completionData
     ) {
-        if (!incidentRepository.existsById(incidentId)) {
-            throw new IllegalArgumentException("incident not found");
-        }
+        existsReportOfIncidentId(incidentId, reportId);
         return reportService.closeReport(reportId, completionData)
                 .orElseThrow(() -> (
                         new ApiException(HttpStatus.NOT_FOUND, "incident not found")
@@ -91,17 +94,8 @@ public class ReportController {
             @PathVariable("incidentId") Long incidentId,
             @PathVariable("reportId") Long reportId
     ) {
-        if (!incidentRepository.existsById(incidentId)) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "incident not found");
-        }
+        Report report = existsReportOfIncidentId(incidentId, reportId);
 
-        Report report = reportService.getReportById(reportId).orElseThrow(() -> (
-                new ApiException(HttpStatus.NOT_FOUND, "report not found")
-        ));
-
-        if (!report.getIncidentId().equals(incidentId)) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no report with incident id found");
-        }
         return reportService.reopenReport(report).orElseThrow(
                 () -> new ApiException(HttpStatus.NOT_FOUND, "report not found"));
     }
@@ -112,11 +106,23 @@ public class ReportController {
             @PathVariable("incidentId") Long incidentId,
             @PathVariable("reportId") Long reportId
     ) {
-        if (!incidentRepository.existsById(incidentId)) {
-            throw new IllegalArgumentException("incident not found");
-        }
+        existsReportOfIncidentId(incidentId, reportId);
+
         if (!reportService.deleteReportById(reportId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "report not found");
         }
+    }
+
+    // TODO: check method name
+    private Report existsReportOfIncidentId(
+            @PathVariable("incidentId") Long incidentId,
+            @PathVariable("reportId") Long reportId
+    ) {
+        boolean incidentExists = incidentRepository.existsById(incidentId);
+        Report report = reportService.getReportById(reportId).orElse(null);
+        if (!incidentExists || report == null || !Objects.equals(incidentId, report.getIncidentId())) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "no report with incident id found");
+        }
+        return report;
     }
 }
