@@ -229,6 +229,13 @@ public class Report implements Completable {
         return isComplete;
     }
 
+    public Long getCompletionId() {
+        if (completion == null) {
+            return null;
+        }
+        return completion.getId();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -276,6 +283,7 @@ public class Report implements Completable {
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
                 + ", isComplete=" + isComplete
+                + ", completionId=" + getCompletionId()
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';
