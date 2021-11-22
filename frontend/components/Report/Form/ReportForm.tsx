@@ -68,7 +68,7 @@ const ReportForm: React.VFC = () => {
           <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
         <UiForm.Field field={form.addendum}>{(props) => (
-          <UiTextInput {...props} label="Adendum" />
+          <UiTextInput {...props} label="Addendum" />
         )}</UiForm.Field>
         <UiForm.Field field={form.location}>{(props) => (
           <UiTextInput {...props} label="Ort" />
