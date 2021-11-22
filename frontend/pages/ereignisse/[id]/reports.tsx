@@ -1,4 +1,4 @@
-import Report from '@/models/Report'
+import Report, { parseReport } from '@/models/Report'
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import ReportStore, { useReports } from '@/stores/ReportStore'
@@ -17,21 +17,7 @@ interface Props {
 
 const ReportsPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
-    //TODO when backend is done
-    //ReportStore.saveAll(data.reports.map(parseReport))
-    ReportStore.saveAll([
-      {
-        title: 'string',
-        authorId: 0,
-        description: 'string',
-        closeReason: 'string',
-        isClosed: false,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        startsAt: Date.now(),
-        endsAt: Date.now(),
-      },
-    ])
+    ReportStore.saveAll(data.reports.map(parseReport))
   })
 
   const reports = useReports()
@@ -43,12 +29,12 @@ const ReportsPage: React.VFC<Props> = ({ data }) => {
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
-          <ReportForm/>
+          <ReportForm />
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <ReportList reports={reports}/>
+          <ReportList reports={reports} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

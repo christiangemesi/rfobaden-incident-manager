@@ -7,7 +7,7 @@ import User from '@/models/User'
 export default interface Report extends Model {
   id: number
   authorId: number
-  assignedTo: User
+  assignedTo: User | null
   incident: Incident
   title: string
   description: string | null
