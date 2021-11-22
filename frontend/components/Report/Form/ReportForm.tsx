@@ -13,17 +13,15 @@ import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
 const ReportForm: React.VFC = () => {
   const form = useForm<ModelData<Report>>(() => ({
     id: -1,
-    author: -1,
+    authorId: -1,
     assignee: -1,
     //TODO get parrent incident incident: new parentIncident,
     title: '',
     description: '',
     addendum: '',
-    //TODO i dont know why new Date() sometimes works and sometimes it doesnt? :O
-    startsAt: new Date(),
+    startsAt: null,
     updatedAt: new Date(),
-    startsAt: new Date(),
-    endsAt: new Date().setDate(Date.now()),
+    endsAt: null,
     completion: -1,
     isComplete: false,
     location: '',
@@ -32,17 +30,23 @@ const ReportForm: React.VFC = () => {
 
   useValidate(form, (validate) => {
     return ({
+      id: [],
+      authorId: [],
+      assignee: [],
       title: [
         validate.notBlank(),
       ],
       description: [
         validate.notBlank({ allowNull: true }),
       ],
+      addendum: [],
       startsAt: [],
-      authorId: [],
-      closeReason: [],
-      isClosed: [],
+      updatedAt: [],
       endsAt: [],
+      completion: [],
+      isComplete: [],
+      location: [],
+      priority: [],
     })
   })
 
@@ -54,7 +58,6 @@ const ReportForm: React.VFC = () => {
     clearForm(form)
   }
 
-  //TODO should i add all fields from above?
   return (
     <div>
       <form>
@@ -64,14 +67,13 @@ const ReportForm: React.VFC = () => {
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
-        <UiForm.Field field={form.adendum}>{(props) => (
+        <UiForm.Field field={form.addendum}>{(props) => (
           <UiTextInput {...props} label="Adendum" />
         )}</UiForm.Field>
         <UiForm.Field field={form.location}>{(props) => (
           <UiTextInput {...props} label="Ort" />
         )}</UiForm.Field>
         <UiForm.Field field={form.priority}>{(props) => (
-          //TODO what do i pass into Object.values? like how to chose LOW,MEDIUM,HIGH?
           <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} onSubmit={handleSubmit} />

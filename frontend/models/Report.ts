@@ -11,7 +11,7 @@ export default interface Report extends Model {
   incident: Incident
   title: string
   description: string | null
-  adendum: string | null
+  addendum: string | null
   createdAt: Date
   updatedAt: Date
   startsAt: Date | null
