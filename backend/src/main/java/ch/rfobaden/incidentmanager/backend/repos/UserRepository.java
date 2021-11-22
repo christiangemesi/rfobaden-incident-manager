@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * This is the data access layer of the N-Tier pattern.
- */
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("SELECT count(user) FROM User user WHERE LOWER(user.email) = LOWER(:email)")
+    long countByEmail(@Param("email") String email);
 
-    @Query("SELECT user FROM User user WHERE LOWER(user.username) = LOWER(:name)")
-    Optional<User> findOneByName(@Param("name") String name);
+    @Query("SELECT user FROM User user WHERE LOWER(user.email) = LOWER(:email)")
+    Optional<User> findByEmail(@Param("email") String email);
 }

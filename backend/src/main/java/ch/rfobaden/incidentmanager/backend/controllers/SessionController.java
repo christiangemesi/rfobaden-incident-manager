@@ -1,13 +1,20 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Session;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,140 +22,89 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.Objects;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @RestController
+@Validated
 @RequestMapping(path = "api/v1/session")
-public final class SessionController {
-    private static final String cookieName = "rfobaden.incidentmanager.session.token";
+public class SessionController extends AppController {
+    private final AuthenticationManager authManager;
 
     private final UserService userService;
 
-    @Autowired
-    public SessionController(UserService userService) {
+    private final JwtHelper jwtHelper;
+
+    public SessionController(
+        AuthenticationManager authManager,
+        UserService userService,
+        JwtHelper jwtHelper) {
+        this.authManager = authManager;
         this.userService = userService;
+        this.jwtHelper = jwtHelper;
     }
 
     @GetMapping
-    public User find(HttpServletRequest request) {
-        var cookie = findCookie(request);
-        var session = parseSessionFromCookie(cookie);
-        return findSessionUser(session);
+    public SessionData find(HttpServletRequest request) {
+        return getCurrentUser().map((user) -> {
+            var token = request.getHeader("Authorization").substring(7);
+            return new SessionData(token, user);
+        }).orElseGet(() -> {
+            // Making this a 404 (or any other 4XX) would be preferable,
+            // but many browsers show these errors in the console, which we do not want
+            // to happen if we just want to check if the user is logged in.
+            return new SessionData(null, null);
+        });
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(
+    public SessionData create(
         @RequestBody LoginData data,
         HttpServletRequest request,
         HttpServletResponse response
     ) {
-        var user = userService.getUserByName(data.username).orElse(null);
-        if (user == null || !Objects.equals(data.getPassword(), user.getPassword())) {
+        var user = authenticate(data);
+        var token = jwtHelper.encodeUser(user);
+        return new SessionData(token, user);
+    }
+
+    private User authenticate(LoginData data) {
+        try {
+            var token = new UsernamePasswordAuthenticationToken(
+                data.getEmail(),
+                data.getPassword()
+            );
+            var auth = authManager.authenticate(token);
+            return ((WebSecurityConfig.DetailsWrapper) auth.getPrincipal()).getUser();
+        } catch (DisabledException e) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "user is disabled");
+        } catch (LockedException e) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "user is locked");
+        } catch (BadCredentialsException e) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
         }
-        var session = new Session(user.getId());
-        var cookie = new Cookie(cookieName, Session.encode(session));
-        setCookie(cookie, request, response, () -> {
-            if (data.isPersistent) {
-                // Keep it for 10 years.
-                cookie.setMaxAge(315_569_520);
-            } else {
-                // Session cookie - deleted when the browser is closed.
-                cookie.setMaxAge(-1);
-            }
-        });
-        return user;
     }
 
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(HttpServletRequest request, HttpServletResponse response) {
-        var cookie = findCookie(request);
+    @Validated
+    public static final class LoginData {
+        @Email
+        @NotBlank
+        private String email;
 
-        var session = parseSessionFromCookie(cookie);
-
-        // Load the session user just to ensure that it exists.
-        // If it does not, we respond with a 404.
-        findSessionUser(session);
-
-        setCookie(cookie, request, response, () -> {
-            cookie.setMaxAge(0);
-        });
-    }
-
-    private User findSessionUser(Session session) {
-        var user = userService.getUserById(session.getUserId()).orElse(null);
-        if (user == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "no active session");
-        }
-        return user;
-    }
-
-    private static Cookie findCookie(HttpServletRequest request) {
-        var cookies = request.getCookies();
-        if (cookies == null) {
-            cookies = new Cookie[0];
-        }
-        return Arrays.stream(cookies)
-            .filter((it) -> it.getName().equals(cookieName))
-            .findFirst()
-            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "no active session"));
-    }
-
-    private static void setCookie(
-        Cookie cookie,
-        HttpServletRequest request,
-        HttpServletResponse response,
-        Runnable configure
-    ) {
-        cookie.setHttpOnly(true);
-        cookie.setDomain(parseDomainFromRequest(request));
-        cookie.setPath("/api/v1/");
-        cookie.setSecure(request.isSecure());
-        configure.run();
-        response.addCookie(cookie);
-
-        // Add 'SameSite=Lax' to the session cookie.
-        // Spring does currently (2021.10.09) not support setting this attribute.
-        var cookieHeader = response.getHeaders("Set-Cookie").stream().findFirst().orElseThrow();
-        response.setHeader("Set-Cookie", cookieHeader + "; SameSite=Lax");
-    }
-
-    private static Session parseSessionFromCookie(Cookie cookie) {
-        var token = cookie.getValue();
-        var session = Session.decode(token).orElse(null);
-        if (session == null) {
-            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid session token");
-        }
-        return session;
-    }
-
-    private static String parseDomainFromRequest(HttpServletRequest request) {
-        var host = URI.create(request.getRequestURL().toString()).getHost();
-        if (host.startsWith("www.")) {
-            return host.substring(4);
-        }
-        return host;
-    }
-
-    private static class LoginData {
-        private String username;
+        @NotBlank
         private String password;
+
         private boolean isPersistent;
 
-
-        public String getUsername() {
-            return username;
+        public String getEmail() {
+            return email;
         }
 
-        public void setUsername(String username) {
-            this.username = username;
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public String getPassword() {
@@ -167,14 +123,24 @@ public final class SessionController {
         public void setPersistent(boolean persistent) {
             isPersistent = persistent;
         }
+    }
 
-        @Override
-        public String toString() {
-            return "LoginData{"
-                + "username='" + username + '\''
-                + ", password='" + password + '\''
-                + ", isPersistent=" + isPersistent
-                + '}';
+    public static final class SessionData {
+        private final String token;
+        private final User user;
+
+        public SessionData(String token, User user) {
+            this.token = token;
+            this.user = user;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        public String getToken() {
+            return token;
+        }
+
+        public User getUser() {
+            return user;
         }
     }
 }

@@ -1,6 +1,7 @@
 import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 import Id from '@/models/base/Id'
+import { getSessionToken } from '@/stores/SessionStore'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -65,22 +66,28 @@ class BackendService {
   }
 
   private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    const token = getSessionToken()
+    if (token !== null) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
       method: options.method,
       body: JSON.stringify(options.body),
       mode: 'cors',
       // Required for sending cross-origin cookies.
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
     })
     if (res.status < 200 || 299 < res.status) {
       if (res.status >= 400 && res.status <= 499) {
         // Error is caused by the client (us).
         // Let the caller handle it.
-        const data: { message: string } = await res.json()
-        const error = new BackendError(res.status, data.message)
+        const data: { message: string, fields: BackendErrorFields | undefined } = await res.json()
+        const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
       // TODO error handling
@@ -98,9 +105,30 @@ export default new BackendService()
 export type BackendResponse<T> = [T, BackendError | null]
 
 export class BackendError extends Error {
-  constructor(public status: number, public error: string) {
-    super(`[${status}] ${error}`)
+  constructor(public status: number, public error: string, public fields: BackendErrorFields | null) {
+    super(`[${status}] ${error}${BackendError.makeFieldsMessage(fields)}`)
+  }
+
+  private static makeFieldsMessage(fields: BackendErrorFields | null): string {
+    if (fields == null) {
+      return ''
+    }
+    let message = ''
+    for (const field of Object.keys(fields)) {
+      if (message.length !== 0) {
+        message += ', '
+      }
+      const value = fields[field]
+      if (Array.isArray(value)) {
+        message += `${field}: [${value.join(', ')}]`
+      } else {
+        message += `${field}: ${this.makeFieldsMessage(value)}`
+      }
+    }
+    return ` (${message})`
   }
 }
 
-
+export interface BackendErrorFields {
+  [field: string]: string[] | BackendErrorFields
+}

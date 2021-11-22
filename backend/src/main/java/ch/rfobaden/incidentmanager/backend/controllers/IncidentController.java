@@ -48,6 +48,18 @@ public class IncidentController {
         return incidentService.addNewIncident(incident);
     }
 
+    @PutMapping("{incidentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident updateIncident(
+        @PathVariable("incidentId") Long incidentId,
+        @RequestBody Incident incident
+    ) {
+        return incidentService.updateIncident(incidentId, incident)
+            .orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+            ));
+    }
+
     @PutMapping("{incidentId}/close")
     @ResponseStatus(HttpStatus.OK)
     public Incident closeIncident(
@@ -55,6 +67,15 @@ public class IncidentController {
         @RequestBody CloseIncidentData closeData
     ) {
         return incidentService.closeIncident(incidentId, closeData.getCloseReason())
+            .orElseThrow(() -> (
+                new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+            ));
+    }
+
+    @PutMapping("{incidentId}/reopen")
+    @ResponseStatus(HttpStatus.OK)
+    public Incident reopenIncident(@PathVariable("incidentId") Long incidentId) {
+        return incidentService.reopenIncident(incidentId)
             .orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
             ));

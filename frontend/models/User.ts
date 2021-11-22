@@ -1,7 +1,21 @@
-import Model from '@/models/base/Model'
+import Model, { parseModel } from '@/models/base/Model'
 
 export default interface User extends Model {
-  name: string
+  email: string
+  firstName: string
+  lastName: string
+  role: UserRole
 }
 
-export const parseUser = (data: unknown): User => data as User
+export enum UserRole {
+  CREATOR = 'CREATOR',
+  ADMIN = 'ADMIN',
+}
+
+export const parseUser = (data: unknown): User => {
+  const user = data as User
+  return {
+    ...user,
+    ...parseModel(data),
+  }
+}

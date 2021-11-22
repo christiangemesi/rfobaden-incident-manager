@@ -1,61 +1,64 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Controller contains all the API mapping. This is part of the N-Tier pattern.
- */
 @RestController
 @RequestMapping(path = "api/v1/users")
-public class UserController {
+public class UserController extends ModelController<User, UserService> {
+    private final JwtHelper jwtHelper;
 
-    private final UserService userService;
-
-    // This is Dependency injection
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserService service, JwtHelper jwtHelper) {
+        super(service);
+        this.jwtHelper = jwtHelper;
     }
 
-    @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
-    }
-
-
-    @GetMapping(value = "{userId}")
-    public User getUserById(@PathVariable(value = "userId") Long userId) {
-        return userService.getUserById(userId).orElseThrow(() -> (
-                new ApiException(HttpStatus.NOT_FOUND, "user not found")
+    @PutMapping("/{id}/password")
+    @ResponseStatus(HttpStatus.OK)
+    public SessionController.SessionData updatePassword(
+        @PathVariable("id") Long id,
+        @RequestBody PasswordData data
+    ) {
+        var user = service.updatePassword(id, data.password).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "user not found")
         ));
+
+        // Create a new session token to send back to the client.
+        // Sessions of other clients will be invalid from here on out.
+        var token = jwtHelper.encodeUser(user);
+
+        return new SessionController.SessionData(token, user);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User addNewUser(@RequestBody User user) {
-        return userService.addNewUser(user);
-    }
+    public static final class PasswordData {
+        private String password;
 
-    @DeleteMapping(value = "{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(
-        @PathVariable(value = "userId") Long userId) {
-        if (!userService.deleteUserById(userId)) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "user not found");
+        public PasswordData() {}
+
+        public PasswordData(String password) {
+            this.password = password;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }

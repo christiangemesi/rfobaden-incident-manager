@@ -1,47 +1,104 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * This is a JPA Entity that will be represented in the database.
- */
+import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @Entity
 @Table(name = "user")
-public class User {
+public final class User extends Model {
+    @Email
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String username;
-    private String password;
+    @NotBlank
+    @Column(nullable = false)
+    private String firstName;
 
-    public User() {
+    @NotBlank
+    @Column(nullable = false)
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Valid
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserCredentials credentials;
+
+    public String getEmail() {
+        return email;
     }
 
-    public User(long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @JsonIgnore
+    public UserCredentials getCredentials() {
+        return credentials;
+    }
+
+    @JsonIgnore
+    public void setCredentials(UserCredentials credentials) {
+        if (this.credentials != credentials) {
+            this.credentials = credentials;
+            credentials.setUser(this);
+        }
     }
 
     @Override
     public String toString() {
         return "User{"
-                + "id="
-                + id
-                + ", username='" + username + '\''
-                + ", password='" + password + '\''
-                + '}';
+            + "id=" + getId()
+            + ", email='" + email + '\''
+            +  ", firstName='" + firstName + '\''
+            + ", lastName='" + lastName + '\''
+            + ", role=" + role
+            + ", createdAt=" + getCreatedAt()
+            + ", updatedAt=" + getUpdatedAt()
+            + '}';
     }
 
     @Override
@@ -53,37 +110,20 @@ public class User {
             return false;
         }
         var that = (User) other;
-        return id == that.id
-                && Objects.equals(username, that.username)
-                && Objects.equals(password, that.password);
+        return equalsModel(that)
+            && Objects.equals(email, that.email)
+            && Objects.equals(firstName, that.firstName)
+            && Objects.equals(lastName, that.lastName)
+            && Objects.equals(role, that.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password);
+        return Objects.hash(modelHashCode(), email, firstName, lastName, role);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public enum Role {
+        CREATOR,
+        ADMIN,
     }
 }

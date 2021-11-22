@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback } from 'react'
 import { UiFormInputProps } from '@/components/Ui/Form/Field/UiFormField'
 import styled from 'styled-components'
+import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 interface Props extends UiFormInputProps<string | null> {
   label?: string
@@ -35,13 +36,7 @@ const UiTextInput: React.VFC<Props> = ({
         </span>
       )}
       <StyledInput value={value ?? ''} onChange={handleChange} type={type} />
-      <Errors>
-        {errors.map((error) => (
-          <div key={error}>
-            {error}
-          </div>
-        ))}
-      </Errors>
+      <UiInputErrors errors={errors} />
     </Label>
   )
 }
@@ -70,12 +65,4 @@ const StyledLabel = styled.label`
     font-size: 0.9rem;
     font-weight: bold;
   }
-`
-
-const Errors = styled.div`
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  color: red;
-  font-size: 0.9rem;
 `

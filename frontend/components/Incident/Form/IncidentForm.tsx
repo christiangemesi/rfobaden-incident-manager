@@ -7,15 +7,21 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
 
-const IncidentForm: React.VFC = () => {
+interface Props {
+  incident: Incident | null
+  onClose?: () => void
+}
+
+const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null }) => {
   const form = useForm<ModelData<Incident>>(() => ({
-    title: '',
-    description: null,
-    authorId: -1,
-    closeReason: null,
-    isClosed: false,
-    startsAt: null,
-    endsAt: null,
+    title: incident?.title ?? '',
+    description: incident?.description ?? null,
+    authorId: incident?.authorId ?? -1,
+    closeReason: incident?.closeReason ?? null,
+    isClosed: incident?.isClosed ?? false,
+    closedAt: incident?.closedAt ?? null,
+    startsAt: incident?.startsAt ?? null,
+    endsAt: incident?.endsAt ?? null,
   }))
 
   useValidate(form, (validate) => ({
@@ -28,30 +34,36 @@ const IncidentForm: React.VFC = () => {
     startsAt: [],
     authorId: [],
     closeReason: [],
+    closedAt: [],
     isClosed: [],
     endsAt: [],
   }))
 
   const handleSubmit = async (incidentData: ModelData<Incident>) => {
-    // TODO correct api type
-    // TODO error handling
-    const [data]: BackendResponse<Incident> = await BackendService.create('incidents', incidentData)
+    const [data]: BackendResponse<Incident> = incident === null ? (
+      await BackendService.create('incidents', incidentData)
+    ) : (
+      await BackendService.update('incidents', incident.id, incidentData)
+    )
 
-    const incident = parseIncident(data)
-    IncidentStore.save(incident)
+    const newIncident = parseIncident(data)
+    IncidentStore.save(newIncident)
     clearForm(form)
+    if (handleClose !== null) {
+      handleClose()
+    }
   }
 
   return (
     <div>
       <form>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel"/>
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung"/>
+          <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit}/>
+        <UiForm.Buttons form={form} onSubmit={handleSubmit} onCancel={handleClose ?? undefined} />
       </form>
     </div>
   )

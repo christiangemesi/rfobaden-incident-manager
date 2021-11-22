@@ -10,3 +10,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+jwt:
+  # The JWT secret key.
+  # CHANGE THIS IN PRODUCTION, and KEEP IT SECRET!
+  secret: "Y4qqQGrNiVToB9zIyzub/7HHV4ZleHsQA/D25kbYVbY="
