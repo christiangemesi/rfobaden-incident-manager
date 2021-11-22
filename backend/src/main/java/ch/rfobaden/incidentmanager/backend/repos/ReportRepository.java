@@ -19,5 +19,5 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     );
 
     @Query("SELECT report FROM Report report WHERE report.incident.id = :incidentId")
-    Optional<List<Report>> findAllByIncidentId(@Param("incidentId") Long incidentId);
+    List<Report> findAllByIncidentId(@Param("incidentId") Long incidentId);
 }

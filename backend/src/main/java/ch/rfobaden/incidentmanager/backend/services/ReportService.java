@@ -37,7 +37,7 @@ public class ReportService {
         return reportRepository.findByIncidentIdAndId(incidentId, reportId);
     }
 
-    public Optional<List<Report>> getAllReportsOfIncidentById(Long incidentId) {
+    public List<Report> getAllReportsOfIncidentById(Long incidentId) {
         return reportRepository.findAllByIncidentId(incidentId);
     }
 
