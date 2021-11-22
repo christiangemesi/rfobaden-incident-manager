@@ -41,3 +41,9 @@ export const parseReport = (data: unknown): Report => {
 const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
 }
+
+export enum ReportPriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
