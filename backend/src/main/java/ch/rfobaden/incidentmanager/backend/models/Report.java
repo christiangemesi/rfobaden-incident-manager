@@ -63,7 +63,7 @@ public class Report implements Completable {
     private String location;
 
     @Column(nullable = false)
-    private Priority priority = Priority.MEDIUM;
+    private Priority priority;
 
     public Report() {
     }
