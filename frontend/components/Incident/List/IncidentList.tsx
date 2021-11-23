@@ -5,6 +5,7 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import * as ReactDOM from 'react-dom'
+import Link from 'next/link'
 
 interface Props {
   incidents: Incident[]
@@ -104,6 +105,13 @@ const IncidentListItem: React.VFC<IncidentListItemProps> = ({ incident, onEdit: 
       <StyledTd>
         {incident.isClosed ? 'Closed' : 'Open'}
       </StyledTd>
+      <StyledTdSmall>
+        <StyledButton type="button">
+          <Link href={`/ereignisse/${incident.id}/meldungen`}>
+            <a>Meldungen</a>
+          </Link>
+        </StyledButton>
+      </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={() => handleEdit(incident)}>
           Bearbeiten

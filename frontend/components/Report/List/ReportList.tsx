@@ -1,86 +1,137 @@
-import Report from '@/models/Report'
 import React from 'react'
+import Report, { parseReport } from '@/models/Report'
 import styled from 'styled-components'
+import BackendService, { BackendResponse } from '@/services/BackendService'
+import ReportStore from '@/stores/ReportStore'
+import { useUser } from '@/stores/UserStore'
 
 interface Props {
   reports: Report[]
+  onEdit?: (report: Report) => void
 }
 
-const ReportList: React.VFC<Props> = ({ reports }) => {
+const ReportList: React.VFC<Props> = ({ reports, onEdit: handleEdit }) => {
   return (
-    <div>
-      <StyledTable>
-        <thead>
-          <StyledTr>
-            <StyledTh>
-              Meldung
-            </StyledTh>
-            <StyledTh>
-            </StyledTh>
-            <StyledTh>
-            </StyledTh>
-          </StyledTr>
-        </thead>
-        <tbody>
-          <thead>
-            {reports.map((report) => (
-              <ReportListItem key={report.id} report={report} />
-            ))}
-          </thead>
-        </tbody>
-      </StyledTable>
-    </div>
+    <StyledTable>
+      <thead>
+        <StyledTr>
+          <StyledTh>
+            Report
+          </StyledTh>
+          <StyledTh>
+            Status
+          </StyledTh>
+          <StyledTh>
+            Priorität
+          </StyledTh>
+          <StyledTh>
+            Ersteller
+          </StyledTh>
+          <StyledTh>
+            Zuweisung
+          </StyledTh>
+        </StyledTr>
+      </thead>
+      <tbody>
+        {reports.map((report) => (
+          <ReportListItem key={report.id} report={report} onEdit={handleEdit} />
+        ))}
+      </tbody>
+    </StyledTable>
   )
+
 }
 export default ReportList
 
-
-
 interface ReportListItemProps {
   report: Report
+  onEdit?: (report: Report) => void
 }
 
-const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
+
+const ReportListItem: React.VFC<ReportListItemProps> = ({ report, onEdit: handleEdit }) => {
+  const author = useUser(report.authorId)
+  const assignee = useUser(report.assigneeId)
+
+  const handleDelete = async () => {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
+      ReportStore.remove(report.id)
+    }
+  }
+
+  const handleComplete = async () => {
+    const reason = prompt(`Wieso schliessen sie das "${report.title}"?`, 'Fertig')
+    if (reason != null && reason.length !== 0) {
+      const [data, error]: BackendResponse<Report> = await BackendService.update(
+        `incidents/${report.incidentId}/reports/${report.id}/complete`,
+        { reason: reason },
+      )
+      if (error !== null) {
+        throw error
+      }
+      console.log(data)
+      ReportStore.save(parseReport(data))
+    }
+  }
+
+  const handleReopen = async () => {
+    const [data, error]: BackendResponse<Report> = await BackendService.update(
+      `incidents/${report.incidentId}/reports/${report.id}/reopen`, {}
+    )
+    if (error !== null) {
+      throw error
+    }
+    ReportStore.save(parseReport(data))
+  }
+
   return (
     <StyledTr>
       <StyledTd>
         {report.title}
       </StyledTd>
       <StyledTd>
-        {report.incident}
+        {report.isComplete ? 'Abgeschlossen' : 'Aktiv'}
       </StyledTd>
       <StyledTd>
-        {report.createdAt.toLocaleString()}
+        {report.priority}
       </StyledTd>
       <StyledTd>
-        {report.updatedAt.toLocaleString()}
+        {author === null ? '-' : (
+          `${author.firstName} ${author.lastName}`
+        )}
       </StyledTd>
       <StyledTd>
-        {report.assigneeId}
+        {assignee === null ? '-' : (
+          `${assignee.firstName} ${assignee.lastName}`
+        )}
       </StyledTd>
+
       <StyledTdSmall>
-        <StyledButton type="button">
+        <StyledButton type="button" onClick={handleEdit && (() => handleEdit(report))}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button">
-          Schliessen
-        </StyledButton>
+        {report.isComplete ? (
+          <StyledButton type="button" onClick={handleReopen}>
+            Öffnen
+          </StyledButton>
+        ) : (
+          <StyledButton type="button" onClick={handleComplete}>
+            Schliessen
+          </StyledButton>
+        )}
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button">
+        <StyledButton type="button" onClick={handleDelete}>
           Löschen
-        </StyledButton>
-      </StyledTdSmall>
-      <StyledTdSmall>
-        <StyledButton type="button">
-          Drucken
         </StyledButton>
       </StyledTdSmall>
     </StyledTr>
   )
 }
+
 
 const StyledTable = styled.table`
   display: block;
@@ -103,7 +154,7 @@ const StyledTh = styled.th`
   text-align: left;
 `
 const StyledTd = styled.td`
-  width: 100%;
+  width: 10%;
   padding: 0.5rem;
   vertical-align: middle;
 `
@@ -114,3 +165,5 @@ const StyledButton = styled.button`
   display: block;
   width: 100%;
 `
+
+

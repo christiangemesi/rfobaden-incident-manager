@@ -1,7 +1,7 @@
-import User from '@/models/User'
+import { parseUser } from '@/models/User'
 import { createModelStore } from '@/stores/Store'
 
-const [UserStore, useUsers, useUser] = createModelStore<User>()({})
+const [UserStore, useUsers, useUser] = createModelStore(parseUser)
 export default UserStore
 
 export {

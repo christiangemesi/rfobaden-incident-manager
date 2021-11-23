@@ -108,7 +108,13 @@ export const useValidate = <T>(
       }
 
       fieldUpdates[key] = { errors: []}
-      for (const validate of validators[key]) {
+      const fieldValidators = validators[key]
+      if (fieldValidators === undefined) {
+        // The form value contains fields not actually managed by the form,
+        // so we just skip them.
+        continue
+      }
+      for (const validate of fieldValidators) {
         const message = validate(form.value[key], form.value)
         if (message !== true) {
           errorCount += 1

@@ -19,6 +19,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
     const token = getSessionToken()
     if (token === null) {
+      SessionStore.clear()
       return
     }
     const [data, error] = await BackendService.find<SessionResponse>('session')

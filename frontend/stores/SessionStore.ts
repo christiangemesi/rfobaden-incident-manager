@@ -28,7 +28,7 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
   clear() {
     currentToken = null
     localStorage.removeItem(storageKey)
-    setState(initialState)
+    setState({ session: { currentUser: null }})
   },
 }))
 export default SessionStore
@@ -39,6 +39,14 @@ export const useSession = (): Session => {
   return session === null
     ? { currentUser: null }
     : session
+}
+
+export const useCurrentUser = (): User => {
+  const { currentUser } = useSession()
+  if (currentUser === null) {
+    throw new Error('not signed in')
+  }
+  return currentUser
 }
 
 const storageKey = 'session.token'
