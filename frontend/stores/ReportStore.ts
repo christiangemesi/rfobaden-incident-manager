@@ -1,4 +1,4 @@
-import { createModelStore, useStored } from '@/stores/Store'
+import { createModelStore } from '@/stores/Store'
 import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
@@ -11,8 +11,8 @@ export {
   useReport,
 }
 
-export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => {
-  return useStored(ReportStore, (reports) => (
+export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
+  useReports((reports) => (
     reports.filter((report) => report.incidentId === incidentId)
   ))
-}
+)

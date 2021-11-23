@@ -3,6 +3,7 @@ import Report, { parseReport } from '@/models/Report'
 import styled from 'styled-components'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
+import { useUser } from '@/stores/UserStore'
 
 interface Props {
   reports: Report[]
@@ -14,22 +15,30 @@ const ReportList: React.VFC<Props> = ({ reports }) => {
       <thead>
         <StyledTr>
           <StyledTh>
-          Report
+            Report
           </StyledTh>
           <StyledTh>
+            Status
           </StyledTh>
           <StyledTh>
+            Priorität
+          </StyledTh>
+          <StyledTh>
+            Ersteller
+          </StyledTh>
+          <StyledTh>
+            Zuweisung
           </StyledTh>
         </StyledTr>
       </thead>
       <tbody>
         {reports.map((report) => (
-          <ReportListItem key={report.id} report={report}/>
+          <ReportListItem key={report.id} report={report} />
         ))}
       </tbody>
     </StyledTable>
   )
-  
+
 }
 export default ReportList
 
@@ -39,9 +48,12 @@ interface ReportListItemProps {
 
 
 const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
+  const author = useUser(report.authorId)
+  const assignee = useUser(report.assigneeId)
+
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
-      await BackendService.delete('reports', report.id)
+      await BackendService.delete(`/incidents/${report.incidentId}/reports`, report.id)
       ReportStore.remove(report.id)
     }
   }
@@ -49,9 +61,10 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
   const handleClose = async () => {
     const closeReason = prompt(`Wieso schliessen sie das "${report.title}"?`, 'Fertig')
     if (closeReason != null && closeReason.length !== 0) {
-      const [data, error]: BackendResponse<Report> = await BackendService.update(`reports/${report.id}/close`, {
-        closeReason: closeReason,
-      })
+      const [data, error]: BackendResponse<Report> =
+        await BackendService.update(`/incidents/${report.incidentId}/reports/${report.id}/close`, {
+          reason: closeReason,
+        })
       if (error !== null) {
         throw error
       }
@@ -65,46 +78,40 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
         {report.title}
       </StyledTd>
       <StyledTd>
-        {report.createdAt.toLocaleString()}
+        {report.isComplete ? 'Abgeschlossen' : 'Aktiv'}
       </StyledTd>
       <StyledTd>
-        {report.updatedAt.toLocaleString()}
+        {report.priority}
       </StyledTd>
       <StyledTd>
-        {report.isClosed ? 'Closed' : 'Open'}
+        {author === null ? '-' : (
+          `${author.firstName} ${author.lastName}`
+        )}
       </StyledTd>
+      <StyledTd>
+        {assignee === null ? '-' : (
+          `${assignee.firstName} ${assignee.lastName}`
+        )}
+      </StyledTd>
+
       <StyledTdSmall>
         <StyledButton type="button">
-            Bearbeiten
+          Bearbeiten
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleClose}>
-            Schliessen
+          Schliessen
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleDelete}>
-            Löschen
+          Löschen
         </StyledButton>
       </StyledTdSmall>
-
-      <StyledTdSmall>
-        <StyledTd>
-          Priority
-        </StyledTd>
-      </StyledTdSmall>
-
-      <StyledTdSmall>
-        <StyledTd>
-          Assignee
-        </StyledTd>
-      </StyledTdSmall>
-
     </StyledTr>
   )
 }
-
 
 
 const StyledTable = styled.table`
@@ -128,7 +135,7 @@ const StyledTh = styled.th`
   text-align: left;
 `
 const StyledTd = styled.td`
-  width: 100%;
+  width: 10%;
   padding: 0.5rem;
   vertical-align: middle;
 `

@@ -7,56 +7,68 @@ import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import ReportStore from '@/stores/ReportStore'
 import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
+import Incident from '@/models/Incident'
+import UserStore, { useUsers } from '@/stores/UserStore'
+import User from '@/models/User'
+import Id from '@/models/base/Id'
 
+interface Props {
+  incident: Incident
+}
 
-
-const ReportForm: React.VFC = () => {
+const ReportForm: React.VFC<Props> = ({ incident }) => {
   const form = useForm<ModelData<Report>>(() => ({
-    id: -1,
-    authorId: -1,
-    assignee: -1,
-    //TODO get parrent incident incident: new parentIncident,
     title: '',
-    description: '',
-    addendum: '',
+    description: null,
+    addendum: null,
+    location: null,
+    priority: ReportPriority.LOW,
+    incidentId: incident.id,
+    authorId: -1,
+    assigneeId: null,
     startsAt: null,
-    updatedAt: new Date(),
     endsAt: null,
-    completion: -1,
+    completion: null,
     isComplete: false,
-    location: '',
-    priority: '',
   }))
 
   useValidate(form, (validate) => {
     return ({
-      id: [],
-      authorId: [],
-      assignee: [],
       title: [
         validate.notBlank(),
       ],
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      addendum: [],
+      addendum: [
+        validate.notBlank({ allowNull: true }),
+      ],
+      location: [
+        validate.notBlank({ allowNull: true }),
+      ],
+      priority: [],
+      incidentId: [],
+      authorId: [],
+      assigneeId: [],
       startsAt: [],
-      updatedAt: [],
       endsAt: [],
       completion: [],
       isComplete: [],
-      location: [],
-      priority: [],
     })
   })
 
-  const handleSubmit = async (reportData: ModelData<Report>) => {
-    const [data]: BackendResponse<Report> = await BackendService.create('reports', reportData)
-
-    const report = parseReport(data)
-    ReportStore.save(report)
+  const handleSubmit = async (formData: ModelData<Report>) => {
+    const [data, error]: BackendResponse<Report> = await BackendService.create(
+      `incidents/${incident.id}/reports`, formData
+    )
+    if (error !== null) {
+      throw error
+    }
+    ReportStore.save(parseReport(data))
     clearForm(form)
   }
+
+  const userIds = useUsers((users) => users.map(({ id }) => id))
 
   return (
     <div>
@@ -76,11 +88,19 @@ const ReportForm: React.VFC = () => {
         <UiForm.Field field={form.priority}>{(props) => (
           <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
         )}</UiForm.Field>
+        <UiForm.Field field={form.assigneeId}>{(props) => (
+          <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+        )}</UiForm.Field>
         <UiForm.Buttons form={form} onSubmit={handleSubmit} />
       </form>
     </div>
   )
-
-
 }
 export default ReportForm
+
+const mapUserIdToName = (id: Id<User>): string | null => {
+  const user = UserStore.find(id)
+  return user === null
+    ? null
+    : `${user.firstName} ${user.lastName}`
+}

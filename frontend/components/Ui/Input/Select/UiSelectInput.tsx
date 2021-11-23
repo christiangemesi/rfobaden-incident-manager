@@ -6,8 +6,8 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 interface Props<T> extends UiFormInputProps<T | null> {
   label?: string
   options: T[]
-  optionValue?: keyof T | ((option: T) => string | number)
-  optionName?: keyof T | ((option: T) => string | number)
+  optionValue?: keyof T | ((option: T) => string | number | null)
+  optionName?: keyof T | ((option: T) => string | number | null)
 }
 
 const UiSelectInput = <T,>({
@@ -22,20 +22,31 @@ const UiSelectInput = <T,>({
   const getOptionValue = useOptionAttribute(optionValue)
   const getOptionName = useOptionAttribute(optionName)
 
-  const optionMapping: Map<string | number, T> = useMemo(() => {
-    const mapping = new Map<string | number, T>()
+  const optionMapping: Map<string, T> = useMemo(() => {
+    const mapping = new Map<string, T>()
     for (const option of options) {
       const optionValue = getOptionValue(option)
-      if (mapping.has(optionValue)) {
+      if (optionValue === null) {
+        throw new Error(`option has no value: ${option}`)
+      }
+      const key = `${optionValue}`
+      if (mapping.has(key)) {
         throw new Error(`duplicate option value: ${optionValue}`)
       }
-      mapping.set(optionValue, option)
+      mapping.set(key, option)
     }
     return mapping
   }, [options, getOptionValue])
 
   const handleChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     const optionValue = e.target.value
+    if (optionValue.length === 0) {
+      // Default, empty option. Set the value to null.
+      if (setValue) {
+        setValue(null as unknown as T)
+      }
+      return
+    }
     const option = optionMapping.get(optionValue)
     if (option === undefined) {
       throw new Error(`unknown option value: ${optionValue}`)
@@ -55,9 +66,10 @@ const UiSelectInput = <T,>({
         </span>
       )}
       <StyledSelect
-        value={value === null ? undefined : getOptionValue(value)}
+        value={value === null ? undefined : getOptionValue(value) ?? undefined}
         onChange={handleChange}
       >
+        <option />
         {[...optionMapping.entries()].map(([optionValue, option]) => (
           <option key={optionValue} value={optionValue}>
             {getOptionName(option)}
@@ -73,13 +85,13 @@ export default UiSelectInput
 type OptionAttribute<T> =
   | undefined
   | keyof T
-  | ((option: T) => string | number)
+  | ((option: T) => string | number | null)
 
-const useOptionAttribute = <T,>(attr: OptionAttribute<T>): (option: T) => string | number => {
+const useOptionAttribute = <T,>(attr: OptionAttribute<T>): (option: T) => string | number | null => {
   return useMemo(() => {
     if (attr === undefined) {
       return (option) => {
-        if (typeof option === 'string' || typeof option === 'number') {
+        if (typeof option === 'string' || typeof option == 'number') {
           return option
         }
         throw new Error(`option is not a string nor a number: ${option}`)
@@ -90,7 +102,7 @@ const useOptionAttribute = <T,>(attr: OptionAttribute<T>): (option: T) => string
     }
     return (option) => {
       const value = option[attr]
-      if (typeof value === 'string' || typeof value === 'number') {
+      if (typeof value === 'string' || typeof value == 'number') {
         return value
       }
       throw new Error(`option value '${option}' is not a string nor a number: ${value}`)

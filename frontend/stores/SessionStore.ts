@@ -41,6 +41,14 @@ export const useSession = (): Session => {
     : session
 }
 
+export const useCurrentUser = (): User => {
+  const { currentUser } = useSession()
+  if (currentUser === null) {
+    throw new Error('not signed in')
+  }
+  return currentUser
+}
+
 const storageKey = 'session.token'
 
 /**

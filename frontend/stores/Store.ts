@@ -22,46 +22,50 @@ export const useStore = <T>(store: Store<T>): T => {
   return globalState
 }
 
-export const useStored = <M extends Model, T>(
-  store: ModelStore<M>,
-  transform: (records: M[]) => T,
-): T => {
-  const { records } = useStore(store)
-  const [value, setValue] = useState<T>(() => {
-    return transform(Object.values(records))
-  })
-  useUpdateEffect(() => {
-    setValue(transform(Object.values(records)))
-  }, [records, setValue])
-  return value
-}
-
 interface UseRecords<T> {
   (ids?: Id<T>[]): T[]
+  <O>(transform: (records: T[]) => O): O
 }
 
-const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (ids) => {
-  const [records, setRecords] = useState([] as T[])
-  const state = useStore(store)
-  const idSet = useMemo(() => ids === undefined ? null : new Set(ids), [ids])
-  useEffect(() => {
-    let records = Object.values(state.records)
-    if (idSet !== null) {
-      records = records.filter(({ id }) => idSet.has(id))
-    }
-    setRecords(records)
-  }, [state, idSet])
-  return records
-}
+const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (
+  <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O)) => {
+    const useAction = useMemo(() => {
+      if (idsOrTransform === undefined) {
+        return (): T[] => {
+          const { records } = useStore(store)
+          return useMemo(() => Object.values(records), [records])
+        }
+      }
+      if (Array.isArray(idsOrTransform)) {
+        const ids: Id<T>[] = idsOrTransform
+        return (): T[] => {
+          const { records } = useStore(store)
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          return useMemo(() => store.list(ids), [records])
+        }
+      }
+
+      const transform: ((records: T[]) => O) = idsOrTransform
+      return (): O => {
+        const { records } = useStore(store)
+        return useMemo(() => transform(Object.values(records)), [records])
+      }
+    }, [idsOrTransform])
+    return useAction()
+  }
+)
 
 
 interface UseRecord<T> {
-  (id: Id<T>): T | null
+  (id: Id<T> | null): T | null
   (record: T): T
 }
 
 const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> => (idOrRecord) => {
   const useAction = useMemo(() => {
+    if (idOrRecord === null) {
+      return () => null as unknown as T
+    }
     if (isId(idOrRecord)) {
       return (): T => {
         const { records } = useStore(store)
