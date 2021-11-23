@@ -1,11 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.controllers.data.CompletionData;
-import ch.rfobaden.incidentmanager.backend.models.Completable;
 import ch.rfobaden.incidentmanager.backend.models.Completion;
-import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
-import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,16 +25,16 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
+    public List<Report> getReportsOfIncident(Long incidentId) {
+        return reportRepository.findAllOfIncident(incidentId);
+    }
+
     public Optional<Report> getReportById(Long reportId) {
         return reportRepository.findById(reportId);
     }
 
     public Optional<Report> getReportOfIncidentById(Long incidentId, Long reportId) {
-        return reportRepository.findByIncidentIdAndId(incidentId, reportId);
-    }
-
-    public List<Report> getAllReportsOfIncidentById(Long incidentId) {
-        return reportRepository.findAllByIncidentId(incidentId);
+        return reportRepository.findByIdOfIncident(incidentId, reportId);
     }
 
     public Report addNewReport(Report report) {
@@ -47,19 +43,59 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    public Optional<Report> updateReport(Report report) {
+    public Optional<Report> updateReport(Long id, Report report) {
+        var persistentReport = getReportById(id).orElse(null);
+        if (persistentReport == null) {
+            return Optional.empty();
+        }
+
+        if (report.getId() != null && !Objects.equals(report.getId(), id)) {
+            throw new IllegalArgumentException("can't update report id");
+        }
+        report.setId(id);
+
+        if (
+            report.isComplete() != persistentReport.isComplete()
+                || report.getCompletion() != null
+                && !Objects.equals(report.getCompletion(), persistentReport.getCompletion())
+        ) {
+            throw new IllegalArgumentException("can't update report completion");
+        }
+        report.setComplete(persistentReport.isComplete());
+        report.setCompletion(persistentReport.getCompletion());
+
+        report.setIncident(persistentReport.getIncident());
+        report.setCreatedAt(persistentReport.getCreatedAt());
         report.setUpdatedAt(LocalDateTime.now());
         return Optional.of(reportRepository.save(report));
     }
 
-    public Optional<Report> closeReport(Report report, CompletionData completionData) {
-        report.setCompletion(completionData.getReason());
-        return updateReport(report);
+    public Optional<Report> closeReportOfIncident(Long incidentId, Long id, String reason) {
+        var report = getReportOfIncidentById(incidentId, id).orElse(null);
+        if (report == null) {
+            return Optional.empty();
+        }
+
+        var completion = new Completion();
+        completion.setReason(reason);
+        completion.setCreatedAt(LocalDateTime.now());
+        completion.setPrevious(report.getCompletion());
+
+        report.setCompletion(completion);
+        report.setComplete(true);
+        report.setUpdatedAt(LocalDateTime.now());
+
+        return Optional.of(reportRepository.save(report));
     }
 
-    public Optional<Report> reopenReport(Report report) {
-        report.setComplete(true);
-        return updateReport(report);
+    public Optional<Report> reopenReportOfIncident(Long incidentId, Long id) {
+        var report = getReportOfIncidentById(incidentId, id).orElse(null);
+        if (report == null) {
+            return Optional.empty();
+        }
+        report.setComplete(false);
+        report.setUpdatedAt(LocalDateTime.now());
+        return Optional.of(reportRepository.save(report));
     }
 
     public boolean deleteReportById(Long reportId) {

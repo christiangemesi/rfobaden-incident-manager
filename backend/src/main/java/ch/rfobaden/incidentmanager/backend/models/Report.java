@@ -106,6 +106,10 @@ public class Report implements Completable {
         return assignee;
     }
 
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -113,8 +117,11 @@ public class Report implements Completable {
         return assignee.getId();
     }
 
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
+    public void setAssigneeId(Long assigneeId) {
+        if (this.assignee == null) {
+            this.assignee = new User();
+        }
+        this.assignee.setId(assigneeId);
     }
 
     @JsonIgnore
@@ -207,11 +214,8 @@ public class Report implements Completable {
     }
 
     @Override
-    public void setCompletion(String reason) {
-        Completion c = new Completion(reason);
-        c.setPrevious(completion);
-        completion = c;
-        this.isComplete = true;
+    public void setCompletion(Completion completion) {
+        this.completion = completion;
     }
 
     @Override
@@ -220,8 +224,8 @@ public class Report implements Completable {
     }
 
     @Override
-    public void setComplete(boolean state) {
-        isComplete = state;
+    public void setComplete(boolean isComplete) {
+        this.isComplete = isComplete;
     }
 
     @Override

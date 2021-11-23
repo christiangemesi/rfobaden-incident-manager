@@ -14,10 +14,10 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     @Query("SELECT report FROM Report report "
             + "WHERE report.id = :id AND report.incident.id = :incidentId")
-    Optional<Report> findByIncidentIdAndId(
+    Optional<Report> findByIdOfIncident(
             @Param("incidentId") Long incidentId, @Param("id") Long id
     );
 
     @Query("SELECT report FROM Report report WHERE report.incident.id = :incidentId")
-    List<Report> findAllByIncidentId(@Param("incidentId") Long incidentId);
+    List<Report> findAllOfIncident(@Param("incidentId") Long incidentId);
 }

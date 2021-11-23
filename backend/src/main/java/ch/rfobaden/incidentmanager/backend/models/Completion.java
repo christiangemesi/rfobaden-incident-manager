@@ -36,11 +36,6 @@ public class Completion {
     public Completion() {
     }
 
-    public Completion(String reason) {
-        this.reason = reason;
-        this.createdAt = LocalDateTime.now();
-    }
-
     public Long getId() {
         return id;
     }

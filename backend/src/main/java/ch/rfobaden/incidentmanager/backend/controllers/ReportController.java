@@ -1,10 +1,12 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.data.CompletionData;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +22,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/incidents/{incidentId}/reports")
-public class ReportController {
+public class ReportController extends AppController {
 
     private final ReportService reportService;
 
     private final IncidentService incidentService;
 
-    public ReportController(ReportService reportService, IncidentService incidentService) {
+    private final UserService userService;
+
+    public ReportController(
+        ReportService reportService,
+        IncidentService incidentService,
+        UserService userService
+    ) {
         this.reportService = reportService;
         this.incidentService = incidentService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -36,7 +45,7 @@ public class ReportController {
         if (incidentService.getIncidentById(incidentId).isEmpty()) {
             throw new IllegalArgumentException("incident not found");
         }
-        return reportService.getAllReportsOfIncidentById(incidentId);
+        return reportService.getReportsOfIncident(incidentId);
     }
 
     @GetMapping({"{reportId}"})
@@ -55,22 +64,22 @@ public class ReportController {
         @PathVariable("incidentId") Long incidentId,
         @RequestBody Report report
     ) {
-        report.setIncident(incidentService.getIncidentById(incidentId).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+        report.setAuthor(getCurrentUser().orElseThrow(() -> (
+            new ApiException(HttpStatus.UNAUTHORIZED, "not signed in")
         )));
+        prepareReport(report, incidentId);
         return reportService.addNewReport(report);
     }
 
-    @PutMapping
+    @PutMapping("{reportId}")
     @ResponseStatus(HttpStatus.OK)
     public Report updateReport(
         @PathVariable("incidentId") Long incidentId,
+        @PathVariable("reportId") Long reportId,
         @RequestBody Report report
     ) {
-        report.setIncident(incidentService.getIncidentById(incidentId).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "incident not found")
-        )));
-        return reportService.updateReport(report).orElseThrow(() -> (
+        prepareReport(report, incidentId);
+        return reportService.updateReport(reportId, report).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "incident not found")
         ));
     }
@@ -82,8 +91,9 @@ public class ReportController {
         @PathVariable("reportId") Long reportId,
         @RequestBody CompletionData completionData
     ) {
-        Report report = loadReport(incidentId, reportId);
-        return reportService.closeReport(report, completionData).orElseThrow(() -> (
+        return reportService.closeReportOfIncident(
+            incidentId, reportId, completionData.getReason()
+        ).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "incident not found")
         ));
     }
@@ -94,8 +104,7 @@ public class ReportController {
         @PathVariable("incidentId") Long incidentId,
         @PathVariable("reportId") Long reportId
     ) {
-        Report report = loadReport(incidentId, reportId);
-        return reportService.reopenReport(report).orElseThrow(() -> (
+        return reportService.reopenReportOfIncident(incidentId, reportId).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "report not found")
         ));
     }
@@ -106,18 +115,22 @@ public class ReportController {
         @PathVariable("incidentId") Long incidentId,
         @PathVariable("reportId") Long reportId
     ) {
-        loadReport(incidentId, reportId);
+        reportService.getReportOfIncidentById(incidentId, reportId).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "report not found")
+        ));
         if (!reportService.deleteReportById(reportId)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "report not found");
         }
     }
 
-    private Report loadReport(
-        @PathVariable("incidentId") Long incidentId,
-        @PathVariable("reportId") Long id
-    ) {
-        return reportService.getReportOfIncidentById(incidentId, id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "report not found")
-        ));
+    private void prepareReport(Report report, Long incidentId) {
+        report.setIncident(incidentService.getIncidentById(incidentId).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+        )));
+        if (report.getAssigneeId() != null) {
+            report.setAssignee(userService.find(report.getAssigneeId()).orElseThrow(() -> (
+                new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "assignee not found")
+            )));
+        }
     }
 }
