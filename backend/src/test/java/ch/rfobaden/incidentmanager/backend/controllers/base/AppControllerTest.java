@@ -13,15 +13,21 @@ import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 
@@ -47,6 +53,7 @@ public abstract class AppControllerTest {
     @Import({
         TestConfig.class,
         Local.LocalAppController.class,
+        SecurityContextMock.class,
     })
     public static class Local {
         @Autowired
@@ -55,25 +62,14 @@ public abstract class AppControllerTest {
         @Autowired
         UserGenerator userGenerator;
 
-        @Mock
-        SecurityContext securityContext;
-
-        @MockBean
-        Supplier<SecurityContext> securityContextSupplier;
-
-        @BeforeEach
-        public void setupSecurityContextSupplier() {
-            Mockito.when(securityContextSupplier.get())
-                .thenReturn(securityContext);
-        }
+        @Autowired
+        SecurityContextMock securityContextMock;
 
         @Test
         public void testGetCurrentUser() {
             // Given
             var user = userGenerator.generate();
-            var auth = new UsernamePasswordAuthenticationToken(user, null, List.of());
-            Mockito.when(securityContext.getAuthentication())
-                .thenReturn(auth);
+            securityContextMock.mockAuth(user);
 
             // Then
             var result = controller.getCurrentUser().orElse(null);
@@ -87,8 +83,7 @@ public abstract class AppControllerTest {
         @Test
         public void testGetCurrentUser_noAuthorization() {
             // Given
-            Mockito.when(securityContext.getAuthentication())
-                .thenReturn(null);
+            securityContextMock.mockAuth(null);
 
             // Then
             var result = controller.getCurrentUser();
@@ -101,9 +96,8 @@ public abstract class AppControllerTest {
         public void testGetCurrentUser_unknownPrincipal() {
             // Given
             var principal = new Object();
-            var auth = new UsernamePasswordAuthenticationToken(principal, null, List.of());
-            Mockito.when(securityContext.getAuthentication())
-                .thenReturn(auth);
+            securityContextMock.mockAuth(principal);
+
 
             // Then
             var result = controller.getCurrentUser();
@@ -116,9 +110,7 @@ public abstract class AppControllerTest {
         public void testRequireCurrentUser() {
             // Given
             var user = userGenerator.generate();
-            var auth = new UsernamePasswordAuthenticationToken(user, null, List.of());
-            Mockito.when(securityContext.getAuthentication())
-                .thenReturn(auth);
+            securityContextMock.mockAuth(user);
 
             // Then
             var result = controller.requireCurrentUser();
@@ -132,8 +124,7 @@ public abstract class AppControllerTest {
         @Test
         public void testRequireCurrentUser_noCurrentUser() {
             // Given
-            Mockito.when(securityContext.getAuthentication())
-                .thenReturn(null);
+            securityContextMock.mockAuth(null);
 
             // Then
             var result = catchThrowable(() -> controller.requireCurrentUser());
@@ -161,5 +152,28 @@ public abstract class AppControllerTest {
         // in which case the test method is responsible for correct mocking.
         @MockBean
         protected UserService userService;
+    }
+
+    @TestConfiguration
+    public static class SecurityContextMock {
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+
+        @Bean
+        @Primary
+        public SecurityContext securityContext() {
+            return securityContext;
+        }
+
+        @Bean
+        @Primary
+        public Supplier<SecurityContext> securityContextSupplier() {
+            return () -> securityContext;
+        }
+
+        public void mockAuth(Object principal) {
+            var auth = new UsernamePasswordAuthenticationToken(principal, null, List.of());
+            Mockito.when(securityContext.getAuthentication())
+                .thenReturn(auth);
+        }
     }
 }
