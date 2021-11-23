@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useEffectOnce, useIsomorphicLayoutEffect } from 'react-use'
+import { useEffectOnce, useIsomorphicLayoutEffect, useUpdateEffect } from 'react-use'
 import Model from '@/models/base/Model'
-import Id from '@/models/base/Id'
+import Id, { isId } from '@/models/base/Id'
 import { PartialUpdate, PartialUpdateFn } from '@/utils/update'
+import { use } from 'ast-types'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]
@@ -19,6 +20,20 @@ export const useStore = <T>(store: Store<T>): T => {
     }
   })
   return globalState
+}
+
+export const useStored = <M extends Model, T>(
+  store: ModelStore<M>,
+  transform: (records: M[]) => T,
+): T => {
+  const { records } = useStore(store)
+  const [value, setValue] = useState<T>(() => {
+    return transform(Object.values(records))
+  })
+  useUpdateEffect(() => {
+    setValue(transform(Object.values(records)))
+  }, [records, setValue])
+  return value
 }
 
 interface UseRecords<T> {
@@ -39,9 +54,37 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
   return records
 }
 
-const createUseRecord = <T>(store: ModelStore<T>) => (id: Id<T>): T | null => {
-  const { records } = useStore(store)
-  return records[id] ?? null
+
+interface UseRecord<T> {
+  (id: Id<T>): T | null
+  (record: T): T
+}
+
+const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> => (idOrRecord) => {
+  const useAction = useMemo(() => {
+    if (isId(idOrRecord)) {
+      return (): T => {
+        const { records } = useStore(store)
+        return records[idOrRecord] ?? null as unknown as T
+      }
+    }
+    return (): T => {
+      const [record, setRecord] = useState<T>(() => {
+        const { parseRecord } = store[privateKey]
+        return parseRecord(idOrRecord)
+      })
+      useEffectOnce(() => {
+        store.save(record)
+      })
+
+      const { records: { [record.id]: storedRecord }} = useStore(store)
+      useUpdateEffect(() => {
+        setRecord(storedRecord)
+      }, [storedRecord ?? record])
+      return record as T
+    }
+  }, [idOrRecord])
+  return useAction()
 }
 
 export const createStore = <T, S>(initialState: T, actions: CreateActions<T, S>): Store<T> & S => {
@@ -70,15 +113,21 @@ export const createStore = <T, S>(initialState: T, actions: CreateActions<T, S>)
   return store
 }
 
-export const createModelStore = <T extends Model>() => <S>(
-  actions: S,
-): [ModelStore<T> & S, UseRecords<T>, (id: Id<T>) => T | null] => {
+type ModelStoreParts<T extends Model, S = unknown> =
+  [ModelStore<T> & S, UseRecords<T>, UseRecord<T>]
+
+export function createModelStore<T extends Model>(parseRecord: (value: T) => T): ModelStoreParts<T>
+export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions: S): ModelStoreParts<T, S>
+export function createModelStore<T extends Model, S>(
+  parseRecord: (value: T) => T,
+  actions?: S,
+): ModelStoreParts<T,  S> {
   const initialState: ModelStoreState<T> = {
     records: {},
   }
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     return {
-      ...actions,
+      ...(actions ?? {} as S),
       list(ids?: Id<T>[]): T[] {
         const { records } = getState()
         if (ids === undefined) {
@@ -125,9 +174,13 @@ export const createModelStore = <T extends Model>() => <S>(
       },
 
       // Will be overwritten by `createStore`, but required here to satisfy the type checker.
-      [privateKey]: undefined as unknown as Store<ModelStoreState<T>>[typeof privateKey],
+      [privateKey]: undefined as unknown as ModelStoreInternals<T>,
     }
   })
+
+  // Assign the internal `parseRecord` property separately,
+  // since the normal store does not know it.
+  store[privateKey].parseRecord = parseRecord
 
   return [
     store,
@@ -139,10 +192,12 @@ export const createModelStore = <T extends Model>() => <S>(
 const privateKey = Symbol('Store.private')
 
 interface Store<T> {
-  readonly [privateKey]: {
-    state: T
-    setters: Array<(value: T) => void>
-  }
+  readonly [privateKey]: StoreInternals<T>
+}
+
+interface StoreInternals<T> {
+  state: T
+  setters: Array<(value: T) => void>
 }
 
 interface ModelStore<T> extends Store<ModelStoreState<T>> {
@@ -151,6 +206,12 @@ interface ModelStore<T> extends Store<ModelStoreState<T>> {
   save(record: T): void
   saveAll(records: Iterable<T>): void
   remove(id: Id<T>): void
+
+  readonly [privateKey]: ModelStoreInternals<T>
+}
+
+interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
+  parseRecord: (record: T) => T
 }
 
 

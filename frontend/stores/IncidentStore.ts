@@ -1,7 +1,7 @@
 import { createModelStore } from '@/stores/Store'
-import Incident from '@/models/Incident'
+import Incident, { parseIncident } from '@/models/Incident'
 
-const [IncidentStore, useIncidents, useIncident] = createModelStore<Incident>()({})
+const [IncidentStore, useIncidents, useIncident] = createModelStore(parseIncident)
 export default IncidentStore
 
 export {
