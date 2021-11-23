@@ -7,9 +7,10 @@ import { useUser } from '@/stores/UserStore'
 
 interface Props {
   reports: Report[]
+  onEdit?: (report: Report) => void
 }
 
-const ReportList: React.VFC<Props> = ({ reports }) => {
+const ReportList: React.VFC<Props> = ({ reports, onEdit: handleEdit }) => {
   return (
     <StyledTable>
       <thead>
@@ -33,7 +34,7 @@ const ReportList: React.VFC<Props> = ({ reports }) => {
       </thead>
       <tbody>
         {reports.map((report) => (
-          <ReportListItem key={report.id} report={report} />
+          <ReportListItem key={report.id} report={report} onEdit={handleEdit} />
         ))}
       </tbody>
     </StyledTable>
@@ -44,10 +45,11 @@ export default ReportList
 
 interface ReportListItemProps {
   report: Report
+  onEdit?: (report: Report) => void
 }
 
 
-const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
+const ReportListItem: React.VFC<ReportListItemProps> = ({ report, onEdit: handleEdit }) => {
   const author = useUser(report.authorId)
   const assignee = useUser(report.assigneeId)
 
@@ -106,7 +108,7 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
       </StyledTd>
 
       <StyledTdSmall>
-        <StyledButton type="button">
+        <StyledButton type="button" onClick={handleEdit && (() => handleEdit(report))}>
           Bearbeiten
         </StyledButton>
       </StyledTdSmall>

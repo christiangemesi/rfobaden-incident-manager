@@ -14,10 +14,12 @@ import Id from '@/models/base/Id'
 
 interface Props {
   incident: Incident
+  report?: Report | null
+  onClose?: () => void
 }
 
-const ReportForm: React.VFC<Props> = ({ incident }) => {
-  const form = useForm<ModelData<Report>>(() => ({
+const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handleClose }) => {
+  const form = useForm<ModelData<Report>>(() => (report ?? {
     title: '',
     description: null,
     addendum: null,
@@ -58,15 +60,19 @@ const ReportForm: React.VFC<Props> = ({ incident }) => {
   })
 
   const handleSubmit = async (formData: ModelData<Report>) => {
-    const [data, error]: BackendResponse<Report> = await BackendService.create(
-      `incidents/${incident.id}/reports`, formData
-    )
+    const [data, error]: BackendResponse<Report> = report === null
+      ? await BackendService.create(`incidents/${incident.id}/reports`, formData)
+      : await BackendService.update(`incidents/${incident.id}/reports`, report.id, formData)
     if (error !== null) {
       throw error
     }
     ReportStore.save(parseReport(data))
     clearForm(form)
+    if (handleClose) {
+      handleClose()
+    }
   }
+
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
@@ -91,7 +97,7 @@ const ReportForm: React.VFC<Props> = ({ incident }) => {
         <UiForm.Field field={form.assigneeId}>{(props) => (
           <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit} />
+        <UiForm.Buttons form={form} onSubmit={handleSubmit} onCancel={handleClose} />
       </form>
     </div>
   )

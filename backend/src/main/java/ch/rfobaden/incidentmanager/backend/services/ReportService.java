@@ -53,14 +53,8 @@ public class ReportService {
             throw new IllegalArgumentException("can't update report id");
         }
         report.setId(id);
+        report.setAuthor(persistentReport.getAuthor());
 
-        if (
-            report.isComplete() != persistentReport.isComplete()
-                || report.getCompletion() != null
-                && !Objects.equals(report.getCompletion(), persistentReport.getCompletion())
-        ) {
-            throw new IllegalArgumentException("can't update report completion");
-        }
         report.setComplete(persistentReport.isComplete());
         report.setCompletion(persistentReport.getCompletion());
 
@@ -84,9 +78,6 @@ public class ReportService {
         report.setCompletion(completion);
         report.setComplete(true);
         report.setUpdatedAt(LocalDateTime.now());
-
-        System.out.println(report);
-
         return Optional.of(reportRepository.save(report));
     }
 

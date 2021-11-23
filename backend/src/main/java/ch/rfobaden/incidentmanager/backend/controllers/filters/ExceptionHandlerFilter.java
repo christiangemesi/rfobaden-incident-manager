@@ -35,7 +35,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             resolver.resolveException(request, response, null, e);
-            System.out.println(response.getHeaderNames());
             if (response.getStatus() >= 500) {
                 log.error("Exception in Filter Chain: ", e);
             }

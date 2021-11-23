@@ -63,13 +63,14 @@ interface UseRecord<T> {
 
 const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> => (idOrRecord) => {
   const useAction = useMemo(() => {
-    if (idOrRecord === null) {
-      return () => null as unknown as T
-    }
-    if (isId(idOrRecord)) {
+    if (idOrRecord === null || isId(idOrRecord)) {
+      const id: Id<T> | null = idOrRecord
       return (): T => {
         const { records } = useStore(store)
-        return records[idOrRecord] ?? null as unknown as T
+        if (id === null) {
+          return null as unknown as T
+        }
+        return records[id] ?? null as unknown as T
       }
     }
     return (): T => {

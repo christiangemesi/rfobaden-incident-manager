@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React from 'react'
+import React, { useState } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -31,6 +31,8 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
 
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
+
   return (
     <SessionOnly doRedirect>
       <UiContainer>
@@ -39,12 +41,17 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
         </h1>
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
-            <ReportForm incident={incident} />
+            <ReportForm
+              key={selectedReport?.id ?? -1}
+              incident={incident}
+              report={selectedReport}
+              onClose={() => setSelectedReport(null)}
+            />
           </UiGrid.Col>
         </UiGrid>
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md: 11, lg: 10, xl: 8 }}>
-            <ReportList reports={reports} />
+            <ReportList reports={reports} onEdit={setSelectedReport} />
           </UiGrid.Col>
         </UiGrid>
       </UiContainer>

@@ -51,8 +51,6 @@ public abstract class ModelControllerTest<
             throw new IllegalArgumentException("basePath has to end with '/'");
         }
         this.basePath = basePath;
-
-        System.out.println(service);
     }
 
     @Test

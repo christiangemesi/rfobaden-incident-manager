@@ -29,10 +29,11 @@ public class Report implements Completable {
     private User author;
 
     @ManyToOne
+    @JoinColumn
     private User assignee;
 
     @ManyToOne
-    @JoinColumn(name = "incident_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Incident incident;
 
     @Column(nullable = false)
@@ -113,6 +114,10 @@ public class Report implements Completable {
     }
 
     public void setAssigneeId(Long assigneeId) {
+        if (assigneeId == null) {
+            this.assignee = null;
+            return;
+        }
         if (this.assignee == null) {
             this.assignee = new User();
         }
@@ -263,7 +268,7 @@ public class Report implements Completable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, getAssigneeId(), getIncidentId(), title,
+        return Objects.hash(id, author, assignee, incident, title,
                 description, addendum, createdAt, updatedAt, startsAt,
                 endsAt, completion, isComplete, location, priority);
     }
@@ -273,8 +278,8 @@ public class Report implements Completable {
         return "Report{"
                 + "id=" + id
                 + ", author=" + author
-                + ", assigneeId=" + getAssigneeId()
-                + ", incidentId=" + getIncidentId()
+                + ", assigneeId=" + assignee
+                + ", incidentId=" + incident
                 + ", title='" + title + '\''
                 + ", description='" + description + '\''
                 + ", addendum='" + addendum + '\''
@@ -282,7 +287,7 @@ public class Report implements Completable {
                 + ", updatedAt=" + updatedAt
                 + ", startsAt=" + startsAt
                 + ", isComplete=" + isComplete
-                + ", completionId=" + getCompletionId()
+                + ", completionId=" + completion
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';
