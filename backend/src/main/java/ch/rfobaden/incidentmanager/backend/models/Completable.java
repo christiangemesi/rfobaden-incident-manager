@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public interface Completable {
     void setCompletion(Completion completion);
 
@@ -7,5 +9,6 @@ public interface Completable {
 
     void setComplete(boolean isComplete);
 
+    @JsonProperty("isComplete")
     boolean isComplete();
 }

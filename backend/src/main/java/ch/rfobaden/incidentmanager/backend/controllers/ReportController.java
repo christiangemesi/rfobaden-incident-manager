@@ -84,14 +84,14 @@ public class ReportController extends AppController {
         ));
     }
 
-    @PutMapping("{reportId}/close")
+    @PutMapping("{reportId}/complete")
     @ResponseStatus(HttpStatus.OK)
-    public Report closeReport(
+    public Report completeReport(
         @PathVariable("incidentId") Long incidentId,
         @PathVariable("reportId") Long reportId,
         @RequestBody CompletionData completionData
     ) {
-        return reportService.closeReportOfIncident(
+        return reportService.completeReportOfIncident(
             incidentId, reportId, completionData.getReason()
         ).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "incident not found")

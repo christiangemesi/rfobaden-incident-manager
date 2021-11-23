@@ -19,11 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "report")
 public class Report implements Completable {
-
-    enum Priority {
-        LOW, MEDIUM, HIGH
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -291,6 +286,10 @@ public class Report implements Completable {
                 + ", location='" + location + '\''
                 + ", priority=" + priority
                 + '}';
+    }
+
+    enum Priority {
+        LOW, MEDIUM, HIGH
     }
 }
 

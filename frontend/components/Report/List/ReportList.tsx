@@ -53,23 +53,34 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
-      await BackendService.delete(`/incidents/${report.incidentId}/reports`, report.id)
+      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
       ReportStore.remove(report.id)
     }
   }
 
-  const handleClose = async () => {
-    const closeReason = prompt(`Wieso schliessen sie das "${report.title}"?`, 'Fertig')
-    if (closeReason != null && closeReason.length !== 0) {
-      const [data, error]: BackendResponse<Report> =
-        await BackendService.update(`/incidents/${report.incidentId}/reports/${report.id}/close`, {
-          reason: closeReason,
-        })
+  const handleComplete = async () => {
+    const reason = prompt(`Wieso schliessen sie das "${report.title}"?`, 'Fertig')
+    if (reason != null && reason.length !== 0) {
+      const [data, error]: BackendResponse<Report> = await BackendService.update(
+        `incidents/${report.incidentId}/reports/${report.id}/complete`,
+        { reason: reason },
+      )
       if (error !== null) {
         throw error
       }
+      console.log(data)
       ReportStore.save(parseReport(data))
     }
+  }
+
+  const handleReopen = async () => {
+    const [data, error]: BackendResponse<Report> = await BackendService.update(
+      `incidents/${report.incidentId}/reports/${report.id}/reopen`, {}
+    )
+    if (error !== null) {
+      throw error
+    }
+    ReportStore.save(parseReport(data))
   }
 
   return (
@@ -100,9 +111,15 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report }) => {
         </StyledButton>
       </StyledTdSmall>
       <StyledTdSmall>
-        <StyledButton type="button" onClick={handleClose}>
-          Schliessen
-        </StyledButton>
+        {report.isComplete ? (
+          <StyledButton type="button" onClick={handleReopen}>
+            Öffnen
+          </StyledButton>
+        ) : (
+          <StyledButton type="button" onClick={handleComplete}>
+            Schliessen
+          </StyledButton>
+        )}
       </StyledTdSmall>
       <StyledTdSmall>
         <StyledButton type="button" onClick={handleDelete}>

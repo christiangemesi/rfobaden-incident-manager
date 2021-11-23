@@ -70,7 +70,7 @@ public class ReportService {
         return Optional.of(reportRepository.save(report));
     }
 
-    public Optional<Report> closeReportOfIncident(Long incidentId, Long id, String reason) {
+    public Optional<Report> completeReportOfIncident(Long incidentId, Long id, String reason) {
         var report = getReportOfIncidentById(incidentId, id).orElse(null);
         if (report == null) {
             return Optional.empty();
@@ -84,6 +84,8 @@ public class ReportService {
         report.setCompletion(completion);
         report.setComplete(true);
         report.setUpdatedAt(LocalDateTime.now());
+
+        System.out.println(report);
 
         return Optional.of(reportRepository.save(report));
     }
