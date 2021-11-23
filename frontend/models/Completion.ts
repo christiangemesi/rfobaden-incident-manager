@@ -1,5 +1,4 @@
 import { parseDate } from '@/models/Date'
-import { parseCompletable } from '@/models/Completable'
 
 export default interface Completion {
   reason: string

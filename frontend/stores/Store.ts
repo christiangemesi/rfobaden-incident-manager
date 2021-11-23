@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useEffectOnce, useIsomorphicLayoutEffect, useUpdateEffect } from 'react-use'
 import Model from '@/models/base/Model'
 import Id, { isId } from '@/models/base/Id'
 import { PartialUpdate, PartialUpdateFn } from '@/utils/update'
-import { use } from 'ast-types'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]

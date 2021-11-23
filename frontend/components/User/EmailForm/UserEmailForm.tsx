@@ -5,9 +5,8 @@ import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
 import { SessionResponse } from '@/models/Session'
-import UserStore from '@/stores/UserStore'
 import { UpdateData } from '@/models/base/Model'
-import SessionStore, { getSessionToken } from '@/stores/SessionStore'
+import SessionStore from '@/stores/SessionStore'
 
 interface Props {
   user: User
