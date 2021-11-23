@@ -28,7 +28,7 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
   clear() {
     currentToken = null
     localStorage.removeItem(storageKey)
-    setState(initialState)
+    setState({ session: { currentUser: null }})
   },
 }))
 export default SessionStore

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import SessionStore from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
@@ -7,7 +7,7 @@ import { useStore } from '@/stores/Store'
 
 interface Props {
   doRedirect?: boolean
-  children?: (session: { currentUser: User }) => ReactNode
+  children?: ReactNode | ((session: { currentUser: User }) => ReactNode)
 }
 
 /**
@@ -18,7 +18,7 @@ const SessionOnly: React.VFC<Props> = ({
   children,
 }) => {
   const session = useStore(SessionStore).session
-
+  
   const router = useRouter()
   useAsync(async () => {
     if (session !== null && session.currentUser === null && doRedirect) {
@@ -26,12 +26,19 @@ const SessionOnly: React.VFC<Props> = ({
     }
   }, [doRedirect, session])
 
-  if (session?.currentUser == null) {
-    return <React.Fragment />
-  }
+  const childComponent = useMemo(() => {
+    if (session?.currentUser == null) {
+      return <React.Fragment />
+    }
+    if (typeof children === 'function') {
+      return children({ currentUser: session.currentUser })
+    }
+    return children
+  }, [children, session])
+
   return (
     <React.Fragment>
-      {children && children({ currentUser: session.currentUser })}
+      {childComponent}
     </React.Fragment>
   )
 }
