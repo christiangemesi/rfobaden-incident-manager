@@ -2,11 +2,7 @@ stages:
   - lint
   - test
   - analyze
-
-variables:
-  SONAR_HOST_URL: ${CI_SONARQUBE_HOST_URL}
-  SONAR_TOKEN: ${CI_SONARQUBE_TOKEN}
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache  
+  
 
 workflow:
   rules:
@@ -39,9 +35,9 @@ analyze.sonarqube:
   stage: analyze
   allow_failure: false
   script:
-    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL
-      -Dsonar.login=$SONAR_TOKEN
-      -Dsonar.projectKey=$SONAR_PROJECT_KEY
+    - sonar-scanner -Dsonar.host.url=$CI_SONAR_HOST_URL
+      -Dsonar.login=$CI_SONAR_TOKEN
+      -Dsonar.projectKey=$CI_SONAR_PROJECT_KEY
       -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
 
 
