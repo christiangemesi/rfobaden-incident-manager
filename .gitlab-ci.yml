@@ -1,5 +1,6 @@
 stages:
   - lint
+  - test
 
 workflow:
   rules:
@@ -19,6 +20,13 @@ backend.checkstyle:
   script:
     - cd backend
     - gradle --no-daemon checkstyleMain checkstyleTest
+
+backend.test:
+  stage: test
+  image: gradle:7.2.0-jdk11
+  script:
+    - cd backend
+    - gradle clean test --rerun-tasks
 
 cache:
   paths:
