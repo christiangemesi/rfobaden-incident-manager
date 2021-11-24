@@ -1,6 +1,12 @@
 stages:
   - lint
   - test
+  - analyze
+
+variables:
+  SONAR_HOST_URL: ${CI_SONARQUBE_HOST_URL}
+  SONAR_TOKEN: ${CI_SONARQUBE_TOKEN}
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache  
 
 workflow:
   rules:
@@ -28,6 +34,15 @@ backend.test:
     - cd backend
     - gradle clean test --rerun-tasks
 
+analyze.sonarqube:
+  image: sonarsource/sonar-scanner-cli:latest
+  stage: analyze
+  allow_failure: false
+  script:
+    - sonar-scanner -Dsonar.qualitygate.wait=true
+
 cache:
+  key: ${CI_JOB_NAME}
   paths:
     - backend/.gradle
+    - .sonar/cache
