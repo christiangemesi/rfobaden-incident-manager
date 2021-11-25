@@ -44,8 +44,8 @@ analyze.sonarqube.frontend:
   before_script:
     - cd frontend
     - apk --update add openjdk8-jre
-    - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /root/.sonar/native-sonar-scanner/sonar-scanner-4.4.0.2170-linux/bin/sonar-scanner
     - npm install --quiet
+    - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /root/.sonar/native-sonar-scanner/sonar-scanner-4.4.0.2170-linux/bin/sonar-scanner
 
   script:
     - npm run sonar-scanner
