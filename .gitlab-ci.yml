@@ -9,7 +9,7 @@ workflow:
 
 frontend.eslint:
   stage: lint
-  image: node:16-alpine3.11
+  image: node:16-alpine3.13
   script:
     - cd frontend
     - npm install --quiet
@@ -39,12 +39,12 @@ analyze.sonarqube.backend:
 
 analyze.sonarqube.frontend:
   stage: analyze
-  image: node:16-alpine3.11
+  image: sonarsource/sonar-scanner-cli:latest
   allow_failure: false
   script:
     - cd frontend
-    - npm install --quiet
-    - npm run sonar-scanner
+    - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
+      -Dsonar.login=$CI_SONARQUBE_TOKEN
 
 
 cache:
