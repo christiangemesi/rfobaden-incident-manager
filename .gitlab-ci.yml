@@ -48,6 +48,7 @@ analyze.sonarqube.frontend:
       -Dsonar.projectKey=rfobaden-incident-manager-frontend
       -Dsonar.projectName=rfobaden-incident-manager-frontend
       -Dsonar.sources=.
+      -Dsonar.language=js
 
 
 cache:
