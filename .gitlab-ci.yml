@@ -41,10 +41,13 @@ analyze.sonarqube.frontend:
   stage: analyze
   image: node:16-alpine3.11
   allow_failure: false
-  script:
+  before_script:
     - cd frontend
-    - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /bin/sonar-scanner/bin/sonar-scanner
+    - apk --update add openjdk8-jre
+    - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /root/.sonar/native-sonar-scanner/sonar-scanner-4.4.0.2170-linux/bin/sonar-scanner
     - npm install --quiet
+
+  script:
     - npm run sonar-scanner
 
 
