@@ -39,13 +39,12 @@ analyze.sonarqube.backend:
 
 analyze.sonarqube.frontend:
   stage: analyze
-  image: node:16-alpine3.13
+  image: sonarsource/sonar-scanner-cli:latest
   allow_failure: false
- 
   script:
     - cd frontend
-    - npm install --quiet
-    - npm run sonar-scanner
+    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL
+      -Dsonar.login=$SONAR_TOKEN
 
 
 cache:
