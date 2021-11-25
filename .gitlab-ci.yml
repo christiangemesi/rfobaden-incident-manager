@@ -43,6 +43,7 @@ analyze.sonarqube.frontend:
   allow_failure: false
   script:
     - cd frontend
+    - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /bin/sonar-scanner/bin/sonar-scanner
     - npm install --quiet
     - npm run sonar-scanner
 
