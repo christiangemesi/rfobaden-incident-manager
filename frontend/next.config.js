@@ -1,4 +1,4 @@
-/**
+npm run sonar-scanner/**
  * @type {import('next').NextConfig}
  **/
 const config = {
