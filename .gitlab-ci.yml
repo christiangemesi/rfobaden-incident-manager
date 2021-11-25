@@ -44,7 +44,7 @@ analyze.sonarqube.frontend:
   script:
     - cd frontend
     - npm install --quiet
-    - sonar-scanner
+    - npm run sonar-scanner
 
 
 cache:
