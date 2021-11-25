@@ -45,6 +45,7 @@ analyze.sonarqube.frontend:
     - cd frontend
     - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
       -Dsonar.login=$CI_SONARQUBE_TOKEN
+      -Dsonar.projectKey=rfobaden-incident-manager-frontend
 
 
 cache:
