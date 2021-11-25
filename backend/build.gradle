@@ -69,19 +69,21 @@ tasks.withType(Test) {
 	}
 }
 
-
 checkstyle {
 	toolVersion "9.0"
 	configFile file("config/checkstyle/checkstyle.xml")
 	showViolations = true
 	ignoreFailures = false
 }
+
 checkstyleMain {
 	source = "src/main/java"
 }
+
 checkstyleTest {
 	source = "src/test/java"
 }
+
 tasks.withType(Checkstyle) {
 	reports {
 		xml.required.set(false)
