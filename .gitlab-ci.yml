@@ -47,6 +47,7 @@ analyze.sonarqube.frontend:
       -Dsonar.login=$CI_SONARQUBE_TOKEN
       -Dsonar.projectKey=rfobaden-incident-manager-frontend
       -Dsonar.projectName=rfobaden-incident-manager-frontend
+      -Dsonar.sources=.
 
 
 cache:
