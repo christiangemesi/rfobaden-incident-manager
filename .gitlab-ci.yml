@@ -43,8 +43,8 @@ analyze.sonarqube.frontend:
   allow_failure: false
   script:
     - cd frontend
-    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL
-      -Dsonar.login=$SONAR_TOKEN
+    - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
+      -Dsonar.login=$CI_SONARQUBE_TOKEN
 
 
 cache:
