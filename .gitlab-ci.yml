@@ -34,11 +34,13 @@ analyze.sonarqube:
   stage: analyze
   allow_failure: false
   script:
-    - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
+    - sonar-scanner 
+      -Dsonar.qualitygate.wait=true
+      -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
       -Dsonar.login=$CI_SONARQUBE_TOKEN
       -Dsonar.projectKey=$CI_SONARQUBE_PROJECT_KEY
       -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
-      -Dsonar.java.binaries=.backend\\build\\classes
+      -Dsonar.java.binaries=${CI_PROJECT_DIR}/backend/build/classes
       -DsonarRunner.dumpToFile=out.txt
 
 
