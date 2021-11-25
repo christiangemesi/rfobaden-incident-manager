@@ -1,6 +1,10 @@
 # RFO Baden - Incident Manager
 
-[TOC]
+[[_TOC_]]
+
+## Code Quality
+[Frontend SonarQube](https://www.cs.technik.fhnw.ch/sonarqube/dashboard?id=rfobaden-incident-manager-frontend) <br>
+[Backend SonarQube](https://www.cs.technik.fhnw.ch/sonarqube/dashboard?id=rfobaden-incident-manager-backend)
 
 ## Development
 ### Setup
