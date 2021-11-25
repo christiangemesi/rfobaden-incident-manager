@@ -37,6 +37,15 @@ analyze.sonarqube.backend:
     - cd backend
     - gradle sonarqube
 
+analyze.sonarqube.frontend:
+  stage: analyze
+  image: node:16-alpine3.11
+  allow_failure: false
+  script:
+    - cd frontend
+    - npm install --quiet
+    - sonar-scanner
+
 
 cache:
   key: ${CI_JOB_NAME}
