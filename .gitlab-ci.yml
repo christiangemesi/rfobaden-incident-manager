@@ -40,7 +40,6 @@ analyze.sonarqube:
       -Dsonar.login=$CI_SONARQUBE_TOKEN
       -Dsonar.projectKey=$CI_SONARQUBE_PROJECT_KEY
       -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
-      -Dsonar.java.binaries=**/backend/build/classes/**/*
 
 
 cache:
