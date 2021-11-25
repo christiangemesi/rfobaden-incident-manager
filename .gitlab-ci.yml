@@ -29,17 +29,15 @@ backend.test:
     - cd backend
     - gradle clean test --rerun-tasks
 
-analyze.sonarqube:
-  image: sonarsource/sonar-scanner-cli:latest
+analyze.sonarqube.backend:
   stage: analyze
+  image: gradle:7.2.0-jdk11
   allow_failure: false
   script:
-    - sonar-scanner 
+    - gradle sonarqube
       -Dsonar.qualitygate.wait=true
       -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
       -Dsonar.login=$CI_SONARQUBE_TOKEN
-      -Dsonar.projectKey=$CI_SONARQUBE_PROJECT_KEY
-      -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
 
 
 cache:
