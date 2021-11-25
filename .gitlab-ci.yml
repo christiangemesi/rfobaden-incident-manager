@@ -2,7 +2,6 @@ stages:
   - lint
   - test
   - analyze
-  
 
 workflow:
   rules:
@@ -35,9 +34,9 @@ analyze.sonarqube:
   stage: analyze
   allow_failure: false
   script:
-    - sonar-scanner -Dsonar.host.url=$CI_SONAR_HOST_URL
-      -Dsonar.login=$CI_SONAR_TOKEN
-      -Dsonar.projectKey=$CI_SONAR_PROJECT_KEY
+    - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
+      -Dsonar.login=$CI_SONARQUBE_TOKEN
+      -Dsonar.projectKey=$CI_SONARQUBE_PROJECT_KEY
       -Dsonar.gitlab.commit_sha=$CI_BUILD_REF
 
 
