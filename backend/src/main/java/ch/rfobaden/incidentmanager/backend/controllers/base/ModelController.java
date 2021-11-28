@@ -73,7 +73,7 @@ public abstract class ModelController<
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@ModelAttribute TPath path,@PathVariable("id") Long id) {
+    public void delete(@ModelAttribute TPath path, @PathVariable("id") Long id) {
         if (!service.delete(path, id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "record not found");
         }

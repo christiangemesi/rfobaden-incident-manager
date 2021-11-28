@@ -16,7 +16,8 @@ public interface ModelRepository<TModel extends Model & PathConvertible<TPath>, 
 
     List<TModel> findAllByPath(TPath path);
 
-    interface Basic<TModel extends Model & PathConvertible<EmptyPath>> extends ModelRepository<TModel, EmptyPath> {
+    interface Basic<TModel extends Model & PathConvertible<EmptyPath>>
+        extends ModelRepository<TModel, EmptyPath> {
         @Override
         default boolean existsByPath(EmptyPath path, Long id) {
             @SuppressWarnings("unchecked")

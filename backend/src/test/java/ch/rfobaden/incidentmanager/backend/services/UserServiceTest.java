@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @SpringBootTest
-public class UserServiceTest extends ModelRepositoryServiceTest.Basic<User, UserService, UserRepository> {
+public class UserServiceTest
+    extends ModelRepositoryServiceTest.Basic<User, UserService, UserRepository> {
     @Autowired
     protected Faker faker;
 
