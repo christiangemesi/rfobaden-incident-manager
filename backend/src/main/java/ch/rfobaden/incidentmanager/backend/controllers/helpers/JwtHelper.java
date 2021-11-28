@@ -82,7 +82,12 @@ public class JwtHelper {
 
     public String encode(Consumer<JwtBuilder> build) {
         var builder = Jwts.builder()
-            .setIssuedAt(new Date())
+            // Add 1 second to issuedAt.
+            // This is done because our application uses java.time, which includes nanoseconds.
+            // This means that some dates are incorrectly compared to this timestamp if they
+            // were created within less than one second after this.
+            // We can correct this by adding just one second.
+            .setIssuedAt(new Date(System.currentTimeMillis() + 1_000))
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS));
         build.accept(builder);
         return builder.signWith(secretKey).compact();
