@@ -5,6 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.models.Model;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,9 @@ import java.time.LocalDateTime;
 
 @Import(TestConfig.class)
 public abstract class ModelRepositoryTest<
-    TModel extends Model,
-    TRepository extends JpaRepository<TModel, Long>
+    TModel extends Model & PathConvertible<TPath>,
+    TPath,
+    TRepository extends ModelRepository<TModel, TPath> & JpaRepository<TModel, Long>
     > {
 
     @Autowired
@@ -28,14 +31,15 @@ public abstract class ModelRepositoryTest<
     protected ModelGenerator<TModel> generator;
 
     @BeforeEach
-    public void setup() {
+    public void setupEmptyRepository() {
         repository.deleteAll();
     }
 
     @Test
     public void testFindAll() {
         // Given
-        var records = generator.generatePersisted(10);
+        var records = generator.generate(10);
+        records.forEach(this::saveRelations);
         records = repository.saveAll(records);
 
         // When
@@ -58,7 +62,7 @@ public abstract class ModelRepositoryTest<
     @Test
     public void testFindById() {
         // Given
-        var record = repository.save(generator.generatePersisted());
+        var record = saveWithRelations(generator.generate());
 
 
         // When
@@ -74,7 +78,6 @@ public abstract class ModelRepositoryTest<
         // Given
         var id = generator.generateId();
 
-
         // When
         var result = repository.findById(id);
 
@@ -85,7 +88,8 @@ public abstract class ModelRepositoryTest<
     @Test
     public void testSave_create() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
+        saveRelations(record);
 
         // When
         var result = repository.save(record);
@@ -99,8 +103,8 @@ public abstract class ModelRepositoryTest<
     @Test
     public void testSave_update() {
         // Given
-        var newRecord = generator.generatePersisted();
-        var createdRecord = repository.save(generator.copy(newRecord));
+        var newRecord = generator.generate();
+        var createdRecord = saveWithRelations(generator.copy(newRecord));
         var editedRecord = generator.copy(createdRecord);
         editedRecord.setUpdatedAt(LocalDateTime.now());
 
@@ -115,7 +119,8 @@ public abstract class ModelRepositoryTest<
     @Test
     public void testDeleteById() {
         // Given
-        var record = repository.save(generator.generatePersisted());
+        var record = generator.generate();
+        record = saveWithRelations(record);
 
         // When
         repository.deleteById(record.getId());
@@ -137,5 +142,18 @@ public abstract class ModelRepositoryTest<
         assertThat(result)
             .isNotNull()
             .isInstanceOf(EmptyResultDataAccessException.class);
+    }
+
+    private TModel saveWithRelations(TModel record) {
+        saveRelations(record);
+        return repository.save(record);
+    }
+
+    protected void saveRelations(TModel record) {}
+
+    public abstract static class Basic<
+        TModel extends Model & PathConvertible<EmptyPath>,
+        TRepository extends ModelRepository<TModel, EmptyPath> & JpaRepository<TModel, Long>
+        > extends ModelRepositoryTest<TModel, EmptyPath, TRepository> {
     }
 }

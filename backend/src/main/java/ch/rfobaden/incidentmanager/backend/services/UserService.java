@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
@@ -15,15 +16,11 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-public class UserService extends ModelRepositoryService<User, UserRepository> {
+public class UserService extends ModelRepositoryService.Basic<User, UserRepository> {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(
-        UserRepository repository,
-        PasswordEncoder passwordEncoder
-    ) {
-        super(repository);
+    public UserService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,7 +29,7 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
     }
 
     @Override
-    public User create(User newUser) {
+    public Optional<User> create(EmptyPath path, User newUser) {
         if (newUser.getCredentials() != null) {
             throw new IllegalArgumentException("credentials will be overwritten and must be null");
         }
@@ -44,14 +41,12 @@ public class UserService extends ModelRepositoryService<User, UserRepository> {
         credentials.setUpdatedAt(credentials.getCreatedAt());
         credentials.setLastPasswordChangeAt(credentials.getCreatedAt());
         newUser.setCredentials(credentials);
-
-        var user = super.create(newUser);
-
-        // TODO send the generated email to the user by mail.
-        // Log the password for now so we can actually now what it is.
-        System.out.println("Password for " + user.getEmail() + ": " + plainPassword);
-
-        return user;
+        return super.create(path, newUser).map((user) -> {
+            // TODO send the generated email to the user by mail.
+            // Log the password for now so we can actually now what it is.
+            System.out.println("Password for " + user.getEmail() + ": " + plainPassword);
+            return user;
+        });
     }
 
     public Optional<User> updatePassword(Long id, String password) {

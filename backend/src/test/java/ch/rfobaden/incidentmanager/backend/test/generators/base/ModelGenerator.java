@@ -22,21 +22,13 @@ public abstract class ModelGenerator<T extends Model> extends Generator<T> {
 
     @Override
     public T generate() {
-        return generatePersisted();
+        return persist(generateNew());
     }
 
     public abstract T generateNew();
 
     public final List<T> generateNew(int amount) {
         return generate(amount, this::generateNew);
-    }
-
-    public final T generatePersisted() {
-        return persist(generateNew());
-    }
-
-    public final List<T> generatePersisted(int amount) {
-        return generate(amount, this::generatePersisted);
     }
 
     public T persist(T record) {

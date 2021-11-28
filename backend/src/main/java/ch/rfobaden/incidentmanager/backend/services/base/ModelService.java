@@ -5,14 +5,16 @@ import ch.rfobaden.incidentmanager.backend.models.Model;
 import java.util.List;
 import java.util.Optional;
 
-public interface ModelService<TModel extends Model> {
+public interface ModelService<TModel extends Model, TPath> {
     public Optional<TModel> find(Long id);
 
-    public List<TModel> list();
+    public Optional<TModel> find(TPath path, Long id);
 
-    public TModel create(TModel record);
+    public List<TModel> list(TPath path);
 
-    public Optional<TModel> update(TModel record);
+    public Optional<TModel> create(TPath path, TModel record);
 
-    public boolean delete(Long id);
+    public Optional<TModel> update(TPath path, TModel record);
+
+    public boolean delete(TPath path, Long id);
 }

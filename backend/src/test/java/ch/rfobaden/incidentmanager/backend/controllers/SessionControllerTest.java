@@ -50,7 +50,7 @@ public class SessionControllerTest extends AppControllerTest {
     @Test
     public void testFind() throws Exception {
         // Given
-        var user = userGenerator.generatePersisted();
+        var user = userGenerator.generate();
         var token = jwtHelper.encodeUser(user);
 
         Mockito.when(userService.find(user.getId()))
@@ -89,7 +89,7 @@ public class SessionControllerTest extends AppControllerTest {
     @Test
     public void testCreate() throws Exception {
         // Given
-        var user = userGenerator.generatePersisted();
+        var user = userGenerator.generate();
 
         var requestData = new SessionController.LoginData();
         requestData.setEmail(user.getEmail());
@@ -125,7 +125,7 @@ public class SessionControllerTest extends AppControllerTest {
     @Test
     public void testCreate_disabledUser() throws Exception {
         // Given
-        var user = userGenerator.generatePersisted();
+        var user = userGenerator.generate();
 
         var requestData = new SessionController.LoginData();
         requestData.setEmail(user.getEmail());
@@ -156,7 +156,7 @@ public class SessionControllerTest extends AppControllerTest {
     @Test
     public void testCreate_lockedUser() throws Exception {
         // Given
-        var user = userGenerator.generatePersisted();
+        var user = userGenerator.generate();
 
         var requestData = new SessionController.LoginData();
         requestData.setEmail(user.getEmail());
@@ -187,7 +187,7 @@ public class SessionControllerTest extends AppControllerTest {
     @Test
     public void testCreate_badCredentials() throws Exception {
         // Given
-        var user = userGenerator.generatePersisted();
+        var user = userGenerator.generate();
 
         var requestData = new SessionController.LoginData();
         requestData.setEmail(user.getEmail());

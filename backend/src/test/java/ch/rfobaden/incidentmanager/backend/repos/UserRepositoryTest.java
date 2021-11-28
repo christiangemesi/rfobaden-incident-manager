@@ -7,14 +7,12 @@ import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Locale;
-
 @DataJpaTest
-public class UserRepositoryTest extends ModelRepositoryTest<User, UserRepository> {
+public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepository> {
     @Test
     public void testFindByEmail() {
         // Given
-        var record = repository.save(generator.generatePersisted());
+        var record = repository.save(generator.generate());
 
         // When
         var result = repository.findByEmail(record.getEmail()).orElse(null);
@@ -27,7 +25,7 @@ public class UserRepositoryTest extends ModelRepositoryTest<User, UserRepository
     @Test
     public void testFindByEmail_ignoreCase() {
         // Given
-        var record = repository.save(generator.generatePersisted());
+        var record = repository.save(generator.generate());
 
         // When
         var result = repository.findByEmail(record.getEmail().toUpperCase()).orElse(null);
@@ -40,7 +38,7 @@ public class UserRepositoryTest extends ModelRepositoryTest<User, UserRepository
     @Test
     public void testFindByEmail_notFound() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
 
         // When
         var result = repository.findByEmail(record.getEmail());

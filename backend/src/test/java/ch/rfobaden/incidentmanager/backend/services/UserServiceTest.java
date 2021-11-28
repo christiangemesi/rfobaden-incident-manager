@@ -19,14 +19,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @SpringBootTest
-public class UserServiceTest extends ModelRepositoryServiceTest<UserService, User, UserRepository> {
+public class UserServiceTest extends ModelRepositoryServiceTest.Basic<User, UserService, UserRepository> {
     @Autowired
     protected Faker faker;
 
     @Test
     protected void testFindByEmail() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         Mockito.when(repository.findByEmail(record.getEmail()))
             .thenReturn(Optional.of(record));
 
@@ -43,7 +43,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
     @Test
     protected void testFindByEmail_notFound() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         Mockito.when(repository.findByEmail(record.getEmail()))
             .thenReturn(Optional.empty());
 
@@ -68,7 +68,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
         });
 
         // When
-        var result = service.create(newUser);
+        var result = service.create(newUser.toPath(), newUser).orElse(null);
 
         // Then
         assertThat(result).isNotNull();
@@ -94,11 +94,11 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
     public void testCreate_presetCredentials() {
         // Given
         var newUser = generator.generateNew();
-        newUser.setCredentials(generator.generatePersisted().getCredentials());
+        newUser.setCredentials(generator.generate().getCredentials());
         newUser.getCredentials().setUser(newUser);
 
         // When
-        var result = catchThrowable(() -> service.create(newUser));
+        var result = catchThrowable(() -> service.create(newUser.toPath(), newUser));
 
         // Then
         assertThat(result)
@@ -111,7 +111,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
     @Test
     public void testUpdatePassword() {
         // Given
-        var user = generator.generatePersisted();
+        var user = generator.generate();
         var newPassword = faker.internet().password();
         Mockito.when(repository.findById(user.getId()))
             .thenReturn(Optional.of(user));
@@ -134,9 +134,24 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
     }
 
     @Test
+    public void testUpdatePassword_unknownUser() {
+        // Given
+        var user = generator.generate();
+        var newPassword = faker.internet().password();
+        Mockito.when(repository.findById(user.getId()))
+            .thenReturn(Optional.empty());
+
+        // When
+        var result = service.updatePassword(user.getId(), newPassword);
+
+        // Then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
     public void testUpdatePassword_nullPassword() {
         // Given
-        var user = generator.generatePersisted();
+        var user = generator.generate();
 
         // When
         var result = catchThrowable(() -> service.updatePassword(user.getId(), null));
@@ -150,7 +165,7 @@ public class UserServiceTest extends ModelRepositoryServiceTest<UserService, Use
     @Test
     public void testUpdatePassword_emptyPassword() {
         // Given
-        var user = generator.generatePersisted();
+        var user = generator.generate();
 
         // When
         var result = catchThrowable(() -> service.updatePassword(user.getId(), ""));

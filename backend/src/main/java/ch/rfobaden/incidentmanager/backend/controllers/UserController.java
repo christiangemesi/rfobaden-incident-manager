@@ -4,26 +4,23 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping(path = "api/v1/users")
-public class UserController extends ModelController<User, UserService> {
+public class UserController extends ModelController.Basic<User, UserService> {
     private final JwtHelper jwtHelper;
 
-    public UserController(UserService service, JwtHelper jwtHelper) {
-        super(service);
+    public UserController(JwtHelper jwtHelper) {
         this.jwtHelper = jwtHelper;
     }
 

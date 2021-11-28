@@ -23,7 +23,7 @@ public class UserGenerator extends ModelGenerator<User> {
     @Override
     public User persist(User user) {
         var persistedUser = super.persist(user);
-        persistedUser.setCredentials(credentialsGenerator.generatePersisted());
+        persistedUser.setCredentials(credentialsGenerator.generate());
         persistedUser.getCredentials().setUser(persistedUser);
         return persistedUser;
     }

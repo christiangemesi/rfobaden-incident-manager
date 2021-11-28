@@ -1,5 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -62,4 +65,12 @@ public abstract class Model {
 
     @Override
     public abstract String toString();
+
+    @MappedSuperclass
+    public abstract static class Basic extends Model implements PathConvertible<EmptyPath> {
+        @Override
+        public final EmptyPath toPath() {
+            return EmptyPath.getInstance();
+        }
+    }
 }

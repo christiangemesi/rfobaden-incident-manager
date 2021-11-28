@@ -10,6 +10,9 @@ import static org.mockito.Mockito.verify;
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,9 +26,10 @@ import java.util.Optional;
 
 @Import(TestConfig.class)
 public abstract class ModelRepositoryServiceTest<
-    TService extends ModelRepositoryService<TModel, TRepository>,
-    TModel extends Model,
-    TRepository extends JpaRepository<TModel, Long>
+    TModel extends Model & PathConvertible<TPath>,
+    TPath,
+    TService extends ModelRepositoryService<TModel, TPath, TRepository>,
+    TRepository extends JpaRepository<TModel, Long> & ModelRepository<TModel, TPath>
     > {
     @Autowired
     protected TService service;
@@ -39,22 +43,23 @@ public abstract class ModelRepositoryServiceTest<
     @Test
     public void testList() {
         // Given
-        var records = generator.generatePersisted(10);
-        Mockito.when(repository.findAll())
+        var records = generator.generate(10);
+        var path = records.get(0).toPath();
+        Mockito.when(repository.findAllByPath(path))
             .thenReturn(records);
 
         // When
-        var result = service.list();
+        var result = service.list(path);
 
         // Then
         assertThat(result).isSameAs(records);
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAllByPath(path);
     }
 
     @Test
     public void testFind() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         Mockito.when(repository.findById(record.getId()))
             .thenReturn(Optional.of(record));
 
@@ -83,10 +88,28 @@ public abstract class ModelRepositoryServiceTest<
     }
 
     @Test
+    public void testFind_byPath_notFound() {
+        // Given
+        var record = generator.generate();
+        var path = record.toPath();
+        Mockito.when(repository.findByPath(path, record.getId()))
+            .thenReturn(Optional.empty());
+
+        // When
+        var result = service.find(path, record.getId());
+
+        // Then
+        assertThat(result).isEmpty();
+        verify(repository, times(1)).findByPath(path, record.getId());
+    }
+
+    @Test
     public void testCreate() {
         // Given
         var newRecord = generator.generateNew();
         var id = generator.generateId();
+        var path = newRecord.toPath();
+        mockLoadRelations(newRecord);
         Mockito.when(repository.save(newRecord))
             .thenAnswer((i) -> {
                 var persistedRecord = generator.copy(newRecord);
@@ -95,7 +118,7 @@ public abstract class ModelRepositoryServiceTest<
             });
 
         // When
-        var result = service.create(newRecord);
+        var result = service.create(path, newRecord).orElse(null);
 
         // Then
         assertThat(result).isNotNull();
@@ -112,9 +135,11 @@ public abstract class ModelRepositoryServiceTest<
         // Given
         var newRecord = generator.generateNew();
         newRecord.setId(generator.generateId());
+        var path = newRecord.toPath();
+        mockLoadRelations(newRecord);
 
         // When
-        var result = catchThrowable(() -> service.create(newRecord));
+        var result = catchThrowable(() -> service.create(path, newRecord));
 
         // Then
         assertThat(result)
@@ -128,9 +153,11 @@ public abstract class ModelRepositoryServiceTest<
         // Given
         var newRecord = generator.generateNew();
         newRecord.setCreatedAt(LocalDateTime.now());
+        var path = newRecord.toPath();
+        mockLoadRelations(newRecord);
 
         // When
-        var result = catchThrowable(() -> service.create(newRecord));
+        var result = catchThrowable(() -> service.create(path, newRecord));
 
         // Then
         assertThat(result)
@@ -144,9 +171,11 @@ public abstract class ModelRepositoryServiceTest<
         // Given
         var newRecord = generator.generateNew();
         newRecord.setUpdatedAt(LocalDateTime.now());
+        var path = newRecord.toPath();
+        mockLoadRelations(newRecord);
 
         // When
-        var result = catchThrowable(() -> service.create(newRecord));
+        var result = catchThrowable(() -> service.create(path, newRecord));
 
         // Then
         assertThat(result)
@@ -158,16 +187,18 @@ public abstract class ModelRepositoryServiceTest<
     @Test
     public void testUpdate() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         var updatedRecord = generator.copy(record);
+        var path = record.toPath();
+        mockLoadRelations(record);
 
-        Mockito.when(repository.findById(record.getId()))
+        Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
         Mockito.when(repository.save(updatedRecord))
             .thenReturn(updatedRecord);
 
         // When
-        var result = service.update(updatedRecord).orElse(null);
+        var result = service.update(path, updatedRecord).orElse(null);
 
         // Then
         assertThat(result).isNotNull();
@@ -181,12 +212,15 @@ public abstract class ModelRepositoryServiceTest<
     @Test
     public void testUpdate_notFound() {
         // Given
-        var updatedRecord = generator.generatePersisted();
+        var updatedRecord = generator.generate();
+        var path = updatedRecord.toPath();
+
         Mockito.when(repository.findById(updatedRecord.getId()))
             .thenReturn(Optional.empty());
+        mockLoadRelations(updatedRecord);
 
         // When
-        var result = service.update(updatedRecord);
+        var result = service.update(path, updatedRecord);
 
         // Then
         assertThat(result).isEmpty();
@@ -196,34 +230,36 @@ public abstract class ModelRepositoryServiceTest<
     @Test
     public void testUpdate_conflict() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         var updatedRecord = generator.copy(record);
+        var path = updatedRecord.toPath();
         record.setUpdatedAt(LocalDateTime.now());
 
-        Mockito.when(repository.findById(record.getId()))
+        Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
+        mockLoadRelations(record);
 
         // When
-        var result = catchThrowable(() -> service.update(updatedRecord));
+        var result = catchThrowable(() -> service.update(path, updatedRecord));
 
         // Then
-        assertThat(result)
-            .isInstanceOf(UpdateConflictException.class);
+        assertThat(result).isInstanceOf(UpdateConflictException.class);
         verify(repository, never()).save(any());
     }
 
     @Test
     public void testUpdate_updatedAtMissing() {
         // Given
-        var record = generator.generatePersisted();
+        var record = generator.generate();
         var updatedRecord = generator.copy(record);
         updatedRecord.setUpdatedAt(null);
 
         Mockito.when(repository.findById(record.getId()))
             .thenReturn(Optional.of(record));
+        mockLoadRelations(record);
 
         // When
-        var result = catchThrowable(() -> service.update(updatedRecord));
+        var result = catchThrowable(() -> service.update(updatedRecord.toPath(), updatedRecord));
 
         // Then
         assertThat(result)
@@ -235,32 +271,45 @@ public abstract class ModelRepositoryServiceTest<
     @Test
     public void testDelete() {
         // Given
-        var id = generator.generateId();
-        Mockito.when(repository.existsById(id))
+        var record = generator.generate();
+        var id = record.getId();
+        var path = record.toPath();
+        Mockito.when(repository.existsByPath(path, id))
             .thenReturn(true);
 
         // When
-        var result = service.delete(id);
+        var result = service.delete(path, id);
 
         // Then
         assertThat(result).isTrue();
-        verify(repository, times(1)).existsById(id);
+        verify(repository, times(1)).existsByPath(path, id);
         verify(repository, times(1)).deleteById(id);
     }
 
     @Test
     public void testDelete_notFound() {
         // Given
-        var id = generator.generateId();
-        Mockito.when(repository.existsById(id))
+        var record = generator.generate();
+        var id = record.getId();
+        var path = record.toPath();
+        Mockito.when(repository.existsByPath(path, id))
             .thenReturn(false);
 
         // When
-        var result = service.delete(id);
+        var result = service.delete(path, id);
 
         // Then
         assertThat(result).isFalse();
-        verify(repository, times(1)).existsById(id);
+        verify(repository, times(1)).existsByPath(path, id);
         verify(repository, never()).deleteById(id);
+    }
+
+    protected void mockLoadRelations(TModel record) {}
+
+    public abstract static class Basic<
+        TModel extends Model & PathConvertible<EmptyPath>,
+        TService extends ModelRepositoryService<TModel, EmptyPath, TRepository>,
+        TRepository extends JpaRepository<TModel, Long> & ModelRepository<TModel, EmptyPath>
+        > extends ModelRepositoryServiceTest<TModel, EmptyPath, TService, TRepository> {
     }
 }

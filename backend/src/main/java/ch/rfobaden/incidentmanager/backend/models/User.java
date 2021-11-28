@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user")
-public final class User extends Model {
+public final class User extends Model.Basic {
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)

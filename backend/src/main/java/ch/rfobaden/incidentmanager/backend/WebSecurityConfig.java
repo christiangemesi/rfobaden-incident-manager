@@ -91,6 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPoint())
 
+
             // make sure we use stateless session; session won't be used to
             // store user's state.
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

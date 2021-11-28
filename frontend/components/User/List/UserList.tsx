@@ -47,11 +47,6 @@ const UserList: React.VFC<Props> = ({ users }) => {
             </StyledTd>
 
             <StyledTdSmall>
-              <StyledButton type="button">
-                Bearbeiten
-              </StyledButton>
-            </StyledTdSmall>
-            <StyledTdSmall>
               <StyledButton type="button" onClick={() => handleDelete(user.id)}>
                 Löschen
               </StyledButton>

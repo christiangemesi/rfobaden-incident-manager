@@ -18,24 +18,12 @@ import org.springframework.context.annotation.Import;
 @SpringBootTest
 @Import(TestConfig.class)
 public abstract class PojoTest<T> {
-    @Autowired
-    protected Generator<T> generator;
-
-    @Test
-    public void testEquals_copy() {
-        // Given
-        var value = generator.generate();
-        var valueCopy = generator.copy(value);
-
-        // Then
-        assertThat(value).isEqualTo(valueCopy);
-        assertThat(valueCopy).isEqualTo(value);
-    }
+    protected abstract T generate();
 
     @Test
     public void testEquals_self() {
         // Given
-        var value = generator.generate();
+        var value = generate();
 
         // When
         var result = value.equals(value);
@@ -47,7 +35,7 @@ public abstract class PojoTest<T> {
     @Test
     public void testEquals_null() {
         // Given
-        var value = generator.generate();
+        var value = generate();
 
         // Then
         assertThat(value).isNotEqualTo(null);
@@ -56,7 +44,7 @@ public abstract class PojoTest<T> {
     @Test
     public void testEquals_differentType() {
         // Given
-        var value = generator.generate();
+        var value = generate();
 
         // Then
         assertThat(value).isNotEqualTo(new Object());
@@ -65,8 +53,8 @@ public abstract class PojoTest<T> {
     @Test
     public void testEquals_nonEqual() {
         // Given
-        var value = generator.generate();
-        var otherValue = generator.generate();
+        var value = generate();
+        var otherValue = generate();
 
         // Then
         assertThat(value).isNotEqualTo(otherValue);
@@ -77,7 +65,7 @@ public abstract class PojoTest<T> {
     @Test
     public void testToString() {
         // Given
-        var value = generator.generate();
+        var value = generate();
 
         // When
         var string = value.toString();
