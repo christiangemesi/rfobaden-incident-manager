@@ -1,5 +1,5 @@
 import React from 'react'
-import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Report, { parseReport, ReportPriority } from '@/models/Report'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -11,6 +11,7 @@ import Incident from '@/models/Incident'
 import UserStore, { useUsers } from '@/stores/UserStore'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
   incident: Incident
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handleClose }) => {
-  const form = useForm<ModelData<Report>>(() => (report ?? {
+  const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
     addendum: null,
@@ -59,7 +60,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     })
   })
 
-  const handleSubmit = async (formData: ModelData<Report>) => {
+  useSubmit(form, async (formData: ModelData<Report>) => {
     const [data, error]: BackendResponse<Report> = report === null
       ? await BackendService.create(`incidents/${incident.id}/reports`, formData)
       : await BackendService.update(`incidents/${incident.id}/reports`, report.id, formData)
@@ -71,7 +72,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     if (handleClose) {
       handleClose()
     }
-  }
+  })
+
+  useCancel(form, handleClose)
 
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
@@ -97,7 +100,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
         <UiForm.Field field={form.assigneeId}>{(props) => (
           <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit} onCancel={handleClose} />
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )

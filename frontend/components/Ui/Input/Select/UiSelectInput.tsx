@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useCallback, useMemo } from 'react'
-import { UiFormInputProps } from '@/components/Ui/Form/Field/UiFormField'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
+import { UiInputProps } from '@/components/Ui/Input'
 
-interface Props<T> extends UiFormInputProps<T | null> {
+interface Props<T> extends UiInputProps<T | null> {
   label?: string
   options: T[]
   optionValue?: keyof T | ((option: T) => string | number | null)

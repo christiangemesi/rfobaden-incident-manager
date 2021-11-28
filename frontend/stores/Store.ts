@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useEffectOnce, useIsomorphicLayoutEffect, useUpdateEffect } from 'react-use'
 import Model from '@/models/base/Model'
 import Id, { isId } from '@/models/base/Id'
-import { PartialUpdate, PartialUpdateFn } from '@/utils/update'
+import { Patcher, PatchFn } from '@/utils/update'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]
@@ -94,8 +94,8 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
 export const createStore = <T, S>(initialState: T, actions: CreateActions<T, S>): Store<T> & S => {
   let state = initialState
   const setters = [] as Array<(value: T) => void>
-  const setState: PartialUpdate<T> = (update) => {
-    const partialState = typeof update === 'function' ? (update as PartialUpdateFn<T>)(state) : update
+  const setState: Patcher<T> = (patch) => {
+    const partialState = typeof patch === 'function' ? (patch as PatchFn<T>)(state) : patch
     state = {
       ...state,
       ...partialState,
@@ -220,7 +220,7 @@ interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
 
 
 interface CreateActions<T, S> {
-  (getState: () => T, setState: PartialUpdate<T>): S
+  (getState: () => T, setState: Patcher<T>): S
 }
 
 

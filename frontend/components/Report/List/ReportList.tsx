@@ -70,7 +70,6 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report, onEdit: handle
       if (error !== null) {
         throw error
       }
-      console.log(data)
       ReportStore.save(parseReport(data))
     }
   }

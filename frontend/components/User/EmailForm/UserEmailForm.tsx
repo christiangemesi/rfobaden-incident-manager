@@ -1,12 +1,13 @@
 import React from 'react'
 import User, { parseUser } from '@/models/User'
-import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
 import { SessionResponse } from '@/models/Session'
 import { UpdateData } from '@/models/base/Model'
 import SessionStore from '@/stores/SessionStore'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
   user: User
@@ -24,7 +25,7 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
     ],
   }))
 
-  const handleSubmit = async (formData: FormData) => {
+  useSubmit(form, async (formData: FormData) => {
     const [data, error] = await BackendService.update<UpdateData<User>, SessionResponse>(`users/${user.id}`, {
       ...user,
       ...formData,
@@ -37,7 +38,9 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
     if (handleClose) {
       handleClose()
     }
-  }
+  })
+
+  useCancel(form, handleClose)
 
   return (
     <div>
@@ -45,11 +48,7 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
         )}</UiForm.Field>
-        <UiForm.Buttons
-          form={form}
-          onSubmit={handleSubmit}
-          onCancel={handleClose}
-        />
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )

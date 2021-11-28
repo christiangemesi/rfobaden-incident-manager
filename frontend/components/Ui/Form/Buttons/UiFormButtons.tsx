@@ -1,40 +1,40 @@
-import { clearForm, getUiFormBase, UiFormFieldsState } from '@/components/Ui/Form'
+import { clearForm, getFormBaseState, UiFormState } from '@/components/Ui/Form'
+import React, { useCallback } from 'react'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
-import { useCallback } from 'react'
 
 interface Props<T> {
-  form: UiFormFieldsState<T>
-  onSubmit: (value: T) => void
-  onCancel?: () => void
+  form: UiFormState<T>
 }
 
 const UiFormButtons = <T,>({
-  form: fields,
-  onSubmit: pushSubmit,
-  onCancel: pushCancel,
+  form,
 }: Props<T>): JSX.Element => {
-  const form = getUiFormBase(fields)
+  const baseForm = getFormBaseState(form)
   const {
-    value,
     isValid,
-  } = form
+    fields,
+    value,
+  } = baseForm
+
+  const pushSubmit = baseForm.onSubmit
+  const pushCancel = baseForm.onCancel
 
   const handleSubmit = useCallback(async () => {
-    if (isValid) {
+    if (isValid && pushSubmit !== null) {
       await pushSubmit(value)
     }
   }, [isValid, value, pushSubmit])
 
   const handleCancel = useCallback(async () => {
     clearForm(fields)
-    if (pushCancel !== undefined) {
+    if (pushCancel !== null) {
       await pushCancel()
     }
   }, [fields, pushCancel])
 
   return (
     <UiConfirmButtons
-      allowSubmit={form.isValid}
+      allowSubmit={isValid}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
     />

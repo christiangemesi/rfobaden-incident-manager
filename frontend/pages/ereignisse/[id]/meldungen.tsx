@@ -42,7 +42,6 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
             <ReportForm
-              key={selectedReport?.id ?? -1}
               incident={incident}
               report={selectedReport}
               onClose={() => setSelectedReport(null)}

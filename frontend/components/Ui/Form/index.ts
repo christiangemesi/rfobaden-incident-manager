@@ -1,242 +1,228 @@
-import { useSetState } from 'react-use'
+import { makeChildPatcher, makeChildUpdater, Patcher, toUpdate } from '@/utils/update'
+import { useCallback } from 'react'
+import { useGetSet, useUpdateEffect } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
-import { useEffect } from 'react'
-import Update from '@/utils/update'
+import { run } from '@/utils/control-flow'
 
-export const useForm = <T>(getInitialValue: () => T): UiFormFieldsState<T> => {
-  const [form, setForm] = useSetState<UiFormState<T>>(useStatic(() => {
-    const value = getInitialValue()
+export interface UiFormBaseState<T> extends UpdatablePart {
+  value: T
+  defaultValue: T
+  fields: UiFormState<T>
+  isValid: boolean
+  onSubmit: ((value: T) => void | Promise<void>) | null
+  onCancel: (() => void | Promise<void>) | null
+}
+
+export type UiFormState<T> = {
+  [K in keyof T]:
+    Exclude<T[K], null | undefined> extends UiFormValue
+      ? UiFormStateField<T, K>
+      : UiFormState<T[K]>
+}
+
+export interface UiFormStateField<T, K extends keyof T> extends UpdatablePart {
+  errors: string[]
+  hasChanged: boolean
+  skipNextValidation: boolean
+  value: T[K]
+  setValue(value: T[K]): void
+}
+
+interface UpdatablePart {
+  update: Patcher<this>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type UiFormValue = boolean | string | number | bigint | any[] | Date
+
+export function useForm<T>(values: () => T): UiFormState<T>
+export function useForm<T>(base: T | null, values: () => T): UiFormState<T>
+export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined?: () => T): UiFormState<T> {
+  const [base, makeValues] = valuesOrUndefined === undefined ? (
+    [null, baseOrValues as () => T]
+  ) : (
+    [baseOrValues as T, valuesOrUndefined]
+  )
+
+  const values = useStatic(makeValues)
+
+  const [getForm, setForm] = useGetSet((): UiFormBaseState<T> => {
+    const value = base ?? values
+    const updateForm: Patcher<UiFormBaseState<T>> = (patch) => {
+      setForm(toUpdate(patch))
+    }
+    const updateValue = makeChildPatcher(updateForm, 'value')
     return {
       value,
-      getInitialValue,
-      fields: buildFields(getInitialValue()),
-      hasChanged: false,
-
-      // We always start out assuming the form is invalid.
-      // Will be updated as soon as validators run for the first time,
-      // but then most ofen remain on `false`, since no valid data has been entered at that time.
+      defaultValue: value,
+      fields: mapValueToState(value, updateValue, makeChildPatcher(updateForm, 'fields')),
       isValid: false,
-
-      // Will be overwritten with `setForm`, to which we do not have (safe) access in here.
-      update: () => undefined,
+      onSubmit: null,
+      onCancel: null,
+      update: updateForm,
     }
-  }))
+  })
+  const form = getForm()
 
-  form.update = setForm
-  ;(form.fields as unknown as UiFormChild<T>)[UiFormChild_baseKey] = form
-  for (const key of Object.keys(form.fields)) {
-    const field = form.fields[key]
-    ;(field as unknown as UiFormChild<T>)[UiFormChild_baseKey] = form
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(form.fields as any)[formKey] = form
+
+  useUpdateEffect(() => {
+    const defaultValue = base ?? values
+    setForm((currentForm) => ({
+      ...currentForm,
+      value: defaultValue,
+      defaultValue: defaultValue,
+      fields: setFieldValues(currentForm.fields, defaultValue),
+    }))
+  }, [base])
 
   return form.fields
 }
 
-export const clearForm = <T>(fields: UiFormFieldsState<T>): void => {
-  const form = getUiFormBase(fields)
-  form.update((state) => {
-    const newFields = { ...state.fields }
-    for (const key of Object.keys(newFields)) {
-      const field = newFields[key]
-      newFields[key] = {
-        ...field,
-        errors: [],
-        isInitial: true,
-      }
-    }
-    return {
-      ...state,
-      value: state.getInitialValue(),
-      isValid: false,
-      hasChanged: false,
-      fields: newFields,
-    }
-  })
-}
-
-export const setFormField = <T, K extends keyof T>(
-  field: UiFormFieldState<T, K>,
-  options: {
-    value?: T[K],
-    errors?: string[],
-  },
+export const useSubmit = <T>(
+  form: UiFormState<T>,
+  callback: (value: T) => void | Promise<void>,
+  deps: unknown[] = [],
 ): void => {
-  const form = getUiFormBase(field)
-  form.update((state) => {
-    const currentField = state.fields[field.key]
-    return {
-      ...state,
-      value: {
-        ...state.value,
-        [field.key]: options.value === undefined ? state.value[field.key] : options.value,
-      },
-      fields: {
-        ...state.fields,
-        [field.key]: {
-          ...currentField,
-          ...(options.errors === undefined ? {} : {
-            errors: options.errors,
-            isInitial: false,
-            skipNextValidation: true,
-          }),
-        },
-      },
-    }
-  })
+  getFormBaseState(form).onSubmit =
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useCallback(callback, deps)
 }
 
-export const useValidate = <T>(
-  fields: UiFormFieldsState<T>,
-  makeValidators: (v: typeof validate) => FieldValidators<T>
+export const useCancel = <T>(
+  form: UiFormState<T>,
+  callback: (() => void | Promise<void>) | undefined,
+  deps: unknown[] = [],
 ): void => {
-  const form = getUiFormBase(fields)
-
-  const validators = useStatic(() => makeValidators(validate))
-
-  useEffect(() => {
-    const fieldUpdates = {} as {
-      [K in keyof T]: Partial<UiFormFieldState<T, keyof T>>
-    }
-    let errorCount = 0
-    for (const key of Object.keys(fields)) {
-      const field = form.fields[key]
-      if (field.skipNextValidation) {
-        fieldUpdates[key] = {
-          skipNextValidation: false,
-        }
-        continue
+  getFormBaseState(form).onCancel =
+    useCallback(async () => {
+      if (callback) {
+        await callback()
       }
-
-      fieldUpdates[key] = { errors: []}
-      const fieldValidators = validators[key]
-      if (fieldValidators === undefined) {
-        // The form value contains fields not actually managed by the form,
-        // so we just skip them.
-        continue
-      }
-      for (const validate of fieldValidators) {
-        const message = validate(form.value[key], form.value)
-        if (message !== true) {
-          errorCount += 1
-          fieldUpdates[key].errors?.push(message)
-        }
-      }
-    }
-    form.update((state) => {
-      const newFields = {} as UiFormFieldsState<T>
-      for (const key of Object.keys(fieldUpdates)) {
-        newFields[key] = {
-          ...state.fields[key],
-          ...fieldUpdates[key],
-        }
-      }
-      return {
-        ...state,
-        isValid: errorCount === 0,
-        fields: newFields,
-      }
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.value])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, deps)
 }
 
-export interface UiFormState<T> {
-  value: T
-  getInitialValue: () => T
-  fields: UiFormFieldsState<T>
-  isValid: boolean
-  hasChanged: boolean
-  update: Update<UiFormState<T>>
+export const clearForm = (form: UiFormState<unknown>): void => {
+  const baseForm = getFormBaseState(form)
+  baseForm.update((prev) => ({
+    value: prev.defaultValue,
+    isValid: false,
+    fields: setFieldValues(prev.fields, prev.defaultValue),
+  }))
 }
 
-export type UiFormFieldsState<T> = {
-  [K in keyof T]: UiFormFieldState<T, K>
+const setFieldValues = <T>(state: UiFormState<T>, defaultValue: T): UiFormState<T> => {
+  const newState = {} as UiFormState<T>
+  for (const fieldName of Object.keys(state)) {
+    const fieldValue = state[fieldName]
+    const defaultFieldValue = defaultValue[fieldName]
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(newState as any)[fieldName] = isFormFieldState(fieldValue)
+      ? setFieldValue(fieldValue as UiFormStateField<T, keyof T>, defaultFieldValue)
+      : setFieldValues(fieldValue as UiFormState<T[keyof T]>, defaultFieldValue)
+  }
+  return newState
 }
 
-export interface UiFormFieldState<T, K extends keyof T> {
-  key: K
-  errors: string[]
-  isInitial: boolean
-  skipNextValidation: boolean
+const setFieldValue = <T>(field: UiFormStateField<T, keyof T>, defaultValue: T[keyof T]): typeof field => {
+  return {
+    ...field,
+    value: defaultValue,
+    hasChanged: false,
+    errors: [],
+  }
 }
 
+const mapValueToState = <T>(
+  value: T,
+  updateValue: Patcher<T>,
+  update: Patcher<UiFormState<T>>,
+): UiFormState<T> => {
+  const fields = {} as UiFormState<T>
+  for (const fieldName of Object.keys(value)) {
 
-const UiFormChild_baseKey = Symbol('UiFormChild.base')
-interface UiFormChild<T> {
-  [UiFormChild_baseKey]: UiFormState<T>
-}
+    const fieldValue = value[fieldName]
+    const updateField = makeChildPatcher(update, fieldName)
 
-export const getUiFormBase = <T>(field: UiFormFieldsState<T> | UiFormFieldState<T, keyof T>): UiFormState<T> => (
-  (field as unknown as UiFormChild<T>)[UiFormChild_baseKey]
-)
-
-const buildFields = <T>(value: T): UiFormFieldsState<T> => {
-  const fields = {} as UiFormFieldsState<T>
-  for (const key of Object.keys(value)) {
-    fields[key] = {
-      key,
-      errors: [],
-      isInitial: true,
-      skipNextValidation: false,
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(fields as any)[fieldName] = isFormValue(fieldValue) ? (
+      mapValueToStateField(
+        value[fieldName],
+        makeChildUpdater(updateValue, fieldName),
+        updateField as Patcher<UiFormStateField<T, keyof T>>,
+      )
+    ) : (
+      mapValueToState<T[keyof T]>(
+        fieldValue,
+        makeChildPatcher(updateValue, fieldName),
+        updateField as Patcher<UiFormState<T[keyof T]>>,
+      )
+    )
   }
   return fields
 }
 
-interface Validator<T, V> {
-  (value: V, record: T): true | string
+const mapValueToStateField = <T, K extends keyof T>(
+  value: T[K],
+  setValue: (value: T[K]) => void,
+  update: Patcher<UiFormStateField<T, K>>,
+): UiFormStateField<T, K> => {
+  return {
+    errors: [],
+    hasChanged: false,
+    skipNextValidation: false,
+    update: (patch) => {
+      if ('value' in patch) {
+        throw new Error('field value should be set using \'setValue\'')
+      }
+      update(patch)
+    },
+    value,
+    setValue(newValue) {
+      update({ value: newValue, hasChanged: true })
+      setValue(newValue)
+    },
+  }
 }
 
-type FieldValidators<T> = {
-  [K in keyof T]: Validator<T, T[K]>[]
+export const setFormField = <T, K extends keyof T>(
+  field: UiFormStateField<T, K>,
+  patch: Partial<{ value: T[K], errors: string[] }>
+): void => {
+  const update: Partial<typeof field> = {}
+  if (patch.errors !== undefined) {
+    update.errors = patch.errors
+    update.skipNextValidation = true
+  }
+  if (Object.keys(update).length !== 0) {
+    field.update(update)
+  }
+
+  if (patch.value !== undefined) {
+    field.setValue(patch.value)
+  }
 }
 
-const validate = {
-  notNull: <T, V extends unknown | null | undefined>(options: { message?: string } = {}): Validator<T, V> => (value) => {
-    const {
-      message = 'darf nicht leer sein',
-    } = options
-    if (value == null) {
-      return message
-    }
-    return true
-  },
-  notEmpty: <T, V extends { length: number }| null | undefined>(options: { message?: string, allowNull?: boolean } = {}): Validator<T, V> => (value) => {
-    const message = options.message ?? 'darf nicht leer sein'
-    const allowNull = options.allowNull ?? false
-    if (value == null) {
-      return allowNull || message
-    }
-    if (value.length === 0) {
-      return message
-    }
-    return true
-  },
-  notBlank: <T, V extends string | null | undefined>(options: { message?: string, allowNull?: boolean } = {}): Validator<T, V> => (value) => {
-    const message = options.message ?? 'darf nicht leer sein'
-    const allowNull = options.allowNull ?? false
+const formKey = Symbol('form')
 
-    if (value == null) {
-      return allowNull || message
-    }
-    return value.trim().length !== 0 || message
-  },
-  match: <T, V extends string | null | undefined>(pattern: RegExp, options: { message?: string } = {}): Validator<T, V> => (value) => {
-    const {
-      message = 'ist nicht gültig',
-    } = options
-    if (value != null && !pattern.test(value as string)) {
-      return message
-    }
-    return true
-  },
-  minLength: <T, V extends { length: number } | null | undefined>(min: number, options: { message?: string } = {}): Validator<T, V> => (value) => {
-    const {
-      message = `muss mindestens ${min} Zeichen lang sein`,
-    } = options
-    if (value != null && value.length < min) {
-      return message
-    }
-    return true
-  },
+export const getFormBaseState = <T>(base: UiFormState<T>): UiFormBaseState<T> => {
+  if (!(formKey in base)) {
+    throw new Error(`fields does not contain form: ${base}`)
+  }
+  return (base as unknown as { [formKey]: UiFormBaseState<T> })[formKey]
 }
+
+export const isFormFieldState = <T, K extends keyof T>(field: UiFormStateField<T, K> | UiFormState<T[K]>): field is UiFormStateField<T, K> => {
+  return field != null && typeof field == 'object' && 'value' in field && 'setValue' in field
+}
+
+const isFormValue = (value: unknown): value is UiFormValue => {
+  const isPrimitive = value == null || typeof value !== 'object' && typeof value !== 'function'
+  return isPrimitive || value instanceof Date || Array.isArray(value)
+}
+
+
+

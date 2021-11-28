@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useCallback } from 'react'
-import { UiFormInputProps } from '@/components/Ui/Form/Field/UiFormField'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
+import { UiInputProps } from '@/components/Ui/Input'
 
-interface Props extends UiFormInputProps<string | null> {
+interface Props extends UiInputProps<string | null> {
   label?: string
   type?: 'text' | 'password'
 }

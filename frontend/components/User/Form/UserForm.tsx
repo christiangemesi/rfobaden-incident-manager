@@ -3,11 +3,12 @@ import User, { parseUser, UserRole } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
-import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { ModelData } from '@/models/base/Model'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 const UserForm: React.VFC = () => {
   const form = useForm<ModelData<User>>(() => ({
@@ -16,6 +17,7 @@ const UserForm: React.VFC = () => {
     lastName: '',
     role: UserRole.ADMIN,
   }))
+
   useValidate(form, (validate) => ({
     email: [
       validate.notBlank(),
@@ -30,11 +32,11 @@ const UserForm: React.VFC = () => {
     role: [],
   }))
 
-  const handleSubmit = async (formData: ModelData<User>) => {
+  useSubmit(form, async (formData: ModelData<User>) => {
     const [data] = await BackendService.create<User>('users', formData)
     UserStore.save(parseUser(data))
     clearForm(form)
-  }
+  })
 
   return (
     <div>
@@ -57,7 +59,7 @@ const UserForm: React.VFC = () => {
         <UiForm.Field field={form.role}>{(props) => (
           <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit} />
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )

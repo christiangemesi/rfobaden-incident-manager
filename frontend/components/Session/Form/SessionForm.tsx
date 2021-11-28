@@ -6,9 +6,10 @@ import SessionStore, { useSession } from '@/stores/SessionStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import { setFormField, useForm, useValidate } from '@/components/Ui/Form'
+import { setFormField, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { SessionResponse } from '@/models/Session'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 const SessionForm: React.VFC = () => {
   const form = useForm<LoginData>(() => ({
@@ -33,7 +34,7 @@ const SessionForm: React.VFC = () => {
     }
   }, [router, currentUser])
 
-  const handleSubmit = async (formData: LoginData) => {
+  useSubmit(form, async (formData: LoginData) => {
     const [data, error]: BackendResponse<SessionResponse> = await BackendService.create('session', {
       ...formData,
       isPersistent: true,
@@ -49,7 +50,7 @@ const SessionForm: React.VFC = () => {
       throw error
     }
     SessionStore.setSession(data.token, parseUser(data.user))
-  }
+  })
 
   return (
     <div>
@@ -65,7 +66,7 @@ const SessionForm: React.VFC = () => {
             <UiForm.Field field={form.password}>{(props) => (
               <UiTextInput {...props} label="Passwort" type="password" />
             )}</UiForm.Field>
-            <UiForm.Buttons form={form} onSubmit={handleSubmit} />
+            <UiForm.Buttons form={form} />
           </form>
         </UiGrid.Col>
       </CenteredGrid>

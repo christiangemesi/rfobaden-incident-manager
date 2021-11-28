@@ -1,27 +1,28 @@
 import React from 'react'
-import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
   incident: Incident | null
   onClose?: () => void
 }
 
-const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null }) => {
-  const form = useForm<ModelData<Incident>>(() => ({
-    title: incident?.title ?? '',
-    description: incident?.description ?? null,
-    authorId: incident?.authorId ?? -1,
-    closeReason: incident?.closeReason ?? null,
-    isClosed: incident?.isClosed ?? false,
-    closedAt: incident?.closedAt ?? null,
-    startsAt: incident?.startsAt ?? null,
-    endsAt: incident?.endsAt ?? null,
+const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
+  const form = useForm<ModelData<Incident>>(incident, () => ({
+    title: '',
+    description: null,
+    authorId: -1,
+    closeReason: null,
+    isClosed: false,
+    closedAt: null,
+    startsAt: null,
+    endsAt: null,
   }))
 
   useValidate(form, (validate) => ({
@@ -39,7 +40,7 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null 
     endsAt: [],
   }))
 
-  const handleSubmit = async (incidentData: ModelData<Incident>) => {
+  useSubmit(form, async (incidentData: ModelData<Incident>) => {
     const [data]: BackendResponse<Incident> = incident === null ? (
       await BackendService.create('incidents', incidentData)
     ) : (
@@ -49,10 +50,12 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null 
     const newIncident = parseIncident(data)
     IncidentStore.save(newIncident)
     clearForm(form)
-    if (handleClose !== null) {
+    if (handleClose) {
       handleClose()
     }
-  }
+  })
+
+  useCancel(form, handleClose)
 
   return (
     <div>
@@ -63,7 +66,7 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose = null 
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextInput {...props} label="Beschreibung" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} onSubmit={handleSubmit} onCancel={handleClose ?? undefined} />
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )

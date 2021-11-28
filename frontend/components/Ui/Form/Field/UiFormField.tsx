@@ -1,71 +1,50 @@
-import React, { Dispatch, memo, ReactNode, useCallback, useMemo } from 'react'
-import { getUiFormBase, UiFormFieldState } from '@/components/Ui/Form'
+import { UiFormStateField } from '@/components/Ui/Form'
+import React, { memo, ReactNode, useMemo } from 'react'
+import { UiInputProps } from '@/components/Ui/Input'
 
 interface Props<T, K extends keyof T> {
-  field: UiFormFieldState<T, K>
-  children: (props: UiFormInputProps<T[K]>) => ReactNode
+  field: UiFormStateField<T, K>
+  deps?: unknown[]
+  children: (inputProps: UiInputProps<T[K] | null>) => ReactNode
 }
 
-const UiFormField = <T, K extends keyof T>({ field, children }: Props<T, K>): JSX.Element => {
-  const form = getUiFormBase(field)
-  const {
-    value: { [field.key]: value },
-    update: setForm,
-  } = form
-  const {
-    key,
-    errors,
-    isInitial,
-  } = field
-
-  const setValue = useCallback((newValue: T[K] | null) => {
-    setForm((form) => {
-      return {
-        ...form,
-        value: {
-          ...form.value,
-          [key]: newValue,
-        },
-        fields: {
-          ...form.fields,
-          [key]: {
-            ...form.fields[key],
-            isInitial: false,
-
-            // Change the (untyped) reload property of the state belonging to this field.
-            // This enables us to memoize this component, without requiring further changes
-            // to how the UiFormState works.
-            [reloadTriggerKey]: {},
-          },
-        },
-      }
-    })
-  }, [key, setForm])
-
-  const inputProps: UiFormInputProps<T[K]> = useMemo(() => ({
+const UiFormField = <T, K extends keyof T>({
+  field,
+  children,
+}: Props<T, K>): JSX.Element => {
+  const { value, setValue, hasChanged, errors } = field
+  const child = useMemo(() => children({
     value,
-    errors: isInitial ? [] : errors,
-    onChange: setValue,
-  }), [value, errors, isInitial, setValue])
-
-  const input = useMemo(() => (
-    children(inputProps)
-  ), [children, inputProps])
+    errors: hasChanged ? errors : [],
+    onChange: (newValue) => {
+      setValue(newValue as T[K])
+    },
+  }), [children, value, hasChanged, errors, setValue])
 
   return (
     <React.Fragment>
-      {input}
+      {child}
     </React.Fragment>
   )
 }
-export default memo(UiFormField, (prev, next) => (
-  prev.field === next.field
-)) as unknown as typeof UiFormField
+export default memo(UiFormField, (prev, next) => {
+  if (prev.field !== next.field) {
+    return false
+  }
 
-export interface UiFormInputProps<T> {
-  value?: T
-  onChange?: Dispatch<T | null>
-  errors?: string[]
-}
+  if (prev.deps === next.deps) {
+    return true
+  }
+  const prevDeps = prev.deps ?? []
+  const nextDeps = next.deps ?? []
+  if (prevDeps.length !== nextDeps.length) {
+    return false
+  }
+  for (let i = 0; i < prevDeps.length; i++) {
+    if (prevDeps[i] !== nextDeps[i]) {
+      return false
+    }
+  }
+  return true
+}) as unknown as typeof UiFormField
 
-const reloadTriggerKey = Symbol('reloadTrigger')

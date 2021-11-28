@@ -1,11 +1,12 @@
 import React from 'react'
 import User, { parseUser } from '@/models/User'
-import { clearForm, useForm, useValidate } from '@/components/Ui/Form'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
 import { SessionResponse } from '@/models/Session'
 import SessionStore from '@/stores/SessionStore'
+import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
   user: User
@@ -26,7 +27,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
     ],
   }))
 
-  const handleSubmit = async (formData: FormData) => {
+  useSubmit(form, async (formData: FormData) => {
     const [data, error] = await BackendService.update<FormData, SessionResponse>(`users/${user.id}/password`, formData)
     if (error !== null) {
       throw error
@@ -36,7 +37,9 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
     if (handleClose) {
       handleClose()
     }
-  }
+  })
+
+  useCancel(form, handleClose)
 
   return (
     <div>
@@ -47,11 +50,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.passwordRepeat}>{(props) => (
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
-        <UiForm.Buttons
-          form={form}
-          onSubmit={handleSubmit}
-          onCancel={handleClose}
-        />
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )
