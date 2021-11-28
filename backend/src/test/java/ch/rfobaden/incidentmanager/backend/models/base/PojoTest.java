@@ -55,6 +55,11 @@ public abstract class PojoTest<T> {
         // Given
         var value = generate();
         var otherValue = generate();
+        
+        // Skip this test if the class is a singleton.
+        if (value == otherValue) {
+            return;
+        }
 
         // Then
         assertThat(value).isNotEqualTo(otherValue);
