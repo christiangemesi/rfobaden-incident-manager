@@ -1,10 +1,10 @@
+import React from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiButton from '@/components/Ui/Button/UiButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 const UiButtonExample: React.VFC = () => {
-
   return (
     <UiContainer>
       <UiGrid gap={0.5}>

@@ -5,14 +5,20 @@ import { ColorName } from '@/theme'
 import { contrastDark } from '@/theme'
 
 interface Props {
-  // disables button
+  /**
+   *   disables button
+   */
   isDisabled?: boolean
 
-  // take up the full width possible
+  /**
+   * take up the full width possible
+   */
   isFull?: boolean
 
-  // tooltip while hovering
-  tooltip?: string
+  /**
+   * tooltip while hovering
+   */
+  title?: string
 
   children?: ReactNode
   onClick?: EventHandler<MouseEvent>
@@ -26,18 +32,18 @@ interface Props {
 const UiButton = styled(StyleHelper.tag('button', ({
   isDisabled = false,
   type = 'button',
-  tooltip,
+  title,
   onClick,
 }: Props) => ({
   disabled: isDisabled,
-  title: tooltip,
+  title: title,
   type,
   onClick,
 })))`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  
+
   padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
   border: none;
@@ -49,11 +55,10 @@ const UiButton = styled(StyleHelper.tag('button', ({
 
   transition: 250ms ease;
   transition-property: opacity, filter, box-shadow;
-  
+
   ${({ isFull }) => isFull && css`
     width: 100%;
   `}
-
   :hover:not(&[disabled]) {
     cursor: pointer;
     filter: brightness(90%);
@@ -65,10 +70,10 @@ const UiButton = styled(StyleHelper.tag('button', ({
     filter: brightness(75%);
   }
 
-  :disabled{
+  :disabled {
     cursor: not-allowed;
     box-shadow: none;
-    background: rgb(200,200,200);
+    background: rgb(200, 200, 200);
     color: ${contrastDark};
   }
 `
