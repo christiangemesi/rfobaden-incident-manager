@@ -7,6 +7,7 @@ interface Props {
 }
 
 const UiTitle: React.VFC<Props> = ({ children, level }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const H: any = `h${level}`
   return (
     <StyledTitle as={H}>
