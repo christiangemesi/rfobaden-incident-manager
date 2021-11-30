@@ -1,9 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
-
-
-
 interface Props {
   text: string
   children: ReactNode
@@ -21,6 +18,7 @@ const TextWithIcon: React.VFC<Props> = ({ children,text  }) => {
     </StyledTitle>
   )
 }
+
 export default TextWithIcon
 
 const StyledTitle = styled.div`
