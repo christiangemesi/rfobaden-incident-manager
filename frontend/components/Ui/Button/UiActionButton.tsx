@@ -11,10 +11,11 @@ interface Props {
 }
 
 const UiActionButton: React.VFC<Props> = ({
+  //TODO set color
+  title= '',
+  isDisabled = false,
   children,
   onClick: handleClick,
-  isDisabled = false,
-  title= '',
 }) => {
   return (
     <StyledActionButton onClick={handleClick} disabled={isDisabled} title={title}>
