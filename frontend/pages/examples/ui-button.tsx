@@ -9,22 +9,22 @@ const UiButtonExample: React.VFC = () => {
     <UiContainer>
       <UiGrid gap={0.5}>
         <UiGrid.Col size={3}>
-          <UiButton isFull isDisabled={true} color={'success'}>
+          <UiButton isFull isDisabled color="success">
             <UiIcon.SubmitAction />
           </UiButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiButton isDisabled={false} color={'error'}>
+          <UiButton color="error">
             <UiIcon.CancelAction />
           </UiButton>
         </UiGrid.Col>
         <UiGrid.Col size={3}>
-          <UiButton isFull isDisabled={false} color={'success'}>
+          <UiButton isFull color="success">
             <UiIcon.SubmitAction />
           </UiButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiButton isFull isDisabled={false}>
+          <UiButton isFull>
             Button
           </UiButton>
         </UiGrid.Col>
