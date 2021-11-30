@@ -7,6 +7,10 @@ export type Theme = {
     warning: Color
     info: Color
   }
+  fonts: {
+    heading: string
+    body: string
+  }
   breakpoints: {
     [K in Breakpoint]: {
       min: number
@@ -29,14 +33,14 @@ export interface Color {
   contrast: string
 }
 
-const contrastDark = '#1D3557'
-const contrastWhite = '#F1FAEE'
+export const contrastDark = '#1D3557'
+export const contrastLight = '#F1FAEE'
 
 export const defaultTheme: Theme = {
   colors: {
     primary: {
       value: '#457B9D',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
     secondary: {
       value: '#A8DADC',
@@ -48,7 +52,7 @@ export const defaultTheme: Theme = {
     },
     error: {
       value: '#E63946',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
     warning: {
       value: '#F5D35A',
@@ -56,8 +60,12 @@ export const defaultTheme: Theme = {
     },
     info: {
       value: '#6F54A9',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
+  },
+  fonts: {
+    heading: 'Arial, sans serif',
+    body: 'Arial, sans serif',
   },
   breakpoints: {
     xs: {
