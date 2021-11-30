@@ -1,6 +1,19 @@
-import { css, DefaultTheme } from 'styled-components'
-
-export type Theme = DefaultTheme
+export type Theme = {
+  colors: {
+    primary: Color
+    secondary: Color
+    success: Color
+    error: Color
+    warning: Color
+    info: Color
+  }
+  breakpoints: {
+    [K in Breakpoint]: {
+      min: number
+      max: number
+    }
+  }
+}
 
 export type Breakpoint =
   | 'xs'
@@ -9,7 +22,43 @@ export type Breakpoint =
   | 'lg'
   | 'xl'
 
+export type ColorName = keyof Theme['colors']
+
+export interface Color {
+  value: string
+  contrast: string
+}
+
+const contrastDark = '#1D3557'
+const contrastWhite = '#F1FAEE'
+
 export const defaultTheme: Theme = {
+  colors: {
+    primary: {
+      value: '#457B9D',
+      contrast: contrastWhite,
+    },
+    secondary: {
+      value: '#A8DADC',
+      contrast: contrastDark,
+    },
+    success: {
+      value: '#74BD6E',
+      contrast: contrastDark,
+    },
+    error: {
+      value: '#E63946',
+      contrast: contrastWhite,
+    },
+    warning: {
+      value: '#F5D35A',
+      contrast: contrastDark,
+    },
+    info: {
+      value: '#6F54A9',
+      contrast: contrastWhite,
+    },
+  },
   breakpoints: {
     xs: {
       min: 0,
