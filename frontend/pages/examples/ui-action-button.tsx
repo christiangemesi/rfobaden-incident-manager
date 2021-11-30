@@ -10,8 +10,12 @@ const UiActionButtonExample: React.VFC = () => {
 
   return(
     <div>
-      <UiActionButton onClick={handleClick} isDisabled={false} title= "Title of a activated FAB">
+      <UiActionButton onClick={handleClick} title= "Title of a activated FAB" color="primary">
         <UiIcon.KeyMessage />
+      </UiActionButton>
+
+      <UiActionButton onClick={handleClick} title= "Title of a activated FAB" color="error">
+        <UiIcon.EditAction />
       </UiActionButton>
 
       <UiActionButton onClick={handleClick} isDisabled title= "Title of a disabled FAB">
@@ -19,7 +23,6 @@ const UiActionButtonExample: React.VFC = () => {
       </UiActionButton>
     </div>
   )
-
 }
 
 export default UiActionButtonExample
