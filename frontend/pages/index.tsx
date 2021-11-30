@@ -1,6 +1,7 @@
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
+import UiBadge from '@/components/Ui/Badge/UiBadge'
 
 const HomePage: React.VFC = () => {
   return (
