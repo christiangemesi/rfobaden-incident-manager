@@ -34,6 +34,10 @@ const UiButton = styled(StyleHelper.tag('button', ({
   type,
   onClick,
 })))`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  
   padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
   border: none;
