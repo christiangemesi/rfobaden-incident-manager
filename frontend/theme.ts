@@ -29,14 +29,14 @@ export interface Color {
   contrast: string
 }
 
-const contrastDark = '#1D3557'
-const contrastWhite = '#F1FAEE'
+export const contrastDark = '#1D3557'
+export const contrastLight = '#F1FAEE'
 
 export const defaultTheme: Theme = {
   colors: {
     primary: {
       value: '#457B9D',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
     secondary: {
       value: '#A8DADC',
@@ -48,7 +48,7 @@ export const defaultTheme: Theme = {
     },
     error: {
       value: '#E63946',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
     warning: {
       value: '#F5D35A',
@@ -56,7 +56,7 @@ export const defaultTheme: Theme = {
     },
     info: {
       value: '#6F54A9',
-      contrast: contrastWhite,
+      contrast: contrastLight,
     },
   },
   breakpoints: {
