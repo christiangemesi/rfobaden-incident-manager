@@ -37,6 +37,8 @@ const UiButton = styled(StyleHelper.tag('button', ({
   padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
   border: none;
+  min-height: 2rem;
+  font-size: 1rem; // TODO
   background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
   color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
 
