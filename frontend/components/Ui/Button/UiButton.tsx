@@ -38,21 +38,30 @@ const UiButton = styled(StyleHelper.tag('button', ({
   border-radius: 0.5rem;
   border: none;
   min-height: 2rem;
-  font-size: 1rem; // TODO
+  font-size: 1rem;
   background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
   color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
-
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  
   ${({ isFull }) => isFull && css`
     width: 100%;
-  `}
-  
-  ${({ isDisabled }) => isDisabled && css`
-    background: rgb(200,200,200);
-    color: ${contrastDark};
   `}
 
   :hover:not(&[disabled]) {
     cursor: pointer;
+    filter: brightness(90%);
+  }
+
+  :active:not(&[disabled]) {
+    cursor: pointer;
+    filter: brightness(75%);
+  }
+
+  :disabled{
+    cursor: not-allowed;
+    box-shadow: none;
+    background: rgb(200,200,200);
+    color: ${contrastDark};
   }
 `
 
