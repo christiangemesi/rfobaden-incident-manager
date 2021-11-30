@@ -35,4 +35,3 @@ const StyledText = styled.span`
   line-height: 24px;
   letter-spacing: 0.1px;
 `
-
