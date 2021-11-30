@@ -42,6 +42,9 @@ const UiButton = styled(StyleHelper.tag('button', ({
   background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
   color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+  transition: 250ms ease;
+  transition-property: opacity, filter, box-shadow;
   
   ${({ isFull }) => isFull && css`
     width: 100%;
@@ -54,6 +57,7 @@ const UiButton = styled(StyleHelper.tag('button', ({
 
   :active:not(&[disabled]) {
     cursor: pointer;
+    box-shadow: none;
     filter: brightness(75%);
   }
 
