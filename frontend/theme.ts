@@ -7,6 +7,10 @@ export type Theme = {
     warning: Color
     info: Color
   }
+  fonts: {
+    heading: string
+    body: string
+  }
   breakpoints: {
     [K in Breakpoint]: {
       min: number
@@ -58,6 +62,10 @@ export const defaultTheme: Theme = {
       value: '#6F54A9',
       contrast: contrastLight,
     },
+  },
+  fonts: {
+    heading: 'Arial, sans serif',
+    body: 'Arial, sans serif',
   },
   breakpoints: {
     xs: {

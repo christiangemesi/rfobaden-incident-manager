@@ -98,16 +98,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 export default App
 
 const GlobalStyle = createGlobalStyle`
-  html, body, #__next {
-    font-family: sans-serif;
-  }
-  
   * {
     box-sizing: border-box;
   }
 
   h1 {
-    font-family: serif;
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 1rem;
