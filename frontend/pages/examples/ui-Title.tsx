@@ -1,7 +1,6 @@
 import React from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
-
 const uiTitle: React.VFC = () => {
   return (
     <div>
@@ -23,9 +22,7 @@ const uiTitle: React.VFC = () => {
       <UiTitle level={6}>
         H6
       </UiTitle>
-
     </div>
   )
 }
-
 export default uiTitle
