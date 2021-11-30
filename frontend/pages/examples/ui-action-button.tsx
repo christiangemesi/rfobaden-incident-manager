@@ -8,17 +8,17 @@ const UiActionButtonExample: React.VFC = () => {
     console.log('Clicked...')
   }
 
-  return(
+  return (
     <div>
-      <UiActionButton onClick={handleClick} title= "Title of a activated FAB" color="primary">
+      <UiActionButton onClick={handleClick} title="Title of a activated FAB" color="primary">
         <UiIcon.KeyMessage />
       </UiActionButton>
 
-      <UiActionButton onClick={handleClick} title= "Title of a activated FAB" color="error">
+      <UiActionButton onClick={handleClick} title="Title of a activated FAB" color="error">
         <UiIcon.EditAction />
       </UiActionButton>
 
-      <UiActionButton onClick={handleClick} isDisabled title= "Title of a disabled FAB">
+      <UiActionButton onClick={handleClick} isDisabled title="Title of a disabled FAB">
         <UiIcon.LocationRelevancy />
       </UiActionButton>
     </div>
