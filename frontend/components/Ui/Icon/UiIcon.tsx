@@ -11,6 +11,7 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
+  mdiAccountMultiple,
 } from '@mdi/js'
 
 interface NamedIconProps {
@@ -51,6 +52,7 @@ const makeNamedIcon = (path: string): React.VFC<NamedIconProps> => {
   )
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   KeyMessage: makeNamedIcon(mdiFlash),
   LocationRelevancy: makeNamedIcon(mdiImageFilterHdr),
@@ -67,4 +69,5 @@ export default {
   PriorityMedium: makeNamedIcon(mdiHexagonOutline),
   PriorityLow: makeNamedIcon(mdiArrowDownBoldHexagonOutline),
   Menu: makeNamedIcon(mdiMenu),
+  Organization: makeNamedIcon(mdiAccountMultiple),
 }
