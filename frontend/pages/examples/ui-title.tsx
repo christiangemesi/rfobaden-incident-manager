@@ -1,7 +1,7 @@
 import React from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
-const uiTitle: React.VFC = () => {
+const UiTitleExample: React.VFC = () => {
   return (
     <div>
       <UiTitle level={1}>
@@ -25,4 +25,4 @@ const uiTitle: React.VFC = () => {
     </div>
   )
 }
-export default uiTitle
+export default UiTitleExample
