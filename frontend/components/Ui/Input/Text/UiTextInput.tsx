@@ -43,14 +43,15 @@ const UiTextInput: React.VFC<Props> = ({
 export default UiTextInput
 
 const StyledInput = styled.input`
-  padding: 0.25rem;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
   font-size: 0.9rem;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   outline: none;
   
   border: 1px solid gray;
   :active, :focus {
-    border-color: cornflowerblue;
+    border-color:  ${({ theme, color }) => theme.colors[color ?? 'primary'].value};;
   }
 `
 
