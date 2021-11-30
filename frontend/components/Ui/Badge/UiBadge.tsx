@@ -10,7 +10,7 @@ const UiBadge: React.VFC<Props> = ({ value, children }) => {
   return (
     <CircleContainer>
       {children}
-      <span style={{ width: '1.5rem', textAlign: 'right' }}>{value}</span>
+      <Counter>{value}</Counter>
     </CircleContainer>
   )
 }
@@ -23,5 +23,10 @@ const CircleContainer = styled.span`
   border-radius: 0.5rem;
   display: inline-flex;
   align-items: center;
+`
+
+const Counter = styled.span`
+  width: 1.5rem;
+  text-align: right;
 `
 
