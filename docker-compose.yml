@@ -22,8 +22,9 @@ services:
     image: gradle:7.2.0-jdk11
     working_dir: /app
     command: > 
-      bash -c "ls -al && chmod 755 /app/run.sh
-      && sh /app/run.sh"
+      sh -c "gradle --stop && 
+            gradle build -x Test -x checkstyleMain -x checkstyleTest -x jar -x distTar -x distZip --continuous && 
+            gradle bootRun --no-build-cache"
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
