@@ -19,16 +19,14 @@ services:
       - /app/.next:mode=777,uid=1000,gid=1000
 
   backend:
-    image: gradle:7.2.0-jdk11
-    working_dir: /app
-    command: sh -c " ls -al && chmod 755 ./run.sh && ./run.sh"
+    build:
+      dockerfile: backend.dockerfile
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
     environment:
       - TZ=Europe/Zurich
     volumes:
-      - ./backend:/app
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - database
