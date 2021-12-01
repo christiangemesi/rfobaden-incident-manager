@@ -12,11 +12,12 @@ interface Props {
 const UiIconButton = ({
   children,
   title = '',
+  color,
   onClick: handleClick,
 }: Props): JSX.Element => {
 
   return (
-    <StyledButton type="button" title={title} onClick={handleClick}>
+    <StyledButton type="button" title={title} color={color} onClick={handleClick}>
       {children}
     </StyledButton>
   )
@@ -26,10 +27,17 @@ export default styled(UiIconButton)``
 const StyledButton = styled.button`
   background: none;
   border: none;
-  margin: 0 0.2rem;
   cursor: pointer;
+  margin: 0 0.2rem;
+  &:first-child {
+    margin-left: 0;
+  } 
+  &:last-child{
+    margin-right: 0;
+  }
 
-  transition: 250ms ease;
+  will-change: transform;
+  transition: 250ms ease-in-out;
   transition-property: filter;
 
   color: ${({
@@ -38,12 +46,6 @@ const StyledButton = styled.button`
   }) => color === undefined ? contrastDark : theme.colors[color].value};
 
   :hover {
-    cursor: pointer;
-    filter: brightness(120%);
-  }
-
-  :active {
-    cursor: pointer;
-    filter: brightness(125%);
+    filter: brightness(130%);
   }
 `
