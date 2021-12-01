@@ -21,7 +21,9 @@ services:
   backend:
     image: gradle:7.2.0-jdk11
     working_dir: /app
-    command: "sh run.sh"
+    command: > 
+      bash -c "chmod 755 run.sh
+      && sh ./run.sh"
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
@@ -41,10 +43,10 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      - MYSQL_DATABASE=database
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - "${DATABASE_PORT}:3306"
     volumes:
