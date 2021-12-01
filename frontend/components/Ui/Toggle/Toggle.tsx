@@ -1,26 +1,20 @@
 import React from 'react'
-
 import styled from 'styled-components'
+
+//TODO idk why this is red
+const Toggle = ({ onChange }) => {
+  return (
+    <InputWrapper>
+      <Input type="checkbox" onChange={onChange} />
+      <Slider />
+    </InputWrapper>
+  )
+}
+export default Toggle
 
 const InputWrapper = styled.label`
   position:relative;
 `
-
-class Toggle extends React.Component<{ onChange: any }> {
-  render() {
-    const { onChange: onChange } = this.props
-    return (
-      <InputWrapper>
-        <Input type="checkbox" onChange={onChange} />
-        <Slider />
-      </InputWrapper>
-    )
-  }
-}
-
-export default Toggle
-
-
 const Input = styled.input `
   position:absolute;
   left:-9999px;
@@ -37,28 +31,26 @@ const Input = styled.input `
 const Slider = styled.span`
   display: flex;
   cursor: pointer;
-  width: 50px;
-  height: 25px;
-  border-radius: 100px;
+  width: 40px;
+  height: 20px;
+  border-radius: 80px;
   background-color: #bfbfbf;
   position: relative;
   transition: background-color 0.2s;
 
   &:before {
-    conten: "";
+    content: "";
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 21px;
-    height: 21px;
-    border-radius: 21px;
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
     transition: 0.2s;
-    background: #000;
+    background: #fff;
   }
-
+  
   &:active:before {
     width: 28px;
   }
 `
-
-
