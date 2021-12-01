@@ -5,8 +5,7 @@ interface Props {
   type?: UiDateType
 }
 
-
-const UiDateLabel: React.VFC<Props> = ({ date, type = 'date' }) => {
+const UiDateLabel: React.VFC<Props> = ({ date, type = 'datetime' }) => {
   switch (type) {
   case 'date':
     return <React.Fragment>{date.getDay()}.{date.getMonth()}.{date.getFullYear()}</React.Fragment>
@@ -15,7 +14,7 @@ const UiDateLabel: React.VFC<Props> = ({ date, type = 'date' }) => {
   case 'datetime':
     return <React.Fragment>{date.getDay()}.{date.getMonth()}.{date.getFullYear()} {date.getHours()}:{date.getMinutes()}</React.Fragment>
   default:
-    return <React.Fragment>Invalid type passed</React.Fragment> // TODO defualt isn't needed but is it correct to add?
+    throw new Error('Invalid type passed to UiDate')
   }
 }
 export default UiDateLabel

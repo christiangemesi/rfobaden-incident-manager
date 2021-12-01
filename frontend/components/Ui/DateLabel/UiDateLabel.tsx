@@ -1,14 +1,14 @@
 import React from 'react'
-import UiDate, { UiDateType } from '@/components/Ui/DataLabel/UiDate'
+import UiDate, { UiDateType } from '@/components/Ui/Date/UiDate'
 
 interface Props {
-  start: Date,
+  start: Date
   end?: Date | null
   type?: UiDateType
 }
 
 const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'date' }) => {
-  const prefix = start < new Date() ? 'seit' : 'ab' // TODO if today seit oder ab? seit Heute oder ab Heute ????
+  const prefix = start < new Date() ? 'seit' : 'ab'
   if (end !== null) {
     return (
       <React.Fragment>
