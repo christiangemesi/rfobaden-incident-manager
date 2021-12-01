@@ -22,7 +22,8 @@ services:
   backend:
     container_name: backend
     build:
-      dockerfile: docker/backend.dockerfile
+      context: ../backend
+      dockerfile: backend.dockerfile
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
