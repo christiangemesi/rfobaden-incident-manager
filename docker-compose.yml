@@ -1,22 +1,17 @@
 version: "3.9"
 services:
   frontend:
-    image: node:16-alpine3.11
-    working_dir: /app
-    command: [ "npm", "run", "dev" ]
+    build:
+      context: .
+      dockerfile: ./docker/frontend.dockerfile
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_BACKEND_ENDPOINT=http://localhost:3001
+      - NEXT_PUBLIC_BACKEND_ENDPOINT=http://localhost:${FRONTEND_APP_PORT}
     ports:
       - "${FRONTEND_APP_PORT}:3000"
       - "${FRONTENT_WEBPACK_PORT}:3035"
-    volumes:
-      - ./frontend:/app
-      - frontend.node_modules:/app/node_modules
     depends_on:
       - backend
-    tmpfs:
-      - /app/.next:mode=777,uid=1000,gid=1000
 
   backend:
     build:
@@ -47,5 +42,4 @@ services:
   
 
 volumes:
-  frontend.node_modules:
   database:
