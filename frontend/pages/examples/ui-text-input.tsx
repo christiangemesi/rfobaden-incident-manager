@@ -21,9 +21,7 @@ const UiTextInputExample: React.VFC = () => {
       <br />
       <UiTextInput label="Text Input Errors" value="top secret" errors={['Not valid', 'Fail !!!']} />
       <br />
-      <UiTextInput label="Text Input with children" onClick={handleClick}>
-        <UiIcon.Organization />
-      </UiTextInput>
+      <UiTextInput label="Text Input with children" onClick={handleClick} />
     </div>
   )
 }

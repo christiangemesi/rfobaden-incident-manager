@@ -14,7 +14,7 @@ interface Props extends UiInputProps<string | null> {
 
 const UiTextInput: React.VFC<Props> = ({
   value,
-  placeholder='',
+  placeholder = '',
   onChange: setValue,
   label,
   type = 'text',
