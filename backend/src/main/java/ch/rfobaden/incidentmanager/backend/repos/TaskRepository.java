@@ -29,7 +29,7 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
     boolean existsByPath(TaskPath path, Long id);
 
     @Query(
-        "SELECT CASE WHEN COUNT(task) > 0 THEN true ELSE false END "
+        "SELECT task "
             + " FROM "
             + "Task task"
             + " WHERE "
@@ -43,15 +43,13 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
     Optional<Task> findByPath(@Param("path") TaskPath path, @Param("id") Long id);
 
     @Query(
-        "SELECT CASE WHEN COUNT(task) > 0 THEN true ELSE false END "
+        "SELECT task "
             + " FROM "
             + "Task task"
             + " WHERE "
             + "task.report.incident.id = :#{#path.incidentId}"
             + " AND "
             + "task.report.id = :#{#path.reportId}"
-            + " AND "
-            + "task.id = :id"
     )
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
