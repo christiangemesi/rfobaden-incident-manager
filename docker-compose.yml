@@ -21,7 +21,7 @@ services:
   backend:
     image: gradle:7.2.0-jdk11
     working_dir: /app
-    command: sh -c " chmod 755 ./run.sh && ./run.sh"
+    command: sh -c " ls -al && chmod 755 ./run.sh && ./run.sh"
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
