@@ -9,6 +9,14 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 const UiIconButtonGroupExample: React.VFC = () => {
   return (
     <UiContainer>
+      <UiTitle level={3}>Icon-Button</UiTitle>
+      <UiGrid gap={0.5}>
+        <UiGrid.Col>
+          <UiIconButton color={'primary'} onClick={() => alert('Test')}>
+            <UiIcon.Organization />
+          </UiIconButton>
+        </UiGrid.Col>
+      </UiGrid>
       <UiTitle level={3}>Icon-Button-Group</UiTitle>
       <UiGrid gap={0.5}>
         <UiGrid.Col>
@@ -19,18 +27,10 @@ const UiIconButtonGroupExample: React.VFC = () => {
             <UiIconButton>
               <UiIcon.EditAction />
             </UiIconButton>
-            <UiIconButton>
+            <UiIconButton color={'error'}>
               <UiIcon.DeleteAction />
             </UiIconButton>
           </UiIconButtonGroup>
-        </UiGrid.Col>
-      </UiGrid>
-      <UiTitle level={3}>Icon-Button</UiTitle>
-      <UiGrid gap={0.5}>
-        <UiGrid.Col>
-          <UiIconButton>
-            <UiIcon.Organization />
-          </UiIconButton>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>
