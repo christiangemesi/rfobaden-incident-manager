@@ -18,7 +18,7 @@ pipeline {
                 else if (env.BRANCH_NAME == 'development') {
                   echo 'Building preview for development'
                   sh 'docker-compose down'
-                  sh 'docker-compose up -d --build'
+                  sh 'docker-compose up --build'
                 }
                 else {
                   echo 'Branch was not selected for preview build!'
