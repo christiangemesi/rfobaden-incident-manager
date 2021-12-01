@@ -22,8 +22,9 @@ services:
     image: gradle:7.2.0-jdk11
     working_dir: /app
     command: > 
-      sh -c "gradle --stop && 
-            gradle build && 
+      sh -c " ls -al &&
+            gradle --stop && 
+            gradle build --stacktrace && 
             gradle bootRun --no-build-cache"
     ports:
       - "${BACKEND_APP_PORT}:8080"
