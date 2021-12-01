@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,12 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "task")
-public class Task implements Completable {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,15 +52,7 @@ public class Task implements Completable {
 
     private LocalDateTime endsAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "completion_id")
-    private Completion completion;
-
-    @Column(nullable = false)
-    private boolean isComplete;
-
     private String location;
-
 
     @Column(nullable = false)
     private Priority priority;
@@ -215,32 +205,6 @@ public class Task implements Completable {
         this.priority = priority;
     }
 
-    @Override
-    public void setCompletion(Completion completion) {
-        this.completion = completion;
-    }
-
-    @Override
-    public Completion getCompletion() {
-        return completion;
-    }
-
-    @Override
-    public void setComplete(boolean isComplete) {
-        this.isComplete = isComplete;
-    }
-
-    @Override
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-    public Long getCompletionId() {
-        if (completion == null) {
-            return null;
-        }
-        return completion.getId();
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -251,8 +215,7 @@ public class Task implements Completable {
             return false;
         }
         Task task = (Task) o;
-        return isComplete == task.isComplete
-            && Objects.equals(id, task.id)
+        return Objects.equals(id, task.id)
             && Objects.equals(author, task.author)
             && Objects.equals(assignee, task.assignee)
             && Objects.equals(report, task.report)
@@ -263,7 +226,6 @@ public class Task implements Completable {
             && Objects.equals(updatedAt, task.updatedAt)
             && Objects.equals(startsAt, task.startsAt)
             && Objects.equals(endsAt, task.endsAt)
-            && Objects.equals(completion, task.completion)
             && Objects.equals(location, task.location)
             && priority == task.priority;
     }
@@ -272,7 +234,7 @@ public class Task implements Completable {
     public int hashCode() {
         return Objects.hash(id, author, assignee, report, title,
             description, addendum, createdAt, updatedAt, startsAt,
-            endsAt, completion, isComplete, location, priority);
+            endsAt, location, priority);
     }
 
     @Override
@@ -280,16 +242,14 @@ public class Task implements Completable {
         return "Task{"
             + "id=" + id
             + ", author=" + author
-            + ", assigneeId=" + assignee
-            + ", reportId=" + report
+            + ", assignee =" + assignee
+            + ", report=" + report
             + ", title='" + title + '\''
             + ", description='" + description + '\''
             + ", addendum='" + addendum + '\''
             + ", createdAt=" + createdAt
             + ", updatedAt=" + updatedAt
             + ", startsAt=" + startsAt
-            + ", isComplete=" + isComplete
-            + ", completionId=" + completion
             + ", location='" + location + '\''
             + ", priority=" + priority
             + '}';

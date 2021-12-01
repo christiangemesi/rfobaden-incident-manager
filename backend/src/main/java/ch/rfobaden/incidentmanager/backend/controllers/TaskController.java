@@ -64,7 +64,7 @@ public class TaskController extends AppController {
         @RequestBody Task task
     ) {
         task.setAuthor(getCurrentUser().orElseThrow(() -> (
-            new ApiException(HttpStatus.UNAUTHORIZED, "not signed in")
+            new ApiException(HttpStatus.UNAUTHORIZED, "not signeds in")
         )));
         prepareTask(task, reportId);
         return taskService.addNewTask(task);

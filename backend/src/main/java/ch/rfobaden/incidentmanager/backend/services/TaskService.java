@@ -54,9 +54,6 @@ public class TaskService {
         task.setId(id);
         task.setAuthor(persistentTask.getAuthor());
 
-        task.setComplete(persistentTask.isComplete());
-        task.setCompletion(persistentTask.getCompletion());
-
         task.setReport(persistentTask.getReport());
         task.setCreatedAt(persistentTask.getCreatedAt());
         task.setUpdatedAt(LocalDateTime.now());
