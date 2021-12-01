@@ -23,7 +23,7 @@ services:
     working_dir: /app
     command: > 
       sh -c "gradle --stop && 
-            gradle build -x Test -x checkstyleMain -x checkstyleTest -x jar -x distTar -x distZip --continuous && 
+            gradle build && 
             gradle bootRun --no-build-cache"
     ports:
       - "${BACKEND_APP_PORT}:8080"
