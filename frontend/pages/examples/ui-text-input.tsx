@@ -1,6 +1,6 @@
 const UiTextInputExample: React.VFC = () => {
 
-  const [value, setValue] = useState<string | null>('default text')
+  const [value, setValue] = useState<string | null>()
 
   const handleChange = (input: string | null) => {
     setValue(input)
@@ -8,7 +8,9 @@ const UiTextInputExample: React.VFC = () => {
 
   return (
     <div>
-      <UiTextInput label="Text Input" type="text" onChange={handleChange} value={value} />
+      <UiTextInput label="Text Input" onChange={handleChange} value={value} placeholder="placeholder" />
+      <br />
+      <UiTextInput label="Password Input" type="password" value="top secret" />
       <br />
       <UiTextInput label="Password Input" type="password" value="top secret" />
     </div>
