@@ -12,7 +12,7 @@ const UiIconButtonGroupExample: React.VFC = () => {
       <UiTitle level={3}>Icon-Button</UiTitle>
       <UiGrid gap={0.5}>
         <UiGrid.Col>
-          <UiIconButton color={'primary'} onClick={() => alert('Test')}>
+          <UiIconButton color="primary" onClick={() => alert('Test')}>
             <UiIcon.Organization />
           </UiIconButton>
         </UiGrid.Col>
@@ -27,7 +27,7 @@ const UiIconButtonGroupExample: React.VFC = () => {
             <UiIconButton>
               <UiIcon.EditAction />
             </UiIconButton>
-            <UiIconButton color={'error'}>
+            <UiIconButton color="error">
               <UiIcon.DeleteAction />
             </UiIconButton>
           </UiIconButtonGroup>
