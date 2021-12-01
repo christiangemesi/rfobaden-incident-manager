@@ -53,7 +53,7 @@ const UiButton = styled(StyleHelper.tag('button', ({
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   transition: 250ms ease;
-  transition-property: opacity, filter, box-shadow;
+  transition-property: filter, box-shadow;
 
   ${({ isFull }) => isFull && css`
     width: 100%;

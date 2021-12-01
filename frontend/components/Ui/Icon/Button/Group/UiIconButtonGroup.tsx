@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode
 }
 
-const UiIconButtonGroup: React.VFC<Props> = ({
+const UiIconButtonGroup = ({
   children,
 }: Props): JSX.Element => {
 
@@ -18,9 +18,7 @@ const UiIconButtonGroup: React.VFC<Props> = ({
 export default UiIconButtonGroup
 
 const StyledGroup = styled.div`
-  float: right;
-
   > button {
-    margin: 0.2rem 0.5rem;
+    margin: 0 0.5rem;
   }
 `

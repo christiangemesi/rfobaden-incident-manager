@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
-import { ColorName, contrastDark, defaultTheme } from '@/theme'
+import { ColorName, contrastDark } from '@/theme'
 
 interface Props {
   title?: string
@@ -9,27 +9,41 @@ interface Props {
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiIconButton: React.VFC<Props> = ({
+const UiIconButton = ({
   children,
   title = '',
-  color,
   onClick: handleClick,
 }: Props): JSX.Element => {
 
-  const cssColor = color != null ? defaultTheme.colors[color].value : contrastDark
-
   return (
-    <StyledButton title={title} onClick={handleClick} cssColor={cssColor}>
+    <StyledButton type="button" title={title} onClick={handleClick}>
       {children}
     </StyledButton>
   )
 }
 export default styled(UiIconButton)``
 
-const StyledButton = styled.button<{ cssColor: string }>`
+const StyledButton = styled.button`
   background: none;
   border: none;
-  margin: 0.2rem;
+  margin: 0 0.2rem;
+  cursor: pointer;
 
-  color: ${({ cssColor }) => cssColor}
+  transition: 250ms ease;
+  transition-property: filter;
+
+  color: ${({
+    theme,
+    color,
+  }) => color === undefined ? contrastDark : theme.colors[color].value};
+
+  :hover {
+    cursor: pointer;
+    filter: brightness(120%);
+  }
+
+  :active {
+    cursor: pointer;
+    filter: brightness(125%);
+  }
 `
