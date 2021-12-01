@@ -1,11 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-//TODO idk why this is red
-const Toggle = ({ onChange }) => {
+interface Props {
+  isToggled?: boolean,
+  onClick?: () => void
+}
+
+const Toggle: React.VFC<Props> = ({
+  onClick: handleClick,
+}) => {
   return (
     <InputWrapper>
-      <Input type="checkbox" onChange={onChange} />
+      <Input type = "checkbox" onClick={handleClick} />
       <Slider />
     </InputWrapper>
   )
