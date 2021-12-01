@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { contrastDark } from '@/theme'
+import { contrastDark, defaultTheme } from '@/theme'
 
 interface Props {
   label: string
@@ -41,7 +41,6 @@ const StyledDiv = styled.div`
 const StyledCheckboxLabel = styled.label`
   margin-left: 0.25rem;
   color: ${contrastDark};
-
 `
 
 const StyledCheckbox = styled.button`
@@ -49,13 +48,13 @@ const StyledCheckbox = styled.button`
   align-items: inherit;
   border: none;
   background: none;
-  color: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
-
+  color: ${defaultTheme.colors.primary.value};
+  
   :disabled {
     color: rgb(200, 200, 200);
     cursor: not-allowed;
     & > label {
-      color: rgb(200, 200 ,200);
+      color: rgb(200, 200, 200);
     }
   }
 `

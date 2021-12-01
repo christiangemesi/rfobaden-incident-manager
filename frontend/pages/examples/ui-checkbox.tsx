@@ -6,6 +6,8 @@ const UiCheckboxExample: React.VFC = () => {
   const [checked, setChecked] = useState(false)
 
   const handleChange = () => {
+
+    // TODO: value checked is before and! after toggling the same !!! WHY?
     console.log(checked ? 'checked' : 'not checked')
     setChecked(!checked)
     console.log(checked ? 'checked' : 'not checked')
