@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
@@ -30,6 +30,7 @@ const UiTextInput: React.VFC<Props> = ({
   }, [setValue])
 
   const Label = label == null ? 'div' : StyledLabel
+  const hasError = errors.length !== 0
 
   return (
     <Label>
@@ -38,14 +39,14 @@ const UiTextInput: React.VFC<Props> = ({
           {label}
         </span>
       )}
-      <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} />
+      <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} hasError={hasError} />
       <UiInputErrors errors={errors} />
     </Label>
   )
 }
 export default UiTextInput
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{hasError: boolean}>`
   padding: 0.5rem;
   margin-top: 0.25rem;
   font-size: 0.9rem;
@@ -54,10 +55,17 @@ const StyledInput = styled.input`
   border-style: solid;
   border-width: 1px;
   border-color: ${contrastDark};
+  
+  ${({ hasError }) => !hasError && css`
+    :active, :focus {
+      border-color:  ${defaultTheme.colors.primary.value};
+    }
+  `}
+  
+  ${({ hasError }) => hasError && css`
+      border-color: ${defaultTheme.colors.error.value};
+  `}
 
-  :active, :focus {
-    border-color:  ${defaultTheme.colors.primary.value};
-  }
 `
 
 const StyledLabel = styled.label`

@@ -1,3 +1,6 @@
+import React, { useState } from 'react'
+import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
+
 const UiTextInputExample: React.VFC = () => {
 
   const [value, setValue] = useState<string | null>()
@@ -12,12 +15,9 @@ const UiTextInputExample: React.VFC = () => {
       <br />
       <UiTextInput label="Password Input" type="password" value="top secret" />
       <br />
-      <UiTextInput label="Password Input" type="password" value="top secret" />
+      <UiTextInput label="Text Input Errors" value="top secret" errors={['Not valid', 'Fail !!!']} />
     </div>
   )
 }
-import React, { useState } from 'react'
-
-import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 
 export default UiTextInputExample
