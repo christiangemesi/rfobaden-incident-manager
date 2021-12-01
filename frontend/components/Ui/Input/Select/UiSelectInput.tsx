@@ -1,13 +1,17 @@
 import React, { useMemo } from 'react'
-import Select from 'react-select'
+import Select, { StylesConfig } from 'react-select'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
+import { defaultTheme, contrastDark } from '@/theme'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
   options: T[]
   optionName?: keyof T | ((option: T) => string | null)
+  isDisabled?: boolean,
+  isSearchable?: boolean,
+  placeholder?: string,
 }
 
 const UiSelectInput = <T, >({
@@ -17,6 +21,9 @@ const UiSelectInput = <T, >({
   label,
   options,
   optionName,
+  isDisabled = false,
+  isSearchable = false,
+  placeholder = '',
 }: Props<T>): JSX.Element => {
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
@@ -25,13 +32,13 @@ const UiSelectInput = <T, >({
     })
   ), [optionToLabel, options])
 
-  const defaultValue = useMemo(()=>(
+  const defaultValue = useMemo(() => (
     value === null ? null : { value, label: optionToLabel(value) ?? '' }
   ), [optionToLabel, value])
 
-  const handleChange = (e: Option<T> | null) => {
+  const handleChange = (option: Option<T> | null) => {
     if (setValue) {
-      setValue(e?.value ?? null)
+      setValue(option?.value ?? null)
     }
   }
 
@@ -47,7 +54,12 @@ const UiSelectInput = <T, >({
       <Select
         options={mappedOptions}
         value={defaultValue}
+        placeholder={placeholder}
         onChange={handleChange}
+        isClearable={true}
+        isDisabled={isDisabled}
+        isSearchable={isSearchable}
+        styles={customStyles}
       />
       <UiInputErrors errors={errors} />
     </Label>
@@ -87,6 +99,62 @@ const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => strin
     }
   }, [attr])
 }
+const customStyles: StylesConfig<string> = {
+  // style of main select box
+  control: (styles, { isFocused }) => ({
+    ...styles,
+    borderRadius: '0.5rem',
+    marginBottom: 0,
+    marginTop: '0.25rem',
+
+    boxShadow: isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none',
+    borderColor: isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)',
+  }),
+  // style of option container
+  menu: (styles) => ({
+    ...styles,
+    borderRadius: '0.5rem',
+    marginTop: 2,
+  }),
+  // style of option element
+  option: (styles, { isDisabled, isSelected }) => {
+    return {
+      ...styles,
+      color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
+
+      ':disabled': {
+        ...styles[':disabled'],
+        backgroundColor: 'rgb(200,200,200)',
+        filter: 'brightness(120%)',
+      },
+
+      ':hover': {
+        ...styles[':hover'],
+        backgroundColor: defaultTheme.colors.secondary.value,
+        color: defaultTheme.colors.secondary.contrast,
+      },
+      //
+      // ':active': {
+      //   ...styles[':active'],
+      // },
+    }
+  },
+  // style of input field in main select with search input
+  input: (styles) => ({
+    ...styles,
+    color: contrastDark,
+  }),
+  // style placeholder in main select
+  placeholder: (styles) => ({
+    ...styles,
+  }),
+  // style of current shown value in select
+  singleValue: (styles) => ({
+    ...styles,
+  }),
+}
 
 const StyledLabel = styled.label`
   display: flex;
@@ -100,45 +168,3 @@ const StyledLabel = styled.label`
     font-weight: bold;
   }
 `
-
-//   const getOptionValue = useOptionAttribute(optionValue)
-//   const getOptionName = useOptionAttribute(optionName)
-//
-//   const optionMapping: Map<string, T> = useMemo(() => {
-//     const mapping = new Map<string, T>()
-//     for (const option of options) {
-//       const optionValue = getOptionValue(option)
-//       if (optionValue === null) {
-//         throw new Error(`option has no value: ${option}`)
-//       }
-//       const key = `${optionValue}`
-//       if (mapping.has(key)) {
-//         throw new Error(`duplicate option value: ${optionValue}`)
-//       }
-//       mapping.set(key, option)
-//     }
-//     return mapping
-//   }, [options, getOptionValue])
-//
-//   const handleChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-//     const optionValue = e.target.value
-//     if (optionValue.length === 0) {
-//       // Default, empty option. Set the value to null.
-//       if (setValue) {
-//         setValue(null as unknown as T)
-//       }
-//       return
-//     }
-//     const option = optionMapping.get(optionValue)
-//     if (option === undefined) {
-//       throw new Error(`unknown option value: ${optionValue}`)
-//     }
-//     if (setValue) {
-//       setValue(option)
-//     }
-//   }, [optionMapping, setValue])
-//
-//   const Label = label == null ? 'div' : StyledLabel
-//
-
-
