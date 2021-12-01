@@ -42,6 +42,7 @@ const UiSelectInput = <T, >({
     }
   }
 
+  const hasErrors = errors && errors.length > 0
 
   const customStyles: StylesConfig<Option<T>, false> = {
     // style of main select box
@@ -51,8 +52,14 @@ const UiSelectInput = <T, >({
       marginBottom: 0,
       marginTop: '0.25rem',
 
-      boxShadow: isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none',
-      borderColor: isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)',
+      boxShadow: hasErrors && isFocused ? '0 0 0 1px ' + defaultTheme.colors.error.value : (isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none'),
+      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)'),
+      color: contrastDark,
+
+      ':hover': {
+        boxShadow: hasErrors && isFocused ? '0 0 0 1px ' + defaultTheme.colors.error.value : (isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none'),
+        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)'),
+      },
     }),
     // style of option container
     menu: (styles) => ({
@@ -79,10 +86,7 @@ const UiSelectInput = <T, >({
           backgroundColor: defaultTheme.colors.secondary.value,
           color: defaultTheme.colors.secondary.contrast,
         },
-        //
-        // ':active': {
-        //   ...styles[':active'],
-        // },
+
       }
     },
     // style of input field in main select with search input
@@ -93,6 +97,7 @@ const UiSelectInput = <T, >({
     // style placeholder in main select
     placeholder: (styles) => ({
       ...styles,
+      color: 'rgb(150,150,150)',
     }),
     // style of current shown value in select
     singleValue: (styles) => ({
