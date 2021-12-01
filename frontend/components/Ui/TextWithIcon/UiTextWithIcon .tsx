@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode
 }
 
-const TextWithIcon: React.VFC<Props> = ({ children, text }) => {
+const UiTextWithIcon: React.VFC<Props> = ({ children, text }) => {
   return (
     <StyledTitle>
       <StyledIcon>
@@ -19,7 +19,7 @@ const TextWithIcon: React.VFC<Props> = ({ children, text }) => {
   )
 }
 
-export default TextWithIcon
+export default UiTextWithIcon
 
 const StyledTitle = styled.div`
   display: inline-flex;
