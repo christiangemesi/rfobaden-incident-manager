@@ -66,6 +66,8 @@ const StyledInput = styled.input<{hasError: boolean}>`
       border-color: ${defaultTheme.colors.error.value};
   `}
 
+  transition: 250ms ease;
+  transition-property: border-color;
 `
 
 const StyledLabel = styled.label`
