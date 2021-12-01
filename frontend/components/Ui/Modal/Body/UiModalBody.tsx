@@ -56,6 +56,8 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
     )
   ), [children, context, isShaking])
 
+  // Don't show the content unless the component is mounted,
+  // since we can't access `document.body` otherwise.
   if (!isMounted()) {
     return <React.Fragment />
   }
