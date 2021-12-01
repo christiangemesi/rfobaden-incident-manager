@@ -9,12 +9,12 @@ interface Props {
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiIconButton = ({
+const UiIconButton: React.VFC<Props> = ({
   children,
   title = '',
   color,
   onClick: handleClick,
-}: Props): JSX.Element => {
+}: Props) => {
 
   return (
     <StyledButton type="button" title={title} color={color} onClick={handleClick}>

@@ -5,9 +5,9 @@ interface Props {
   children: ReactNode
 }
 
-const UiIconButtonGroup = ({
+const UiIconButtonGroup: React.VFC<Props> = ({
   children,
-}: Props): JSX.Element => {
+}: Props) => {
 
   return (
     <StyledGroup>
