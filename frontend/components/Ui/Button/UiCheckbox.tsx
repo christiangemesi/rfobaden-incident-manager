@@ -2,31 +2,31 @@ import styled from 'styled-components'
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { contrastDark, defaultTheme } from '@/theme'
+import { UiInputProps } from '@/components/Ui/Input'
+import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
-interface Props {
+interface Props extends UiInputProps<boolean>{
   label: string
-  value: string
   isDisabled?: boolean
-  checked: boolean
-  onChange?: () => void
 }
 
 const UiCheckbox: React.VFC<Props> = ({
   label = '',
-  value = '',
+  value ,
   isDisabled = false,
-  checked,
+  errors = [],
   onChange: handleChange,
 },
 ) => {
   return (
     <StyledDiv>
-      <StyledCheckbox onClick={handleChange} disabled={isDisabled} value={value}>
-        {checked && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}
+      <StyledCheckbox onClick={() => handleChange(!value)} disabled={isDisabled}>
+        {value && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}
         <StyledCheckboxLabel>
           {label}
         </StyledCheckboxLabel>
       </StyledCheckbox>
+      <UiInputErrors errors={errors} />
     </StyledDiv>
   )
 }

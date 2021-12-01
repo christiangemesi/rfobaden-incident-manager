@@ -3,21 +3,14 @@ import UiCheckbox from '@/components/Ui/Button/UiCheckbox'
 
 const UiCheckboxExample: React.VFC = () => {
 
-  const [checked, setChecked] = useState(false)
-
-  const handleChange = () => {
-
-    // TODO: value checked is before and! after toggling the same !!! WHY?
-    console.log(checked ? 'checked' : 'not checked')
-    setChecked(!checked)
-    console.log(checked ? 'checked' : 'not checked')
-  }
-
+  const [value, setValue] = useState(false)
   return (
     <div>
-      <UiCheckbox label="Checkbox Label" value="value" onChange={handleChange} checked={checked} />
+      <UiCheckbox label="Checkbox Label" value={value} onChange={setValue} />
       <br />
-      <UiCheckbox label="Checkbox Label" value="dis" onChange={handleChange} checked={checked} isDisabled />
+      <UiCheckbox label="Disabled Checkbox Label" isDisabled value={value} onChange={setValue} />
+      <br />
+      <UiCheckbox label="Error Checkbox Label" value={value} onChange={setValue} errors={['Error 1','Error 2']} />
     </div>
   )
 }
