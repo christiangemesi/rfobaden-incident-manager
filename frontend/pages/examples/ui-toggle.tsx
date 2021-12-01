@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import Toggle from '@/components/Ui/Toggle/Toggle'
+import UiToggle from '@/components/Ui/Toggle/UiToggle'
 
-const handleClick = () => {
-  console.log('Clicked...')
-}
+
 
 const UiToggleExample: React.VFC = () => {
+  const [value, setValue] = useState(false)
   return (
     <div>
-      <Toggle onClick={handleClick} />
+      <UiToggle value={value} onChange={setValue} label = "test" errors={['1','2']} />
+      <UiToggle value={value} onChange={setValue} label = "Apples are great" errors={['I am an error!','with multiple',' arguments','in Array']} />
+      <UiToggle value={value} onChange={setValue} label = "I am good at programming" errors={['Nothing','to','judge']} />
     </div>
   )
 }

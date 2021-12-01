@@ -1,41 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
+import { UiInputProps } from '@/components/Ui/Input'
+import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
-interface Props {
-  isToggled?: boolean,
-  onClick?: () => void
+interface Props extends UiInputProps<boolean> {
+  label?: string,
 }
 
-const Toggle: React.VFC<Props> = ({
-  onClick: handleClick,
+const UiToggle: React.VFC<Props> = ({
+  value,
+  onChange: handleChange,
+  label,
+  errors = [],
 }) => {
   return (
     <InputWrapper>
-      <Input type = "checkbox" onClick={handleClick} />
-      <Slider />
+      <Input type="checkbox" onClick={() => handleChange(!value)}  />
+      <Slider /> {label}
+      <UiInputErrors errors={errors} />
     </InputWrapper>
   )
 }
-export default Toggle
+export default UiToggle
 
 const InputWrapper = styled.label`
-  position:relative;
+  position: relative;
 `
 const Input = styled.input `
-  position:absolute;
-  left:-9999px;
+  position: absolute;
+  left: -9999px;
   top: -9999px;
   
   &:checked + span {
     background-color: #1890ff;
     &:before{
       left: calc(100% - 2px);
-      transform:translate(-100%);
+      transform: translate(-100%);
     }
   }
 `
 const Slider = styled.span`
-  display: flex;
+  display: inline-flex;
   cursor: pointer;
   width: 40px;
   height: 20px;
