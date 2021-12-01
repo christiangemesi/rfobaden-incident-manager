@@ -63,11 +63,9 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
   margin-top: 0.25rem;
   font-size: 0.9rem;
   border-radius: 0.5rem;
-  border-style: solid;
-  border-width: 1px;
   outline: none;
-  border-color: inherit;
   width: 100%;
+  border: 1px solid ${contrastDark};
 
 
   ${({ hasChildren }) => hasChildren && css`
@@ -76,23 +74,26 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
     border-right: none;
   `}
 
+  transition: 250ms ease;
+  transition-property: border-color;
+
 `
 const StyledAdditionalInput = styled.div`
   background: ${defaultTheme.colors.primary.value};
-  border-color: inherit;
   margin-top: 0.25rem;
-  outline: none;  
-  border-style: solid;
-  border-width: 1px;
+  outline: none; 
+  border: 1px solid ${contrastDark};
   border-radius: 0  0.5rem 0.5rem 0;
   width: 40px;
+  
   display: inline-flex;
   justify-content: center;
   align-items: center;
   
-  * {
-    color: ${defaultTheme.colors.primary.contrast};
-  }
+  color: ${defaultTheme.colors.primary.contrast};
+
+  transition: 250ms ease;
+  transition-property: border-color;
 `
 const StyledLabel = styled.label`
   display: flex;
@@ -110,16 +111,25 @@ const StyledLabel = styled.label`
 const StyledDiv = styled.div<{hasError: boolean}>`
   display: flex;
 
+
   ${({ hasError }) => !hasError && css`
-    :active, :focus {
-      border-color:  ${defaultTheme.colors.primary.value};
+    & > ${StyledInput} {
+      :active, :focus {
+        border-color:  ${defaultTheme.colors.primary.value};
+        & + ${StyledAdditionalInput} {
+          border-color:  ${defaultTheme.colors.primary.value};
+        }
+      }
     }
   `}
 
   ${({ hasError }) => hasError && css`
-      border-color: ${defaultTheme.colors.error.value};
+    & > ${StyledInput} {
+
+      border-color:  ${defaultTheme.colors.error.value};
+      & + ${StyledAdditionalInput} {
+        border-color:  ${defaultTheme.colors.error.value};
+      }
+    }
   `}
-  
-  transition: 250ms ease;
-  transition-property: border-color;
 `
