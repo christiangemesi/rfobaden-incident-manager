@@ -5,7 +5,7 @@ import TextWithIcon from '@/components/Ui/TextWithIcon/TextWithIcon'
 
 const UiTextWithIcon: React.VFC = () => {
   return (
-    <TextWithIcon text={'Christian'}>
+    <TextWithIcon text="Christian">
       <UiIcon.DeleteAction />
     </TextWithIcon>
   )

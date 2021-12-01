@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode
 }
 
-const TextWithIcon: React.VFC<Props> = ({ children,text  }) => {
+const TextWithIcon: React.VFC<Props> = ({ children, text }) => {
   return (
     <StyledTitle>
       <StyledIcon>
@@ -25,7 +25,6 @@ const StyledTitle = styled.div`
   display: inline-flex;
   align-items: center;
 `
-
 const StyledIcon = styled.span`
   margin-right: 2px;
 `
