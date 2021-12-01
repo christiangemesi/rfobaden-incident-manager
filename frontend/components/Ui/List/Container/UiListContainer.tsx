@@ -5,14 +5,14 @@ interface Props {
   children: ReactNode
 }
 
-const UiListItem: React.VFC<Props> = ({ children }) => {
+const UiListContainer: React.VFC<Props> = ({ children }) => {
   return (
     <Box>
       {children}
     </Box>
   )
 }
-export default UiListItem
+export default UiListContainer
 
 const Box = styled.div`
   display:inline-flex;

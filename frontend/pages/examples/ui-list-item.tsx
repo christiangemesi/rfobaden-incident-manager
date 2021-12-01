@@ -1,17 +1,17 @@
 import React from 'react'
-import UiListItem from '@/components/Ui/ListItem/UiListItem'
+import UiListContainer from '@/components/Ui/List/Container/UiListContainer'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
-const UiListItemExample: React.VFC = () => {
+const UiListContainerExample: React.VFC = () => {
   return (
-    <UiListItem>
+    <UiListContainer>
       <UiIcon.PriorityHigh />
       <UiActionButton>
         test
       </UiActionButton>
       <UiIcon.SubmitAction />
-    </UiListItem>
+    </UiListContainer>
   )
 }
-export default UiListItemExample
+export default UiListContainerExample
