@@ -16,7 +16,8 @@ const UiToggle: React.VFC<Props> = ({
   return (
     <InputWrapper>
       <Input type="checkbox" onClick={() => handleChange(!value)}  />
-      <Slider /> {label}
+      <Slider />
+      {label}
       <UiInputErrors errors={errors} />
     </InputWrapper>
   )
@@ -25,6 +26,8 @@ export default UiToggle
 
 const InputWrapper = styled.label`
   position: relative;
+  display: inline-flex;
+  align-items: center;
 `
 const Input = styled.input `
   position: absolute;
