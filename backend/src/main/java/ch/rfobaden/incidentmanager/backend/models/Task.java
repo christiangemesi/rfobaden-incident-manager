@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,23 +9,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "task")
-public class Task {
+public class Task extends Model implements PathConvertible<TaskPath> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Long id;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private User author;
 
@@ -31,7 +25,7 @@ public class Task {
     @JoinColumn
     private User assignee;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
@@ -42,12 +36,6 @@ public class Task {
 
     private String addendum;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
@@ -56,24 +44,6 @@ public class Task {
 
     @Column(nullable = false)
     private Priority priority;
-
-    public Task() {
-    }
-
-    public Task(Long id, String title, User author, Report report) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.report = report;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public User getAuthor() {
         return author;
@@ -157,22 +127,6 @@ public class Task {
         this.addendum = addendum;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public LocalDateTime getStartsAt() {
         return startsAt;
     }
@@ -215,15 +169,13 @@ public class Task {
             return false;
         }
         Task task = (Task) o;
-        return Objects.equals(id, task.id)
+        return equalsModel(task)
             && Objects.equals(author, task.author)
             && Objects.equals(assignee, task.assignee)
             && Objects.equals(report, task.report)
             && Objects.equals(title, task.title)
             && Objects.equals(description, task.description)
             && Objects.equals(addendum, task.addendum)
-            && Objects.equals(createdAt, task.createdAt)
-            && Objects.equals(updatedAt, task.updatedAt)
             && Objects.equals(startsAt, task.startsAt)
             && Objects.equals(endsAt, task.endsAt)
             && Objects.equals(location, task.location)
@@ -232,30 +184,35 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, assignee, report, title,
-            description, addendum, createdAt, updatedAt, startsAt,
+        return Objects.hash(modelHashCode(), author, assignee, report, title,
+            description, addendum, startsAt,
             endsAt, location, priority);
     }
 
     @Override
     public String toString() {
         return "Task{"
-            + "id=" + id
+            + "id=" + getId()
             + ", author=" + author
             + ", assignee =" + assignee
             + ", report=" + report
             + ", title='" + title + '\''
             + ", description='" + description + '\''
             + ", addendum='" + addendum + '\''
-            + ", createdAt=" + createdAt
-            + ", updatedAt=" + updatedAt
+            + ", createdAt=" + getCreatedAt()
+            + ", updatedAt=" + getUpdatedAt()
             + ", startsAt=" + startsAt
             + ", location='" + location + '\''
             + ", priority=" + priority
             + '}';
     }
 
-    enum Priority {
-        LOW, MEDIUM, HIGH
+
+    @Override
+    public TaskPath toPath() {
+        var path = new TaskPath();
+        path.setIncidentId(getReport().getIncident().getId());
+        path.setReportId(getReport().getId());
+        return path;
     }
 }
