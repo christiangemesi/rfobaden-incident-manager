@@ -22,7 +22,7 @@ services:
     image: gradle:7.2.0-jdk11
     working_dir: /app
     command: > 
-      bash -c "chmod 755 run.sh
+      bash -c "chmod 755 ./run.sh
       && sh ./run.sh"
     ports:
       - "${BACKEND_APP_PORT}:8080"
