@@ -21,7 +21,8 @@ const UiComponentsExample: React.VFC = () => {
           UiButton
         </a>
       </Link>
-      <Link href="examples/ui-iconbuttongroup">
+      <br />
+      <Link href="examples/ui-icon-button-group">
         <a>
           UiIconButtonGroup
         </a>
