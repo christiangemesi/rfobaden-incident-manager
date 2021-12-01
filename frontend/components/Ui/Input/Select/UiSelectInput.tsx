@@ -52,13 +52,12 @@ const UiSelectInput = <T, >({
       marginBottom: 0,
       marginTop: '0.25rem',
 
-      boxShadow: hasErrors && isFocused ? '0 0 0 1px ' + defaultTheme.colors.error.value : (isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none'),
-      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)'),
+      boxShadow: 'none',
+      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
       color: contrastDark,
 
       ':hover': {
-        boxShadow: hasErrors && isFocused ? '0 0 0 1px ' + defaultTheme.colors.error.value : (isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none'),
-        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)'),
+        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
       },
     }),
     // style of option container
