@@ -1,5 +1,5 @@
 import React from 'react'
-import UiDataLabel from '@/components/Ui/DataLabel/UiDataLabel'
+import UiDataLabel from '@/components/Ui/DataLabel/UiDateLabel'
 
 const UiDateLabelExample: React.VFC = () => {
   const past = new Date(2018, 11, 24)
