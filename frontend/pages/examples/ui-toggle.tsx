@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import UiToggle from '@/components/Ui/Toggle/UiToggle'
 
 
-
 const UiToggleExample: React.VFC = () => {
   const [value, setValue] = useState(false)
   return (
