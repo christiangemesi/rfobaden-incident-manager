@@ -14,12 +14,14 @@ const UiToggle: React.VFC<Props> = ({
   errors = [],
 }) => {
   return (
-    <InputWrapper>
-      <Input type="checkbox" onClick={() => handleChange(!value)}  />
-      <Slider />
-      {label}
+    <div>
+      <InputWrapper>
+        <Input type="checkbox" onClick={() => handleChange(!value)}  />
+        <Slider />
+        {label}
+      </InputWrapper>
       <UiInputErrors errors={errors} />
-    </InputWrapper>
+    </div>
   )
 }
 export default UiToggle
@@ -29,14 +31,14 @@ const InputWrapper = styled.label`
   display: inline-flex;
   align-items: center;
 `
-const Input = styled.input `
+const Input = styled.input`
   position: absolute;
   left: -9999px;
   top: -9999px;
   
   &:checked + span {
     background-color: #1890ff;
-    &:before{
+    &:before {
       left: calc(100% - 2px);
       transform: translate(-100%);
     }
@@ -51,6 +53,7 @@ const Slider = styled.span`
   background-color: #bfbfbf;
   position: relative;
   transition: background-color 0.2s;
+  margin-right: 0.5rem;
 
   &:before {
     content: "";
