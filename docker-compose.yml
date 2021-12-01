@@ -8,11 +8,8 @@ services:
       - NODE_ENV=development
       - NEXT_PUBLIC_BACKEND_ENDPOINT=http://localhost:3001
     ports:
-      - "3000:3000"
-      - "3035:3035"
-    expose:
-      - "3000" # WebApp endpoint
-      - "3035" # Webpack Development Server
+      - "${FRONTEND_APP_PORT}:3000"
+      - "${FRONTENT_WEBPACK_PORT}:3035"
     volumes:
       - ./frontend:/app
       - frontend.node_modules:/app/node_modules
@@ -26,11 +23,8 @@ services:
     working_dir: /app
     command: "sh run.sh"
     ports:
-      - "3001:8080"
-      - "5005:5005" 
-    expose:
-      - "3001" # Main port
-      - "5005" # Debugger port
+      - "${BACKEND_APP_PORT}:8080"
+      - "${BACKEND_DEBUGGER_PORT}:5005" 
     environment:
       - TZ=Europe/Zurich
     volumes:
@@ -52,9 +46,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=password
     ports:
-      - "3002:3306"
-    expose:
-      - "3002"
+      - "${DATABASE_PORT}:3306"
     volumes:
       - database:/var/lib/mysql
   
