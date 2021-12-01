@@ -11,6 +11,8 @@ const UiButtonExample: React.VFC = () => {
     'Option 4',
   ]
   const [currentValue, setCurrentValue] = useState<string | null>(null)
+  const [currentValue2, setCurrentValue2] = useState<string | null>(null)
+  const [currentValue3, setCurrentValue3] = useState<string | null>(null)
 
   return (
     <UiContainer>
@@ -19,6 +21,16 @@ const UiButtonExample: React.VFC = () => {
           <UiSelectInput label="options" options={options1} value={currentValue} onChange={(newValue) => {
             setCurrentValue(newValue)
           }} />
+        </UiGrid.Col>
+        <UiGrid.Col>
+          <UiSelectInput label="disabled" options={options1} value={currentValue2} onChange={(newValue) => {
+            setCurrentValue2(newValue)
+          }} isDisabled placeholder={'disable'} />
+        </UiGrid.Col>
+        <UiGrid.Col>
+          <UiSelectInput label="searchable" options={options1} value={currentValue3} onChange={(newValue) => {
+            setCurrentValue3(newValue)
+          }} isSearchable placeholder={'search'} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>
