@@ -36,6 +36,7 @@ ENV GRADLE_USER_HOME /cache
 ENV PATH $PATH:$GRADLE_HOME/bin
 
 VOLUME $GRADLE_USER_HOME
-COPY ./backend /app
+
 WORKDIR /app
+COPY backend/ .
 CMD sh run.sh
