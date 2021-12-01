@@ -49,6 +49,4 @@ services:
 
 volumes:
   frontend.node_modules:
-  backend.gradle-local:
-  backend.gradle-global:
   database:
