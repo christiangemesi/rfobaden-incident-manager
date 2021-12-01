@@ -1,11 +1,11 @@
-import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo } from 'react'
+import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalContext, {
   animationMillis,
   UiModalState,
   UiModalVisibility,
 } from '@/components/Ui/Modal/Context/UiModalContext'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
@@ -20,16 +20,23 @@ interface Props {
 const UiModalBody: React.VFC<Props> = ({ children }) => {
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
-  
+
+  const [isShaking, setShaking] = useState(false)
+
   const handleOutsideClick = useCallback(() => {
-    if (!context.isPersistent) {
+    if (context.isPersistent) {
+      setShaking(true)
+      setTimeout(() => {
+        setShaking(false)
+      }, shakeMillis)
+    } else {
       context.close()
     }
   }, [context])
   
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
-      <DialogContainer>
+      <DialogContainer isShaking={isShaking}>
         <Dialog
           open={context.isOpen}
           visibility={context.visibility}
@@ -47,7 +54,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
         </Dialog>
       </DialogContainer>
     )
-  ), [children, context])
+  ), [children, context, isShaking])
 
   if (!isMounted()) {
     return <React.Fragment />
@@ -106,12 +113,35 @@ const Background = styled.div<{ visibility: UiModalVisibility }>`
   }}
 `
 
-const DialogContainer = styled.div`
+const ShakeAnimation = keyframes`
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(2px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-4px);
+  }
+  40%, 60% {
+    transform: translateX(4px);
+  }
+`
+
+const shakeMillis = 500
+
+const DialogContainer = styled.div<{ isShaking: boolean }>`
   position: relative;
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: fit-content;
+  
+  ${({ isShaking }) => isShaking && css`
+    animation-name: ${ShakeAnimation};
+    animation-duration: ${shakeMillis}ms;
+    animation-timing-function: ease;
+  `}
 `
 
 const CloseButton = styled.button`
@@ -145,7 +175,6 @@ const CloseButton = styled.button`
     filter: brightness(75%);
   }
 `
-
 
 const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>`
   position: static;
