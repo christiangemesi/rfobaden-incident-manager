@@ -42,6 +42,64 @@ const UiSelectInput = <T, >({
     }
   }
 
+
+  const customStyles: StylesConfig<Option<T>, false> = {
+    // style of main select box
+    control: (styles, { isFocused }) => ({
+      ...styles,
+      borderRadius: '0.5rem',
+      marginBottom: 0,
+      marginTop: '0.25rem',
+
+      boxShadow: isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none',
+      borderColor: isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)',
+    }),
+    // style of option container
+    menu: (styles) => ({
+      ...styles,
+      borderRadius: '0.5rem',
+      marginTop: 2,
+    }),
+    // style of option element
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
+        cursor: isDisabled ? 'not-allowed' : 'pointer',
+        backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
+
+        ':disabled': {
+          ...styles[':disabled'],
+          backgroundColor: 'rgb(200,200,200)',
+          filter: 'brightness(120%)',
+        },
+
+        ':hover': {
+          ...styles[':hover'],
+          backgroundColor: defaultTheme.colors.secondary.value,
+          color: defaultTheme.colors.secondary.contrast,
+        },
+        //
+        // ':active': {
+        //   ...styles[':active'],
+        // },
+      }
+    },
+    // style of input field in main select with search input
+    input: (styles) => ({
+      ...styles,
+      color: contrastDark,
+    }),
+    // style placeholder in main select
+    placeholder: (styles) => ({
+      ...styles,
+    }),
+    // style of current shown value in select
+    singleValue: (styles) => ({
+      ...styles,
+    }),
+  }
+
   const Label = label == null ? 'div' : StyledLabel
 
   return (
@@ -56,7 +114,7 @@ const UiSelectInput = <T, >({
         value={defaultValue}
         placeholder={placeholder}
         onChange={handleChange}
-        isClearable={true}
+        isClearable
         isDisabled={isDisabled}
         isSearchable={isSearchable}
         styles={customStyles}
@@ -98,62 +156,6 @@ const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => strin
       throw new Error(`option value '${option}' is not a string nor a number: ${value}`)
     }
   }, [attr])
-}
-const customStyles: StylesConfig<string> = {
-  // style of main select box
-  control: (styles, { isFocused }) => ({
-    ...styles,
-    borderRadius: '0.5rem',
-    marginBottom: 0,
-    marginTop: '0.25rem',
-
-    boxShadow: isFocused ? '0 0 0 1px ' + defaultTheme.colors.primary.value : 'none',
-    borderColor: isFocused ? defaultTheme.colors.primary.value : 'rgb(200,200,200)',
-  }),
-  // style of option container
-  menu: (styles) => ({
-    ...styles,
-    borderRadius: '0.5rem',
-    marginTop: 2,
-  }),
-  // style of option element
-  option: (styles, { isDisabled, isSelected }) => {
-    return {
-      ...styles,
-      color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
-      cursor: isDisabled ? 'not-allowed' : 'pointer',
-      backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
-
-      ':disabled': {
-        ...styles[':disabled'],
-        backgroundColor: 'rgb(200,200,200)',
-        filter: 'brightness(120%)',
-      },
-
-      ':hover': {
-        ...styles[':hover'],
-        backgroundColor: defaultTheme.colors.secondary.value,
-        color: defaultTheme.colors.secondary.contrast,
-      },
-      //
-      // ':active': {
-      //   ...styles[':active'],
-      // },
-    }
-  },
-  // style of input field in main select with search input
-  input: (styles) => ({
-    ...styles,
-    color: contrastDark,
-  }),
-  // style placeholder in main select
-  placeholder: (styles) => ({
-    ...styles,
-  }),
-  // style of current shown value in select
-  singleValue: (styles) => ({
-    ...styles,
-  }),
 }
 
 const StyledLabel = styled.label`
