@@ -13,6 +13,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 
 interface Props {
   incident: Incident | null
@@ -85,7 +86,7 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
 
               <UiGrid.Col size={12}>
                 <UiForm.Field field={form.description}>{(props) => (
-                  <UiTextInput {...props} label="Beschreibung" placeholder="Beschreibung" />
+                  <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
                 )}</UiForm.Field>
               </UiGrid.Col>
 
