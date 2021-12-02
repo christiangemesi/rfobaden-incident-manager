@@ -37,7 +37,8 @@ const Input = styled.input`
   top: -9999px;
   
   &:checked + span {
-    background-color: #1890ff;
+    background-color: ${({ theme }) => theme.colors.primary.value};
+    
     &:before {
       left: calc(100% - 2px);
       transform: translate(-100%);
