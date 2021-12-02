@@ -27,9 +27,9 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
     @ResponseStatus(HttpStatus.OK)
     public Incident closeIncident(
         @PathVariable("incidentId") Long incidentId,
-        @RequestBody CloseIncidentData closeData
+        @RequestBody String closeMessage
     ) {
-        return service.closeIncident(incidentId, closeData.getCloseReason())
+        return service.closeIncident(incidentId, closeMessage)
             .orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
             ));
@@ -42,17 +42,5 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
             .orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")
             ));
-    }
-
-    static class CloseIncidentData {
-        private String closeReason;
-
-        public String getCloseReason() {
-            return closeReason;
-        }
-
-        public void setCloseReason(String closeReason) {
-            this.closeReason = closeReason;
-        }
     }
 }

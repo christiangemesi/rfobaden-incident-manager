@@ -1,103 +1,26 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.models.CloseReason;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
-public class ReportService {
+public class ReportService extends ModelRepositoryService<Report, ReportPath, ReportRepository> {
+    private final UserService userService;
 
-    private final ReportRepository reportRepository;
-
-    @Autowired
-    public ReportService(ReportRepository reportRepository) {
-        this.reportRepository = reportRepository;
+    public ReportService(UserService userService) {
+        this.userService = userService;
     }
 
-    public List<Report> getReports() {
-        return reportRepository.findAll();
-    }
-
-    public List<Report> getReportsOfIncident(Long incidentId) {
-        return reportRepository.findAllOfIncident(incidentId);
-    }
-
-    public Optional<Report> getReportById(Long reportId) {
-        return reportRepository.findById(reportId);
-    }
-
-    public Optional<Report> getReportOfIncidentById(Long incidentId, Long reportId) {
-        return reportRepository.findByIdOfIncident(incidentId, reportId);
-    }
-
-    public Report addNewReport(Report report) {
-        report.setCreatedAt(LocalDateTime.now());
-        report.setUpdatedAt(LocalDateTime.now());
-        return reportRepository.save(report);
-    }
-
-    public Optional<Report> updateReport(Long id, Report report) {
-        var persistentReport = getReportById(id).orElse(null);
-        if (persistentReport == null) {
-            return Optional.empty();
+    @Override
+    protected void loadRelations(Report report, Violations violations) {
+        if (report.getAssignee() != null) {
+            userService.find(report.getAssigneeId()).ifPresentOrElse(report::setAssignee, () ->
+                violations.add("assignee", "does not exist")
+            );
         }
-
-        if (report.getId() != null && !Objects.equals(report.getId(), id)) {
-            throw new IllegalArgumentException("can't update report id");
-        }
-        report.setId(id);
-        report.setAuthor(persistentReport.getAuthor());
-
-        report.setComplete(persistentReport.isComplete());
-        report.setCompletion(persistentReport.getCompletion());
-
-        report.setIncident(persistentReport.getIncident());
-        report.setCreatedAt(persistentReport.getCreatedAt());
-        report.setUpdatedAt(LocalDateTime.now());
-        return Optional.of(reportRepository.save(report));
     }
-
-    public Optional<Report> completeReportOfIncident(Long incidentId, Long id, String reason) {
-        var report = getReportOfIncidentById(incidentId, id).orElse(null);
-        if (report == null) {
-            return Optional.empty();
-        }
-
-        var completion = new CloseReason();
-        completion.setMessage(reason);
-        completion.setCreatedAt(LocalDateTime.now());
-        completion.setPrevious(report.getCompletion());
-
-        report.setCompletion(completion);
-        report.setComplete(true);
-        report.setUpdatedAt(LocalDateTime.now());
-        return Optional.of(reportRepository.save(report));
-    }
-
-    public Optional<Report> reopenReportOfIncident(Long incidentId, Long id) {
-        var report = getReportOfIncidentById(incidentId, id).orElse(null);
-        if (report == null) {
-            return Optional.empty();
-        }
-        report.setComplete(false);
-        report.setUpdatedAt(LocalDateTime.now());
-        return Optional.of(reportRepository.save(report));
-    }
-
-    public boolean deleteReportById(Long reportId) {
-        if (reportRepository.existsById(reportId)) {
-            reportRepository.deleteById(reportId);
-            return true;
-        }
-        return false;
-    }
-
-
 }

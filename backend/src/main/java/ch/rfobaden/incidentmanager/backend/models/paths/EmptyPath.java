@@ -2,15 +2,13 @@ package ch.rfobaden.incidentmanager.backend.models.paths;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public final class EmptyPath {
+public class EmptyPath {
     private static final EmptyPath instance = new EmptyPath();
 
     @JsonCreator
     public static EmptyPath getInstance() {
         return instance;
     }
-
-    private EmptyPath() {}
 
     @Override
     public boolean equals(Object other) {

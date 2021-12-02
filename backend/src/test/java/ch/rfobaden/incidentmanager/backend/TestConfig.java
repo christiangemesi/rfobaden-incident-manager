@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend;
 import java.util.Locale;
 
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserCredentialsGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import com.github.javafaker.Faker;
@@ -15,7 +16,8 @@ import org.springframework.context.annotation.Import;
     Application.class,
     UserGenerator.class,
     UserCredentialsGenerator.class,
-    IncidentGenerator.class
+    IncidentGenerator.class,
+    ReportGenerator.class
 })
 public class TestConfig {
     @Bean

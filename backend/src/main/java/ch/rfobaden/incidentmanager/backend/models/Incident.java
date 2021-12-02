@@ -68,6 +68,13 @@ public class Incident extends Model.Basic {
         return closeReason;
     }
 
+    public Long getCloseReasonId() {
+        if (closeReason == null) {
+            return null;
+        }
+        return closeReason.getId();
+    }
+
     public void setCloseReason(CloseReason closeReason) {
         this.closeReason = closeReason;
     }
@@ -103,14 +110,14 @@ public class Incident extends Model.Basic {
         if (!(other instanceof Incident)) {
             return false;
         }
-        var that = (Incident) other;
-        return equalsModel(that)
-            && Objects.equals(title, that.title)
-            && Objects.equals(description, that.description)
-            && Objects.equals(startsAt, that.startsAt)
-            && Objects.equals(endsAt, that.endsAt)
-            && Objects.equals(closeReason, that.closeReason)
-            && Objects.equals(isClosed, that.isClosed)
+        var incident = (Incident) other;
+        return equalsModel(incident)
+            && Objects.equals(title, incident.title)
+            && Objects.equals(description, incident.description)
+            && Objects.equals(startsAt, incident.startsAt)
+            && Objects.equals(endsAt, incident.endsAt)
+            && Objects.equals(closeReason, incident.closeReason)
+            && Objects.equals(isClosed, incident.isClosed)
             ;
     }
 
