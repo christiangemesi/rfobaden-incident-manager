@@ -27,7 +27,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 
   const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
 
-  const clearCurrentIncident = async () => {
+  const clearCurrentIncident = () => {
     setCurrentIncident(null)
   }
 
@@ -42,7 +42,6 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-
           <UiModal isFull>
             <UiModal.Activator>{({ open }) => (
               <UiButton onClick={open}>
