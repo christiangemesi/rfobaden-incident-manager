@@ -16,6 +16,7 @@ import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
+import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,7 @@ public class ReportControllerTest extends AppControllerTest {
     SecurityContextMock securityContextMock;
 
     UserGenerator userGenerator;
+    IncidentGenerator incidentGenerator;
 
     private final Incident incident;
 
@@ -63,10 +65,11 @@ public class ReportControllerTest extends AppControllerTest {
     private final User author;
 
     @Autowired
-    ReportControllerTest(UserGenerator userGenerator) {
+    ReportControllerTest(UserGenerator userGenerator, IncidentGenerator incidentGenerator) {
         this.userGenerator = userGenerator;
+        this.incidentGenerator = incidentGenerator;
         author = userGenerator.generate();
-        incident = new Incident(1L, "Title", author.getId());
+        incident = incidentGenerator.generate();
         report1 = new Report(1L, "Report Title 1", userGenerator.generate(), incident);
         report2 = new Report(2L, "Report Title 2", userGenerator.generate(), incident);
         report3 = new Report(3L, "Report Title 3", userGenerator.generate(), incident);
@@ -74,7 +77,7 @@ public class ReportControllerTest extends AppControllerTest {
 
     @BeforeEach
     public void setupIncidentService() {
-        Mockito.when(incidentService.getIncidentById(incident.getId()))
+        Mockito.when(incidentService.find(incident.getId()))
             .thenReturn(Optional.of(incident));
     }
 

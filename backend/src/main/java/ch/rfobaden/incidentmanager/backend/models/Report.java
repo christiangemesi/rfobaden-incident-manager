@@ -55,7 +55,7 @@ public class Report implements Completable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "completion_id")
-    private Completion completion;
+    private CloseReason completion;
 
     @Column(nullable = false)
     private boolean isComplete;
@@ -214,12 +214,12 @@ public class Report implements Completable {
     }
 
     @Override
-    public void setCompletion(Completion completion) {
+    public void setCompletion(CloseReason completion) {
         this.completion = completion;
     }
 
     @Override
-    public Completion getCompletion() {
+    public CloseReason getCompletion() {
         return completion;
     }
 

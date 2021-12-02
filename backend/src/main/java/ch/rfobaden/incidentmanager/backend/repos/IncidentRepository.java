@@ -14,7 +14,4 @@ import java.util.Optional;
 
 @Repository
 public interface IncidentRepository extends JpaRepository<Incident, Long>, ModelRepository.Basic<Incident> {
-
-
-
 }

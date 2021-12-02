@@ -1,13 +1,14 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "incident")
@@ -19,18 +20,17 @@ public class Incident extends Model.Basic {
 
     private String description;
 
-    private String closeReason;
-
-    @Column(nullable = false)
-    private boolean isClosed;
-
     @Column(nullable = false)
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
-    private LocalDateTime closedAt;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "close_reason_id")
+    private CloseReason closeReason;
 
+    @Column(nullable = false)
+    private boolean isClosed;
 
     public String getTitle() {
         return title;
@@ -46,23 +46,6 @@ public class Incident extends Model.Basic {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getCloseReason() {
-        return closeReason;
-    }
-
-    public void setCloseReason(String closeReason) {
-        this.closeReason = closeReason;
-    }
-
-    @JsonProperty("isClosed")
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    public void setClosed(boolean closed) {
-        isClosed = closed;
     }
 
     public LocalDateTime getStartsAt() {
@@ -81,12 +64,20 @@ public class Incident extends Model.Basic {
         this.endsAt = endsAt;
     }
 
-    public LocalDateTime getClosedAt() {
-        return closedAt;
+    public CloseReason getCloseReason() {
+        return closeReason;
     }
 
-    public void setClosedAt(LocalDateTime closedAt) {
-        this.closedAt = closedAt;
+    public void setCloseReason(CloseReason closeReason) {
+        this.closeReason = closeReason;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
     @Override
@@ -97,11 +88,10 @@ public class Incident extends Model.Basic {
             ", updatedAt=" + getUpdatedAt() +
             ", title='" + title + '\'' +
             ", description='" + description + '\'' +
-            ", closeReason='" + closeReason + '\'' +
-            ", isClosed=" + isClosed + '\'' +
             ", startsAt=" + startsAt + '\'' +
             ", endsAt=" + endsAt + '\'' +
-            ", closedAt=" + closedAt +
+            ", closeReason=" + closeReason +
+            ", isClosed=" + isClosed +
             '}';
     }
 
@@ -117,15 +107,16 @@ public class Incident extends Model.Basic {
         return equalsModel(that)
             && Objects.equals(title, that.title)
             && Objects.equals(description, that.description)
-            && Objects.equals(closeReason, that.closeReason)
             && Objects.equals(startsAt, that.startsAt)
             && Objects.equals(endsAt, that.endsAt)
-            && Objects.equals(closedAt, that.closedAt);
+            && Objects.equals(closeReason, that.closeReason)
+            && Objects.equals(isClosed, that.isClosed)
+            ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), title, description, closeReason, startsAt, endsAt,
-            closedAt);
+        return Objects.hash(modelHashCode(), title, description, startsAt, endsAt,
+            closeReason, isClosed);
     }
 }

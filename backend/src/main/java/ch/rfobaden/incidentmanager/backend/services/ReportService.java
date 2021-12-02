@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.models.Completion;
+import ch.rfobaden.incidentmanager.backend.models.CloseReason;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +70,8 @@ public class ReportService {
             return Optional.empty();
         }
 
-        var completion = new Completion();
-        completion.setReason(reason);
+        var completion = new CloseReason();
+        completion.setMessage(reason);
         completion.setCreatedAt(LocalDateTime.now());
         completion.setPrevious(report.getCompletion());
 
