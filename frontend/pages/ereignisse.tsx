@@ -8,6 +8,9 @@ import { useEffectOnce } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentList from '@/components/Incident/List/IncidentList'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   data: {
@@ -39,7 +42,21 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
       </h1>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={clearCurrentIncident} />
+
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiButton onClick={open}>
+                Ereignis erstellen
+              </UiButton>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <UiContainer>
+                <UiTitle level={1}>Ereignis erstellen</UiTitle>
+                <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={close} />
+              </UiContainer>
+            )}</UiModal.Body>
+          </UiModal>
+
         </UiGrid.Col>
       </UiGrid>
       <UiGrid style={{ justifyContent: 'center' }}>
