@@ -1,13 +1,6 @@
 import 'styled-components'
-import { Breakpoint } from '@/theme'
+import { Theme } from '@/theme'
 
 declare module 'styled-components' {
-  export interface DefaultTheme {
-    breakpoints: {
-      [K in Breakpoint]: {
-        min: number
-        max: number
-      }
-    }
-  }
+  export type DefaultTheme = Theme
 }

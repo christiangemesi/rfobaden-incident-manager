@@ -1,60 +1,108 @@
-import React, { ChangeEvent, useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
+import Select, { StylesConfig } from 'react-select'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
+import { defaultTheme, contrastDark } from '@/theme'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
   options: T[]
-  optionValue?: keyof T | ((option: T) => string | number | null)
-  optionName?: keyof T | ((option: T) => string | number | null)
+  optionName?: keyof T | ((option: T) => string | null)
+  isDisabled?: boolean,
+  isSearchable?: boolean,
+  placeholder?: string,
 }
 
-const UiSelectInput = <T,>({
+const UiSelectInput = <T, >({
   value = null,
   onChange: setValue,
   errors,
   label,
   options,
-  optionValue,
   optionName,
+  isDisabled = false,
+  isSearchable = false,
+  placeholder = '',
 }: Props<T>): JSX.Element => {
-  const getOptionValue = useOptionAttribute(optionValue)
-  const getOptionName = useOptionAttribute(optionName)
+  const optionToLabel = useOptionAttribute(optionName)
+  const mappedOptions: Option<T>[] = useMemo(() => (
+    options.map((option) => {
+      return { value: option, label: optionToLabel(option) ?? '' }
+    })
+  ), [optionToLabel, options])
 
-  const optionMapping: Map<string, T> = useMemo(() => {
-    const mapping = new Map<string, T>()
-    for (const option of options) {
-      const optionValue = getOptionValue(option)
-      if (optionValue === null) {
-        throw new Error(`option has no value: ${option}`)
-      }
-      const key = `${optionValue}`
-      if (mapping.has(key)) {
-        throw new Error(`duplicate option value: ${optionValue}`)
-      }
-      mapping.set(key, option)
-    }
-    return mapping
-  }, [options, getOptionValue])
+  const defaultValue = useMemo(() => (
+    value === null ? null : { value, label: optionToLabel(value) ?? '' }
+  ), [optionToLabel, value])
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-    const optionValue = e.target.value
-    if (optionValue.length === 0) {
-      // Default, empty option. Set the value to null.
-      if (setValue) {
-        setValue(null as unknown as T)
-      }
-      return
-    }
-    const option = optionMapping.get(optionValue)
-    if (option === undefined) {
-      throw new Error(`unknown option value: ${optionValue}`)
-    }
+  const handleChange = (option: Option<T> | null) => {
     if (setValue) {
-      setValue(option)
+      setValue(option?.value ?? null)
     }
-  }, [optionMapping, setValue])
+  }
+
+  const hasErrors = errors && errors.length > 0
+
+  const customStyles: StylesConfig<Option<T>, false> = {
+    // style of main select box
+    control: (styles, { isFocused }) => ({
+      ...styles,
+      borderRadius: '0.5rem',
+      marginBottom: 0,
+      marginTop: '0.25rem',
+
+      boxShadow: 'none',
+      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
+      color: contrastDark,
+
+      ':hover': {
+        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
+      },
+    }),
+    // style of option container
+    menu: (styles) => ({
+      ...styles,
+      borderRadius: '0.5rem',
+      marginTop: 2,
+    }),
+    // style of option element
+    option: (styles, { isDisabled, isSelected }) => {
+      return {
+        ...styles,
+        color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
+        cursor: isDisabled ? 'not-allowed' : 'pointer',
+        backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
+
+        ':disabled': {
+          ...styles[':disabled'],
+          backgroundColor: 'rgb(200,200,200)',
+          filter: 'brightness(120%)',
+        },
+
+        ':hover': {
+          ...styles[':hover'],
+          backgroundColor: defaultTheme.colors.secondary.value,
+          color: defaultTheme.colors.secondary.contrast,
+        },
+
+      }
+    },
+    // style of input field in main select with search input
+    input: (styles) => ({
+      ...styles,
+      color: contrastDark,
+    }),
+    // style placeholder in main select
+    placeholder: (styles) => ({
+      ...styles,
+      color: 'rgb(150,150,150)',
+    }),
+    // style of current shown value in select
+    singleValue: (styles) => ({
+      ...styles,
+    }),
+  }
 
   const Label = label == null ? 'div' : StyledLabel
 
@@ -65,33 +113,37 @@ const UiSelectInput = <T,>({
           {label}
         </span>
       )}
-      <StyledSelect
-        value={value === null ? undefined : getOptionValue(value) ?? undefined}
+      <Select
+        options={mappedOptions}
+        value={defaultValue}
+        placeholder={placeholder}
         onChange={handleChange}
-      >
-        <option />
-        {[...optionMapping.entries()].map(([optionValue, option]) => (
-          <option key={optionValue} value={optionValue}>
-            {getOptionName(option)}
-          </option>
-        ))}
-      </StyledSelect>
+        isClearable
+        isDisabled={isDisabled}
+        isSearchable={isSearchable}
+        styles={customStyles}
+      />
       <UiInputErrors errors={errors} />
     </Label>
   )
 }
 export default UiSelectInput
 
+interface Option<T> {
+  value: T
+  label: string
+}
+
 type OptionAttribute<T> =
   | undefined
   | keyof T
-  | ((option: T) => string | number | null)
+  | ((option: T) => string | null)
 
-const useOptionAttribute = <T,>(attr: OptionAttribute<T>): (option: T) => string | number | null => {
+const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => string | null => {
   return useMemo(() => {
     if (attr === undefined) {
       return (option) => {
-        if (typeof option === 'string' || typeof option == 'number') {
+        if (typeof option === 'string') {
           return option
         }
         throw new Error(`option is not a string nor a number: ${option}`)
@@ -102,25 +154,13 @@ const useOptionAttribute = <T,>(attr: OptionAttribute<T>): (option: T) => string
     }
     return (option) => {
       const value = option[attr]
-      if (typeof value === 'string' || typeof value == 'number') {
+      if (typeof value === 'string') {
         return value
       }
       throw new Error(`option value '${option}' is not a string nor a number: ${value}`)
     }
   }, [attr])
 }
-
-const StyledSelect = styled.select`
-  padding: 0.25rem;
-  font-size: 0.9rem;
-  border-radius: 0.25rem;
-  outline: none;
-  
-  border: 1px solid gray;
-  :active, :focus {
-    border-color: cornflowerblue;
-  }
-`
 
 const StyledLabel = styled.label`
   display: flex;
@@ -134,4 +174,3 @@ const StyledLabel = styled.label`
     font-weight: bold;
   }
 `
-

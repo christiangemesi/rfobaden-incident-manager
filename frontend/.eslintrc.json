@@ -50,6 +50,10 @@
       // Disallow spaces before closing a normal JSX element:
       //    <div>...</div>
       "beforeClosing": "never"
-    }]
+    }],
+
+    // Allow children to be passed as prob.
+    // This is almost a necessity if we want to pass function variables as children.
+    "react/no-children-prop": "off"
   }
 }
