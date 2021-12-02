@@ -1,0 +1,19 @@
+FROM node:16-alpine3.11
+WORKDIR /app
+COPY frontend/package.json .
+
+RUN npm install
+
+COPY frontend/ .
+#ARG ENV_FILE_NAME
+#ENV ENV_FILE_NAME ${ENV_FILE_NAME}
+
+ARG NEXT_PUBLIC_BACKEND_ENDPOINT
+ENV NEXT_PUBLIC_BACKEND_ENDPOINT ${NEXT_PUBLIC_BACKEND_ENDPOINT}
+
+#RUN echo ${ENV_FILE_NAME}
+#COPY ${ENV_FILE_NAME} .
+
+RUN npm run build
+
+CMD npm run start
