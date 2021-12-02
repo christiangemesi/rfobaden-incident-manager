@@ -1,30 +1,21 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "incident")
-public class Incident {
+public class Incident extends Model.Basic {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Long id;
-
+    @NotBlank
     @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false)
-    private Long authorId;
 
     private String description;
 
@@ -34,40 +25,12 @@ public class Incident {
     private boolean isClosed;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
     private LocalDateTime closedAt;
 
-    public Incident() {
-    }
-
-    public Incident(String title, Long authorId) {
-        this(null, title, authorId);
-    }
-
-    public Incident(Long id, String title, Long authorId) {
-        this.id = id;
-        this.title = title;
-        this.authorId = authorId;
-        this.isClosed = false;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -75,14 +38,6 @@ public class Incident {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
     }
 
     public String getDescription() {
@@ -110,22 +65,6 @@ public class Incident {
         isClosed = closed;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public LocalDateTime getStartsAt() {
         return startsAt;
     }
@@ -151,49 +90,42 @@ public class Incident {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public String toString() {
+        return "Incident{" +
+            "id=" + getId() +
+            ", createdAt=" + getCreatedAt() +
+            ", updatedAt=" + getUpdatedAt() +
+            ", title='" + title + '\'' +
+            ", description='" + description + '\'' +
+            ", closeReason='" + closeReason + '\'' +
+            ", isClosed=" + isClosed + '\'' +
+            ", startsAt=" + startsAt + '\'' +
+            ", endsAt=" + endsAt + '\'' +
+            ", closedAt=" + closedAt +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(other instanceof Incident)) {
             return false;
         }
-        Incident incident = (Incident) o;
-        return Objects.equals(id, incident.getId())
-            && isClosed == incident.isClosed
-            && Objects.equals(title, incident.title)
-            && Objects.equals(authorId, incident.authorId)
-            && Objects.equals(description, incident.description)
-            && Objects.equals(closeReason, incident.closeReason)
-            && Objects.equals(createdAt, incident.createdAt)
-            && Objects.equals(updatedAt, incident.updatedAt)
-            && Objects.equals(closedAt, incident.closedAt)
-            && Objects.equals(startsAt, incident.startsAt)
-            && Objects.equals(endsAt, incident.endsAt);
+        var that = (Incident) other;
+        return equalsModel(that)
+            && Objects.equals(title, that.title)
+            && Objects.equals(description, that.description)
+            && Objects.equals(closeReason, that.closeReason)
+            && Objects.equals(startsAt, that.startsAt)
+            && Objects.equals(endsAt, that.endsAt)
+            && Objects.equals(closedAt, that.closedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-            id, title, authorId, description, closeReason,
-            isClosed, createdAt, updatedAt, closedAt, startsAt, endsAt
-        );
-    }
-
-    @Override
-    public String toString() {
-        return "Incident{"
-            + "id=" + id
-            + ", title=" + title
-            + ", authorId=" + authorId
-            + ", description=" + description
-            + ", closeReason=" + closeReason
-            + ", isClosed=" + isClosed
-            + ", creationDate=" + createdAt
-            + ", updateDate=" + updatedAt
-            + ", closedDate=" + closedAt
-            + ", startDate=" + startsAt
-            + ", endDate=" + endsAt
-            + '}';
+        return Objects.hash(modelHashCode(), title, description, closeReason, startsAt, endsAt,
+            closedAt);
     }
 }
