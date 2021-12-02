@@ -1,5 +1,5 @@
 import React from 'react'
-import UiDataLabel from '@/components/Ui/DataLabel/UiDateLabel'
+import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 
 const UiDateLabelExample: React.VFC = () => {
   const past = new Date(2018, 11, 24)
@@ -9,13 +9,13 @@ const UiDateLabelExample: React.VFC = () => {
   return (
     <React.Fragment>
       <h2>UiBadge</h2>
-      <UiDataLabel start={past} end={now} />
+      <UiDateLabel start={past} end={now} />
       <br />
-      <UiDataLabel start={now} end={future} type="datetime" />
+      <UiDateLabel start={now} end={future} type="datetime" />
       <br />
-      <UiDataLabel start={now} />
+      <UiDateLabel start={now} />
       <br />
-      <UiDataLabel start={past} />
+      <UiDateLabel start={past} />
     </React.Fragment>
   )
 }

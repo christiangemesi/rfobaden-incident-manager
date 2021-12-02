@@ -22,7 +22,7 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-datelabel">
+      <Link href="examples/ui-date-label">
         <a>
           UiDateLabel
         </a>
