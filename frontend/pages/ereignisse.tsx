@@ -51,8 +51,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
             )}</UiModal.Activator>
             <UiModal.Body>{({ close }) => (
               <UiContainer>
-                <UiTitle level={1}>Ereignis erstellen</UiTitle>
-                <IncidentForm incident={currentIncident} key={currentIncident?.id ?? -1} onClose={close} />
+                <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
+                <IncidentForm incident={currentIncident} onClose={() => { close(); clearCurrentIncident() }} />
               </UiContainer>
             )}</UiModal.Body>
           </UiModal>
