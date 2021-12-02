@@ -20,8 +20,8 @@ const UiCheckbox: React.VFC<Props> = ({
 ) => {
   return (
     <div>
-      <StyledDiv onClick={() => handleChange(!value)}>
-        <StyledCheckboxLabel isDisabled={isDisabled}>
+      <StyledDiv onClick={() => handleChange(!value)} isDisabled={isDisabled}>
+        <StyledCheckboxLabel>
           <StyledCheckbox>
             {value && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}
           </StyledCheckbox>
@@ -35,36 +35,36 @@ const UiCheckbox: React.VFC<Props> = ({
 
 export default UiCheckbox
 
-const StyledDiv = styled.div`
-  *  {
-    :hover {
-      cursor: pointer;
-    }
-  }
-`
-
-const StyledCheckboxLabel = styled.label<{ isDisabled: boolean }>`
+const StyledDiv = styled.div<{ isDisabled: boolean }>`
   display: inline-flex;
-  justify-content: center;
   align-items: center;
-  margin-left: 0.25rem;
-  color: ${contrastDark}
   
   ${({ isDisabled }) => isDisabled && css`
+  & > ${StyledCheckboxLabel} {
     color: rgb(200, 200, 200);
-
+    
     & > div {
       color: rgb(200, 200, 200);
+      :hover {
+        cursor: not-allowed;
+      }
     }
-
     :hover {
       cursor: not-allowed;
     }
+  }
+`}
+`
 
-    & > label {
-      color: rgb(200, 200, 200);
-    }
-  `}
+const StyledCheckboxLabel = styled.label`
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.25rem;
+  color: ${contrastDark};
+  
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const StyledCheckbox = styled.div`
