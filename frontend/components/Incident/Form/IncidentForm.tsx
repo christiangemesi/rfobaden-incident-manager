@@ -12,6 +12,7 @@ import UiButton from '@/components/Ui/Button/UiButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
   incident: Incident | null
@@ -90,13 +91,17 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
 
               <UiGrid.Col>
                 <UiForm.Field field={form.description}>{(props) => (
-                  <UiTextInput {...props} label="Start Datum" placeholder="Start Datum" />
+                  <UiTextInput {...props} label="Start Datum" placeholder="Start Datum">
+                    <UiIcon.Organization />
+                  </UiTextInput>
                 )}</UiForm.Field>
               </UiGrid.Col>
 
               <UiGrid.Col>
                 <UiForm.Field field={form.description}>{(props) => (
-                  <UiTextInput {...props} label="End Datum" placeholder="End Datum" />
+                  <UiTextInput {...props} label="End Datum" placeholder="End Datum">
+                    <UiIcon.Organization />
+                  </UiTextInput>
                 )}</UiForm.Field>
               </UiGrid.Col>
 
