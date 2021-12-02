@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
-import Priority from '@/models/Slider'
+import Priority from '@/models/Priority'
 
 const UiPrioritySliderExample: React.VFC = () => {
 

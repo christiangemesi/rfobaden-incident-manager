@@ -1,48 +1,60 @@
 import React from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
-import Priority from '@/models/Slider'
 import styled, { css } from 'styled-components'
 import { contrastDark, defaultTheme } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
-
-
+import Priority from '@/models/Priority'
 
 const UiPrioritySlider: React.VFC<UiInputProps<Priority>> = ({
-  value= Priority.MEDIUM,
+  value = Priority.MEDIUM,
   onChange: handleChange,
-  errors= [],
+  errors = [],
 }) => {
 
   return (
     <div>
       <StyledDiv>
+
         <StyledSlider value={value} />
         <StyledContainer>
-          <div onClick={ () => handleChange(Priority.LOW)}>
+          <StyledIconDiv onClick={() => handleChange(Priority.LOW)} priority={Priority.LOW}>
             <UiIcon.PriorityLow />
-          </div>
-          <div onClick={ () => handleChange(Priority.MEDIUM)}>
+          </StyledIconDiv>
+          <StyledIconDiv onClick={() => handleChange(Priority.MEDIUM)} priority={Priority.MEDIUM}>
             <UiIcon.PriorityMedium />
-          </div>
-          <div onClick={ () => handleChange(Priority.HIGH)}>
+          </StyledIconDiv>
+          <StyledIconDiv onClick={() => handleChange(Priority.HIGH)} priority={Priority.HIGH}>
             <UiIcon.PriorityHigh />
-          </div>
+          </StyledIconDiv>
         </StyledContainer>
 
       </StyledDiv>
       <UiInputErrors errors={errors} />
-
     </div>
-
   )
 }
 
 export default UiPrioritySlider
 
+const StyledIconDiv = styled.div<{priority: Priority}>`
+  ${({ priority }) => priority==Priority.LOW && css`
+    color: ${({ theme } ) => theme.colors.success.value};
+  `}
+
+  ${({ priority }) => priority==Priority.MEDIUM && css`
+    color: ${({ theme } ) => theme.colors.warning.value};
+  `}
+
+  ${({ priority }) => priority==Priority.HIGH && css`
+    color: ${({ theme } ) => theme.colors.error.value};
+  `}
+`
+
 const StyledDiv = styled.div`
   display: inline-flex;
   position: relative;
+  cursor: pointer;
 `
 
 const StyledSlider = styled.div<{value: Priority}>`
