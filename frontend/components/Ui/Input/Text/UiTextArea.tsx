@@ -57,6 +57,7 @@ const StyledTextArea = styled.textarea`
   min-width: 100%; // so you cant resize it horizontally
   min-height: 2.1rem; // so you cant resize smaller then 1 row
   border: 1px solid ${contrastDark};
+  resize: vertical;
   transition: 250ms ease;
   transition-property: border-color;
 `
