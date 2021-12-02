@@ -37,6 +37,12 @@ public class Report extends Model implements PathConvertible<ReportPath> {
     private String location;
 
     @Column(nullable = false)
+    private boolean isKeyReport;
+
+    @Column(nullable = false)
+    private boolean isLocationRelevantReport;
+
+    @Column(nullable = false)
     private Priority priority;
 
     public User getAssignee() {
@@ -131,6 +137,22 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         this.location = location;
     }
 
+    public boolean isKeyReport() {
+        return isKeyReport;
+    }
+
+    public void setKeyReport(boolean keyReport) {
+        isKeyReport = keyReport;
+    }
+
+    public boolean isLocationRelevantReport() {
+        return isLocationRelevantReport;
+    }
+
+    public void setLocationRelevantReport(boolean locationRelevantReport) {
+        isLocationRelevantReport = locationRelevantReport;
+    }
+
     public Priority getPriority() {
         return priority;
     }
@@ -157,6 +179,8 @@ public class Report extends Model implements PathConvertible<ReportPath> {
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
             && Objects.equals(location, report.location)
+            && Objects.equals(isKeyReport, report.isKeyReport)
+            && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport)
             && priority == report.priority;
     }
 
@@ -164,7 +188,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
     public int hashCode() {
         return Objects.hash(assignee, incident, title,
             description, notes, startsAt,
-            endsAt, location, priority);
+            endsAt, location, isKeyReport, isLocationRelevantReport, priority);
     }
 
     @Override
@@ -181,6 +205,8 @@ public class Report extends Model implements PathConvertible<ReportPath> {
             + ", startsAt=" + startsAt + '\''
             + ", endsAt=" + endsAt + '\''
             + ", location='" + location + '\''
+            + ", isKeyReport='" + isKeyReport + '\''
+            + ", isLocationRelevantReport='" + isLocationRelevantReport + '\''
             + ", priority=" + priority
             + '}';
     }

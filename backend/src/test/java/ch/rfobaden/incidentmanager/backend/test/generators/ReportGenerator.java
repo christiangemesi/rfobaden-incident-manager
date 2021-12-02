@@ -19,6 +19,8 @@ public class ReportGenerator extends ModelGenerator<Report> {
         report.setNotes(faker.lorem().sentence(10));
         // TODO starts at and ends at?
         report.setLocation(faker.country().capital());
+        report.setKeyReport(faker.bool().bool());
+        report.setLocationRelevantReport(faker.bool().bool());
         report.setPriority(Report.Priority.MEDIUM); // TODO all generated are medium
         report.setIncident(incidentGenerator.generate());
         return report;
