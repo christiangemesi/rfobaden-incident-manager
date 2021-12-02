@@ -14,7 +14,6 @@ import SessionOnly from '@/components/Session/Only/SessionOnly'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiButton from '@/components/Ui/Button/UiButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
@@ -53,7 +52,6 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
                 <UiContainer>
-                  {/*TODO: set isCentered*/}
                   <UiTitle level={1} isCentered>Meldung erstellen</UiTitle>
                   <ReportForm
                     incident={incident}
@@ -76,8 +74,6 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
   )
 }
 export default MeldungenPage
-
-
 
 type Query = {
   id: string
