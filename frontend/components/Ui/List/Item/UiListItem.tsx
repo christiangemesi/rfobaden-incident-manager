@@ -23,6 +23,7 @@ export default UiListItem
 
 const StyledListItem = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border-radius: 0.5rem;
   margin: 0.5rem 0;
