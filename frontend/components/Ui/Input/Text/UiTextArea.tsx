@@ -39,7 +39,6 @@ const UiTextArea: React.VFC<Props> = ({
           placeholder={placeholder}
           rows={rows}
           onChange={(e) => handleChange(processText(e.target.value))}
-          hasErrors={hasError}
         />
       </StyledDiv>
       <UiInputErrors errors={errors} />
