@@ -42,7 +42,7 @@ public class ReportController extends AppController {
 
     @GetMapping
     public List<Report> getReports(@PathVariable("incidentId") Long incidentId) {
-        if (incidentService.getIncidentById(incidentId).isEmpty()) {
+        if (incidentService.find(incidentId).isEmpty()) {
             throw new IllegalArgumentException("incident not found");
         }
         return reportService.getReportsOfIncident(incidentId);
@@ -124,7 +124,7 @@ public class ReportController extends AppController {
     }
 
     private void prepareReport(Report report, Long incidentId) {
-        report.setIncident(incidentService.getIncidentById(incidentId).orElseThrow(() -> (
+        report.setIncident(incidentService.find(incidentId).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "incident not found")
         )));
         if (report.getAssigneeId() != null) {
