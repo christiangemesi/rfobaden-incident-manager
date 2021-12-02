@@ -12,7 +12,7 @@ interface Props {
   children: ReactNode,
 }
 
-const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }) => {
+const UiListItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }) => {
   let priorityIcon = <UiIcon.PriorityMedium />
 
   if (priority === Priority.HIGH) {
@@ -40,7 +40,7 @@ const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }
     </UiListItem>
   )
 }
-export default styled(UiItemWithDetails)``
+export default styled(UiListItemWithDetails)``
 
 const StyledBelowEachOther = styled.div`
   width: max-content;
