@@ -1,7 +1,7 @@
 import React from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
-import Report, { parseReport, ReportPriority } from '@/models/Report'
+import Report, { parseReport } from '@/models/Report'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -12,6 +12,7 @@ import UserStore, { useUsers } from '@/stores/UserStore'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import { useValidate } from '@/components/Ui/Form/validate'
+import Priority from '@/models/Priority'
 
 interface Props {
   incident: Incident
@@ -25,7 +26,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     description: null,
     addendum: null,
     location: null,
-    priority: ReportPriority.LOW,
+    priority: Priority.LOW,
     incidentId: incident.id,
     authorId: -1,
     assigneeId: null,
@@ -95,7 +96,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
           <UiTextInput {...props} label="Ort" />
         )}</UiForm.Field>
         <UiForm.Field field={form.priority}>{(props) => (
-          <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
+          <UiSelectInput {...props} label="Priorität" options={Object.values(Priority)} />
         )}</UiForm.Field>
         <UiForm.Field field={form.assigneeId}>{(props) => (
           <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />

@@ -1,7 +1,7 @@
 import React from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
-import Task, { parseTask, TaskPriority } from '@/models/Task'
+import Task, { parseTask } from '@/models/Task'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -13,6 +13,7 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
+import Priority from '@/models/Priority'
 
 interface Props {
   incident: Incident
@@ -26,7 +27,7 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
     title: '',
     description: null,
     location: null,
-    priority: TaskPriority.LOW,
+    priority: Priority.LOW,
     assigneeId: null,
     closedAt: null,
     startsAt: null,
@@ -84,7 +85,7 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
         <UiTextInput {...props} label="Ort" />
       )}</UiForm.Field>
       <UiForm.Field field={form.priority}>{(props) => (
-        <UiSelectInput {...props} label="Priorität" options={Object.values(TaskPriority)} />
+        <UiSelectInput {...props} label="Priorität" options={Object.values(Priority)} />
       )}</UiForm.Field>
       <UiForm.Field field={form.assigneeId}>{(props) => (
         <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
