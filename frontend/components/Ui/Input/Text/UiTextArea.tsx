@@ -41,6 +41,7 @@ export default UiTextArea
 const TextArea = styled.textarea<{ hasErrors: boolean }>`
   border-radius: 0.5rem;
   width: 100%;
+  font-family: ${({ theme }) => theme.fonts.body} 
   ${({ hasErrors, theme }) => hasErrors && css`
     border: 1px solid ${theme.colors.error.value}
   `}
