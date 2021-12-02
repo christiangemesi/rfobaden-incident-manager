@@ -37,7 +37,6 @@ const EreignisPage: React.VFC<Props> = ({ id, data }) => {
 }
 export default EreignisPage
 
-
 export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
   const id = parseInt(query.id as string) as Id<Incident>
   const [incident, error] = await BackendService.find<Incident>('incidents', id)

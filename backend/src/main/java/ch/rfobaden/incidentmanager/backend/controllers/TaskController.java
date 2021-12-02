@@ -26,7 +26,6 @@ public class TaskController extends ModelController<Task, TaskPath, TaskService>
 
     @Override
     public Task create(@ModelAttribute TaskPath path, @RequestBody Task task) {
-        task.setAuthor(requireCurrentUser());
         return super.create(path, task);
     }
 

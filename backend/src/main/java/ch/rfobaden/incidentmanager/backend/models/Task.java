@@ -17,10 +17,6 @@ import javax.persistence.Table;
 @Table(name = "task")
 public class Task extends Model implements PathConvertible<TaskPath> {
 
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private User author;
-
     @ManyToOne
     @JoinColumn
     private User assignee;
@@ -34,8 +30,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     private String description;
 
-    private String addendum;
-
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
@@ -44,21 +38,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     @Column(nullable = false)
     private Priority priority;
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public Long getAuthorId() {
-        if (author == null) {
-            return null;
-        }
-        return author.getId();
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
 
     public User getAssignee() {
         return assignee;
@@ -98,6 +77,13 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         return report.getId();
     }
 
+    public Long getIncidentId() {
+        if (report == null) {
+            return null;
+        }
+        return report.getIncident().getId();
+    }
+
     @JsonProperty
     public void setReport(Report report) {
         this.report = report;
@@ -117,14 +103,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getAddendum() {
-        return addendum;
-    }
-
-    public void setAddendum(String addendum) {
-        this.addendum = addendum;
     }
 
     public LocalDateTime getStartsAt() {
@@ -170,12 +148,10 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         }
         Task task = (Task) o;
         return equalsModel(task)
-            && Objects.equals(author, task.author)
             && Objects.equals(assignee, task.assignee)
             && Objects.equals(report, task.report)
             && Objects.equals(title, task.title)
             && Objects.equals(description, task.description)
-            && Objects.equals(addendum, task.addendum)
             && Objects.equals(startsAt, task.startsAt)
             && Objects.equals(endsAt, task.endsAt)
             && Objects.equals(location, task.location)
@@ -184,8 +160,8 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), author, assignee, report, title,
-            description, addendum, startsAt,
+        return Objects.hash(modelHashCode(), assignee, report, title,
+            description, startsAt,
             endsAt, location, priority);
     }
 
@@ -193,12 +169,10 @@ public class Task extends Model implements PathConvertible<TaskPath> {
     public String toString() {
         return "Task{"
             + "id=" + getId()
-            + ", author=" + author
             + ", assignee =" + assignee
             + ", report=" + report
             + ", title='" + title + '\''
             + ", description='" + description + '\''
-            + ", addendum='" + addendum + '\''
             + ", createdAt=" + getCreatedAt()
             + ", updatedAt=" + getUpdatedAt()
             + ", startsAt=" + startsAt
