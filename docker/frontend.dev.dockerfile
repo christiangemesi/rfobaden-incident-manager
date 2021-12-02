@@ -3,7 +3,9 @@ WORKDIR /app
 COPY frontend/package.json .
 
 RUN npm install
-
 COPY frontend/ .
+
+ARG NEXT_PUBLIC_BACKEND_ENDPOINT
+ENV NEXT_PUBLIC_BACKEND_ENDPOINT ${NEXT_PUBLIC_BACKEND_ENDPOINT}
 
 CMD npm run dev
