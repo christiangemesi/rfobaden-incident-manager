@@ -44,11 +44,11 @@ const TaskView: React.VFC = () => {
       </UiTitle>
 
       <UiTextWithIcon text={user.firstName + ' ' + user.lastName}>
-        <UiIcon.Organization />
+        <UiIcon.UserInCircle />
       </UiTextWithIcon>
 
       <UiTextWithIcon text={task.location}>
-        <UiIcon.LocationRelevancy />
+        <UiIcon.Location />
       </UiTextWithIcon>
 
       <UiTitle level={6}>

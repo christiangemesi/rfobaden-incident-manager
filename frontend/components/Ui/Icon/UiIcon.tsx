@@ -12,6 +12,9 @@ import {
   mdiPlus,
   mdiPrinter,
   mdiAccountMultiple,
+  mdiMap,
+  mdiMapMarker,
+  mdiAccountCircle,
 } from '@mdi/js'
 
 interface NamedIconProps {
@@ -70,4 +73,7 @@ export default {
   PriorityLow: makeNamedIcon(mdiArrowDownBoldHexagonOutline),
   Menu: makeNamedIcon(mdiMenu),
   Organization: makeNamedIcon(mdiAccountMultiple),
+  Location: makeNamedIcon(mdiMapMarker),
+  Map: makeNamedIcon(mdiMap),
+  UserInCircle: makeNamedIcon(mdiAccountCircle),
 }
