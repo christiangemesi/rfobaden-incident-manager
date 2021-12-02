@@ -3,9 +3,9 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend.dev.dockerfile
+      dockerfile: ./docker/frontend.prod.dockerfile
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - NEXT_PUBLIC_BACKEND_ENDPOINT=http://${BACKEND_HOST}:${BACKEND_APP_PORT}
     ports:
       - "${FRONTEND_APP_PORT}:3000"
