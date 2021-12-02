@@ -39,10 +39,12 @@ public class Task extends Model implements PathConvertible<TaskPath> {
     @Column(nullable = false)
     private Priority priority;
 
+    @JsonIgnore
     public User getAssignee() {
         return assignee;
     }
 
+    @JsonIgnore
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
