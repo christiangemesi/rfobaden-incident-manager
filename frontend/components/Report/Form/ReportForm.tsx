@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Report, { parseReport, ReportPriority } from '@/models/Report'
@@ -12,6 +12,9 @@ import UserStore, { useUsers } from '@/stores/UserStore'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import { useValidate } from '@/components/Ui/Form/validate'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
+import UiToggle from '@/components/Ui/Toggle/UiToggle'
 
 interface Props {
   incident: Incident
@@ -75,32 +78,71 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
   })
 
   useCancel(form, handleClose)
-
+  const [value, setValue] = useState(false)
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
   return (
     <div>
       <form>
-        <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.addendum}>{(props) => (
-          <UiTextInput {...props} label="Addendum" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.location}>{(props) => (
-          <UiTextInput {...props} label="Ort" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.priority}>{(props) => (
-          <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
-        )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiGrid gap={0.5}>
+
+          <UiGrid.Col size={4}>
+            <UiForm.Field field={form.title}>{(props) => (
+              <UiToggle value={false} onChange={setValue} />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={4}>
+            <UiForm.Field field={form.title}>{(props) => (
+              <UiToggle value={false} onChange={setValue} />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={4}>
+            <UiForm.Field field={form.title}>{(props) => (
+              <UiToggle value={false} onChange={setValue} />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.title}>{(props) => (
+              <UiTextInput {...props} label="Titel" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.description}>{(props) => (
+              <UiTextArea {...props} label="Beschreibung" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.addendum}>{(props) => (
+              <UiTextArea {...props} label="Addendum" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.location}>{(props) => (
+              <UiTextInput {...props} label="Ort" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.priority}>{(props) => (
+              <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col size={12}>
+            <UiForm.Field field={form.assigneeId}>{(props) => (
+              <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiForm.Buttons form={form} />
+        </UiGrid>
       </form>
     </div>
   )

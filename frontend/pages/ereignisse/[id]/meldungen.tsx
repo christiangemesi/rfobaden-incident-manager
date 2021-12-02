@@ -13,6 +13,10 @@ import { useEffectOnce } from 'react-use'
 import SessionOnly from '@/components/Session/Only/SessionOnly'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   data: {
@@ -41,11 +45,25 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
         </h1>
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md:8, lg: 6, xl: 4 }}>
-            <ReportForm
-              incident={incident}
-              report={selectedReport}
-              onClose={() => setSelectedReport(null)}
-            />
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiButton onClick={open}>
+                  Meldung erstellen
+                </UiButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <UiContainer>
+                  {/*TODO: set isCentered*/}
+                  <UiTitle level={1}>Meldung erstellen</UiTitle>
+                  <ReportForm
+                    incident={incident}
+                    report={selectedReport}
+                    onClose={() => {close(); setSelectedReport(null)} }
+                  />
+                </UiContainer>
+              )}
+              </UiModal.Body>
+            </UiModal>
           </UiGrid.Col>
         </UiGrid>
         <UiGrid style={{ justifyContent: 'center' }}>
