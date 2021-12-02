@@ -54,10 +54,14 @@ const UiButton = styled(StyleHelper.tag('button', ({
 
   transition: 250ms ease;
   transition-property: filter, box-shadow;
-
+  
   ${({ isFull }) => isFull && css`
     width: 100%;
   `}
+  :focus {
+    outline: 1px solid ${contrastDark};
+  }
+  
   :hover:not(&[disabled]) {
     cursor: pointer;
     filter: brightness(90%);
