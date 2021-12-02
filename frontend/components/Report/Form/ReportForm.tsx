@@ -96,6 +96,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
               <UiToggle value={false} onChange={setValue} label="Schlüsselmeldung" />
             )}</UiForm.Field>
           </UiGrid.Col>
+
           <UiGrid.Col size={4}>
             <UiForm.Field field={form.title}>{(props) => (
               <UiToggle value={false} onChange={setValue} label="Lagerelevant" />

@@ -54,7 +54,7 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
               <UiModal.Body>{({ close }) => (
                 <UiContainer>
                   {/*TODO: set isCentered*/}
-                  <UiTitle level={1}>Meldung erstellen</UiTitle>
+                  <UiTitle level={1} isCentered>Meldung erstellen</UiTitle>
                   <ReportForm
                     incident={incident}
                     report={selectedReport}
