@@ -19,7 +19,6 @@ export default interface Task extends Model {
 
   reportId: number
   incidentId: number
-
 }
 
 export enum TaskPriority {

@@ -5,6 +5,8 @@ import Task from '@/models/TaskView'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import User, { UserRole } from '@/models/User'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 const TaskView: React.VFC = () => {
   const task: Task = {
@@ -31,16 +33,17 @@ const TaskView: React.VFC = () => {
     firstName: 'Peter',
     lastName: 'Nachname',
     role: UserRole.ADMIN,
-    
+
   }
 
   return (
-    <div>
-      <UiTitle level={1}>
+    <UiContainer>
+
+      <UiTitle level={2}>
         {task.title} {<UiIcon.PriorityHigh />}
       </UiTitle>
 
-      <UiTextWithIcon text={user.firstName + ' '+ user.lastName}>
+      <UiTextWithIcon text={user.firstName + ' ' + user.lastName}>
         <UiIcon.Organization />
       </UiTextWithIcon>
 
@@ -56,9 +59,7 @@ const TaskView: React.VFC = () => {
         <UiIcon.Attachments />
       </UiTextWithIcon>
 
-
-
-    </div>
+    </UiContainer>
   )
 }
 export default TaskView
