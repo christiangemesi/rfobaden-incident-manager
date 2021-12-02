@@ -35,20 +35,17 @@ const ReportListItem: React.VFC<ReportListItemProps> = ({ report, onClick: handl
   const assignee = useUser(report.assigneeId)
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
+  // TODO not func
   const tasksAll = useTasksOfReport(report.id)
   const tasksDone = tasksAll.filter((task) => task.closedAt !== null)
 
-  const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
-      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
-      ReportStore.remove(report.id)
-    }
-  }
-
   const keyMessage = true
   const locationRelevancy = true
-  console.log(tasksAll)
-  console.log(tasksDone)
+  if(report.id == 1){
+    console.log(tasksAll)
+    console.log(tasksDone)
+  }
+
   return (
     <UiListItemWithDetails title={report.title} priority={report.priority} user={assigneeName}
       onClick={handleClick && (() => handleClick(report))}>
