@@ -10,9 +10,6 @@ services:
     ports:
       - "${FRONTEND_APP_PORT}:3000"
       - "${FRONTENT_WEBPACK_PORT}:3035"
-    volumes:
-      - ./frontend:/app
-      - frontend.node_modules:/app/node_modules
     tmpfs:  
       - /app/.next:mode=777,uid=1000,gid=1000
     depends_on:
@@ -28,9 +25,6 @@ services:
     environment:
       - TZ=Europe/Zurich
     volumes:
-      - ./backend:/app
-      - backend.gradle-global:/home/gradle/.gradle
-      - backend.gradle-local:/app/.gradle
       - /etc/localtime:/etc/localtime:ro
     tmpfs:
       - /app/build
