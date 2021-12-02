@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import UiCheckbox from '@/components/Ui/Button/UiCheckbox'
+import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 
 const UiCheckboxExample: React.VFC = () => {
 
