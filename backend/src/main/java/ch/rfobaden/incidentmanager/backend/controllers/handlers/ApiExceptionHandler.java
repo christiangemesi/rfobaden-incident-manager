@@ -68,6 +68,7 @@ public class ApiExceptionHandler {
         );
     }
 
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleRemaining(Exception e) {
         log.error("Unhandled Error", e);
 
