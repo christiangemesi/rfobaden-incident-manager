@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { contrastDark, defaultTheme } from '@/theme'
+import { contrastDark } from '@/theme'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
@@ -16,8 +16,7 @@ const UiCheckbox: React.VFC<Props> = ({
   isDisabled = false,
   errors = [],
   onChange: handleChange,
-},
-) => {
+}) => {
   return (
     <div>
       <StyledDiv onClick={() => handleChange(!value)} isDisabled={isDisabled}>
@@ -68,7 +67,7 @@ const StyledCheckboxLabel = styled.label`
 `
 
 const StyledCheckbox = styled.div`
-  color: ${defaultTheme.colors.primary.value};
+  color: ${({ theme }) => theme.colors.primary.value};
   border: none;
   background: none;
 `
