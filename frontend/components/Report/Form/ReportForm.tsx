@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
-import Report, { parseReport, ReportPriority } from '@/models/Report'
+import Report, { parseReport } from '@/models/Report'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -15,8 +15,9 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiToggle from '@/components/Ui/Toggle/UiToggle'
-import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
+import Priority from '@/models/Priority'
 
 interface Props {
   incident: Incident
@@ -30,7 +31,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     description: null,
     addendum: null,
     location: null,
-    priority: ReportPriority.MEDIUM,
+    priority: Priority.MEDIUM,
     incidentId: incident.id,
     authorId: -1,
     assigneeId: null,
@@ -39,6 +40,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     completion: null,
     isComplete: false,
     isKeyReport: false,
+    isLocationRelevant: false,
   }))
 
   useValidate(form, (validate) => {
@@ -64,6 +66,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       completion: [],
       isComplete: [],
       isKeyReport: [],
+      isLocationRelevant: [],
     })
   })
 
@@ -82,7 +85,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
   })
 
   useCancel(form, handleClose)
-  const [value, setValue] = useState(false)
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
@@ -90,54 +92,49 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     <div>
       <form>
         <UiGrid gap={0.5}>
+          <UiGrid>
+            <UiGrid.Col style={{ textAlign: 'left' }}>
+              <UiForm.Field field={form.isKeyReport}>{(props) => (
+                <UiToggle {...props} label="Schlüsselmeldung" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
 
-          <UiGrid.Col size={4}>
-            <UiForm.Field field={form.title}>{(props) => (
-              <UiToggle value={false} onChange={setValue} label="Schlüsselmeldung" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+            <UiGrid.Col style={{ textAlign: 'center' }}>
+              <UiForm.Field field={form.isLocationRelevant}>{(props) => (
+                <UiToggle {...props} label="Lagerelevant" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
 
-          <UiGrid.Col size={4}>
-            <UiForm.Field field={form.title}>{(props) => (
-              <UiToggle value={false} onChange={setValue} label="Lagerelevant" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
-
-          <UiGrid.Col size={4}>
-            <UiForm.Field field={form.priority}>{(props) => (
-              <UiCheckbox value={false} onChange={setValue} label="Prio" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+            <UiGrid.Col style={{ textAlign: 'right' }}>
+              <UiForm.Field field={form.priority}>{(props) => (
+                <UiPrioritySlider {...props} />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.title}>{(props) => (
-              <UiTextInput {...props} label="Titel" />
+              <UiTextInput {...props} label="Titel" placeholder="Titel" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.description}>{(props) => (
-              <UiTextArea {...props} label="Beschreibung" />
+              <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.addendum}>{(props) => (
-              <UiTextArea {...props} label="Addendum" />
+              <UiTextArea {...props} label="Addendum" placeholder="Addendum" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="Ort" />
+              <UiTextInput {...props} label="Ort" placeholder="Ort" />
             )}</UiForm.Field>
           </UiGrid.Col>
-
-          {/*<UiGrid.Col size={12}>*/}
-          {/*  <UiForm.Field field={form.priority}>{(props) => (*/}
-          {/*    <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />*/}
-          {/*  )}</UiForm.Field>*/}
-          {/*</UiGrid.Col>*/}
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.assigneeId}>{(props) => (
@@ -153,7 +150,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
             )}</UiForm.Field>
           </UiGrid.Col>
 
-          <UiGrid.Col>
+          <UiGrid.Col style={{ marginBottom: '2rem' }}>
             <UiForm.Field field={form.location}>{(props) => (
               <UiTextInput {...props} label="End Datum" placeholder="End Datum">
                 <UiIcon.Organization />

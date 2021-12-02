@@ -16,6 +16,7 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 
   ${({ gap = 0, gapH = gap, gapV = gap }) => {
     gapH = Math.max(0, gapH) / 2

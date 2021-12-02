@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
-interface Props extends UiInputProps<boolean> {
+interface Props extends UiInputProps<boolean | null> {
   label?: string,
 }
 
