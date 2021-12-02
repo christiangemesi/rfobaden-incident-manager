@@ -1,8 +1,9 @@
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled from 'styled-components'
 import { ColorName } from '@/theme'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends StyledProps {
   color?: ColorName
   children: ReactNode
   onClick?: EventHandler<MouseEvent>
@@ -11,10 +12,12 @@ interface Props {
 const UiListItem: React.VFC<Props> = ({
   color = 'primary',
   children,
+  className,
+  style,
   onClick: handleClick,
 }: Props) => {
   return (
-    <StyledListItem color={color} onClick={handleClick}>
+    <StyledListItem style={style} className={className} color={color} onClick={handleClick}>
       {children}
     </StyledListItem>
   )

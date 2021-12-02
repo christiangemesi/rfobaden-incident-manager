@@ -40,7 +40,7 @@ const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }
     </UiListItem>
   )
 }
-export default UiItemWithDetails
+export default styled(UiItemWithDetails)``
 
 const StyledBelowEachOther = styled.div`
   width: max-content;
