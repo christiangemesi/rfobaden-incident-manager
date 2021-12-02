@@ -18,7 +18,7 @@ const UiPrioritySlider: React.VFC<UiInputProps<Priority>> = ({
 
         <StyledSlider value={value} />
         <StyledContainer>
-          <StyledIconDiv onClick={() => handleChange(Priority.LOW)} priority={Priority.LOW}>
+          <StyledIconDiv  priority={Priority.LOW} onClick={() => handleChange(Priority.LOW)}>
             <UiIcon.PriorityLow />
           </StyledIconDiv>
           <StyledIconDiv onClick={() => handleChange(Priority.MEDIUM)} priority={Priority.MEDIUM}>
@@ -38,6 +38,12 @@ const UiPrioritySlider: React.VFC<UiInputProps<Priority>> = ({
 export default UiPrioritySlider
 
 const StyledIconDiv = styled.div<{priority: Priority}>`
+  height: 40px;
+  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
   ${({ priority }) => priority==Priority.LOW && css`
     color: ${({ theme } ) => theme.colors.success.value};
   `}
