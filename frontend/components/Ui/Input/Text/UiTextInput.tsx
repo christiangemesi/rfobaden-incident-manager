@@ -47,7 +47,7 @@ const UiTextInput: React.VFC<Props> = ({
       <StyledDiv hasError={hasError}>
         <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} hasChildren={hasChildren} />
         {hasChildren ?
-          <StyledAdditionalInput onClick={handleClick}>
+          <StyledAdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
             {children}
           </StyledAdditionalInput>: null}
       </StyledDiv>
@@ -78,7 +78,7 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
   transition-property: border-color;
 
 `
-const StyledAdditionalInput = styled.div`
+const StyledAdditionalInput = styled.div<{ isClickable: boolean }>`
   background: ${defaultTheme.colors.primary.value};
   margin-top: 0.25rem;
   outline: none; 
@@ -94,6 +94,10 @@ const StyledAdditionalInput = styled.div`
 
   transition: 250ms ease;
   transition-property: border-color;
+  
+  ${({ isClickable }) => isClickable && css`
+    cursor: pointer;
+  `}
 `
 const StyledLabel = styled.label`
   display: flex;
