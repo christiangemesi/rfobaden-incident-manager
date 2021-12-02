@@ -2,6 +2,7 @@ export type Theme = {
   colors: {
     primary: Color
     secondary: Color
+    tertiary: Color
     success: Color
     error: Color
     warning: Color
@@ -46,6 +47,10 @@ export const defaultTheme: Theme = {
       value: '#A8DADC',
       contrast: contrastDark,
     },
+    tertiary: {
+      value: contrastLight,
+      contrast: contrastDark,
+    },
     success: {
       value: '#74BD6E',
       contrast: contrastDark,
@@ -64,8 +69,8 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    heading: 'Arial, sans serif',
-    body: 'Arial, sans serif',
+    heading: 'Montserrat, sans-serif',
+    body: 'Montserrat, sans-serif',
   },
   breakpoints: {
     xs: {

@@ -1,8 +1,8 @@
 import { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import Head from 'next/head'
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { defaultTheme } from '@/theme'
+import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import { contrastDark, defaultTheme, Theme } from '@/theme'
 import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { getSessionToken, useSession } from '@/stores/SessionStore'
@@ -60,8 +60,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <GlobalStyle />
       <ThemeProvider theme={defaultTheme}>
+        <GlobalStyle />
         <SessionStateBar>
           {currentUser === null ? (
             <Link href="/anmelden">
@@ -97,10 +97,18 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 }
 export default App
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   * {
     box-sizing: border-box;
   }
+  
+  ${({ theme }) => css`
+    body {
+      font-family: ${theme.fonts.body};
+      background: ${theme.colors.tertiary.value};
+      color: ${theme.colors.tertiary.contrast};
+    }
+  `}
   
   button {
     cursor: pointer;
