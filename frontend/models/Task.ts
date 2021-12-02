@@ -4,11 +4,12 @@ import Id from '@/models/base/Id'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { parseDate } from '@/models/Date'
+import Priority from '@/models/Priority'
 
 export default interface Task extends Model {
     title: string
     description: string | null
-    priority: string
+    priority: Priority
     location: string | null
 
     assigneeId: Id<User> | null
@@ -35,10 +36,4 @@ export const parseTask = (data: Task): Task => ({
 
 const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
-}
-
-export enum TaskPriority {
-    LOW = 'LOW',
-    MEDIUM = 'MEDIUM',
-    HIGH = 'HIGH',
 }
