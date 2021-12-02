@@ -15,6 +15,8 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiToggle from '@/components/Ui/Toggle/UiToggle'
+import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
   incident: Incident
@@ -28,7 +30,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     description: null,
     addendum: null,
     location: null,
-    priority: ReportPriority.LOW,
+    priority: ReportPriority.MEDIUM,
     incidentId: incident.id,
     authorId: -1,
     assigneeId: null,
@@ -36,6 +38,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     endsAt: null,
     completion: null,
     isComplete: false,
+    isKeyReport: false,
   }))
 
   useValidate(form, (validate) => {
@@ -60,6 +63,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       endsAt: [],
       completion: [],
       isComplete: [],
+      isKeyReport: [],
     })
   })
 
@@ -89,19 +93,18 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
           <UiGrid.Col size={4}>
             <UiForm.Field field={form.title}>{(props) => (
-              <UiToggle value={false} onChange={setValue} />
+              <UiToggle value={false} onChange={setValue} label="Schlüsselmeldung" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+          <UiGrid.Col size={4}>
+            <UiForm.Field field={form.title}>{(props) => (
+              <UiToggle value={false} onChange={setValue} label="Lagerelevant" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
           <UiGrid.Col size={4}>
-            <UiForm.Field field={form.title}>{(props) => (
-              <UiToggle value={false} onChange={setValue} />
-            )}</UiForm.Field>
-          </UiGrid.Col>
-
-          <UiGrid.Col size={4}>
-            <UiForm.Field field={form.title}>{(props) => (
-              <UiToggle value={false} onChange={setValue} />
+            <UiForm.Field field={form.priority}>{(props) => (
+              <UiCheckbox value={false} onChange={setValue} label="Prio" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
@@ -129,11 +132,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
             )}</UiForm.Field>
           </UiGrid.Col>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.priority}>{(props) => (
-              <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          {/*<UiGrid.Col size={12}>*/}
+          {/*  <UiForm.Field field={form.priority}>{(props) => (*/}
+          {/*    <UiSelectInput {...props} label="Priorität" options={Object.values(ReportPriority)} />*/}
+          {/*  )}</UiForm.Field>*/}
+          {/*</UiGrid.Col>*/}
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.assigneeId}>{(props) => (
@@ -141,8 +144,23 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
             )}</UiForm.Field>
           </UiGrid.Col>
 
-          <UiForm.Buttons form={form} />
+          <UiGrid.Col>
+            <UiForm.Field field={form.location}>{(props) => (
+              <UiTextInput {...props} label="Start Datum" placeholder="Start Datum">
+                <UiIcon.Organization />
+              </UiTextInput>
+            )}</UiForm.Field>
+          </UiGrid.Col>
+
+          <UiGrid.Col>
+            <UiForm.Field field={form.location}>{(props) => (
+              <UiTextInput {...props} label="End Datum" placeholder="End Datum">
+                <UiIcon.Organization />
+              </UiTextInput>
+            )}</UiForm.Field>
+          </UiGrid.Col>
         </UiGrid>
+        <UiForm.Buttons form={form} />
       </form>
     </div>
   )
