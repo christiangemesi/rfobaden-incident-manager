@@ -7,6 +7,11 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
 import { useValidate } from '@/components/Ui/Form/validate'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   incident: Incident | null
@@ -58,17 +63,52 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
   useCancel(form, handleClose)
 
   return (
-    <div>
-      <form>
-        <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.description}>{(props) => (
-          <UiTextInput {...props} label="Beschreibung" />
-        )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
-      </form>
-    </div>
+
+    <UiModal isFull>
+      <UiModal.Activator>{({ open }) => (
+        <UiButton onClick={open}>
+          Ereignis erstellen
+        </UiButton>
+      )}</UiModal.Activator>
+      <UiModal.Body>{({ close }) => (
+        <UiContainer>
+          <UiTitle level={1}>Ereignis erstellen</UiTitle>
+
+          <form>
+            <UiGrid gap={0.5}>
+              <UiGrid.Col size={12}>
+                <UiForm.Field field={form.description}>{(props) => (
+                  <UiTextInput {...props} label="Titel" placeholder="Titel" />
+                )}</UiForm.Field>
+              </UiGrid.Col>
+
+              <UiGrid.Col size={12}>
+                <UiForm.Field field={form.description}>{(props) => (
+                  <UiTextInput {...props} label="Beschreibung" placeholder="Beschreibung" />
+                )}</UiForm.Field>
+              </UiGrid.Col>
+
+              <UiGrid.Col>
+                <UiForm.Field field={form.description}>{(props) => (
+                  <UiTextInput {...props} label="Start Datum" placeholder="Start Datum" />
+                )}</UiForm.Field>
+              </UiGrid.Col>
+
+              <UiGrid.Col>
+                <UiForm.Field field={form.description}>{(props) => (
+                  <UiTextInput {...props} label="End Datum" placeholder="End Datum" />
+                )}</UiForm.Field>
+              </UiGrid.Col>
+
+            </UiGrid>
+
+            <UiForm.Buttons form={form} />
+          </form>
+
+        </UiContainer>
+
+      )}</UiModal.Body>
+    </UiModal>
   )
 }
 
