@@ -30,6 +30,9 @@ const InputWrapper = styled.label`
   position: relative;
   display: inline-flex;
   align-items: center;
+  :hover {
+    cursor: pointer;
+  }
 `
 const Input = styled.input`
   position: absolute;
