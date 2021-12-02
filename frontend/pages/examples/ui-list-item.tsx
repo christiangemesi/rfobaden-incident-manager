@@ -1,5 +1,5 @@
 import React from 'react'
-import UiListContainer from '@/components/Ui/List/Container/UiListContainer'
+import UiList from '@/components/Ui/List/UiList'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -15,19 +15,19 @@ const UiListContainerExample: React.VFC = () => {
       <UiTitle level={3}>List-Container</UiTitle>
       <UiGrid gap={0.5}>
         <UiGrid.Col>
-          <UiListContainer>
+          <UiList>
             <UiIcon.PriorityHigh />
             <UiActionButton>
               test
             </UiActionButton>
             <UiIcon.SubmitAction />
-          </UiListContainer>
+          </UiList>
         </UiGrid.Col>
       </UiGrid>
       <UiTitle level={3}>List-Item</UiTitle>
       <UiGrid gap={0.5}>
         <UiGrid.Col>
-          <UiListContainer>
+          <UiList>
             <UiListItem color="secondary">
               <UiIcon.PriorityHigh />
             </UiListItem>
@@ -44,14 +44,14 @@ const UiListContainerExample: React.VFC = () => {
               <UiIcon.PriorityLow />
               <UiIcon.EditAction />
             </UiListItem>
-          </UiListContainer>
+          </UiList>
         </UiGrid.Col>
       </UiGrid>
       <UiTitle level={3}>List-Element</UiTitle>
       <UiGrid gap={0.5}>
         <UiGrid.Col size={6}>
 
-          <UiListContainer>
+          <UiList>
             <UiListElement priority={Priority.LOW} title="Bedrohung auf Holzbrücke" user="Christian Gemesi">
               <UiIcon.KeyMessage />
               <UiIcon.LocationRelevancy />
@@ -68,7 +68,7 @@ const UiListContainerExample: React.VFC = () => {
               <div>3/5</div>
             </UiListElement>
 
-          </UiListContainer>
+          </UiList>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

@@ -19,14 +19,13 @@ const UiListItem: React.VFC<Props> = ({
     </StyledListItem>
   )
 }
-export default UiListItem
+export default styled(UiListItem)``
 
 const StyledListItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 0.5rem;
-  margin: 0.5rem 0;
   padding: 0.5rem;
   width: 100%;
   cursor: pointer;
@@ -36,14 +35,6 @@ const StyledListItem = styled.div`
 
   transition: 250ms ease;
   transition-property: filter, box-shadow;
-
-  :first-child {
-    margin-top: 0;
-  }
-
-  :last-child {
-    margin-bottom: 0;
-  }
 
   :hover {
     filter: brightness(90%);
