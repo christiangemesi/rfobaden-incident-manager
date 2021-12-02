@@ -6,22 +6,23 @@ import Incident from '@/models/Incident'
 import { parseDate } from '@/models/Date'
 
 export default interface Task extends Model {
-  title: string
-  description: string | null
-  priority: string
-  location: string | null
+    title: string
+    description: string | null
+    priority: string
+    location: string | null
 
-  assigneeId: Id<User> | null
+    assigneeId: Id<User> | null
 
-  createdAt: Date
-  updatedAt: Date
-  closedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    closedAt: Date | null
 
-  startsAt: Date | null
-  endsAt: Date | null
+    startsAt: Date | null
+    endsAt: Date | null
 
-  reportId: Id<Report>
-  incidentId: Id<Incident>
+    reportId: Id<Report>
+    incidentId: Id<Incident>
+
 }
 
 export const parseTask = (data: Task): Task => ({
@@ -37,7 +38,7 @@ const parseDateOrNull = (date: Date | null): Date | null => {
 }
 
 export enum TaskPriority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
+    LOW = 'LOW',
+    MEDIUM = 'MEDIUM',
+    HIGH = 'HIGH',
 }

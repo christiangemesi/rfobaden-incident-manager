@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +19,8 @@ import java.util.Random;
 @Service
 public class UserService extends ModelRepositoryService.Basic<User, UserRepository> {
     private final PasswordEncoder passwordEncoder;
+
+    private final SecureRandom passwordRandom = new SecureRandom();
 
     @Autowired
     public UserService(PasswordEncoder passwordEncoder) {
@@ -88,11 +91,10 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
     private static final String PASSWORD_CHARS =
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
 
-    private static String generatePassword(int length) {
-        var random = new Random();
+    private String generatePassword(int length) {
         StringBuilder builder = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            var nextChar = PASSWORD_CHARS.charAt(random.nextInt(PASSWORD_CHARS.length()));
+            var nextChar = PASSWORD_CHARS.charAt(passwordRandom.nextInt(PASSWORD_CHARS.length()));
             builder.append(nextChar);
         }
         return builder.toString();
