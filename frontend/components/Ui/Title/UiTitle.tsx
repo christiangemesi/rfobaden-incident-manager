@@ -1,16 +1,21 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface Props {
   children: ReactNode
   level: number
+  isCentered?: boolean
 }
 
-const UiTitle: React.VFC<Props> = ({ children, level }) => {
+const UiTitle: React.VFC<Props> = ({
+  children,
+  level,
+  isCentered = false,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const H: any = `h${level}`
   return (
-    <StyledTitle as={H}>
+    <StyledTitle as={H} isCentered={isCentered}>
       {children}
     </StyledTitle>
   )
@@ -18,7 +23,12 @@ const UiTitle: React.VFC<Props> = ({ children, level }) => {
 
 export default UiTitle
 
-const StyledTitle = styled.div`
+const StyledTitle = styled.div<{isCentered: boolean}>`
+  ${({ isCentered }) => isCentered && css`
+    text-align: center;
+  `}
+  
+  
   h1& {
     font-weight: 300;
     font-size: 52px;

@@ -1,7 +1,8 @@
 import { makeChildPatcher, makeChildUpdater, Patcher, toUpdate } from '@/utils/update'
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import { useGetSet, useUpdateEffect } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
+import UiModalContext, { animationMillis as uiModalAnimationMillis } from '@/components/Ui/Modal/Context/UiModalContext'
 
 export interface UiFormBaseState<T> extends UpdatablePart {
   value: T
@@ -75,6 +76,18 @@ export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined
       fields: setFieldValues(currentForm.fields, defaultValue),
     }))
   }, [base])
+
+  // If the form is in a modal,
+  // we want to clear the form if that modal is closed.
+  const modalContext = useContext(UiModalContext)
+  useUpdateEffect(() => {
+    const timeout = setTimeout(() => {
+      clearForm(form.fields)
+    }, uiModalAnimationMillis)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [modalContext.isOpen])
 
   return form.fields
 }

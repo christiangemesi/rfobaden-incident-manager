@@ -22,6 +22,25 @@ const UiTitleExample: React.VFC = () => {
       <UiTitle level={6}>
         H6
       </UiTitle>
+      <UiTitle level={1} isCentered>
+        Centered H1
+      </UiTitle>
+      <UiTitle level={2} isCentered>
+        Centered H2
+      </UiTitle>
+      <UiTitle level={3} isCentered>
+        Centered H3
+      </UiTitle>
+      <UiTitle level={4} isCentered>
+        Centered H4
+      </UiTitle>
+      <UiTitle level={5} isCentered>
+        Centered H5
+      </UiTitle>
+      <UiTitle level={6} isCentered>
+        Centered H6
+      </UiTitle>
+
     </div>
   )
 }
