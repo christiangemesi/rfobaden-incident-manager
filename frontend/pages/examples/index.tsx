@@ -16,7 +16,7 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-textarea">
+      <Link href="examples/ui-text-area">
         <a>
           UiTextArea
         </a>

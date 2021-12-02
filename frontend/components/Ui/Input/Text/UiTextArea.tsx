@@ -8,8 +8,9 @@ interface Props extends UiInputProps<string | null> {
   placeholder?: string,
   isRequired?: boolean,
   rows?: number
-  errors?: string[]
 }
+
+const processText = (v: string) => v.length === 0 ? null : v
 
 const UiTextArea: React.VFC<Props> = ({
   label = '',
@@ -20,15 +21,13 @@ const UiTextArea: React.VFC<Props> = ({
   onChange: handleChange,
   errors = [],
 }) => {
-  const processText = (v: string) => v.length === 0 ? null : v
-
+  /*add star to label when isRequired*/
   return (
     <React.Fragment>
       <h2>{label}</h2>
       <TextArea
         value={value ?? ''}
         placeholder={placeholder}
-        required={isRequired} // doesn't actually do anything yet
         rows={rows}
         onChange={(e) => handleChange(processText(e.target.value))}
         hasErrors={errors.length !== 0}
@@ -41,11 +40,9 @@ export default UiTextArea
 
 const TextArea = styled.textarea<{ hasErrors: boolean }>`
   border-radius: 0.5rem;
-  resize: none;
   width: 100%;
   ${({ hasErrors, theme }) => hasErrors && css`
     border: 1px solid ${theme.colors.error.value}
-  `
-}
+  `}
 `
 
