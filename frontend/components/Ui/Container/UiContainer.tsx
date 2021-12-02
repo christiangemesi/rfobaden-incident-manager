@@ -12,7 +12,7 @@ const UiContainer = styled(StyleHelper.tag<Props>('div'))`
   width: 100%;
   margin-inline: auto;
   ${({ isFluid }) => !isFluid && css`
-    padding: 0 0.5rem;
+    padding: 0 0.8rem;
     ${Themed.media.sm.min} {
       max-width: ${({ theme }) => theme.breakpoints.sm.min}px;
     }

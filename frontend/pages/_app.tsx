@@ -101,12 +101,6 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
-
-  h1 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
   
   button {
     cursor: pointer;
