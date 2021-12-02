@@ -10,7 +10,6 @@ import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
 import { useMountedState } from 'react-use'
-import { contrastDark } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiButton from '@/components/Ui/Button/UiButton'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 const UiModalExample: React.VFC = () => {
 
