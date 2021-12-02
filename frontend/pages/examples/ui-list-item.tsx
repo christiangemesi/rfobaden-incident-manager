@@ -6,7 +6,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
-import UiListElement from '@/components/Ui/List/Element/UiListElement'
+import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
 import Priority from '@/models/Priority'
 
 const UiListContainerExample: React.VFC = () => {
@@ -52,21 +52,21 @@ const UiListContainerExample: React.VFC = () => {
         <UiGrid.Col size={6}>
 
           <UiList>
-            <UiListElement priority={Priority.LOW} title="Bedrohung auf Holzbrücke" user="Christian Gemesi">
+            <UiItemWithDetails priority={Priority.LOW} title="Bedrohung auf Holzbrücke" user="Christian Gemesi">
               <UiIcon.KeyMessage />
               <UiIcon.LocationRelevancy />
               <div>5/10</div>
-            </UiListElement>
+            </UiItemWithDetails>
 
-            <UiListElement priority={Priority.HIGH} title="Zimmer brennt" user="Andri Wild">
+            <UiItemWithDetails priority={Priority.HIGH} title="Zimmer brennt" user="Andri Wild">
               <UiIcon.KeyMessage />
               <UiIcon.LocationRelevancy />
               <div>3/5</div>
-            </UiListElement>
+            </UiItemWithDetails>
 
-            <UiListElement priority={Priority.MEDIUM} title="Überflutung Keller" user="Arian">
+            <UiItemWithDetails priority={Priority.MEDIUM} title="Überflutung Keller" user="Arian">
               <div>3/5</div>
-            </UiListElement>
+            </UiItemWithDetails>
 
           </UiList>
         </UiGrid.Col>

@@ -26,7 +26,7 @@ const StyledListItem = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   width: 100%;
   cursor: pointer;
   background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
