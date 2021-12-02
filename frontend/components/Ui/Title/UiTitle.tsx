@@ -24,6 +24,7 @@ const StyledTitle = styled.div`
     font-size: 52px;
     line-height: 64px;
     letter-spacing: 0.2px;
+    margin-bottom: 1rem;
   }
   
   h2& {
