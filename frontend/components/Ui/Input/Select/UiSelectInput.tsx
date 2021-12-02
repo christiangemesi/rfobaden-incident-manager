@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { defaultTheme, contrastDark } from '@/theme'
+import { useMountedState } from 'react-use'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
@@ -105,6 +106,11 @@ const UiSelectInput = <T, >({
   }
 
   const Label = label == null ? 'div' : StyledLabel
+
+  const isMounted = useMountedState()
+  if (!isMounted()) {
+    return <React.Fragment />
+  }
 
   return (
     <Label>

@@ -17,7 +17,6 @@ const UiTextArea: React.VFC<Props> = ({
   label = '',
   value,
   placeholder = '',
-  isRequired = false,
   rows = 3,
   onChange: handleChange,
   errors = [],

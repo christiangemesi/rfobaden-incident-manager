@@ -22,6 +22,12 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+      <Link href="examples/ui-date-label">
+        <a>
+          UiTextArea
+        </a>
+      </Link>
+      <br />
       <Link href="examples/ui-button">
         <a>
           UiButton
