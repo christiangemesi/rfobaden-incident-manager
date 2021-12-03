@@ -66,7 +66,9 @@ const IncidentCard: React.VFC<IncidentCardProps> = ({ incident }) => {
   )
 }
 
-const A = styled.a``
+const A = styled.a`
+  text-decoration: none;
+`
 
 const Card = styled.span`
   color: ${({ theme }) => theme.colors.primary.value};
