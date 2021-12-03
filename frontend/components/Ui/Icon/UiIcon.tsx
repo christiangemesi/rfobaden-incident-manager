@@ -11,7 +11,7 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiAccountMultiple,
+  mdiAccountMultiple, mdiCalendar,
 } from '@mdi/js'
 
 interface NamedIconProps {
@@ -70,4 +70,5 @@ export default {
   PriorityLow: makeNamedIcon(mdiArrowDownBoldHexagonOutline),
   Menu: makeNamedIcon(mdiMenu),
   Organization: makeNamedIcon(mdiAccountMultiple),
+  Calendar: makeNamedIcon(mdiCalendar),
 }

@@ -59,7 +59,7 @@ const AuftraegePage: React.VFC<Props> = ({ data }) => {
                   incident={incident}
                   report={report}
                   task={selectedTask}
-                  onClose={() => setSelectedTask(null)}
+                  onClose={() => { close(); setSelectedTask(null) }}
                 />
               </UiContainer>
             )}</UiModal.Body>
