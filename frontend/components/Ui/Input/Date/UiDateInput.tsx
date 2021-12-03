@@ -4,7 +4,14 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { UiInputProps } from '@/components/Ui/Input'
 
 
-const UiDateInput: React.VFC<UiInputProps<Date | null>> = ({
+interface Props extends UiInputProps<Date | null> {
+  label?: string
+  placeholder?: string
+}
+
+const UiDateInput: React.VFC<Props> = ({
+  label,
+  placeholder = '',
   onChange: handleChange,
   errors = [],
 }) => {
@@ -34,7 +41,7 @@ const UiDateInput: React.VFC<UiInputProps<Date | null>> = ({
 
   return(
     <div>
-      <UiTextInput value={text} onChange={setText} placeholder="dd.mm.yyyy" errors={isInvalid ? ['ist invalid', ...errors] : errors}>
+      <UiTextInput label={label} placeholder={placeholder} value={text} onChange={setText} errors={isInvalid ? ['ist invalid', ...errors] : errors}>
         <UiIcon.Organization />
       </UiTextInput>
     </div>
