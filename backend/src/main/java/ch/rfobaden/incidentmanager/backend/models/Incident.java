@@ -1,5 +1,9 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,10 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "incident")
@@ -91,17 +91,17 @@ public class Incident extends Model.Basic {
 
     @Override
     public String toString() {
-        return "Incident{" +
-            "id=" + getId() +
-            ", createdAt=" + getCreatedAt() +
-            ", updatedAt=" + getUpdatedAt() +
-            ", title='" + title + '\'' +
-            ", description='" + description + '\'' +
-            ", startsAt=" + startsAt + '\'' +
-            ", endsAt=" + endsAt + '\'' +
-            ", closeReason=" + closeReason +
-            ", isClosed=" + isClosed +
-            '}';
+        return "Incident{"
+            + "id=" + getId()
+            + ", createdAt=" + getCreatedAt()
+            + ", updatedAt=" + getUpdatedAt()
+            + ", title='" + title + '\''
+            + ", description='" + description + '\''
+            + ", startsAt=" + startsAt + '\''
+            + ", endsAt=" + endsAt + '\''
+            + ", closeReason=" + closeReason
+            + ", isClosed=" + isClosed
+            + '}';
     }
 
     @Override

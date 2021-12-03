@@ -1,15 +1,14 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 import ch.rfobaden.incidentmanager.backend.models.CloseReason;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Service

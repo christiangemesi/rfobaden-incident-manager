@@ -2,7 +2,7 @@ package ch.rfobaden.incidentmanager.backend.models.paths;
 
 import java.util.Objects;
 
-public class ReportPath extends EmptyPath{
+public class ReportPath extends EmptyPath {
     private Long incidentId;
 
     public Long getIncidentId() {
@@ -32,8 +32,8 @@ public class ReportPath extends EmptyPath{
 
     @Override
     public String toString() {
-        return "ReportPath{" +
-            "incidentId=" + incidentId +
-            '}';
+        return "ReportPath{"
+            + "incidentId=" + incidentId
+            + '}';
     }
 }
