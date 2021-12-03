@@ -18,6 +18,7 @@ import UiToggle from '@/components/Ui/Toggle/UiToggle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
+import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 
 interface Props {
   incident: Incident
@@ -143,20 +144,17 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
           </UiGrid.Col>
 
           <UiGrid.Col>
-            <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="Start Datum" placeholder="Start Datum">
-                <UiIcon.Organization />
-              </UiTextInput>
+            <UiForm.Field field={form.startsAt}>{(props) => (
+              <UiDateInput {...props} label="End Datum" placeholder="dd.mm.yyyy" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
-          <UiGrid.Col style={{ marginBottom: '2rem' }}>
-            <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="End Datum" placeholder="End Datum">
-                <UiIcon.Organization />
-              </UiTextInput>
+          <UiGrid.Col>
+            <UiForm.Field field={form.endsAt}>{(props) => (
+              <UiDateInput {...props} label="Start Datum" placeholder="dd.mm.yyyy" />
             )}</UiForm.Field>
           </UiGrid.Col>
+
         </UiGrid>
         <UiForm.Buttons form={form} />
       </form>
