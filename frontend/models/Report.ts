@@ -4,6 +4,7 @@ import Incident from '@/models/Incident'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import Completable, { parseCompletable } from '@/models/Completable'
+import Priority from '@/models/Priority'
 
 
 export default interface Report extends Model, Completable {
@@ -13,7 +14,7 @@ export default interface Report extends Model, Completable {
   addendum: string | null
 
   location: string | null
-  priority: ReportPriority
+  priority: Priority
 
   incidentId: Id<Incident>
   authorId: Id<User>
@@ -24,6 +25,9 @@ export default interface Report extends Model, Completable {
 
   createdAt: Date
   updatedAt: Date
+
+  isKeyReport: boolean
+  isLocationRelevant: boolean
 }
 
 export const parseReport = (data: Report): Report => ({
@@ -37,10 +41,4 @@ export const parseReport = (data: Report): Report => ({
 
 const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
-}
-
-export enum ReportPriority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
 }
