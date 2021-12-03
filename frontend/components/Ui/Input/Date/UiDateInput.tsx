@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { UiInputProps } from '@/components/Ui/Input'
+import { useUpdateEffect } from 'react-use'
 
 
 interface Props extends UiInputProps<Date | null> {
@@ -19,7 +20,7 @@ const UiDateInput: React.VFC<Props> = ({
   const [text, setText] = useState<string|null>(null)
   const [isInvalid, setInvalid] = useState<boolean>(false)
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if(text === null) {
       handleChange(null)
       setInvalid(false)
@@ -37,7 +38,7 @@ const UiDateInput: React.VFC<Props> = ({
     }
     handleChange(newDate)
     setInvalid(false)
-  }, [handleChange, text])
+  }, [text])
 
   return(
     <div>
