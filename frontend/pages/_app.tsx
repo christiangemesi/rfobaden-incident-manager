@@ -14,6 +14,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiButton from '@/components/Ui/Button/UiButton'
 import { SessionResponse } from '@/models/Session'
 import { useRouter } from 'next/router'
+import UiHeader from '@/components/Ui/Header/UiHeader'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -62,34 +63,36 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-        <SessionStateBar>
-          {currentUser === null ? (
-            <Link href="/anmelden">
-              <a>
-                <button type="button">
+        <UiHeader>
+          <SessionStateBar>
+            {currentUser === null ? (
+              <Link href="/anmelden">
+                <a>
+                  <UiButton type="button">
                   → anmelden
-                </button>
-              </a>
-            </Link>
-          ) : (
-            <UiGrid gap={1}>
-              <UiGrid.Col>
-                <Link href="/profil">
-                  <a>
-                    <UiButton type="button">
-                      {currentUser.firstName} {currentUser.lastName}
-                    </UiButton>
-                  </a>
-                </Link>
-              </UiGrid.Col>
-              <UiGrid.Col size="auto">
-                <UiButton onClick={logout}>
+                  </UiButton>
+                </a>
+              </Link>
+            ) : (
+              <UiGrid gap={1}>
+                <UiGrid.Col>
+                  <Link href="/profil">
+                    <a>
+                      <UiButton type="button">
+                        {currentUser.firstName} {currentUser.lastName}
+                      </UiButton>
+                    </a>
+                  </Link>
+                </UiGrid.Col>
+                <UiGrid.Col size="auto">
+                  <UiButton onClick={logout}>
                   abmelden →
-                </UiButton>
-              </UiGrid.Col>
-            </UiGrid>
-          )}
-        </SessionStateBar>
+                  </UiButton>
+                </UiGrid.Col>
+              </UiGrid>
+            )}
+          </SessionStateBar>
+        </UiHeader>
         {component}
       </ThemeProvider>
     </>
