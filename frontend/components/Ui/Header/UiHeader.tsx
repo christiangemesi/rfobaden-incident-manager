@@ -11,7 +11,7 @@ interface Props{
   children: ReactNode
  }
 
-const UiHeader: React.VFC <Props> =({ children, }) =>{
+const UiHeader: React.VFC <Props> =({ children }) =>{
 
   return (
     <header>
@@ -19,9 +19,10 @@ const UiHeader: React.VFC <Props> =({ children, }) =>{
         <StyliedImage>
           <Image src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
         </StyliedImage>
-        <div>
+
+        <UiHeaderButton>
           {children}
-        </div>
+        </UiHeaderButton>
 
       </UiHeaderContainer>
     </header>
@@ -32,8 +33,9 @@ export default UiHeader
 
 const UiHeaderContainer = styled.div`
   display: inline-flex;
+  justify-content: space-between;
   width: 100%;
-  height: 3rem;
+  height: 4rem;
   background: ${({ theme }) => theme.colors.secondary.value};
   //background: lightskyblue;
 `
@@ -41,4 +43,12 @@ const StyliedImage = styled.div`
   display: inline-flex;
   justify-content: left;
   margin-left: 50px;
+`
+const UiHeaderButton = styled.div`
+  width: 500px;
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 50px;
+
 `
