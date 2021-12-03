@@ -7,6 +7,10 @@ import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import User, { UserRole } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
+import UiList from '@/components/Ui/List/UiList'
+import Priority from '@/models/Priority'
+import UiListItem from '@/components/Ui/List/Item/UiListItem'
 
 const TaskView: React.VFC = () => {
   const task: Task = {
@@ -37,6 +41,7 @@ const TaskView: React.VFC = () => {
   }
 
   return (
+    //TODO not assignable to type string?? line 53
     <UiContainer>
 
       <UiTitle level={2}>
@@ -58,6 +63,45 @@ const TaskView: React.VFC = () => {
       <UiTextWithIcon text={' PLATZHALTER ACHTUNG: starke Strömung und morsches Holz'}>
         <UiIcon.Attachments />
       </UiTextWithIcon>
+
+      <UiGrid gap={0.5}>
+        <UiGrid.Col size={6}>
+
+          <UiList>
+
+            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
+              <UiIcon.KeyMessage />
+              <UiIcon.LocationRelevancy />
+              <div>5/10</div>
+            </UiItemWithDetails>
+
+            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
+              <UiIcon.KeyMessage />
+              <UiIcon.LocationRelevancy />
+              <div>5/10</div>
+            </UiItemWithDetails>
+
+            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
+              <UiIcon.KeyMessage />
+              <UiIcon.LocationRelevancy />
+              <div>5/10</div>
+            </UiItemWithDetails>
+
+            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={user.firstName + ' ' + user.lastName}>
+              <UiIcon.KeyMessage />
+              <UiIcon.LocationRelevancy />
+              <div>5/10</div>
+            </UiItemWithDetails>
+
+            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={user.firstName + ' ' + user.lastName}>
+              <UiIcon.KeyMessage />
+              <UiIcon.LocationRelevancy />
+              <div>5/10</div>
+            </UiItemWithDetails>
+
+          </UiList>
+        </UiGrid.Col>
+      </UiGrid>
 
     </UiContainer>
   )
