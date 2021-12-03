@@ -9,17 +9,24 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import { useTasksOfReport } from '@/stores/TaskStore'
 import BackendService from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
-import IncidentView from '@/components/Incident/View/IncidentView'
 import * as ReactDOM from 'react-dom'
 import ReportView from '@/components/Report/View/ReportView'
+import ReportStore from '@/stores/ReportStore'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import { useUser } from '@/stores/UserStore'
 
 interface Props {
   report: Report
 }
 
 const ReportItem: React.VFC<Props> = ({ report }) => {
+  const assignee = useUser(report.assigneeId)
+  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
+  const tasks = useTasksOfReport(report.id)
+
+  // TODO check if working
   const [printer, setPrinter] = useState<ReactNode>()
   const handlePrint = () => {
     const Printer: React.VFC = () => {
@@ -44,44 +51,58 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
     }
   }
 
-  const tasks = useTasksOfReport(report.id)
-
-  // TODO get organisations from assignees
-  const organisationList = ['Berufsfeuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
-  const organisations = organisationList.reduce((a, b) => a + ', ' + b)
-
   const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
 
   return (
-    <UiGrid gap={1}>
+    <UiGrid gapH={2} gapV={1}>
       <UiGrid.Col size={12}>
         <UiTitle level={2}>
           {report.title}
         </UiTitle>
       </UiGrid.Col>
       <UiGrid.Col size={12}>
-        <StyledP>
-          <UiDateLabel start={startDate} end={report.endsAt} type={'datetime'} />
-        </StyledP>
-        {/* TODO actions */}
+        <StyledDiv>
+          <StyledP>
+            <UiDateLabel start={startDate} end={report.endsAt} type={'datetime'} />
+          </StyledP>
+          <UiIconButtonGroup>
+            <UiIconButton onClick={handlePrint}>
+              <UiIcon.PrintAction />
+              {printer}
+            </UiIconButton>
+            <UiIconButton> {/*TODO*/}
+              <UiIcon.EditAction />
+            </UiIconButton>
+            <UiIconButton onClick={handleDelete}>
+              <UiIcon.DeleteAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </StyledDiv>
       </UiGrid.Col>
       <UiGrid.Col size={12}>
         {report.description}
       </UiGrid.Col>
-      <UiGrid.Col size={'auto'}>{/*TODO width auto or 6*/}
+      <UiGrid.Col size={12}>
         <UiTextWithIcon text={report.location ?? ''}>
-          <UiIcon.LocationRelevancy /> {/* TODO location icon */}
-        </UiTextWithIcon>
-      </UiGrid.Col>
-      <UiGrid.Col size={'auto'}>
-        <UiTextWithIcon text={organisations}>
-          <UiIcon.Organization />
+          <UiIcon.Location />
         </UiTextWithIcon>
       </UiGrid.Col>
       <UiGrid.Col size={12}>
-        {report.addendum}
+        <UiTextWithIcon text={assigneeName}>
+          <UiIcon.UserInCircle />
+        </UiTextWithIcon>
       </UiGrid.Col>
-      <TaskList tasks={tasks} />
+      {report.addendum !== null ?
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={report.addendum}>
+            <UiIcon.AlertCircle />
+          </UiTextWithIcon>
+        </UiGrid.Col> :
+        ''
+      }
+      <UiGrid.Col size={12}>
+        <TaskList tasks={tasks} />
+      </UiGrid.Col>
     </UiGrid>
   )
 }
@@ -93,4 +114,10 @@ const StyledP = styled.p`
   :last-child {
     margin-bottom: 0;
   }
+`
+
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+
 `

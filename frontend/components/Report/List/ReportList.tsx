@@ -1,8 +1,6 @@
 import React from 'react'
 import Report from '@/models/Report'
-import styled from 'styled-components'
-import BackendService from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
+import styled, { css } from 'styled-components'
 import { useUser } from '@/stores/UserStore'
 import UiList from '@/components/Ui/List/UiList'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
@@ -11,14 +9,15 @@ import { useTasksOfReport } from '@/stores/TaskStore'
 
 interface Props {
   reports: Report[]
+  activeReport: Report | null
   onClick?: (report: Report) => void
 }
 
-const ReportList: React.VFC<Props> = ({ reports, onClick: handleClick }) => {
+const ReportList: React.VFC<Props> = ({ reports, activeReport, onClick: handleClick }) => {
   return (
     <UiList>
       {reports.map((report) => (
-        <ReportListItem key={report.id} report={report} onClick={handleClick} />
+        <ReportListItem key={report.id} report={report} onClick={handleClick} isActive={activeReport == report} />
       ))}
     </UiList>
   )
@@ -27,44 +26,47 @@ export default ReportList
 
 interface ReportListItemProps {
   report: Report
+  isActive: boolean
   onClick?: (report: Report) => void
 }
 
 
-const ReportListItem: React.VFC<ReportListItemProps> = ({ report, onClick: handleClick }) => {
+const ReportListItem: React.VFC<ReportListItemProps> = ({ report, isActive, onClick: handleClick }) => {
+
   const assignee = useUser(report.assigneeId)
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
   // TODO not func
   const tasksAll = useTasksOfReport(report.id)
-  const tasksDone = tasksAll.filter((task) => task.closedAt !== null)
+  const tasksDone = tasksAll.filter((task) => task.closedAt != null)
 
   const keyMessage = true
   const locationRelevancy = true
-  if(report.id == 1){
-    console.log(tasksAll)
-    console.log(tasksDone)
-  }
 
   return (
-    <UiListItemWithDetails title={report.title} priority={report.priority} user={assigneeName}
-      onClick={handleClick && (() => handleClick(report))}>
+    <StyledReportListItem
+      title={report.title}
+      priority={report.priority}
+      user={assigneeName}
+      onClick={handleClick && (() => handleClick(report))}
+      isActive={isActive}
+    >
       {keyMessage ?
         <StyledDiv>
           <UiIcon.KeyMessage />
         </StyledDiv>
-        : <EmptyIcon />
+        : <UiIcon.Empty />
       }
       {locationRelevancy ?
         <StyledDiv>
           <UiIcon.LocationRelevancy />
         </StyledDiv>
-        : <EmptyIcon />
+        : <UiIcon.Empty />
       }
       <StyledDiv>
         {tasksDone.length}/{tasksAll.length}
       </StyledDiv>
-    </UiListItemWithDetails>
+    </StyledReportListItem>
   )
 }
 
@@ -73,7 +75,9 @@ const StyledDiv = styled.div`
   margin-left: 1rem;
 `
 
-const EmptyIcon = styled.div`
-  margin-left: 1rem;
-  width: 23px;
+const StyledReportListItem = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+  ${({ isActive }) => isActive && css`
+    background: ${({ theme }) => theme.colors.secondary.value};
+    color: ${({ theme }) => theme.colors.secondary.contrast};
+  `}
 `

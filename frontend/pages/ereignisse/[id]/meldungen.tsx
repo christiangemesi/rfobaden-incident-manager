@@ -1,6 +1,5 @@
-
 import Report, { parseReport } from '@/models/Report'
-import React, { useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
@@ -20,13 +19,18 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import ReportItem from '@/components/Report/Item/ReportItem'
-
-// import TaskList from '@/components/Task/List/TaskList'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
+import * as ReactDOM from 'react-dom'
+import IncidentView from '@/components/Incident/View/IncidentView'
+import Task, { parseTask } from '@/models/Task'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   data: {
     incident: Incident
     reports: Report[]
+    tasks: Task[]
     users: User[]
   }
 }
@@ -35,14 +39,39 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
+    TaskStore.saveAll(data.tasks.map(parseTask))
   })
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
-
   const [selectedReport, setSelectedReport] = useState<Report | null>(null)
 
-  // TODO get organisations from assignees
+  // TODO check if working
+  const [printer, setPrinter] = useState<ReactNode>()
+  const handlePrint = () => {
+    const Printer: React.VFC = () => {
+      const ref = useRef<HTMLDivElement | null>(null)
+      useEffect(() => {
+        window.print()
+        setPrinter(undefined)
+      }, [ref])
+      return <IncidentView innerRef={ref} incident={incident} />
+    }
+    setPrinter(ReactDOM.createPortal((
+      <div id="print-only" style={{ margin: '4rem' }}>
+        <Printer />
+      </div>
+    ), document.body))
+  }
+
+  const handleDelete = async () => {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${incident.title}" schliessen wollen?`)) {
+      await BackendService.delete('incidents/', incident.id)
+      ReportStore.remove(incident.id)
+    }
+  }
+
+  // TODO get organisations from assignees for incident
   const organisationList = ['Berufsfeuerwehr Baden', 'freiwillige Feuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
   const organisations = organisationList.reduce((a, b) => a + ', ' + b)
 
@@ -51,7 +80,7 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
   return (
     <SessionOnly doRedirect>
       <UiContainer>
-        <UiGrid gap={2}>
+        <UiGrid gapH={2} gapV={1}>
           <UiGrid.Col size={12}>
             <UiTitle level={1}>
               {incident.title}
@@ -60,6 +89,18 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
           <UiGrid.Col size={12}>
             <StyledDiv>
               <UiDateLabel start={startDate} end={incident.endsAt} type={'datetime'} />
+              <UiIconButtonGroup>
+                <UiIconButton onClick={handlePrint}>
+                  <UiIcon.PrintAction />
+                  {printer}
+                </UiIconButton>
+                <UiIconButton> {/*TODO*/}
+                  <UiIcon.EditAction />
+                </UiIconButton>
+                <UiIconButton onClick={handleDelete}>
+                  <UiIcon.DeleteAction />
+                </UiIconButton>
+              </UiIconButtonGroup>
             </StyledDiv>
           </UiGrid.Col>
           <UiGrid.Col size={6}>
@@ -67,7 +108,7 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
           </UiGrid.Col>
           <UiGrid.Col size={6}>
             <UiTextWithIcon text={organisations}>
-              <UiIcon.Organization />
+              <UiIcon.UserInCircle />
             </UiTextWithIcon>
           </UiGrid.Col>
           <UiGrid.Col size={6}>
@@ -78,10 +119,9 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
               </UiActionButton>
             </StyledDiv>
           </UiGrid.Col>
+          <UiGrid.Col size={6} />
           <UiGrid.Col size={6}>
-          </UiGrid.Col>
-          <UiGrid.Col size={6}>
-            <ReportList reports={reports} onClick={setSelectedReport} />
+            <ReportList reports={reports} onClick={setSelectedReport} activeReport={selectedReport} />
           </UiGrid.Col>
           <UiGrid.Col size={6}>
             {selectedReport !== null ?
@@ -126,6 +166,16 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw reportsError
   }
 
+  const tasks = await reports.reduce(async (all, report) => {
+    const [tasks, tasksError]: BackendResponse<Task[]> = await BackendService.list(
+      `incidents/${incidentId}/reports/${report.id}/tasks`,
+    )
+    if (tasksError !== null) {
+      throw tasksError
+    }
+    return [...(await all), ...tasks]
+  }, Promise.resolve([] as Task[]))
+
 
   const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
   if (usersError !== null) {
@@ -137,6 +187,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
       data: {
         incident,
         reports,
+        tasks,
         users,
       },
     },
@@ -146,5 +197,4 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
-
 `
