@@ -15,7 +15,7 @@ const TaskList: React.VFC<Props> = ({ tasks, onClick: handleClick }) => {
   return (
     <UiList>
       {tasks.map((task) => (
-        <Link key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftrag/${task.id}`}>
+        <Link key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}/unterauftraege`}>
           <a>
             <TaskListItem task={task} onClick={handleClick} />
           </a>
@@ -34,7 +34,7 @@ interface TaskListItemProps {
 
 const TaskListItem: React.VFC<TaskListItemProps> = ({ task, onClick: handleClick }) => {
   const assignee = useUser(task.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+  const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
   return (
     <UiListItemWithDetails

@@ -1,36 +1,29 @@
 import React, { useState } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
-import Task from '@/models/TaskView'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
-import User, { parseUser, UserRole } from '@/models/User'
+import User, { parseUser } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
-import UiList from '@/components/Ui/List/UiList'
-import Priority from '@/models/Priority'
-import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
-import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
-import { data } from 'browserslist'
-import { parseTask } from '@/models/Task'
-import ReportStore, { useReport, useReports, useReportsOfIncident } from '@/stores/ReportStore'
-import Report, { parseReport } from '@/models/Report'
+import { useTask, useTasksOfReport } from '@/stores/TaskStore'
+import { useReport } from '@/stores/ReportStore'
+import Report from '@/models/Report'
 import Incident from '@/models/Incident'
-import { useIncident } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
+import Task from '@/models/Task'
+import Priority from '@/models/Priority'
 
 interface Props{
   data: {
     //incident: Incident
     report: Report
     task: Task
-    subtasks: Task[]
     users: User[]
   }
 }
@@ -39,7 +32,6 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
 
   useEffectOnce(() => {
     UserStore.saveAll(data.users.map(parseUser))
-    TaskStore.saveAll(data.subtasks.map(parseTask))
   })
 
   //const incidents = useIncident(data.incident)
@@ -57,7 +49,7 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
     id: 1,
     title: 'Holz wegräumen 1',
     description: 'Baumstämme und Schutt bedrohen die alte Holzbücke am Limmatweg',
-    priority: 'LOW',
+    priority: Priority.MEDIUM,
     location: 'Baden',
     assigneeId: 1,
     createdAt: new Date(),
@@ -68,8 +60,6 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
     reportId: 1,
     incidentId: 1,
   }
-
-  const [value, setValue] = useState(false)
 
   return (
     <UiContainer>
@@ -116,7 +106,6 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
 
         <UiGrid.Col size={6}>
           <SubtaskList subtasks={subtasks} onClick={setSelectedSubtask} activeSubtask={selectedSubtask} />
-
         </UiGrid.Col>
       </UiGrid>
 
@@ -127,6 +116,8 @@ export default UnterauftraegePage
 
 type Query = {
   id: string
+  reportId: string
+  taskId: string
 }
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
@@ -148,7 +139,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw incidentError
   }
 
-  const reportId = parseInt(params.id)
+  const reportId = parseInt(params.reportId)
   if (isNaN(reportId)) {
     return {
       notFound: true,
@@ -162,7 +153,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw reportError
   }
 
-  const taskId = parseInt(params.id)
+  const taskId = parseInt(params.taskId)
   if (isNaN(taskId)) {
     return {
       notFound: true,
@@ -176,13 +167,6 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw taskError
   }
 
-  const [subtasks, subtasksError]: BackendResponse<Task[]> = await BackendService.list(
-    `incidents/${incidentId}/reports/${reportId}/tasks/${taskId}/subtasks`,
-  )
-  if (subtasksError !== null) {
-    throw subtasksError
-  }
-
   const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
   if (usersError !== null) {
     throw usersError
@@ -194,21 +178,14 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
         incident,
         report,
         task,
-        subtasks,
+        subtasks: [],
         users,
       },
     },
   }
 }
-const StyledName = styled.div`
-  color: ${({ theme }) => theme.colors.error.value};
-`
 
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
-`
-
-const StyledSpaceBeforeButton = styled.div`
-  margin-bottom: 2rem;
 `

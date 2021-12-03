@@ -49,6 +49,7 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         this.assignee = assignee;
     }
 
+    @JsonProperty
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -56,6 +57,7 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         return assignee.getId();
     }
 
+    @JsonProperty
     public void setAssigneeId(Long assigneeId) {
         if (assigneeId == null) {
             this.assignee = null;
@@ -72,6 +74,7 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         return report;
     }
 
+    @JsonProperty
     public Long getReportId() {
         if (report == null) {
             return null;
@@ -79,6 +82,7 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         return report.getId();
     }
 
+    @JsonProperty
     public Long getIncidentId() {
         if (report == null) {
             return null;

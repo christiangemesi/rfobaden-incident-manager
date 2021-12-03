@@ -33,12 +33,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     location: null,
     priority: Priority.MEDIUM,
     incidentId: incident.id,
-    authorId: -1,
     assigneeId: null,
     startsAt: null,
     endsAt: null,
     isKeyReport: false,
-    isLocationRelevant: false,
+    isLocationRelevantReport: false,
   }))
 
   useValidate(form, (validate) => {
@@ -62,9 +61,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       startsAt: [],
       endsAt: [],
       isKeyReport: [],
-      isLocationRelevant: [],
+      isLocationRelevantReport: [],
     })
   })
+
+  console.log(Object.keys(form))
 
   useSubmit(form, async (formData: ModelData<Report>) => {
     const [data, error]: BackendResponse<Report> = report === null
@@ -96,7 +97,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
             </UiGrid.Col>
 
             <UiGrid.Col justify="center">
-              <UiForm.Field field={form.isLocationRelevant}>{(props) => (
+              <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                 <UiToggle {...props} label="Lagerelevant" />
               )}</UiForm.Field>
             </UiGrid.Col>

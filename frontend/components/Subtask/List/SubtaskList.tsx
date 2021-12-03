@@ -6,8 +6,8 @@ import ReportStore from '@/stores/ReportStore'
 import UiList from '@/components/Ui/List/UiList'
 import Priority from '@/models/Priority'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
-import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
 import { useUser } from '@/stores/UserStore'
+import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 
 interface Props {
   subtasks: Task[]
@@ -48,10 +48,9 @@ const SubtaskListItem: React.VFC<TaskListItemProps> = ({ subtask, isActive, onCl
   }
 
   return (
-
-    <UiItemWithDetails priority={Priority.LOW} title={subtask.title} user={assigneeName}>
+    <UiListItemWithDetails priority={Priority.LOW} title={subtask.title} user={assigneeName}>
       <UiCheckbox label="" value={value} onChange={setValue} color="tertiary" />
-    </UiItemWithDetails>
+    </UiListItemWithDetails>
   )
 }
 

@@ -34,7 +34,7 @@ interface ReportListItemProps {
 const ReportListItem: React.VFC<ReportListItemProps> = ({ report, isActive, onClick: handleClick }) => {
 
   const assignee = useUser(report.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+  const assigneeName = assignee ? assignee.firstName + ' ' + assignee?.lastName : ''
 
   // TODO not func
   const tasksAll = useTasksOfReport(report.id)
