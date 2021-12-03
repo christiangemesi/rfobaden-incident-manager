@@ -1,4 +1,4 @@
-import { clearForm, UiFormStateField } from '@/components/Ui/Form'
+import { UiFormStateField } from '@/components/Ui/Form'
 import React, { memo, ReactNode, useContext, useMemo } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiModalContext from '@/components/Ui/Modal/Context/UiModalContext'

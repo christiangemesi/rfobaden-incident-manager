@@ -1,14 +1,14 @@
 import styled, { css } from 'styled-components'
 import { CSSProperties, ReactNode } from 'react'
 import { Breakpoint, Themed } from '@/theme'
-import StyleHelper from '@/utils/helpers/StyleHelper'
+import StyleHelper, { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends StyledProps {
   gap?: number
   gapH?: number
   gapV?: number
-  className?: string
-  style?: CSSProperties
+  justify?: CSSProperties['justifyContent']
+  align?: CSSProperties['alignItems']
   children?: ReactNode
 }
 
@@ -18,6 +18,9 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   flex-wrap: wrap;
   width: 100%;
 
+  justify-content: ${({ justify }) => justify};
+  align-items: ${({ align }) => align};
+  
   ${({ gap = 0, gapH = gap, gapV = gap }) => {
     gapH = Math.max(0, gapH) / 2
     gapV = Math.max(0, gapV) / 2
@@ -32,11 +35,11 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   }}
 `
 
-interface ColProps {
+interface ColProps extends StyledProps {
   size?: ColSizeProp
   order?: Order
-  className?: string
-  style?: CSSProperties
+  justify?: CSSProperties['justifyContent']
+  align?: CSSProperties['alignItems']
   children?: ReactNode
 }
 
@@ -45,6 +48,11 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   --gap-h: 0rem;
   
   position: relative;
+  display: flex;
+  
+  justify-content: ${({ justify }) => justify};
+  align-items: ${({ align }) => align};
+  
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
   ${({ order }) => mapOrder(order)}
