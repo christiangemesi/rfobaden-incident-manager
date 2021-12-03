@@ -88,13 +88,11 @@ export default UiModalExample
 
 
 const Heading = styled.h1`
-  font-family: sans-serif;
   font-size: 2rem;
   margin-top: 3rem;
 `
 
 const SpacedSection = styled.section`
-  font-family: sans-serif;
   margin-top: 1rem;
   display: flex;
   justify-content: center;
