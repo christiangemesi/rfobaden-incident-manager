@@ -9,44 +9,36 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentList from '@/components/Incident/List/IncidentList'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiButton from '@/components/Ui/Button/UiButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import UiDate from '@/components/Ui/Date/UiDate'
 import IncidentCards from '@/components/Incident/List/IncidentCards'
+import Report, { parseReport } from '@/models/Report'
+import Task from '@/models/Task'
+import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   data: {
     incidents: Incident[]
+    reports: Report[]
   }
 }
 
 const EreignissePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
+    ReportStore.saveAll(data.reports.map(parseReport))
   })
 
   const incidents = useIncidents()
   const closedIncidents = incidents.filter((incident) => incident.isClosed)
   const openIncidents = incidents.filter((incident) => !incident.isClosed)
 
-  const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
-
-  const clearCurrentIncident = () => {
-    setCurrentIncident(null)
-  }
-
-  const handleEdit = async (incident: Incident) => {
-    setCurrentIncident(incident)
-  }
-
   return (
     <UiContainer>
       {/* Title */}
       <UiTitle level={1}>
-        Ereignis verwalten
+        Ereignisse
       </UiTitle>
       {/* Create Button */}
       <UiModal isFull>
@@ -57,12 +49,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         )}</UiModal.Activator>
         <UiModal.Body>{({ close }) => (
           <UiContainer>
-            {/* TODO this doesn't seem correct*/}
             <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
-            <IncidentForm incident={currentIncident} onClose={() => {
-              close()
-              clearCurrentIncident()
-            }} />
+            <IncidentForm onClose={close} />
           </UiContainer>
         )}</UiModal.Body>
       </UiModal>
@@ -92,11 +80,26 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 export default EreignissePage
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const [incidents]: BackendResponse<Incident[]> = await BackendService.list('incidents')
+  const [incidents, incidentsError]: BackendResponse<Incident[]> = await BackendService.list('incidents')
+  if (incidentsError !== null) {
+    throw incidentsError
+  }
+
+  const reports = await incidents.reduce(async (all, incident) => {
+    const [reports, reportsError]: BackendResponse<Report[]> = await BackendService.list(
+      `incidents/${incident.id}/reports`,
+    )
+    if (reportsError !== null) {
+      throw reportsError
+    }
+    return [...(await all), ...reports]
+  }, Promise.resolve([] as Report[]))
+
   return {
     props: {
       data: {
         incidents,
+        reports,
       },
     },
   }
