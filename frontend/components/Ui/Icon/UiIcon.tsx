@@ -11,7 +11,11 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiAccountMultiple, mdiMapMarker, mdiMap, mdiAccountCircle, mdiAlertCircleOutline,
+  mdiAccountMultiple,
+  mdiMapMarker,
+  mdiMap,
+  mdiAccountCircle,
+  mdiAlertCircleOutline,
 } from '@mdi/js'
 
 interface NamedIconProps {
@@ -74,4 +78,5 @@ export default {
   Map: makeNamedIcon(mdiMap),
   UserInCircle: makeNamedIcon(mdiAccountCircle),
   AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
+  Empty: makeNamedIcon(''),
 }
