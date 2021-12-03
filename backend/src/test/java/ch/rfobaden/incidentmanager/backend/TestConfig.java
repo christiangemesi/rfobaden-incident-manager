@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend;
 
-import java.util.Locale;
 
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
@@ -10,6 +9,8 @@ import com.github.javafaker.Faker;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+
+import java.util.Locale;
 
 @TestConfiguration
 @Import({

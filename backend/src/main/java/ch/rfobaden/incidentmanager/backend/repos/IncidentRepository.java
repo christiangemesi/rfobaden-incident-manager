@@ -13,5 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IncidentRepository extends JpaRepository<Incident, Long>, ModelRepository.Basic<Incident> {
+public interface IncidentRepository extends JpaRepository<Incident, Long>,
+    ModelRepository.Basic<Incident> {
 }

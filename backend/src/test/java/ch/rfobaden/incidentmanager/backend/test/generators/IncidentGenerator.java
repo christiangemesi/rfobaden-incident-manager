@@ -1,11 +1,11 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
-import java.time.LocalDateTime;
-
 import ch.rfobaden.incidentmanager.backend.models.CloseReason;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.boot.test.context.TestComponent;
+
+import java.time.LocalDateTime;
 
 @TestComponent
 public class IncidentGenerator extends ModelGenerator<Incident> {
@@ -17,7 +17,8 @@ public class IncidentGenerator extends ModelGenerator<Incident> {
         // TODO do some fancy stuff do daisychain closeReasons randomly
         CloseReason closeReason = new CloseReason();
         closeReason.setMessage(faker.animal().name());
-        closeReason.setCreatedAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
+        closeReason.setCreatedAt(LocalDateTime.now().minusDays(faker.random()
+                .nextInt(0, 365 * 1000)));
         incident.setCloseReason(closeReason);
         incident.setClosed(faker.bool().bool());
         incident.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));

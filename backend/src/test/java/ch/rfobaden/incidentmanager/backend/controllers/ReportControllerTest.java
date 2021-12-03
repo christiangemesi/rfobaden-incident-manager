@@ -1,7 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
-import java.util.Optional;
-
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
 import ch.rfobaden.incidentmanager.backend.models.Report;
@@ -12,6 +10,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+
+import java.util.Optional;
 
 @WebMvcTest(ReportController.class)
 @Import(AppControllerTest.SecurityContextMock.class)
