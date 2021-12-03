@@ -36,27 +36,35 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
   return (
     <UiContainer>
       {/* Title */}
-      <UiTitle level={1}>
-        Ereignisse
-      </UiTitle>
-      {/* Create Button */}
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiActionButton onClick={open}>
-            <UiIcon.CreateAction />
-          </UiActionButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <UiContainer>
-            <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
-            <IncidentForm onClose={close} />
-          </UiContainer>
-        )}</UiModal.Body>
-      </UiModal>
+      <UiGrid>
+        <UiGrid.Col>
+          <UiTitle level={1}>
+            Ereignisse
+          </UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size="auto">
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiActionButton onClick={open}>
+                <UiIcon.CreateAction />
+              </UiActionButton>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <UiContainer>
+                <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
+                <IncidentForm onClose={close} />
+              </UiContainer>
+            )}</UiModal.Body>
+          </UiModal>
+        </UiGrid.Col>
+      </UiGrid>
       {/* Incident Cards */}
       <IncidentCards incidents={openIncidents} />
       {/* Closed Incidents List */}
-      <UiTitle level={3}>Geschlossene Ereignisse</UiTitle>
+
+      <div style={{ marginTop: '2rem' }}>
+        <UiTitle level={3}>Geschlossene Ereignisse</UiTitle>
+      </div>
       {/* Table Header */}
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
         <UiGrid.Col size={4}>

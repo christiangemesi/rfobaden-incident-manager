@@ -48,7 +48,7 @@ const IncidentCard: React.VFC<IncidentCardProps> = ({ incident }) => {
             <UiGrid align="center" style={{ height: '8rem' }}>
               <UiGrid.Col size={8}>
                 <UiBadge value={10}><UiIcon.Organization /></UiBadge>
-                <br />
+                <div style={{ marginTop: '1rem' }} />
                 <UiBadge value={keyMessageCount}><UiIcon.KeyMessage /></UiBadge>
               </UiGrid.Col>
               <UiGrid.Col size={4} style={{ textAlign: 'center' }}>
@@ -132,4 +132,7 @@ const Fill = styled.div`
   height: 8rem;
   width: 8rem;
   background-color: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
