@@ -1,21 +1,27 @@
 import Icon from '@mdi/react'
 import React from 'react'
 import {
+  mdiAccountCircle,
+  mdiAccountMultiple,
+  mdiAlertCircleOutline,
   mdiArrowDownBoldHexagonOutline,
-  mdiArrowUpBoldHexagonOutline, mdiCheck,
-  mdiCheckboxBlankOutline, mdiCheckboxMarked, mdiClose,
+  mdiArrowUpBoldHexagonOutline,
+  mdiCalendar,
+  mdiCheck,
+  mdiCheckboxBlankOutline,
+  mdiCheckboxMarked,
+  mdiClose,
   mdiDelete,
-  mdiFlash, mdiHexagonOutline,
-  mdiImageFilterHdr, mdiMenu,
+  mdiFlash,
+  mdiHexagonOutline,
+  mdiImageFilterHdr,
+  mdiMap,
+  mdiMapMarker,
+  mdiMenu,
   mdiPaperclip,
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiAccountMultiple,
-  mdiMapMarker,
-  mdiMap,
-  mdiAccountCircle,
-  mdiAlertCircleOutline,
 } from '@mdi/js'
 
 interface NamedIconProps {
@@ -58,6 +64,7 @@ const makeNamedIcon = (path: string): React.VFC<NamedIconProps> => {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  Empty: makeNamedIcon(''),
   KeyMessage: makeNamedIcon(mdiFlash),
   LocationRelevancy: makeNamedIcon(mdiImageFilterHdr),
   Attachments: makeNamedIcon(mdiPaperclip),
@@ -78,5 +85,5 @@ export default {
   Map: makeNamedIcon(mdiMap),
   UserInCircle: makeNamedIcon(mdiAccountCircle),
   AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
-  Empty: makeNamedIcon(''),
+  Calendar: makeNamedIcon(mdiCalendar),
 }

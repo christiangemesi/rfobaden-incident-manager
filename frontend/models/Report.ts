@@ -25,6 +25,9 @@ export default interface Report extends Model, Completable {
 
   createdAt: Date
   updatedAt: Date
+
+  isKeyReport: boolean
+  isLocationRelevant: boolean
 }
 
 export const parseReport = (data: Report): Report => ({

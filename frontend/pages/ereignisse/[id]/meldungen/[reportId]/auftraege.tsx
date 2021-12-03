@@ -12,6 +12,11 @@ import { useIncident } from '@/stores/IncidentStore'
 import TaskStore, { useTasksOfReport } from '@/stores/TaskStore'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   data: {
@@ -35,18 +40,41 @@ const AuftraegePage: React.VFC<Props> = ({ data }) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
   return (
-    <div>
-      <TaskForm
-        incident={incident}
-        report={report}
-        task={selectedTask}
-        onClose={() => setSelectedTask(null)}
-      />
-      <TaskList
-        tasks={tasks}
-        onClick={setSelectedTask}
-      />
-    </div>
+    <UiContainer>
+      <UiTitle level={1} isCentered>
+        Aufträge verwalten
+      </UiTitle>
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiButton onClick={open}>
+                Auftrag erstellen
+              </UiButton>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <UiContainer>
+                <UiTitle level={1}>Auftrag erstellen</UiTitle>
+                <TaskForm
+                  incident={incident}
+                  report={report}
+                  task={selectedTask}
+                  onClose={() => { close(); setSelectedTask(null) }}
+                />
+              </UiContainer>
+            )}</UiModal.Body>
+          </UiModal>
+        </UiGrid.Col>
+      </UiGrid>
+      <UiGrid style={{ justifyContent: 'center' }}>
+        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+          <TaskList
+            tasks={tasks}
+            onEdit={setSelectedTask}
+          />
+        </UiGrid.Col>
+      </UiGrid>
+    </UiContainer>
   )
 }
 export default AuftraegePage

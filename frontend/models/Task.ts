@@ -23,7 +23,6 @@ export default interface Task extends Model {
 
     reportId: Id<Report>
     incidentId: Id<Incident>
-
 }
 
 export const parseTask = (data: Task): Task => ({
@@ -37,3 +36,4 @@ export const parseTask = (data: Task): Task => ({
 const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
 }
+
