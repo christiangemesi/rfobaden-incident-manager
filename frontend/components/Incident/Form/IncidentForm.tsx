@@ -10,6 +10,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
+import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 
 interface Props {
   incident: Incident | null
@@ -76,18 +77,14 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
         </UiGrid.Col>
 
         <UiGrid.Col>
-          <UiForm.Field field={form.closeReason}>{(props) => (
-            <UiTextInput {...props} label="Start Datum" placeholder="Start Datum">
-              <UiIcon.Organization />
-            </UiTextInput>
+          <UiForm.Field field={form.startsAt}>{(props) => (
+            <UiDateInput {...props} label="End Datum" placeholder="dd.mm.yyyy" />
           )}</UiForm.Field>
         </UiGrid.Col>
 
         <UiGrid.Col>
-          <UiForm.Field field={form.closeReason}>{(props) => (
-            <UiTextInput {...props} label="End Datum" placeholder="End Datum">
-              <UiIcon.Organization />
-            </UiTextInput>
+          <UiForm.Field field={form.endsAt}>{(props) => (
+            <UiDateInput {...props} label="Start Datum" placeholder="dd.mm.yyyy" />
           )}</UiForm.Field>
         </UiGrid.Col>
       </UiGrid>
