@@ -115,9 +115,9 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
           <UiIcon.UserInCircle />
         </UiTextWithIcon>
       </UiGrid.Col>
-      {report.addendum !== null ?
+      {report.notes !== null ?
         <UiGrid.Col size={12}>
-          <UiTextWithIcon text={report.addendum}>
+          <UiTextWithIcon text={report.notes}>
             <UiIcon.AlertCircle />
           </UiTextWithIcon>
         </UiGrid.Col> :

@@ -29,7 +29,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    addendum: null,
+    notes: null,
     location: null,
     priority: Priority.MEDIUM,
     incidentId: incident.id,
@@ -37,8 +37,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     assigneeId: null,
     startsAt: null,
     endsAt: null,
-    completion: null,
-    isComplete: false,
     isKeyReport: false,
     isLocationRelevant: false,
   }))
@@ -51,7 +49,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      addendum: [
+      notes: [
         validate.notBlank({ allowNull: true }),
       ],
       location: [
@@ -63,8 +61,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       assigneeId: [],
       startsAt: [],
       endsAt: [],
-      completion: [],
-      isComplete: [],
       isKeyReport: [],
       isLocationRelevant: [],
     })
@@ -125,7 +121,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
           </UiGrid.Col>
 
           <UiGrid.Col size={12}>
-            <UiForm.Field field={form.addendum}>{(props) => (
+            <UiForm.Field field={form.notes}>{(props) => (
               <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
             )}</UiForm.Field>
           </UiGrid.Col>
