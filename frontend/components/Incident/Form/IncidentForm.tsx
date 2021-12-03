@@ -12,11 +12,11 @@ import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 
 interface Props {
-  incident: Incident | null
+  incident?: Incident | null
   onClose?: () => void
 }
 
-const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
+const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Incident>>(incident, () => ({
     title: '',
     description: null,

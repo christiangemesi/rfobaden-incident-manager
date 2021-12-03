@@ -3,9 +3,9 @@ package ch.rfobaden.incidentmanager.backend.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public interface Completable {
-    void setCompletion(Completion completion);
+    void setCompletion(CloseReason completion);
 
-    Completion getCompletion();
+    CloseReason getCompletion();
 
     void setComplete(boolean isComplete);
 

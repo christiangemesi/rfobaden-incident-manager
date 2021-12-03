@@ -1,33 +1,20 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "report")
-public class Report implements Completable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private User author;
-
+public class Report extends Model implements PathConvertible<ReportPath> {
     @ManyToOne
     @JoinColumn
     private User assignee;
@@ -41,62 +28,22 @@ public class Report implements Completable {
 
     private String description;
 
-    private String addendum;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private String notes;
 
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "completion_id")
-    private Completion completion;
-
-    @Column(nullable = false)
-    private boolean isComplete;
-
     private String location;
 
     @Column(nullable = false)
+    private boolean isKeyReport;
+
+    @Column(nullable = false)
+    private boolean isLocationRelevantReport;
+
+    @Column(nullable = false)
     private Priority priority;
-
-    public Report() {
-    }
-
-    public Report(Long id, String title, User author, Incident incident) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.incident = incident;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public Long getAuthorId() {
-        if (author == null) {
-            return null;
-        }
-        return author.getId();
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
 
     public User getAssignee() {
         return assignee;
@@ -129,6 +76,7 @@ public class Report implements Completable {
         return incident;
     }
 
+    @JsonIgnore
     public Long getIncidentId() {
         if (incident == null) {
             return null;
@@ -136,7 +84,7 @@ public class Report implements Completable {
         return incident.getId();
     }
 
-    @JsonProperty
+    @JsonIgnore
     public void setIncident(Incident incident) {
         this.incident = incident;
     }
@@ -157,28 +105,12 @@ public class Report implements Completable {
         this.description = description;
     }
 
-    public String getAddendum() {
-        return addendum;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setAddendum(String addendum) {
-        this.addendum = addendum;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setNotes(String addendum) {
+        this.notes = addendum;
     }
 
     public LocalDateTime getStartsAt() {
@@ -205,39 +137,28 @@ public class Report implements Completable {
         this.location = location;
     }
 
+    public boolean isKeyReport() {
+        return isKeyReport;
+    }
+
+    public void setKeyReport(boolean keyReport) {
+        isKeyReport = keyReport;
+    }
+
+    public boolean isLocationRelevantReport() {
+        return isLocationRelevantReport;
+    }
+
+    public void setLocationRelevantReport(boolean locationRelevantReport) {
+        isLocationRelevantReport = locationRelevantReport;
+    }
+
     public Priority getPriority() {
         return priority;
     }
 
     public void setPriority(Priority priority) {
         this.priority = priority;
-    }
-
-    @Override
-    public void setCompletion(Completion completion) {
-        this.completion = completion;
-    }
-
-    @Override
-    public Completion getCompletion() {
-        return completion;
-    }
-
-    @Override
-    public void setComplete(boolean isComplete) {
-        this.isComplete = isComplete;
-    }
-
-    @Override
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-    public Long getCompletionId() {
-        if (completion == null) {
-            return null;
-        }
-        return completion.getId();
     }
 
     @Override
@@ -249,51 +170,55 @@ public class Report implements Completable {
             return false;
         }
         Report report = (Report) o;
-        return isComplete == report.isComplete
-                && Objects.equals(id, report.id)
-                && Objects.equals(author, report.author)
-                && Objects.equals(assignee, report.assignee)
-                && Objects.equals(incident, report.incident)
-                && Objects.equals(title, report.title)
-                && Objects.equals(description, report.description)
-                && Objects.equals(addendum, report.addendum)
-                && Objects.equals(createdAt, report.createdAt)
-                && Objects.equals(updatedAt, report.updatedAt)
-                && Objects.equals(startsAt, report.startsAt)
-                && Objects.equals(endsAt, report.endsAt)
-                && Objects.equals(completion, report.completion)
-                && Objects.equals(location, report.location)
-                && priority == report.priority;
+        return equalsModel(report)
+            && Objects.equals(assignee, report.assignee)
+            && Objects.equals(incident, report.incident)
+            && Objects.equals(title, report.title)
+            && Objects.equals(description, report.description)
+            && Objects.equals(notes, report.notes)
+            && Objects.equals(startsAt, report.startsAt)
+            && Objects.equals(endsAt, report.endsAt)
+            && Objects.equals(location, report.location)
+            && Objects.equals(isKeyReport, report.isKeyReport)
+            && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport)
+            && priority == report.priority;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, assignee, incident, title,
-                description, addendum, createdAt, updatedAt, startsAt,
-                endsAt, completion, isComplete, location, priority);
+        return Objects.hash(assignee, incident, title,
+            description, notes, startsAt,
+            endsAt, location, isKeyReport, isLocationRelevantReport, priority);
     }
 
     @Override
     public String toString() {
         return "Report{"
-                + "id=" + id
-                + ", author=" + author
-                + ", assigneeId=" + assignee
-                + ", incidentId=" + incident
-                + ", title='" + title + '\''
-                + ", description='" + description + '\''
-                + ", addendum='" + addendum + '\''
-                + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt
-                + ", startsAt=" + startsAt
-                + ", isComplete=" + isComplete
-                + ", completionId=" + completion
-                + ", location='" + location + '\''
-                + ", priority=" + priority
-                + '}';
+            + "id=" + getId()
+            + ", assignee=" + assignee
+            + ", incident=" + incident
+            + ", title='" + title + '\''
+            + ", description='" + description + '\''
+            + ", addendum='" + notes + '\''
+            + ", createdAt=" + getCreatedAt() + '\''
+            + ", updatedAt=" + getUpdatedAt() + '\''
+            + ", startsAt=" + startsAt + '\''
+            + ", endsAt=" + endsAt + '\''
+            + ", location='" + location + '\''
+            + ", isKeyReport='" + isKeyReport + '\''
+            + ", isLocationRelevantReport='" + isLocationRelevantReport + '\''
+            + ", priority=" + priority
+            + '}';
     }
 
-    enum Priority {
+    @Override
+    public ReportPath toPath() {
+        ReportPath path = new ReportPath();
+        path.setIncidentId(getIncidentId());
+        return path;
+    }
+
+    public enum Priority {
         LOW, MEDIUM, HIGH
     }
 }

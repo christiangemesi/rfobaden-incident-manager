@@ -1,11 +1,11 @@
-import Completion, { parseCompletion } from '@/models/Completion'
+import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 
 export default interface Completable {
-  completion: Completion | null
+  completion: CloseReason | null
   isComplete: boolean
 }
 
 export const parseCompletable = ({ completion, isComplete }: Completable): Completable => ({
-  completion: completion && parseCompletion(completion),
+  completion: completion && parseCloseReason(completion),
   isComplete,
 })

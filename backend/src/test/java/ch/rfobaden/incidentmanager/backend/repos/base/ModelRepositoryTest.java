@@ -94,6 +94,7 @@ public abstract class ModelRepositoryTest<
         // When
         var result = repository.save(record);
         record.setId(result.getId());
+        alignAfterCreate(record, result);
 
         // Then
         assertThat(result).isNotNull();
@@ -150,6 +151,8 @@ public abstract class ModelRepositoryTest<
     }
 
     protected void saveRelations(TModel record) {}
+
+    protected void alignAfterCreate(TModel record, TModel result) {}
 
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,
