@@ -24,7 +24,7 @@ public interface ReportRepository
             + "report.id = :id"
     )
     @Override
-    boolean existsByPath(ReportPath path, Long id);
+    boolean existsByPath(@Param("path") ReportPath path, @Param("id") Long id);
 
     @Query(
         "SELECT report"
@@ -44,8 +44,6 @@ public interface ReportRepository
             + "Report report"
             + " WHERE "
             + "report.incident.id = :#{#path.incidentId}"
-            + " AND "
-            + "report.id = :id"
     )
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
