@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
-interface Props extends UiInputProps<boolean> {
+interface Props extends UiInputProps<boolean | null> {
   label?: string,
 }
 
@@ -30,6 +30,9 @@ const InputWrapper = styled.label`
   position: relative;
   display: inline-flex;
   align-items: center;
+  :hover {
+    cursor: pointer;
+  }
 `
 const Input = styled.input`
   position: absolute;
@@ -37,7 +40,8 @@ const Input = styled.input`
   top: -9999px;
   
   &:checked + span {
-    background-color: #1890ff;
+    background-color: ${({ theme }) => theme.colors.primary.value};
+    
     &:before {
       left: calc(100% - 2px);
       transform: translate(-100%);
