@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useUser } from '@/stores/UserStore'
 import UiList from '@/components/Ui/List/UiList'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
+import Link from 'next/link'
 
 interface Props {
   tasks: Task[]
@@ -14,7 +15,11 @@ const TaskList: React.VFC<Props> = ({ tasks, onClick: handleClick }) => {
   return (
     <UiList>
       {tasks.map((task) => (
-        <TaskListItem key={task.id} task={task} onClick={handleClick} />
+        <Link key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftrag/${task.id}`}>
+          <a>
+            <TaskListItem task={task} onClick={handleClick} />
+          </a>
+        </Link>
       ))}
     </UiList>
   )

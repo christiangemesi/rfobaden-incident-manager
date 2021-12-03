@@ -70,7 +70,7 @@ const AuftraegePage: React.VFC<Props> = ({ data }) => {
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
           <TaskList
             tasks={tasks}
-            onEdit={setSelectedTask}
+            onClick={setSelectedTask}
           />
         </UiGrid.Col>
       </UiGrid>

@@ -1,14 +1,11 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
-import Link from 'next/link'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiButton from '@/components/Ui/Button/UiButton'
 
 
 interface Props{
    //isFluid?: boolean
-  children: ReactNode
+  children?: ReactNode
  }
 
 const UiHeader: React.VFC <Props> =({ children }) =>{

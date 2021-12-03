@@ -4,7 +4,7 @@ import Priority from '@/models/Priority'
 
 const UiPrioritySliderExample: React.VFC = () => {
 
-  const [value, setValue] = useState(Priority.MEDIUM)
+  const [value, setValue] = useState(Priority.MEDIUM as Priority | null)
 
   return(
     <div>
