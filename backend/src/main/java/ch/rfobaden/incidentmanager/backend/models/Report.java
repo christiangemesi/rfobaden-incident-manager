@@ -46,14 +46,17 @@ public class Report extends Model implements PathConvertible<ReportPath> {
     @Column(nullable = false)
     private Priority priority;
 
+    @JsonIgnore
     public User getAssignee() {
         return assignee;
     }
 
+    @JsonIgnore
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
 
+    @JsonProperty
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -61,6 +64,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         return assignee.getId();
     }
 
+    @JsonProperty
     public void setAssigneeId(Long assigneeId) {
         if (assigneeId == null) {
             this.assignee = null;
@@ -77,7 +81,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         return incident;
     }
 
-    @JsonIgnore
+    @JsonProperty
     public Long getIncidentId() {
         if (incident == null) {
             return null;
@@ -147,7 +151,6 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         isKeyReport = keyReport;
     }
 
-    @JsonProperty("isLocationRelevantReport")
     public boolean isLocationRelevantReport() {
         return isLocationRelevantReport;
     }

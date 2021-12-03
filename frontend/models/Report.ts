@@ -25,7 +25,7 @@ export default interface Report extends Model {
   updatedAt: Date
 
   isKeyReport: boolean
-  isLocationRelevant: boolean
+  isLocationRelevantReport: boolean
 }
 
 export const parseReport = (data: Report): Report => ({

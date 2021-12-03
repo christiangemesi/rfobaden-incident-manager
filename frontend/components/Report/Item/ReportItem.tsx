@@ -18,6 +18,7 @@ import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import { useIncident } from '@/stores/IncidentStore'
+import TaskForm from '@/components/Task/Form/TaskForm'
 
 interface Props {
   report: Report
@@ -75,22 +76,43 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
               <UiIcon.PrintAction />
               {printer}
             </UiIconButton>
+            {/*{incident !== null && (*/}
+            {/*  <UiModal isFull>*/}
+            {/*    <UiModal.Activator>{({ open }) => (*/}
+            {/*      <UiIconButton onClick={open}>*/}
+            {/*        <UiIcon.EditAction />*/}
+            {/*      </UiIconButton>*/}
+            {/*    )}</UiModal.Activator>*/}
+            {/*    <UiModal.Body>{({ close }) => (*/}
+            {/*      <UiGrid gapV={1.5}>*/}
+            {/*        <UiGrid.Col size={12}>*/}
+            {/*          <UiTitle level={1} isCentered>*/}
+            {/*            Meldung bearbeiten*/}
+            {/*          </UiTitle>*/}
+            {/*        </UiGrid.Col>*/}
+            {/*        <UiGrid.Col size={12}>*/}
+            {/*          <ReportForm incident={incident} report={report} onClose={close} />*/}
+            {/*        </UiGrid.Col>*/}
+            {/*      </UiGrid>*/}
+            {/*    )}</UiModal.Body>*/}
+            {/*  </UiModal>*/}
+            {/*)}*/}
             {incident !== null && (
               <UiModal isFull>
                 <UiModal.Activator>{({ open }) => (
                   <UiIconButton onClick={open}>
-                    <UiIcon.EditAction />
+                    <UiIcon.CreateAction />
                   </UiIconButton>
                 )}</UiModal.Activator>
                 <UiModal.Body>{({ close }) => (
                   <UiGrid gapV={1.5}>
                     <UiGrid.Col size={12}>
                       <UiTitle level={1} isCentered>
-                        Meldung bearbeiten
+                        Auftrag erfassen
                       </UiTitle>
                     </UiGrid.Col>
                     <UiGrid.Col size={12}>
-                      <ReportForm incident={incident} report={report} onClose={close} />
+                      <TaskForm incident={incident} report={report} onClose={close} />
                     </UiGrid.Col>
                   </UiGrid>
                 )}</UiModal.Body>
@@ -105,24 +127,27 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
       <UiGrid.Col size={12}>
         {report.description}
       </UiGrid.Col>
-      <UiGrid.Col size={12}>
-        <UiTextWithIcon text={report.location ?? ''}>
-          <UiIcon.Location />
-        </UiTextWithIcon>
-      </UiGrid.Col>
-      <UiGrid.Col size={12}>
-        <UiTextWithIcon text={assigneeName}>
-          <UiIcon.UserInCircle />
-        </UiTextWithIcon>
-      </UiGrid.Col>
-      {report.notes !== null ?
+      {report.location && (
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={report.location ?? ''}>
+            <UiIcon.Location />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      )}
+      {assignee && (
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={assigneeName}>
+            <UiIcon.UserInCircle />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      )}
+      {report.notes !== null && (
         <UiGrid.Col size={12}>
           <UiTextWithIcon text={report.notes}>
             <UiIcon.AlertCircle />
           </UiTextWithIcon>
-        </UiGrid.Col> :
-        ''
-      }
+        </UiGrid.Col>
+      )}
       <UiGrid.Col size={12}>
         <TaskList tasks={tasks} />
       </UiGrid.Col>
