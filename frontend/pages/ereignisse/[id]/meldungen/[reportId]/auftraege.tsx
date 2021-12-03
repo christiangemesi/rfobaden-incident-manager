@@ -44,7 +44,7 @@ const AuftraegePage: React.VFC<Props> = ({ data }) => {
       />
       <TaskList
         tasks={tasks}
-        onEdit={setSelectedTask}
+        onClick={setSelectedTask}
       />
     </div>
   )
