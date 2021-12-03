@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -137,6 +138,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         this.location = location;
     }
 
+    @JsonProperty("isKeyReport")
     public boolean isKeyReport() {
         return isKeyReport;
     }
@@ -145,6 +147,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         isKeyReport = keyReport;
     }
 
+    @JsonProperty("isLocationRelevantReport")
     public boolean isLocationRelevantReport() {
         return isLocationRelevantReport;
     }
