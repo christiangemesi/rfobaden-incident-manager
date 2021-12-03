@@ -6,7 +6,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
-import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
+import UiItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import Priority from '@/models/Priority'
 
 const UiListContainerExample: React.VFC = () => {
