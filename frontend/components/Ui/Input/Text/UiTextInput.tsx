@@ -85,6 +85,7 @@ const StyledAdditionalInput = styled.div<{ isClickable: boolean }>`
   border: 1px solid ${contrastDark};
   border-radius: 0  0.5rem 0.5rem 0;
   width: 40px;
+  height: 35px;
   
   display: inline-flex;
   justify-content: center;
