@@ -25,6 +25,9 @@ import * as ReactDOM from 'react-dom'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import Task, { parseTask } from '@/models/Task'
 import TaskStore from '@/stores/TaskStore'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import ReportForm from '@/components/Report/Form/ReportForm'
+import IncidentForm from '@/components/Incident/Form/IncidentForm'
 
 interface Props {
   data: {
@@ -88,15 +91,31 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
           </UiGrid.Col>
           <UiGrid.Col size={12}>
             <StyledDiv>
-              <UiDateLabel start={startDate} end={incident.endsAt} type={'datetime'} />
+              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
               <UiIconButtonGroup>
                 <UiIconButton onClick={handlePrint}>
                   <UiIcon.PrintAction />
                   {printer}
                 </UiIconButton>
-                <UiIconButton> {/*TODO*/}
-                  <UiIcon.EditAction />
-                </UiIconButton>
+                <UiModal isFull>
+                  <UiModal.Activator>{({ open }) => (
+                    <UiIconButton onClick={open}>
+                      <UiIcon.EditAction />
+                    </UiIconButton>
+                  )}</UiModal.Activator>
+                  <UiModal.Body>{({ close }) => (
+                    <UiGrid gapV={1.5}>
+                      <UiGrid.Col size={12}>
+                        <UiTitle level={1} isCentered>
+                          Ereignis bearbeiten
+                        </UiTitle>
+                      </UiGrid.Col>
+                      <UiGrid.Col size={12}>
+                        <IncidentForm incident={incident} onClose={close} />
+                      </UiGrid.Col>
+                    </UiGrid>
+                  )}</UiModal.Body>
+                </UiModal>
                 <UiIconButton onClick={handleDelete}>
                   <UiIcon.DeleteAction />
                 </UiIconButton>
@@ -113,10 +132,25 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
           </UiGrid.Col>
           <UiGrid.Col size={6}>
             <StyledDiv>
-              <div>{/*TODO fill in modal form instead of div*/}</div>
-              <UiActionButton>
-                <UiIcon.CreateAction />
-              </UiActionButton>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiActionButton onClick={open}>
+                    <UiIcon.CreateAction />
+                  </UiActionButton>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <UiGrid gapV={1.5}>
+                    <UiGrid.Col size={12}>
+                      <UiTitle level={1} isCentered>
+                        Meldung erfassen
+                      </UiTitle>
+                    </UiGrid.Col>
+                    <UiGrid.Col size={12}>
+                      <ReportForm incident={incident} onClose={close} />
+                    </UiGrid.Col>
+                  </UiGrid>
+                )}</UiModal.Body>
+              </UiModal>
             </StyledDiv>
           </UiGrid.Col>
           <UiGrid.Col size={6} />
@@ -124,10 +158,9 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
             <ReportList reports={reports} onClick={setSelectedReport} activeReport={selectedReport} />
           </UiGrid.Col>
           <UiGrid.Col size={6}>
-            {selectedReport !== null ?
+            {selectedReport !== null && (
               <ReportItem report={selectedReport} />
-              : ''
-            }
+            )}
           </UiGrid.Col>
         </UiGrid>
       </UiContainer>
@@ -196,5 +229,5 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 
 const StyledDiv = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 `

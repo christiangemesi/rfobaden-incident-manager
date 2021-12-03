@@ -15,6 +15,10 @@ import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useUser } from '@/stores/UserStore'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import IncidentForm from '@/components/Incident/Form/IncidentForm'
+import ReportForm from '@/components/Report/Form/ReportForm'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props {
   report: Report
@@ -53,6 +57,8 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
 
   const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
 
+  const incident = useIncident(report.incidentId)
+
   return (
     <UiGrid gapH={2} gapV={1}>
       <UiGrid.Col size={12}>
@@ -70,9 +76,27 @@ const ReportItem: React.VFC<Props> = ({ report }) => {
               <UiIcon.PrintAction />
               {printer}
             </UiIconButton>
-            <UiIconButton> {/*TODO*/}
-              <UiIcon.EditAction />
-            </UiIconButton>
+            {incident !== null && (
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiIconButton onClick={open}>
+                    <UiIcon.EditAction />
+                  </UiIconButton>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <UiGrid gapV={1.5}>
+                    <UiGrid.Col size={12}>
+                      <UiTitle level={1} isCentered>
+                        Meldung bearbeiten
+                      </UiTitle>
+                    </UiGrid.Col>
+                    <UiGrid.Col size={12}>
+                      <ReportForm incident={incident} report={report} onClose={close} />
+                    </UiGrid.Col>
+                  </UiGrid>
+                )}</UiModal.Body>
+              </UiModal>
+            )}
             <UiIconButton onClick={handleDelete}>
               <UiIcon.DeleteAction />
             </UiIconButton>
