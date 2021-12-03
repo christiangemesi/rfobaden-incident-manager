@@ -23,6 +23,7 @@ import Incident from '@/models/Incident'
 import { useIncident } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
+import SubtaskList from '@/components/Subtask/List/SubtaskList'
 
 interface Props{
   data: {
@@ -34,7 +35,7 @@ interface Props{
   }
 }
 
-const TaskView: React.VFC<Props> = ({ data }) => {
+const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
 
   useEffectOnce(() => {
     UserStore.saveAll(data.users.map(parseUser))
@@ -67,8 +68,6 @@ const TaskView: React.VFC<Props> = ({ data }) => {
     reportId: 1,
     incidentId: 1,
   }
-
-  const SubtaskList = [subtask, subtask]
 
   const [value, setValue] = useState(false)
 
@@ -124,7 +123,7 @@ const TaskView: React.VFC<Props> = ({ data }) => {
     </UiContainer>
   )
 }
-export default TaskView
+export default UnterauftraegePage
 
 type Query = {
   id: string
