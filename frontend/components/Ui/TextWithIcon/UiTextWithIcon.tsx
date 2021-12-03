@@ -8,25 +8,28 @@ interface Props {
 
 const UiTextWithIcon: React.VFC<Props> = ({ children, text }) => {
   return (
-    <StyledTitle>
+    <StyledDiv>
       <StyledIcon>
         {children}
       </StyledIcon>
       <StyledText>
         {text}
       </StyledText>
-    </StyledTitle>
+    </StyledDiv>
   )
 }
 
 export default UiTextWithIcon
 
-const StyledTitle = styled.div`
+const StyledDiv = styled.div`
   display: inline-flex;
   align-items: center;
 `
 const StyledIcon = styled.span`
   margin-right: 2px;
+  height: 100%;
+  margin-top: 0;
+  margin-bottom: auto;
 `
 const StyledText = styled.span`
   font-weight: 400;
