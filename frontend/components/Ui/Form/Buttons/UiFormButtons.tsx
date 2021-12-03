@@ -1,4 +1,4 @@
-import { clearForm, getFormBaseState, UiFormState } from '@/components/Ui/Form'
+import { getFormBaseState, UiFormState } from '@/components/Ui/Form'
 import React, { useCallback } from 'react'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 
@@ -12,12 +12,10 @@ const UiFormButtons = <T,>({
   const baseForm = getFormBaseState(form)
   const {
     isValid,
-    fields,
     value,
   } = baseForm
 
   const pushSubmit = baseForm.onSubmit
-  const pushCancel = baseForm.onCancel
 
   const handleSubmit = useCallback(async () => {
     if (isValid && pushSubmit !== null) {
@@ -25,18 +23,10 @@ const UiFormButtons = <T,>({
     }
   }, [isValid, value, pushSubmit])
 
-  const handleCancel = useCallback(async () => {
-    clearForm(fields)
-    if (pushCancel !== null) {
-      await pushCancel()
-    }
-  }, [fields, pushCancel])
-
   return (
     <UiConfirmButtons
       allowSubmit={isValid}
       onSubmit={handleSubmit}
-      onCancel={handleCancel}
     />
   )
 }

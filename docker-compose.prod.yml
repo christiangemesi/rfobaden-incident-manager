@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/frontend.prod.dockerfile
+      args: 
+        - ENV_FILE_NAME
+        - NEXT_PUBLIC_BACKEND_ENDPOINT=http://${BACKEND_HOST}:${BACKEND_APP_PORT}
+    environment:
+      - NODE_ENV=production
+  
+    ports:
+      - "${FRONTEND_APP_PORT}:3000"
+      - "${FRONTENT_WEBPACK_PORT}:3035"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend.dockerfile
+    ports:
+      - "${BACKEND_APP_PORT}:8080"
+      - "${BACKEND_DEBUGGER_PORT}:5005" 
+    environment:
+      - TZ=Europe/Zurich
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - database
+
+  database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${DATABASE_PORT}:3306"
+    volumes:
+      - database:/var/lib/mysql
+  
+
+volumes:
+  frontend.node_modules:
+  backend.gradle-local:
+  backend.gradle-global:
+  database:
