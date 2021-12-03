@@ -26,7 +26,7 @@ class StyleHelper {
 }
 export default new StyleHelper()
 
-interface StyledProps {
+export interface StyledProps {
   className?: string
   style?: CSSProperties
   children?: ReactNode

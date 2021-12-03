@@ -184,6 +184,11 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   overflow: hidden;
   max-height: 90vh;
   width: ${({ isFull }) => isFull && '100%'};
+  
+  ${({ theme }) => css`
+    background: ${theme.colors.tertiary.value};
+    color: ${theme.colors.tertiary.contrast};
+  `};
 
   border-radius: 1rem;
   padding: 1rem;
