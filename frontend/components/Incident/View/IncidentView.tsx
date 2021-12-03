@@ -1,7 +1,6 @@
 import Incident from '@/models/Incident'
 import React, { ReactNode, Ref } from 'react'
 import styled from 'styled-components'
-import { useUser } from '@/stores/UserStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
@@ -10,18 +9,12 @@ interface Props {
 }
 
 const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
-  const author = useUser(incident.authorId)
 
   return (
     <Container ref={innerRef}>
       <h1>
         {incident.title}
       </h1>
-      {author !== null && (
-        <div>
-          Erstellt von {author.firstName} {author.lastName}
-        </div>
-      )}
       <div style={{ width: '100%' }}>
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md: 8, lg: 5 }}>

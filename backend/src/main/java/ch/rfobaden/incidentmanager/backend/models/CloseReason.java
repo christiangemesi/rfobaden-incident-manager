@@ -1,20 +1,19 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Table(name = "completion")
-public class Completion {
+@Table(name = "close_reason")
+public class CloseReason {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,18 +21,15 @@ public class Completion {
     private Long id;
 
     @Column(nullable = false)
-    private String reason;
+    private String message;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Completion previous;
+    private CloseReason previous;
 
-    @OneToOne(mappedBy = "previous", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Completion next;
-
-    public Completion() {
+    public CloseReason() {
     }
 
     public Long getId() {
@@ -44,12 +40,12 @@ public class Completion {
         this.id = id;
     }
 
-    public String getReason() {
-        return reason;
+    public String getMessage() {
+        return message;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setMessage(String reason) {
+        this.message = reason;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -60,11 +56,11 @@ public class Completion {
         this.createdAt = createdAt;
     }
 
-    public Completion getPrevious() {
+    public CloseReason getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Completion previous) {
+    public void setPrevious(CloseReason previous) {
         this.previous = previous;
     }
 
@@ -76,22 +72,24 @@ public class Completion {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Completion completion = (Completion) o;
-        return Objects.equals(id, completion.id)
-                && Objects.equals(reason, completion.reason)
-                && Objects.equals(createdAt, completion.createdAt);
+        CloseReason closeReason = (CloseReason) o;
+        return Objects.equals(id, closeReason.id)
+            && Objects.equals(message, closeReason.message)
+            && Objects.equals(previous, closeReason.previous)
+            && Objects.equals(createdAt, closeReason.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reason, createdAt);
+        return Objects.hash(message, previous, createdAt);
     }
 
     @Override
     public String toString() {
-        return "Completion{"
-                + "reason='" + reason + '\''
-                + ", closedAt=" + createdAt
-                + '}';
+        return "CloseReason{"
+            + "id='" + id + '\''
+            + ", reason='" + message + '\''
+            + ", closedAt=" + createdAt
+            + '}';
     }
 }

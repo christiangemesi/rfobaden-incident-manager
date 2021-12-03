@@ -1,19 +1,14 @@
 import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
-import Id from '@/models/base/Id'
-import User from '@/models/User'
+import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 
 export default interface Incident extends Model {
   title: string
-  authorId: Id<User>
   description: string | null
-  closeReason: string | null
-  isClosed: boolean
-  createdAt: Date
-  updatedAt: Date
   startsAt: Date | null
   endsAt: Date | null
-  closedAt: Date | null
+  closeReason: CloseReason | null
+  isClosed: boolean
 }
 
 export const parseIncident = (data: unknown): Incident => {
@@ -24,7 +19,7 @@ export const parseIncident = (data: unknown): Incident => {
     updatedAt: parseDate(incident.updatedAt),
     startsAt: parseDateOrNull(incident.startsAt),
     endsAt: parseDateOrNull(incident.endsAt),
-    closedAt: parseDateOrNull(incident.closedAt),
+    closeReason:  incident.closeReason && parseCloseReason(incident.closeReason),
   }
 }
 
