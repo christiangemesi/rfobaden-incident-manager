@@ -81,7 +81,6 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
   return (
     <form>
       <UiGrid gap={0.5}>
-
         <UiGrid.Col style={{ textAlign:'right' }}>
           <UiForm.Field field={form.priority}>{(props) => (
             <UiPrioritySlider {...props} />
