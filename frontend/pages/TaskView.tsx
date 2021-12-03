@@ -12,6 +12,8 @@ import UiList from '@/components/Ui/List/UiList'
 import Priority from '@/models/Priority'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
+import { white } from 'colorette'
+import UiActionButton from '@/components/Ui/Button/UiActionButton'
 
 const TaskView: React.VFC = () => {
   const task: Task = {
@@ -33,46 +35,62 @@ const TaskView: React.VFC = () => {
     reportId: 1,
     incidentId: 1,
   }
-  const user: { firstName: string; lastName: string; role: UserRole; email: string } = {
+  const assignee: User = {
+    id: 1,
     email: 'Peter@Peter.usbekistan',
     firstName: 'Peter',
     lastName: 'Nachname',
     role: UserRole.ADMIN,
-
+    createdAt: new Date(),
+    updatedAt: new Date(),
   }
 
   const [value, setValue] = useState(false)
   return (
-    //TODO not assignable to type string?? line 53
-    //TODO line 57
     <UiContainer>
 
       <UiTitle level={2}>
         {task.title} {<UiIcon.PriorityHigh />}
       </UiTitle>
 
-      <UiTextWithIcon text={user.firstName + ' ' + user.lastName}>
+      <UiTextWithIcon text={assignee.firstName + ' ' + assignee.lastName}>
         <UiIcon.UserInCircle />
       </UiTextWithIcon>
 
-      <UiTextWithIcon text={task.location}>
-        <UiIcon.Location />
-      </UiTextWithIcon>
+      {task.location !== null && (
+        <UiTextWithIcon text={task.location ?? ''}>
+          <UiIcon.Location />
+        </UiTextWithIcon>
+      )}
 
       <UiTitle level={6}>
         {task.description}
       </UiTitle>
+      <StyledSpaceBeforeButton>
+        <UiTextWithIcon text={' PLATZHALTER ACHTUNG: starke Strömung und morsches Holz'}>
+          <UiIcon.AlertCircle />
+        </UiTextWithIcon>
+      </StyledSpaceBeforeButton>
 
-      <UiTextWithIcon text={' PLATZHALTER ACHTUNG: starke Strömung und morsches Holz'}>
-        <UiIcon.AlertCircle />
-      </UiTextWithIcon>
 
       <UiGrid gap={0.5}>
+
+        <UiGrid.Col size={6}>
+          <StyledDiv>
+            <div>{/*TODO fill in modal form instead of div*/}</div>
+            <UiActionButton>
+              <UiIcon.CreateAction />
+            </UiActionButton>
+          </StyledDiv>
+        </UiGrid.Col>
+
+        <UiGrid.Col size={6} />
         <UiGrid.Col size={6}>
 
           <UiList>
-            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
-              <UiCheckbox label="CHECKBOX" value={value} onChange={setValue} />
+            <UiItemWithDetails priority={Priority.LOW} title={task.title}
+              user={assignee.firstName + ' ' + assignee.lastName}>
+              <UiCheckbox label="" value={value} onChange={setValue} color="tertiary" />
             </UiItemWithDetails>
 
           </UiList>
@@ -86,4 +104,13 @@ export default TaskView
 
 const StyledName = styled.div`
   color: ${({ theme }) => theme.colors.error.value};
+`
+
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const StyledSpaceBeforeButton = styled.div`
+  margin-bottom: 2rem;
 `
