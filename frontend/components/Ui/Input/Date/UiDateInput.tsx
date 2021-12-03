@@ -42,7 +42,7 @@ const UiDateInput: React.VFC<Props> = ({
   return(
     <div>
       <UiTextInput label={label} placeholder={placeholder} value={text} onChange={setText} errors={isInvalid ? ['ist invalid', ...errors] : errors}>
-        <UiIcon.Organization />
+        <UiIcon.Calendar />
       </UiTextInput>
     </div>
 

@@ -77,13 +77,13 @@ const IncidentForm: React.VFC<Props> = ({ incident, onClose: handleClose }) => {
 
         <UiGrid.Col>
           <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="End Datum" placeholder="dd.mm.yyyy" />
+            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
         </UiGrid.Col>
 
-        <UiGrid.Col>
+        <UiGrid.Col style={{ marginBottom: '2rem' }}>
           <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Start Datum" placeholder="dd.mm.yyyy" />
+            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
         </UiGrid.Col>
       </UiGrid>

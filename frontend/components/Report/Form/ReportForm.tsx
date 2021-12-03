@@ -132,7 +132,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
           <UiGrid.Col size={12}>
             <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="Ort" placeholder="Ort" />
+              <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
@@ -144,13 +144,13 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
           <UiGrid.Col>
             <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="End Datum" placeholder="dd.mm.yyyy" />
+              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
 
-          <UiGrid.Col>
+          <UiGrid.Col style={{ marginBottom: '2rem' }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Start Datum" placeholder="dd.mm.yyyy" />
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
 

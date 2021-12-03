@@ -17,7 +17,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 
 interface Props {
   incident: Incident
@@ -107,23 +107,19 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
 
         <UiGrid.Col size={12}>
           <UiForm.Field field={form.location}>{(props) => (
-            <UiTextInput {...props} label="Gebiet" placeholder="Gebiet" />
+            <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
           )}</UiForm.Field>
         </UiGrid.Col>
 
         <UiGrid.Col>
-          <UiForm.Field field={form.location}>{(props) => (
-            <UiTextInput {...props} label="Start Datum" placeholder="Start Datum">
-              <UiIcon.Organization />
-            </UiTextInput>
+          <UiForm.Field field={form.startsAt}>{(props) => (
+            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
         </UiGrid.Col>
 
         <UiGrid.Col style={{ marginBottom: '2rem' }}>
-          <UiForm.Field field={form.location}>{(props) => (
-            <UiTextInput {...props} label="End Datum" placeholder="End Datum">
-              <UiIcon.Organization />
-            </UiTextInput>
+          <UiForm.Field field={form.endsAt}>{(props) => (
+            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
         </UiGrid.Col>
 
