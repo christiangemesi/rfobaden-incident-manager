@@ -92,14 +92,14 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     <div>
       <form>
         <UiGrid gap={0.5}>
-          <UiGrid>
+          <UiGrid align="center">
             <UiGrid.Col style={{ textAlign:'left' }}>
               <UiForm.Field field={form.isKeyReport}>{(props) => (
                 <UiToggle {...props} label="Schlüsselmeldung" />
               )}</UiForm.Field>
             </UiGrid.Col>
 
-            <UiGrid.Col style={{ textAlign:'center' }}>
+            <UiGrid.Col justify="center">
               <UiForm.Field field={form.isLocationRelevant}>{(props) => (
                 <UiToggle {...props} label="Lagerelevant" />
               )}</UiForm.Field>
