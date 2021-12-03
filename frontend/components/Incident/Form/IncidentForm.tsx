@@ -8,7 +8,6 @@ import Incident, { parseIncident } from '@/models/Incident'
 import { ModelData } from '@/models/base/Model'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 

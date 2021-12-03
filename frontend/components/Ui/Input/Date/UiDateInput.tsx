@@ -37,7 +37,7 @@ const UiDateInput: React.VFC<Props> = ({
     }
     handleChange(newDate)
     setInvalid(false)
-  }, [text])
+  }, [handleChange, text])
 
   return(
     <div>
