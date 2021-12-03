@@ -6,8 +6,8 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import Priority from '@/models/Priority'
 
-const UiPrioritySlider: React.VFC<UiInputProps<Priority>> = ({
-  value = Priority.MEDIUM,
+const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
+  value,
   onChange: handleChange,
   errors = [],
 }) => {
@@ -63,10 +63,12 @@ const StyledDiv = styled.div`
   cursor: pointer;
 `
 
-const StyledSlider = styled.div<{value: Priority}>`
+const StyledSlider = styled.div<{ value: Priority | null }>`
   height: 40px;
   width: 40px;
-  background: ${defaultTheme.colors.primary.value};
+  ${({ value }) => value !== null && css`
+    background: ${defaultTheme.colors.primary.value};
+  `}
   position: absolute;
 
   

@@ -21,9 +21,6 @@ const TaskList: React.VFC<Props> = ({ tasks , onEdit: handleEdit }) => {
             Priorität
           </StyledTh>
           <StyledTh>
-            Ort
-          </StyledTh>
-          <StyledTh>
             Zuweisung
           </StyledTh>
         </StyledTr>

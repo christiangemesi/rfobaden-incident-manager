@@ -17,6 +17,7 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
   
