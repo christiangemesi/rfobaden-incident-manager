@@ -18,7 +18,7 @@ export default UiList
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  > ${UiListItem} {
+  ${UiListItem} {
     margin: 0.5rem 0;
 
     :first-child {
