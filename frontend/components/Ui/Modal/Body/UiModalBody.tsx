@@ -182,6 +182,7 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   display: block;
   border: none;
   overflow: hidden;
+  overflow-y: auto;
   max-height: 90vh;
   width: ${({ isFull }) => isFull && '100%'};
   
