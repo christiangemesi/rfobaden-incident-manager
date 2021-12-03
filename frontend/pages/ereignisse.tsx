@@ -11,6 +11,9 @@ import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiButton from '@/components/Ui/Button/UiButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiActionButton from '@/components/Ui/Button/UiActionButton'
 
 interface Props {
   data: {
@@ -24,6 +27,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
   })
 
   const incidents = useIncidents()
+  const closedIncidents = incidents.filter((incident) => incident.isClosed)
+  const openIncidents = incidents.filter((incident) => !incident.isClosed)
 
   const [currentIncident, setCurrentIncident] = useState<Incident | null>(null)
 
@@ -37,30 +42,34 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 
   return (
     <UiContainer>
-      <h1>
+      {/* Title */}
+      <UiTitle level={1}>
         Ereignis verwalten
-      </h1>
-      <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
-              <UiButton onClick={open}>
-                Ereignis erstellen
-              </UiButton>
-            )}</UiModal.Activator>
-            <UiModal.Body>{({ close }) => (
-              <UiContainer>
-                <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
-                <IncidentForm incident={currentIncident} onClose={() => { close(); clearCurrentIncident() }} />
-              </UiContainer>
-            )}</UiModal.Body>
-          </UiModal>
-
-        </UiGrid.Col>
-      </UiGrid>
+      </UiTitle>
+      {/* Create Button */}
+      <UiModal isFull>
+        <UiModal.Activator>{({ open }) => (
+          <UiActionButton onClick={open}>
+            <UiIcon.CreateAction />
+          </UiActionButton>
+        )}</UiModal.Activator>
+        <UiModal.Body>{({ close }) => (
+          <UiContainer>
+            {/* TODO this doesn't seem correct*/}
+            <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
+            <IncidentForm incident={currentIncident} onClose={() => {
+              close()
+              clearCurrentIncident()
+            }} />
+          </UiContainer>
+        )}</UiModal.Body>
+      </UiModal>
+      {/* Incident Cards */}
+      {/* Closed Incidents List */}
+      <UiTitle level={3}>Geschlossene Ereignisse</UiTitle>
       <UiGrid style={{ justifyContent: 'center' }}>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <IncidentList incidents={incidents} onEdit={handleEdit} />
+          <IncidentList incidents={closedIncidents} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

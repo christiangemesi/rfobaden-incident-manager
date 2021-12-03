@@ -1,7 +1,7 @@
-import Completion, { parseCompletion } from '@/models/Completion'
+import CloseReason, { parseCompletion } from '@/models/CloseReason'
 
 export default interface Completable {
-  completion: Completion | null
+  completion: CloseReason | null
   isComplete: boolean
 }
 

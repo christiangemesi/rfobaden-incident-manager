@@ -10,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic {
@@ -20,7 +22,6 @@ public class Incident extends Model.Basic {
 
     private String description;
 
-    @Column(nullable = false)
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
@@ -79,6 +80,7 @@ public class Incident extends Model.Basic {
         this.closeReason = closeReason;
     }
 
+    @JsonProperty("isClosed")
     public boolean isClosed() {
         return isClosed;
     }
