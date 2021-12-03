@@ -38,10 +38,10 @@ const IncidentCard: React.VFC<IncidentCardProps> = ({ incident }) => {
   const reports = useReportsOfIncident(incident.id)
   const keyMessageCount = useMemo(() => (
     reports.filter(({ isKeyReport }) => isKeyReport).length
-  ))
+  ), [reports])
 
   return (
-    <Link href={`/ereignisse/${incident.id}/meldungen`}>
+    <Link href={`/ereignisse/${incident.id}/meldungen`} passHref>
       <A>
         <Card>
           <div>
@@ -96,7 +96,7 @@ const Card = styled.span`
     filter: brightness(75%);
   }
 `
-const IncidentProgress: React.VFC<IncidentCardProps> = ({ incident }) => {
+const IncidentProgress: React.VFC<IncidentCardProps> = ({ incident: _incident }) => {
   return (
     <Container>
       <Mask>

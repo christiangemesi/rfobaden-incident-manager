@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React, { useState } from 'react'
+import React from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -14,7 +14,6 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import IncidentCards from '@/components/Incident/List/IncidentCards'
 import Report, { parseReport } from '@/models/Report'
-import Task from '@/models/Task'
 import ReportStore from '@/stores/ReportStore'
 
 interface Props {
