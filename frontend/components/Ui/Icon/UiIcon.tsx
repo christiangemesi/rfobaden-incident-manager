@@ -70,4 +70,5 @@ export default {
   PriorityLow: makeNamedIcon(mdiArrowDownBoldHexagonOutline),
   Menu: makeNamedIcon(mdiMenu),
   Organization: makeNamedIcon(mdiAccountMultiple),
+  Empty: makeNamedIcon(''),
 }
