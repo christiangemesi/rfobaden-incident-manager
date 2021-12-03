@@ -21,13 +21,13 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
             <UiGrid.Col size={4}>
               <span>{incident.title}</span>
             </UiGrid.Col>
-            <UiGrid.Col size={1}>
+            <UiGrid.Col size={2}>
               <UiDate value={incident.startsAt ?? incident.createdAt} />
             </UiGrid.Col>
-            <UiGrid.Col size={1}>
+            <UiGrid.Col size={2}>
               <UiDate value={closeReason.createdAt} />
             </UiGrid.Col>
-            <UiGrid.Col size={6}>
+            <UiGrid.Col>
               <span>{closeReason.message}</span>
             </UiGrid.Col>
           </UiGrid>

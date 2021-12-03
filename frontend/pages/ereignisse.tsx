@@ -75,13 +75,13 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         <UiGrid.Col size={4}>
           <UiTitle level={6}>Title</UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={1}>
+        <UiGrid.Col size={2}>
           <UiTitle level={6}>Startdatum</UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={1}>
+        <UiGrid.Col size={2}>
           <UiTitle level={6}>Schliessdatum</UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={6}>
+        <UiGrid.Col>
           <UiTitle level={6}>Begründung</UiTitle>
         </UiGrid.Col>
       </UiGrid>

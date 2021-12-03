@@ -1,9 +1,5 @@
 import React from 'react'
 import Incident from '@/models/Incident'
-import UiList from '@/components/Ui/List/UiList'
-import UiListItem from '@/components/Ui/List/Item/UiListItem'
-import UiDate from '@/components/Ui/Date/UiDate'
-import CloseReason from '@/models/CloseReason'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -40,13 +36,13 @@ const IncidentCard: React.VFC<IncidentCardProps> = ({ incident }) => {
   return (
     <Card>
       <div>
-        <UiGrid>
-          <UiGrid.Col size={'auto'}>
+        <UiGrid align="center" style={{ height: '8rem' }}>
+          <UiGrid.Col size={8}>
             <UiBadge value={10}><UiIcon.Organization /></UiBadge>
             <br />
             <UiBadge value={69}><UiIcon.KeyMessage /></UiBadge>
           </UiGrid.Col>
-          <UiGrid.Col>
+          <UiGrid.Col size={4} style={{ textAlign: 'center' }}>
             <IncidentProgress incident={incident} />
           </UiGrid.Col>
         </UiGrid>
@@ -73,6 +69,36 @@ const Card = styled.span`
 `
 const IncidentProgress: React.VFC<IncidentCardProps> = ({ incident }) => {
   return (
-    <span>10%</span>
+    <Container>
+      <Mask>
+        <Fill>
+          <span>10%</span>
+        </Fill>
+      </Mask>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 8rem;
+  width: 8rem;
+  background-color: red;
+`
+
+const Mask = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  height: 8rem;
+  width: 8rem;
+`
+
+const Fill = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  height: 8rem;
+  width: 8rem;
+  background-color: pink;
+`
