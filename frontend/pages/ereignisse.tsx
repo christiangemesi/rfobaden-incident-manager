@@ -14,6 +14,8 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
+import UiDate from '@/components/Ui/Date/UiDate'
+import IncidentCards from '@/components/Incident/List/IncidentCards'
 
 interface Props {
   data: {
@@ -65,13 +67,25 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         )}</UiModal.Body>
       </UiModal>
       {/* Incident Cards */}
+      <IncidentCards incidents={openIncidents} />
       {/* Closed Incidents List */}
       <UiTitle level={3}>Geschlossene Ereignisse</UiTitle>
-      <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <IncidentList incidents={closedIncidents} />
+      {/* Table Header */}
+      <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
+        <UiGrid.Col size={4}>
+          <UiTitle level={6}>Title</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={1}>
+          <UiTitle level={6}>Startdatum</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={1}>
+          <UiTitle level={6}>Schliessdatum</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={6}>
+          <UiTitle level={6}>Begründung</UiTitle>
         </UiGrid.Col>
       </UiGrid>
+      <IncidentList incidents={closedIncidents} />
     </UiContainer>
   )
 }
