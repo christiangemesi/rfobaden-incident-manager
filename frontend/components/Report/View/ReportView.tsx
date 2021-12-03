@@ -1,40 +1,28 @@
-import Incident from '@/models/Incident'
+import Report from '@/models/Report'
 import React, { ReactNode, Ref } from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
-  incident: Incident
+  report: Report
   innerRef?: Ref<HTMLDivElement>
 }
 
-const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
-
+const ReportView: React.VFC<Props> = ({ report, innerRef }) => {
   return (
     <Container ref={innerRef}>
       <h1>
-        {incident.title}
+        {report.title}
       </h1>
       <div style={{ width: '100%' }}>
         <UiGrid style={{ justifyContent: 'center' }}>
           <UiGrid.Col size={{ md: 8, lg: 5 }}>
-            <Info name="Status">
-              {getStatusMessage(incident)}
-            </Info>
-            {incident.isClosed && (
-              <>
-                <Info name="Abschlussgrund">
-                  {incident.closeReason}
-                </Info>
-              </>
-            )}
-
             <div style={{ marginTop: '1rem' }} />
             <Info name="erstellt am">
-              {incident.createdAt.toLocaleString()}
+              {report.createdAt.toLocaleString()}
             </Info>
             <Info name="zuletzt bearbeitet am">
-              {incident.updatedAt.toLocaleString()}
+              {report.updatedAt.toLocaleString()}
             </Info>
             <Info name="gedruckt am" className="print-only">
               {new Date().toLocaleString()}
@@ -43,12 +31,12 @@ const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
         </UiGrid>
       </div>
       <article style={{ marginTop: '1.5rem' }}>
-        {incident.description}
+        {report.description}
       </article>
     </Container>
   )
 }
-export default IncidentView
+export default ReportView
 
 interface InfoProp {
   name: string
@@ -69,19 +57,6 @@ const Info: React.VFC<InfoProp> = ({ name, children, className }) => {
       </UiGrid.Col>
     </UiGrid>
   )
-}
-
-const getStatusMessage = (incident: Incident): string => {
-  if (incident.isClosed) {
-    return 'geschlossen'
-  }
-  if (incident.startsAt !== null && incident.startsAt > new Date()) {
-    return 'ungeöffnet'
-  }
-  if (incident.endsAt !== null && incident.endsAt < new Date()) {
-    return 'vorbei'
-  }
-  return 'geöffnet'
 }
 
 const Container = styled.div`

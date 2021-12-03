@@ -34,8 +34,8 @@ export interface Color {
   contrast: string
 }
 
-export const contrastDark = '#07263A'
-export const contrastLight = '#E8F2F9'
+export const contrastDark = '#051A27'
+export const contrastLight = '#F3F8FC'
 
 export const defaultTheme: Theme = {
   colors: {

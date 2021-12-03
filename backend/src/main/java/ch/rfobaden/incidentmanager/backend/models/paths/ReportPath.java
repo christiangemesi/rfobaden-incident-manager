@@ -2,11 +2,8 @@ package ch.rfobaden.incidentmanager.backend.models.paths;
 
 import java.util.Objects;
 
-// TODO extend ReportPath
-public class TaskPath {
+public class ReportPath extends EmptyPath {
     private Long incidentId;
-
-    private Long reportId;
 
     public Long getIncidentId() {
         return incidentId;
@@ -14,14 +11,6 @@ public class TaskPath {
 
     public void setIncidentId(Long incidentId) {
         this.incidentId = incidentId;
-    }
-
-    public Long getReportId() {
-        return reportId;
-    }
-
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
     }
 
     @Override
@@ -32,21 +21,19 @@ public class TaskPath {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TaskPath taskPath = (TaskPath) o;
-        return Objects.equals(incidentId, taskPath.incidentId)
-                && Objects.equals(reportId, taskPath.reportId);
+        ReportPath that = (ReportPath) o;
+        return Objects.equals(incidentId, that.incidentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(incidentId, reportId);
+        return Objects.hash(incidentId);
     }
 
     @Override
     public String toString() {
-        return "TaskPath{"
+        return "ReportPath{"
             + "incidentId=" + incidentId
-            + ", reportId=" + reportId
             + '}';
     }
 }

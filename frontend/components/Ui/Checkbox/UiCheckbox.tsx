@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 

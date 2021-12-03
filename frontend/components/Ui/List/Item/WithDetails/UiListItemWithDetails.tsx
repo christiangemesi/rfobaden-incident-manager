@@ -1,18 +1,28 @@
-import React, { ReactNode } from 'react'
+import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled from 'styled-components'
 import Priority from '@/models/Priority'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { ColorName } from '@/theme'
 
 interface Props {
   priority: Priority
-  title: string,
-  user: string,
-  children: ReactNode,
+  title: string
+  user: string
+  color?: ColorName
+  children: ReactNode
+  onClick?: EventHandler<MouseEvent>
 }
 
-const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }) => {
+const UiListItemWithDetails: React.VFC<Props> = ({
+  priority,
+  title,
+  user,
+  color,
+  children,
+  onClick: handleClick,
+}: Props) => {
   let priorityIcon = <UiIcon.PriorityMedium />
 
   if (priority === Priority.HIGH) {
@@ -22,7 +32,7 @@ const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }
   }
 
   return (
-    <UiListItem>
+    <UiListItem onClick={handleClick} color={color}>
       <StyledDiv>
         <StyledPriority>
           {priorityIcon}
@@ -40,7 +50,7 @@ const UiItemWithDetails: React.VFC<Props> = ({ priority, title, user, children }
     </UiListItem>
   )
 }
-export default styled(UiItemWithDetails)``
+export default styled(UiListItemWithDetails)``
 
 const StyledBelowEachOther = styled.div`
   width: max-content;

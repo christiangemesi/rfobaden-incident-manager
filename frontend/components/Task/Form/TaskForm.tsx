@@ -1,7 +1,7 @@
 import React from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
-import Task, { parseTask, TaskPriority } from '@/models/Task'
+import Task, { parseTask } from '@/models/Task'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -13,6 +13,11 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
+import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
+import Priority from '@/models/Priority'
+import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 
 interface Props {
   incident: Incident
@@ -26,7 +31,7 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
     title: '',
     description: null,
     location: null,
-    priority: TaskPriority.LOW,
+    priority: Priority.MEDIUM,
     assigneeId: null,
     closedAt: null,
     startsAt: null,
@@ -72,23 +77,53 @@ const TaskForm: React.VFC<Props> = ({ incident,report, task = null, onClose: han
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
+
   return (
     <form>
-      <UiForm.Field field={form.title}>{(props) => (
-        <UiTextInput {...props} label="Titel" />
-      )}</UiForm.Field>
-      <UiForm.Field field={form.description}>{(props) => (
-        <UiTextInput {...props} label="Beschreibung" />
-      )}</UiForm.Field>
-      <UiForm.Field field={form.location}>{(props) => (
-        <UiTextInput {...props} label="Ort" />
-      )}</UiForm.Field>
-      <UiForm.Field field={form.priority}>{(props) => (
-        <UiSelectInput {...props} label="Priorität" options={Object.values(TaskPriority)} />
-      )}</UiForm.Field>
-      <UiForm.Field field={form.assigneeId}>{(props) => (
-        <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
-      )}</UiForm.Field>
+      <UiGrid gap={0.5}>
+        <UiGrid.Col style={{ textAlign:'right' }}>
+          <UiForm.Field field={form.priority}>{(props) => (
+            <UiPrioritySlider {...props} />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col size={12}>
+          <UiForm.Field field={form.title}>{(props) => (
+            <UiTextInput {...props} label="Titel" placeholder="Titel" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col size={12}>
+          <UiForm.Field field={form.description}>{(props) => (
+            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col size={12}>
+          <UiForm.Field field={form.assigneeId}>{(props) => (
+            <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col size={12}>
+          <UiForm.Field field={form.location}>{(props) => (
+            <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col>
+          <UiForm.Field field={form.startsAt}>{(props) => (
+            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+        <UiGrid.Col style={{ marginBottom: '2rem' }}>
+          <UiForm.Field field={form.endsAt}>{(props) => (
+            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+
+      </UiGrid>
       <UiForm.Buttons form={form} />
     </form>
   )

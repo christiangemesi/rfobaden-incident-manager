@@ -12,7 +12,7 @@ const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'date' }) => 
   if (end !== null) {
     return (
       <React.Fragment>
-        {prefix} <UiDate value={start} type={type} /> bis <UiDate value={end} type={type} />
+        von <UiDate value={start} type={type} /> bis <UiDate value={end} type={type} />
       </React.Fragment>
     )
   }

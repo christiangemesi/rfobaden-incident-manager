@@ -91,12 +91,12 @@ public final class User extends Model.Basic {
     public String toString() {
         return "User{"
             + "id=" + getId()
-            + ", email='" + email + '\''
-            +  ", firstName='" + firstName + '\''
-            + ", lastName='" + lastName + '\''
-            + ", role=" + role
             + ", createdAt=" + getCreatedAt()
             + ", updatedAt=" + getUpdatedAt()
+            + ", email='" + email + '\''
+            + ", firstName='" + firstName + '\''
+            + ", lastName='" + lastName + '\''
+            + ", role=" + role
             + '}';
     }
 

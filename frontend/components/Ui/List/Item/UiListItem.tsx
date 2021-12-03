@@ -1,4 +1,4 @@
-import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import React, { CSSProperties, EventHandler, MouseEvent, ReactNode } from 'react'
 import styled from 'styled-components'
 import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
@@ -6,6 +6,8 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 interface Props extends StyledProps {
   color?: ColorName
   children: ReactNode
+  className?: string
+  style?: CSSProperties
   onClick?: EventHandler<MouseEvent>
 }
 

@@ -3,7 +3,7 @@ import UiToggle from '@/components/Ui/Toggle/UiToggle'
 
 
 const UiToggleExample: React.VFC = () => {
-  const [value, setValue] = useState(false)
+  const [value, setValue] = useState(false as boolean | null)
   return (
     <div>
       <UiToggle value={value} onChange={setValue} label = "test" errors={['1','2']} />
