@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
 import Task from '@/models/TaskView'
@@ -11,6 +11,7 @@ import UiItemWithDetails from '@/components/Ui/List/Element/UiItemWithDetails'
 import UiList from '@/components/Ui/List/UiList'
 import Priority from '@/models/Priority'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
+import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 
 const TaskView: React.VFC = () => {
   const task: Task = {
@@ -40,8 +41,10 @@ const TaskView: React.VFC = () => {
 
   }
 
+  const [value, setValue] = useState(false)
   return (
     //TODO not assignable to type string?? line 53
+    //TODO line 57
     <UiContainer>
 
       <UiTitle level={2}>
@@ -61,42 +64,15 @@ const TaskView: React.VFC = () => {
       </UiTitle>
 
       <UiTextWithIcon text={' PLATZHALTER ACHTUNG: starke Strömung und morsches Holz'}>
-        <UiIcon.Attachments />
+        <UiIcon.AlertCircle />
       </UiTextWithIcon>
 
       <UiGrid gap={0.5}>
         <UiGrid.Col size={6}>
 
           <UiList>
-
             <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
-              <UiIcon.KeyMessage />
-              <UiIcon.LocationRelevancy />
-              <div>5/10</div>
-            </UiItemWithDetails>
-
-            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
-              <UiIcon.KeyMessage />
-              <UiIcon.LocationRelevancy />
-              <div>5/10</div>
-            </UiItemWithDetails>
-
-            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={task.assigneeId}>
-              <UiIcon.KeyMessage />
-              <UiIcon.LocationRelevancy />
-              <div>5/10</div>
-            </UiItemWithDetails>
-
-            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={user.firstName + ' ' + user.lastName}>
-              <UiIcon.KeyMessage />
-              <UiIcon.LocationRelevancy />
-              <div>5/10</div>
-            </UiItemWithDetails>
-
-            <UiItemWithDetails priority={Priority.LOW} title={task.title} user={user.firstName + ' ' + user.lastName}>
-              <UiIcon.KeyMessage />
-              <UiIcon.LocationRelevancy />
-              <div>5/10</div>
+              <UiCheckbox label="CHECKBOX" value={value} onChange={setValue} />
             </UiItemWithDetails>
 
           </UiList>
