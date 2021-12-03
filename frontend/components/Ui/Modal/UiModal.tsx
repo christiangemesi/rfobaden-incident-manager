@@ -1,7 +1,12 @@
 import React, { ReactNode, useMemo, useState } from 'react'
-import UiModalContext, { animationMillis, UiModalState, UiModalVisibility } from '@/components/Ui/Modal/Context/UiModalContext'
+import UiModalContext, {
+  animationMillis,
+  UiModalState,
+  UiModalVisibility,
+} from '@/components/Ui/Modal/Context/UiModalContext'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalBody from '@/components/Ui/Modal/Body/UiModalBody'
+import { useUpdateEffect } from 'react-use'
 
 interface Props {
   /**
@@ -25,7 +30,7 @@ const UiModal: React.VFC<Props> = ({
 }) => {
   const [visibility, setVisibility] = useState(UiModalVisibility.CLOSED)
   const [isPersistent, setPersistent] = useState(isPersistentProp)
-  
+
   const context: UiModalState = useMemo(() => {
     const isOpen = visibility === UiModalVisibility.OPEN || visibility === UiModalVisibility.OPENING
     const close = () => {
@@ -58,6 +63,13 @@ const UiModal: React.VFC<Props> = ({
       persist: () => setPersistent(true),
     }
   }, [isFull, isPersistent, visibility])
+
+  useUpdateEffect(() => {
+    if (!context.isOpen) {
+      context.setPersistent(false)
+    }
+  }, [context.isOpen])
+
   return (
     <UiModalContext.Provider value={context}>
       {children}
