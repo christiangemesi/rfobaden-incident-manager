@@ -75,7 +75,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
               </Link>
             ) : (
               <UiGrid gap={1}>
-                <UiGrid.Col size={2}>
+                <UiGrid.Col>
                   <Link href="/profil">
                     <a>
                       <UiButton type="button">
@@ -83,10 +83,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
                       </UiButton>
                     </a>
                   </Link>
-                </UiGrid.Col>
-                <UiGrid.Col gap={1}>
-                  {/*<div style={{ width: '20px' }}>*/}
-                  {/*</div>*/}
                 </UiGrid.Col>
                 <UiGrid.Col size="auto">
                   <UiButton onClick={logout}>

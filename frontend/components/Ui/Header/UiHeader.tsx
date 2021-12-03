@@ -45,7 +45,6 @@ const StyliedImage = styled.div`
   margin-left: 50px;
 `
 const UiHeaderButton = styled.div`
-  width: 500px;
   display: inline-flex;
   justify-content: flex-end;
   align-items: center;
