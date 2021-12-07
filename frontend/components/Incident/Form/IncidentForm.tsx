@@ -44,14 +44,10 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
   }))
 
   useSubmit(form, async (incidentData: ModelData<Incident>) => {
-    const [data]: BackendResponse<Incident> = incident === null ? (
-      await BackendService.create('incidents', incidentData)
-    ) : (
-      await BackendService.update('incidents', incident.id, incidentData)
-    )
-
-    const newIncident = parseIncident(data)
-    IncidentStore.save(newIncident)
+    const [data]: BackendResponse<Incident> = incident === null
+      ? await BackendService.create('incidents', incidentData)
+      : await BackendService.update('incidents', incident.id, incidentData)
+    IncidentStore.save(parseIncident(data))
     clearForm(form)
     if (handleClose) {
       handleClose()

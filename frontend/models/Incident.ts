@@ -11,18 +11,27 @@ export default interface Incident extends Model {
   isClosed: boolean
 }
 
-export const parseIncident = (data: unknown): Incident => {
-  const incident = data as Incident
+export const parseIncident = (data: Incident): Incident => {
   return {
-    ...incident,
-    createdAt: parseDate(incident.createdAt),
-    updatedAt: parseDate(incident.updatedAt),
-    startsAt: parseDateOrNull(incident.startsAt),
-    endsAt: parseDateOrNull(incident.endsAt),
-    closeReason:  incident.closeReason && parseCloseReason(incident.closeReason),
+    ...data,
+    createdAt: parseDate(data.createdAt),
+    updatedAt: parseDate(data.updatedAt),
+    startsAt: parseDateOrNull(data.startsAt),
+    endsAt: parseDateOrNull(data.endsAt),
+    closeReason:  data.closeReason && parseCloseReason(data.closeReason),
   }
 }
 
 const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
 }
+
+
+export interface ClosedIncident extends Incident {
+  closeReason: CloseReason
+  isClosed: true
+}
+
+export const isClosedIncident = (incident: Incident): incident is ClosedIncident => (
+  incident.isClosed && incident.closeReason !== null
+)

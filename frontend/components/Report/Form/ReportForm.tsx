@@ -96,7 +96,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
               )}</UiForm.Field>
             </UiGrid.Col>
 
-            <UiGrid.Col justify="center">
+            <UiGrid.Col>
               <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                 <UiToggle {...props} label="Lagerelevant" />
               )}</UiForm.Field>

@@ -1,18 +1,18 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import React from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import Incident, { parseIncident } from '@/models/Incident'
+import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import IncidentList from '@/components/Incident/List/IncidentList'
+import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import IncidentCards from '@/components/Incident/List/IncidentCards'
+import IncidentList from '@/components/Incident/List/IncidentList'
 import Report, { parseReport } from '@/models/Report'
 import ReportStore from '@/stores/ReportStore'
 
@@ -32,8 +32,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
   const incidents = useIncidents()
 
   // TODO Replace filter with `useIncidents`.
-  const closedIncidents = incidents.filter((incident) => incident.isClosed)
-  const openIncidents = incidents.filter((incident) => !incident.isClosed)
+  const closedIncidents = incidents.filter(isClosedIncident)
+  const openIncidents = incidents.filter((incident) => !isClosedIncident(incident))
 
   return (
     <UiContainer>
@@ -61,7 +61,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
           </UiGrid.Col>
         </UiGrid>
 
-        <IncidentCards incidents={openIncidents} />
+        <IncidentList incidents={openIncidents} />
       </section>
 
       {/* TODO Hide section if no closed incidents exist. */}
@@ -85,7 +85,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
             <UiTitle level={6}>Begründung</UiTitle>
           </UiGrid.Col>
         </UiGrid>
-        <IncidentList incidents={closedIncidents} />
+        <IncidentArchiveList incidents={closedIncidents} />
       </section>
     </UiContainer>
   )
