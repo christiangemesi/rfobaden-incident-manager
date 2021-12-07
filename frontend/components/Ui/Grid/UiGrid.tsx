@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components'
-import { CSSProperties, ReactNode } from 'react'
-import { Breakpoint, Themed } from '@/theme'
 import StyleHelper, { StyledProps } from '@/utils/helpers/StyleHelper'
+import { CSSProperties, ReactNode } from 'react'
+import styled, { css } from 'styled-components'
+import { Breakpoint, Themed } from '@/theme'
 
 interface Props extends StyledProps {
   gap?: number
@@ -16,38 +16,35 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
+
+  --gap-h: 0;
+  --gap-v: 0;
+  margin: calc(var(--gap-v) * -1) calc(var(--gap-h) * -1);
+  padding: 0;
   
-  ${({ gap = 0, gapH = gap, gapV = gap }) => {
-    gapH = Math.max(0, gapH) / 2
-    gapV = Math.max(0, gapV) / 2
-    return css`
-      margin: ${-gapV}rem ${-gapH}rem;
-      & > ${Col} {
-        --gap-v: ${gapV}rem;
-        --gap-h: ${gapH}rem;
-        margin: var(--gap-v) var(--gap-h);
-      }
-    `
-  }}
+  ${({ gap = 1, gapH = gap, gapV = gap }) => css`
+    --gap-h: ${gapH * 0.5}rem;
+    --gap-v: ${gapV * 0.5}rem;
+  `}
 `
 
-interface ColProps extends StyledProps {
+interface ColProps {
   size?: ColSizeProp
   order?: Order
+  className?: string
+  style?: CSSProperties
   children?: ReactNode
 }
 
 const Col = styled(StyleHelper.tag<ColProps>('div'))`
-  --gap-v: 0rem;
-  --gap-h: 0rem;
-  
   position: relative;
   display: block;
-  
+  width: 100%;
+  padding: var(--gap-v) var(--gap-h);
+
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
   ${({ order }) => mapOrder(order)}
@@ -112,7 +109,7 @@ const colSizeStyles = {
   default: css`
     flex-basis: 0;
     flex-grow: 1;
-    max-width: calc(100% - var(--gap-h) * 2);
+    max-width: 100%;
   `,
   auto: css`
     flex: 0 0 auto;
@@ -122,7 +119,7 @@ const colSizeStyles = {
   fixed: Array.from({ length: 12 }, (_, i) => {
     const percentage = 100 / 12 * (i + 1)
     return css`
-      flex: 0 0 calc(${percentage}% - var(--gap-h) * 2);
+      flex: 0 0 ${percentage}%;
       max-width: ${percentage}%;
     `
   }),
