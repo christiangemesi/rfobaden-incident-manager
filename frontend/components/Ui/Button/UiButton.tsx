@@ -1,13 +1,15 @@
 import styled, { css } from 'styled-components'
-import { EventHandler, ReactNode, MouseEvent, CSSProperties } from 'react'
-import StyleHelper from '@/utils/helpers/StyleHelper'
+import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { ColorName, contrastDark } from '@/theme'
+import { PropsOf } from '@emotion/react'
 
-interface Props {
+interface Props extends StyledProps {
+
   /**
-   *   disables button
+   * Tooltip while hovering.
    */
-  isDisabled?: boolean
+  title?: string
 
   /**
    * take up the full width possible
@@ -15,30 +17,45 @@ interface Props {
   isFull?: boolean
 
   /**
-   * tooltip while hovering
+   * Disables the button.
    */
-  title?: string
+  isDisabled?: boolean
 
-  children?: ReactNode
-  onClick?: EventHandler<MouseEvent>
-  className?: string
-  style?: CSSProperties
-
+  /**
+   * The color of the button.
+   */
   color?: ColorName
-  type?: 'button' | 'submit',
+
+  /**
+   * The button type.
+   */
+  type?: 'button' | 'submit'
+
+  /**
+   * Click event handler.
+   */
+  onClick?: EventHandler<MouseEvent>
+
+  /**
+   * The button content.
+   */
+  children?: ReactNode
 }
 
-const UiButton = styled(StyleHelper.tag('button', ({
-  isDisabled = false,
+const UiButton: React.VFC<Props> = ({
+  color = 'primary',
   type = 'button',
-  title,
-  onClick,
-}: Props) => ({
-  disabled: isDisabled,
-  title: title,
-  type,
-  onClick,
-})))`
+  ...otherProps
+}) => {
+  const sharedProps: PropsOf<typeof StyledButton> = {
+    ...otherProps,
+    color,
+  }
+  return <StyledButton {...sharedProps} type={type} />
+}
+export default styled(UiButton)``
+
+const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color: ColorName }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -48,8 +65,8 @@ const UiButton = styled(StyleHelper.tag('button', ({
   border: none;
   min-height: 2rem;
   font-size: 1rem;
-  background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
-  color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
+  background: ${({ theme, color }) => theme.colors[color].value};
+  color: ${({ theme, color }) => theme.colors[color].contrast};
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   transition: 250ms ease;
@@ -80,5 +97,3 @@ const UiButton = styled(StyleHelper.tag('button', ({
     color: ${contrastDark};
   }
 `
-
-export default UiButton

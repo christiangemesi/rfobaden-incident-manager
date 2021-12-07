@@ -1,19 +1,27 @@
 import React from 'react'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled from 'styled-components'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiLink from '@/components/Ui/Link/UiLink'
 
 const HomePage: React.VFC = () => {
   return (
-    <div>
-      <UiIcon.PriorityHigh />
-      <StyledName>
-        Daniel
-      </StyledName>
-    </div>
+    <UiContainer>
+      <UiTitle level={1} isCentered>
+        Home Sweet Home
+      </UiTitle>
+
+      <UiGrid justify="center">
+        <UiGrid.Col size={{ xs: 12, md: 6, xl: 4 }}>
+          <UiLink href="/ereignisse">
+            <UiButton isFull>
+              Ereignisse
+            </UiButton>
+          </UiLink>
+        </UiGrid.Col>
+      </UiGrid>
+    </UiContainer>
   )
 }
 export default HomePage
-
-const StyledName = styled.div`
-  color: ${({ theme }) => theme.colors.error.value};
-`

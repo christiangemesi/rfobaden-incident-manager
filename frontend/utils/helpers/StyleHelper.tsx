@@ -2,12 +2,12 @@ import React, { CSSProperties, ReactNode } from 'react'
 import StringHelper from '@/utils/helpers/StringHelper'
 
 class StyleHelper {
-  tag<P>(name: keyof JSX.IntrinsicElements): React.VFC<P & StyledProps>
-  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps>
-  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps> {
+  tag<P>(name: keyof JSX.IntrinsicElements): React.VFC<P & StyledProps & { children?: ReactNode }>
+  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps & { children?: ReactNode }>
+  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps & { children?: ReactNode }> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Tag = name as any
-    const StyledTag: React.VFC<P & StyledProps> = (props) => {
+    const StyledTag: React.VFC<P & StyledProps & { children?: ReactNode }> = (props) => {
       const {
         className = props.className,
         style = props.style,
@@ -29,5 +29,4 @@ export default new StyleHelper()
 export interface StyledProps {
   className?: string
   style?: CSSProperties
-  children?: ReactNode
 }
