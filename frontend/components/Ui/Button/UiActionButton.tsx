@@ -11,8 +11,8 @@ interface Props {
 }
 
 const UiActionButton: React.VFC<Props> = ({
-  title= '',
-  color= 'primary',
+  title = '',
+  color = 'primary',
   isDisabled = false,
   children,
   onClick: handleClick,
@@ -23,18 +23,23 @@ const UiActionButton: React.VFC<Props> = ({
     </StyledActionButton>
   )
 }
-
 export default UiActionButton
 
-const StyledActionButton = styled.button<{color:string}>`
-  background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
-  color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
+const StyledActionButton = styled.button<{ color: string }>`
+  background: ${({ theme, color }) => theme.colors[color].value};
+  color: ${({ theme, color }) => theme.colors[color].contrast};
+  
   width: 56px;
   height: 56px;
-  align-items: center;
-  border-radius: 50%;
   border: none;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 50%;
+  box-shadow:
+      0 3px 6px rgba(0, 0, 0, 0.16),
+      0 3px 6px rgba(0, 0, 0, 0.23);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
   transition: 250ms ease;
   transition-property: filter, box-shadow;
