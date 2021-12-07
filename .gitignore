@@ -144,10 +144,15 @@ Temporary Items
 .localhistory*
 .lh*
 
-# IntelliJ JPA-Buddy plugin configuration
+# IDEA JPA-Buddy plugin configuration
 .idea/jpa-buddy.xml
 
-# Intellij compiler configuration
+# IDEA compiler configuration
 #   Ignored because it contains references to the local environment
 #   and has to be different for every user.
 .idea/compiler.xml
+
+
+# IDEA sonarlint plugin
+.idea/sonarlint-state.xml
+.idea/sonarlint/issuestore/
