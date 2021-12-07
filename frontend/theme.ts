@@ -75,19 +75,19 @@ export const defaultTheme: Theme = {
   breakpoints: {
     xs: {
       min: 0,
-      max: 640,
+      max: 639.99,
     },
     sm: {
       min: 640,
-      max: 768,
+      max: 767.99,
     },
     md: {
       min: 768,
-      max: 1024,
+      max: 1023.99,
     },
     lg: {
       min: 1024,
-      max: 1536,
+      max: 1535.99,
     },
     xl: {
       min: 1536,
