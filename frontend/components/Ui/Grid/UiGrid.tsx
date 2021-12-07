@@ -38,8 +38,6 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
 interface ColProps extends StyledProps {
   size?: ColSizeProp
   order?: Order
-  justify?: CSSProperties['justifyContent']
-  align?: CSSProperties['alignItems']
   children?: ReactNode
 }
 
@@ -48,10 +46,7 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   --gap-h: 0rem;
   
   position: relative;
-  display: flex;
-  
-  justify-content: ${({ justify }) => justify};
-  align-items: ${({ align }) => align};
+  display: block;
   
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
@@ -115,13 +110,11 @@ const mapOrder = (order: Order | null | undefined): any => {
 
 const colSizeStyles = {
   default: css`
-    display: block;
     flex-basis: 0;
     flex-grow: 1;
     max-width: calc(100% - var(--gap-h) * 2);
   `,
   auto: css`
-    display: block;
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
@@ -129,7 +122,6 @@ const colSizeStyles = {
   fixed: Array.from({ length: 12 }, (_, i) => {
     const percentage = 100 / 12 * (i + 1)
     return css`
-      display: block;
       flex: 0 0 calc(${percentage}% - var(--gap-h) * 2);
       max-width: ${percentage}%;
     `
