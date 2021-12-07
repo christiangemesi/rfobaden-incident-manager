@@ -50,7 +50,7 @@ const StyledTextArea = styled.textarea`
   padding: 0.5rem;
   margin-top: 0.25rem;
   font-size: 0.9rem;
-  font-family: ${defaultTheme.fonts.body};
+  font-family: ${({ theme }) => theme.fonts.body};
   border-radius: 0.5rem;
   outline: none;
   width: 100%;

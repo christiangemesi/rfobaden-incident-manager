@@ -16,6 +16,7 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
@@ -34,6 +35,7 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
 interface ColProps {
   size?: ColSizeProp
   order?: Order
+  textAlign?: CSSProperties['textAlign']
   className?: string
   style?: CSSProperties
   children?: ReactNode
@@ -44,6 +46,8 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   display: block;
   width: 100%;
   padding: var(--gap-v) var(--gap-h);
+  text-align: ${({ textAlign }) => textAlign};
+
 
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}

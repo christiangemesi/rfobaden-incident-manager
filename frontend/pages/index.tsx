@@ -21,6 +21,16 @@ const HomePage: React.VFC = () => {
           </UiLink>
         </UiGrid.Col>
       </UiGrid>
+
+      <UiGrid justify="center">
+        <UiGrid.Col size={{ xs: 12, md: 6, xl: 4 }}>
+          <UiLink href="/benutzer">
+            <UiButton isFull>
+              Benutzer
+            </UiButton>
+          </UiLink>
+        </UiGrid.Col>
+      </UiGrid>
     </UiContainer>
   )
 }

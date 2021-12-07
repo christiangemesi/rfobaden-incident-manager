@@ -15,5 +15,5 @@ export {
 export const useTasksOfReport = (reportId: Id<Report>): Task[] => (
   useTasks((tasks) => (
     tasks.filter((task) => task.reportId === reportId)
-  ))
+  ), [reportId])
 )

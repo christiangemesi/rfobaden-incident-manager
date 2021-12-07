@@ -1,67 +1,150 @@
 import Report from '@/models/Report'
-import React, { ReactNode, Ref } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
+import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import TaskList from '@/components/Task/List/TaskList'
+import { useTasksOfReport } from '@/stores/TaskStore'
+import BackendService from '@/services/BackendService'
+import ReportStore from '@/stores/ReportStore'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import { useUser } from '@/stores/UserStore'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import { useIncident } from '@/stores/IncidentStore'
+import TaskForm from '@/components/Task/Form/TaskForm'
+import ReportForm from '@/components/Report/Form/ReportForm'
 
 interface Props {
   report: Report
-  innerRef?: Ref<HTMLDivElement>
 }
 
-const ReportView: React.VFC<Props> = ({ report, innerRef }) => {
+const ReportView: React.VFC<Props> = ({ report }) => {
+  const assignee = useUser(report.assigneeId)
+  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+
+  const tasks = useTasksOfReport(report.id)
+
+  const handleDelete = async () => {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
+      ReportStore.remove(report.id)
+    }
+  }
+
+  const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
+
+  const incident = useIncident(report.incidentId)
+  if (incident === null) {
+    throw new Error('incident of report not found')
+  }
+
+  // TODO Split grit into multiple rows.
   return (
-    <Container ref={innerRef}>
-      <h1>
-        {report.title}
-      </h1>
-      <div style={{ width: '100%' }}>
-        <UiGrid style={{ justifyContent: 'center' }}>
-          <UiGrid.Col size={{ md: 8, lg: 5 }}>
-            <div style={{ marginTop: '1rem' }} />
-            <Info name="erstellt am">
-              {report.createdAt.toLocaleString()}
-            </Info>
-            <Info name="zuletzt bearbeitet am">
-              {report.updatedAt.toLocaleString()}
-            </Info>
-            <Info name="gedruckt am" className="print-only">
-              {new Date().toLocaleString()}
-            </Info>
-          </UiGrid.Col>
-        </UiGrid>
-      </div>
-      <article style={{ marginTop: '1.5rem' }}>
-        {report.description}
-      </article>
-    </Container>
-  )
-}
-export default ReportView
-
-interface InfoProp {
-  name: string
-  children: ReactNode
-  className?: string
-}
-
-const Info: React.VFC<InfoProp> = ({ name, children, className }) => {
-  return (
-    <UiGrid gap={1} className={className}>
-      <UiGrid.Col size={6} style={{ textAlign: 'right' }}>
-        <span style={{ fontWeight: 600 }}>
-          {name}
-        </span>
+    <UiGrid gapH={2} gapV={1}>
+      <UiGrid.Col size={12}>
+        <UiTitle level={2}>
+          {report.title}
+        </UiTitle>
       </UiGrid.Col>
-      <UiGrid.Col>
-        {children}
+      <UiGrid.Col size={12}>
+        <StyledDiv>
+          <StyledP>
+            <UiDateLabel start={startDate} end={report.endsAt} />
+          </StyledP>
+          <UiIconButtonGroup>
+            <UiIconButton onClick={() => alert('not yet implemented')}>
+              <UiIcon.PrintAction />
+            </UiIconButton>
+
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiIconButton onClick={open}>
+                  <UiIcon.EditAction />
+                </UiIconButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <UiGrid gapV={1.5}>
+                  <UiGrid.Col size={12}>
+                    <UiTitle level={1} isCentered>
+                      Meldung bearbeiten
+                    </UiTitle>
+                  </UiGrid.Col>
+                  <UiGrid.Col size={12}>
+                    <ReportForm incident={incident} report={report} onClose={close} />
+                  </UiGrid.Col>
+                </UiGrid>
+              )}</UiModal.Body>
+            </UiModal>
+
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiIconButton onClick={open}>
+                  <UiIcon.CreateAction />
+                </UiIconButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <div>
+                  <UiTitle level={1} isCentered>
+                    Auftrag erfassen
+                  </UiTitle>
+                  <TaskForm incident={incident} report={report} onClose={close} />
+                </div>
+              )}</UiModal.Body>
+            </UiModal>
+
+            <UiIconButton onClick={handleDelete}>
+              <UiIcon.DeleteAction />
+            </UiIconButton>
+
+          </UiIconButtonGroup>
+        </StyledDiv>
+      </UiGrid.Col>
+      <UiGrid.Col size={12}>
+        {report.description}
+      </UiGrid.Col>
+      {report.location && (
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={report.location ?? ''}>
+            <UiIcon.Location />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      )}
+      {assignee && (
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={assigneeName}>
+            <UiIcon.UserInCircle />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      )}
+      {report.notes !== null && (
+        <UiGrid.Col size={12}>
+          <UiTextWithIcon text={report.notes}>
+            <UiIcon.AlertCircle />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      )}
+      <UiGrid.Col size={12}>
+        <TaskList tasks={tasks} />
       </UiGrid.Col>
     </UiGrid>
   )
 }
+export default ReportView
 
-const Container = styled.div`
+const StyledP = styled.p`
+  margin-bottom: 2rem;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+`
+
+const StyledDiv = styled.div`
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+
 `

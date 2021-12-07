@@ -20,7 +20,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
   ), [reports])
 
   return (
-    <UiLink href={`/ereignisse/${incident.id}/meldungen`}>
+    <UiLink href={`/ereignisse/${incident.id}`}>
       <Container>
         <div>
           <UiGrid align="center" style={{ height: '8rem' }}>

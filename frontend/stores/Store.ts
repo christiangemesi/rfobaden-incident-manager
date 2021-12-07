@@ -23,11 +23,11 @@ export const useStore = <T>(store: Store<T>): T => {
 
 interface UseRecords<T> {
   (ids?: Id<T>[]): T[]
-  <O>(transform: (records: T[]) => O): O
+  <O>(transform: (records: T[]) => O, deps?: unknown[]): O
 }
 
 const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (
-  <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O)) => {
+  <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O), depsOrUndefined?: unknown[]) => {
     const useAction = useMemo(() => {
       if (idsOrTransform === undefined) {
         return (): T[] => {
@@ -47,7 +47,7 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
       const transform: ((records: T[]) => O) = idsOrTransform
       return (): O => {
         const { records } = useStore(store)
-        return useMemo(() => transform(Object.values(records)), [records])
+        return useMemo(() => transform(Object.values(records)), [records, ...(depsOrUndefined ?? [])])
       }
     }, [idsOrTransform])
     return useAction()

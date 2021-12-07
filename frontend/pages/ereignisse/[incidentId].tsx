@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
@@ -18,7 +18,6 @@ import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import ReportItem from '@/components/Report/Item/ReportItem'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import * as ReactDOM from 'react-dom'
@@ -28,6 +27,7 @@ import TaskStore from '@/stores/TaskStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
+import ReportView from '@/components/Report/View/ReportView'
 
 interface Props {
   data: {
@@ -38,7 +38,7 @@ interface Props {
   }
 }
 
-const MeldungenPage: React.VFC<Props> = ({ data }) => {
+const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
@@ -47,9 +47,11 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
+
+  // TODO Only store reportId, load select value from store.
   const [selectedReport, setSelectedReport] = useState<Report | null>(null)
 
-  // TODO check if working
+  // TODO rewrite print page
   const [printer, setPrinter] = useState<ReactNode>()
   const handlePrint = () => {
     const Printer: React.VFC = () => {
@@ -69,108 +71,117 @@ const MeldungenPage: React.VFC<Props> = ({ data }) => {
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${incident.title}" schliessen wollen?`)) {
-      await BackendService.delete('incidents/', incident.id)
+      await BackendService.delete('incidents', incident.id)
       ReportStore.remove(incident.id)
     }
   }
 
-  // TODO get organisations from assignees for incident
+  // TODO Use actual organisations.
   const organisationList = ['Berufsfeuerwehr Baden', 'freiwillige Feuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
   const organisations = organisationList.reduce((a, b) => a + ', ' + b)
 
-  const startDate = incident.startsAt !== null ? incident.startsAt : incident.createdAt
+  const startDate = useMemo(() => (
+    incident.startsAt !== null ? incident.startsAt : incident.createdAt
+  ), [incident])
 
   return (
-    <SessionOnly doRedirect>
-      <UiContainer>
-        <UiGrid gapH={2} gapV={1}>
-          <UiGrid.Col size={12}>
-            <UiTitle level={1}>
-              {incident.title}
-            </UiTitle>
-          </UiGrid.Col>
-          <UiGrid.Col size={12}>
-            <StyledDiv>
-              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
-              <UiIconButtonGroup>
-                <UiIconButton onClick={handlePrint}>
-                  <UiIcon.PrintAction />
-                  {printer}
-                </UiIconButton>
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
-                    <UiIconButton onClick={open}>
-                      <UiIcon.EditAction />
-                    </UiIconButton>
-                  )}</UiModal.Activator>
-                  <UiModal.Body>{({ close }) => (
-                    <UiGrid gapV={1.5}>
-                      <UiGrid.Col size={12}>
-                        <UiTitle level={1} isCentered>
-                          Ereignis bearbeiten
-                        </UiTitle>
-                      </UiGrid.Col>
-                      <UiGrid.Col size={12}>
-                        <IncidentForm incident={incident} onClose={close} />
-                      </UiGrid.Col>
-                    </UiGrid>
-                  )}</UiModal.Body>
-                </UiModal>
-                <UiIconButton onClick={handleDelete}>
-                  <UiIcon.DeleteAction />
-                </UiIconButton>
-              </UiIconButtonGroup>
-            </StyledDiv>
-          </UiGrid.Col>
-          <UiGrid.Col size={6}>
-            {incident.description}
-          </UiGrid.Col>
-          <UiGrid.Col size={6}>
-            <UiTextWithIcon text={organisations}>
-              <UiIcon.UserInCircle />
-            </UiTextWithIcon>
-          </UiGrid.Col>
-          <UiGrid.Col size={6}>
-            <StyledDiv>
+    <UiContainer>
+
+      {/* TODO Restructure the heading section. */}
+      {/*
+        * Note that grids should mainly be used for positioning elements, NOT FOR SPACING!
+        * If you want to space elements, either style them this way or use a component intended for this purpose.
+        */}
+
+      <UiGrid gapH={2} gapV={1}>
+        <UiGrid.Col size={12}>
+          <UiTitle level={1}>
+            {incident.title}
+          </UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={12}>
+          <StyledDiv>
+            <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
+            <UiIconButtonGroup>
+              <UiIconButton onClick={handlePrint}>
+                <UiIcon.PrintAction />
+                {printer}
+              </UiIconButton>
               <UiModal isFull>
                 <UiModal.Activator>{({ open }) => (
-                  <UiActionButton onClick={open}>
-                    <UiIcon.CreateAction />
-                  </UiActionButton>
+                  <UiIconButton onClick={open}>
+                    <UiIcon.EditAction />
+                  </UiIconButton>
                 )}</UiModal.Activator>
                 <UiModal.Body>{({ close }) => (
                   <UiGrid gapV={1.5}>
                     <UiGrid.Col size={12}>
                       <UiTitle level={1} isCentered>
-                        Meldung erfassen
+                        Ereignis bearbeiten
                       </UiTitle>
                     </UiGrid.Col>
                     <UiGrid.Col size={12}>
-                      <ReportForm incident={incident} onClose={close} />
+                      <IncidentForm incident={incident} onClose={close} />
                     </UiGrid.Col>
                   </UiGrid>
                 )}</UiModal.Body>
               </UiModal>
-            </StyledDiv>
-          </UiGrid.Col>
-          <UiGrid.Col size={6} />
-          <UiGrid.Col size={6}>
-            <ReportList reports={reports} onClick={setSelectedReport} activeReport={selectedReport} />
-          </UiGrid.Col>
-          <UiGrid.Col size={6}>
-            {selectedReport !== null && (
-              <ReportItem report={selectedReport} />
-            )}
-          </UiGrid.Col>
-        </UiGrid>
-      </UiContainer>
-    </SessionOnly>
+              <UiIconButton onClick={handleDelete}>
+                <UiIcon.DeleteAction />
+              </UiIconButton>
+            </UiIconButtonGroup>
+          </StyledDiv>
+        </UiGrid.Col>
+        <UiGrid.Col size={6}>
+          {incident.description}
+        </UiGrid.Col>
+        <UiGrid.Col size={6}>
+          <UiTextWithIcon text={organisations}>
+            <UiIcon.UserInCircle />
+          </UiTextWithIcon>
+        </UiGrid.Col>
+      </UiGrid>
+
+      <UiGrid gapH={4}>
+
+        <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
+          <Actions>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiActionButton onClick={open}>
+                  <UiIcon.CreateAction />
+                </UiActionButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <UiGrid gapV={1.5}>
+                  <UiGrid.Col size={12}>
+                    <UiTitle level={1} isCentered>
+                      Meldung erfassen
+                    </UiTitle>
+                  </UiGrid.Col>
+                  <UiGrid.Col size={12}>
+                    <ReportForm incident={incident} onClose={close} />
+                  </UiGrid.Col>
+                </UiGrid>
+              )}</UiModal.Body>
+            </UiModal>
+          </Actions>
+          <ReportList reports={reports} onClick={setSelectedReport} activeReport={selectedReport} />
+        </UiGrid.Col>
+
+        <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
+          {selectedReport !== null && (
+            <ReportView report={selectedReport} />
+          )}
+        </UiGrid.Col>
+      </UiGrid>
+    </UiContainer>
   )
 }
-export default MeldungenPage
+export default IncidentPage
 
 type Query = {
-  id: string
+  incidentId: string
 }
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
@@ -178,7 +189,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw new Error('params is undefined')
   }
 
-  const incidentId = parseInt(params.id)
+  const incidentId = parseInt(params.incidentId)
   if (isNaN(incidentId)) {
     return {
       notFound: true,
@@ -230,4 +241,10 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 const StyledDiv = styled.div`
   display: flex;
   justify-content: flex-end;
+`
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
 `

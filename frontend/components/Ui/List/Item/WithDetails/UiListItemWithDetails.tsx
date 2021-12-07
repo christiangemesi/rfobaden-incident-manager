@@ -5,8 +5,9 @@ import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ColorName } from '@/theme'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends StyledProps {
   priority: Priority
   title: string
   user: string
@@ -20,6 +21,8 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   title,
   user,
   color,
+  className,
+  style,
   children,
   onClick: handleClick,
 }: Props) => {
@@ -32,17 +35,17 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   }
 
   return (
-    <UiListItem onClick={handleClick} color={color}>
+    <UiListItem onClick={handleClick} color={color} style={style} className={className}>
       <StyledDiv>
         <StyledPriority>
           {priorityIcon}
         </StyledPriority>
-        <StyledBelowEachOther>
+        <div>
           <UiTitle level={5}>
             {title}
           </UiTitle>
           {user}
-        </StyledBelowEachOther>
+        </div>
       </StyledDiv>
       <StyledChildren>
         {children}
@@ -52,9 +55,6 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 }
 export default styled(UiListItemWithDetails)``
 
-const StyledBelowEachOther = styled.div`
-  width: max-content;
-`
 const StyledPriority = styled.div`
   display: inline-flex;
   margin-right: 1rem;

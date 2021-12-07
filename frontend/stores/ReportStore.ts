@@ -14,5 +14,5 @@ export {
 export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
   useReports((reports) => (
     reports.filter((report) => report.incidentId === incidentId)
-  ))
+  ), [incidentId])
 )

@@ -16,7 +16,7 @@ const UiToggle: React.VFC<Props> = ({
   return (
     <div>
       <InputWrapper>
-        <Input type="checkbox" onClick={() => handleChange(!value)}  />
+        <Input type="checkbox" checked={value ?? false} onClick={() => handleChange(!value)}  />
         <Slider />
         {label}
       </InputWrapper>

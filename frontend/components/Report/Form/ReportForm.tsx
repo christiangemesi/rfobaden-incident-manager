@@ -65,8 +65,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     })
   })
 
-  console.log(Object.keys(form))
-
   useSubmit(form, async (formData: ModelData<Report>) => {
     const [data, error]: BackendResponse<Report> = report === null
       ? await BackendService.create(`incidents/${incident.id}/reports`, formData)
@@ -85,24 +83,26 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
+  console.log(form)
+
   return (
     <div>
       <form>
         <UiGrid gap={0.5}>
           <UiGrid align="center">
-            <UiGrid.Col style={{ textAlign:'left' }}>
+            <UiGrid.Col textAlign="left">
               <UiForm.Field field={form.isKeyReport}>{(props) => (
                 <UiToggle {...props} label="Schlüsselmeldung" />
               )}</UiForm.Field>
             </UiGrid.Col>
 
-            <UiGrid.Col>
+            <UiGrid.Col textAlign="center">
               <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                 <UiToggle {...props} label="Lagerelevant" />
               )}</UiForm.Field>
             </UiGrid.Col>
 
-            <UiGrid.Col style={{ textAlign:'right' }}>
+            <UiGrid.Col textAlign="right">
               <UiForm.Field field={form.priority}>{(props) => (
                 <UiPrioritySlider {...props} />
               )}</UiForm.Field>
