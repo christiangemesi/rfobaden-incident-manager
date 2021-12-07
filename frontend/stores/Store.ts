@@ -47,9 +47,12 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
       const transform: ((records: T[]) => O) = idsOrTransform
       return (): O => {
         const { records } = useStore(store)
-        return useMemo(() => transform(Object.values(records)), [records, ...(depsOrUndefined ?? [])])
+        return useMemo(() => (
+          transform(Object.values(records))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        ), [records, ...(depsOrUndefined ?? [])])
       }
-    }, [idsOrTransform])
+    }, [depsOrUndefined, idsOrTransform])
     return useAction()
   }
 )

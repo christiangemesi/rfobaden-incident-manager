@@ -17,67 +17,55 @@ import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import Task from '@/models/Task'
-import Priority from '@/models/Priority'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props{
   data: {
-    //incident: Incident
+    incident: Incident
     report: Report
     task: Task
     users: User[]
   }
 }
 
-const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
-
+const TaskPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     UserStore.saveAll(data.users.map(parseUser))
   })
 
-  //const incidents = useIncident(data.incident)
+  const _incident = useIncident(data.incident)
   const report = useReport(data.report)
   const task = useTask(data.task)
 
   const assignee = useUser(task.assigneeId)
+
+  // TODO Use custom hook for username.
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
-  //TODO
+  // TODO replace with subtasks.
   const subtasks = useTasksOfReport(report.id)
+
+  // TODO Store only id and load subtask from store.
   const [selectedSubtask, setSelectedSubtask] = useState<Task | null>(null)
 
-  const subtask: Task = {
-    id: 1,
-    title: 'Holz wegräumen 1',
-    description: 'Baumstämme und Schutt bedrohen die alte Holzbücke am Limmatweg',
-    priority: Priority.MEDIUM,
-    location: 'Baden',
-    assigneeId: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    closedAt: new Date(),
-    startsAt: new Date(),
-    endsAt: new Date(),
-    reportId: 1,
-    incidentId: 1,
-  }
-
+  // TODO Rewrite grid.
   return (
     <UiContainer>
       <UiGrid gapH={2} gapV={1}>
         <UiGrid.Col size={12}>
           <UiTitle level={2}>
-            {subtask.title} {<UiIcon.PriorityHigh />}
+            {report.title} {<UiIcon.PriorityHigh />}
           </UiTitle>
         </UiGrid.Col>
 
         <UiGrid.Col size={12}>
-          {subtask.description}
+          {report.description}
         </UiGrid.Col>
 
         <UiGrid.Col size={12}>
 
-          {subtask.location !== null && (
-            <UiTextWithIcon text={subtask.location ?? ''}>
+          {report.location !== null && (
+            <UiTextWithIcon text={report.location}>
               <UiIcon.Location />
             </UiTextWithIcon>
           )}
@@ -88,11 +76,13 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
           </UiTextWithIcon>
         </UiGrid.Col>
 
-        <UiGrid.Col size={12}>
-          <UiTextWithIcon text={' PLATZHALTER ACHTUNG: starke Strömung und morsches Holz'}>
-            <UiIcon.AlertCircle />
-          </UiTextWithIcon>
-        </UiGrid.Col>
+        {report.notes !== null && (
+          <UiGrid.Col size={12}>
+            <UiTextWithIcon text={report.notes}>
+              <UiIcon.AlertCircle />
+            </UiTextWithIcon>
+          </UiGrid.Col>
+        )}
 
         <UiGrid.Col size={6}>
           <StyledDiv>
@@ -105,17 +95,17 @@ const UnterauftraegePage: React.VFC<Props> = ({ data }) => {
         <UiGrid.Col size={6} />
 
         <UiGrid.Col size={6}>
-          <SubtaskList subtasks={subtasks} onClick={setSelectedSubtask} activeSubtask={selectedSubtask} />
+          <SubtaskList subtasks={subtasks} activeSubtask={selectedSubtask} onClick={setSelectedSubtask} />
         </UiGrid.Col>
       </UiGrid>
 
     </UiContainer>
   )
 }
-export default UnterauftraegePage
+export default TaskPage
 
 type Query = {
-  id: string
+  incidentId: string
   reportId: string
   taskId: string
 }
@@ -125,7 +115,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw new Error('params is undefined')
   }
 
-  const incidentId = parseInt(params.id)
+  const incidentId = parseInt(params.incidentId)
   if (isNaN(incidentId)) {
     return {
       notFound: true,
