@@ -151,6 +151,7 @@ public class Report extends Model implements PathConvertible<ReportPath> {
         isKeyReport = keyReport;
     }
 
+    @JsonProperty("isLocationRelevantReport")
     public boolean isLocationRelevantReport() {
         return isLocationRelevantReport;
     }
