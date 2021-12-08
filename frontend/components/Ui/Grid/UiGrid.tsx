@@ -16,7 +16,7 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
+  width: calc(100% + var(--gap-h) * 2);
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
@@ -45,7 +45,7 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   position: relative;
   display: block;
   width: 100%;
-  padding: var(--gap-v) var(--gap-h);
+  margin: var(--gap-v) var(--gap-h);
   text-align: ${({ textAlign }) => textAlign};
 
 
