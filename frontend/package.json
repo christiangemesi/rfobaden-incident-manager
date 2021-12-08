@@ -6,13 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@mdi/js": "^6.5.95",
     "@mdi/react": "^1.5.0",
-    "next": "11.1.2",
-    "react": "17.0.2",
+    "next": "^12.0.7",
+    "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-select": "^5.2.1",
     "react-use": "^17.3.1",
@@ -20,11 +21,13 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.25",
+    "@next/bundle-analyzer": "^12.0.7",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/styled-components": "^5.1.14",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "babel-plugin-styled-components": "^1.5.1",
+    "cross-env": "^7.0.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "typescript": "^4.4.3"
