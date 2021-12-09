@@ -65,16 +65,12 @@ const ReportView: React.VFC<Props> = ({ report }) => {
                 </UiIconButton>
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
-                <UiGrid gapV={1.5}>
-                  <UiGrid.Col size={12}>
-                    <UiTitle level={1} isCentered>
-                      Meldung bearbeiten
-                    </UiTitle>
-                  </UiGrid.Col>
-                  <UiGrid.Col size={12}>
-                    <ReportForm incident={incident} report={report} onClose={close} />
-                  </UiGrid.Col>
-                </UiGrid>
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Meldung bearbeiten
+                  </UiTitle>
+                  <ReportForm incident={incident} report={report} onClose={close} />
+                </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
 

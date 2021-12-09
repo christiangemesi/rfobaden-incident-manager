@@ -113,16 +113,12 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                   </UiIconButton>
                 )}</UiModal.Activator>
                 <UiModal.Body>{({ close }) => (
-                  <UiGrid gapV={1.5}>
-                    <UiGrid.Col size={12}>
-                      <UiTitle level={1} isCentered>
-                        Ereignis bearbeiten
-                      </UiTitle>
-                    </UiGrid.Col>
-                    <UiGrid.Col size={12}>
-                      <IncidentForm incident={incident} onClose={close} />
-                    </UiGrid.Col>
-                  </UiGrid>
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Ereignis bearbeiten
+                    </UiTitle>
+                    <IncidentForm incident={incident} onClose={close} />
+                  </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
               <UiIconButton onClick={handleDelete}>
@@ -157,14 +153,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
                 <React.Fragment>
-                  <VerticalSpacer>
-                    <UiTitle level={1} isCentered>
-                      Meldung erfassen
-                    </UiTitle>
-                  </VerticalSpacer>
-                  <VerticalSpacer>
-                    <ReportForm incident={incident} onClose={close} />
-                  </VerticalSpacer>
+                  <UiTitle level={1} isCentered>
+                    Meldung erfassen
+                  </UiTitle>
+                  <ReportForm incident={incident} onClose={close} />
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
