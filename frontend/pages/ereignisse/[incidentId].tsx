@@ -113,16 +113,12 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                   </UiIconButton>
                 )}</UiModal.Activator>
                 <UiModal.Body>{({ close }) => (
-                  <UiGrid gapV={1.5}>
-                    <VerticalSpacer>
-                      <UiTitle level={1} isCentered>
-                        Ereignis bearbeiten
-                      </UiTitle>
-                    </VerticalSpacer>
-                    <VerticalSpacer>
-                      <IncidentForm incident={incident} onClose={close} />
-                    </VerticalSpacer>
-                  </UiGrid>
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Ereignis bearbeiten
+                    </UiTitle>
+                    <IncidentForm incident={incident} onClose={close} />
+                  </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
               <UiIconButton onClick={handleDelete}>
