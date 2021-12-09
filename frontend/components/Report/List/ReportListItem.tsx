@@ -1,5 +1,5 @@
 import Report from '@/models/Report'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useUser } from '@/stores/UserStore'
 import { useTasksOfReport } from '@/stores/TaskStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -24,8 +24,10 @@ const ReportListItem: React.VFC<Props> = ({
 
   const tasksAll = useTasksOfReport(report.id)
 
-  // TODO Memoize filter.
-  const tasksDone = tasksAll.filter((task) => task.closedAt != null)
+  // TODO Memoize filter. change to flag isClosed
+  const tasksDone = useMemo(() => (
+    tasksAll.filter((task) => task.closedAt != null)
+  ), [tasksAll])
 
   return (
     <SelectableListItem
