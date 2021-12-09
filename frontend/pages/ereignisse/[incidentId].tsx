@@ -153,14 +153,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
                 <React.Fragment>
-                  <VerticalSpacer>
-                    <UiTitle level={1} isCentered>
-                      Meldung erfassen
-                    </UiTitle>
-                  </VerticalSpacer>
-                  <VerticalSpacer>
-                    <ReportForm incident={incident} onClose={close} />
-                  </VerticalSpacer>
+                  <UiTitle level={1} isCentered>
+                    Meldung erfassen
+                  </UiTitle>
+                  <ReportForm incident={incident} onClose={close} />
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
