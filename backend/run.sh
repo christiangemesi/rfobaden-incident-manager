@@ -1,5 +1,4 @@
 #!/bin/bash
-gradle --stop
 gradle build \
   -x Test \
   -x checkstyleMain \

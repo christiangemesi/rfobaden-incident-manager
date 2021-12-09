@@ -16,19 +16,20 @@ const UiGrid = styled(StyleHelper.tag<Props>('div'))`
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: calc(100% + var(--gap-h) * 2);
+  width: 100%;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
 
   --gap-h: 0;
   --gap-v: 0;
-  margin: calc(var(--gap-v) * -1) calc(var(--gap-h) * -1);
+  // margin: calc(var(--gap-v) * -1) calc(var(--gap-h) * -1);
+  gap: var(--gap-v) var(--gap-h);
   padding: 0;
   
-  ${({ gap = 1, gapH = gap, gapV = gap }) => css`
-    --gap-h: ${gapH * 0.5}rem;
-    --gap-v: ${gapV * 0.5}rem;
+  ${({ gap = 0, gapH = gap, gapV = gap }) => css`
+    --gap-h: ${gapH}rem;
+    --gap-v: ${gapV}rem;
   `}
 `
 
@@ -45,10 +46,9 @@ const Col = styled(StyleHelper.tag<ColProps>('div'))`
   position: relative;
   display: block;
   width: 100%;
-  margin: var(--gap-v) var(--gap-h);
+  // margin: var(--gap-v) var(--gap-h);
   text-align: ${({ textAlign }) => textAlign};
-
-
+  
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
   ${({ order }) => mapOrder(order)}

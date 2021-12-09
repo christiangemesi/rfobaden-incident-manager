@@ -36,7 +36,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 
   return (
     <UiListItem onClick={handleClick} color={color} style={style} className={className}>
-      <StyledDiv>
+      <CenterBox>
         <StyledPriority>
           {priorityIcon}
         </StyledPriority>
@@ -46,10 +46,10 @@ const UiListItemWithDetails: React.VFC<Props> = ({
           </UiTitle>
           {user}
         </div>
-      </StyledDiv>
-      <StyledChildren>
+      </CenterBox>
+      <CenterBox>
         {children}
-      </StyledChildren>
+      </CenterBox>
     </UiListItem>
   )
 }
@@ -59,11 +59,8 @@ const StyledPriority = styled.div`
   display: inline-flex;
   margin-right: 1rem;
 `
-const StyledChildren = styled.div`
-  display: flex;
-  align-items: center;
-`
-const StyledDiv = styled.div`
+
+const CenterBox = styled.div`
   display: flex;
   align-items: center;
 `

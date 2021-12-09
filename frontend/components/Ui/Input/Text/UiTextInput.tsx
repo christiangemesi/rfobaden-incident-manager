@@ -44,13 +44,13 @@ const UiTextInput: React.VFC<Props> = ({
           {label}
         </span>
       )}
-      <StyledDiv hasError={hasError}>
+      <InputAndErrorBox hasError={hasError}>
         <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} hasChildren={hasChildren} />
         {hasChildren ?
           <StyledAdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
             {children}
           </StyledAdditionalInput>: null}
-      </StyledDiv>
+      </InputAndErrorBox>
 
       <UiInputErrors errors={errors} />
     </Label>
@@ -113,7 +113,7 @@ const StyledLabel = styled.label`
   }
 `
 
-const StyledDiv = styled.div<{hasError: boolean}>`
+const InputAndErrorBox = styled.div<{hasError: boolean}>`
   display: flex;
 
 
