@@ -103,6 +103,7 @@ docker volume rm rfobaden-incident-manager_database
 ## Testing
 > Tests can also be run locally, without requiring a docker container.
 
+Test the backend:
 ```bash
 # locally
 cd backend
@@ -112,6 +113,25 @@ gradle clean test --rerun-tasks
 docker compose run --no-deps backend gradle test
 ```
 
-Tests can also be run inside Intellij, which also offers built-in coverage testing.
+Test the frontend:
+```bash
+# locally
+cd frontend
+npm run test
+
+# locally, using the interactive test runner
+cd frontend
+npm run test --watch
+
+# in docker
+docker compose run --no-deps npm run test
+
+# in docker, using the interactive test runner
+docker compose run --no-deps npm run test --watch 
+```
+
+Backend tests can also be run inside IntelliJ, which also offers built-in coverage testing.
 For this to work correctly, make sure to go to `File > Settings... > Build, Execution & Deployment > Build Tools > Gradle`,
 where you can configure `Build and run using:` as `Gradle (default)` and `Run tests using:` as `Intellij IDEA`.
+
+Frontend tests can also be run inside IntelliJ, altough they are remarkably slow compared to just testing using the command line.
