@@ -19,3 +19,10 @@ export const parseUser = (data: unknown): User => {
     ...parseModel(data),
   }
 }
+
+export const useUsername = (user: User | null): string | null => {
+  if(user === null){
+    return null
+  }
+  return `${user.firstName} ${user.lastName}`
+}
