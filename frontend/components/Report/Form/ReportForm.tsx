@@ -89,7 +89,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
   return (
     <div>
       <form>
-        <ItemSeparator>
+        <FormContainer>
           <UiGrid align="center">
             <UiGrid.Col textAlign="left">
               <UiForm.Field field={form.isKeyReport}>{(props) => (
@@ -109,51 +109,36 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
-        </ItemSeparator>
-        <ItemSeparator>
+
           <UiForm.Field field={form.title}>{(props) => (
             <UiTextInput {...props} label="Titel" placeholder="Titel" />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.description}>{(props) => (
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.notes}>{(props) => (
             <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.location}>{(props) => (
             <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.assigneeId}>{(props) => (
             <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.startsAt}>{(props) => (
             <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
-        </ItemSeparator>
 
-        <ItemSeparator>
           <UiForm.Field field={form.endsAt}>{(props) => (
             <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
-        </ItemSeparator>
-        <ItemSeparator>
           <UiForm.Buttons form={form} />
-        </ItemSeparator>
+        </FormContainer>
       </form>
     </div>
   )
@@ -167,7 +152,8 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
-const ItemSeparator = styled.div`
-  display: block;
-  margin: 1rem;
+const FormContainer = styled.div`
+  display: flex;  
+  flex-direction: column;
+  gap: 0.5rem;
 `
