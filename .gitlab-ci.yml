@@ -44,7 +44,7 @@ analyze.sonarqube.frontend:
   script:
     - cd frontend
     - npm install typescript
-    - sonar-scanner -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
+    - sonar-scanner -X -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
       -Dsonar.sources=.
       -Dsonar.language=js
       -Dsonar.login=$CI_SONARQUBE_TOKEN
