@@ -18,6 +18,7 @@ import UiToggle from '@/components/Ui/Toggle/UiToggle'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
+import styled from 'styled-components'
 
 interface Props {
   incident: Incident
@@ -88,7 +89,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
   return (
     <div>
       <form>
-        <UiGrid gap={0.5}>
+        <FormContainer>
           <UiGrid align="center">
             <UiGrid.Col textAlign="left">
               <UiForm.Field field={form.isKeyReport}>{(props) => (
@@ -109,50 +110,35 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
             </UiGrid.Col>
           </UiGrid>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.title}>{(props) => (
-              <UiTextInput {...props} label="Titel" placeholder="Titel" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.title}>{(props) => (
+            <UiTextInput {...props} label="Titel" placeholder="Titel" />
+          )}</UiForm.Field>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.description}>{(props) => (
-              <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.description}>{(props) => (
+            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+          )}</UiForm.Field>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.notes}>{(props) => (
-              <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.notes}>{(props) => (
+            <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
+          )}</UiForm.Field>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.location}>{(props) => (
+            <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+          )}</UiForm.Field>
 
-          <UiGrid.Col size={12}>
-            <UiForm.Field field={form.assigneeId}>{(props) => (
-              <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.assigneeId}>{(props) => (
+            <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+          )}</UiForm.Field>
 
-          <UiGrid.Col>
-            <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
+          <UiForm.Field field={form.startsAt}>{(props) => (
+            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+          )}</UiForm.Field>
 
-          <UiGrid.Col style={{ marginBottom: '2rem' }}>
-            <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
-
-        </UiGrid>
-        <UiForm.Buttons form={form} />
+          <UiForm.Field field={form.endsAt}>{(props) => (
+            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+          )}</UiForm.Field>
+          <UiForm.Buttons form={form} />
+        </FormContainer>
       </form>
     </div>
   )
@@ -165,3 +151,9 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     ? null
     : `${user.firstName} ${user.lastName}`
 }
+
+const FormContainer = styled.div`
+  display: flex;  
+  flex-direction: column;
+  gap: 0.5rem;
+`
