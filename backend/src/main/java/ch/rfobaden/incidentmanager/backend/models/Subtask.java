@@ -2,7 +2,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
-import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -196,12 +195,13 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
             + '}';
     }
 
-
     @Override
     public SubtaskPath toPath() {
         var path = new SubtaskPath();
-        path.setIncidentId(getTask().getReport().getIncident().getId());
-        path.setReportId(getTask().getReport().getId());
+        path.setIncidentId(getTask().getReport().getIncidentId());
+        // TODO: is there a reason to do this in the same way of the task -> `getReport().getId()`?
+        path.setReportId(getTask().getReportId());
+        path.setTaskId(getTaskId());
         return path;
     }
 }
