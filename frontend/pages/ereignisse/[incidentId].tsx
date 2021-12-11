@@ -1,6 +1,6 @@
 import Report, { parseReport } from '@/models/Report'
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
+import ReportStore, { useReport, useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -27,6 +27,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import ReportView from '@/components/Report/View/ReportView'
+import Id from '@/models/base/Id'
 
 interface Props {
   data: {
@@ -47,8 +48,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
 
-  // TODO Only store reportId, load select value from store.
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
+  const [selectedReportId, setSelectedReportId] = useState<Id<Report> | null>(null)
+  const selectedReport = useReport(selectedReportId)
 
   // TODO rewrite print page
   const [printer, setPrinter] = useState<ReactNode>()
@@ -161,7 +162,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Body>
             </UiModal>
           </Actions>
-          <ReportList reports={reports} onClick={setSelectedReport} activeReport={selectedReport} />
+          <ReportList reports={reports} onClick={(report) => setSelectedReportId(report.id)} activeReport={selectedReport} />
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
