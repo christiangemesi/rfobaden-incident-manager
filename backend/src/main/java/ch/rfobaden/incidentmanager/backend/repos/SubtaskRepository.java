@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SubtaskRepository extends JpaRepository<Task, Long>, ModelRepository<Task, TaskPath> {
+public interface SubtaskRepository
+    extends JpaRepository<Subtask, Long>, ModelRepository<Subtask, SubtaskPath> {
 
     @Query(
         "SELECT CASE WHEN COUNT(task) > 0 THEN true ELSE false END "
@@ -26,7 +29,7 @@ public interface SubtaskRepository extends JpaRepository<Task, Long>, ModelRepos
                 + "task.id = :id"
     )
     @Override
-    boolean existsByPath(TaskPath path, Long id);
+    boolean existsByPath(SubtaskPath path, Long id);
 
     @Query(
         "SELECT task "
@@ -40,7 +43,7 @@ public interface SubtaskRepository extends JpaRepository<Task, Long>, ModelRepos
             + "task.id = :id"
     )
     @Override
-    Optional<Task> findByPath(@Param("path") TaskPath path, @Param("id") Long id);
+    Optional<Subtask> findByPath(@Param("path") SubtaskPath path, @Param("id") Long id);
 
     @Query(
         "SELECT task "
@@ -52,5 +55,5 @@ public interface SubtaskRepository extends JpaRepository<Task, Long>, ModelRepos
             + "task.report.id = :#{#path.reportId}"
     )
     @Override
-    List<Task> findAllByPath(@Param("path") TaskPath path);
+    List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
 }
