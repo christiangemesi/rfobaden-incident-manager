@@ -20,12 +20,21 @@ public class SubtaskServiceTest extends
     @MockBean
     UserService userService;
 
+    @MockBean
+    TaskService taskService;
+
     @Override
     protected void mockLoadRelations(Subtask subtask) {
         var assignee = subtask.getAssignee();
         if (assignee != null) {
             Mockito.when(userService.find(assignee.getId()))
                 .thenReturn(Optional.of(assignee));
+        }
+
+        var task = subtask.getTask();
+        if (task != null) {
+            Mockito.when(taskService.find(task.getId()))
+                .thenReturn(Optional.of(task));
         }
     }
 }
