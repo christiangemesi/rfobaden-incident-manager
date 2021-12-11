@@ -51,6 +51,11 @@ const UiComponentsExample: React.VFC = () => {
           UiSelect
         </a>
       </Link>
+      <Link href="examples/ui-breadcrumb">
+        <a>
+          UiSelect
+        </a>
+      </Link>
     </React.Fragment>
   )
 }
