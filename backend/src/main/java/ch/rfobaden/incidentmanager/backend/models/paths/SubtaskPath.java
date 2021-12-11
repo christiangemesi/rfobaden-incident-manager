@@ -37,7 +37,7 @@ public class SubtaskPath extends TaskPath {
     @Override
     public String toString() {
         return "SubtaskPath{"
-            // TODO: check with or without super call?
+            // TODO: with or without super call?
             + super.toString()
             + "taskId=" + taskId
             + '}';
