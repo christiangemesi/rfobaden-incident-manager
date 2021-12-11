@@ -92,14 +92,14 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         * If you want to space elements, either style them this way or use a component intended for this purpose.
         */}
 
-      <UiGrid gapH={2} gapV={1}>
-        <UiGrid.Col size={12}>
+      <SpacerUiGrid gapH={2} gapV={1}>
+        <BlockContainer>
           <UiTitle level={1}>
             {incident.title}
           </UiTitle>
-        </UiGrid.Col>
-        <UiGrid.Col size={12}>
-          <StyledDiv>
+        </BlockContainer>
+        <VerticalSpacer>
+          <HorizontalSpacer>
             <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
             <UiIconButtonGroup>
               <UiIconButton onClick={handlePrint}>
@@ -113,33 +113,33 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                   </UiIconButton>
                 )}</UiModal.Activator>
                 <UiModal.Body>{({ close }) => (
-                  <UiGrid gapV={1.5}>
-                    <UiGrid.Col size={12}>
-                      <UiTitle level={1} isCentered>
-                        Ereignis bearbeiten
-                      </UiTitle>
-                    </UiGrid.Col>
-                    <UiGrid.Col size={12}>
-                      <IncidentForm incident={incident} onClose={close} />
-                    </UiGrid.Col>
-                  </UiGrid>
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Ereignis bearbeiten
+                    </UiTitle>
+                    <IncidentForm incident={incident} onClose={close} />
+                  </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
               <UiIconButton onClick={handleDelete}>
                 <UiIcon.DeleteAction />
               </UiIconButton>
             </UiIconButtonGroup>
-          </StyledDiv>
-        </UiGrid.Col>
-        <UiGrid.Col size={6}>
-          {incident.description}
-        </UiGrid.Col>
-        <UiGrid.Col size={6}>
-          <UiTextWithIcon text={organisations}>
-            <UiIcon.UserInCircle />
-          </UiTextWithIcon>
-        </UiGrid.Col>
-      </UiGrid>
+          </HorizontalSpacer>
+        </VerticalSpacer>
+        <VerticalSpacer>
+          <UiGrid.Col size={{ lg: 6, xs: 12 }}>
+            {incident.description}
+          </UiGrid.Col>
+        </VerticalSpacer>
+        <VerticalSpacer>
+          <UiGrid.Col size={{ lg: 6, xs: 12 }}>
+            <UiTextWithIcon text={organisations}>
+              <UiIcon.UserInCircle />
+            </UiTextWithIcon>
+          </UiGrid.Col>
+        </VerticalSpacer>
+      </SpacerUiGrid>
 
       <UiGrid gapH={4}>
 
@@ -152,16 +152,12 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                 </UiActionButton>
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
-                <UiGrid gapV={1.5}>
-                  <UiGrid.Col size={12}>
-                    <UiTitle level={1} isCentered>
-                      Meldung erfassen
-                    </UiTitle>
-                  </UiGrid.Col>
-                  <UiGrid.Col size={12}>
-                    <ReportForm incident={incident} onClose={close} />
-                  </UiGrid.Col>
-                </UiGrid>
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Meldung erfassen
+                  </UiTitle>
+                  <ReportForm incident={incident} onClose={close} />
+                </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
           </Actions>
@@ -237,13 +233,31 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
   }
 }
 
-const StyledDiv = styled.div`
+const HorizontalSpacer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const VerticalSpacer = styled.div`
+  width: 100%;
+  margin-bottom: 1rem;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+`
+const SpacerUiGrid = styled(UiGrid)`
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+`
+
+const BlockContainer = styled.div`
+  width: 100%;
 `
 
 const Actions = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-bottom: 1rem;
 `
