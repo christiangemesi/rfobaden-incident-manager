@@ -18,41 +18,49 @@ public interface SubtaskRepository
     extends JpaRepository<Subtask, Long>, ModelRepository<Subtask, SubtaskPath> {
 
     @Query(
-        "SELECT CASE WHEN COUNT(task) > 0 THEN true ELSE false END "
+        "SELECT CASE WHEN COUNT(subtask) > 0 THEN true ELSE false END "
             + " FROM "
-                + "Task task"
+            + "Subtask subtask"
             + " WHERE "
-                + "task.report.incident.id = :#{#path.incidentId}"
+                + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-                + "task.report.id = :#{#path.reportId}"
+                + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
-                + "task.id = :id"
+                +  "subtask.task.id = :#{#path.taskId}"
+            + " AND "
+                + "subtask.id = :id"
     )
     @Override
     boolean existsByPath(SubtaskPath path, Long id);
 
     @Query(
-        "SELECT task "
+        "SELECT subtask "
             + " FROM "
-            + "Task task"
+            + "Subtask subtask"
             + " WHERE "
-            + "task.report.incident.id = :#{#path.incidentId}"
+                + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-            + "task.report.id = :#{#path.reportId}"
+              + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
-            + "task.id = :id"
+               + "subtask.task.id = :#{#path.taskId}"
+            + " AND "
+               + "subtask.id = :id"
     )
     @Override
     Optional<Subtask> findByPath(@Param("path") SubtaskPath path, @Param("id") Long id);
 
     @Query(
-        "SELECT task "
+        "SELECT subtask "
             + " FROM "
-            + "Task task"
+            + "Subtask subtask"
             + " WHERE "
-            + "task.report.incident.id = :#{#path.incidentId}"
+                + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-            + "task.report.id = :#{#path.reportId}"
+              + "subtask.task.report.id = :#{#path.reportId}"
+            + " AND "
+              + "subtask.task.id = :#{#path.taskId}"
+            + " AND "
+              + "subtask.id = :id"
     )
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
