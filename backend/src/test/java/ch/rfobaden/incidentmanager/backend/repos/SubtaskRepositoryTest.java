@@ -14,6 +14,12 @@ public class SubtaskRepositoryTest extends
     TaskRepository taskRepository;
 
     @Autowired
+    ReportRepository reportRepository;
+
+    @Autowired
+    IncidentRepository incidentRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     @Override
@@ -26,6 +32,16 @@ public class SubtaskRepositoryTest extends
         var task = subtask.getTask();
         if (task != null) {
             subtask.setTask(taskRepository.save(task));
+
+            var report = task.getReport();
+            if (report != null) {
+                task.setReport(reportRepository.save(report));
+
+                var incident = report.getIncident();
+                if (incident != null) {
+                    report.setIncident(incidentRepository.save(incident));
+                }
+            }
         }
     }
 }
