@@ -57,6 +57,7 @@ frontend.sonarqube:
         -Dsonar.sources=.
         -Dsonar.language=js
         -Dsonar.projectKey=rfobaden-incident-manager_frontend
+        -Dsonar.projectName=rfobaden-incident-manager_frontend
     # TODO Enable this as soon as the quality is ok.
     # -Dsonar.qualitygate.wait=true
 
