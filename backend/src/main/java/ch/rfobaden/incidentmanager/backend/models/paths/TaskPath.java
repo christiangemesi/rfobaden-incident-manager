@@ -2,8 +2,8 @@ package ch.rfobaden.incidentmanager.backend.models.paths;
 
 import java.util.Objects;
 
-// TODO extend ReportPath
-public class TaskPath {
+public class TaskPath extends ReportPath {
+
     private Long incidentId;
 
     private Long reportId;

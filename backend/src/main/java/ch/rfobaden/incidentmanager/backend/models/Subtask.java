@@ -34,6 +34,7 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
 
     private LocalDateTime endsAt;
 
+    // TODO: check is location needed !?
     private String location;
 
     @Column(nullable = false)
@@ -181,7 +182,7 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
 
     @Override
     public String toString() {
-        return "Task{"
+        return "Subtask{"
             + "id=" + getId()
             + ", assignee =" + assignee
             + ", task=" + task
