@@ -10,6 +10,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
+import styled from 'styled-components'
 
 interface Props {
   incident?: Incident | null
@@ -58,34 +59,38 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
 
   return (
     <form>
-      <UiGrid gap={0.5}>
-        <UiGrid.Col size={12}>
-          <UiForm.Field field={form.title}>{(props) => (
-            <UiTextInput {...props} label="Titel" placeholder="Titel" />
-          )}</UiForm.Field>
-        </UiGrid.Col>
+      <FormContainer>
+        <UiForm.Field field={form.title}>{(props) => (
+          <UiTextInput {...props} label="Titel" placeholder="Titel" />
+        )}</UiForm.Field>
 
-        <UiGrid.Col size={12}>
-          <UiForm.Field field={form.description}>{(props) => (
-            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
-          )}</UiForm.Field>
-        </UiGrid.Col>
+        <UiForm.Field field={form.description}>{(props) => (
+          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+        )}</UiForm.Field>
 
-        <UiGrid.Col>
-          <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-        </UiGrid.Col>
+        <UiGrid gap={0.5}>
+          <UiGrid.Col>
+            <UiForm.Field field={form.startsAt}>{(props) => (
+              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+          <UiGrid.Col>
+            <UiForm.Field field={form.endsAt}>{(props) => (
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+        </UiGrid>
 
-        <UiGrid.Col style={{ marginBottom: '2rem' }}>
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-        </UiGrid.Col>
-      </UiGrid>
-      <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} />
+      </FormContainer>
     </form>
   )
 }
 
 export default IncidentForm
+
+const FormContainer = styled.div`
+  display: flex;  
+  flex-direction: column;
+  gap: 0.5rem;
+`
