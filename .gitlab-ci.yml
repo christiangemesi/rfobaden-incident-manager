@@ -48,8 +48,8 @@ analyze.sonarqube.frontend:
       -Dsonar.sources=.
       -Dsonar.language=js
       -Dsonar.login=$CI_SONARQUBE_TOKEN
-      -Dsonar.projectKey=rfobaden-incident-manager-frontend
-      -Dsonar.projectName=rfobaden-incident-manager-frontend
+      -Dsonar.projectKey=rfobaden-incident-manager_frontend
+      -Dsonar.projectName=rfobaden-incident-manager_frontend
      
 
 
