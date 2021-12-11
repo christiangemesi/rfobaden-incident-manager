@@ -27,7 +27,7 @@ public class SubtaskGenerator extends ModelGenerator<Subtask> {
         subtask.setClosed(faker.bool().bool());
         subtask.setLocation(faker.country().capital());
         subtask.setPriority(faker.options().option(Priority.class));
-        //        subtask.setTask(taskGenerator.generate());
+        // subtask.setTask(taskGenerator.generate());
 
         subtask.setCreatedAt(LocalDateTime.now().minusDays(faker.random()
             .nextInt(0, 365 * 1000)));
