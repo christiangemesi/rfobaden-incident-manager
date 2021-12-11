@@ -35,7 +35,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
   
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
-      <DialogContainer isShaking={isShaking}>
+      <DialogContainer isShaking={isShaking} isFull={context.isFull}>
         <Dialog
           open={context.isOpen}
           visibility={context.visibility}
@@ -131,12 +131,12 @@ const ShakeAnimation = keyframes`
 
 const shakeMillis = 500
 
-const DialogContainer = styled.div<{ isShaking: boolean }>`
+const DialogContainer = styled.div<{ isShaking: boolean, isFull: boolean }>`
   position: relative;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: fit-content;
+  width: ${({ isFull }) => isFull && '100%'};
   
   ${({ isShaking }) => isShaking && css`
     animation-name: ${ShakeAnimation};

@@ -1,4 +1,4 @@
-import StyleHelper, { StyledProps } from '@/utils/helpers/StyleHelper'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { CSSProperties, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { Breakpoint, Themed } from '@/theme'
@@ -12,23 +12,17 @@ interface Props extends StyledProps {
   children?: ReactNode
 }
 
-const UiGrid = styled(StyleHelper.tag<Props>('div'))`
+const UiGrid = styled.div<Props>`
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: calc(100% + var(--gap-h) * 2);
+  width: 100%;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
-
-  --gap-h: 0;
-  --gap-v: 0;
-  margin: calc(var(--gap-v) * -1) calc(var(--gap-h) * -1);
-  padding: 0;
   
-  ${({ gap = 1, gapH = gap, gapV = gap }) => css`
-    --gap-h: ${gapH * 0.5}rem;
-    --gap-v: ${gapV * 0.5}rem;
+  ${({ gap = 0, gapH = gap, gapV = gap }) => css`
+    gap: ${gapH}rem ${gapV}rem;
   `}
 `
 
@@ -41,14 +35,12 @@ interface ColProps {
   children?: ReactNode
 }
 
-const Col = styled(StyleHelper.tag<ColProps>('div'))`
+const Col = styled.div<ColProps>`
   position: relative;
   display: block;
   width: 100%;
-  margin: var(--gap-v) var(--gap-h);
   text-align: ${({ textAlign }) => textAlign};
-
-
+  
   ${() => colSizeStyles.default}
   ${({ size }) => mapSize(size)}
   ${({ order }) => mapOrder(order)}
