@@ -33,8 +33,7 @@ dependencies {
 	testImplementation 'com.h2database:h2:1.4.200'
 	testImplementation 'com.github.javafaker:javafaker:1.0.2'
 
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.8.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter:5.8.2'
 
 	developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
 
