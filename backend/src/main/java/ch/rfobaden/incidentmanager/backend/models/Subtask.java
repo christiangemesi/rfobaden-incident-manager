@@ -37,9 +37,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
     @Column(nullable = false)
     private boolean isClosed;
 
-    // TODO: check is location needed !?
-    private String location;
-
     @Column(nullable = false)
     private Priority priority;
 
@@ -139,14 +136,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         this.endsAt = endsAt;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Priority getPriority() {
         return priority;
     }
@@ -180,7 +169,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
             && Objects.equals(description, subtask.description)
             && Objects.equals(startsAt, subtask.startsAt)
             && Objects.equals(endsAt, subtask.endsAt)
-            && Objects.equals(location, subtask.location)
             && Objects.equals(isClosed, subtask.isClosed)
             && priority == subtask.priority;
     }
@@ -188,7 +176,7 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
     @Override
     public int hashCode() {
         return Objects.hash(modelHashCode(), assignee, task, title,
-            description, startsAt, endsAt, location, priority, isClosed);
+            description, startsAt, endsAt, priority, isClosed);
     }
 
     @Override
@@ -202,7 +190,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
             + ", createdAt=" + getCreatedAt()
             + ", updatedAt=" + getUpdatedAt()
             + ", startsAt=" + startsAt
-            + ", location='" + location + '\''
             + ", priority=" + priority
             + ", isClosed=" + isClosed
             + '}';
