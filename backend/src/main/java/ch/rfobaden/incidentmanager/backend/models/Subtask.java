@@ -50,7 +50,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         this.assignee = assignee;
     }
 
-    @JsonProperty
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -58,7 +57,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         return assignee.getId();
     }
 
-    @JsonProperty
     public void setAssigneeId(Long assigneeId) {
         if (assigneeId == null) {
             this.assignee = null;
@@ -75,7 +73,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         return task;
     }
 
-    @JsonProperty
     public Long getTaskId() {
         if (task == null) {
             return null;
@@ -83,7 +80,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         return task.getId();
     }
 
-    @JsonProperty
     public Long getReportId() {
         if (task == null) {
             return null;
@@ -91,7 +87,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         return task.getReportId();
     }
 
-    @JsonProperty
     public Long getIncidentId() {
         if (task == null) {
             return null;
