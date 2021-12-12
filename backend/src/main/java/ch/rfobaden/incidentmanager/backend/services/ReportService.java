@@ -16,9 +16,9 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
     }
 
     @Override
-    protected void loadRelations(Report report, Violations violations) {
-        if (report.getAssignee() != null) {
-            userService.find(report.getAssigneeId()).ifPresentOrElse(report::setAssignee, () ->
+    protected void loadRelations(Report entity, Violations violations) {
+        if (entity.getAssignee() != null) {
+            userService.find(entity.getAssigneeId()).ifPresentOrElse(entity::setAssignee, () ->
                 violations.add("assignee", "does not exist")
             );
         }

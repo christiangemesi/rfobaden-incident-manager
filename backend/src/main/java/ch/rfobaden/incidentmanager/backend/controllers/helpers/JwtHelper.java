@@ -96,17 +96,12 @@ public class JwtHelper {
     public Optional<Jws<Claims>> decode(String token) {
         try {
             return Optional.of(jwtParser.parseClaimsJws(token));
-        } catch (UnsupportedJwtException e) {
-            return Optional.empty();
-        } catch (MalformedJwtException e) {
-            return Optional.empty();
-        } catch (ExpiredJwtException e) {
-            return Optional.empty();
-        } catch (SignatureException e) {
-            return Optional.empty();
-        } catch (DecodingException e) {
-            return Optional.empty();
-        } catch (IllegalArgumentException e) {
+        } catch (UnsupportedJwtException
+            | MalformedJwtException
+            | ExpiredJwtException
+            | SignatureException
+            | DecodingException
+            | IllegalArgumentException e) {
             return Optional.empty();
         }
     }

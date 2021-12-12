@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +20,9 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user")
-public final class User extends Model.Basic {
+public final class User extends Model.Basic implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
