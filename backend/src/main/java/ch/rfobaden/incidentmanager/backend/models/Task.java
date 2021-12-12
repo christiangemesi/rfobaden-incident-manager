@@ -195,8 +195,4 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         path.setReportId(getReport().getId());
         return path;
     }
-
-    public enum Priority {
-        LOW, MEDIUM, HIGH
-    }
 }
