@@ -34,7 +34,7 @@ public class SubtaskControllerTest
 
     @Override
     protected void mockPopulate(SubtaskPath path, Subtask subtask) {
-        Mockito.when(taskService.find(path, path.getIncidentId()))
+        Mockito.when(taskService.find(path, path.getTaskId()))
             .thenReturn(Optional.of(subtask.getTask()));
     }
 }
