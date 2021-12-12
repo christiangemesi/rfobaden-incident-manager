@@ -39,6 +39,9 @@ public class SessionControllerTest extends AppControllerTest {
     @MockBean
     protected AuthenticationManager authManager;
 
+    @MockBean
+    protected UserService userService;
+
     @Autowired
     protected JwtHelper jwtHelper;
 

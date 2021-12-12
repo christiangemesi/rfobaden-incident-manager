@@ -15,13 +15,4 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
     public TaskService(UserService userService) {
         this.userService = userService;
     }
-
-    @Override
-    protected void loadRelations(Task task, Violations violations) {
-        if (task.getAssignee() != null) {
-            userService.find(task.getAssignee().getId()).ifPresentOrElse(task::setAssignee, () ->
-                violations.add("assignee", "does not exist")
-            );
-        }
-    }
 }

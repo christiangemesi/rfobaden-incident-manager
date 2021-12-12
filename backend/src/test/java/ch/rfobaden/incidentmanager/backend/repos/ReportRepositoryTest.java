@@ -9,14 +9,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 public class ReportRepositoryTest extends
     ModelRepositoryTest<Report, ReportPath, ReportRepository> {
+
     @Autowired
     IncidentRepository incidentRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     protected void saveRelations(Report report) {
         var incident = report.getIncident();
         if (incident != null) {
             report.setIncident(incidentRepository.save(incident));
+        }
+
+        var assignee = report.getAssignee();
+        if (assignee != null) {
+            report.setAssignee(userRepository.save(assignee));
         }
     }
 }
