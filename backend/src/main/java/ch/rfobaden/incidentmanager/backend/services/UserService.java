@@ -6,6 +6,8 @@ import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,11 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class UserService extends ModelRepositoryService.Basic<User, UserRepository> {
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final PasswordEncoder passwordEncoder;
 
     private final SecureRandom passwordRandom = new SecureRandom();
@@ -47,7 +50,7 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         return super.create(path, newUser).map((user) -> {
             // TODO send the generated email to the user by mail.
             // Log the password for now so we can actually now what it is.
-            System.out.println("Password for " + user.getEmail() + ": " + plainPassword);
+            logger.info("Password for {}: {}", user.getEmail(), plainPassword);
             return user;
         });
     }

@@ -27,34 +27,45 @@ backend.test:
   image: gradle:7.2.0-jdk11
   script:
     - cd backend
-    - gradle clean test --rerun-tasks
+    - gradle clean test jacocoTestReport --rerun-tasks
 
-analyze.sonarqube.backend:
+backend.sonarqube:
   stage: analyze
   image: gradle:7.2.0-jdk11
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - backend/.sonar/cache
   allow_failure: true
   script:
     - cd backend
-    - gradle sonarqube
+    - gradle jacocoTestReport sonarqube
 
-analyze.sonarqube.frontend:
+frontend.sonarqube:
   stage: analyze
   image: sonarsource/sonar-scanner-cli:latest
+  variables:
+    EXCLUDE: node_modules/**
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - frontend/.sonar/cache
   allow_failure: true
   script:
     - cd frontend
-    - npm install typescript
-    - sonar-scanner -X -Dsonar.host.url=$CI_SONARQUBE_HOST_URL
-      -Dsonar.sources=.
-      -Dsonar.language=js
-      -Dsonar.login=$CI_SONARQUBE_TOKEN
-      -Dsonar.projectKey=rfobaden-incident-manager_frontend
-      -Dsonar.projectName=rfobaden-incident-manager_frontend
-     
+    - sonar-scanner
+        -Dsonar.sources=.
+        -Dsonar.language=js
+        -Dsonar.projectKey=rfobaden-incident-manager_frontend
+        -Dsonar.projectName=rfobaden-incident-manager_frontend
+    # TODO Enable this as soon as the quality is ok.
+    # -Dsonar.qualitygate.wait=true
 
+variables:
+  GIT_DEPTH: 0
 
 cache:
   key: ${CI_JOB_NAME}
   paths:
     - backend/.gradle
-    - .sonar/cache
+    - frontend/node_modules

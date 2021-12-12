@@ -12,9 +12,9 @@ public interface ModelService<TModel extends Model, TPath> {
 
     public List<TModel> list(TPath path);
 
-    public Optional<TModel> create(TPath path, TModel record);
+    public Optional<TModel> create(TPath path, TModel entity);
 
-    public Optional<TModel> update(TPath path, TModel record);
+    public Optional<TModel> update(TPath path, TModel entity);
 
     public boolean delete(TPath path, Long id);
 }

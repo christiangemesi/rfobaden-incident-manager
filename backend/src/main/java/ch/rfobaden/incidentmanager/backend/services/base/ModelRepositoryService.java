@@ -43,47 +43,47 @@ public abstract class ModelRepositoryService<
     }
 
     @Override
-    public Optional<TModel> create(TPath path, TModel record) {
-        if (record.getId() != null) {
+    public Optional<TModel> create(TPath path, TModel entity) {
+        if (entity.getId() != null) {
             throw new IllegalArgumentException("id will be overwritten and must be null");
         }
-        if (record.getCreatedAt() != null) {
+        if (entity.getCreatedAt() != null) {
             throw new IllegalArgumentException("createdAt must not be set");
         }
-        if (record.getUpdatedAt() != null) {
+        if (entity.getUpdatedAt() != null) {
             throw new IllegalArgumentException("updatedAt must not be set");
         }
-        record.setCreatedAt(LocalDateTime.now());
-        record.setUpdatedAt(record.getCreatedAt());
-        validate(record);
-        if (!path.equals(record.toPath())) {
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(entity.getCreatedAt());
+        validate(entity);
+        if (!path.equals(entity.toPath())) {
             throw new IllegalStateException("record does not match path: " + path);
         }
-        return Optional.of(repository.save(record));
+        return Optional.of(repository.save(entity));
     }
 
     @Override
-    public Optional<TModel> update(TPath path, TModel record) {
-        if (record.getUpdatedAt() == null) {
+    public Optional<TModel> update(TPath path, TModel entity) {
+        if (entity.getUpdatedAt() == null) {
             throw new IllegalArgumentException("updatedAt must be set");
         }
 
-        var existingRecord = find(path, record.getId()).orElse(null);
+        var existingRecord = find(path, entity.getId()).orElse(null);
         if (existingRecord == null) {
             return Optional.empty();
         }
-        if (!isSameDateTime(existingRecord.getUpdatedAt(), record.getUpdatedAt())) {
+        if (!isSameDateTime(existingRecord.getUpdatedAt(), entity.getUpdatedAt())) {
             throw new UpdateConflictException(
-                "record " + record.getId() + " has already been modified"
+                "record " + entity.getId() + " has already been modified"
             );
         }
-        record.setUpdatedAt(LocalDateTime.now());
-        record.setCreatedAt(existingRecord.getCreatedAt());
-        validate(record);
-        if (!path.equals(record.toPath())) {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setCreatedAt(existingRecord.getCreatedAt());
+        validate(entity);
+        if (!path.equals(entity.toPath())) {
             throw new IllegalStateException("record does not match path: " + path);
         }
-        return Optional.of(repository.save(record));
+        return Optional.of(repository.save(entity));
     }
 
     @Override
@@ -95,19 +95,19 @@ public abstract class ModelRepositoryService<
         return false;
     }
 
-    protected void loadRelations(TModel record, Violations violations) {}
+    protected void loadRelations(TModel entity, Violations violations) {}
 
-    protected final void validate(TModel record) {
-        validationUtils.validate(record, (r, violations) -> {
-            loadRelations(record, violations);
-            validate(record, violations);
+    protected final void validate(TModel entity) {
+        validationUtils.validate(entity, (r, violations) -> {
+            loadRelations(entity, violations);
+            validate(entity, violations);
         });
     }
 
-    protected void validate(TModel record, Violations violations) {}
+    protected void validate(TModel entity, Violations violations) {}
 
-    protected static boolean isPersisted(Model record) {
-        return record.getId() == null;
+    protected static boolean isPersisted(Model entity) {
+        return entity.getId() == null;
     }
 
     private boolean isSameDateTime(LocalDateTime a, LocalDateTime b) {
