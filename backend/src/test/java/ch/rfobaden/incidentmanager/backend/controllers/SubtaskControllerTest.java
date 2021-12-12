@@ -6,6 +6,7 @@ import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,7 +34,7 @@ public class SubtaskControllerTest
     }
 
     @Override
-    protected void mockPopulate(SubtaskPath path, Subtask subtask) {
+    protected void mockRelations(SubtaskPath path, Subtask subtask) {
         Mockito.when(taskService.find(path, path.getTaskId()))
             .thenReturn(Optional.of(subtask.getTask()));
     }

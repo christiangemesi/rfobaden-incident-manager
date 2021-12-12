@@ -129,9 +129,10 @@ public abstract class ModelControllerTest<
         var newRecord = generator.generateNew();
         var path = newRecord.toPath();
         var createdRecord = generator.persist(newRecord);
+        System.out.println(newRecord);
         Mockito.when(service.create(path, newRecord))
             .thenReturn(Optional.of(createdRecord));
-        mockPopulate(path, newRecord);
+        mockRelations(path, newRecord);
 
         // When
         var mockRequest = MockMvcRequestBuilders.post(getEndpointFor(path))
@@ -153,7 +154,7 @@ public abstract class ModelControllerTest<
         var newRecord = generator.generateNew();
         newRecord.setId(1L);
         var path = newRecord.toPath();
-        mockPopulate(path, newRecord);
+        mockRelations(path, newRecord);
 
         // When
         var mockRequest = MockMvcRequestBuilders.post(getEndpointFor(path))
@@ -178,7 +179,7 @@ public abstract class ModelControllerTest<
         updatedRecord.setUpdatedAt(LocalDateTime.now());
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.of(updatedRecord));
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -199,7 +200,7 @@ public abstract class ModelControllerTest<
         // Given
         var record = generator.generate();
         var path = record.toPath();
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, generator.generateId()))
@@ -222,7 +223,7 @@ public abstract class ModelControllerTest<
         var path = record.toPath();
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.empty());
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -245,7 +246,7 @@ public abstract class ModelControllerTest<
         var path = record.toPath();
         Mockito.when(service.update(path, record))
             .thenThrow(new UpdateConflictException("..."));
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -309,13 +310,13 @@ public abstract class ModelControllerTest<
         return getEndpointFor(path) + id;
     }
 
-    protected abstract void mockPopulate(TPath path, TModel record);
+    protected abstract void mockRelations(TPath path, TModel record);
 
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelControllerTest<TModel, EmptyPath, TService> {
         @Override
-        protected final void mockPopulate(EmptyPath emptyPath, TModel record) {}
+        protected final void mockRelations(EmptyPath emptyPath, TModel record) {}
     }
 }

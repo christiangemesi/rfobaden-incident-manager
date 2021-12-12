@@ -28,7 +28,7 @@ public abstract class ModelController<
     @Autowired
     protected TService service;
 
-    protected abstract void loadPath(TPath path, TModel entity);
+    protected abstract void loadRelations(TPath path, TModel entity);
 
     @GetMapping
     public List<TModel> list(@ModelAttribute TPath path) {
@@ -48,7 +48,7 @@ public abstract class ModelController<
         if (entity.getId() != null) {
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "id must not be set");
         }
-        loadPath(path, entity);
+        loadRelations(path, entity);
         return service.create(path, entity).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
         ));
@@ -66,7 +66,7 @@ public abstract class ModelController<
                 HttpStatus.UNPROCESSABLE_ENTITY, "id must be identical to url parameter"
             );
         }
-        loadPath(path, entity);
+        loadRelations(path, entity);
         return service.update(path, entity).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
         ));
@@ -85,6 +85,6 @@ public abstract class ModelController<
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelController<TModel, EmptyPath, TService> {
         @Override
-        protected final void loadPath(EmptyPath emptyPath, TModel entity) {}
+        protected final void loadRelations(EmptyPath emptyPath, TModel entity) {}
     }
 }
