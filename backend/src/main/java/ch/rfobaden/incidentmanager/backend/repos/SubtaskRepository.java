@@ -20,7 +20,7 @@ public interface SubtaskRepository
     @Query(
         "SELECT CASE WHEN COUNT(subtask) > 0 THEN true ELSE false END "
             + " FROM "
-            + "Subtask subtask"
+                + "Subtask subtask"
             + " WHERE "
                 + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
@@ -36,7 +36,7 @@ public interface SubtaskRepository
     @Query(
         "SELECT subtask "
             + " FROM "
-            + "Subtask subtask"
+                + "Subtask subtask"
             + " WHERE "
                 + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
@@ -52,7 +52,7 @@ public interface SubtaskRepository
     @Query(
         "SELECT subtask "
             + " FROM "
-            + "Subtask subtask"
+                + "Subtask subtask"
             + " WHERE "
                 + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
