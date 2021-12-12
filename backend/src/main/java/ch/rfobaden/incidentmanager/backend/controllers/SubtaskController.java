@@ -23,11 +23,6 @@ public class SubtaskController extends ModelController<Subtask, SubtaskPath, Sub
     }
 
     @Override
-    public Subtask create(@ModelAttribute SubtaskPath path, @RequestBody Subtask subtask) {
-        return super.create(path, subtask);
-    }
-
-    @Override
     protected void loadPath(SubtaskPath path, Subtask subtask) {
         var task = taskService.find(path.getTaskId()).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "task not found")
