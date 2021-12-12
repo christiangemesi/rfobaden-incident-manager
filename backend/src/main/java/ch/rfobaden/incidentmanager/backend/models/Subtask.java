@@ -199,7 +199,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
     public SubtaskPath toPath() {
         var path = new SubtaskPath();
         path.setIncidentId(getTask().getReport().getIncidentId());
-        // TODO: is there a reason to do this in the same way of the task -> `getReport().getId()`?
         path.setReportId(getTask().getReportId());
         path.setTaskId(getTaskId());
         return path;
