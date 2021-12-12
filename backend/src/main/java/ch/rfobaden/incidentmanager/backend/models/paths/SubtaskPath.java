@@ -22,11 +22,9 @@ public class SubtaskPath extends TaskPath {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o)) {
-            return false;
-        }
         SubtaskPath that = (SubtaskPath) o;
-        return Objects.equals(taskId, that.taskId);
+        return Objects.equals(taskId, that.taskId)
+            && super.equals(that);
     }
 
     @Override
@@ -37,9 +35,9 @@ public class SubtaskPath extends TaskPath {
     @Override
     public String toString() {
         return "SubtaskPath{"
-            // TODO: with or without super call?
-            + super.toString()
-            + "taskId=" + taskId
+            + "incidentId=" + getIncidentId()
+            + ", reportId=" + getReportId()
+            + ", taskId=" + taskId
             + '}';
     }
 }
