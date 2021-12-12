@@ -59,8 +59,6 @@ public interface SubtaskRepository
               + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
               + "subtask.task.id = :#{#path.taskId}"
-            + " AND "
-              + "subtask.id = :id"
     )
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);

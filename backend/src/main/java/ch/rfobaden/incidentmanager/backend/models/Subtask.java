@@ -68,11 +68,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         this.assignee.setId(assigneeId);
     }
 
-    @JsonIgnore
-    public Task getTask() {
-        return task;
-    }
-
     public Long getTaskId() {
         if (task == null) {
             return null;
@@ -94,7 +89,11 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
         return task.getReport().getIncidentId();
     }
 
-    @JsonProperty
+    @JsonIgnore
+    public Task getTask() {
+        return task;
+    }
+
     public void setTask(Task task) {
         this.task = task;
     }

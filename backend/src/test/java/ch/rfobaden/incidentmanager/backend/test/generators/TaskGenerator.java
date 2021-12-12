@@ -28,19 +28,11 @@ public class TaskGenerator extends ModelGenerator<Task> {
         task.setReport(reportGenerator.generate());
         task.setLocation(faker.country().capital());
 
-        task.setCreatedAt(LocalDateTime.now().minusDays(faker.random()
-            .nextInt(0, 365 * 1000)));
-
         task.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
 
         if (faker.bool().bool()) {
             task.setEndsAt(
                 LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        }
-
-        if (faker.bool().bool()) {
-            task.setUpdatedAt(
-                LocalDateTime.now().plusDays(faker.random().nextInt(0, 365 * 1000)));
         }
         return task;
     }
