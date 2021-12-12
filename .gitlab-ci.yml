@@ -39,7 +39,7 @@ backend.sonarqube:
   allow_failure: true
   script:
     - cd backend
-    - gradle sonarqube
+    - gradle jacocoTestReport sonarqube
 
 frontend.sonarqube:
   stage: analyze
