@@ -27,20 +27,11 @@ public class SubtaskGenerator extends ModelGenerator<Subtask> {
         subtask.setClosed(faker.bool().bool());
         subtask.setPriority(faker.options().option(Priority.class));
         subtask.setTask(taskGenerator.generate());
-
-        subtask.setCreatedAt(LocalDateTime.now().minusDays(faker.random()
-            .nextInt(0, 365 * 1000)));
-
         subtask.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
 
         if (faker.bool().bool()) {
             subtask.setEndsAt(
                 LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        }
-
-        if (faker.bool().bool()) {
-            subtask.setUpdatedAt(
-                LocalDateTime.now().plusDays(faker.random().nextInt(0, 365 * 1000)));
         }
         return subtask;
     }
