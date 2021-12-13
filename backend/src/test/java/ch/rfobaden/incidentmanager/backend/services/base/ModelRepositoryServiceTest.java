@@ -14,6 +14,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public abstract class ModelRepositoryServiceTest<
     @Autowired
     protected ModelGenerator<TModel> generator;
 
-    @Test
+    @RepeatedTest(5)
     public void testList() {
         // Given
         var records = generator.generate(10);
@@ -56,7 +57,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).findAllByPath(path);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFind() {
         // Given
         var record = generator.generate();
@@ -72,7 +73,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).findById(record.getId());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFind_notFound() {
         // Given
         var id = generator.generateId();
@@ -87,7 +88,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).findById(id);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFind_byPath_notFound() {
         // Given
         var record = generator.generate();
@@ -103,7 +104,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).findByPath(path, record.getId());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate() {
         // Given
         var newRecord = generator.generateNew();
@@ -130,7 +131,7 @@ public abstract class ModelRepositoryServiceTest<
     }
 
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_presetId() {
         // Given
         var newRecord = generator.generateNew();
@@ -148,7 +149,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(newRecord);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_presetCreatedAt() {
         // Given
         var newRecord = generator.generateNew();
@@ -166,7 +167,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_presetUpdatedAt() {
         // Given
         var newRecord = generator.generateNew();
@@ -184,7 +185,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate() {
         // Given
         var record = generator.generate();
@@ -209,7 +210,7 @@ public abstract class ModelRepositoryServiceTest<
     }
 
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_notFound() {
         // Given
         var updatedRecord = generator.generate();
@@ -227,7 +228,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_conflict() {
         // Given
         var record = generator.generate();
@@ -247,7 +248,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_updatedAtMissing() {
         // Given
         var record = generator.generate();
@@ -268,7 +269,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, never()).save(any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDelete() {
         // Given
         var record = generator.generate();
@@ -286,7 +287,7 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).deleteById(id);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDelete_notFound() {
         // Given
         var record = generator.generate();
