@@ -14,11 +14,11 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.rule=Host(`ip34.daniel-va.ch`)
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.entrypoints=https
-      - traefik.http.services.${TRAEFIK_SERVICE_NAME}-frontend.loadbalancer.server.port=3000
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.tls=true
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.tls.certresolver=generate_cert_resolver
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-frontend.rule=Host(`ip34.daniel-va.ch`)
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-frontend.entrypoints=https
+      - traefik.http.services.incident_manager-${RFO_STAGE}-frontend.loadbalancer.server.port=3000
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-frontend.tls=true
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-frontend.tls.certresolver=generate_cert_resolver
     depends_on:
       - backend
     env_file:
@@ -40,11 +40,11 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.rule=Host(`ip34.daniel-va.ch`) && (Path(`/api`) || PathPrefix(`/api/`))
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.entrypoints=https
-      - traefik.http.services.${TRAEFIK_SERVICE_NAME}-backend.loadbalancer.server.port=8080
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.tls=true
-      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.tls.certresolver=generate_cert_resolver
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-backend.rule=Host(`ip34.daniel-va.ch`) && (Path(`/api`) || PathPrefix(`/api/`))
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-backend.entrypoints=https
+      - traefik.http.services.incident_manager-${RFO_STAGE}-backend.loadbalancer.server.port=8080
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-backend.tls=true
+      - traefik.http.routers.incident_manager-${RFO_STAGE}-backend.tls.certresolver=generate_cert_resolver
     depends_on:
       - database
     env_file:
