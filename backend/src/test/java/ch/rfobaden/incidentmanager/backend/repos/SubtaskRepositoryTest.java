@@ -31,17 +31,9 @@ public class SubtaskRepositoryTest extends
 
         var task = subtask.getTask();
         if (task != null) {
+            task.getReport().setIncident(incidentRepository.save(task.getReport().getIncident()));
+            task.setReport(reportRepository.save(task.getReport()));
             subtask.setTask(taskRepository.save(task));
-
-            var report = task.getReport();
-            if (report != null) {
-                task.setReport(reportRepository.save(report));
-
-                var incident = report.getIncident();
-                if (incident != null) {
-                    report.setIncident(incidentRepository.save(incident));
-                }
-            }
         }
     }
 }
