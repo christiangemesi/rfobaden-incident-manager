@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
+import ch.rfobaden.incidentmanager.backend.models.Priority;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,21 @@ public class ReportGenerator extends ModelGenerator<Report> {
     @Override
     public Report generateNew() {
         Report report = new Report();
-        report.setAssignee(userGenerator.generate());
+
         report.setTitle(faker.funnyName().name());
-        report.setDescription(faker.lorem().sentence(10));
-        report.setNotes(faker.lorem().sentence(10));
-        // TODO starts at and ends at?
-        report.setLocation(faker.country().capital());
+        report.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
+        report.setNotes(doMaybe(() -> faker.lorem().sentence(10)));
+        report.setLocation(doMaybe(() -> faker.country().capital()));
         report.setKeyReport(faker.bool().bool());
         report.setLocationRelevantReport(faker.bool().bool());
-        report.setPriority(Report.Priority.MEDIUM); // TODO all generated are medium
+        report.setPriority(faker.options().option(Report.Priority.class));
+
+        report.setStartsAt(doMaybe(this::randomDateTime));
+        report.setEndsAt(doMaybe(this::randomDateTime));
+
         report.setIncident(incidentGenerator.generate());
+        report.setAssignee(doMaybe(userGenerator::generate));
+
         return report;
     }
 }

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @TestComponent
 public class TaskGenerator extends ModelGenerator<Task> {
-
     @Autowired
     UserGenerator userGenerator;
 
@@ -22,18 +21,16 @@ public class TaskGenerator extends ModelGenerator<Task> {
     public Task generateNew() {
         Task task = new Task();
         task.setTitle(faker.funnyName().name());
-        task.setDescription(faker.lorem().sentence(10));
-        task.setAssignee(userGenerator.generate());
+        task.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
         task.setPriority(faker.options().option(Priority.class));
+        task.setLocation(doMaybe(() -> faker.country().capital()));
+
+        task.setStartsAt(doMaybe(this::randomDateTime));
+        task.setEndsAt(doMaybe(this::randomDateTime));
+
         task.setReport(reportGenerator.generate());
-        task.setLocation(faker.country().capital());
+        task.setAssignee(doMaybe(userGenerator::generate));
 
-        task.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-
-        if (faker.bool().bool()) {
-            task.setEndsAt(
-                LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        }
         return task;
     }
 }

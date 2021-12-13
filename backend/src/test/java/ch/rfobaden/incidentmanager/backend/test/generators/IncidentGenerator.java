@@ -13,19 +13,22 @@ public class IncidentGenerator extends ModelGenerator<Incident> {
     public Incident generateNew() {
         Incident incident = new Incident();
         incident.setTitle(faker.funnyName().name());
-        incident.setDescription(faker.lorem().sentence(10));
-        // TODO do some fancy stuff do daisychain closeReasons randomly
-        CloseReason closeReason = new CloseReason();
-        closeReason.setMessage(faker.animal().name());
-        closeReason.setCreatedAt(LocalDateTime.now().minusDays(faker.random()
-                .nextInt(0, 365 * 1000)));
-        incident.setCloseReason(closeReason);
+        incident.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
+
+        incident.setStartsAt(doMaybe(this::randomDateTime));
+        incident.setEndsAt(doMaybe(this::randomDateTime));
+
+        incident.setCloseReason(doMaybe(this::generateCloseReason));
         incident.setClosed(faker.bool().bool());
-        incident.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        if (faker.bool().bool()) {
-            incident.setEndsAt(
-                LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        }
+
         return incident;
+    }
+
+    private CloseReason generateCloseReason() {
+        CloseReason reason = new CloseReason();
+        reason.setMessage(faker.animal().name());
+        reason.setCreatedAt(randomDateTime());
+        reason.setPrevious(doMaybe(this::generateCloseReason));
+        return reason;
     }
 }

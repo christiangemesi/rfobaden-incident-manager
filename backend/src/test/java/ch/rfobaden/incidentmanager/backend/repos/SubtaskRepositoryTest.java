@@ -30,12 +30,19 @@ public class SubtaskRepositoryTest extends
         }
 
         var task = subtask.getTask();
-        if (task != null) {
-            task.getReport().setAssignee(userRepository.save(task.getReport().getAssignee()));
-            task.setAssignee(userRepository.save(task.getAssignee()));
-            task.getReport().setIncident(incidentRepository.save(task.getReport().getIncident()));
-            task.setReport(reportRepository.save(task.getReport()));
-            subtask.setTask(taskRepository.save(task));
+        var taskAssignee = task.getAssignee();
+        if (taskAssignee != null) {
+            task.setAssignee(userRepository.save(taskAssignee));
         }
+
+        var report = task.getReport();
+        report.setIncident(incidentRepository.save(report.getIncident()));
+        var reportAssignee = report.getAssignee();
+        if (reportAssignee != null) {
+            report.setAssignee(userRepository.save(reportAssignee));
+        }
+        task.setReport(reportRepository.save(report));
+
+        subtask.setTask(taskRepository.save(task));
     }
 }

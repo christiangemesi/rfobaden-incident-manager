@@ -10,12 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
-@Import(TestConfig.class)
 public abstract class ModelGenerator<T extends Model> extends Generator<T> {
-    @Autowired
-    protected Faker faker;
-
     public final Long generateId() {
         return faker.number().numberBetween(1, Long.MAX_VALUE);
     }

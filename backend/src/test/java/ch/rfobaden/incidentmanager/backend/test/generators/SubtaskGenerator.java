@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @TestComponent
 public class SubtaskGenerator extends ModelGenerator<Subtask> {
-
     @Autowired
     TaskGenerator taskGenerator;
 
@@ -21,18 +20,18 @@ public class SubtaskGenerator extends ModelGenerator<Subtask> {
     @Override
     public Subtask generateNew() {
         Subtask subtask = new Subtask();
+
         subtask.setTitle(faker.funnyName().name());
-        subtask.setDescription(faker.lorem().sentence(10));
-        subtask.setAssignee(userGenerator.generate());
+        subtask.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
         subtask.setClosed(faker.bool().bool());
         subtask.setPriority(faker.options().option(Priority.class));
-        subtask.setTask(taskGenerator.generate());
-        subtask.setStartsAt(LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
 
-        if (faker.bool().bool()) {
-            subtask.setEndsAt(
-                LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000)));
-        }
+        subtask.setStartsAt(doMaybe(this::randomDateTime));
+        subtask.setEndsAt(doMaybe(this::randomDateTime));
+
+        subtask.setTask(taskGenerator.generate());
+        subtask.setAssignee(doMaybe(userGenerator::generate));
+
         return subtask;
     }
 }
