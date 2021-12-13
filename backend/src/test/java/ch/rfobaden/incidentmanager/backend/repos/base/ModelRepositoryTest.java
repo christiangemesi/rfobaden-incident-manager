@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDateTime;
 
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class ModelRepositoryTest<
     TModel extends Model & PathConvertible<TPath>,
     TPath,
@@ -29,11 +31,6 @@ public abstract class ModelRepositoryTest<
 
     @Autowired
     protected ModelGenerator<TModel> generator;
-
-    @BeforeEach
-    public void setupEmptyRepository() {
-        repository.deleteAll();
-    }
 
     @Test
     public void testFindAll() {
