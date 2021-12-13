@@ -21,7 +21,7 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   useValidate(form, (validate) => ({
     email: [
       validate.notBlank(),
-      validate.match(/.+@.+\..+/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
+      validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
     ],
   }))
 

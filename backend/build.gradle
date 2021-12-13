@@ -105,8 +105,6 @@ sonarqube {
 		property "sonar.projectKey", "rfobaden-incident-manager_backend"
 		property "sonar.projectName", "rfobaden-incident-manager_backend"
 		property 'sonar.core.codeCoveragePlugin', 'jacoco'
-
-		// TODO Enable this as soon as the quality is ok.
-		// property "sonar.qualitygate.wait", true
+		property "sonar.qualitygate.wait", true
 	}
 }
