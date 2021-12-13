@@ -6,6 +6,8 @@ import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
+import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,15 +20,26 @@ public class SubtaskController extends ModelController<Subtask, SubtaskPath, Sub
 
     private final TaskService taskService;
 
-    public SubtaskController(TaskService taskService) {
+    private final UserService userService;
+
+    public SubtaskController(
+        TaskService taskService,
+        UserService userService
+    ) {
         this.taskService = taskService;
+        this.userService = userService;
     }
 
     @Override
     protected void loadRelations(SubtaskPath path, Subtask subtask) {
-        var task = taskService.find(path, path.getTaskId()).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "task not found")
-        ));
+        var task = taskService.find(path, path.getTaskId())
+            .orElseThrow(() -> (new ApiException(HttpStatus.NOT_FOUND, "task not found")));
         subtask.setTask(task);
+
+        if (subtask.getAssignee() != null) {
+            var assignee = userService.find(subtask.getAssigneeId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "assignee not found"));
+            subtask.setAssignee(assignee);
+        }
     }
 }

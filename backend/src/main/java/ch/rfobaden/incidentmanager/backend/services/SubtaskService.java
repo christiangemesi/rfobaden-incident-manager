@@ -13,19 +13,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubtaskService
     extends ModelRepositoryService<Subtask, SubtaskPath, SubtaskRepository> {
-
-    private final UserService userService;
-
-    public SubtaskService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Override
-    protected void loadRelations(Subtask subtask, Violations violations) {
-        if (subtask.getAssignee() != null) {
-            userService.find(subtask.getAssignee().getId()).ifPresentOrElse(subtask::setAssignee, () ->
-                violations.add("assignee", "does not exist")
-            );
-        }
-    }
 }
