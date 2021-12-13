@@ -8,8 +8,17 @@ services:
       args:
         - RFO_BACKEND_URL=${RFO_BACKEND_URL}
     restart: always
-    ports:
-      - "3000:3000"
+    networks:
+      - default
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.rule=Host(`ip34.daniel-va.ch`)
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.entrypoints=https
+      - traefik.http.services.${TRAEFIK_SERVICE_NAME}-frontend.loadbalancer.server.port=3000
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.tls=true
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-frontend.tls.certresolver=generate_cert_resolver
     depends_on:
       - backend
     env_file:
@@ -21,12 +30,21 @@ services:
       context: ../
       dockerfile: deploy/backend/Dockerfile
     restart: always
-    ports:
-      - "3001:8080"
     environment:
       - TZ=Europe/Zurich
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - default
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.rule=Host(`ip34.daniel-va.ch`) && (Path(`/api`) || PathPrefix(`/api/`))
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.entrypoints=https
+      - traefik.http.services.${TRAEFIK_SERVICE_NAME}-backend.loadbalancer.server.port=8080
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.tls=true
+      - traefik.http.routers.${TRAEFIK_SERVICE_NAME}-backend.tls.certresolver=generate_cert_resolver
     depends_on:
       - database
     env_file:
@@ -47,3 +65,8 @@ services:
 
 volumes:
   database:
+
+networks:
+  proxy:
+    name: "proxy"
+    external: true
