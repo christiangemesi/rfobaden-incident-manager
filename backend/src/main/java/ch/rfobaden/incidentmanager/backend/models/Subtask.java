@@ -1,7 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
-import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,8 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "task")
-public class Task extends Model implements PathConvertible<TaskPath> {
+@Table(name = "subtask")
+public class Subtask extends Model implements PathConvertible<SubtaskPath> {
 
     @ManyToOne
     @JoinColumn
@@ -23,7 +23,7 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
-    private Report report;
+    private Task task;
 
     @Column(nullable = false)
     private String title;
@@ -34,7 +34,8 @@ public class Task extends Model implements PathConvertible<TaskPath> {
 
     private LocalDateTime endsAt;
 
-    private String location;
+    @Column(nullable = false)
+    private boolean isClosed;
 
     @Column(nullable = false)
     private Priority priority;
@@ -49,7 +50,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         this.assignee = assignee;
     }
 
-    @JsonProperty
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -57,7 +57,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         return assignee.getId();
     }
 
-    @JsonProperty
     public void setAssigneeId(Long assigneeId) {
         if (assigneeId == null) {
             this.assignee = null;
@@ -69,30 +68,34 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         this.assignee.setId(assigneeId);
     }
 
-    @JsonIgnore
-    public Report getReport() {
-        return report;
+    public Long getTaskId() {
+        if (task == null) {
+            return null;
+        }
+        return task.getId();
     }
 
-    @JsonProperty
     public Long getReportId() {
-        if (report == null) {
+        if (task == null) {
             return null;
         }
-        return report.getId();
+        return task.getReportId();
     }
 
-    @JsonProperty
     public Long getIncidentId() {
-        if (report == null) {
+        if (task == null) {
             return null;
         }
-        return report.getIncident().getId();
+        return task.getReport().getIncidentId();
     }
 
-    @JsonProperty
-    public void setReport(Report report) {
-        this.report = report;
+    @JsonIgnore
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public String getTitle() {
@@ -127,14 +130,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         this.endsAt = endsAt;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Priority getPriority() {
         return priority;
     }
@@ -143,6 +138,14 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         this.priority = priority;
     }
 
+    @JsonProperty("isClosed")
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -152,47 +155,46 @@ public class Task extends Model implements PathConvertible<TaskPath> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Task task = (Task) o;
-        return equalsModel(task)
-            && Objects.equals(assignee, task.assignee)
-            && Objects.equals(report, task.report)
-            && Objects.equals(title, task.title)
-            && Objects.equals(description, task.description)
-            && Objects.equals(startsAt, task.startsAt)
-            && Objects.equals(endsAt, task.endsAt)
-            && Objects.equals(location, task.location)
-            && priority == task.priority;
+        Subtask subtask = (Subtask) o;
+        return equalsModel(subtask)
+            && Objects.equals(assignee, subtask.assignee)
+            && Objects.equals(task, subtask.task)
+            && Objects.equals(title, subtask.title)
+            && Objects.equals(description, subtask.description)
+            && Objects.equals(startsAt, subtask.startsAt)
+            && Objects.equals(endsAt, subtask.endsAt)
+            && Objects.equals(isClosed, subtask.isClosed)
+            && priority == subtask.priority;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), assignee, report, title,
-            description, startsAt,
-            endsAt, location, priority);
+        return Objects.hash(modelHashCode(), assignee, task, title,
+            description, startsAt, endsAt, priority, isClosed);
     }
 
     @Override
     public String toString() {
-        return "Task{"
+        return "Subtask{"
             + "id=" + getId()
             + ", assignee =" + assignee
-            + ", report=" + report
+            + ", task=" + task
             + ", title='" + title + '\''
             + ", description='" + description + '\''
             + ", createdAt=" + getCreatedAt()
             + ", updatedAt=" + getUpdatedAt()
             + ", startsAt=" + startsAt
-            + ", location='" + location + '\''
             + ", priority=" + priority
+            + ", isClosed=" + isClosed
             + '}';
     }
 
-
     @Override
-    public TaskPath toPath() {
-        var path = new TaskPath();
-        path.setIncidentId(getReport().getIncident().getId());
-        path.setReportId(getReport().getId());
+    public SubtaskPath toPath() {
+        var path = new SubtaskPath();
+        path.setIncidentId(getTask().getReport().getIncidentId());
+        path.setReportId(getTask().getReportId());
+        path.setTaskId(getTaskId());
         return path;
     }
 }

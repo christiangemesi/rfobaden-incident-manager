@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f61ca581-0d52-441f-9f25-040fff84cc43",
+		"_postman_id": "841bb449-4a37-44cf-9944-2ccdc087e908",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"username\",\n    \"password\": \"password\"\n}"
+							"raw": "{\n    \"email\": \"peter.muster@rfobaden.ch\",\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Muster\",\n    \"role\": \"ADMIN\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3001/api/v1/users",
@@ -47,7 +47,7 @@
 					"response": []
 				},
 				{
-					"name": "Read All Users",
+					"name": "List Users",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -68,7 +68,7 @@
 					"response": []
 				},
 				{
-					"name": "Read User By Id",
+					"name": "Find User",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -123,7 +123,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"title 2\",\n    \"closeReason\": \"\",\n    \"authorId\": \"3\",\n    \"description\": \"description\"\n}",
+							"raw": "{\n    \"title\": \"Badenfahrt\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -148,7 +148,7 @@
 					"response": []
 				},
 				{
-					"name": "Read All Incident",
+					"name": "List Incidents",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -169,7 +169,7 @@
 					"response": []
 				},
 				{
-					"name": "Read Incident By Id",
+					"name": "Find Incident",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -205,7 +205,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/2/close",
+							"raw": "http://localhost:3001/api/v1/incidents/1/close",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -215,7 +215,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"2",
+								"1",
 								"close"
 							]
 						}
@@ -256,7 +256,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Report Title\",\n    \"author\": {\n        \"id\": 1,\n        \"username\": \"User\",\n        \"password\": \"Test\"\n        },\n    \"incident\": {\n        \"id\": 1,\n        \"title\": \"Badenfahrt\",\n        \"authorId\": 1\n    }\n}",
+							"raw": "{\n    \"title\": \"Fahrzeug blockiert Fahrbahn\",\n    \"priority\": \"MEDIUM\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -264,50 +264,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/reports/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read All Report",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"api",
-								"v1",
-								"incidents"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read Report By Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/1",
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -317,7 +274,55 @@
 								"api",
 								"v1",
 								"incidents",
-								"1"
+								"5",
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7"
 							]
 						}
 					},
@@ -329,7 +334,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/1",
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -339,7 +344,249 @@
 								"api",
 								"v1",
 								"incidents",
-								"1"
+								"5",
+								"reports",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Sperrung der Zugangswege\",\n    \"priority\": \"HIGH\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subtask",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Umleitung markieren\",\n    \"priority\": \"LOW\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10",
+								"subtasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10",
+								"subtasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10",
+								"subtasks",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"5",
+								"reports",
+								"7",
+								"tasks",
+								"10",
+								"subtasks",
+								"15"
 							]
 						}
 					},

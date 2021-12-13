@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers.base;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class ModelController<
-    TModel extends Model,
+    TModel extends Model & PathConvertible<TPath>,
     TPath,
     TService extends ModelService<TModel, TPath>
     > extends AppController {
@@ -28,7 +29,7 @@ public abstract class ModelController<
     @Autowired
     protected TService service;
 
-    protected abstract void loadPath(TPath path, TModel entity);
+    protected abstract void loadRelations(TPath path, TModel entity);
 
     @GetMapping
     public List<TModel> list(@ModelAttribute TPath path) {
@@ -48,10 +49,8 @@ public abstract class ModelController<
         if (entity.getId() != null) {
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "id must not be set");
         }
-        loadPath(path, entity);
-        return service.create(path, entity).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
-        ));
+        loadRelations(path, entity);
+        return service.create(path, entity);
     }
 
     @PutMapping("{id}")
@@ -66,7 +65,7 @@ public abstract class ModelController<
                 HttpStatus.UNPROCESSABLE_ENTITY, "id must be identical to url parameter"
             );
         }
-        loadPath(path, entity);
+        loadRelations(path, entity);
         return service.update(path, entity).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
         ));
@@ -81,10 +80,10 @@ public abstract class ModelController<
     }
 
     public abstract static class Basic<
-        TModel extends Model,
+        TModel extends Model & PathConvertible<EmptyPath>,
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelController<TModel, EmptyPath, TService> {
         @Override
-        protected final void loadPath(EmptyPath emptyPath, TModel entity) {}
+        protected final void loadRelations(EmptyPath emptyPath, TModel entity) {}
     }
 }

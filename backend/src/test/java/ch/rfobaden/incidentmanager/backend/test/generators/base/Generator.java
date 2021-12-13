@@ -57,7 +57,7 @@ public abstract class Generator<T> {
                 .forEach(getter -> {
                     var fieldName = getter.getName().substring(3);
                     var setter = Arrays.stream(methods)
-                        .filter(method -> method.getName().startsWith("set" + fieldName))
+                        .filter(method -> method.getName().equals("set" + fieldName))
                         .filter(method -> method.getParameterCount() == 1)
                         .findFirst()
                         .orElse(null);
