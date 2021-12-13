@@ -118,7 +118,7 @@ public abstract class ModelRepositoryServiceTest<
             });
 
         // When
-        var result = service.create(path, newRecord).orElse(null);
+        var result = service.create(path, newRecord);
 
         // Then
         assertThat(result).isNotNull();

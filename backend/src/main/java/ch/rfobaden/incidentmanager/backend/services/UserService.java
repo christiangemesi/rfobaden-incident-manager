@@ -35,7 +35,7 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
     }
 
     @Override
-    public Optional<User> create(EmptyPath path, User newUser) {
+    public User create(EmptyPath path, User newUser) {
         if (newUser.getCredentials() != null) {
             throw new IllegalArgumentException("credentials will be overwritten and must be null");
         }
@@ -47,12 +47,12 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         credentials.setUpdatedAt(credentials.getCreatedAt());
         credentials.setLastPasswordChangeAt(credentials.getCreatedAt());
         newUser.setCredentials(credentials);
-        return super.create(path, newUser).map((user) -> {
-            // TODO send the generated email to the user by mail.
-            // Log the password for now so we can actually now what it is.
-            logger.info("Password for {}: {}", user.getEmail(), plainPassword);
-            return user;
-        });
+        var user = super.create(path, newUser);
+
+        // TODO send the generated email to the user by mail.
+        // Log the password for now so we can actually now what it is.
+        logger.info("Password for {}: {}", user.getEmail(), plainPassword);
+        return user;
     }
 
     public Optional<User> updatePassword(Long id, String password) {

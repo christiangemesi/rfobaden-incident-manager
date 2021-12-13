@@ -69,7 +69,7 @@ public class UserServiceTest
         });
 
         // When
-        var result = service.create(newUser.toPath(), newUser).orElse(null);
+        var result = service.create(newUser.toPath(), newUser);
 
         // Then
         assertThat(result).isNotNull();

@@ -43,7 +43,7 @@ public abstract class ModelRepositoryService<
     }
 
     @Override
-    public Optional<TModel> create(TPath path, TModel entity) {
+    public TModel create(TPath path, TModel entity) {
         if (entity.getId() != null) {
             throw new IllegalArgumentException("id will be overwritten and must be null");
         }
@@ -59,7 +59,7 @@ public abstract class ModelRepositoryService<
         if (!path.equals(entity.toPath())) {
             throw new IllegalStateException("record does not match path: " + path);
         }
-        return Optional.of(repository.save(entity));
+        return repository.save(entity);
     }
 
     @Override

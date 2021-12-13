@@ -49,9 +49,7 @@ public abstract class ModelController<
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "id must not be set");
         }
         loadRelations(path, entity);
-        return service.create(path, entity).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
-        ));
+        return service.create(path, entity);
     }
 
     @PutMapping("{id}")
