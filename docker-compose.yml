@@ -3,7 +3,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend.dev.dockerfile
+      dockerfile: deploy/frontend.dev.dockerfile
       args: 
         - NEXT_PUBLIC_BACKEND_ENDPOINT=http://${BACKEND_HOST}:${BACKEND_APP_PORT}
     environment:
@@ -23,7 +23,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./docker/backend.dockerfile
+      dockerfile: deploy/backend.dockerfile
     ports:
       - "${BACKEND_APP_PORT}:8080"
       - "${BACKEND_DEBUGGER_PORT}:5005" 
