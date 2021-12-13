@@ -3,7 +3,7 @@
  **/
 const config = {
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify: true,
   eslint: {
     dirs: [
       'components',
