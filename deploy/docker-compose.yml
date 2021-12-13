@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+  frontend:
+    image: rfobaden/incident-manager/frontend:${RFO_STAGE}
+    build:
+      context: ../frontend/
+      dockerfile: ../deploy/frontend/Dockerfile
+      args:
+        - RFO_BACKEND_URL=${RFO_BACKEND_URL}
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    env_file:
+      - .env
+
+  backend:
+    image: rfobaden/incident-manager/backend:${RFO_STAGE}
+    build:
+      context: ../
+      dockerfile: deploy/backend/Dockerfile
+    restart: always
+    ports:
+      - "3001:8080"
+    environment:
+      - TZ=Europe/Zurich
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - database
+    env_file:
+      - .env
+
+  database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${RFO_DATABASE_NAME}
+      - MYSQL_USER=${RFO_DATABASE_USERNAME}
+      - MYSQL_PASSWORD=${RFO_DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${RFO_DATABASE_ROOT_PASSWORD}
+    volumes:
+      - database:/var/lib/mysql
+    env_file:
+      - .env
+
+volumes:
+  database:
