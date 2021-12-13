@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers.base;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class ModelController<
-    TModel extends Model,
+    TModel extends Model & PathConvertible<TPath>,
     TPath,
     TService extends ModelService<TModel, TPath>
     > extends AppController {
@@ -79,7 +80,7 @@ public abstract class ModelController<
     }
 
     public abstract static class Basic<
-        TModel extends Model,
+        TModel extends Model & PathConvertible<EmptyPath>,
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelController<TModel, EmptyPath, TService> {
         @Override
