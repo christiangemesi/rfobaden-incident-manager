@@ -6,8 +6,10 @@ import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -21,6 +23,9 @@ public class SubtaskControllerTest
 
     @MockBean
     TaskService taskService;
+
+    @Autowired
+    protected UserService userService;
 
     @Override
     protected String getEndpointFor(SubtaskPath path) {
@@ -37,6 +42,12 @@ public class SubtaskControllerTest
     protected void mockRelations(SubtaskPath path, Subtask subtask) {
         Mockito.when(taskService.find(path, path.getTaskId()))
             .thenReturn(Optional.of(subtask.getTask()));
+
+        var assignee = subtask.getAssignee();
+        if (assignee != null) {
+            Mockito.when(userService.find(assignee.getId()))
+                .thenReturn(Optional.of(assignee));
+        }
     }
 }
 
