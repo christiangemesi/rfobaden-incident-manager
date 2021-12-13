@@ -61,6 +61,9 @@ compileTestJava.inputs.files(processTestResources)
 
 test {
 	useJUnitPlatform()
+	testLogging {
+		events "skipped", "failed"
+	}
 }
 
 checkstyle {
