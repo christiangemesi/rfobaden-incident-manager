@@ -14,8 +14,6 @@ export default interface Subtask extends Model {
 
     assigneeId: Id<User> | null
 
-    closedAt: Date | null
-
     startsAt: Date | null
     endsAt: Date | null
 

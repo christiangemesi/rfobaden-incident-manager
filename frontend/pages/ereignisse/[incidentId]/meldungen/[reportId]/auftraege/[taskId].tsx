@@ -18,12 +18,15 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import Task from '@/models/Task'
 import { useIncident } from '@/stores/IncidentStore'
+import Subtask, { parseSubtask } from '@/models/Subtask'
+import SubtaskStore, { useSubtask, useSubtaskOfTask } from '@/stores/SubtaskStore'
 
 interface Props{
   data: {
     incident: Incident
     report: Report
     task: Task
+    subtasks: Subtask[]
     users: User[]
   }
 }
@@ -31,22 +34,22 @@ interface Props{
 const TaskPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     UserStore.saveAll(data.users.map(parseUser))
+    SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
   const _incident = useIncident(data.incident)
   const report = useReport(data.report)
   const task = useTask(data.task)
-
   const assignee = useUser(task.assigneeId)
 
   // TODO Use custom hook for username.
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
   // TODO replace with subtasks.
-  const subtasks = useTasksOfReport(report.id)
+  const subtasks = useSubtaskOfTask(task.id)
 
   // TODO Store only id and load subtask from store.
-  const [selectedSubtask, setSelectedSubtask] = useState<Task | null>(null)
+  const [selectedSubtask, setSelectedSubtask] = useState<Subtask | null>(null)
 
   // TODO Rewrite grid.
   return (
@@ -157,6 +160,13 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw taskError
   }
 
+  const [subtasks, subtaskError]: BackendResponse<Subtask[]> = await BackendService.list(
+    `incidents/${incidentId}/reports/${reportId}/tasks/${taskId}/subtasks`,
+  )
+  if (subtaskError !== null) {
+    throw subtaskError
+  }
+
   const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
   if (usersError !== null) {
     throw usersError
@@ -168,7 +178,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
         incident,
         report,
         task,
-        subtasks: [],
+        subtasks,
         users,
       },
     },

@@ -1,16 +1,12 @@
-import Task from '@/models/Task'
-import React, { useState } from 'react'
+import React from 'react'
 import UiList from '@/components/Ui/List/UiList'
-import Priority from '@/models/Priority'
-import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
-import { useUser } from '@/stores/UserStore'
-import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
+import Subtask from '@/models/Subtask'
+import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
 
-// TODO Change to Subtask.
 interface Props {
-  subtasks: Task[]
-  activeSubtask: Task | null
-  onClick?: (task: Task) => void
+  subtasks: Subtask[]
+  activeSubtask: Subtask | null
+  onClick?: (subtask: Subtask) => void
 }
 
 const SubtaskList: React.VFC<Props> = ({ subtasks, activeSubtask, onClick: handleClick }) => {
@@ -24,23 +20,4 @@ const SubtaskList: React.VFC<Props> = ({ subtasks, activeSubtask, onClick: handl
 }
 export default SubtaskList
 
-interface TaskListItemProps {
-  subtask: Task,
-  isActive: boolean,
-  onClick?: (Task: Task) => void,
-}
 
-// TODO implement subtask functionality.
-const SubtaskListItem: React.VFC<TaskListItemProps> = ({ subtask, onClick: _handleClick }) => {
-
-  const assignee = useUser(subtask.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
-
-  const [value, setValue] = useState(false)
-
-  return (
-    <UiListItemWithDetails priority={Priority.LOW} title={subtask.title} user={assigneeName}>
-      <UiCheckbox label="" value={value} onChange={setValue} color="tertiary" />
-    </UiListItemWithDetails>
-  )
-}
