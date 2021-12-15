@@ -1,45 +1,14 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
-import Link from 'next/link'
 import UiButton from '@/components/Ui/Button/UiButton'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
-import SessionStore, { getSessionToken, useSession } from '@/stores/SessionStore'
-import { useAsync } from 'react-use'
-import BackendService from '@/services/BackendService'
-import { SessionResponse } from '@/models/Session'
-import { parseUser } from '@/models/User'
+import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiLink from '@/components/Ui/Link/UiLink'
 
 
-interface Props{
-   //isFluid?: boolean
-  children?: ReactNode
- }
-
-const UiHeader: React.VFC <Props> =({ children }) =>{
-
-  useAsync(async () => {
-    const token = getSessionToken()
-    if (token === null) {
-      SessionStore.clear()
-      return
-    }
-    const [data, error] = await BackendService.find<SessionResponse>('session')
-    if (error !== null) {
-      if (error.status === 401) {
-        SessionStore.clear()
-        return
-      }
-      throw error
-    }
-    if (data.user === null) {
-      SessionStore.clear()
-      return
-    }
-    SessionStore.setSession(data.token, parseUser(data.user))
-  })
+const UiHeader: React.VFC = () => {
 
   const { currentUser } = useSession()
 
@@ -55,84 +24,67 @@ const UiHeader: React.VFC <Props> =({ children }) =>{
 
   return (
     <HeaderContainer>
-        
-      <ImageContainer>
-        <Link href="/">
-          <Image src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150%" height="150%" />
-        </Link>
-      </ImageContainer>
-        
-      <NavBar>
-        <NavItem>
-          <Link href="/">
-            <a>
+      <NavContainer>
+        <ImageContainer>
+          <UiLink href="/">
+            <Image src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
+          </UiLink>
+        </ImageContainer>
+        <NavBar>
+          <NavItem>
+            <NavLink href="/">
               <UiTitle level={7}>
               Home
               </UiTitle>
-            </a>
-          </Link>
-        </NavItem>
-        <NavItem>
-          <Link href="/benutzer">
-            <a>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="/benutzer">
               <UiTitle level={7}>
-                Benutzer
+              Benutzer
               </UiTitle>
-            </a>
-          </Link>
-        </NavItem>
-        <NavItem>
-          <Link href="/ereignisse">
-            <a>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="/ereignisse">
               <UiTitle level={7}>
-                Ereignisse
+              Ereignisse
               </UiTitle>
-            </a>
-          </Link>
-        </NavItem>
-      </NavBar>
-        
+            </NavLink>
+          </NavItem>
+        </NavBar>
+      </NavContainer>
       <ButtonList>
-        {/*<SessionStateBar>*/}
         {currentUser === null ? (
-          <Link href="/anmelden">
-            <a>
-              <UiButton type="button">
-                  → anmelden
-              </UiButton>
-            </a>
-          </Link>
+          <NavLink href="/anmelden">
+            <UiButton type="button">
+                → anmelden
+            </UiButton>
+          </NavLink>
         ) : (
-          <UiGrid>
-            <UiGrid.Col>
-              <Link href="/profil">
-                <a>
-                  <UiButton type="button">
-                    {currentUser.firstName} {currentUser.lastName}
-                  </UiButton>
-                </a>
-              </Link>
-            </UiGrid.Col>
-            <UiGrid.Col size="auto">
-              <UiButton onClick={logout}>
-                  abmelden →
+          <React.Fragment>
+            <UiLink href="/profil">
+              <UiButton type="button">
+                {currentUser.firstName} {currentUser.lastName}
               </UiButton>
-            </UiGrid.Col>
-          </UiGrid>
+            </UiLink>
+            <UiButton onClick={logout}>
+                  abmelden →
+            </UiButton>
+          </React.Fragment>
         )}
-        {/*</SessionStateBar>*/}
       </ButtonList>
-
-      {/*<UiHeaderButton>*/}
-      {/*  {children}*/}
-      {/*</UiHeaderButton>*/}
-
     </HeaderContainer>
   )
-
 }
 export default UiHeader
 
+const NavLink = styled(UiLink)`
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+  :hover {
+    //TODO and also when activated
+  }
+`
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
@@ -142,36 +94,26 @@ const HeaderContainer = styled.header`
   margin-bottom: 3rem;
   background: ${({ theme }) => theme.colors.secondary.value};
 `
+const NavContainer = styled.div`
+  display: flex;
+`
 const ImageContainer = styled.div`
   display: flex;
-  justify-content: left;
-  padding: 10px;
+  align-items: center;
 `
 const NavBar = styled.nav`
   display: flex;
-  justify-content:center; //FIXME: doesn't stay centred
-  padding: 10px;
+  gap: 1rem;
+  align-items: center;
+  margin-left: 2rem;
 `
-const NavItem = styled.div` //FIXME: navitem still has link_line 
+const NavItem = styled.div`
   display: flex;
   justify-content: space-evenly;
   padding: 5px;
 `
 const ButtonList = styled.div`
   display: flex;
-  justify-content: space-around;
-  padding: 5px;
+  gap: 1rem;
+  align-items: center;
 `
-// const UiHeaderButton = styled.div`
-//   display: inline-flex;
-//   justify-content: flex-end;
-//   align-items: center;
-//   //margin-right: 50px;
-// `
-// const SessionStateBar = styled.div`
-//   display: flex;
-//   justify-content: flex-end;
-//   padding: 0.25rem;
-//   margin-right: 50px;
-//   background: rebeccapurple;
-//`

@@ -1,16 +1,15 @@
 import { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import Head from 'next/head'
-import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
 import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
-import SessionStore, { getSessionToken, useSession } from '@/stores/SessionStore'
+import SessionStore, { getSessionToken } from '@/stores/SessionStore'
 
 import 'reset-css/reset.css'
 import { parseUser } from '@/models/User'
 import { SessionResponse } from '@/models/Session'
-import { useRouter } from 'next/router'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
@@ -35,18 +34,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     SessionStore.setSession(data.token, parseUser(data.user))
   })
 
-  const { currentUser } = useSession()
-
-  const router = useRouter()
-  const logout = async () => {
-    SessionStore.clear()
-
-    // Should probably not do this everytime, but only if we are on a page
-    // which only signed in users can access. There's currently no nice way to detect this,
-    // so we just do it for every page.
-    await router.push('/')
-  }
-
   const component = useMemo(() => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
@@ -61,35 +48,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiHeader />
-        {/*  <UiHeader>*/}
-        {/*    <SessionStateBar>*/}
-        {/*      {currentUser === null ? (*/}
-        {/*        <Link href="/anmelden">*/}
-        {/*          <a>*/}
-        {/*            <UiButton type="button">*/}
-        {/*            → anmelden*/}
-        {/*            </UiButton>*/}
-        {/*          </a>*/}
-        {/*        </Link>*/}
-        {/*      ) : (*/}
-        {/*        <UiGrid gap={1}>*/}
-        {/*          <UiGrid.Col>*/}
-        {/*            <Link href="/profil">*/}
-        {/*              <a>*/}
-        {/*                <UiButton type="button">*/}
-        {/*                  {currentUser.firstName} {currentUser.lastName}*/}
-        {/*                </UiButton>*/}
-        {/*              </a>*/}
-        {/*            </Link>*/}
-        {/*          </UiGrid.Col>*/}
-        {/*          <UiGrid.Col size="auto">*/}
-        {/*            <UiButton onClick={logout}>*/}
-        {/*            abmelden →*/}
-        {/*            </UiButton>*/}
-        {/*          </UiGrid.Col>*/}
-        {/*        </UiGrid>*/}
-        {/*      )}*/}
-        {/*    </SessionStateBar>*/}
         {component}
       </ThemeProvider>
     </>
@@ -136,10 +94,4 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       display: none;
     }
   }
-`
-
-const SessionStateBar = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.25rem;
 `
