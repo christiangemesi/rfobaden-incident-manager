@@ -4,7 +4,6 @@ import Image from 'next/image'
 import UiButton from '@/components/Ui/Button/UiButton'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiLink from '@/components/Ui/Link/UiLink'
 
 
@@ -33,23 +32,17 @@ const UiHeader: React.VFC = () => {
         <NavBar>
           <NavItem>
             <NavLink href="/">
-              <UiTitle level={7}>
               Home
-              </UiTitle>
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink href="/benutzer">
-              <UiTitle level={7}>
               Benutzer
-              </UiTitle>
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink href="/ereignisse">
-              <UiTitle level={7}>
               Ereignisse
-              </UiTitle>
             </NavLink>
           </NavItem>
         </NavBar>
@@ -58,7 +51,7 @@ const UiHeader: React.VFC = () => {
         {currentUser === null ? (
           <NavLink href="/anmelden">
             <UiButton type="button">
-                → anmelden
+              → anmelden
             </UiButton>
           </NavLink>
         ) : (
@@ -81,8 +74,9 @@ export default UiHeader
 
 const NavLink = styled(UiLink)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
+  font-size: 1rem;
   :hover {
-    //TODO and also when activated
+    font-weight: bold;
   }
 `
 const HeaderContainer = styled.header`
@@ -108,9 +102,7 @@ const NavBar = styled.nav`
   margin-left: 2rem;
 `
 const NavItem = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  padding: 5px;
+  padding: 0.5rem;
 `
 const ButtonList = styled.div`
   display: flex;
