@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models.paths;
 
+import ch.rfobaden.incidentmanager.backend.models.Subtask;
+
 import java.util.Objects;
 
 public class SubtaskPath extends TaskPath {
@@ -15,14 +17,14 @@ public class SubtaskPath extends TaskPath {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (! (other instanceof SubtaskPath)) {
             return false;
         }
-        SubtaskPath that = (SubtaskPath) o;
+        SubtaskPath that = (SubtaskPath) other;
         return Objects.equals(taskId, that.taskId)
             && super.equals(that);
     }
