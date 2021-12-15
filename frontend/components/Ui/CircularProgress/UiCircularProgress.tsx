@@ -1,61 +1,55 @@
-import React, { useRef } from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react'
+import styled from 'styled-components'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
-  value: number
+  done: number
+  total: number
 }
 
-const firstRotate = keyframes`
-  0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-  }
-`
-
-const UICircularProgress: React.VFC<Props> = ({ value= 0 }) => {
+const UICircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
+  const decimal = parseFloat((done / total).toFixed(2))
   return (
-    <EmptyCircle>
-      <Indicator />
-      <CoverIndicator />
-    </EmptyCircle>
+    <Circle percentDecimal={decimal}>
+      <CircleOverlay>
+        <CompletionRate><UiTitle level={5}>{done}/{total}</UiTitle> </CompletionRate>
+        <Percent><UiTitle level={6}>{decimal * 100}%</UiTitle></Percent>
+      </CircleOverlay>
+    </Circle>
   )
 }
 export default UICircularProgress
 
-const CircleBase = styled.div`
+const Circle = styled.div<{ percentDecimal: number }>`
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
-  border-style: solid;
-  border-width: 20px;
-`
-
-const EmptyCircle = styled(CircleBase)`
-  border-color: red; // empty color
-  justify-content: center;
+  display: flex;
   align-items: center;
-  transform: rotate(-45deg); // So that it starts at the top center
+  justify-content: center;
+  background: conic-gradient(${({
+    theme,
+    percentDecimal,
+  }) => theme.colors.success.value + ' ' + (percentDecimal * 100) + '%' + ',0,' + theme.colors.secondary.value + ' ' + (100 - (percentDecimal * 100)) + '%'});
+  /* This is done so there aren't 4 inline parts*/
 `
 
-const Indicator = styled(CircleBase)`
-  position: absolute;
-  border-left-color: blue; //progress color
-  border-top-color: blue;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  transform: rotate(50deg);
-  animation: ${firstRotate} 2s linear infinite;
+
+const CircleOverlay = styled.div`
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.primary.contrast};
 `
 
-const CoverIndicator = styled(CircleBase)`
-  position: absolute;
-  border-left-color: red; //empty color
-  border-top-color: red;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
+const CompletionRate = styled.div`
+  color: ${({ theme }) => theme.colors.primary.value};
 `
 
+const Percent = styled.div`
+  color: ${({ theme }) => theme.colors.primary.value};
+`
