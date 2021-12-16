@@ -22,19 +22,17 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
         user={assigneeName}
         onClick={handleClick && (() => handleClick(task))}
       >
-        <StyledDiv>
+        <LeftSpacer>
           {/* TODO Show actual number of subtasks */}
           0/0
-        </StyledDiv>
+        </LeftSpacer>
       </UiListItemWithDetails>
     </UiLink>
   )
 }
 export default TaskListItem
 
-// TODO Rename this component.
-const StyledDiv = styled.div`
-  > div {
-    margin-left: 1rem;
-  }
+const LeftSpacer = styled.div`
+  margin-left: 1rem;
 `
+

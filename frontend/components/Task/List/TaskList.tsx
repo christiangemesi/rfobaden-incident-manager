@@ -19,5 +19,3 @@ const TaskList: React.VFC<Props> = ({ tasks, onClick: handleClick }) => {
 
 }
 export default TaskList
-
-

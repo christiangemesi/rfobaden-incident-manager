@@ -1,7 +1,7 @@
 import React from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
-import ReportListItem from '@/components/Report/List/ReportListItem'
+import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 
 interface Props {
   reports: Report[]

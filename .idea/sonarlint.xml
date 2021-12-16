@@ -2,7 +2,12 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
-    <option name="projectKey" value="rfobaden-incident-manager-frontend" />
-    <option name="serverId" value="FHNW SonarQube" />
+    <option name="fileExclusions">
+      <list>
+        <option value="DIRECTORY:frontend/node_modules" />
+      </list>
+    </option>
+    <option name="projectKey" value="rfobaden-incident-manager_backend" />
+    <option name="serverId" value="rfo" />
   </component>
 </project>

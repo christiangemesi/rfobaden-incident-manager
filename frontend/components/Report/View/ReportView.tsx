@@ -45,16 +45,14 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   // TODO Split grit into multiple rows.
   return (
     <UiGrid gapH={2} gapV={1}>
-      <UiGrid.Col size={12}>
+      <VerticalSpacer>
         <UiTitle level={2}>
           {report.title}
         </UiTitle>
-      </UiGrid.Col>
-      <UiGrid.Col size={12}>
-        <StyledDiv>
-          <StyledP>
-            <UiDateLabel start={startDate} end={report.endsAt} />
-          </StyledP>
+      </VerticalSpacer>
+      <VerticalSpacer>
+        <HorizontalSpacer>
+          <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
@@ -67,16 +65,12 @@ const ReportView: React.VFC<Props> = ({ report }) => {
                 </UiIconButton>
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
-                <UiGrid gapV={1.5}>
-                  <UiGrid.Col size={12}>
-                    <UiTitle level={1} isCentered>
-                      Meldung bearbeiten
-                    </UiTitle>
-                  </UiGrid.Col>
-                  <UiGrid.Col size={12}>
-                    <ReportForm incident={incident} report={report} onClose={close} />
-                  </UiGrid.Col>
-                </UiGrid>
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Meldung bearbeiten
+                  </UiTitle>
+                  <ReportForm incident={incident} report={report} onClose={close} />
+                </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
 
@@ -101,50 +95,55 @@ const ReportView: React.VFC<Props> = ({ report }) => {
             </UiIconButton>
 
           </UiIconButtonGroup>
-        </StyledDiv>
-      </UiGrid.Col>
-      <UiGrid.Col size={12}>
+        </HorizontalSpacer>
+      </VerticalSpacer>
+      <BlockContainer>
         {report.description}
-      </UiGrid.Col>
+      </BlockContainer>
       {report.location && (
-        <UiGrid.Col size={12}>
+        <BlockContainer>
           <UiTextWithIcon text={report.location ?? ''}>
             <UiIcon.Location />
           </UiTextWithIcon>
-        </UiGrid.Col>
+        </BlockContainer>
       )}
       {assignee && (
-        <UiGrid.Col size={12}>
+        <BlockContainer>
           <UiTextWithIcon text={assigneeName}>
             <UiIcon.UserInCircle />
           </UiTextWithIcon>
-        </UiGrid.Col>
+        </BlockContainer>
       )}
       {report.notes !== null && (
-        <UiGrid.Col size={12}>
+        <VerticalSpacer>
           <UiTextWithIcon text={report.notes}>
             <UiIcon.AlertCircle />
           </UiTextWithIcon>
-        </UiGrid.Col>
+        </VerticalSpacer>
       )}
-      <UiGrid.Col size={12}>
+      <BlockContainer>
         <TaskList tasks={tasks} />
-      </UiGrid.Col>
+      </BlockContainer>
     </UiGrid>
   )
 }
 export default ReportView
 
-const StyledP = styled.p`
-  margin-bottom: 2rem;
+const HorizontalSpacer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const VerticalSpacer = styled.div`
+  width: 100%;
+  margin-bottom: 1rem;
 
   :last-child {
     margin-bottom: 0;
   }
 `
 
-const StyledDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-
+const BlockContainer = styled.div`
+  width: 100%;
 `

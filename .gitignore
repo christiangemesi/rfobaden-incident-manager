@@ -152,7 +152,10 @@ Temporary Items
 #   and has to be different for every user.
 .idea/compiler.xml
 
-
 # IDEA sonarlint plugin
 .idea/sonarlint-state.xml
 .idea/sonarlint/issuestore/
+
+# IDEA remote targets.
+#   Almost always machine specific, so we don't want them in the git repo.
+.idea/remote-targets.xml

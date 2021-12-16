@@ -10,6 +10,13 @@ public class IncidentRepositoryTest
 
     @Override
     protected void alignAfterCreate(Incident record, Incident result) {
-        record.getCloseReason().setId(result.getCloseReason().getId());
+        var closeReason = record.getCloseReason();
+        var closeReasonResult = result.getCloseReason();
+        while (closeReason != null && closeReasonResult != null) {
+            closeReason.setId(closeReasonResult.getId());
+            closeReason = closeReason.getPrevious();
+            closeReasonResult = closeReasonResult.getPrevious();
+        }
+
     }
 }

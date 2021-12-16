@@ -35,9 +35,6 @@ import java.util.function.Supplier;
     AppControllerTest.MockUserServiceConfig.class
 })
 public abstract class AppControllerTest {
-    @Autowired
-    protected UserService userService;
-
     /**
      * Tests for {@link AppController}, which do not have to be tested
      * for every subclass.

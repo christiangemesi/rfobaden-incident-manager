@@ -1,10 +1,11 @@
 import Report from '@/models/Report'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useUser } from '@/stores/UserStore'
 import { useTasksOfReport } from '@/stores/TaskStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled, { css } from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
+import { useUsername } from '@/models/User'
 
 interface Props {
   report: Report
@@ -19,46 +20,45 @@ const ReportListItem: React.VFC<Props> = ({
 }) => {
   const assignee = useUser(report.assigneeId)
 
-  // TODO Create custom hook for username.
-  const assigneeName = assignee ? assignee.firstName + ' ' + assignee?.lastName : ''
+  const assigneeName = useUsername(assignee)
 
   const tasksAll = useTasksOfReport(report.id)
 
-  // TODO Memoize filter.
-  const tasksDone = tasksAll.filter((task) => task.closedAt != null)
+  const tasksDone = useMemo(() => (
+    tasksAll.filter((task) => task.closedAt != null)
+  ), [tasksAll])
 
   return (
     <SelectableListItem
       isActive={isActive}
       title={report.title}
       priority={report.priority}
-      user={assigneeName}
+      user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(report))}
     >
-      <StyledDiv>
+      <LeftSpacer>
         {report.isKeyReport ? (
           <UiIcon.KeyMessage />
         ) : (
           <UiIcon.Empty />
         )}
-      </StyledDiv>
-      <StyledDiv>
+      </LeftSpacer>
+      <LeftSpacer>
         {report.isLocationRelevantReport ? (
           <UiIcon.LocationRelevancy />
         ) : (
           <UiIcon.Empty />
         )}
-      </StyledDiv>
-      <StyledDiv>
+      </LeftSpacer>
+      <LeftSpacer>
         {tasksDone.length}/{tasksAll.length}
-      </StyledDiv>
+      </LeftSpacer>
     </SelectableListItem>
   )
 }
 export default ReportListItem
 
-// TODO Rename this component.
-const StyledDiv = styled.div`
+const LeftSpacer = styled.div`
   margin-left: 1rem;
 `
 

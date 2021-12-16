@@ -6,7 +6,7 @@ interface Props {
 }
 
 const UiDate: React.VFC<Props> = ({ value, type = 'datetime' }) => {
-  const day = prefixZero(value.getDay())
+  const day = prefixZero(value.getDate())
   const month = prefixZero(value.getMonth())
   const year = value.getFullYear()
   const hours = prefixZero(value.getHours())

@@ -1,4 +1,5 @@
 import Model, { parseModel } from '@/models/base/Model'
+import { useMemo } from 'react'
 
 export default interface User extends Model {
   email: string
@@ -18,4 +19,10 @@ export const parseUser = (data: unknown): User => {
     ...user,
     ...parseModel(data),
   }
+}
+
+export const useUsername = (user: User | null): string | null => {
+  return useMemo(() => (
+    (user === null) ? null : `${user.firstName} ${user.lastName}`
+  ), [user])
 }
