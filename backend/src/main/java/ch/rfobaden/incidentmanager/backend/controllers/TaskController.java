@@ -31,7 +31,7 @@ public class TaskController extends ModelController<Task, TaskPath, TaskService>
 
     @Override
     protected void loadRelations(TaskPath path, Task task) {
-        var report = reportService.find(path.getReportId()).orElseThrow(() -> (
+        var report = reportService.find(path, path.getReportId()).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "report not found")
         ));
         task.setReport(report);
