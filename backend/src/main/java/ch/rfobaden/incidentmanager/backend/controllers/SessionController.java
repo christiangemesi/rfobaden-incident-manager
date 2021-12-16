@@ -5,7 +5,6 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
-import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
@@ -33,16 +32,12 @@ import javax.validation.constraints.NotBlank;
 public class SessionController extends AppController {
     private final AuthenticationManager authManager;
 
-    private final UserService userService;
-
     private final JwtHelper jwtHelper;
 
     public SessionController(
         AuthenticationManager authManager,
-        UserService userService,
         JwtHelper jwtHelper) {
         this.authManager = authManager;
-        this.userService = userService;
         this.jwtHelper = jwtHelper;
     }
 
@@ -51,12 +46,12 @@ public class SessionController extends AppController {
         return getCurrentUser().map((user) -> {
             var token = request.getHeader("Authorization").substring(7);
             return new SessionData(token, user);
-        }).orElseGet(() -> {
+        }).orElseGet(() -> (
             // Making this a 404 (or any other 4XX) would be preferable,
             // but many browsers show these errors in the console, which we do not want
             // to happen if we just want to check if the user is logged in.
-            return new SessionData(null, null);
-        });
+            new SessionData(null, null)
+        ));
     }
 
     @PostMapping

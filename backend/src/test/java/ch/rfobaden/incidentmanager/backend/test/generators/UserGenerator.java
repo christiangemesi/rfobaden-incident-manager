@@ -16,7 +16,7 @@ public class UserGenerator extends ModelGenerator<User> {
         user.setFirstName(faker.name().firstName());
         user.setLastName(faker.name().lastName());
         user.setEmail(faker.internet().emailAddress());
-        user.setRole(faker.random().nextInt(0, 1) == 1 ? User.Role.ADMIN : User.Role.CREATOR);
+        user.setRole(faker.options().option(User.Role.class));
         return user;
     }
 

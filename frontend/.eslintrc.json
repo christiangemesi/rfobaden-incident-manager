@@ -3,7 +3,12 @@
     "eslint:recommended",
     "next/core-web-vitals",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style"
+  ],
+  "plugins": [
+    "jest"
   ],
   "rules": {
     // Require indentation of 2 spaces.
@@ -55,5 +60,8 @@
     // Allow children to be passed as prob.
     // This is almost a necessity if we want to pass function variables as children.
     "react/no-children-prop": "off"
+  },
+  "env": {
+    "jest/globals": true
   }
 }

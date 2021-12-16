@@ -15,6 +15,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public abstract class ModelControllerTest<
 
     protected ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
 
-    @Test
+    @RepeatedTest(5)
     public void testList() throws Exception {
         // Given
         var records = generator.generateNew(10);
@@ -64,8 +65,7 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).list(path);
     }
 
-
-    @Test
+    @RepeatedTest(5)
     public void testList_empty() throws Exception {
         // Given
         var record = generator.generate();
@@ -84,7 +84,7 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).list(path);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFind() throws Exception {
         // Given
         var record = generator.generate();
@@ -103,7 +103,7 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).find(path, record.getId());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFind_notFound() throws Exception {
         // Given
         var record = generator.generate();
@@ -123,15 +123,16 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).find(path, id);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate() throws Exception {
         // Given
         var newRecord = generator.generateNew();
         var path = newRecord.toPath();
         var createdRecord = generator.persist(newRecord);
+        System.out.println(newRecord);
         Mockito.when(service.create(path, newRecord))
-            .thenReturn(Optional.of(createdRecord));
-        mockPopulate(path, newRecord);
+            .thenReturn(createdRecord);
+        mockRelations(path, newRecord);
 
         // When
         var mockRequest = MockMvcRequestBuilders.post(getEndpointFor(path))
@@ -147,13 +148,13 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).create(path, newRecord);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_presetId() throws Exception {
         // Given
         var newRecord = generator.generateNew();
         newRecord.setId(1L);
         var path = newRecord.toPath();
-        mockPopulate(path, newRecord);
+        mockRelations(path, newRecord);
 
         // When
         var mockRequest = MockMvcRequestBuilders.post(getEndpointFor(path))
@@ -169,7 +170,7 @@ public abstract class ModelControllerTest<
         verify(service, times(0)).create(any(), any());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate() throws Exception {
         // Given
         var record = generator.generate();
@@ -178,7 +179,7 @@ public abstract class ModelControllerTest<
         updatedRecord.setUpdatedAt(LocalDateTime.now());
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.of(updatedRecord));
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -194,12 +195,12 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).update(path, record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_idMismatch() throws Exception {
         // Given
         var record = generator.generate();
         var path = record.toPath();
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, generator.generateId()))
@@ -215,14 +216,14 @@ public abstract class ModelControllerTest<
         verify(service, times(0)).update(path, record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_notFound() throws Exception {
         // Given
         var record = generator.generate();
         var path = record.toPath();
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.empty());
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -238,14 +239,14 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).update(path, record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdate_conflict() throws Exception {
         // Given
         var record = generator.generate();
         var path = record.toPath();
         Mockito.when(service.update(path, record))
             .thenThrow(new UpdateConflictException("..."));
-        mockPopulate(path, record);
+        mockRelations(path, record);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()))
@@ -262,7 +263,7 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).update(path, record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDelete() throws Exception {
         // Given
         var record = generator.generate();
@@ -282,7 +283,7 @@ public abstract class ModelControllerTest<
         verify(service, times(1)).delete(path, id);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDelete_notFound() throws Exception {
         // Given
         var record = generator.generate();
@@ -309,13 +310,13 @@ public abstract class ModelControllerTest<
         return getEndpointFor(path) + id;
     }
 
-    protected abstract void mockPopulate(TPath path, TModel record);
+    protected abstract void mockRelations(TPath path, TModel record);
 
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelControllerTest<TModel, EmptyPath, TService> {
         @Override
-        protected final void mockPopulate(EmptyPath emptyPath, TModel record) {}
+        protected final void mockRelations(EmptyPath emptyPath, TModel record) {}
     }
 }

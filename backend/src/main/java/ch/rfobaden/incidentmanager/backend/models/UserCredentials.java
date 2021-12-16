@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -8,11 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Null;
 
 @Entity
 @Table(name = "user_credentials")
-public final class UserCredentials extends Model {
+public final class UserCredentials extends Model implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 

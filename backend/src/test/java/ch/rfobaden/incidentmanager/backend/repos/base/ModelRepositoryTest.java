@@ -9,15 +9,18 @@ import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDateTime;
 
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class ModelRepositoryTest<
     TModel extends Model & PathConvertible<TPath>,
     TPath,
@@ -30,12 +33,7 @@ public abstract class ModelRepositoryTest<
     @Autowired
     protected ModelGenerator<TModel> generator;
 
-    @BeforeEach
-    public void setupEmptyRepository() {
-        repository.deleteAll();
-    }
-
-    @Test
+    @RepeatedTest(5)
     public void testFindAll() {
         // Given
         var records = generator.generate(10);
@@ -50,7 +48,7 @@ public abstract class ModelRepositoryTest<
     }
 
 
-    @Test
+    @RepeatedTest(5)
     public void testFindAll_empty() {
         // When
         var result = repository.findAll();
@@ -59,7 +57,7 @@ public abstract class ModelRepositoryTest<
         assertThat(result).asList().isEmpty();
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFindById() {
         // Given
         var record = saveWithRelations(generator.generate());
@@ -73,7 +71,7 @@ public abstract class ModelRepositoryTest<
         assertThat(result).isEqualTo(record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testFindById_notFound() {
         // Given
         var id = generator.generateId();
@@ -85,7 +83,7 @@ public abstract class ModelRepositoryTest<
         assertThat(result).isEmpty();
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testSave_create() {
         // Given
         var record = generator.generate();
@@ -101,7 +99,7 @@ public abstract class ModelRepositoryTest<
         assertThat(result).isEqualTo(record);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testSave_update() {
         // Given
         var newRecord = generator.generate();
@@ -117,7 +115,7 @@ public abstract class ModelRepositoryTest<
             .isEqualTo(updatedRecord);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDeleteById() {
         // Given
         var record = generator.generate();
@@ -131,7 +129,7 @@ public abstract class ModelRepositoryTest<
         assertThat(result).isNull();
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testDeleteById_notFound() {
         // Given
         var id = generator.generateId();

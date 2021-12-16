@@ -1,12 +1,15 @@
 package ch.rfobaden.incidentmanager.backend.utils.validation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class Violations {
+public final class Violations implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Map<String, List<String>> fields;
 
     private final Map<String, Violations> nested;
@@ -21,6 +24,11 @@ public final class Violations {
     }
 
     public void add(String field, String error) {
+        if (field.isEmpty()) {
+            throw new IllegalArgumentException(
+                "field name must not be empty"
+            );
+        }
         if (field.contains(".")) {
             throw new IllegalArgumentException(
                 "can't add with nested field key '" + field + "'"
@@ -38,19 +46,26 @@ public final class Violations {
     public Violations nested(String... fields) {
         var violations = this;
         for (var field : fields) {
-            violations = nested(field);
+            violations = violations.nested(field);
         }
         return violations;
     }
 
     public Violations nested(String field) {
+        if (field.isEmpty()) {
+            throw new IllegalArgumentException(
+                "field name must not be empty"
+            );
+        }
+        if (field.contains(".")) {
+            throw new IllegalArgumentException(
+                "can't nest into nested field key '" + field + "'"
+            );
+        }
         if (fields.containsKey(field)) {
             throw new IllegalArgumentException(
                 "can't nest into non-nested field '" + field + "'"
             );
-        }
-        if (field.length() == 0) {
-            throw new IllegalArgumentException("nested field name must not be empty");
         }
         return nested.computeIfAbsent(field, (k) -> new Violations());
     }
@@ -63,5 +78,9 @@ public final class Violations {
             errors.put(field, violations.getAll());
         });
         return errors;
+    }
+
+    public Map<String, Violations> getNested() {
+        return nested;
     }
 }

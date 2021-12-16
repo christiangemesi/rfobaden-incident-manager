@@ -10,6 +10,7 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryServiceTest;
 import com.github.javafaker.Faker;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class UserServiceTest
     @Autowired
     protected Faker faker;
 
-    @Test
+    @RepeatedTest(5)
     protected void testFindByEmail() {
         // Given
         var record = generator.generate();
@@ -41,7 +42,7 @@ public class UserServiceTest
         verify(repository, times(1)).findByEmail(record.getEmail());
     }
 
-    @Test
+    @RepeatedTest(5)
     protected void testFindByEmail_notFound() {
         // Given
         var record = generator.generate();
@@ -56,7 +57,7 @@ public class UserServiceTest
         verify(repository, times(1)).findByEmail(record.getEmail());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_credentials() {
         // Given
         var newUser = generator.generateNew();
@@ -69,7 +70,7 @@ public class UserServiceTest
         });
 
         // When
-        var result = service.create(newUser.toPath(), newUser).orElse(null);
+        var result = service.create(newUser.toPath(), newUser);
 
         // Then
         assertThat(result).isNotNull();
@@ -91,7 +92,7 @@ public class UserServiceTest
         verify(repository, times(1)).save(newUser);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testCreate_presetCredentials() {
         // Given
         var newUser = generator.generateNew();
@@ -109,7 +110,7 @@ public class UserServiceTest
         verify(repository, never()).save(newUser);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdatePassword() {
         // Given
         var user = generator.generate();
@@ -134,7 +135,7 @@ public class UserServiceTest
         verify(repository, times(1)).save(user);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdatePassword_unknownUser() {
         // Given
         var user = generator.generate();
@@ -149,7 +150,7 @@ public class UserServiceTest
         assertThat(result).isEmpty();
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdatePassword_nullPassword() {
         // Given
         var user = generator.generate();
@@ -163,7 +164,7 @@ public class UserServiceTest
             .hasMessage("password must not be empty");
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testUpdatePassword_emptyPassword() {
         // Given
         var user = generator.generate();

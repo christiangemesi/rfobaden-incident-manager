@@ -14,14 +14,14 @@ public class ReportPath extends EmptyPath {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (! (other instanceof ReportPath)) {
             return false;
         }
-        ReportPath that = (ReportPath) o;
+        ReportPath that = (ReportPath) other;
         return Objects.equals(incidentId, that.incidentId);
     }
 
