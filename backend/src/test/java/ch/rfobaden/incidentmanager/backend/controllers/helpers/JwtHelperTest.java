@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers.helpers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
+import ch.rfobaden.incidentmanager.backend.RfoConfig;
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
@@ -236,11 +237,11 @@ public class JwtHelperTest {
     @Test
     public void testNew_weakKey() {
         // Given
-        var props = new JwtHelper.Props();
-        props.setSecret(faker.leagueOfLegends().champion());
+        var secret = faker.leagueOfLegends().champion();
+        var rfoConfig = new RfoConfig(null, new RfoConfig.Jwt(secret));
 
         // When
-        var result = catchThrowable(() -> new JwtHelper(props, userService));
+        var result = catchThrowable(() -> new JwtHelper(rfoConfig, userService));
 
         // Then
         assertThat(result)

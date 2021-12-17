@@ -1,32 +1,29 @@
 version: "3.9"
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: ./docker/frontend.dev.dockerfile
-      args: 
-        - NEXT_PUBLIC_BACKEND_ENDPOINT=http://${BACKEND_HOST}:${BACKEND_APP_PORT}
+    image: node:16-alpine3.11
+    command: ["npm", "run", "dev"]
+    working_dir: /app
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_BACKEND_ENDPOINT=http://${BACKEND_HOST}:${BACKEND_APP_PORT}
+      - NEXT_PUBLIC_RFO_BACKEND_URL=${RFO_BACKEND_URL}
     ports:
-      - "${FRONTEND_APP_PORT}:3000"
-      - "${FRONTENT_WEBPACK_PORT}:3035"
+      - "3000:3000"
+      - "3035:3035"
     volumes:
       - ./frontend:/app
       - frontend.node_modules:/app/node_modules
     depends_on:
       - backend
-    tmpfs:
-      - /app/.nextn
 
   backend:
-    build:
-      context: .
-      dockerfile: ./docker/backend.dockerfile
+    image: gradle:7.3.1-jdk11-alpine
+    command: ["sh", "dev.sh"]
+    working_dir: /app
+    restart: always
     ports:
-      - "${BACKEND_APP_PORT}:8080"
-      - "${BACKEND_DEBUGGER_PORT}:5005" 
+      - "3001:8080"
+      - "5005:5005"
     environment:
       - TZ=Europe/Zurich
     volumes:
@@ -34,23 +31,25 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - database
+    env_file:
+      - .env
 
   database:
     image: mysql:8.0
     restart: always
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${RFO_DATABASE_NAME}
+      - MYSQL_USER=${RFO_DATABASE_USERNAME}
+      - MYSQL_PASSWORD=${RFO_DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${RFO_DATABASE_ROOT_PASSWORD}
     ports:
-      - "${DATABASE_PORT}:3306"
+      - "3002:3306"
     volumes:
       - database:/var/lib/mysql
+    env_file:
+      - .env
   
 
 volumes:
   frontend.node_modules:
-  backend.gradle-local:
-  backend.gradle-global:
   database:

@@ -9,7 +9,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
 
-jwt:
-  # The JWT secret key.
-  # CHANGE THIS IN PRODUCTION, and KEEP IT SECRET!
-  secret: "9OXZSztg+yrDtpP+0tW4BRrXMALxUwlMQojsJMEtSJ4="
+rfo:
+  jwt:
+    # Fixed JWT for test environment.
+    secret: "9OXZSztg+yrDtpP+0tW4BRrXMALxUwlMQojsJMEtSJ4="
+  frontend:
+    # Fixed host for test environment, value does not influence tests.
+    host: "localhost:300"

@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.function.Supplier;
 
 @SpringBootApplication
+@EnableConfigurationProperties(RfoConfig.class)
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

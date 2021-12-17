@@ -2,6 +2,7 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { CSSProperties, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { Breakpoint, Themed } from '@/theme'
+import { run } from '@/utils/control-flow'
 
 interface Props extends StyledProps {
   gap?: number
@@ -17,12 +18,18 @@ const UiGrid = styled.div<Props>`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  flex: 0 1 auto;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};
+
+  --gap-h: 0;
+  --gap-v: 0;
+  gap: var(--gap-v) var(--gap-h);
   
   ${({ gap = 0, gapH = gap, gapV = gap }) => css`
-    gap: ${gapH}rem ${gapV}rem;
+    --gap-h: ${gapH}rem;
+    --gap-v: ${gapV}rem;
   `}
 `
 
@@ -38,7 +45,7 @@ interface ColProps {
 const Col = styled.div<ColProps>`
   position: relative;
   display: block;
-  width: 100%;
+  // width: 100%;
   text-align: ${({ textAlign }) => textAlign};
   
   ${() => colSizeStyles.default}
@@ -113,10 +120,35 @@ const colSizeStyles = {
     max-width: 100%;
   `,
   fixed: Array.from({ length: 12 }, (_, i) => {
-    const percentage = 100 / 12 * (i + 1)
+    // By default, `gap` and fixed size flex items don't work together at all: gap stays at its fixed size, and the
+    // columns do too. This would mean that, for example, a grid with a non-zero gap and 3 fixed columns of size 4 would
+    // not stay on one line - the gap fills up some of the first row, and thus push at least one column to the next row.
+    // This is basically never the behaviour we want the grid to have, so we have to counteract this.
+    //
+    // The solution to keeping columns with a combined size of 12 on one line, even if a gap is set,
+    // is to compute their width as follows:
+    //   - Use the normal percentage as base value (e.g. size 4 => 33.333%).
+    //   - Remove the full gap width from this value.
+    //     This causes everything to be on one line, but leaves unused space at the end of each row.
+    //     This unused space has the exact same size as the horizontal gap.
+    //   - Distribute this unused space among all columns of a row.
+    //     This is done by dividing the gap size through the ratio that the column is taking up,
+    //     and adding the resulting value to the total width.
+    //
+    // Note that we can exclude full-width columns (size = 12) from this,
+    // since they are only affected by the vertical gap,
+    // while this countermeasure only deals with the horizontal gap.
+    const basis = i == 11 ? '100%' : run(() => {
+      const ratio = 12 / (i + 1)
+      const percentage = (100 / ratio).toFixed(4)
+      return css`
+        calc(${percentage}% - var(--gap-h) + calc(var(--gap-h) / ${ratio}))
+      `
+    })
     return css`
-      flex: 0 0 ${percentage}%;
-      max-width: ${percentage}%;
+      flex: 1 0 ${basis};
+      width: 100%;
+      max-width: ${basis};
     `
   }),
   none: css`

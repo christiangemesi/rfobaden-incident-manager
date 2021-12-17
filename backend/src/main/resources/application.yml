@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database:3306/database?allowPublicKeyRetrieval=true&useSSL=false
-    username: user
-    password: password
+    url: jdbc:mysql://database:3306/${RFO_DATABASE_NAME}?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${RFO_DATABASE_USERNAME}
+    password: ${RFO_DATABASE_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
@@ -11,7 +11,8 @@ spring:
     hibernate:
       ddl-auto: update
 
-jwt:
-  # The JWT secret key.
-  # CHANGE THIS IN PRODUCTION, and KEEP IT SECRET!
-  secret: "Y4qqQGrNiVToB9zIyzub/7HHV4ZleHsQA/D25kbYVbY="
+rfo:
+  jwt:
+    secret: ${RFO_JWT_SECRET}
+  frontend:
+    host: ${RFO_FRONTEND_HOST}
