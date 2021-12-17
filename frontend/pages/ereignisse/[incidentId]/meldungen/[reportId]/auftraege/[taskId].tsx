@@ -61,15 +61,20 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   // TODO Rewrite grid.
   return (
-    <UiGrid gapH={2} gapV={1}>
+    <UiContainer>
+
+      {/* Title */}
       <VerticalSpacer>
         <UiTitle level={2}>
           {task.title}
         </UiTitle>
       </VerticalSpacer>
+
       <VerticalSpacer>
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={task.endsAt} />
+
+          {/* Button Group */}
           <UiIconButtonGroup>
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
@@ -134,7 +139,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       <BlockContainer>
         <SubtaskList subtasks={subtasks} />
       </BlockContainer>
-    </UiGrid>
+    </UiContainer>
   )
 }
 export default TaskPage
