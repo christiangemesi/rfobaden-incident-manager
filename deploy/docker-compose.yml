@@ -14,7 +14,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
-      - traefik.http.routers.incident_manager/frontend:${RFO_STAGE}.rule=Host(`ip34.daniel-va.ch`)
+      - traefik.http.routers.incident_manager/frontend:${RFO_STAGE}.rule=Host(`${RFO_DOMAIN}`)
       - traefik.http.routers.incident_manager/frontend:${RFO_STAGE}.entrypoints=https
       - traefik.http.services.incident_manager/frontend:${RFO_STAGE}.loadbalancer.server.port=3000
       - traefik.http.routers.incident_manager/frontend:${RFO_STAGE}.tls=true
@@ -40,7 +40,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
-      - traefik.http.routers.incident_manager/backend:${RFO_STAGE}.rule=Host(`ip34.daniel-va.ch`) && (Path(`/api`) || PathPrefix(`/api/`))
+      - traefik.http.routers.incident_manager/backend:${RFO_STAGE}.rule=Host(`${RFO_DOMAIN}`) && (Path(`/api`) || PathPrefix(`/api/`))
       - traefik.http.routers.incident_manager/backend:${RFO_STAGE}.entrypoints=https
       - traefik.http.services.incident_manager/backend:${RFO_STAGE}.loadbalancer.server.port=8080
       - traefik.http.routers.incident_manager/backend:${RFO_STAGE}.tls=true
