@@ -2,10 +2,11 @@ import React from 'react'
 import UiList from '@/components/Ui/List/UiList'
 import Subtask from '@/models/Subtask'
 import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
+import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 
 interface Props {
   subtasks: Subtask[]
-  activeSubtask?: Subtask | null
+  activeSubtask: Subtask | null
   onClick?: (subtask: Subtask) => void
 }
 
@@ -13,7 +14,12 @@ const SubtaskList: React.VFC<Props> = ({ subtasks, activeSubtask, onClick: handl
   return (
     <UiList>
       {subtasks.map((subtask) => (
-        <SubtaskListItem key={subtask.id} subtask={subtask} onClick={handleClick} isActive={activeSubtask === subtask} />
+        <SubtaskListItem
+          key={subtask.id}
+          subtask={subtask}
+          onClick={handleClick}
+          isActive={activeSubtask !== null && activeSubtask.id == subtask.id}
+        />
       ))}
     </UiList>
   )
