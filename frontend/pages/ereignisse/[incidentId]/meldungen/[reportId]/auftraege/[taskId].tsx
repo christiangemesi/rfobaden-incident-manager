@@ -9,7 +9,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
-import { useTask, useTasksOfReport } from '@/stores/TaskStore'
+import { useTask } from '@/stores/TaskStore'
 import { useReport } from '@/stores/ReportStore'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
@@ -24,9 +24,10 @@ import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import ReportForm from '@/components/Report/Form/ReportForm'
 import TaskForm from '@/components/Task/Form/TaskForm'
-import TaskList from '@/components/Task/List/TaskList'
+import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
+import SubtaskView from '@/components/Subtask/View/SubtaskView'
+import Id from '@/models/base/Id'
 
 interface Props {
   data: {
@@ -44,7 +45,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
-  const _incident = useIncident(data.incident)
+  const incident = useIncident(data.incident)
   const report = useReport(data.report)
   const task = useTask(data.task)
   const assignee = useUser(task.assigneeId)
@@ -52,14 +53,13 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   // TODO Use custom hook for username.
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
-  // TODO replace with subtasks.
   const subtasks = useSubtaskOfTask(task.id)
 
-  // TODO Store only id and load subtask from store.
-  const [selectedSubtask, setSelectedSubtask] = useState<Subtask | null>(null)
+  const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(null)
+  const selectedSubtask = useSubtask(selectedSubtaskId)
+
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
-  // TODO Rewrite grid.
   return (
     <UiContainer>
 
@@ -69,6 +69,23 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           {task.title}
         </UiTitle>
       </VerticalSpacer>
+
+      {/* Create Form */}
+      <UiModal isFull>
+        <UiModal.Activator>{({ open }) => (
+          <UiActionButton onClick={open}>
+            <UiIcon.CreateAction />
+          </UiActionButton>
+        )}</UiModal.Activator>
+        <UiModal.Body>{({ close }) => (
+          <div>
+            <UiTitle level={1} isCentered>
+              Teilauftrag erfassen
+            </UiTitle>
+            <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+          </div>
+        )}</UiModal.Body>
+      </UiModal>
 
       <VerticalSpacer>
         <HorizontalSpacer>
@@ -80,6 +97,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
               <UiIcon.PrintAction />
             </UiIconButton>
 
+            {/* Edit Form */}
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (
                 <UiIconButton onClick={open}>
@@ -91,26 +109,11 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
                   <UiTitle level={1} isCentered>
                     Task bearbeiten
                   </UiTitle>
-                  <ReportForm incident={_incident} report={report} onClose={close} />
+                  <TaskForm incident={incident} report={report} task={task} onClose={close} />
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
 
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiIconButton onClick={open}>
-                  <UiIcon.CreateAction />
-                </UiIconButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <div>
-                  <UiTitle level={1} isCentered>
-                    Auftrag erfassen
-                  </UiTitle>
-                  {/*<TaskForm incident={incident} report={report} onClose={close} />*/}
-                </div>
-              )}</UiModal.Body>
-            </UiModal>
 
             {/*<UiIconButton onClick={handleDelete}>*/}
             {/*  <UiIcon.DeleteAction />*/}
@@ -120,11 +123,11 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
         </HorizontalSpacer>
       </VerticalSpacer>
       <BlockContainer>
-        {report.description}
+        {task.description}
       </BlockContainer>
-      {report.location && (
+      {task.location && (
         <BlockContainer>
-          <UiTextWithIcon text={report.location ?? ''}>
+          <UiTextWithIcon text={task.location ?? ''}>
             <UiIcon.Location />
           </UiTextWithIcon>
         </BlockContainer>
@@ -136,9 +139,17 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           </UiTextWithIcon>
         </BlockContainer>
       )}
-      <BlockContainer>
-        <SubtaskList subtasks={subtasks} />
-      </BlockContainer>
+      <UiGrid gapH={2}>
+        <UiGrid.Col>
+          <SubtaskList subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
+                       activeSubtask={selectedSubtask} />
+        </UiGrid.Col>
+        <UiGrid.Col>
+          {selectedSubtask !== null && (
+            <SubtaskView incident={incident} report={report} task={task} subtask={selectedSubtask} />
+          )}
+        </UiGrid.Col>
+      </UiGrid>
     </UiContainer>
   )
 }
