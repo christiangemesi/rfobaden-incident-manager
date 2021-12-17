@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import UiButton from '@/components/Ui/Button/UiButton'
 import SessionStore, { useSession } from '@/stores/SessionStore'
@@ -12,6 +12,7 @@ const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
 
   const router = useRouter()
+
   const logout = async () => {
     SessionStore.clear()
 
@@ -31,12 +32,12 @@ const UiHeader: React.VFC = () => {
         </ImageContainer>
         <NavBar>
           <NavItem data-name="Benutzer">
-            <NavLink href="/benutzer">
+            <NavLink href="/benutzer" link={router.asPath} hrefLink="/benutzer">
               Benutzer
             </NavLink>
           </NavItem>
           <NavItem data-name="Ereignisse">
-            <NavLink href="/ereignisse">
+            <NavLink href="/ereignisse" link={router.asPath} hrefLink="/ereignisse">
               Ereignisse
             </NavLink>
           </NavItem>
@@ -44,7 +45,7 @@ const UiHeader: React.VFC = () => {
       </NavContainer>
       <ButtonList>
         {currentUser === null ? (
-          <NavLink href="/anmelden">
+          <NavLink href="/anmelden" link="null" hrefLink="void">
             <UiButton type="button">
               → anmelden
             </UiButton>
@@ -57,7 +58,7 @@ const UiHeader: React.VFC = () => {
               </UiButton>
             </UiLink>
             <UiButton onClick={logout}>
-                  abmelden →
+              abmelden →
             </UiButton>
           </React.Fragment>
         )}
@@ -67,9 +68,23 @@ const UiHeader: React.VFC = () => {
 }
 export default UiHeader
 
-const NavLink = styled(UiLink)`
-  color: ${({ theme }) => theme.colors.secondary.contrast};
+const NavLink = styled(UiLink)<{ link: string, hrefLink: string }>`
+  ${({ link, hrefLink }) => {
+    if (link === hrefLink) {
+      return css`
+        color: ${({ theme }) => theme.colors.primary.value};
+        font-weight: bold;
+      `
+    }
+    if (link !== hrefLink) {
+      return css`
+        color: ${({ theme }) => theme.colors.secondary.contrast};
+      `
+    }
+  }}
+
   font-size: 1rem;
+
   :hover {
     font-weight: bold;
   }
@@ -98,6 +113,7 @@ const NavBar = styled.nav`
 `
 const NavItem = styled.div`
   padding: 0.5rem;
+
   &::before {
     display: block;
     content: attr(data-name);
