@@ -7,7 +7,7 @@ const apiEndpoint = run(() => {
   if (!process.browser) {
     return 'http://backend:8080'
   }
-  const value = process.env['NEXT_PUBLIC_BACKEND_ENDPOINT']
+  const value = process.env['NEXT_PUBLIC_RFO_BACKEND_URL']
   if (value === undefined) {
     return ''
   }
