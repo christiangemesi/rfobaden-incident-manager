@@ -18,7 +18,7 @@ public class TaskPath extends ReportPath {
         if (this == other) {
             return true;
         }
-        if (other == null || getClass() != other.getClass()) {
+        if (! (other instanceof TaskPath)) {
             return false;
         }
         TaskPath that = (TaskPath) other;

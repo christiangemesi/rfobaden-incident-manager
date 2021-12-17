@@ -6,11 +6,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -45,6 +49,9 @@ public class Report extends Model implements PathConvertible<ReportPath> {
 
     @Column(nullable = false)
     private Priority priority;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.REMOVE)
+    private List<Task> tasks;
 
     @JsonIgnore
     public User getAssignee() {
@@ -166,6 +173,16 @@ public class Report extends Model implements PathConvertible<ReportPath> {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    @JsonIgnore
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    @JsonIgnore
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @Override
