@@ -30,17 +30,17 @@ const UiHeader: React.VFC = () => {
           </UiLink>
         </ImageContainer>
         <NavBar>
-          <NavItem>
+          <NavItem data-name="Home">
             <NavLink href="/">
               Home
             </NavLink>
           </NavItem>
-          <NavItem>
+          <NavItem data-name="Benutzer">
             <NavLink href="/benutzer">
               Benutzer
             </NavLink>
           </NavItem>
-          <NavItem>
+          <NavItem data-name="Ereignisse">
             <NavLink href="/ereignisse">
               Ereignisse
             </NavLink>
@@ -103,6 +103,15 @@ const NavBar = styled.nav`
 `
 const NavItem = styled.div`
   padding: 0.5rem;
+  &::before {
+    display: block;
+    content: attr(data-name);
+    font-weight: bold;
+    height: 1px;
+    color: transparent;
+    overflow: hidden;
+    visibility: hidden;
+  }
 `
 const ButtonList = styled.div`
   display: flex;
