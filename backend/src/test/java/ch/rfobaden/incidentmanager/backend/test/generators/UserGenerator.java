@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
+import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ public class UserGenerator extends ModelGenerator<User> {
     @Autowired
     UserCredentialsGenerator credentialsGenerator;
 
+    @Autowired
+    OrganizationGenerator organizationGenerator;
+
     @Override
     public User generateNew() {
         var user = new User();
@@ -17,6 +21,7 @@ public class UserGenerator extends ModelGenerator<User> {
         user.setLastName(faker.name().lastName());
         user.setEmail(faker.internet().emailAddress());
         user.setRole(faker.options().option(User.Role.class));
+        user.setOrganization(organizationGenerator.generate());
         return user;
     }
 

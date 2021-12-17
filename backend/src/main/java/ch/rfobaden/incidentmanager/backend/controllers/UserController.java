@@ -3,7 +3,9 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/v1/users")
 public class UserController extends ModelController.Basic<User, UserService> {
     private final JwtHelper jwtHelper;
+    private final UserService userService;
 
-    public UserController(JwtHelper jwtHelper) {
+    //TODO red when in
+    //@Override
+    protected void loadRelations(Organization organization, EmptyPath path) {
+        if (organization.getUser() != null) {
+            var user = userService.find(organization.getUser().getId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+            organization.setUser(user);
+        }
+    }
+
+
+    public UserController(JwtHelper jwtHelper, UserService userService) {
         this.jwtHelper = jwtHelper;
+        this.userService = userService;
     }
 
     @PutMapping("/{id}/password")

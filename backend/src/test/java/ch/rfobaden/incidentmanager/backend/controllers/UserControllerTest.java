@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
+import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +27,19 @@ import java.util.Optional;
 public class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
     @Autowired
     Faker faker;
+
+    @MockBean
+    UserService userService;
+
+    //TODO red when in
+    //@Override
+    protected void mockRelations(Organization organization, EmptyPath path) {
+        var user = organization.getUser();
+        if (user != null) {
+            Mockito.when(userService.find(user.getId()))
+                .thenReturn(Optional.of(user));
+        }
+    }
 
     @Override
     protected String getEndpointFor(EmptyPath path) {
