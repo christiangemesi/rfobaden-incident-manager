@@ -30,11 +30,6 @@ const UiHeader: React.VFC = () => {
           </UiLink>
         </ImageContainer>
         <NavBar>
-          <NavItem data-name="Home">
-            <NavLink href="/">
-              Home
-            </NavLink>
-          </NavItem>
           <NavItem data-name="Benutzer">
             <NavLink href="/benutzer">
               Benutzer
