@@ -29,8 +29,6 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     ReportStore.saveAll(data.reports.map(parseReport))
   })
 
-  const incidents = useIncidents()
-
   const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
   const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
 
