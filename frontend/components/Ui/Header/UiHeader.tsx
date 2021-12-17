@@ -1,10 +1,11 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
+import React, { CSSProperties } from 'react'
+import styled from 'styled-components'
 import Image from 'next/image'
 import UiButton from '@/components/Ui/Button/UiButton'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
+import { defaultTheme } from '@/theme'
 
 
 const UiHeader: React.VFC = () => {
@@ -12,6 +13,14 @@ const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
 
   const router = useRouter()
+  const hrefIcident = '/ereignisse'
+  const hrefUser = '/benutzer'
+  const styleIncident: CSSProperties = {
+    borderBottom: router.asPath === hrefIcident ? 'solid 1px ' + defaultTheme.colors.secondary.contrast : 'none',
+  }
+  const styleUser: CSSProperties = {
+    borderBottom: router.asPath === hrefUser ? 'solid 1px '+ defaultTheme.colors.secondary.contrast : 'none',
+  }
 
   const logout = async () => {
     SessionStore.clear()
@@ -32,12 +41,12 @@ const UiHeader: React.VFC = () => {
         </ImageContainer>
         <NavBar>
           <NavItem data-name="Benutzer">
-            <NavLink href="/benutzer" link={router.asPath} hrefLink="/benutzer">
+            <NavLink href={hrefUser} style={styleUser}>
               Benutzer
             </NavLink>
           </NavItem>
           <NavItem data-name="Ereignisse">
-            <NavLink href="/ereignisse" link={router.asPath} hrefLink="/ereignisse">
+            <NavLink href={hrefIcident} style={styleIncident}>
               Ereignisse
             </NavLink>
           </NavItem>
@@ -45,7 +54,7 @@ const UiHeader: React.VFC = () => {
       </NavContainer>
       <ButtonList>
         {currentUser === null ? (
-          <NavLink href="/anmelden" link="null" hrefLink="void">
+          <NavLink href="/anmelden">
             <UiButton type="button">
               → anmelden
             </UiButton>
@@ -68,23 +77,10 @@ const UiHeader: React.VFC = () => {
 }
 export default UiHeader
 
-const NavLink = styled(UiLink)<{ link: string, hrefLink: string }>`
-  ${({ link, hrefLink }) => {
-    if (link === hrefLink) {
-      return css`
-        color: ${({ theme }) => theme.colors.primary.value};
-        font-weight: bold;
-      `
-    }
-    if (link !== hrefLink) {
-      return css`
-        color: ${({ theme }) => theme.colors.secondary.contrast};
-      `
-    }
-  }}
-
+const NavLink = styled(UiLink)`
+  color: ${({ theme }) => theme.colors.secondary.contrast};
   font-size: 1rem;
-
+  
   :hover {
     font-weight: bold;
   }
