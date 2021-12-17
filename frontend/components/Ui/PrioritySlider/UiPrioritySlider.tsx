@@ -14,22 +14,22 @@ const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
 
   return (
     <div>
-      <StyledDiv>
+      <Slider>
 
-        <StyledSlider value={value} />
-        <StyledContainer>
-          <StyledIconDiv  priority={Priority.LOW} onClick={() => handleChange(Priority.LOW)}>
+        <Selector value={value} />
+        <IconContainer>
+          <Icon  priority={Priority.LOW} onClick={() => handleChange(Priority.LOW)}>
             <UiIcon.PriorityLow />
-          </StyledIconDiv>
-          <StyledIconDiv onClick={() => handleChange(Priority.MEDIUM)} priority={Priority.MEDIUM}>
+          </Icon>
+          <Icon onClick={() => handleChange(Priority.MEDIUM)} priority={Priority.MEDIUM}>
             <UiIcon.PriorityMedium />
-          </StyledIconDiv>
-          <StyledIconDiv onClick={() => handleChange(Priority.HIGH)} priority={Priority.HIGH}>
+          </Icon>
+          <Icon onClick={() => handleChange(Priority.HIGH)} priority={Priority.HIGH}>
             <UiIcon.PriorityHigh />
-          </StyledIconDiv>
-        </StyledContainer>
+          </Icon>
+        </IconContainer>
 
-      </StyledDiv>
+      </Slider>
       <UiInputErrors errors={errors} />
     </div>
   )
@@ -37,7 +37,7 @@ const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
 
 export default UiPrioritySlider
 
-const StyledIconDiv = styled.div<{priority: Priority}>`
+const Icon = styled.div<{priority: Priority}>`
   height: 40px;
   width: 40px;
   display: inline-flex;
@@ -57,13 +57,13 @@ const StyledIconDiv = styled.div<{priority: Priority}>`
   `}
 `
 
-const StyledDiv = styled.div`
+const Slider = styled.div`
   display: inline-flex;
   position: relative;
   cursor: pointer;
 `
 
-const StyledSlider = styled.div<{ value: Priority | null }>`
+const Selector = styled.div<{ value: Priority | null }>`
   height: 40px;
   width: 40px;
   ${({ value }) => value !== null && css`
@@ -90,7 +90,7 @@ const StyledSlider = styled.div<{ value: Priority | null }>`
   transition-property: right, border-radius;
 `
 
-const StyledContainer = styled.div`
+const IconContainer = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: space-around;
