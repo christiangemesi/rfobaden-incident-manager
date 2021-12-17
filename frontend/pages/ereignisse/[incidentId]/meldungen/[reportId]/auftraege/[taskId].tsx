@@ -20,8 +20,15 @@ import Task from '@/models/Task'
 import { useIncident } from '@/stores/IncidentStore'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtask, useSubtaskOfTask } from '@/stores/SubtaskStore'
+import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import ReportForm from '@/components/Report/Form/ReportForm'
+import TaskForm from '@/components/Task/Form/TaskForm'
+import TaskList from '@/components/Task/List/TaskList'
 
-interface Props{
+interface Props {
   data: {
     incident: Incident
     report: Report
@@ -50,59 +57,84 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   // TODO Store only id and load subtask from store.
   const [selectedSubtask, setSelectedSubtask] = useState<Subtask | null>(null)
+  const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
   // TODO Rewrite grid.
   return (
-    <UiContainer>
-      <UiGrid gapH={2} gapV={1}>
-        <UiGrid.Col size={12}>
-          <UiTitle level={2}>
-            {report.title} {<UiIcon.PriorityHigh />}
-          </UiTitle>
-        </UiGrid.Col>
+    <UiGrid gapH={2} gapV={1}>
+      <VerticalSpacer>
+        <UiTitle level={2}>
+          {task.title}
+        </UiTitle>
+      </VerticalSpacer>
+      <VerticalSpacer>
+        <HorizontalSpacer>
+          <UiDateLabel start={startDate} end={task.endsAt} />
+          <UiIconButtonGroup>
+            <UiIconButton onClick={() => alert('not yet implemented')}>
+              <UiIcon.PrintAction />
+            </UiIconButton>
 
-        <UiGrid.Col size={12}>
-          {report.description}
-        </UiGrid.Col>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiIconButton onClick={open}>
+                  <UiIcon.EditAction />
+                </UiIconButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Task bearbeiten
+                  </UiTitle>
+                  <ReportForm incident={_incident} report={report} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
 
-        <UiGrid.Col size={12}>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiIconButton onClick={open}>
+                  <UiIcon.CreateAction />
+                </UiIconButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <div>
+                  <UiTitle level={1} isCentered>
+                    Auftrag erfassen
+                  </UiTitle>
+                  {/*<TaskForm incident={incident} report={report} onClose={close} />*/}
+                </div>
+              )}</UiModal.Body>
+            </UiModal>
 
-          {report.location !== null && (
-            <UiTextWithIcon text={report.location}>
-              <UiIcon.Location />
-            </UiTextWithIcon>
-          )}
-        </UiGrid.Col>
-        <UiGrid.Col size={12}>
+            {/*<UiIconButton onClick={handleDelete}>*/}
+            {/*  <UiIcon.DeleteAction />*/}
+            {/*</UiIconButton>*/}
+
+          </UiIconButtonGroup>
+        </HorizontalSpacer>
+      </VerticalSpacer>
+      <BlockContainer>
+        {report.description}
+      </BlockContainer>
+      {report.location && (
+        <BlockContainer>
+          <UiTextWithIcon text={report.location ?? ''}>
+            <UiIcon.Location />
+          </UiTextWithIcon>
+        </BlockContainer>
+      )}
+      {assignee && (
+        <BlockContainer>
           <UiTextWithIcon text={assigneeName}>
             <UiIcon.UserInCircle />
           </UiTextWithIcon>
-        </UiGrid.Col>
-
-        {report.notes !== null && (
-          <UiGrid.Col size={12}>
-            <UiTextWithIcon text={report.notes}>
-              <UiIcon.AlertCircle />
-            </UiTextWithIcon>
-          </UiGrid.Col>
-        )}
-
-        <UiGrid.Col size={6}>
-          <StyledDiv>
-            <div>{/*TODO fill in modal form instead of div*/}</div>
-            <UiActionButton>
-              <UiIcon.CreateAction />
-            </UiActionButton>
-          </StyledDiv>
-        </UiGrid.Col>
-        <UiGrid.Col size={6} />
-
-        <UiGrid.Col size={6}>
-          <SubtaskList subtasks={subtasks} activeSubtask={selectedSubtask} onClick={setSelectedSubtask} />
-        </UiGrid.Col>
-      </UiGrid>
-
-    </UiContainer>
+        </BlockContainer>
+      )}
+      <BlockContainer>
+        <SubtaskList subtasks={subtasks} />
+      </BlockContainer>
+    </UiGrid>
   )
 }
 export default TaskPage
@@ -188,4 +220,22 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
+`
+const HorizontalSpacer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const VerticalSpacer = styled.div`
+  width: 100%;
+  margin-bottom: 1rem;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+`
+
+const BlockContainer = styled.div`
+  width: 100%;
 `

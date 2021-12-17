@@ -5,7 +5,7 @@ import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
 
 interface Props {
   subtasks: Subtask[]
-  activeSubtask: Subtask | null
+  activeSubtask?: Subtask | null
   onClick?: (subtask: Subtask) => void
 }
 
