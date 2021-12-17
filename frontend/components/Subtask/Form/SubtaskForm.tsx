@@ -1,7 +1,7 @@
 import React from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
-import Task, { parseTask } from '@/models/Task'
+import Task from '@/models/Task'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -10,7 +10,6 @@ import UserStore, { useUsers } from '@/stores/UserStore'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import TaskStore from '@/stores/TaskStore'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -26,7 +25,7 @@ interface Props {
   incident: Incident
   report: Report
   task: Task
-  subtask: Subtask | null
+  subtask?: Subtask | null
   onClose?: () => void
 }
 
@@ -79,7 +78,6 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
-
   return (
     <form>
       <FormContainer>
@@ -119,7 +117,6 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
         <UiForm.Buttons form={form} />
       </FormContainer>
     </form>
-
   )
 }
 export default SubtaskForm
