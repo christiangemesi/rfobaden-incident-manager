@@ -12,8 +12,16 @@ const UICircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
   return (
     <Circle percentDecimal={decimal}>
       <CircleOverlay>
-        <CompletionRate><UiTitle level={5}>{done}/{total}</UiTitle> </CompletionRate>
-        <Percent><UiTitle level={6}>{decimal * 100}%</UiTitle></Percent>
+        <CompletionRate>
+          <UiTitle level={5}>
+            {done}/{total}
+          </UiTitle> 
+        </CompletionRate>
+        <Percent>
+          <UiTitle level={6}>
+            {decimal * 100}%<
+          /UiTitle>
+        </Percent>
       </CircleOverlay>
     </Circle>
   )
