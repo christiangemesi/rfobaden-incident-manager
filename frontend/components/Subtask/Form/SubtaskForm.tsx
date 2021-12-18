@@ -41,6 +41,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
     taskId: -1,
     reportId: -1,
     incidentId: -1,
+    isClosed: false,
   }))
 
   useValidate(form, (validate) => ({
@@ -58,6 +59,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
     taskId: [],
     reportId: [],
     incidentId: [],
+    isClosed: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Subtask>) => {

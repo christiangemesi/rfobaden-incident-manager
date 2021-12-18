@@ -1,34 +1,52 @@
-import Subtask from '@/models/Subtask'
+import Subtask, { parseSubtask } from '@/models/Subtask'
 import React, { useState } from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import styled, { css } from 'styled-components'
+import { useUsername } from '@/models/User'
+import BackendService, { BackendResponse } from '@/services/BackendService'
+import Incident from '@/models/Incident'
+import Report from '@/models/Report'
+import Task from '@/models/Task'
+import SubtaskStore from '@/stores/SubtaskStore'
+import { parseModel } from '@/models/base/Model'
 
 interface Props {
+  incident: Incident
+  report: Report
+  task: Task
   subtask: Subtask,
   isActive: boolean,
   onClick?: (Subtask: Subtask) => void,
 }
 
 const SubtaskListItem: React.VFC<Props> = ({
+  incident,
+  report,
+  task,
   subtask,
   isActive,
   onClick: handleClick }) => {
 
   const assignee = useUser(subtask.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+  const assigneeName = useUsername(assignee)
 
-  const [value, setValue] = useState(false)
+  const [isClosed, setClosed] = useState(subtask.isClosed)
+
+  const handleChange = async () => {
+    await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, subtask)
+    SubtaskStore.save(parseSubtask(subtask))
+  }
 
   return (
     <SelectableListItem
       isActive={isActive}
       priority={subtask.priority}
       title={subtask.title}
-      user={assigneeName}
-      onClick={handleClick && ( () => handleClick(subtask))}>
-      <UiCheckbox label="" value={value} onChange={setValue} color="tertiary" />
+      user={assigneeName ?? ''}
+      onClick={handleClick && (() => handleClick(subtask))}>
+      <UiCheckbox label="" value={isClosed} onChange={handleChange} color="tertiary" />
     </SelectableListItem>
   )
 }

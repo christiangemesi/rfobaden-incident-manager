@@ -11,7 +11,7 @@ export {
   useSubtask,
 }
 
-export const useSubtaskOfTask = (taskId: Id<Task>): Subtask[] => (
+export const useSubtasksOfTask = (taskId: Id<Task>): Subtask[] => (
   useSubtasks((subtasks) => (
     subtasks.filter((subtask) => subtask.taskId === taskId)
   ), [taskId])

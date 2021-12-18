@@ -19,7 +19,7 @@ import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import Task from '@/models/Task'
 import { useIncident } from '@/stores/IncidentStore'
 import Subtask, { parseSubtask } from '@/models/Subtask'
-import SubtaskStore, { useSubtask, useSubtaskOfTask } from '@/stores/SubtaskStore'
+import SubtaskStore, { useSubtask, useSubtasksOfTask } from '@/stores/SubtaskStore'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
@@ -51,7 +51,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const task = useTask(data.task)
   const assignee = useUser(task.assigneeId)
   const assigneeName = useUsername(assignee)
-  const subtasks = useSubtaskOfTask(task.id)
+  const subtasks = useSubtasksOfTask(task.id)
 
   const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(null)
   const selectedSubtask = useSubtask(selectedSubtaskId)
@@ -153,7 +153,12 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
       <UiGrid gapH={4}>
         <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
-          <SubtaskList subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)} activeSubtask={selectedSubtask} />
+          <SubtaskList
+            incident={incident}
+            report={report}
+            task={task}
+            subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
+            activeSubtask={selectedSubtask} />
         </UiGrid.Col>
         <UiGrid.Col size={{ xs: 12, md: true }}>
           {selectedSubtask !== null && (

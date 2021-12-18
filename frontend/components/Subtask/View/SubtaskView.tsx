@@ -16,6 +16,7 @@ import Incident from '@/models/Incident'
 import { contrastDark } from '@/theme'
 import BackendService from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
+import { useUsername } from '@/models/User'
 
 
 interface Props {
@@ -27,7 +28,7 @@ interface Props {
 
 const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
   const assignee = useUser(subtask.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+  const assigneeName = useUsername(assignee)
 
   const startDate = subtask.startsAt !== null ? subtask.startsAt : subtask.createdAt
 
@@ -75,7 +76,7 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
       <UiDateLabel start={startDate} end={subtask.endsAt} />
 
 
-      {assignee && (
+      {assigneeName && (
         <UiTextWithIcon text={assigneeName}>
           <UiIcon.UserInCircle />
         </UiTextWithIcon>

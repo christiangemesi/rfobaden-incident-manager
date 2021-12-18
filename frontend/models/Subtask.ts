@@ -11,6 +11,7 @@ export default interface Subtask extends Model {
     title: string
     description: string | null
     priority: Priority
+    isClosed: boolean
 
     assigneeId: Id<User> | null
 
