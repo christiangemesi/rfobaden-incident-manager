@@ -5,12 +5,11 @@ import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListI
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import styled, { css } from 'styled-components'
 import { useUsername } from '@/models/User'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService from '@/services/BackendService'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import SubtaskStore from '@/stores/SubtaskStore'
-import { parseModel } from '@/models/base/Model'
 
 interface Props {
   incident: Incident
