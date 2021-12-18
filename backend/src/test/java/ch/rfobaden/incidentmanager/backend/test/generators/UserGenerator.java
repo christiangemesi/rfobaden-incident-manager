@@ -6,6 +6,8 @@ import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
+import java.util.List;
+
 @TestComponent
 public class UserGenerator extends ModelGenerator<User> {
     @Autowired
@@ -16,20 +18,28 @@ public class UserGenerator extends ModelGenerator<User> {
 
     @Override
     public User generateNew() {
+        User user = generateNewWithoutOrganization();
+        user.setOrganization(organizationGenerator.generate());
+        user.getOrganization().setUsers(List.of());
+        return user;
+    }
+
+    public User generateNewWithoutOrganization() {
         var user = new User();
         user.setFirstName(faker.name().firstName());
         user.setLastName(faker.name().lastName());
         user.setEmail(faker.internet().emailAddress());
         user.setRole(faker.options().option(User.Role.class));
-        user.setOrganization(organizationGenerator.generate());
         return user;
     }
 
+
     @Override
     public User persist(User user) {
-        var persistedUser = super.persist(user);
-        persistedUser.setCredentials(credentialsGenerator.generate());
-        persistedUser.getCredentials().setUser(persistedUser);
-        return persistedUser;
+        user = super.persist(user);
+        user.setCredentials(credentialsGenerator.generate());
+        user.getCredentials().setUser(user);
+        user.getOrganization().setUsers(List.of(user));
+        return user;
     }
 }

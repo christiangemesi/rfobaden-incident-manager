@@ -317,6 +317,6 @@ public abstract class ModelControllerTest<
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelControllerTest<TModel, EmptyPath, TService> {
         @Override
-        protected final void mockRelations(EmptyPath emptyPath, TModel record) {}
+        protected void mockRelations(EmptyPath emptyPath, TModel record) {}
     }
 }

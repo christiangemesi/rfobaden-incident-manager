@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
 @WebMvcTest(UserController.class)
@@ -27,19 +28,6 @@ import java.util.Optional;
 public class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
     @Autowired
     Faker faker;
-
-    @MockBean
-    UserService userService;
-
-    //TODO red when in
-    //@Override
-    protected void mockRelations(Organization organization, EmptyPath path) {
-        var user = organization.getUser();
-        if (user != null) {
-            Mockito.when(userService.find(user.getId()))
-                .thenReturn(Optional.of(user));
-        }
-    }
 
     @Override
     protected String getEndpointFor(EmptyPath path) {

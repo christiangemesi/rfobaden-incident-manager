@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -23,7 +25,8 @@ import javax.validation.constraints.NotBlank;
 public final class User extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
+    @JoinColumn
     private Organization organization;
 
     @Email
@@ -146,7 +149,7 @@ public final class User extends Model.Basic implements Serializable {
         return organization.getId();
     }
 
-    public void setOrganization(Long id) {
+    public void setOrganizationId(Long id) {
         if (id == null) {
             organization = null;
             return;
@@ -155,9 +158,7 @@ public final class User extends Model.Basic implements Serializable {
         organization.setId(id);
     }
 
-    //TODO added organization
     public enum Role {
-        ORGANIZATION,
         CREATOR,
         ADMIN,
     }

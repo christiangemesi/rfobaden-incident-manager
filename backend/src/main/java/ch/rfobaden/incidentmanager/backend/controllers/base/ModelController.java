@@ -84,6 +84,6 @@ public abstract class ModelController<
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelController<TModel, EmptyPath, TService> {
         @Override
-        protected final void loadRelations(EmptyPath emptyPath, TModel entity) {}
+        protected void loadRelations(EmptyPath emptyPath, TModel entity) {}
     }
 }

@@ -9,17 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 @DataJpaTest
 public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepository> {
     @Autowired
     UserRepository userRepository;
 
-    //TODO red when in
     //@Override
     protected void saveRelations(Organization organization) {
-        var user = organization.getUser();
-        if (user != null) {
-            organization.setUser(userRepository.save(user));
+        List<User> users = organization.getUsers();
+        if (users != null) {
+            organization.setUsers(users);
         }
     }
 

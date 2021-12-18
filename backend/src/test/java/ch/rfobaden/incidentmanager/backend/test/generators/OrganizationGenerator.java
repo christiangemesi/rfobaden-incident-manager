@@ -6,20 +6,33 @@ import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
+import java.util.List;
+
 @TestComponent
 public class OrganizationGenerator extends ModelGenerator<Organization> {
-    @Autowired
-    OrganizationGenerator organizationGenerator;
 
+    @Autowired
+    UserGenerator userGenerator;
 
     @Override
     public Organization generateNew() {
         var organization = new Organization();
-        User user = new User();
         organization.setName(faker.name().name());
-        user.setOrganization(organizationGenerator.generate());
+        organization.setUsers(List.of(
+            userGenerator.generateNewWithoutOrganization(),
+            userGenerator.generateNewWithoutOrganization(),
+            userGenerator.generateNewWithoutOrganization()
+        ));
         organization.setEmail(faker.internet().emailAddress());
-
         return organization;
+    }
+
+    @Override
+    public Organization persist(Organization organisation) {
+        organisation = super.persist(organisation);
+        for (User user : organisation.getUsers()) {
+            user.setOrganization(organisation);
+        }
+        return organisation;
     }
 }
