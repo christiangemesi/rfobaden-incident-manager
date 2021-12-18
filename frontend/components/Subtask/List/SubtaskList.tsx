@@ -2,7 +2,6 @@ import React from 'react'
 import UiList from '@/components/Ui/List/UiList'
 import Subtask from '@/models/Subtask'
 import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
-import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 
 interface Props {
   subtasks: Subtask[]
