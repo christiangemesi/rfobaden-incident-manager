@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import React from 'react'
+import React, { useCallback } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ColorName } from '@/theme'
 import { UiInputProps } from '@/components/Ui/Input'
@@ -19,9 +19,14 @@ const UiCheckbox: React.VFC<Props> = ({
   onChange: handleChange,
   color = 'primary',
 }) => {
+  const handleSelect = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    handleChange(!value)
+  }, [handleChange, value])
+
   return (
     <div>
-      <Container onClick={() => handleChange(!value)} isDisabled={isDisabled}>
+      <Container onClick={handleSelect} isDisabled={isDisabled}>
         <CheckboxLabel color={color}>
           <Checkbox color={color}>
             {value && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}

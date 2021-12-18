@@ -1,46 +1,43 @@
-import Task from '@/models/Task'
-import React, { useState } from 'react'
+import React from 'react'
 import UiList from '@/components/Ui/List/UiList'
-import Priority from '@/models/Priority'
-import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
-import { useUser } from '@/stores/UserStore'
-import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
+import Subtask from '@/models/Subtask'
+import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
+import Incident from '@/models/Incident'
+import Report from '@/models/Report'
+import Task from '@/models/Task'
 
-// TODO Change to Subtask.
 interface Props {
-  subtasks: Task[]
-  activeSubtask: Task | null
-  onClick?: (task: Task) => void
+  incident: Incident
+  report: Report
+  task: Task
+  subtasks: Subtask[]
+  activeSubtask: Subtask | null
+  onClick?: (subtask: Subtask) => void
 }
 
-const SubtaskList: React.VFC<Props> = ({ subtasks, activeSubtask, onClick: handleClick }) => {
+const SubtaskList: React.VFC<Props> = ({
+  incident,
+  report,
+  task,
+  subtasks,
+  activeSubtask,
+  onClick: handleClick }) => {
   return (
     <UiList>
       {subtasks.map((subtask) => (
-        <SubtaskListItem key={subtask.id} subtask={subtask} onClick={handleClick} isActive={activeSubtask === subtask} />
+        <SubtaskListItem
+          incident={incident}
+          report={report}
+          task={task}
+          key={subtask.id}
+          subtask={subtask}
+          onClick={handleClick}
+          isActive={activeSubtask !== null && activeSubtask.id == subtask.id}
+        />
       ))}
     </UiList>
   )
 }
 export default SubtaskList
 
-interface TaskListItemProps {
-  subtask: Task,
-  isActive: boolean,
-  onClick?: (Task: Task) => void,
-}
 
-// TODO implement subtask functionality.
-const SubtaskListItem: React.VFC<TaskListItemProps> = ({ subtask, onClick: _handleClick }) => {
-
-  const assignee = useUser(subtask.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
-
-  const [value, setValue] = useState(false)
-
-  return (
-    <UiListItemWithDetails priority={Priority.LOW} title={subtask.title} user={assigneeName}>
-      <UiCheckbox label="" value={value} onChange={setValue} color="tertiary" />
-    </UiListItemWithDetails>
-  )
-}
