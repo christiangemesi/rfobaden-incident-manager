@@ -81,13 +81,11 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
   return (
     <form>
       <FormContainer>
-
-        <UiGrid.Col style={{ textAlign: 'right' }}>
+        <PrioritySliderPositioner>
           <UiForm.Field field={form.priority}>{(props) => (
             <UiPrioritySlider {...props} />
           )}</UiForm.Field>
-        </UiGrid.Col>
-
+        </PrioritySliderPositioner>
         <UiForm.Field field={form.title}>{(props) => (
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
         )}</UiForm.Field>
@@ -108,10 +106,12 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
+          <UiGrid.Col>
+            <UiForm.Field field={form.endsAt}>{(props) => (
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
 
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
         </UiGrid>
 
         <UiForm.Buttons form={form} />
@@ -132,4 +132,9 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: end; 
 `
