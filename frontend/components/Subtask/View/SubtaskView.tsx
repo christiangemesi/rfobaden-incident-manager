@@ -2,7 +2,6 @@ import Subtask from '@/models/Subtask'
 import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import styled from 'styled-components'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
@@ -33,7 +32,7 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
   const startDate = subtask.startsAt !== null ? subtask.startsAt : subtask.createdAt
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${subtask.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Teilauftrag "${subtask.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id)
       ReportStore.remove(subtask.id)
     }
@@ -70,9 +69,7 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
           <UiIconButton onClick={handleDelete}>
             <UiIcon.DeleteAction />
           </UiIconButton>
-
         </UiIconButtonGroup>
-
       </TitleIconContainer>
 
       <UiDateLabel start={startDate} end={subtask.endsAt} />
@@ -83,8 +80,9 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
           <UiIcon.UserInCircle />
         </UiTextWithIcon>
       )}
-      {subtask.description}
-
+      <BlockContainer>
+        {subtask.description}
+      </BlockContainer>
     </Details>
   )
 }
@@ -107,4 +105,8 @@ const Details = styled.div`
   display: flex;  
   flex-direction: column;
   gap: 1rem;
+`
+
+const BlockContainer = styled.div`
+  width: 100%;
 `
