@@ -36,7 +36,7 @@ const NavItem = styled.li`
     visibility: hidden;
   }
 `
-const NavLink = styled(UiLink)<{ isActive: boolean}>`
+const NavLink = styled(UiLink)<{ isActive: boolean }>`
   color: ${({ theme }) => theme.colors.secondary.contrast};
   font-size: 1rem;
   transition: 150ms ease-out;
