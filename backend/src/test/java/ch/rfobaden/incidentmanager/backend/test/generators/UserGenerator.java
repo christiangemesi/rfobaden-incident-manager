@@ -39,7 +39,6 @@ public class UserGenerator extends ModelGenerator<User> {
         user = super.persist(user);
         user.setCredentials(credentialsGenerator.generate());
         user.getCredentials().setUser(user);
-        user.getOrganization().setUsers(List.of(user));
         return user;
     }
 }

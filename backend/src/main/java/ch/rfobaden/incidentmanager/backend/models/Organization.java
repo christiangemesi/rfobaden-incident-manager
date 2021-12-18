@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -17,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "organization")
 public final class Organization extends Model.Basic {
 
-    @OneToMany
+    @OneToMany(mappedBy = "organization")
     private List<User> users = new ArrayList<>();
 
     @Email

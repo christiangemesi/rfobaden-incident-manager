@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @TestComponent
 public class OrganizationGenerator extends ModelGenerator<Organization> {
@@ -25,14 +26,5 @@ public class OrganizationGenerator extends ModelGenerator<Organization> {
         ));
         organization.setEmail(faker.internet().emailAddress());
         return organization;
-    }
-
-    @Override
-    public Organization persist(Organization organisation) {
-        organisation = super.persist(organisation);
-        for (User user : organisation.getUsers()) {
-            user.setOrganization(organisation);
-        }
-        return organisation;
     }
 }
