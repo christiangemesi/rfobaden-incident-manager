@@ -29,11 +29,8 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     ReportStore.saveAll(data.reports.map(parseReport))
   })
 
-  const incidents = useIncidents()
-
-  // TODO Replace filter with `useIncidents`.
-  const closedIncidents = incidents.filter(isClosedIncident)
-  const openIncidents = incidents.filter((incident) => !isClosedIncident(incident))
+  const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
+  const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
 
   return (
     <UiContainer>
@@ -64,29 +61,29 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         <IncidentList incidents={openIncidents} />
       </section>
 
-      {/* TODO Hide section if no closed incidents exist. */}
-      <section>
-        <div style={{ margin: '4rem 0 1rem 0' }}>
-          <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
-        </div>
+      {closedIncidents.length !== 0 && (
+        <section>
+          <div style={{ margin: '4rem 0 1rem 0' }}>
+            <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
+          </div>
 
-        {/* TODO Remove outermost padding on both heading and content. */}
-        <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
-          <UiGrid.Col size={4}>
-            <UiTitle level={6}>Title</UiTitle>
-          </UiGrid.Col>
-          <UiGrid.Col size={2}>
-            <UiTitle level={6}>Startdatum</UiTitle>
-          </UiGrid.Col>
-          <UiGrid.Col size={2}>
-            <UiTitle level={6}>Schliessdatum</UiTitle>
-          </UiGrid.Col>
-          <UiGrid.Col>
-            <UiTitle level={6}>Begründung</UiTitle>
-          </UiGrid.Col>
-        </UiGrid>
-        <IncidentArchiveList incidents={closedIncidents} />
-      </section>
+          <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
+            <UiGrid.Col size={4}>
+              <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Title</UiTitle>
+            </UiGrid.Col>
+            <UiGrid.Col size={2}>
+              <UiTitle level={6}>Startdatum</UiTitle>
+            </UiGrid.Col>
+            <UiGrid.Col size={2}>
+              <UiTitle level={6}>Schliessdatum</UiTitle>
+            </UiGrid.Col>
+            <UiGrid.Col>
+              <UiTitle level={6}>Begründung</UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
+          <IncidentArchiveList incidents={closedIncidents} />
+        </section>
+      )}
     </UiContainer>
   )
 }

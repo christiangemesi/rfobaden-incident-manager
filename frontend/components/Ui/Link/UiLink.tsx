@@ -10,11 +10,13 @@ interface Props extends StyledProps {
 
 const UiLink: React.VFC<Props> = ({
   href,
+  className,
+  style,
   children,
 }) => {
   return (
     <Link href={href} passHref>
-      <A>
+      <A style={style} className={className}>
         {children}
       </A>
     </Link>

@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers.helpers;
 
+import ch.rfobaden.incidentmanager.backend.RfoConfig;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import io.jsonwebtoken.Claims;
@@ -27,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Component
-@EnableConfigurationProperties(JwtHelper.Props.class)
 public class JwtHelper {
     private static final long EXPIRATION_MILLIS = TimeUnit.DAYS.toMillis(30);
 
@@ -37,8 +37,8 @@ public class JwtHelper {
 
     private final UserService userService;
 
-    public JwtHelper(Props props, UserService userService) {
-        this.secretKey = parseKey(props.getSecret());
+    public JwtHelper(RfoConfig rfoConfig, UserService userService) {
+        this.secretKey = parseKey(rfoConfig.getJwt().getSecret());
         this.userService = userService;
         this.jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
     }
@@ -112,19 +112,5 @@ public class JwtHelper {
         } catch (WeakKeyException e) {
             throw new IllegalStateException("jwt.secret is too weak", e);
         }
-    }
-
-    @ConfigurationProperties("jwt")
-    public static class Props {
-        private String secret;
-
-        public String getSecret() {
-            return secret;
-        }
-
-        public void setSecret(String secret) {
-            this.secret = secret;
-        }
-
     }
 }

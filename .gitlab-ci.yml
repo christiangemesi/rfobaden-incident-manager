@@ -2,6 +2,7 @@ stages:
   - lint
   - test
   - analyze
+  - deploy
 
 workflow:
   rules:
@@ -59,6 +60,15 @@ frontend.sonarqube:
         -Dsonar.language=js
         -Dsonar.projectKey=rfobaden-incident-manager_frontend
         -Dsonar.projectName=rfobaden-incident-manager_frontend
+
+deploy.jenkins:
+  stage: deploy
+  image: curlimages/curl:7.80.0
+  script:
+    - |
+      curl --user "${JENKINS_DEPLOY_USER}:${JENKINS_DEPLOY_TOKEN}" "https://ip34.daniel-va.ch/jenkins/job/IncidentManager%20${CI_COMMIT_BRANCH}/build?token=${JENKINS_PIPELINE_TOKEN}&cause=gitlab-ci"
+
+
 
 variables:
   GIT_DEPTH: 0

@@ -45,7 +45,7 @@ Stop the application:
 docker compose down
 ```
 
-The frontend is served on `localhost:3000`.  
+The frontend is served on `localhost:3000`. 
 The backend is served on `localhost:3001`.
 
 #### Hot Reloading
@@ -89,11 +89,6 @@ docker compose run --no-deps frontend sh -c "npm run lint"
 Remove currently installed frontend dependencies:
 ```shell
 docker volume rm rfobaden-incident-manager_frontend.node_modules
-```
-Remove gradle caches:
-```shell
-docker volume rm rfobaden-incident-manager_backend.gradle-global
-docker volume rm rfobaden-incident-manager_backend.gradle-local
 ```
 Drop the database:
 ```shell

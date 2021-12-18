@@ -18,14 +18,14 @@ const UiActionButton: React.VFC<Props> = ({
   onClick: handleClick,
 }) => {
   return (
-    <StyledActionButton onClick={handleClick} disabled={isDisabled} title={title} color={color}>
+    <ActionButton onClick={handleClick} disabled={isDisabled} title={title} color={color}>
       {children}
-    </StyledActionButton>
+    </ActionButton>
   )
 }
 export default UiActionButton
 
-const StyledActionButton = styled.button<{ color: string }>`
+const ActionButton = styled.button<{ color: string }>`
   background: ${({ theme, color }) => theme.colors[color].value};
   color: ${({ theme, color }) => theme.colors[color].contrast};
   

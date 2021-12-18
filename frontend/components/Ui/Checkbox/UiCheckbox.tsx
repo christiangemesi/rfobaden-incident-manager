@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import React from 'react'
+import React, { useCallback } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ColorName } from '@/theme'
 import { UiInputProps } from '@/components/Ui/Input'
@@ -19,16 +19,21 @@ const UiCheckbox: React.VFC<Props> = ({
   onChange: handleChange,
   color = 'primary',
 }) => {
+  const handleSelect = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    handleChange(!value)
+  }, [handleChange, value])
+
   return (
     <div>
-      <StyledDiv onClick={() => handleChange(!value)} isDisabled={isDisabled}>
-        <StyledCheckboxLabel color={color}>
-          <StyledCheckbox color={color}>
+      <Container onClick={handleSelect} isDisabled={isDisabled}>
+        <CheckboxLabel color={color}>
+          <Checkbox color={color}>
             {value && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}
-          </StyledCheckbox>
+          </Checkbox>
           {label}
-        </StyledCheckboxLabel>
-      </StyledDiv>
+        </CheckboxLabel>
+      </Container>
       <UiInputErrors errors={errors} />
     </div>
   )
@@ -36,12 +41,12 @@ const UiCheckbox: React.VFC<Props> = ({
 
 export default UiCheckbox
 
-const StyledDiv = styled.div<{ isDisabled: boolean }>`
+const Container = styled.div<{ isDisabled: boolean }>`
   display: inline-flex;
   align-items: center;
   
   ${({ isDisabled }) => isDisabled && css`
-  & > ${StyledCheckboxLabel} {
+  & > ${CheckboxLabel} {
     color: rgb(200, 200, 200);
     
     & > div {
@@ -57,7 +62,7 @@ const StyledDiv = styled.div<{ isDisabled: boolean }>`
 `}
 `
 
-const StyledCheckboxLabel = styled.label<{ color: ColorName }>`
+const CheckboxLabel = styled.label<{ color: ColorName }>`
   display: inline-flex;
   align-items: center;
   margin-left: 0.25rem;
@@ -68,7 +73,7 @@ const StyledCheckboxLabel = styled.label<{ color: ColorName }>`
   }
 `
 
-const StyledCheckbox = styled.div<{ color: ColorName }>`
+const Checkbox = styled.div<{ color: ColorName }>`
   color: ${({ theme, color }) => theme.colors[color].value};
   border: none;
   background: none;

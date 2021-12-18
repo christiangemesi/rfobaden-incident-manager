@@ -47,9 +47,9 @@ const UiTextInput: React.VFC<Props> = ({
       <InputAndErrorBox hasError={hasError}>
         <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} hasChildren={hasChildren} />
         {hasChildren ?
-          <StyledAdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
+          <AdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
             {children}
-          </StyledAdditionalInput>: null}
+          </AdditionalInput>: null}
       </InputAndErrorBox>
 
       <UiInputErrors errors={errors} />
@@ -78,7 +78,7 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
   transition-property: border-color;
 
 `
-const StyledAdditionalInput = styled.div<{ isClickable: boolean }>`
+const AdditionalInput = styled.div<{ isClickable: boolean }>`
   background: ${defaultTheme.colors.primary.value};
   margin-top: 0.25rem;
   outline: none; 
@@ -121,7 +121,7 @@ const InputAndErrorBox = styled.div<{hasError: boolean}>`
     & > ${StyledInput} {
       :active, :focus {
         border-color:  ${defaultTheme.colors.primary.value};
-        & + ${StyledAdditionalInput} {
+        & + ${AdditionalInput} {
           border-color:  ${defaultTheme.colors.primary.value};
         }
       }
@@ -132,7 +132,7 @@ const InputAndErrorBox = styled.div<{hasError: boolean}>`
     & > ${StyledInput} {
 
       border-color:  ${defaultTheme.colors.error.value};
-      & + ${StyledAdditionalInput} {
+      & + ${AdditionalInput} {
         border-color:  ${defaultTheme.colors.error.value};
       }
     }

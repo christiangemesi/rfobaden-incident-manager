@@ -1,13 +1,17 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -32,6 +36,9 @@ public class Incident extends Model.Basic {
 
     @Column(nullable = false)
     private boolean isClosed;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
+    private List<Report> reports;
 
     public String getTitle() {
         return title;
@@ -87,6 +94,16 @@ public class Incident extends Model.Basic {
 
     public void setClosed(boolean closed) {
         isClosed = closed;
+    }
+
+    @JsonIgnore
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    @JsonIgnore
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 
     @Override

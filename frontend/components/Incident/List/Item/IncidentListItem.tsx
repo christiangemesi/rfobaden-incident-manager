@@ -8,6 +8,7 @@ import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 interface IncidentCardProps {
   incident: Incident
@@ -24,7 +25,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
       <Container>
         <div>
           <UiGrid align="center" style={{ height: '8rem' }}>
-            <UiGrid.Col size={8}>
+            <UiGrid.Col size={7}>
 
               <UiBadge value={10}>
                 <UiIcon.Organization />
@@ -35,16 +36,8 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
               </UiBadge>
 
             </UiGrid.Col>
-            <UiGrid.Col size={4} style={{ textAlign: 'center' }}>
-
-              <ProgressCircle>
-                <ProgressCircleMask>
-                  <ProgressCircleFill>
-                    <span>10%</span>
-                  </ProgressCircleFill>
-                </ProgressCircleMask>
-              </ProgressCircle>
-
+            <UiGrid.Col>
+              <UiCircularProgress done={69} total={84} />
             </UiGrid.Col>
           </UiGrid>
         </div>
@@ -68,18 +61,18 @@ export default IncidentListItem
 const Container = styled.span`
   color: ${({ theme }) => theme.colors.primary.value};
   background-color: ${({ theme }) => theme.colors.primary.contrast};
-  
+
   width: 100%;
   height: 15rem;
   padding: 1rem;
-  
+
   border: 2px solid ${({ theme }) => theme.colors.primary.value};
   border-radius: 0.5rem;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   transition: 250ms ease;
@@ -93,32 +86,4 @@ const Container = styled.span`
   :active:not(&[disabled]) {
     box-shadow: none;
   }
-`
-const ProgressCircle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-  
-  background-color: red;
-`
-const ProgressCircleMask = styled.div`
-  position: absolute;
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-`
-const ProgressCircleFill = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-  background-color: pink;
 `
