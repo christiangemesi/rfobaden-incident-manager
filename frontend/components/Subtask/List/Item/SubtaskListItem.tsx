@@ -35,8 +35,15 @@ const SubtaskListItem: React.VFC<Props> = ({
   const [isClosed, setClosed] = useState(subtask.isClosed)
 
   const handleChange = async () => {
-    await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, subtask)
-    SubtaskStore.save(parseSubtask(subtask))
+    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, {
+      ...subtask,
+      isClosed: !subtask.isClosed,
+    })
+    if (error !== null) {
+      throw error
+    }
+    SubtaskStore.save(parseSubtask(newSubtask))
+    setClosed(newSubtask.isClosed)
   }
 
   return (
