@@ -1,10 +1,11 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Image from 'next/image'
 import UiButton from '@/components/Ui/Button/UiButton'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
+import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 
 
 const UiHeader: React.VFC = () => {
@@ -30,14 +31,16 @@ const UiHeader: React.VFC = () => {
             <Image src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
           </UiLink>
         </ImageContainer>
-        <NavBar>
-          <NavLink href="/benutzer" link={router.asPath} hrefLink="/benutzer" data-name="Benutzer">
-            Benutzer
-          </NavLink>
-          <NavLink href="/ereignisse" link={router.asPath} hrefLink="/ereignisse" data-name="Ereignisse">
-            Ereignisse
-          </NavLink>
-        </NavBar>
+        <nav>
+          <NavBar>
+            <UiHeaderItem href="/benutzer">
+              Benutzer
+            </UiHeaderItem>
+            <UiHeaderItem href="/ereignisse">
+              Ereignisse
+            </UiHeaderItem>
+          </NavBar>
+        </nav>
       </NavContainer>
       <ButtonList>
         {currentUser === null ? (
@@ -81,42 +84,12 @@ const ImageContainer = styled.div`
   display: flex;
   align-items: center;
 `
-const NavBar = styled.nav`
+const NavBar = styled.ul`
   display: flex;
   gap: 1rem;
   align-items: center;
   margin-left: 2rem;
-`
-const NavLink = styled(UiLink)<{ link: string, hrefLink: string }>`
-  color: ${({ theme }) => theme.colors.secondary.contrast};
-  font-size: 1rem;
-  
-  ${({ link, hrefLink }) => {
-    if (link === hrefLink) {
-      return css`
-        border-bottom: solid 1px ${({ theme }) => theme.colors.secondary.contrast};
-      `
-    }
-    if (link !== hrefLink) {
-      return css`
-        border-bottom: none;
-      `
-    }
-  }}
-  
-  &::before {
-    display: block;
-    content: attr(data-name);
-    font-weight: bold;
-    height: 1px;
-    color: transparent;
-    overflow: hidden;
-    visibility: hidden;
-  }
-
-  :hover {
-    font-weight: bold;
-  }
+  list-style: none;
 `
 const ButtonList = styled.div`
   display: flex;
