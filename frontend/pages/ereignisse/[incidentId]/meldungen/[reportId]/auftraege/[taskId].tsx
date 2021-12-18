@@ -28,6 +28,7 @@ import TaskForm from '@/components/Task/Form/TaskForm'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import SubtaskView from '@/components/Subtask/View/SubtaskView'
 import Id from '@/models/base/Id'
+import Priority from '@/models/Priority'
 
 interface Props {
   data: {
@@ -65,12 +66,22 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     }
   }
 
+  let priorityIcon = <UiIcon.PriorityMedium />
+  if (task.priority === Priority.HIGH) {
+    priorityIcon= <UiIcon.PriorityHigh />
+  } else if (task.priority === Priority.LOW) {
+    priorityIcon = <UiIcon.PriorityLow />
+  }
+
   return (
     <UiContainer>
       <Details>
         <TitleIconContainer>
           <UiTitle level={1}>
             {task.title}
+            <PriorityIcon>
+              {priorityIcon}
+            </PriorityIcon>
           </UiTitle>
 
           <UiIconButtonGroup>
@@ -255,4 +266,8 @@ const FloatingActionButton = styled.div`
   display: flex;
   justify-content: end;
   right: 0;
+`
+
+const PriorityIcon = styled.span`
+  margin-left: 2rem;
 `

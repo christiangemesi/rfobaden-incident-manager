@@ -2,7 +2,6 @@ import Subtask from '@/models/Subtask'
 import React, { useState } from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
-import Priority from '@/models/Priority'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import styled, { css } from 'styled-components'
 
@@ -25,7 +24,7 @@ const SubtaskListItem: React.VFC<Props> = ({
   return (
     <SelectableListItem
       isActive={isActive}
-      priority={Priority.LOW}
+      priority={subtask.priority}
       title={subtask.title}
       user={assigneeName}
       onClick={handleClick && ( () => handleClick(subtask))}>
