@@ -262,7 +262,7 @@ const BlockContainer = styled.div`
 `
 
 const FloatingActionButton = styled.div`
-  margin: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: end;
   right: 0;

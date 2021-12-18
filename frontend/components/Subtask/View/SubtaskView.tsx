@@ -96,7 +96,7 @@ const TitleIconContainer = styled.div`
 `
 
 const Line = styled.div`
-  height: 1px;
+  height: 2px;
   background: ${contrastDark};
   margin-bottom: 2rem;
 `
