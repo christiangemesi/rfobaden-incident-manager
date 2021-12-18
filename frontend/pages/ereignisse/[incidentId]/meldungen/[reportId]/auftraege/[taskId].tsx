@@ -3,14 +3,14 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
-import User, { parseUser } from '@/models/User'
+import User, { parseUser, useUsername } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import { useTask } from '@/stores/TaskStore'
-import { useReport } from '@/stores/ReportStore'
+import ReportStore, { useReport } from '@/stores/ReportStore'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { GetServerSideProps } from 'next'
@@ -49,10 +49,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const report = useReport(data.report)
   const task = useTask(data.task)
   const assignee = useUser(task.assigneeId)
-
-  // TODO Use custom hook for username.
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
-
+  const assigneeName = useUsername(assignee)
   const subtasks = useSubtaskOfTask(task.id)
 
   const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(null)
@@ -60,44 +57,26 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
+
+  const handleDelete = async () => {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+      await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
+      ReportStore.remove(task.id)
+    }
+  }
+
   return (
     <UiContainer>
+      <Details>
+        <TitleIconContainer>
+          <UiTitle level={1}>
+            {task.title}
+          </UiTitle>
 
-      {/* Title */}
-      <VerticalSpacer>
-        <UiTitle level={2}>
-          {task.title}
-        </UiTitle>
-      </VerticalSpacer>
-
-      {/* Create Form */}
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiActionButton onClick={open}>
-            <UiIcon.CreateAction />
-          </UiActionButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Teilauftrag erfassen
-            </UiTitle>
-            <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
-
-      <VerticalSpacer>
-        <HorizontalSpacer>
-          <UiDateLabel start={startDate} end={task.endsAt} />
-
-          {/* Button Group */}
           <UiIconButtonGroup>
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>
-
-            {/* Edit Form */}
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (
                 <UiIconButton onClick={open}>
@@ -113,38 +92,59 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
-
-
-            {/*<UiIconButton onClick={handleDelete}>*/}
-            {/*  <UiIcon.DeleteAction />*/}
-            {/*</UiIconButton>*/}
-
+            <UiIconButton onClick={handleDelete}>
+              <UiIcon.DeleteAction />
+            </UiIconButton>
           </UiIconButtonGroup>
-        </HorizontalSpacer>
-      </VerticalSpacer>
-      <BlockContainer>
-        {task.description}
-      </BlockContainer>
-      {task.location && (
+
+        </TitleIconContainer>
+        <UiDateLabel start={startDate} end={task.endsAt} />
         <BlockContainer>
-          <UiTextWithIcon text={task.location ?? ''}>
-            <UiIcon.Location />
-          </UiTextWithIcon>
+          {task.description}
         </BlockContainer>
-      )}
-      {assignee && (
-        <BlockContainer>
-          <UiTextWithIcon text={assigneeName}>
-            <UiIcon.UserInCircle />
-          </UiTextWithIcon>
-        </BlockContainer>
-      )}
-      <UiGrid gapH={2}>
-        <UiGrid.Col>
-          <SubtaskList subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
-                       activeSubtask={selectedSubtask} />
+        {task.location && (
+          <BlockContainer>
+            <UiTextWithIcon text={task.location ?? ''}>
+              <UiIcon.Location />
+            </UiTextWithIcon>
+          </BlockContainer>
+        )}
+        {assigneeName && (
+          <BlockContainer>
+            <UiTextWithIcon text={assigneeName}>
+              <UiIcon.UserInCircle />
+            </UiTextWithIcon>
+          </BlockContainer>
+        )}
+      </Details>
+
+      <UiGrid gapH={4}>
+        <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
+          <FloatingActionButton>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiActionButton onClick={open}>
+                  <UiIcon.CreateAction />
+                </UiActionButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <div>
+                  <UiTitle level={1} isCentered>
+                    Teilauftrag erfassen
+                  </UiTitle>
+                  <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+                </div>
+              )}</UiModal.Body>
+            </UiModal>
+          </FloatingActionButton>
         </UiGrid.Col>
-        <UiGrid.Col>
+      </UiGrid>
+
+      <UiGrid gapH={4}>
+        <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
+          <SubtaskList subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)} activeSubtask={selectedSubtask} />
+        </UiGrid.Col>
+        <UiGrid.Col size={{ xs: 12, md: true }}>
           {selectedSubtask !== null && (
             <SubtaskView incident={incident} report={report} task={task} subtask={selectedSubtask} />
           )}
@@ -233,25 +233,26 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
   }
 }
 
-const StyledDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const HorizontalSpacer = styled.div`
+const TitleIconContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `
 
-const VerticalSpacer = styled.div`
-  width: 100%;
-  margin-bottom: 1rem;
-
-  :last-child {
-    margin-bottom: 0;
-  }
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
 `
 
 const BlockContainer = styled.div`
   width: 100%;
+`
+
+const FloatingActionButton = styled.div`
+  margin: 1rem;
+  display: flex;
+  justify-content: end;
+  right: 0;
 `
