@@ -101,6 +101,32 @@ public final class User extends Model.Basic implements Serializable {
             credentials.setUser(this);
         }
     }
+    
+    @JsonIgnore
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    @JsonIgnore
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Long getOrganizationId() {
+        if (organization == null) {
+            return null;
+        }
+        return organization.getId();
+    }
+
+    public void setOrganizationId(Long id) {
+        if (id == null) {
+            organization = null;
+            return;
+        }
+        organization = new Organization();
+        organization.setId(id);
+    }
 
     @Override
     public String toString() {
@@ -136,32 +162,6 @@ public final class User extends Model.Basic implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(modelHashCode(), email, firstName, lastName, role, organization);
-    }
-
-    @JsonIgnore
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    @JsonIgnore
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public Long getOrganizationId() {
-        if (organization == null) {
-            return null;
-        }
-        return organization.getId();
-    }
-
-    public void setOrganizationId(Long id) {
-        if (id == null) {
-            organization = null;
-            return;
-        }
-        organization = new Organization();
-        organization.setId(id);
     }
 
     public enum Role {
