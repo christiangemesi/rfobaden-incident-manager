@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,8 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "organization")
-public final class Organization extends Model.Basic {
+public final class Organization extends Model.Basic implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @OneToMany(mappedBy = "organization")
     private List<User> users = new ArrayList<>();
