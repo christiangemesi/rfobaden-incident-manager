@@ -64,7 +64,12 @@ public abstract class Model {
     }
 
     @Override
-    public abstract String toString();
+    public final String toString() {
+        var string = new StringBuilder();
+        var clazz = this.getClass();
+        
+        return string.toString();
+    }
 
     @MappedSuperclass
     public abstract static class Basic extends Model implements PathConvertible<EmptyPath> {

@@ -1,37 +1,26 @@
 import React from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiButton from '@/components/Ui/Button/UiButton'
-import UiLink from '@/components/Ui/Link/UiLink'
+import styled from 'styled-components'
 
 const HomePage: React.VFC = () => {
   return (
     <UiContainer>
-      <UiTitle level={1} isCentered>
-        Home Sweet Home
-      </UiTitle>
-
-      <UiGrid justify="center">
-        <UiGrid.Col size={{ xs: 12, md: 6, xl: 4 }}>
-          <UiLink href="/ereignisse">
-            <UiButton isFull>
-              Ereignisse
-            </UiButton>
-          </UiLink>
-        </UiGrid.Col>
-      </UiGrid>
-
-      <UiGrid justify="center">
-        <UiGrid.Col size={{ xs: 12, md: 6, xl: 4 }}>
-          <UiLink href="/benutzer">
-            <UiButton isFull>
-              Benutzer
-            </UiButton>
-          </UiLink>
-        </UiGrid.Col>
-      </UiGrid>
+      <div>
+        <UiTitle level={1} isCentered>
+          IncidentManager
+        </UiTitle>
+        <Subtitle>
+          Regionales Führungsorgan Baden
+        </Subtitle>
+      </div>
     </UiContainer>
   )
 }
 export default HomePage
+
+const Subtitle = styled.div`
+  width: 100%;
+  text-align: center;
+  margin-top: -0.5rem;
+`
