@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @TestPropertySource(properties = "app.mock-user-service=false")
 @WebMvcTest(OrganizationController.class)
-public class OrganizationControllerTest extends ModelControllerTest.Basic<Organization, OrganizationService> {
+public class OrganizationControllerTest
+    extends ModelControllerTest.Basic<Organization, OrganizationService> {
 
     @MockBean
     UserService userService;

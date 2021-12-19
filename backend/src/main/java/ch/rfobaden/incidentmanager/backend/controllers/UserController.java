@@ -19,22 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/v1/users")
 public class UserController extends ModelController.Basic<User, UserService> {
     private final JwtHelper jwtHelper;
-    private final UserService userService;
     private final OrganizationService organizationService;
 
 
-    public UserController(JwtHelper jwtHelper, UserService userService, OrganizationService organizationService) {
+    public UserController(JwtHelper jwtHelper, UserService userService,
+                          OrganizationService organizationService) {
         this.jwtHelper = jwtHelper;
-        this.userService = userService;
         this.organizationService = organizationService;
     }
 
 
     @Override
-    protected void loadRelations(EmptyPath path,User user) {
+    protected void loadRelations(EmptyPath path, User user) {
         if (user.getOrganization() != null) {
             var organization = organizationService.find(user.getOrganizationId())
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "organization not found"));
+                .orElseThrow(() -> new ApiException(
+                    HttpStatus.NOT_FOUND, "organization not found"));
             user.setOrganization(organization);
         }
     }

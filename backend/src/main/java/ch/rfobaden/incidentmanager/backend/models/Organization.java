@@ -68,8 +68,8 @@ public final class Organization extends Model.Basic implements Serializable {
     }
 
     public List<Long> getUserIds() {
-        List<Long> userIds = new ArrayList<Long>();
-        for(User user : users) {
+        List<Long> userIds = new ArrayList<>();
+        for (User user : users) {
             userIds.add(user.getId());
         }
         return userIds;

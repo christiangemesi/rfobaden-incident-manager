@@ -17,7 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/organizations")
-public class OrganizationController extends ModelController.Basic<Organization, OrganizationService> {
+public class OrganizationController
+    extends ModelController.Basic<Organization, OrganizationService> {
 
     private final UserService userService;
 

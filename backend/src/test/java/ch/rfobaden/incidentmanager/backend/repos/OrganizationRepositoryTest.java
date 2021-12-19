@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
-public class OrganizationRepositoryTest extends ModelRepositoryTest.Basic<Organization, OrganizationRepository> {
+public class OrganizationRepositoryTest
+    extends ModelRepositoryTest.Basic<Organization, OrganizationRepository> {
 
     @Autowired
     UserRepository userRepository;

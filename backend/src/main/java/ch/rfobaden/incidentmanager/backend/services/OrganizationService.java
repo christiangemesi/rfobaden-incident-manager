@@ -6,5 +6,6 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrganizationService extends ModelRepositoryService.Basic<Organization, OrganizationRepository>{
+public class OrganizationService
+    extends ModelRepositoryService.Basic<Organization, OrganizationRepository> {
 }

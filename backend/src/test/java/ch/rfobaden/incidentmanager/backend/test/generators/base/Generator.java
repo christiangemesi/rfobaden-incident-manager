@@ -166,7 +166,9 @@ public abstract class Generator<T> {
 
     public interface Property<T, TValue> {
         Class<TValue> getType();
+
         TValue get(T target);
+
         void set(T target, TValue value);
     }
 }
