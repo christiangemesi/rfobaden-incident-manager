@@ -110,7 +110,6 @@ public abstract class ModelRepositoryServiceTest<
         var newRecord = generator.generateNew();
         var id = generator.generateId();
         var path = newRecord.toPath();
-        mockLoadRelations(newRecord);
         Mockito.when(repository.save(newRecord))
             .thenAnswer((i) -> {
                 var persistedRecord = generator.copy(newRecord);
@@ -137,7 +136,6 @@ public abstract class ModelRepositoryServiceTest<
         var newRecord = generator.generateNew();
         newRecord.setId(generator.generateId());
         var path = newRecord.toPath();
-        mockLoadRelations(newRecord);
 
         // When
         var result = catchThrowable(() -> service.create(path, newRecord));
@@ -155,7 +153,6 @@ public abstract class ModelRepositoryServiceTest<
         var newRecord = generator.generateNew();
         newRecord.setCreatedAt(LocalDateTime.now());
         var path = newRecord.toPath();
-        mockLoadRelations(newRecord);
 
         // When
         var result = catchThrowable(() -> service.create(path, newRecord));
@@ -173,7 +170,6 @@ public abstract class ModelRepositoryServiceTest<
         var newRecord = generator.generateNew();
         newRecord.setUpdatedAt(LocalDateTime.now());
         var path = newRecord.toPath();
-        mockLoadRelations(newRecord);
 
         // When
         var result = catchThrowable(() -> service.create(path, newRecord));
@@ -191,7 +187,6 @@ public abstract class ModelRepositoryServiceTest<
         var record = generator.generate();
         var updatedRecord = generator.copy(record);
         var path = record.toPath();
-        mockLoadRelations(record);
 
         Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
@@ -218,7 +213,6 @@ public abstract class ModelRepositoryServiceTest<
 
         Mockito.when(repository.findById(updatedRecord.getId()))
             .thenReturn(Optional.empty());
-        mockLoadRelations(updatedRecord);
 
         // When
         var result = service.update(path, updatedRecord);
@@ -238,7 +232,6 @@ public abstract class ModelRepositoryServiceTest<
 
         Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
-        mockLoadRelations(record);
 
         // When
         var result = catchThrowable(() -> service.update(path, updatedRecord));
@@ -257,7 +250,6 @@ public abstract class ModelRepositoryServiceTest<
 
         Mockito.when(repository.findById(record.getId()))
             .thenReturn(Optional.of(record));
-        mockLoadRelations(record);
 
         // When
         var result = catchThrowable(() -> service.update(updatedRecord.toPath(), updatedRecord));
@@ -304,8 +296,6 @@ public abstract class ModelRepositoryServiceTest<
         verify(repository, times(1)).existsByPath(path, id);
         verify(repository, never()).deleteById(id);
     }
-
-    protected void mockLoadRelations(TModel record) {}
 
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,

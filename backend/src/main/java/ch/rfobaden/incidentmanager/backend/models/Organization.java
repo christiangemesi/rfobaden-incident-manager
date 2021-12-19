@@ -21,7 +21,14 @@ import javax.validation.constraints.NotBlank;
 public final class Organization extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(
+        mappedBy = "organization",
+        cascade = {
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.MERGE
+        }
+    )
     private List<User> users = new ArrayList<>();
 
     @Email
@@ -32,31 +39,6 @@ public final class Organization extends Model.Basic implements Serializable {
     @NotBlank
     @Column(nullable = false)
     private String name;
-
-    @Override
-    public String toString() {
-        return "Organization{"
-            + "id=" + getId()
-            + ", name=" + name
-            + ", email=" + email
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + '}';
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof Organization)) {
-            return false;
-        }
-        var that = (Organization) other;
-        return equalsModel(that)
-            && Objects.equals(name, that.name)
-            && Objects.equals(email, that.email);
-    }
 
     public String getEmail() {
         return email;
@@ -102,7 +84,30 @@ public final class Organization extends Model.Basic implements Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Organization{"
+            + "id=" + getId()
+            + ", name=" + name
+            + ", email=" + email
+            + ", createdAt=" + getCreatedAt()
+            + ", updatedAt=" + getUpdatedAt()
+            + '}';
+    }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Organization)) {
+            return false;
+        }
+        var that = (Organization) other;
+        return equalsModel(that)
+            && Objects.equals(name, that.name)
+            && Objects.equals(email, that.email);
+    }
 
     @Override
     public int hashCode() {

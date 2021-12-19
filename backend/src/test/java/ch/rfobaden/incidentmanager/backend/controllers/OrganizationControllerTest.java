@@ -29,8 +29,6 @@ public class OrganizationControllerTest extends ModelControllerTest.Basic<Organi
         }
     }
 
-
-
     @Override
     protected String getEndpointFor(EmptyPath path) {
         return "/api/v1/organizations/";

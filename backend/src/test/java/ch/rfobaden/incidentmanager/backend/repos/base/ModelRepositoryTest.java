@@ -8,10 +8,9 @@ import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,12 +25,14 @@ public abstract class ModelRepositoryTest<
     TPath,
     TRepository extends ModelRepository<TModel, TPath> & JpaRepository<TModel, Long>
     > {
-
     @Autowired
     protected TRepository repository;
 
     @Autowired
     protected ModelGenerator<TModel> generator;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @RepeatedTest(5)
     public void testFindAll() {
@@ -61,7 +62,6 @@ public abstract class ModelRepositoryTest<
     public void testFindById() {
         // Given
         var record = saveWithRelations(generator.generate());
-
 
         // When
         var result = repository.findById(record.getId()).orElse(null);

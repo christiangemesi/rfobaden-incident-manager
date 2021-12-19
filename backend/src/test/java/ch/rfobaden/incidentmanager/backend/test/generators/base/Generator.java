@@ -2,19 +2,19 @@ package ch.rfobaden.incidentmanager.backend.test.generators.base;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import com.github.javafaker.Faker;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -88,27 +88,17 @@ public abstract class Generator<T> {
             }
 
             var newValue = defaultConstructor.newInstance();
-            var methods = Arrays.stream(clazz.getMethods())
-                .filter((method) -> (
-                    method.getName().startsWith("get") || method.getName().startsWith("set")
-                ))
-                .collect(Collectors.toMap(
-                    Method::getName,
-                    (method) -> method
-                ));
+            var properties = getProperties(value);
 
             var currentClass = clazz;
             do {
                 for (var field : currentClass.getDeclaredFields()) {
-                    var fieldName = field.getName();
-                    var suffix = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                    var getter = methods.get("get" + suffix);
-                    var setter = methods.get("set" + suffix);
-                    if (getter == null || setter == null) {
+                    @SuppressWarnings("unchecked")
+                    var property = (Property<T, Object>) properties.get(field.getName());
+                    if (property == null) {
                         continue;
                     }
-                    var propertyValue = getter.invoke(value);
-                    setter.invoke(newValue, propertyValue);
+                    property.set(newValue, property.get(value));
                 }
                 currentClass = currentClass.getSuperclass();
             } while (currentClass != null);
@@ -116,5 +106,67 @@ public abstract class Generator<T> {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException("failed to copy", e);
         }
+    }
+
+    public Map<String, Property<T, ?>> getProperties(T value) {
+        var clazz = value.getClass();
+        var methods = Arrays.stream(clazz.getMethods())
+            .filter((method) -> (
+                method.getName().startsWith("get") || method.getName().startsWith("set")
+            ))
+            .collect(Collectors.toMap(
+                Method::getName,
+                (method) -> method
+            ));
+        var properties = new HashMap<String, Property<T, ?>>();
+        methods.forEach((methodName, getter) -> {
+            if (!methodName.startsWith("get")) {
+                return;
+            }
+            var setter = methods.get("set" + methodName.substring(3));
+            if (setter == null) {
+                return;
+            }
+            var name = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
+
+            @SuppressWarnings("unchecked")
+            var type = (Class<Object>) getter.getReturnType();
+            properties.put(name, new Property<>() {
+                @Override
+                public Class<Object> getType() {
+                    return type;
+                }
+
+                @Override
+                public Object get(T target) {
+                    try {
+                        return getter.invoke(target);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new IllegalStateException("failed to access property getter", e);
+                    }
+                }
+
+                @Override
+                public void set(T target, Object value) {
+                    try {
+                        setter.invoke(target, value);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new IllegalStateException("failed to access property setter", e);
+                    }
+                }
+
+                @Override
+                public String toString() {
+                    return clazz.getSimpleName() + "." + name;
+                }
+            });
+        });
+        return properties;
+    }
+
+    public interface Property<T, TValue> {
+        Class<TValue> getType();
+        TValue get(T target);
+        void set(T target, TValue value);
     }
 }

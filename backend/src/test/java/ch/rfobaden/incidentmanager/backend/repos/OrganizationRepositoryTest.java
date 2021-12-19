@@ -21,7 +21,6 @@ public class OrganizationRepositoryTest extends ModelRepositoryTest.Basic<Organi
     protected void saveRelations(Organization organization) {
         List<User> users = new ArrayList<>();
         for (User user : organization.getUsers()) {
-            System.out.println(user);
             users.add(userRepository.save(user));
         }
         organization.setUsers(users);

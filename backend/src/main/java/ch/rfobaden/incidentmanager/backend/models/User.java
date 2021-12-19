@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -25,7 +26,12 @@ import javax.validation.constraints.NotBlank;
 public final class User extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+        CascadeType.PERSIST,
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
     @JoinColumn
     private Organization organization;
 

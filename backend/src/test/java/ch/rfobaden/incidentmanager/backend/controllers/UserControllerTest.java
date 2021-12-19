@@ -9,6 +9,7 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
 import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,21 @@ public class UserControllerTest extends ModelControllerTest.Basic<User, UserServ
     @Autowired
     Faker faker;
 
+    @MockBean
+    OrganizationService organizationService;
+
     @Override
     protected String getEndpointFor(EmptyPath path) {
         return "/api/v1/users/";
+    }
+
+    @Override
+    protected void mockRelations(EmptyPath path, User user) {
+        var organization = user.getOrganization();
+        if (organization != null) {
+            Mockito.when(organizationService.find(organization.getId()))
+                .thenReturn(Optional.of(organization));
+        }
     }
 
     @Test

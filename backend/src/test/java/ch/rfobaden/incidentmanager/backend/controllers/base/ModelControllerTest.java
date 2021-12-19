@@ -129,7 +129,6 @@ public abstract class ModelControllerTest<
         var newRecord = generator.generateNew();
         var path = newRecord.toPath();
         var createdRecord = generator.persist(newRecord);
-        System.out.println(newRecord);
         Mockito.when(service.create(path, newRecord))
             .thenReturn(createdRecord);
         mockRelations(path, newRecord);
