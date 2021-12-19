@@ -25,7 +25,7 @@ import javax.validation.constraints.NotBlank;
 public final class User extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn
     private Organization organization;
 
