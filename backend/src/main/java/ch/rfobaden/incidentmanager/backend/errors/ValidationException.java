@@ -8,7 +8,7 @@ public class ValidationException extends RuntimeException {
     private final Violations violations;
 
     public ValidationException(Violations violations) {
-        super("validation failed");
+        super("validation failed: " + violations);
         this.violations = violations;
     }
 

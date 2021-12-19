@@ -129,7 +129,6 @@ public abstract class ModelControllerTest<
         var newRecord = generator.generateNew();
         var path = newRecord.toPath();
         var createdRecord = generator.persist(newRecord);
-        System.out.println(newRecord);
         Mockito.when(service.create(path, newRecord))
             .thenReturn(createdRecord);
         mockRelations(path, newRecord);
@@ -317,6 +316,6 @@ public abstract class ModelControllerTest<
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelControllerTest<TModel, EmptyPath, TService> {
         @Override
-        protected final void mockRelations(EmptyPath emptyPath, TModel record) {}
+        protected void mockRelations(EmptyPath emptyPath, TModel record) {}
     }
 }

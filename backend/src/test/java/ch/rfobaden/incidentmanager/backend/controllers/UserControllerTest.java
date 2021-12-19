@@ -6,18 +6,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
+import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
 @WebMvcTest(UserController.class)
@@ -26,9 +30,21 @@ public class UserControllerTest extends ModelControllerTest.Basic<User, UserServ
     @Autowired
     Faker faker;
 
+    @MockBean
+    OrganizationService organizationService;
+
     @Override
     protected String getEndpointFor(EmptyPath path) {
         return "/api/v1/users/";
+    }
+
+    @Override
+    protected void mockRelations(EmptyPath path, User user) {
+        var organization = user.getOrganization();
+        if (organization != null) {
+            Mockito.when(organizationService.find(organization.getId()))
+                .thenReturn(Optional.of(organization));
+        }
     }
 
     @Test

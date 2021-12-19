@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -22,6 +25,15 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "user")
 public final class User extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    @ManyToOne(cascade = {
+        CascadeType.PERSIST,
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
+    @JoinColumn
+    private Organization organization;
 
     @Email
     @NotBlank
@@ -89,6 +101,32 @@ public final class User extends Model.Basic implements Serializable {
             credentials.setUser(this);
         }
     }
+    
+    @JsonIgnore
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    @JsonIgnore
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Long getOrganizationId() {
+        if (organization == null) {
+            return null;
+        }
+        return organization.getId();
+    }
+
+    public void setOrganizationId(Long id) {
+        if (id == null) {
+            organization = null;
+            return;
+        }
+        organization = new Organization();
+        organization.setId(id);
+    }
 
     @Override
     public String toString() {
@@ -100,6 +138,7 @@ public final class User extends Model.Basic implements Serializable {
             + ", firstName='" + firstName + '\''
             + ", lastName='" + lastName + '\''
             + ", role=" + role
+            + ", organization=" + organization
             + '}';
     }
 
@@ -116,12 +155,13 @@ public final class User extends Model.Basic implements Serializable {
             && Objects.equals(email, that.email)
             && Objects.equals(firstName, that.firstName)
             && Objects.equals(lastName, that.lastName)
-            && Objects.equals(role, that.role);
+            && Objects.equals(role, that.role)
+            && Objects.equals(organization, that.organization);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), email, firstName, lastName, role);
+        return Objects.hash(modelHashCode(), email, firstName, lastName, role, organization);
     }
 
     public enum Role {

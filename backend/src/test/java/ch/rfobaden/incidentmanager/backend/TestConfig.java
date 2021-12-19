@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend;
 
 
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.OrganizationGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.SubtaskGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TaskGenerator;
@@ -22,8 +23,9 @@ import java.util.Locale;
     IncidentGenerator.class,
     ReportGenerator.class,
     TaskGenerator.class,
-    SubtaskGenerator.class
-})
+    SubtaskGenerator.class,
+    OrganizationGenerator.class
+    })
 public class TestConfig {
     @Bean
     public Faker createFaker() {
