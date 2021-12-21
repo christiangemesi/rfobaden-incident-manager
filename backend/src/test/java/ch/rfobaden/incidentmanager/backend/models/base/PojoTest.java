@@ -4,6 +4,7 @@ package ch.rfobaden.incidentmanager.backend.models.base;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Import;
 public abstract class PojoTest<T> {
     protected abstract T generate();
 
-    @Test
+    @RepeatedTest(5)
     public void testEquals_self() {
         // Given
         var value = generate();
@@ -30,7 +31,7 @@ public abstract class PojoTest<T> {
         assertThat(result).isTrue();
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testEquals_null() {
         // Given
         var value = generate();
@@ -39,7 +40,7 @@ public abstract class PojoTest<T> {
         assertThat(value).isNotEqualTo(null);
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testEquals_differentType() {
         // Given
         var value = generate();
@@ -48,7 +49,7 @@ public abstract class PojoTest<T> {
         assertThat(value).isNotEqualTo(new Object());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testEquals_nonEqual() {
         // Given
         var value = generate();
@@ -65,7 +66,7 @@ public abstract class PojoTest<T> {
         assertThat(value.hashCode()).isNotEqualTo(otherValue.hashCode());
     }
 
-    @Test
+    @RepeatedTest(5)
     public void testToString() {
         // Given
         var value = generate();
