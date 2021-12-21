@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
-import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
