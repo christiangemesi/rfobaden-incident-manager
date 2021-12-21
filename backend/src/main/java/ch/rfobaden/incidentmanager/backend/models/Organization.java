@@ -85,17 +85,6 @@ public final class Organization extends Model.Basic implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Organization{"
-            + "id=" + getId()
-            + ", name=" + name
-            + ", email=" + email
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + '}';
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

@@ -4,9 +4,7 @@ package ch.rfobaden.incidentmanager.backend.models.base;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
-import ch.rfobaden.incidentmanager.backend.test.generators.base.Generator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
@@ -76,6 +74,6 @@ public abstract class PojoTest<T> {
         var string = value.toString();
 
         // Then
-        assertThat(string).isNotNull();
+        assertThat(string).isNotBlank();
     }
 }

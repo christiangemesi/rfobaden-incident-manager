@@ -174,22 +174,6 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath> {
     }
 
     @Override
-    public String toString() {
-        return "Subtask{"
-            + "id=" + getId()
-            + ", assignee =" + assignee
-            + ", task=" + task
-            + ", title='" + title + '\''
-            + ", description='" + description + '\''
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + ", startsAt=" + startsAt
-            + ", priority=" + priority
-            + ", isClosed=" + isClosed
-            + '}';
-    }
-
-    @Override
     public SubtaskPath toPath() {
         var path = new SubtaskPath();
         path.setIncidentId(getTask().getReport().getIncidentId());

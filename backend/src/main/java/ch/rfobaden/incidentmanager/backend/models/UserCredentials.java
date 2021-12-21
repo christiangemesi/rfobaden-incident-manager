@@ -59,18 +59,6 @@ public final class UserCredentials extends Model implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "UserCredentials{"
-            + "id='" + getId() + '\''
-            + ", encryptedPassword='" + encryptedPassword + '\''
-            + ", user='" + getUserId()  + '\''
-            + ", lastPasswordChangeAt='" + lastPasswordChangeAt + '\''
-            + ", createdAt='" + getCreatedAt() + '\''
-            + ", updatedAt='" + getUpdatedAt() + '\''
-            + '}';
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

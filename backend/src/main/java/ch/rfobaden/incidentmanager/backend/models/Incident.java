@@ -107,21 +107,6 @@ public class Incident extends Model.Basic {
     }
 
     @Override
-    public String toString() {
-        return "Incident{"
-            + "id=" + getId()
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + ", title='" + title + '\''
-            + ", description='" + description + '\''
-            + ", startsAt=" + startsAt + '\''
-            + ", endsAt=" + endsAt + '\''
-            + ", closeReason=" + closeReason
-            + ", isClosed=" + isClosed
-            + '}';
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

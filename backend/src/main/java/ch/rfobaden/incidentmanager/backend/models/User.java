@@ -129,20 +129,6 @@ public final class User extends Model.Basic implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "User{"
-            + "id=" + getId()
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + ", email='" + email + '\''
-            + ", firstName='" + firstName + '\''
-            + ", lastName='" + lastName + '\''
-            + ", role=" + role
-            + ", organization=" + organization
-            + '}';
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

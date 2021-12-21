@@ -216,26 +216,6 @@ public class Report extends Model implements PathConvertible<ReportPath> {
     }
 
     @Override
-    public String toString() {
-        return "Report{"
-            + "id=" + getId()
-            + ", assignee=" + assignee
-            + ", incident=" + incident
-            + ", title='" + title + '\''
-            + ", description='" + description + '\''
-            + ", addendum='" + notes + '\''
-            + ", createdAt=" + getCreatedAt() + '\''
-            + ", updatedAt=" + getUpdatedAt() + '\''
-            + ", startsAt=" + startsAt + '\''
-            + ", endsAt=" + endsAt + '\''
-            + ", location='" + location + '\''
-            + ", isKeyReport='" + isKeyReport + '\''
-            + ", isLocationRelevantReport='" + isLocationRelevantReport + '\''
-            + ", priority=" + priority
-            + '}';
-    }
-
-    @Override
     public ReportPath toPath() {
         ReportPath path = new ReportPath();
         path.setIncidentId(getIncidentId());

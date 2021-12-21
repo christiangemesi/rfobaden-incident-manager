@@ -187,22 +187,6 @@ public class Task extends Model implements PathConvertible<TaskPath> {
             endsAt, location, priority);
     }
 
-    @Override
-    public String toString() {
-        return "Task{"
-            + "id=" + getId()
-            + ", assignee =" + assignee
-            + ", report=" + report
-            + ", title='" + title + '\''
-            + ", description='" + description + '\''
-            + ", createdAt=" + getCreatedAt()
-            + ", updatedAt=" + getUpdatedAt()
-            + ", startsAt=" + startsAt
-            + ", location='" + location + '\''
-            + ", priority=" + priority
-            + '}';
-    }
-
 
     @Override
     public TaskPath toPath() {
