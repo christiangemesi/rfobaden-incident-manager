@@ -1,12 +1,34 @@
 package ch.rfobaden.incidentmanager.backend;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.function.Supplier;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import(TestConfig.class)
 class ApplicationTests {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    Supplier<SecurityContext> securityContextSupplier;
+
     @Test
-    void contextLoads() {}
+    void testPasswordEncoder() {
+        assertThat(passwordEncoder).isInstanceOf(BCryptPasswordEncoder.class);
+    }
+
+    @Test
+    void testSecurityContextSupplier() {
+        assertThat(securityContextSupplier.get()).isSameAs(SecurityContextHolder.getContext());
+    }
 }

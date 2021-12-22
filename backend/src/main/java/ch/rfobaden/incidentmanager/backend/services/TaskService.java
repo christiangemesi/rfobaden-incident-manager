@@ -8,10 +8,4 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepository>  {
-
-    private final UserService userService;
-
-    public TaskService(UserService userService) {
-        this.userService = userService;
-    }
 }

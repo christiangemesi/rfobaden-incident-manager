@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @SpringBootTest
-public class UserServiceTest
+class UserServiceTest
     extends ModelRepositoryServiceTest.Basic<User, UserService, UserRepository> {
     @Autowired
     protected Faker faker;
@@ -58,7 +58,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testCreate_credentials() {
+    void testCreate_credentials() {
         // Given
         var newUser = generator.generateNew();
         Mockito.when(repository.save(newUser)).thenAnswer((i) -> {
@@ -93,7 +93,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testCreate_presetCredentials() {
+    void testCreate_presetCredentials() {
         // Given
         var newUser = generator.generateNew();
         newUser.setCredentials(generator.generate().getCredentials());
@@ -111,7 +111,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testUpdatePassword() {
+    void testUpdatePassword() {
         // Given
         var user = generator.generate();
         var newPassword = faker.internet().password();
@@ -136,7 +136,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testUpdatePassword_unknownUser() {
+    void testUpdatePassword_unknownUser() {
         // Given
         var user = generator.generate();
         var newPassword = faker.internet().password();
@@ -151,7 +151,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testUpdatePassword_nullPassword() {
+    void testUpdatePassword_nullPassword() {
         // Given
         var user = generator.generate();
 
@@ -165,7 +165,7 @@ public class UserServiceTest
     }
 
     @RepeatedTest(5)
-    public void testUpdatePassword_emptyPassword() {
+    void testUpdatePassword_emptyPassword() {
         // Given
         var user = generator.generate();
 

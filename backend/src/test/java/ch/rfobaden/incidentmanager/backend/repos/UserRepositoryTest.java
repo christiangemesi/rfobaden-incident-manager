@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepository> {
+class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepository> {
     @Autowired
     OrganizationRepository organizationRepository;
 
@@ -22,7 +22,7 @@ public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepo
     }
 
     @Test
-    public void testFindByEmail() {
+    void testFindByEmail() {
         // Given
         var record = repository.save(generator.generate());
 
@@ -35,7 +35,7 @@ public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepo
     }
 
     @Test
-    public void testFindByEmail_ignoreCase() {
+    void testFindByEmail_ignoreCase() {
         // Given
         var record = repository.save(generator.generate());
 
@@ -48,7 +48,7 @@ public class UserRepositoryTest extends ModelRepositoryTest.Basic<User, UserRepo
     }
 
     @Test
-    public void testFindByEmail_notFound() {
+    void testFindByEmail_notFound() {
         // Given
         var record = generator.generate();
 
