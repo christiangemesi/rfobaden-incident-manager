@@ -177,8 +177,8 @@ public abstract class Model {
                 var modelCollection = (Collection<Model>) value;
                 builder.append(field.getName()).append("Ids").append(": ").append(
                     modelCollection == null ? "null" : modelCollection.stream()
-                        .map(entity -> {
-                            var entityId = entity.getId();
+                        .map(element -> {
+                            var entityId = element.getId();
                             if (entityId == null) {
                                 return "null";
                             }

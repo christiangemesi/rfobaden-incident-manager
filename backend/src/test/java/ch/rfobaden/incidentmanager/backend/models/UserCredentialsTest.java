@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class UserCredentialsTest extends ModelTest<UserCredentials> {
+class UserCredentialsTest extends ModelTest<UserCredentials> {
     @Autowired
     UserGenerator userGenerator;
 
     @Test
-    public void testGetId() {
+    void testGetId() {
         // When
         var credentials = generator.generate();
         var user = userGenerator.generate();

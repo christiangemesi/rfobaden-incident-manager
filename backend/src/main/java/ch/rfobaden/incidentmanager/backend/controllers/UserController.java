@@ -22,8 +22,10 @@ public class UserController extends ModelController.Basic<User, UserService> {
     private final OrganizationService organizationService;
 
 
-    public UserController(JwtHelper jwtHelper, UserService userService,
-                          OrganizationService organizationService) {
+    public UserController(
+        JwtHelper jwtHelper,
+        OrganizationService organizationService
+    ) {
         this.jwtHelper = jwtHelper;
         this.organizationService = organizationService;
     }

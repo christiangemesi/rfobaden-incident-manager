@@ -68,8 +68,9 @@ public abstract class ModelRepositoryServiceTest<
         var result = service.find(record.getId());
 
         // Then
-        assertThat(result).isNotEmpty();
-        assertThat(result.get()).isSameAs(record);
+        assertThat(result)
+            .isNotEmpty()
+            .containsSame(record);
         verify(repository, times(1)).findById(record.getId());
     }
 
@@ -121,8 +122,9 @@ public abstract class ModelRepositoryServiceTest<
         var result = service.create(path, newRecord);
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).isNotSameAs(newRecord);
+        assertThat(result)
+            .isNotNull()
+            .isNotSameAs(newRecord);
         assertThat(result.getId()).isEqualTo(id);
         assertThat(result.getCreatedAt()).isNotNull();
         assertThat(result.getUpdatedAt()).isEqualTo(result.getCreatedAt());
@@ -197,8 +199,9 @@ public abstract class ModelRepositoryServiceTest<
         var result = service.update(path, updatedRecord).orElse(null);
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).isSameAs(updatedRecord);
+        assertThat(result)
+            .isNotNull()
+            .isSameAs(updatedRecord);
         assertThat(result.getCreatedAt()).isEqualTo(record.getCreatedAt());
         assertThat(result.getUpdatedAt()).isAfter(record.getUpdatedAt());
         verify(repository, times(1)).save(updatedRecord);

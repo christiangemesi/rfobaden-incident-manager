@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers.filters;
+package ch.rfobaden.incidentmanager.backend.controllers.base.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

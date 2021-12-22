@@ -4,5 +4,5 @@ import ch.rfobaden.incidentmanager.backend.models.base.ModelTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class UserTest extends ModelTest<User> {
+class UserTest extends ModelTest<User> {
 }

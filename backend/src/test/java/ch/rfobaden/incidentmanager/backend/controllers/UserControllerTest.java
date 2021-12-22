@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
-import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
@@ -21,12 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.List;
 import java.util.Optional;
 
 @WebMvcTest(UserController.class)
 @TestPropertySource(properties = "app.mock-user-service=false")
-public class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
+class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
     @Autowired
     Faker faker;
 
@@ -48,7 +46,7 @@ public class UserControllerTest extends ModelControllerTest.Basic<User, UserServ
     }
 
     @Test
-    public void testUpdatePassword() throws Exception {
+    void testUpdatePassword() throws Exception {
         // Given
         var user = generator.generate();
         var newPassword = faker.internet().password();

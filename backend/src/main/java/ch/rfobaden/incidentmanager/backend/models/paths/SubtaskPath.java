@@ -1,7 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.models.paths;
 
-import ch.rfobaden.incidentmanager.backend.models.Subtask;
-
 import java.util.Objects;
 
 public class SubtaskPath extends TaskPath {

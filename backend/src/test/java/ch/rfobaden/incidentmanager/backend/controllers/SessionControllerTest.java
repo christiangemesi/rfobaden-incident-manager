@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
-import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelperTest;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +17,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +33,7 @@ import java.util.Optional;
 
 @WebMvcTest(SessionController.class)
 @TestPropertySource(properties = "app.mock-user-service=false")
-public class SessionControllerTest extends AppControllerTest {
+class SessionControllerTest extends AppControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
@@ -54,7 +52,7 @@ public class SessionControllerTest extends AppControllerTest {
     protected ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
 
     @Test
-    public void testFind() throws Exception {
+    void testFind() throws Exception {
         // Given
         var user = userGenerator.generate();
         var token = jwtHelper.encodeUser(user);
@@ -78,7 +76,7 @@ public class SessionControllerTest extends AppControllerTest {
     }
 
     @Test
-    public void testFind_noToken() throws Exception {
+    void testFind_noToken() throws Exception {
         // When
         var mockRequest = MockMvcRequestBuilders.get("/api/v1/session")
             .accept(MediaType.APPLICATION_JSON);
@@ -93,7 +91,7 @@ public class SessionControllerTest extends AppControllerTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    void testCreate() throws Exception {
         // Given
         var user = userGenerator.generate();
 
@@ -129,7 +127,7 @@ public class SessionControllerTest extends AppControllerTest {
     }
 
     @Test
-    public void testCreate_disabledUser() throws Exception {
+    void testCreate_disabledUser() throws Exception {
         // Given
         var user = userGenerator.generate();
 
@@ -160,7 +158,7 @@ public class SessionControllerTest extends AppControllerTest {
     }
 
     @Test
-    public void testCreate_lockedUser() throws Exception {
+    void testCreate_lockedUser() throws Exception {
         // Given
         var user = userGenerator.generate();
 
@@ -191,7 +189,7 @@ public class SessionControllerTest extends AppControllerTest {
     }
 
     @Test
-    public void testCreate_badCredentials() throws Exception {
+    void testCreate_badCredentials() throws Exception {
         // Given
         var user = userGenerator.generate();
 

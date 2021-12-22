@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers.filters;
+package ch.rfobaden.incidentmanager.backend.controllers.base.filters;
 
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;

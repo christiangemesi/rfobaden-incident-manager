@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @Import(TestConfig.class)
-public class JwtHelperTest {
+class JwtHelperTest {
     @MockBean
     UserService userService;
 
@@ -38,7 +38,7 @@ public class JwtHelperTest {
     Faker faker;
 
     @Test
-    public void testEncode() {
+    void testEncode() {
         // When
         var result = jwtHelper.encode((jwt) -> {});
 
@@ -47,7 +47,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode() {
+    void testDecode() {
         // Given
         var token = jwtHelper.encode((jwt) -> {});
 
@@ -59,7 +59,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_nullToken() {
+    void testDecode_nullToken() {
         // When
         var result = jwtHelper.decode(null).orElse(null);
 
@@ -68,7 +68,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_emptyToken() {
+    void testDecode_emptyToken() {
         // When
         var result = jwtHelper.decode("").orElse(null);
 
@@ -77,7 +77,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_blankToken() {
+    void testDecode_blankToken() {
         // Given
         var token = " ".repeat(10);
 
@@ -89,7 +89,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_malformedToken() {
+    void testDecode_malformedToken() {
         // Given
         var token = faker.beer().name();
 
@@ -101,7 +101,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_invalidToken() {
+    void testDecode_invalidToken() {
         // Given
         var token = String.format(
             "%s.%s.%s", faker.beer().name(), faker.beer().name(), faker.beer().name()
@@ -115,7 +115,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_expiredToken() {
+    void testDecode_expiredToken() {
         // Given
         var token = jwtHelper.encode((jwt) -> jwt
             .setExpiration(new Date(System.currentTimeMillis() - 10))
@@ -129,7 +129,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_differentSignature() {
+    void testDecode_differentSignature() {
         // Given
         var token = Jwts.builder().signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256)).compact();
 
@@ -141,7 +141,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecode_unsignedJwt() {
+    void testDecode_unsignedJwt() {
         // Given
         var token = Jwts.builder().compact();
 
@@ -153,7 +153,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testEncodeUser() {
+    void testEncodeUser() {
         // Given
         var user = userGenerator.generate();
 
@@ -165,7 +165,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecodeUser() {
+    void testDecodeUser() {
         // Given
         var user = userGenerator.generate();
         var token = jwtHelper.encodeUser(user);
@@ -180,7 +180,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecodeUser_expiredToken() {
+    void testDecodeUser_expiredToken() {
         // Given
         var token = jwtHelper.encode((jwt) -> jwt.setExpiration(new Date()));
 
@@ -192,7 +192,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecodeUser_invalidId() {
+    void testDecodeUser_invalidId() {
         // Given
         var token = jwtHelper.encode((jwt) -> jwt.setSubject(faker.beer().name()));
 
@@ -204,7 +204,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecodeUser_unknownUser() {
+    void testDecodeUser_unknownUser() {
         // Given
         var user = userGenerator.generate();
         var token = jwtHelper.encodeUser(user);
@@ -219,7 +219,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testDecodeUser_afterPasswordChange() {
+    void testDecodeUser_afterPasswordChange() {
         // Given
         var user = userGenerator.generate();
         var token = jwtHelper.encodeUser(user);
@@ -235,7 +235,7 @@ public class JwtHelperTest {
     }
 
     @Test
-    public void testNew_weakKey() {
+    void testNew_weakKey() {
         // Given
         var secret = faker.leagueOfLegends().champion();
         var rfoConfig = new RfoConfig(null, new RfoConfig.Jwt(secret));

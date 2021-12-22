@@ -42,10 +42,10 @@ public abstract class AppControllerTest {
     @SpringBootTest
     @Import({
         TestConfig.class,
-        Local.LocalAppController.class,
+        LocalTests.LocalAppController.class,
         SecurityContextMock.class,
     })
-    public static class Local {
+    static class LocalTests {
         @Autowired
         public LocalAppController controller;
 
@@ -56,7 +56,7 @@ public abstract class AppControllerTest {
         SecurityContextMock securityContextMock;
 
         @Test
-        public void testGetCurrentUser() {
+        void testGetCurrentUser() {
             // Given
             var user = userGenerator.generate();
             securityContextMock.mockAuth(user);
@@ -71,7 +71,7 @@ public abstract class AppControllerTest {
         }
 
         @Test
-        public void testGetCurrentUser_noAuthorization() {
+        void testGetCurrentUser_noAuthorization() {
             // Given
             securityContextMock.mockAuth(null);
 
@@ -83,7 +83,7 @@ public abstract class AppControllerTest {
         }
 
         @Test
-        public void testGetCurrentUser_unknownPrincipal() {
+        void testGetCurrentUser_unknownPrincipal() {
             // Given
             var principal = new Object();
             securityContextMock.mockAuth(principal);
@@ -97,7 +97,7 @@ public abstract class AppControllerTest {
         }
 
         @Test
-        public void testRequireCurrentUser() {
+        void testRequireCurrentUser() {
             // Given
             var user = userGenerator.generate();
             securityContextMock.mockAuth(user);
@@ -112,7 +112,7 @@ public abstract class AppControllerTest {
         }
 
         @Test
-        public void testRequireCurrentUser_noCurrentUser() {
+        void testRequireCurrentUser_noCurrentUser() {
             // Given
             securityContextMock.mockAuth(null);
 

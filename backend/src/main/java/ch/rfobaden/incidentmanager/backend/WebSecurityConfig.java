@@ -1,8 +1,8 @@
 package ch.rfobaden.incidentmanager.backend;
 
-import ch.rfobaden.incidentmanager.backend.controllers.filters.ExceptionHandlerFilter;
-import ch.rfobaden.incidentmanager.backend.controllers.filters.JwtAuthFilter;
-import ch.rfobaden.incidentmanager.backend.controllers.handlers.ApiExceptionHandler;
+import ch.rfobaden.incidentmanager.backend.controllers.base.filters.ExceptionHandlerFilter;
+import ch.rfobaden.incidentmanager.backend.controllers.base.filters.JwtAuthFilter;
+import ch.rfobaden.incidentmanager.backend.controllers.base.handlers.ApiExceptionHandler;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;

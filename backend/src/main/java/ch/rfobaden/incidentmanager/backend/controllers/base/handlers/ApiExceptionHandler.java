@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.controllers.handlers;
+package ch.rfobaden.incidentmanager.backend.controllers.base.handlers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;

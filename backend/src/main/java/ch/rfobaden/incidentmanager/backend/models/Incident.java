@@ -121,8 +121,7 @@ public class Incident extends Model.Basic {
             && Objects.equals(startsAt, incident.startsAt)
             && Objects.equals(endsAt, incident.endsAt)
             && Objects.equals(closeReason, incident.closeReason)
-            && Objects.equals(isClosed, incident.isClosed)
-            ;
+            && Objects.equals(isClosed, incident.isClosed);
     }
 
     @Override

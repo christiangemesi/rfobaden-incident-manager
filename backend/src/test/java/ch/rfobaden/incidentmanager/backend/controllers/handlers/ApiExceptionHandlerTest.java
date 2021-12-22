@@ -1,8 +1,9 @@
 package ch.rfobaden.incidentmanager.backend.controllers.handlers;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
+import ch.rfobaden.incidentmanager.backend.controllers.base.handlers.ApiExceptionHandler;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.errors.ValidationException;
@@ -27,7 +28,7 @@ import javax.validation.constraints.NotNull;
 
 @SpringBootTest
 @Import(TestConfig.class)
-public class ApiExceptionHandlerTest {
+class ApiExceptionHandlerTest {
     @Autowired
     Faker faker;
 
@@ -38,7 +39,7 @@ public class ApiExceptionHandlerTest {
     Validator validator;
 
     @Test
-    public void testHandleRemaining() {
+    void testHandleRemaining() {
         // Given
         var e = new Exception(faker.chuckNorris().fact());
 
@@ -53,7 +54,7 @@ public class ApiExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleRemaining_nestedExceptions() {
+    void testHandleRemaining_nestedExceptions() {
         // Given
         var e0 = new Exception(faker.chuckNorris().fact());
         var e1 = new Exception(faker.chuckNorris().fact(), e0);
@@ -72,7 +73,7 @@ public class ApiExceptionHandlerTest {
     }
 
     @Test
-    public void testHandle_ApiException() {
+    void testHandle_ApiException() {
         // Given
         var e = new ApiException(HttpStatus.I_AM_A_TEAPOT, faker.chuckNorris().fact());
 
@@ -87,7 +88,7 @@ public class ApiExceptionHandlerTest {
     }
 
     @Test
-    public void testHandle_UpdateConflictException() {
+    void testHandle_UpdateConflictException() {
         // Given
         var e = new UpdateConflictException(faker.chuckNorris().fact());
 
@@ -104,7 +105,7 @@ public class ApiExceptionHandlerTest {
     }
 
     @Test
-    public void testHandle_AuthenticationException() {
+    void testHandle_AuthenticationException() {
         // Given
         var e = new AuthenticationException(faker.chuckNorris().fact()) {};
 
@@ -119,7 +120,7 @@ public class ApiExceptionHandlerTest {
     }
 
     @Test
-    public void testHandle_MethodArgumentNotValidException() {
+    void testHandle_MethodArgumentNotValidException() {
         // Given
         MethodArgumentNotValidException e = run(() -> {
             @Validated
@@ -160,7 +161,7 @@ public class ApiExceptionHandlerTest {
         assertThat(result.getBody()).isNotNull();
 
         var fields = result.getBody().getFields();
-        assertThat(fields.size()).isEqualTo(1);
+        assertThat(fields).hasSize(1);
         assertThat(fields.get("value")).isNotNull();
 
         var fieldValue = fields.get("value");
@@ -175,7 +176,7 @@ public class ApiExceptionHandlerTest {
 
 
     @Test
-    public void testHandle_ValidationException() {
+    void testHandle_ValidationException() {
         // Given
         var fieldName = "field";
         var error = "is not valid";

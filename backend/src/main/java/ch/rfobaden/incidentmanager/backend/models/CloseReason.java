@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "close_reason")
 public class CloseReason {
@@ -30,9 +28,6 @@ public class CloseReason {
 
     @OneToOne(cascade = CascadeType.ALL)
     private CloseReason previous;
-
-    public CloseReason() {
-    }
 
     public Long getId() {
         return id;
