@@ -153,6 +153,7 @@ Temporary Items
 .idea/compiler.xml
 
 # IDEA sonarlint plugin
+.idea/sonarlint.xml
 .idea/sonarlint-state.xml
 .idea/sonarlint/issuestore/
 
