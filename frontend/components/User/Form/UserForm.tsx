@@ -16,6 +16,7 @@ const UserForm: React.VFC = () => {
     firstName: '',
     lastName: '',
     role: UserRole.ADMIN,
+    organization: 1, // TODO
   }))
 
   useValidate(form, (validate) => ({
@@ -30,6 +31,7 @@ const UserForm: React.VFC = () => {
       validate.notBlank(),
     ],
     role: [],
+    organization: [],
   }))
 
   useSubmit(form, async (formData: ModelData<User>) => {

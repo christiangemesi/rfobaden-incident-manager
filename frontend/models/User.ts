@@ -1,11 +1,14 @@
 import Model, { parseModel } from '@/models/base/Model'
 import { useMemo } from 'react'
+import Organization from '@/models/Organization'
+import Id from '@/models/base/Id'
 
 export default interface User extends Model {
   email: string
   firstName: string
   lastName: string
   role: UserRole
+  organizationId: Id<Organization>
 }
 
 export enum UserRole {
