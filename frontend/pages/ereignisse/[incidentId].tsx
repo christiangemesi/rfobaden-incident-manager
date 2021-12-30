@@ -28,6 +28,7 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
+import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props {
   data: {
@@ -76,7 +77,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     }
   }
 
+  console.log(OrganizationStore.list().length)
+
   // TODO Use actual organisations.
+
   const organisationList = ['Berufsfeuerwehr Baden', 'freiwillige Feuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
   const organisations = organisationList.reduce((a, b) => a + ', ' + b)
 
