@@ -28,7 +28,8 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
-import OrganizationStore from '@/stores/OrganizationStore'
+import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
+import Organization, { parseOrganization } from '@/models/Organization'
 
 interface Props {
   data: {
@@ -36,6 +37,7 @@ interface Props {
     reports: Report[]
     tasks: Task[]
     users: User[]
+    organizations: Organization[]
   }
 }
 
@@ -44,10 +46,12 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
     TaskStore.saveAll(data.tasks.map(parseTask))
+    OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
+  const organisations = useOrganizations()
 
   const [selectedReportId, setSelectedReportId] = useState<Id<Report> | null>(null)
   const selectedReport = useReport(selectedReportId)
@@ -80,9 +84,9 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   console.log(OrganizationStore.list().length)
 
   // TODO Use actual organisations.
-
   const organisationList = ['Berufsfeuerwehr Baden', 'freiwillige Feuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
-  const organisations = organisationList.reduce((a, b) => a + ', ' + b)
+  const organisations2 = organisationList.reduce((a, b) => a + ', ' + b)
+  const organizationList2 = organisations.map( (org) => org.name).reduce((a, b) => a + ', ' + b)
 
   const startDate = useMemo(() => (
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
@@ -139,7 +143,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </VerticalSpacer>
         <VerticalSpacer>
           <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-            <UiTextWithIcon text={organisations}>
+            <UiTextWithIcon text={organizationList2}>
               <UiIcon.UserInCircle />
             </UiTextWithIcon>
           </UiGrid.Col>
@@ -196,6 +200,13 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     }
   }
 
+  const [organizations, organizationError]: BackendResponse<Organization[]> = await BackendService.list(
+    'organizations',
+  )
+  if(organizationError !== null){
+    throw organizationError
+  }
+
   const [incident, incidentError]: BackendResponse<Incident> = await BackendService.find(
     `incidents/${incidentId}`,
   )
@@ -233,6 +244,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
         reports,
         tasks,
         users,
+        organizations,
       },
     },
   }
