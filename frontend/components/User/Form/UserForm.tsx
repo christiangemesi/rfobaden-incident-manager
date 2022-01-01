@@ -43,7 +43,7 @@ const UserForm: React.VFC = () => {
     clearForm(form)
   })
 
-  const organizations = useOrganizations((organizations) => organizations.map(({ id }) => id))
+  const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
   return (
     <div>
       <form>
@@ -66,7 +66,7 @@ const UserForm: React.VFC = () => {
           <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
         )}</UiForm.Field>
         <UiForm.Field field={form.organizationId}>{(props) => (
-          <UiSelectInput {...props} label="Organisation" options={organizations} optionName={mapOrganizationIdToName} />
+          <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </form>
