@@ -95,9 +95,9 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     ...subtasks.map((subtask) => subtask.assigneeId),
   ])
 
-  const activeOrganisations = organisations.filter((o) => {
-    return o.userIds.some((id) => allIds.has(id))
-  }).map((o) => o.name)
+  const activeOrganisations = organisations.filter(
+    (organization) => organization.userIds.some((id) => allIds.has(id)))
+    .map(({ name }) => name)
 
   const startDate = useMemo(() => (
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
