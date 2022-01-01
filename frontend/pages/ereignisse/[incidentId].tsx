@@ -22,7 +22,7 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import * as ReactDOM from 'react-dom'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import Task, { parseTask } from '@/models/Task'
-import TaskStore from '@/stores/TaskStore'
+import TaskStore, { useTasks } from '@/stores/TaskStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
@@ -30,12 +30,15 @@ import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
+import Subtask from '@/models/Subtask'
+import { useSubtasks } from '@/stores/SubtaskStore'
 
 interface Props {
   data: {
     incident: Incident
     reports: Report[]
     tasks: Task[]
+    subtasks: Subtask[]
     users: User[]
     organizations: Organization[]
   }
@@ -51,6 +54,11 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
+  const subtasks = useSubtasks((subtasks) => (
+    subtasks.filter((subtask) => subtask.incidentId === incident.id)))
+  const tasks = useTasks((tasks) => (
+    tasks.filter((task) => task.incidentId === incident.id)
+  ))
   const organisations = useOrganizations()
 
   const [selectedReportId, setSelectedReportId] = useState<Id<Report> | null>(null)
@@ -81,12 +89,15 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     }
   }
 
-  console.log(OrganizationStore.list().length)
+  const allIds = new Set([
+    ...reports.map((report) => report.assigneeId),
+    ...tasks.map((task) => task.assigneeId),
+    ...subtasks.map((subtask) => subtask.assigneeId),
+  ])
 
-  // TODO Use actual organisations.
-  const organisationList = ['Berufsfeuerwehr Baden', 'freiwillige Feuerwehr Baden', 'Werkhof Baden', 'Werkhof Turgi']//reports.map((report) => report.assigneeId)
-  const organisations2 = organisationList.reduce((a, b) => a + ', ' + b)
-  const organizationList2 = organisations.map( (org) => org.name).reduce((a, b) => a + ', ' + b)
+  const activeOrganisations = organisations.filter((o) => {
+    return o.userIds.some((id) => allIds.has(id))
+  }).map((o) => o.name)
 
   const startDate = useMemo(() => (
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
@@ -143,7 +154,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </VerticalSpacer>
         <VerticalSpacer>
           <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-            <UiTextWithIcon text={organizationList2}>
+            <UiTextWithIcon text={
+              activeOrganisations.length ?
+                activeOrganisations.reduce((a, b) => a + ', ' + b) :
+                'Keine Organisationen beteiligt'}>
               <UiIcon.UserInCircle />
             </UiTextWithIcon>
           </UiGrid.Col>
@@ -170,7 +184,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Body>
             </UiModal>
           </Actions>
-          <ReportList reports={reports} onClick={(report) => setSelectedReportId(report.id)} activeReport={selectedReport} />
+          <ReportList reports={reports} onClick={(report) => setSelectedReportId(report.id)}
+            activeReport={selectedReport} />
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
@@ -203,7 +218,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
   const [organizations, organizationError]: BackendResponse<Organization[]> = await BackendService.list(
     'organizations',
   )
-  if(organizationError !== null){
+  if (organizationError !== null) {
     throw organizationError
   }
 
@@ -231,6 +246,16 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     return [...(await all), ...tasks]
   }, Promise.resolve([] as Task[]))
 
+  const subtasks = await tasks.reduce(async (all, task) => {
+    const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await BackendService.list(
+      `incidents/${incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks/`,
+    )
+    if (subtasksError !== null) {
+      throw subtasksError
+    }
+    return [...(await all), ...subtasks]
+  }, Promise.resolve([] as Subtask[]))
+
 
   const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
   if (usersError !== null) {
@@ -243,6 +268,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
         incident,
         reports,
         tasks,
+        subtasks,
         users,
         organizations,
       },
