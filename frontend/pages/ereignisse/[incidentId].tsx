@@ -30,8 +30,8 @@ import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
-import Subtask from '@/models/Subtask'
-import { useSubtasks } from '@/stores/SubtaskStore'
+import Subtask, { parseSubtask } from '@/models/Subtask'
+import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 
 interface Props {
   data: {
@@ -49,17 +49,18 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
     TaskStore.saveAll(data.tasks.map(parseTask))
+    SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
   const subtasks = useSubtasks((subtasks) => (
-    subtasks.filter((subtask) => subtask.incidentId === incident.id)))
+    subtasks.filter((subtask) => subtask.incidentId === incident.id)
+  ))
   const tasks = useTasks((tasks) => (
     tasks.filter((task) => task.incidentId === incident.id)
   ))
-  const organisations = useOrganizations()
 
   const [selectedReportId, setSelectedReportId] = useState<Id<Report> | null>(null)
   const selectedReport = useReport(selectedReportId)
@@ -89,15 +90,17 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     }
   }
 
-  const allIds = new Set([
+  const assigneeIds = new Set([
     ...reports.map((report) => report.assigneeId),
     ...tasks.map((task) => task.assigneeId),
     ...subtasks.map((subtask) => subtask.assigneeId),
   ])
 
-  const activeOrganisations = organisations.filter(
-    (organization) => organization.userIds.some((id) => allIds.has(id)))
-    .map(({ name }) => name)
+  const activeOrganisations = useOrganizations((organizations) => (
+    organizations
+      .filter(({ userIds }) => userIds.some((id) => assigneeIds.has(id)))
+      .map(({ name }) => name)
+  ), [assigneeIds])
 
   const startDate = useMemo(() => (
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
@@ -155,9 +158,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         <VerticalSpacer>
           <UiGrid.Col size={{ lg: 6, xs: 12 }}>
             <UiTextWithIcon text={
-              activeOrganisations.length ?
-                activeOrganisations.reduce((a, b) => a + ', ' + b) :
-                'Keine Organisationen beteiligt'}>
+              activeOrganisations.length === 0
+                ? 'Keine Organisationen beteiligt'
+                : activeOrganisations.reduce((a, b) => a + ', ' + b)
+            }>
               <UiIcon.UserInCircle />
             </UiTextWithIcon>
           </UiGrid.Col>
