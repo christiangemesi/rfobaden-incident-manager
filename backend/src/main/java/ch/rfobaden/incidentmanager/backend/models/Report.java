@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "report")
-public class Report extends Model implements PathConvertible<ReportPath> {
+public class Report extends Model implements PathConvertible<ReportPath>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     @ManyToOne
     @JoinColumn
     private User assignee;

@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +15,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -55,6 +58,27 @@ public final class User extends Model.Basic implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserCredentials credentials;
+
+    @OneToMany(
+        mappedBy = "assignee",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.DETACH
+    )
+    private List<Report> assignedReports;
+
+    @OneToMany(
+        mappedBy = "assignee",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.DETACH
+    )
+    private List<Task> assignedTasks;
+
+    @OneToMany(
+        mappedBy = "assignee",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.DETACH
+    )
+    private List<Subtask> assignedSubtasks;
 
     public String getEmail() {
         return email;
@@ -127,6 +151,30 @@ public final class User extends Model.Basic implements Serializable {
         organization.setId(id);
     }
 
+    public List<Report> getAssignedReports() {
+        return assignedReports;
+    }
+
+    public void setAssignedReports(List<Report> assignedReports) {
+        this.assignedReports = assignedReports;
+    }
+
+    public List<Task> getAssignedTasks() {
+        return assignedTasks;
+    }
+
+    public void setAssignedTasks(List<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
+    }
+
+    public List<Subtask> getAssignedSubtasks() {
+        return assignedSubtasks;
+    }
+
+    public void setAssignedSubtasks(List<Subtask> assignedSubtasks) {
+        this.assignedSubtasks = assignedSubtasks;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -147,6 +195,13 @@ public final class User extends Model.Basic implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(modelHashCode(), email, firstName, lastName, role, organization);
+    }
+
+    @PreRemove
+    private void nullifyAssignments() {
+        getAssignedSubtasks().forEach((it) -> it.setAssignee(null));
+        getAssignedTasks().forEach((it) -> it.setAssignee(null));
+        getAssignedReports().forEach((it) -> it.setAssignee(null));
     }
 
     public enum Role {

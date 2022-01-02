@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,8 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "incident")
-public class Incident extends Model.Basic {
+public class Incident extends Model.Basic implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @NotBlank
     @Column(nullable = false)

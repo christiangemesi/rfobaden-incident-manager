@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "task")
-public class Task extends Model implements PathConvertible<TaskPath> {
+public class Task extends Model implements PathConvertible<TaskPath>, Serializable {
+    private static final long serialVersionUID = 1L;
 
     @ManyToOne
     @JoinColumn
