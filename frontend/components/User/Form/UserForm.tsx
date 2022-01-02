@@ -19,7 +19,7 @@ const UserForm: React.VFC = () => {
     firstName: '',
     lastName: '',
     role: UserRole.ADMIN,
-    organizationId: -1,
+    organizationId: null,
   }))
 
   useValidate(form, (validate) => ({

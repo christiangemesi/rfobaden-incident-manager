@@ -8,7 +8,7 @@ export default interface User extends Model {
   firstName: string
   lastName: string
   role: UserRole
-  organizationId: Id<Organization>
+  organizationId: Id<Organization> | null
 }
 
 export enum UserRole {
