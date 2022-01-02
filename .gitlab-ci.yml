@@ -66,7 +66,7 @@ deploy.jenkins:
   image: curlimages/curl:7.80.0
   script:
     - |
-      curl --user "${JENKINS_DEPLOY_USER}:${JENKINS_DEPLOY_TOKEN}" "https://ip34.daniel-va.ch/jenkins/job/IncidentManager%20${CI_COMMIT_BRANCH}/build?token=${JENKINS_PIPELINE_TOKEN}&cause=gitlab-ci"
+      curl --user "${JENKINS_DEPLOY_USER}:${JENKINS_DEPLOY_TOKEN}" "https://im.rfobaden.ch/jenkins/job/IncidentManager%20${CI_COMMIT_BRANCH}/build?token=${JENKINS_PIPELINE_TOKEN}&cause=gitlab-ci"
 
 
 
