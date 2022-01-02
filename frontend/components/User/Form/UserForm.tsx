@@ -33,7 +33,10 @@ const UserForm: React.VFC = () => {
   }))
 
   useSubmit(form, async (formData: ModelData<User>) => {
-    const [data] = await BackendService.create<User>('users', formData)
+    const [data, error] = await BackendService.create<User>('users', formData)
+    if (error !== null) {
+      throw error
+    }
     UserStore.save(parseUser(data))
     clearForm(form)
   })
