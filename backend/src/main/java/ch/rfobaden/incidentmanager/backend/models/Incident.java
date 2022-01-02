@@ -78,13 +78,6 @@ public class Incident extends Model.Basic implements Serializable {
         return closeReason;
     }
 
-    public Long getCloseReasonId() {
-        if (closeReason == null) {
-            return null;
-        }
-        return closeReason.getId();
-    }
-
     public void setCloseReason(CloseReason closeReason) {
         this.closeReason = closeReason;
     }
