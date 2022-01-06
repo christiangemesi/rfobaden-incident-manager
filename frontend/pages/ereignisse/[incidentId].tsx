@@ -5,7 +5,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Incident from '@/models/Incident'
-import { useIncident } from '@/stores/IncidentStore'
+import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
@@ -32,6 +32,7 @@ import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
+import { useRouter } from 'next/router'
 
 interface Props {
   data: {
@@ -52,6 +53,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
+
+  const router = useRouter()
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
@@ -84,9 +87,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
-      ReportStore.remove(incident.id)
+      IncidentStore.remove(incident.id)
+      await router.push('/ereignisse')
     }
   }
 
@@ -108,13 +112,6 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
 
   return (
     <UiContainer>
-
-      {/* TODO Restructure the heading section. */}
-      {/*
-        * Note that grids should mainly be used for positioning elements, NOT FOR SPACING!
-        * If you want to space elements, either style them this way or use a component intended for this purpose.
-        */}
-
       <SpacerUiGrid gapH={2} gapV={1}>
         <BlockContainer>
           <UiTitle level={1}>

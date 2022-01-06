@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -15,7 +16,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "subtask")
-public class Subtask extends Model implements PathConvertible<SubtaskPath> {
+public class Subtask extends Model implements PathConvertible<SubtaskPath>, Serializable {
+    private static final long serialVersionUID = 1L;
 
     @ManyToOne
     @JoinColumn
