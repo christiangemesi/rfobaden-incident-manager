@@ -37,7 +37,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
 
             </UiGrid.Col>
             <UiGrid.Col>
-              <UiCircularProgress done={69} total={84} />
+              <UiCircularProgress done={incident.numberClosedReports} total={incident.numberReports} />
             </UiGrid.Col>
           </UiGrid>
         </div>
