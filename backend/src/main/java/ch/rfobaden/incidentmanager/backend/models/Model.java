@@ -13,10 +13,13 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 
 @MappedSuperclass
 public abstract class Model {
@@ -164,6 +167,11 @@ public abstract class Model {
         }
 
         private void insertCollectionField(Field field, Collection<?> value) {
+            var oneToManyAnnotation = field.getAnnotation(OneToMany.class);
+            if (oneToManyAnnotation != null && oneToManyAnnotation.fetch() == FetchType.LAZY) {
+                return;
+            }
+            
             var type = (ParameterizedType) field.getGenericType();
             var elementType = type.getActualTypeArguments()[0];
             if (!(elementType instanceof Class)) {
