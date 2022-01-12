@@ -5,10 +5,15 @@ import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 export default interface Incident extends Model {
   title: string
   description: string | null
+
   startsAt: Date | null
   endsAt: Date | null
+
   closeReason: CloseReason | null
   isClosed: boolean
+
+  numberClosedReports: number
+  numberReports: number
 }
 
 export const parseIncident = (data: Incident): Incident => {
@@ -18,7 +23,7 @@ export const parseIncident = (data: Incident): Incident => {
     updatedAt: parseDate(data.updatedAt),
     startsAt: parseDateOrNull(data.startsAt),
     endsAt: parseDateOrNull(data.endsAt),
-    closeReason:  data.closeReason && parseCloseReason(data.closeReason),
+    closeReason: data.closeReason && parseCloseReason(data.closeReason),
   }
 }
 

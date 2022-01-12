@@ -7,22 +7,25 @@ import { parseDate } from '@/models/Date'
 import Priority from '@/models/Priority'
 
 export default interface Task extends Model {
-    title: string
-    description: string | null
-    priority: Priority
-    location: string | null
+  title: string
+  description: string | null
+  priority: Priority
+  location: string | null
 
-    assigneeId: Id<User> | null
+  assigneeId: Id<User> | null
 
-    createdAt: Date
-    updatedAt: Date
-    closedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+  closedAt: Date | null
 
-    startsAt: Date | null
-    endsAt: Date | null
+  startsAt: Date | null
+  endsAt: Date | null
 
-    reportId: Id<Report>
-    incidentId: Id<Incident>
+  reportId: Id<Report>
+  incidentId: Id<Incident>
+
+  numberClosedSubtasks: number
+  numberSubtasks: number
 }
 
 export const parseTask = (data: Task): Task => ({
