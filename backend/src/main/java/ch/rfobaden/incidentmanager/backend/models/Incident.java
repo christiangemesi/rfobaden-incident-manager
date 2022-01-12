@@ -101,6 +101,16 @@ public class Incident extends Model.Basic implements Serializable {
         this.reports = reports;
     }
 
+    @JsonProperty("numberReports")
+    public long getNumberReports() {
+        return reports.size();
+    }
+
+    @JsonProperty("numberClosedReports")
+    public long getNumberClosedReports() {
+        return reports.stream().filter(r -> r.getNumberClosedTasks() > 0).count();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

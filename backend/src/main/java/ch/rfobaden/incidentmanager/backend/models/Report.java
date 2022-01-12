@@ -188,6 +188,16 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
         this.tasks = tasks;
     }
 
+    @JsonProperty("numberTasks")
+    public long getNumberTasks() {
+        return tasks.size();
+    }
+
+    @JsonProperty("numberClosedTasks")
+    public long getNumberClosedTasks() {
+        return tasks.stream().filter(t -> t.getNumberClosedSubtasks() > 0).count();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
