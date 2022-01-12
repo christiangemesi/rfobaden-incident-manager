@@ -9,6 +9,9 @@ import { ModelData } from '@/models/base/Model'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
 import { useValidate } from '@/components/Ui/Form/validate'
+import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
+import Id from '@/models/base/Id'
+import Organization from '@/models/Organization'
 
 const UserForm: React.VFC = () => {
   const form = useForm<ModelData<User>>(() => ({
@@ -16,6 +19,7 @@ const UserForm: React.VFC = () => {
     firstName: '',
     lastName: '',
     role: UserRole.ADMIN,
+    organizationId: null,
   }))
 
   useValidate(form, (validate) => ({
@@ -30,6 +34,7 @@ const UserForm: React.VFC = () => {
       validate.notBlank(),
     ],
     role: [],
+    organizationId: [],
   }))
 
   useSubmit(form, async (formData: ModelData<User>) => {
@@ -41,6 +46,7 @@ const UserForm: React.VFC = () => {
     clearForm(form)
   })
 
+  const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
   return (
     <div>
       <form>
@@ -62,9 +68,19 @@ const UserForm: React.VFC = () => {
         <UiForm.Field field={form.role}>{(props) => (
           <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
         )}</UiForm.Field>
+        <UiForm.Field field={form.organizationId}>{(props) => (
+          <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
+        )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </form>
     </div>
   )
 }
 export default UserForm
+
+const mapOrganizationIdToName = (id: Id<Organization>): string | null => {
+  const organization = OrganizationStore.find(id)
+  return organization === null
+    ? null
+    : `${organization.name}`
+}

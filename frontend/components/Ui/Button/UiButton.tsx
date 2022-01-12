@@ -50,6 +50,7 @@ const UiButton: React.VFC<Props> = ({
   const sharedProps: PropsOf<typeof StyledButton> = {
     ...otherProps,
     color,
+    disabled: otherProps.isDisabled,
   }
   return <StyledButton {...sharedProps} type={type} />
 }
