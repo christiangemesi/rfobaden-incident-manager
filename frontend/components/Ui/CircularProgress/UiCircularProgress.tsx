@@ -19,7 +19,7 @@ const UICircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
         </CompletionRate>
         <Percent>
           <UiTitle level={6}>
-            {decimal * 100}%
+            {(decimal * 100).toFixed(0)}%
           </UiTitle>
         </Percent>
       </CircleOverlay>
