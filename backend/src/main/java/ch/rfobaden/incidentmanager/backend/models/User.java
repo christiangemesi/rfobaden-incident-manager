@@ -205,7 +205,7 @@ public final class User extends Model.Basic implements Serializable {
     }
 
     public enum Role {
-        CREATOR,
+        AGENT,
         ADMIN,
     }
 }

@@ -12,7 +12,7 @@ export default interface User extends Model {
 }
 
 export enum UserRole {
-  CREATOR = 'CREATOR',
+  AGENT = 'AGENT',
   ADMIN = 'ADMIN',
 }
 
