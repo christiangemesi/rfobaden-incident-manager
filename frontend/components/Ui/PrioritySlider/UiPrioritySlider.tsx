@@ -43,7 +43,6 @@ const Icon = styled.div<{priority: Priority}>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  
   ${({ priority }) => priority==Priority.LOW && css`
     color: ${({ theme } ) => theme.colors.success.value};
   `}

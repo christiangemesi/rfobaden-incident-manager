@@ -24,6 +24,7 @@ import {
   mdiPrinter,
 } from '@mdi/js'
 
+
 interface NamedIconProps {
   /**
    * Size multiplier.
