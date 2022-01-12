@@ -119,10 +119,10 @@ cd frontend
 npm run test --watch
 
 # in docker
-docker compose run --no-deps npm run test
+docker compose run --no-deps frontend npm run test
 
 # in docker, using the interactive test runner
-docker compose run --no-deps npm run test --watch 
+docker compose run --no-deps frontend npm run test --watch 
 ```
 
 Backend tests can also be run inside IntelliJ, which also offers built-in coverage testing.
