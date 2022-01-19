@@ -8,9 +8,26 @@ workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "master"
 
+.backend_cache: &backend_cache
+  key: backend-${$CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/.gradle
+    - backend/build
+    - backend/.sonar/cache
+
+.frontend_cache: &frontend_cache
+  key: frontend-${$CI_COMMIT_REF_SLUG}
+  paths:
+    - frontend/node_modules
+    - frontend/coverage
+    - frontend/.sonar/cache
+
 backend.checkstyle:
   stage: lint
   image: gradle:7.2.0-jdk11
+  cache:
+    <<: *backend_cache
+    policy: push
   script:
     - cd backend
     - gradle --no-daemon clean checkstyleMain checkstyleTest
@@ -18,6 +35,9 @@ backend.checkstyle:
 frontend.eslint:
   stage: lint
   image: node:16-alpine3.13
+  cache:
+    <<: *frontend_cache
+    policy: push
   script:
     - cd frontend
     - npm install --quiet
@@ -26,15 +46,17 @@ frontend.eslint:
 backend.test:
   stage: test
   image: gradle:7.2.0-jdk11
+  cache:
+    <<: *backend_cache
   script:
     - cd backend
     - gradle --no-daemon test jacocoTestReport --rerun-tasks
-    - ls -l build/
-    - ls -l build/reports
 
 frontend.test:
   stage: test
   image: node:16-alpine3.13
+  cache:
+    <<: *frontend_cache
   script:
     - cd frontend
     - npm run test -- --coverage
@@ -42,16 +64,19 @@ frontend.test:
 backend.sonarqube:
   stage: analyze
   image: gradle:7.2.0-jdk11
+  cache:
+    <<: *backend_cache
   allow_failure: true
   script:
     - cd backend
-    - ls -l build/
-    - ls -l build/reports
     - gradle --no-daemon sonarqube
 
 frontend.sonarqube:
   stage: analyze
   image: sonarsource/sonar-scanner-cli:latest
+  cache:
+    <<: *frontend_cache
+    policy: pull
   variables:
     EXCLUDE: node_modules/**
   allow_failure: true
@@ -74,13 +99,3 @@ deploy.jenkins:
 
 variables:
   GIT_DEPTH: 0
-
-cache:
-  key: $CI_COMMIT_REF_SLUG
-  paths:
-    - backend/.gradle
-    - backend/build
-    - backend/.sonar/cache
-    - frontend/node_modules
-    - frontend/coverage
-    - frontend/.sonar/cache
