@@ -116,7 +116,7 @@ npm run test
 
 # locally, using the interactive test runner
 cd frontend
-npm run test --watch
+npm run test -- --watch
 
 # in docker
 docker compose run --no-deps frontend npm run test
