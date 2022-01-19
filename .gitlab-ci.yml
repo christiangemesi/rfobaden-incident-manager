@@ -8,6 +8,13 @@ workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "master"
 
+backend.checkstyle:
+  stage: lint
+  image: gradle:7.2.0-jdk11
+  script:
+    - cd backend
+    - gradle --no-daemon clean checkstyleMain checkstyleTest
+
 frontend.eslint:
   stage: lint
   image: node:16-alpine3.13
@@ -16,12 +23,14 @@ frontend.eslint:
     - npm install --quiet
     - npm run lint
 
-backend.checkstyle:
-  stage: lint
+backend.test:
+  stage: test
   image: gradle:7.2.0-jdk11
   script:
     - cd backend
-    - gradle --no-daemon clean checkstyleMain checkstyleTest
+    - gradle --no-daemon test jacocoTestReport --rerun-tasks
+    - ls -l build/
+    - ls -l build/reports
 
 frontend.test:
   stage: test
@@ -30,19 +39,14 @@ frontend.test:
     - cd frontend
     - npm run test -- --coverage
 
-backend.test:
-  stage: test
-  image: gradle:7.2.0-jdk11
-  script:
-    - cd backend
-    - gradle --no-daemon test jacocoTestReport --rerun-tasks
-
 backend.sonarqube:
   stage: analyze
   image: gradle:7.2.0-jdk11
   allow_failure: true
   script:
     - cd backend
+    - ls -l build/
+    - ls -l build/reports
     - gradle --no-daemon sonarqube
 
 frontend.sonarqube:
