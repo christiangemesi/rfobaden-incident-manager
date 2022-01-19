@@ -5,7 +5,8 @@ import { getSessionToken } from '@/stores/SessionStore'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
-    return 'http://backend:8080'
+    const stage = process.env['RFO_STAGE']
+    return `http://backend-${stage}:8080`
   }
   const value = process.env['NEXT_PUBLIC_RFO_BACKEND_URL']
   if (value === undefined) {

@@ -7,10 +7,11 @@ services:
       dockerfile: ../deploy/frontend/Dockerfile
       args:
         - RFO_BACKEND_URL=${RFO_BACKEND_URL}
+        - RFO_STAGE=${RFO_STAGE}
     restart: always
     networks:
-      - default
-      - proxy
+      default:
+      proxy:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
@@ -35,8 +36,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     networks:
-      - default
-      - proxy
+      default:
+        aliases:
+          - backend-${RFO_STAGE}
+      proxy:
     labels:
       - traefik.enable=true
       - traefik.docker.network=proxy
