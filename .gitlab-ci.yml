@@ -27,7 +27,6 @@ backend.checkstyle:
   image: gradle:7.2.0-jdk11
   cache:
     <<: *backend_cache
-    policy: push
   script:
     - cd backend
     - gradle --no-daemon clean checkstyleMain checkstyleTest
@@ -37,7 +36,6 @@ frontend.eslint:
   image: node:16-alpine3.13
   cache:
     <<: *frontend_cache
-    policy: push
   script:
     - cd frontend
     - npm install --quiet
@@ -76,7 +74,6 @@ frontend.sonarqube:
   image: sonarsource/sonar-scanner-cli:latest
   cache:
     <<: *frontend_cache
-    policy: pull
   variables:
     EXCLUDE: node_modules/**
   allow_failure: true
