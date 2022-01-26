@@ -15,12 +15,18 @@ services:
       - frontend.node_modules:/app/node_modules
     depends_on:
       - backend
+    env_file:
+      - .env
 
   backend:
     image: gradle:7.3.1-jdk11-alpine
     command: ["sh", "dev.sh"]
     working_dir: /app
     restart: always
+    networks:
+      default:
+        aliases:
+          - backend-${RFO_STAGE}
     ports:
       - "3001:8080"
       - "5005:5005"
@@ -48,7 +54,7 @@ services:
       - database:/var/lib/mysql
     env_file:
       - .env
-  
+
 
 volumes:
   frontend.node_modules:
