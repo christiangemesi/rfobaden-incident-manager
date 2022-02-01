@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -40,7 +41,7 @@ public class Incident extends Model.Basic implements Serializable {
     private boolean isClosed;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
-    private List<Report> reports;
+    private List<Report> reports = new ArrayList<>();
 
     public String getTitle() {
         return title;
