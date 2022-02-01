@@ -157,7 +157,7 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 }
 
 const FormContainer = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `
