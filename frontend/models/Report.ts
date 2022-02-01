@@ -27,8 +27,8 @@ export default interface Report extends Model {
   isKeyReport: boolean
   isLocationRelevantReport: boolean
 
-  numberClosedTasks: number
-  numberTasks: number
+  closedTaskCount: number
+  taskCount: number
 }
 
 export const parseReport = (data: Report): Report => ({

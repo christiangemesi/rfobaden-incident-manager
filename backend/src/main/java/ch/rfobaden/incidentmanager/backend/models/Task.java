@@ -162,13 +162,13 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
         this.subtasks = subtasks;
     }
 
-    @JsonProperty("numberSubtasks")
-    public long getNumberSubtasks() {
+    @JsonProperty("subtaskCount")
+    public long subtaskCount() {
         return subtasks.size();
     }
 
-    @JsonProperty("numberClosedSubtasks")
-    public long getNumberClosedSubtasks() {
+    @JsonProperty("closedSubtaskCount")
+    public long closedSubtaskCount() {
         return subtasks.stream().filter(Subtask::isClosed).count();
     }
 

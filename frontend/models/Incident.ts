@@ -12,8 +12,8 @@ export default interface Incident extends Model {
   closeReason: CloseReason | null
   isClosed: boolean
 
-  numberClosedReports: number
-  numberReports: number
+  closedReportCount: number
+  reportCount: number
 }
 
 export const parseIncident = (data: Incident): Incident => {

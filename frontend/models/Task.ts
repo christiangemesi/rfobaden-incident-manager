@@ -24,8 +24,8 @@ export default interface Task extends Model {
   reportId: Id<Report>
   incidentId: Id<Incident>
 
-  numberClosedSubtasks: number
-  numberSubtasks: number
+  closedSubtaskCount: number
+  subtaskCount: number
 }
 
 export const parseTask = (data: Task): Task => ({
