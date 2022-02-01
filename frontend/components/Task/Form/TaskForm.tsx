@@ -39,6 +39,8 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     endsAt: null,
     reportId: -1,
     incidentId: -1,
+    closedSubtaskCount: 0,
+    subtaskCount: 0,
   }))
 
   useValidate(form, (validate) => ({
@@ -58,6 +60,8 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     endsAt: [],
     reportId: [],
     incidentId: [],
+    closedSubtaskCount: [],
+    subtaskCount: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Task>) => {

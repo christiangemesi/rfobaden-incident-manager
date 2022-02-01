@@ -39,6 +39,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     endsAt: null,
     isKeyReport: false,
     isLocationRelevantReport: false,
+    closedTaskCount: 0,
+    taskCount: 0,
   }))
 
   useValidate(form, (validate) => {
@@ -63,6 +65,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       endsAt: [],
       isKeyReport: [],
       isLocationRelevantReport: [],
+      closedTaskCount: [],
+      taskCount: [],
     })
   })
 
