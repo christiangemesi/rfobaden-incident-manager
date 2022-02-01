@@ -8,14 +8,14 @@ interface Props {
 }
 
 const UICircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
-  const decimal = parseFloat((done / total).toFixed(2))
+  const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
   return (
     <Circle percentDecimal={decimal}>
       <CircleOverlay>
         <CompletionRate>
           <UiTitle level={5}>
             {done}/{total}
-          </UiTitle> 
+          </UiTitle>
         </CompletionRate>
         <Percent>
           <UiTitle level={6}>
