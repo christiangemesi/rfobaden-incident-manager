@@ -44,7 +44,7 @@ const ReportListItem: React.VFC<Props> = ({
         )}
       </LeftSpacer>
       <LeftSpacer>
-        {report.closedTaskCount}/{report.taskCount}
+        {report.closedTaskIds.length}/{report.taskIds.length}
       </LeftSpacer>
     </SelectableListItem>
   )

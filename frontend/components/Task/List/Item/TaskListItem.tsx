@@ -23,7 +23,7 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
         onClick={handleClick && (() => handleClick(task))}
       >
         <LeftSpacer>
-          {task.closedSubtaskCount}/{task.subtaskCount}
+          {task.closedSubtaskIds.length}/{task.subtaskIds.length}
         </LeftSpacer>
       </UiListItemWithDetails>
     </UiLink>
