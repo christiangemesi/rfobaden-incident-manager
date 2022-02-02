@@ -71,8 +71,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       updatedReport.taskCount--
       ReportStore.save(updatedReport)
 
-      // TODO report store with task?
-      ReportStore.remove(task.id)
+      TaskStore.remove(task.id)
     }
   }
 
