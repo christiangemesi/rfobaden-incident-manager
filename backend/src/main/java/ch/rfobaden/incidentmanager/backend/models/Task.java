@@ -163,19 +163,17 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
         this.subtasks = subtasks;
     }
 
-    @JsonProperty("subtaskCount")
-    public long getSubtaskCount() {
-        return getSubtasks().size();
+    public List<Long> getSubtaskIds() {
+        return getSubtasks().stream().map(Subtask::getId).toList();
     }
 
-    @JsonProperty("closedSubtaskCount")
-    public long getClosedSubtaskCount() {
-        return getSubtasks().stream().filter(Subtask::isClosed).count();
+    public List<Long> getClosedSubtaskIds() {
+        return getSubtasks().stream().filter(Subtask::isClosed).map(Subtask::getId).toList();
     }
 
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return getSubtaskCount() == getClosedSubtaskCount() && getSubtaskCount() > 0;
+        return getClosedSubtaskIds().containsAll(getSubtaskIds()) && getSubtaskIds().size() > 0;
     }
 
     @Override

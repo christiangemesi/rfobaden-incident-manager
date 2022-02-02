@@ -102,14 +102,12 @@ public class Incident extends Model.Basic implements Serializable {
         this.reports = reports;
     }
 
-    @JsonProperty("reportCount")
-    public long getReportCount() {
-        return getReports().size();
+    public List<Long> getReportIds() {
+        return getReports().stream().map(Report::getId).toList();
     }
 
-    @JsonProperty("closedReportCount")
-    public long getClosedReportCount() {
-        return getReports().stream().filter(Report::isClosed).count();
+    public List<Long> getClosedReportIds() {
+        return getReports().stream().filter(Report::isClosed).map(Report::getId).toList();
     }
 
     @Override
