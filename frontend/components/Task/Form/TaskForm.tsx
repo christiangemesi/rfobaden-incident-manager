@@ -19,6 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   incident: Incident
@@ -74,6 +75,10 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
       throw error
     }
     TaskStore.save(parseTask(data))
+    if (task === null) {
+      report.taskCount++
+      ReportStore.save(report)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()

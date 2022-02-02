@@ -14,7 +14,7 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import { useIncident } from '@/stores/IncidentStore'
+import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import ReportForm from '@/components/Report/Form/ReportForm'
 
@@ -31,6 +31,16 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
+
+      const updatedIncident = IncidentStore.find(report.incidentId)
+      if (updatedIncident !== null) {
+        if (report.isClosed) {
+          updatedIncident.closedReportCount--
+        }
+        updatedIncident.reportCount--
+        IncidentStore.save(updatedIncident)
+      }
+
       ReportStore.remove(report.id)
     }
   }

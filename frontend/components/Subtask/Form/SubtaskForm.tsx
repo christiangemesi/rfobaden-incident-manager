@@ -20,6 +20,7 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -70,6 +71,10 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
       throw error
     }
     SubtaskStore.save(parseSubtask(data))
+    if (subtask === null) {
+      task.subtaskCount++
+      TaskStore.save(task)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()
@@ -138,5 +143,5 @@ const FormContainer = styled.div`
 
 const PrioritySliderPositioner = styled.div`
   display: flex;
-  justify-content: end; 
+  justify-content: end;
 `

@@ -19,6 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import IncidentStore from '@/stores/IncidentStore'
 
 interface Props {
   incident: Incident
@@ -80,6 +81,10 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       throw error
     }
     ReportStore.save(parseReport(data))
+    if (report === null) {
+      incident.reportCount++
+      IncidentStore.save(incident)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()

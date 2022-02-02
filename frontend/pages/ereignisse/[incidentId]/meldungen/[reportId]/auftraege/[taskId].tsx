@@ -62,13 +62,23 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
+
+      // todo what about incident? also updating or leaving
+      const updatedReport = report
+      if (task.isClosed) {
+        updatedReport.closedTaskCount--
+      }
+      updatedReport.taskCount--
+      ReportStore.save(updatedReport)
+
+      // TODO report store with task?
       ReportStore.remove(task.id)
     }
   }
 
   let priorityIcon = <UiIcon.PriorityMedium />
   if (task.priority === Priority.HIGH) {
-    priorityIcon= <UiIcon.PriorityHigh />
+    priorityIcon = <UiIcon.PriorityHigh />
   } else if (task.priority === Priority.LOW) {
     priorityIcon = <UiIcon.PriorityLow />
   }
