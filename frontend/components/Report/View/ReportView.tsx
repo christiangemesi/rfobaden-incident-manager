@@ -32,14 +32,11 @@ const ReportView: React.VFC<Props> = ({ report }) => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
 
-      const updatedIncident = IncidentStore.find(report.incidentId)
-      if (updatedIncident !== null) {
-        if (report.isClosed) {
-          updatedIncident.closedReportCount--
-        }
-        updatedIncident.reportCount--
-        IncidentStore.save(updatedIncident)
+      const incident = IncidentStore.find(report.incidentId)
+      if (incident === null) {
+        throw new Error(`unable to find incident ${report.incidentId} in store`)
       }
+      // ...update incident
 
       ReportStore.remove(report.id)
     }
