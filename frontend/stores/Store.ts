@@ -133,6 +133,18 @@ export function createModelStore<T extends Model, S>(
     records: {},
   }
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
+    const createListeners: Array<(record: T) => void> = []
+    const updateListeners: Array<(newRecord: T, oldRecord: T) => void> = []
+    const removeListeners: Array<(record: T) => void> = []
+
+    const insertListener = <F>(listeners: F[], listener: F): () => void => {
+      const i = listeners.length - 1
+      listeners.push(listener)
+      return () => {
+        listeners.splice(i, 1)
+      }
+    }
+
     return {
       ...(actions ?? {} as S),
       list(ids?: Id<T>[]): T[] {
@@ -151,17 +163,25 @@ export function createModelStore<T extends Model, S>(
         return records[id] ?? null
       },
       save(record: T) {
+        const oldRecord = getState().records[record.id] as T | undefined
         setState((state) => ({
           records: {
             ...state.records,
             [record.id]: record,
           },
         }))
+        if (oldRecord === undefined) {
+          createListeners.forEach((receive) => receive(record))
+        } else {
+          updateListeners.forEach((receive) => receive(record, oldRecord))
+        }
       },
       saveAll(records: Iterable<T>) {
         const newRecords: ModelStoreState<T>['records'] = {}
+        const newAndOld: Array<[T, T | undefined]> = []
         for (const record of records) {
           newRecords[record.id] = record
+          newAndOld.push([record, getState().records[record.id]])
         }
         setState((state) => ({
           records: {
@@ -169,8 +189,16 @@ export function createModelStore<T extends Model, S>(
             ...newRecords,
           },
         }))
+        for (const [record, oldRecord] of newAndOld) {
+          if (oldRecord === undefined) {
+            createListeners.forEach((receive) => receive(record))
+          } else {
+            updateListeners.forEach((receive) => receive(record, oldRecord))
+          }
+        }
       },
       remove(id: Id<T>) {
+        const record = getState().records[id] as T | undefined
         setState((state) => {
           const records = { ...state.records }
           delete records[id]
@@ -178,6 +206,27 @@ export function createModelStore<T extends Model, S>(
             records,
           }
         })
+        if (record !== undefined) {
+          removeListeners.forEach((receive) => receive(record))
+        }
+      },
+
+      onCreate(receive: (record: T) => void): () => void {
+        return insertListener(createListeners, receive)
+      },
+      onUpdate(receive: (record: T, oldRecord: T) => void): () => void {
+        return insertListener(updateListeners, receive)
+      },
+      onRemove(receive: (record: T) => void): () => void {
+        return insertListener(removeListeners, receive)
+      },
+      onSave(receive: (record: T, oldRecord: T | null) => void): () => void {
+        const removeCreate = insertListener(createListeners, (record) => receive(record, null))
+        const removeUpdate = insertListener(updateListeners, receive)
+        return () => {
+          removeCreate()
+          removeUpdate()
+        }
       },
 
       // Will be overwritten by `createStore`, but required here to satisfy the type checker.
@@ -213,6 +262,11 @@ interface ModelStore<T> extends Store<ModelStoreState<T>> {
   save(record: T): void
   saveAll(records: Iterable<T>): void
   remove(id: Id<T>): void
+
+  onCreate(receive: (record: T) => void): () => void;
+  onUpdate(receive: (record: T, oldRecord: T) => void): () => void;
+  onRemove(receive: (record: T) => void): () => void;
+  onSave(receive: (record: T, oldRecord: T | null) => void): () => void;
 
   readonly [privateKey]: ModelStoreInternals<T>
 }

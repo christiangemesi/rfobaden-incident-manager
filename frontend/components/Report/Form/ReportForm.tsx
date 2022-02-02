@@ -99,8 +99,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
-  console.log(form)
-
   return (
     <div>
       <form>
