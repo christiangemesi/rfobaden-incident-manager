@@ -103,13 +103,13 @@ public class Incident extends Model.Basic implements Serializable {
     }
 
     @JsonProperty("reportCount")
-    public long reportCount() {
+    public long getReportCount() {
         return reports.size();
     }
 
     @JsonProperty("closedReportCount")
-    public long closedReportCount() {
-        return reports.stream().filter(r -> r.closedTaskCount() > 0).count();
+    public long getClosedReportCount() {
+        return reports.stream().filter(Report::isClosed).count();
     }
 
     @Override

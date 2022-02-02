@@ -190,13 +190,18 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     }
 
     @JsonProperty("taskCount")
-    public long taskCount() {
+    public long getTaskCount() {
         return tasks.size();
     }
 
     @JsonProperty("closedTaskCount")
-    public long closedTaskCount() {
-        return tasks.stream().filter(t -> t.closedSubtaskCount() > 0).count();
+    public long getClosedTaskCount() {
+        return tasks.stream().filter(Task::isClosed).count();
+    }
+
+    @JsonProperty("isClosed")
+    public boolean isClosed() {
+        return getTaskCount() == getClosedTaskCount() && getTaskCount() > 0;
     }
 
     @Override
