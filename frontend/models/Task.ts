@@ -26,6 +26,7 @@ export default interface Task extends Model {
 
   closedSubtaskCount: number
   subtaskCount: number
+  isClosed: boolean
 }
 
 export const parseTask = (data: Task): Task => ({

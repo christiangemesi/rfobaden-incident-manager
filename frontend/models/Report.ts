@@ -29,6 +29,7 @@ export default interface Report extends Model {
 
   closedTaskCount: number
   taskCount: number
+  isClosed: boolean
 }
 
 export const parseReport = (data: Report): Report => ({
