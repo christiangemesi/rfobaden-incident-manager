@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -103,11 +104,11 @@ public class Incident extends Model.Basic implements Serializable {
     }
 
     public List<Long> getReportIds() {
-        return getReports().stream().map(Report::getId).toList();
+        return getReports().stream().map(Report::getId).collect(Collectors.toList());
     }
 
     public List<Long> getClosedReportIds() {
-        return getReports().stream().filter(Report::isClosed).map(Report::getId).toList();
+        return getReports().stream().filter(Report::isClosed).map(Report::getId).collect(Collectors.toList());
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -190,11 +191,11 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     }
 
     public List<Long> getTaskIds() {
-        return getTasks().stream().map(Task::getId).toList();
+        return getTasks().stream().map(Task::getId).collect(Collectors.toList());
     }
 
     public List<Long> getClosedTaskIds() {
-        return getTasks().stream().filter(Task::isClosed).map(Task::getId).toList();
+        return getTasks().stream().filter(Task::isClosed).map(Task::getId).collect(Collectors.toList());
     }
 
     @JsonProperty("isClosed")
