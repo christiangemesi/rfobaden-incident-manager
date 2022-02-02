@@ -20,7 +20,6 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
-import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -70,15 +69,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
     if (error !== null) {
       throw error
     }
-
     SubtaskStore.save(parseSubtask(data))
-    if (subtask === null) {
-      TaskStore.save({
-        ...task,
-        subtaskCount: task.subtaskCount + 1,
-      })
-    }
-
     clearForm(form)
     if (handleClose) {
       handleClose()

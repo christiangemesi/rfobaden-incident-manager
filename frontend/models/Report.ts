@@ -4,6 +4,7 @@ import Incident from '@/models/Incident'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
+import Task from '@/models/Task'
 
 
 export default interface Report extends Model {
@@ -27,8 +28,8 @@ export default interface Report extends Model {
   isKeyReport: boolean
   isLocationRelevantReport: boolean
 
-  closedTaskCount: number
-  taskCount: number
+  closedTaskIds: Id<Task>[]
+  taskIds: Id<Task>[]
   isClosed: boolean
 }
 

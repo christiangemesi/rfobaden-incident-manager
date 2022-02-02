@@ -19,7 +19,6 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
-import IncidentStore from '@/stores/IncidentStore'
 
 interface Props {
   incident: Incident
@@ -40,8 +39,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     endsAt: null,
     isKeyReport: false,
     isLocationRelevantReport: false,
-    closedTaskCount: 0,
-    taskCount: 0,
+    closedTaskIds: [],
+    taskIds: [],
     isClosed: false,
   }))
 
@@ -67,8 +66,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       endsAt: [],
       isKeyReport: [],
       isLocationRelevantReport: [],
-      closedTaskCount: [],
-      taskCount: [],
+      closedTaskIds: [],
+      taskIds: [],
       isClosed: [],
     })
   })
@@ -80,15 +79,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     if (error !== null) {
       throw error
     }
-
     ReportStore.save(parseReport(data))
-    if (report === null) {
-      IncidentStore.save({
-        ...incident,
-        reportCount: incident.reportCount + 1,
-      })
-    }
-
     clearForm(form)
     if (handleClose) {
       handleClose()

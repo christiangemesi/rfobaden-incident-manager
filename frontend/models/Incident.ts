@@ -1,6 +1,8 @@
 import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
 import CloseReason, { parseCloseReason } from '@/models/CloseReason'
+import Report from '@/models/Report'
+import Id from '@/models/base/Id'
 
 export default interface Incident extends Model {
   title: string
@@ -12,8 +14,8 @@ export default interface Incident extends Model {
   closeReason: CloseReason | null
   isClosed: boolean
 
-  closedReportCount: number
-  reportCount: number
+  closedReportIds: Id<Report>[]
+  reportIds: Id<Report>[]
 }
 
 export const parseIncident = (data: Incident): Incident => {

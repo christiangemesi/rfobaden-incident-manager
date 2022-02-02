@@ -5,6 +5,7 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { parseDate } from '@/models/Date'
 import Priority from '@/models/Priority'
+import Subtask from '@/models/Subtask'
 
 export default interface Task extends Model {
   title: string
@@ -24,8 +25,8 @@ export default interface Task extends Model {
   reportId: Id<Report>
   incidentId: Id<Incident>
 
-  closedSubtaskCount: number
-  subtaskCount: number
+  closedSubtaskIds: Id<Subtask>[]
+  subtaskIds: Id<Subtask>[]
   isClosed: boolean
 }
 
