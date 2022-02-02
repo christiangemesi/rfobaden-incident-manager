@@ -41,7 +41,7 @@ public class Incident extends Model.Basic implements Serializable {
     private boolean isClosed;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
-    private List<Report> reports = new ArrayList<>();
+    private List<Report> reports;
 
     public String getTitle() {
         return title;
@@ -104,12 +104,12 @@ public class Incident extends Model.Basic implements Serializable {
 
     @JsonProperty("reportCount")
     public long getReportCount() {
-        return reports.size();
+        return getReports().size();
     }
 
     @JsonProperty("closedReportCount")
     public long getClosedReportCount() {
-        return reports.stream().filter(Report::isClosed).count();
+        return getReports().stream().filter(Report::isClosed).count();
     }
 
     @Override

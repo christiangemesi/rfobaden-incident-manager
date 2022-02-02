@@ -55,7 +55,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     private Priority priority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.REMOVE)
-    private List<Task> tasks = new ArrayList<>();
+    private List<Task> tasks;
 
     @JsonIgnore
     public User getAssignee() {
@@ -191,12 +191,12 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     @JsonProperty("taskCount")
     public long getTaskCount() {
-        return tasks.size();
+        return getTasks().size();
     }
 
     @JsonProperty("closedTaskCount")
     public long getClosedTaskCount() {
-        return tasks.stream().filter(Task::isClosed).count();
+        return getTasks().stream().filter(Task::isClosed).count();
     }
 
     @JsonProperty("isClosed")

@@ -47,7 +47,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     private Priority priority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.REMOVE)
-    private List<Subtask> subtasks = new ArrayList<>();
+    private List<Subtask> subtasks;
 
     @JsonIgnore
     public User getAssignee() {
@@ -165,12 +165,12 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     @JsonProperty("subtaskCount")
     public long getSubtaskCount() {
-        return subtasks.size();
+        return getSubtasks().size();
     }
 
     @JsonProperty("closedSubtaskCount")
     public long getClosedSubtaskCount() {
-        return subtasks.stream().filter(Subtask::isClosed).count();
+        return getSubtasks().stream().filter(Subtask::isClosed).count();
     }
 
     @JsonProperty("isClosed")
