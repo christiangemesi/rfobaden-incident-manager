@@ -9,7 +9,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
-import { useTask } from '@/stores/TaskStore'
+import TaskStore, { useTask } from '@/stores/TaskStore'
 import ReportStore, { useReport } from '@/stores/ReportStore'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
@@ -64,12 +64,15 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
 
       // todo what about incident? also updating or leaving
-      const updatedReport = report
-      if (task.isClosed) {
-        updatedReport.closedTaskCount--
-      }
-      updatedReport.taskCount--
-      ReportStore.save(updatedReport)
+      ReportStore.save({
+        ...report,
+        taskCount: report.taskCount - 1,
+        closedTaskCount: (
+          task.isClosed
+            ? report.closedTaskCount - 1
+            : report.closedTaskCount
+        ),
+      })
 
       TaskStore.remove(task.id)
     }

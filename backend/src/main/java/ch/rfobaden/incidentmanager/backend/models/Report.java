@@ -55,7 +55,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     private Priority priority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.REMOVE)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     @JsonIgnore
     public User getAssignee() {

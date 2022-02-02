@@ -80,13 +80,15 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     if (error !== null) {
       throw error
     }
+
     ReportStore.save(parseReport(data))
     if (report === null) {
-      IncidentStore.save({ 
+      IncidentStore.save({
         ...incident,
         reportCount: incident.reportCount + 1,
       })
     }
+
     clearForm(form)
     if (handleClose) {
       handleClose()

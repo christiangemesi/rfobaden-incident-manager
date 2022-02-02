@@ -70,11 +70,15 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
     if (error !== null) {
       throw error
     }
+
     SubtaskStore.save(parseSubtask(data))
     if (subtask === null) {
-      task.subtaskCount++
-      TaskStore.save(task)
+      TaskStore.save({
+        ...task,
+        subtaskCount: task.subtaskCount + 1,
+      })
     }
+
     clearForm(form)
     if (handleClose) {
       handleClose()

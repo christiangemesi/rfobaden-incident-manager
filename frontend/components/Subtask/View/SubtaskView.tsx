@@ -15,9 +15,9 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { contrastDark } from '@/theme'
 import BackendService from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
 import { useUsername } from '@/models/User'
 import TaskStore from '@/stores/TaskStore'
+import SubtaskStore from '@/stores/SubtaskStore'
 
 
 interface Props {
@@ -38,15 +38,17 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id)
 
       // todo what about report and incident? also updating or leaving
-      const updatedTask = task
-      if (subtask.isClosed) {
-        updatedTask.closedSubtaskCount--
-      }
-      updatedTask.subtaskCount--
-      TaskStore.save(updatedTask)
+      TaskStore.save({
+        ...task,
+        subtaskCount: task.subtaskCount - 1,
+        closedSubtaskCount: (
+          subtask.isClosed
+            ? task.closedSubtaskCount - 1
+            : task.closedSubtaskCount
+        ),
+      })
 
-      // TODO report store with subtask?
-      ReportStore.remove(subtask.id)
+      SubtaskStore.remove(subtask.id)
     }
   }
 

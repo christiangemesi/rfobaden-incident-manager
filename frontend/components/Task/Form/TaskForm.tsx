@@ -74,11 +74,15 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     if (error !== null) {
       throw error
     }
+
     TaskStore.save(parseTask(data))
     if (task === null) {
-      report.taskCount++
-      ReportStore.save(report)
+      ReportStore.save({
+        ...report,
+        taskCount: report.taskCount + 1,
+      })
     }
+
     clearForm(form)
     if (handleClose) {
       handleClose()

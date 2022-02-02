@@ -47,7 +47,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     private Priority priority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.REMOVE)
-    private List<Subtask> subtasks;
+    private List<Subtask> subtasks = new ArrayList<>();
 
     @JsonIgnore
     public User getAssignee() {

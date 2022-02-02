@@ -41,7 +41,7 @@ public class Incident extends Model.Basic implements Serializable {
     private boolean isClosed;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
-    private List<Report> reports;
+    private List<Report> reports = new ArrayList<>();
 
     public String getTitle() {
         return title;

@@ -36,7 +36,16 @@ const ReportView: React.VFC<Props> = ({ report }) => {
       if (incident === null) {
         throw new Error(`unable to find incident ${report.incidentId} in store`)
       }
-      // ...update incident
+
+      IncidentStore.save({
+        ...incident,
+        reportCount: incident.reportCount - 1,
+        closedReportCount: (
+          report.isClosed
+            ? incident.closedReportCount - 1
+            : incident.closedReportCount
+        ),
+      })
 
       ReportStore.remove(report.id)
     }
