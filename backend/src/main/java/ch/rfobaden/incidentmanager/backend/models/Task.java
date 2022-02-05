@@ -174,7 +174,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return getClosedSubtaskIds().containsAll(getSubtaskIds()) && getSubtaskIds().size() > 0;
+        return !getSubtasks().isEmpty() && getSubtasks().stream().allMatch(Subtask::isClosed);
     }
 
     @Override
