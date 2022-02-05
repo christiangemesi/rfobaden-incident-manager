@@ -63,16 +63,6 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
 
-      // todo what about incident? also updating or leaving
-      ReportStore.save({
-        ...report,
-        taskCount: report.taskCount - 1,
-        closedTaskCount: (
-          task.isClosed
-            ? report.closedTaskCount - 1
-            : report.closedTaskCount
-        ),
-      })
 
       TaskStore.remove(task.id)
     }
