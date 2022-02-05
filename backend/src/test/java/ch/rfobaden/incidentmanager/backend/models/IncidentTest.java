@@ -24,9 +24,9 @@ class IncidentTest extends ModelTest<Incident> {
     SubtaskGenerator subtaskGenerator;
 
     @RepeatedTest(5)
-    public void testGetReportIds_withReports() {
+    public void testGetReportIds_notEmpty() {
         // Given
-        var amount = (int) (Math.random() * 5);
+        var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
         value.getReports().addAll(reportGenerator.generate(amount));
         var allReportIds = value.getReports()
@@ -35,14 +35,14 @@ class IncidentTest extends ModelTest<Incident> {
 
         // Then
         assertThat(value.getReportIds().containsAll(allReportIds)
-            && allReportIds.containsAll(value.getClosedReportIds())
+            && allReportIds.containsAll(value.getReportIds())
         ).isTrue();
     }
 
     @RepeatedTest(5)
     public void testGetClosedReportIds_allReportsClosed() {
         // Given
-        var amount = (int) (Math.random() * 5);
+        var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
         value.getReports().addAll(reportGenerator.generate(amount));
         value.getReports().forEach((report) -> {
@@ -90,7 +90,7 @@ class IncidentTest extends ModelTest<Incident> {
     @RepeatedTest(5)
     public void testGetClosedReportIds_noReportsClosed() {
         // Given
-        var amount = (int) (Math.random() * 5);
+        var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
         value.getReports().addAll(reportGenerator.generate(amount));
         value.getReports().forEach((report) -> {
