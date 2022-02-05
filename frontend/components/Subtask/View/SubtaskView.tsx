@@ -38,15 +38,6 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id)
 
       // todo what about report and incident? also updating or leaving
-      TaskStore.save({
-        ...task,
-        subtaskCount: task.subtaskCount - 1,
-        closedSubtaskCount: (
-          subtask.isClosed
-            ? task.closedSubtaskCount - 1
-            : task.closedSubtaskCount
-        ),
-      })
 
       SubtaskStore.remove(subtask.id)
     }
