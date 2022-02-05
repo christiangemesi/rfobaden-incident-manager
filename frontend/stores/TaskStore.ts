@@ -2,58 +2,57 @@ import { createModelStore } from '@/stores/Store'
 import Task, { parseTask } from '@/models/Task'
 import Report from '@/models/Report'
 import Id from '@/models/base/Id'
-import ReportStore from '@/stores/ReportStore'
-
+import SubtaskStore from '@/stores/SubtaskStore'
 
 const [TaskStore, useTasks, useTask] = createModelStore(parseTask)
 export default TaskStore
 
-TaskStore.onCreate((task) => {
-  const report = ReportStore.find(task.reportId)
-  if (report === null) {
+SubtaskStore.onCreate((subtask) => {
+  const task = TaskStore.find(subtask.taskId)
+  if (task === null) {
     return
   }
-  ReportStore.save({
-    ...report,
-    taskIds: [...new Set([...report.taskIds, task.id])],
-    closedTaskIds: (
-      task.isClosed
-        ? [...new Set([...report.closedTaskIds, task.id])]
-        : report.taskIds
+  TaskStore.save({
+    ...task,
+    subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
+    closedSubtaskIds: (
+      subtask.isClosed
+        ? [...new Set([...task.closedSubtaskIds, subtask.id])]
+        : task.subtaskIds
     ),
   })
 })
-TaskStore.onUpdate((task, oldTask) => {
-  const report = ReportStore.find(task.reportId)
-  if (report === null || task.isClosed === oldTask.isClosed) {
+SubtaskStore.onUpdate((subtask, oldSubtask) => {
+  const task = TaskStore.find(subtask.taskId)
+  if (task === null || subtask.isClosed === oldSubtask.isClosed) {
     return
   }
-  const closedTaskIds = [...report.closedTaskIds]
-  closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
-  ReportStore.save({
-    ...report,
-    closedTaskIds: (
-      task.isClosed
-        ? [...new Set([...report.closedTaskIds, task.id])]
-        : closedTaskIds
+  const closedSubtaskIds = [...task.closedSubtaskIds]
+  closedSubtaskIds.splice(closedSubtaskIds.indexOf(subtask.id), 1)
+  TaskStore.save({
+    ...task,
+    closedSubtaskIds: (
+      subtask.isClosed
+        ? [...new Set([...task.closedSubtaskIds, subtask.id])]
+        : closedSubtaskIds
     ),
   })
 })
-TaskStore.onRemove((task) => {
-  const report = ReportStore.find(task.reportId)
-  if (report === null) {
+SubtaskStore.onRemove((subtask) => {
+  const task = TaskStore.find(subtask.taskId)
+  if (task === null) {
     return
   }
-  const taskIds = [...report.taskIds]
-  taskIds.splice(taskIds.indexOf(task.id), 1)
-  const closedTaskIds = [...report.closedTaskIds]
-  if (task.isClosed) {
-    closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
+  const subtaskIds = [...task.subtaskIds]
+  subtaskIds.splice(subtaskIds.indexOf(subtask.id), 1)
+  const closedSubtaskIds = [...task.closedSubtaskIds]
+  if (subtask.isClosed) {
+    closedSubtaskIds.splice(closedSubtaskIds.indexOf(subtask.id), 1)
   }
-  ReportStore.save({
-    ...report,
-    taskIds,
-    closedTaskIds,
+  TaskStore.save({
+    ...task,
+    subtaskIds,
+    closedSubtaskIds,
   })
 })
 

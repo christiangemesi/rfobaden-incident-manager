@@ -2,57 +2,57 @@ import { createModelStore } from '@/stores/Store'
 import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
-import IncidentStore from '@/stores/IncidentStore'
+import TaskStore from '@/stores/TaskStore'
 
 const [ReportStore, useReports, useReport] = createModelStore(parseReport)
 export default ReportStore
 
-ReportStore.onCreate((report) => {
-  const incident = IncidentStore.find(report.incidentId)
-  if (incident === null) {
+TaskStore.onCreate((task) => {
+  const report = ReportStore.find(task.reportId)
+  if (report === null) {
     return
   }
-  IncidentStore.save({
-    ...incident,
-    reportIds: [...new Set([...incident.reportIds, report.id])],
-    closedReportIds: (
-      report.isClosed
-        ? [...new Set([...incident.closedReportIds, report.id])]
-        : incident.reportIds
+  ReportStore.save({
+    ...report,
+    taskIds: [...new Set([...report.taskIds, task.id])],
+    closedTaskIds: (
+      task.isClosed
+        ? [...new Set([...report.closedTaskIds, task.id])]
+        : report.taskIds
     ),
   })
 })
-ReportStore.onUpdate((report, oldReport) => {
-  const incident = IncidentStore.find(report.incidentId)
-  if (incident === null || report.isClosed === oldReport.isClosed) {
+TaskStore.onUpdate((task, oldTask) => {
+  const report = ReportStore.find(task.reportId)
+  if (report === null || task.isClosed === oldTask.isClosed) {
     return
   }
-  const closedReportIds = [...incident.closedReportIds]
-  closedReportIds.splice(closedReportIds.indexOf(report.id), 1)
-  IncidentStore.save({
-    ...incident,
-    closedReportIds: (
-      report.isClosed
-        ? [...new Set([...incident.closedReportIds, report.id])]
-        : closedReportIds
+  const closedTaskIds = [...report.closedTaskIds]
+  closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
+  ReportStore.save({
+    ...report,
+    closedTaskIds: (
+      task.isClosed
+        ? [...new Set([...report.closedTaskIds, task.id])]
+        : closedTaskIds
     ),
   })
 })
-ReportStore.onRemove((report) => {
-  const incident = IncidentStore.find(report.incidentId)
-  if (incident === null) {
+TaskStore.onRemove((task) => {
+  const report = ReportStore.find(task.reportId)
+  if (report === null) {
     return
   }
-  const reportIds = [...incident.reportIds]
-  reportIds.splice(reportIds.indexOf(report.id), 1)
-  const closedReportIds = [...incident.closedReportIds]
-  if (report.isClosed) {
-    closedReportIds.splice(closedReportIds.indexOf(report.id), 1)
+  const taskIds = [...report.taskIds]
+  taskIds.splice(taskIds.indexOf(task.id), 1)
+  const closedTaskIds = [...report.closedTaskIds]
+  if (task.isClosed) {
+    closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
   }
-  IncidentStore.save({
-    ...incident,
-    reportIds,
-    closedReportIds,
+  ReportStore.save({
+    ...report,
+    taskIds,
+    closedTaskIds,
   })
 })
 

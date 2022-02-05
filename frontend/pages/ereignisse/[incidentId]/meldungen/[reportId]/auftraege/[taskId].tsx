@@ -10,7 +10,7 @@ import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import TaskStore, { useTask } from '@/stores/TaskStore'
-import ReportStore, { useReport } from '@/stores/ReportStore'
+import { useReport } from '@/stores/ReportStore'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { GetServerSideProps } from 'next'
@@ -62,7 +62,6 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
-
 
       TaskStore.remove(task.id)
     }
