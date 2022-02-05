@@ -73,7 +73,7 @@ class IncidentTest extends ModelTest<Incident> {
             report.getTasks().add(taskGenerator.generate());
             report.getTasks().forEach((task) -> {
                 task.getSubtasks().add(subtaskGenerator.generate());
-                task.getSubtasks().get(0).setClosed(amount < 3);
+                task.getSubtasks().get(0).setClosed(Math.random() < 0.5);
             });
         });
         var allClosedReportIds = value.getReports()

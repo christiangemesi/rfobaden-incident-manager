@@ -53,7 +53,7 @@ public class TaskTest extends ModelTest<Task> {
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
         value.getSubtasks().addAll(subtaskGenerator.generate(amount));
-        value.getSubtasks().forEach((subtask) -> subtask.setClosed(amount < 3));
+        value.getSubtasks().forEach((subtask) -> subtask.setClosed(Math.random() < 0.5));
         var allClosedReportIds = value.getSubtasks()
             .stream().filter(Subtask::isClosed)
             .map(Subtask::getId)
@@ -79,10 +79,36 @@ public class TaskTest extends ModelTest<Task> {
     @RepeatedTest(5)
     public void testIsClosed_unclosedSubtasks() {
         // Given
+        var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
-        value.getSubtasks().add(subtaskGenerator.generate());
+        value.getSubtasks().addAll(subtaskGenerator.generate(amount));
 
         // Then
         assertThat(value.isClosed()).isFalse();
+    }
+
+    @RepeatedTest(5)
+    public void testIsClosed_mixedSubtasks() {
+        // Given
+        var amount = (int) (Math.random() * 5) + 1;
+        var value = generator.generate();
+        value.getSubtasks().addAll(subtaskGenerator.generate(amount));
+        value.getSubtasks().forEach((subtask) -> subtask.setClosed(Math.random() < 0.5));
+        value.getSubtasks().add(subtaskGenerator.generate()); // ensure one not closed
+
+        // Then
+        assertThat(value.isClosed()).isFalse();
+    }
+
+    @RepeatedTest(5)
+    public void testIsClosed_closedSubtasks() {
+        // Given
+        var amount = (int) (Math.random() * 5) + 1;
+        var value = generator.generate();
+        value.getSubtasks().addAll(subtaskGenerator.generate(amount));
+        value.getSubtasks().forEach((subtask) -> subtask.setClosed(true));
+
+        // Then
+        assertThat(value.isClosed()).isTrue();
     }
 }

@@ -62,7 +62,7 @@ class ReportTest extends ModelTest<Report> {
         value.getTasks().addAll(taskGenerator.generate(amount));
         value.getTasks().forEach((task) -> {
             task.getSubtasks().add(subtaskGenerator.generate());
-            task.getSubtasks().get(0).setClosed(amount < 3);
+            task.getSubtasks().get(0).setClosed(Math.random() < 0.5);
         });
         var allClosedTaskIds = value.getTasks()
             .stream().filter(Task::isClosed)
@@ -92,11 +92,42 @@ class ReportTest extends ModelTest<Report> {
     @RepeatedTest(5)
     public void testIsClosed_unclosedTasks() {
         // Given
+        var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
-        value.getTasks().add(taskGenerator.generate());
-        // This task is never closed, since it does not contain any subtasks by default.
+        value.getTasks().addAll(taskGenerator.generate(amount));
 
         // Then
         assertThat(value.isClosed()).isFalse();
+    }
+
+    @RepeatedTest(5)
+    public void testIsClosed_mixedTasks() {
+        // Given
+        var amount = (int) (Math.random() * 5) + 1;
+        var value = generator.generate();
+        value.getTasks().addAll(taskGenerator.generate(amount));
+        value.getTasks().forEach((task) -> {
+            task.getSubtasks().add(subtaskGenerator.generate());
+            task.getSubtasks().get(0).setClosed(Math.random() < 0.5);
+        });
+        value.getTasks().add(taskGenerator.generate()); // ensure one not closed
+
+        // Then
+        assertThat(value.isClosed()).isFalse();
+    }
+
+    @RepeatedTest(5)
+    public void testIsClosed_closedTasks() {
+        // Given
+        var amount = (int) (Math.random() * 5) + 1;
+        var value = generator.generate();
+        value.getTasks().addAll(taskGenerator.generate(amount));
+        value.getTasks().forEach((task) -> {
+            task.getSubtasks().add(subtaskGenerator.generate());
+            task.getSubtasks().get(0).setClosed(true);
+        });
+
+        // Then
+        assertThat(value.isClosed()).isTrue();
     }
 }
