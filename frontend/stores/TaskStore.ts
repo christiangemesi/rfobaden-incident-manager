@@ -20,6 +20,11 @@ SubtaskStore.onCreate((subtask) => {
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
         : task.subtaskIds
     ),
+    isClosed: (
+      subtask.isClosed
+        ? [...new Set([...task.subtaskIds, subtask.id])] === [...new Set([...task.closedSubtaskIds, subtask.id])]
+        : false
+    ),
   })
 })
 SubtaskStore.onUpdate((subtask, oldSubtask) => {
@@ -35,6 +40,11 @@ SubtaskStore.onUpdate((subtask, oldSubtask) => {
       subtask.isClosed
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
         : closedSubtaskIds
+    ),
+    isClosed: (
+      subtask.isClosed
+        ? task.subtaskIds === [...new Set([...task.closedSubtaskIds, subtask.id])]
+        : false
     ),
   })
 })
@@ -53,6 +63,7 @@ SubtaskStore.onRemove((subtask) => {
     ...task,
     subtaskIds,
     closedSubtaskIds,
+    isClosed: subtaskIds === closedSubtaskIds,
   })
 })
 

@@ -20,6 +20,11 @@ TaskStore.onCreate((task) => {
         ? [...new Set([...report.closedTaskIds, task.id])]
         : report.taskIds
     ),
+    isClosed: (
+      task.isClosed
+        ? [...new Set([...report.taskIds, task.id])] === [...new Set([...report.closedTaskIds, task.id])]
+        : false
+    ),
   })
 })
 TaskStore.onUpdate((task, oldTask) => {
@@ -35,6 +40,11 @@ TaskStore.onUpdate((task, oldTask) => {
       task.isClosed
         ? [...new Set([...report.closedTaskIds, task.id])]
         : closedTaskIds
+    ),
+    isClosed: (
+      task.isClosed
+        ? report.taskIds === [...new Set([...report.closedTaskIds, task.id])]
+        : false
     ),
   })
 })
@@ -53,6 +63,7 @@ TaskStore.onRemove((task) => {
     ...report,
     taskIds,
     closedTaskIds,
+    isClosed: taskIds == closedTaskIds,
   })
 })
 
