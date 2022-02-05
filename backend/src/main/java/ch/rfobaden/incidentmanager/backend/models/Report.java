@@ -200,7 +200,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return getClosedTaskIds().containsAll(getTaskIds()) && getTaskIds().size() > 0;
+        return !getTasks().isEmpty() && getTasks().stream().allMatch(Task::isClosed);
     }
 
     @Override
