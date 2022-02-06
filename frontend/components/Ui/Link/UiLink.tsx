@@ -24,6 +24,7 @@ const UiLink: React.VFC<Props> = ({
 }
 export default styled(UiLink)``
 
+// TODO define color for normal and hover ?
 const A = styled.a`
   text-decoration: none;
 `
