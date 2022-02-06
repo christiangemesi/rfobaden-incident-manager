@@ -80,7 +80,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       label: incident.title,
     },
     {
-      url: '/ereignisse/' + incident.id,
+      url: '/ereignisse/' + incident.id, // TODO link for selected report
       label: report.title,
     },
     {
@@ -90,7 +90,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   ]
   if (selectedSubtask != null) {
     links[3] = {
-      url: '/ereignisse/' + incident.id,
+      url: '/ereignisse/' + incident.id, // TODO link for selected subtask
       label: selectedSubtask.title,
     }
   }

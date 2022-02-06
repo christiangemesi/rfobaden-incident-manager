@@ -119,7 +119,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   ]
   if (selectedReport != null) {
     links[1] = {
-      url: '/ereignisse/' + incident.id,
+      url: '/ereignisse/' + incident.id, // TODO link for selected report
       label: selectedReport.title,
     }
   }
