@@ -29,6 +29,7 @@ import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import SubtaskView from '@/components/Subtask/View/SubtaskView'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
+import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
 
 interface Props {
   data: {
@@ -73,8 +74,32 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     priorityIcon = <UiIcon.PriorityLow />
   }
 
+  const links: Link[] = [
+    {
+      url: '/ereignisse' + incident.id,
+      label: incident.title,
+    },
+    {
+      url: '/ereignisse/' + incident.id,
+      label: report.title,
+    },
+    {
+      url: '/ereignisse' + incident.id+ '/meldungen/'+report.id+ '/auftraege/'+task.id,
+      label: task.title,
+    },
+  ]
+  if (selectedSubtask != null) {
+    links[3] = {
+      url: '/ereignisse/' + incident.id,
+      label: selectedSubtask.title,
+    }
+  }
+
   return (
     <UiContainer>
+      <BlockContainer>
+        <UiBreadcrumb links={links} />
+      </BlockContainer>
       <Details>
         <TitleIconContainer>
           <UiTitle level={1}>

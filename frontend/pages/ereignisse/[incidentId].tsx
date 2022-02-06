@@ -33,6 +33,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
+import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
 
 interface Props {
   data: {
@@ -110,9 +111,25 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
   ), [incident])
 
+  const links: Link[] = [
+    {
+      url: '/ereignisse/' + incident.id,
+      label: incident.title,
+    },
+  ]
+  if (selectedReport != null) {
+    links[1] = {
+      url: '/ereignisse/' + incident.id,
+      label: selectedReport.title,
+    }
+  }
+
   return (
     <UiContainer>
       <SpacerUiGrid gapH={2} gapV={1}>
+        <BlockContainer>
+          <UiBreadcrumb links={links} />
+        </BlockContainer>
         <BlockContainer>
           <UiTitle level={1}>
             {incident.title}
