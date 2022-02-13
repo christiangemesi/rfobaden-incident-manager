@@ -13,14 +13,14 @@ const UiTitle: React.VFC<Props> = ({
     <LinkContainer>
       {links.map((link) => (
         <React.Fragment key={link.label}>
-          {link.url !== undefined ? (
-            <UiLink href={link.url}>
-              {link.label}
-            </UiLink>
-          ) : (
+          {link.url === undefined ? (
             <LabelContainer>
               {link.label}
             </LabelContainer>
+          ) : (
+            <UiLink href={link.url}>
+              {link.label}
+            </UiLink>
           )}
           <SpacerArrow>/</SpacerArrow>
         </React.Fragment>
