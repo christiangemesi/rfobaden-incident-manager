@@ -26,4 +26,9 @@ export default styled(UiLink)``
 
 const A = styled.a`
   text-decoration: none;
+  color: ${({ theme }) => theme.colors.primary.value};
+
+  &:hover {
+    filter: brightness(150%);
+  }
 `

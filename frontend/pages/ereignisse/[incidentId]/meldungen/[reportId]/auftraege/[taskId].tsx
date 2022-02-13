@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -7,7 +7,7 @@ import User, { parseUser, useUsername } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useSearchParam } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import TaskStore, { useTask } from '@/stores/TaskStore'
 import { useReport } from '@/stores/ReportStore'
@@ -29,6 +29,8 @@ import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import SubtaskView from '@/components/Subtask/View/SubtaskView'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
+import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
+import { useRouter } from 'next/router'
 
 interface Props {
   data: {
@@ -46,6 +48,8 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
+  const router = useRouter()
+
   const incident = useIncident(data.incident)
   const report = useReport(data.report)
   const task = useTask(data.task)
@@ -53,11 +57,22 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const assigneeName = useUsername(assignee)
   const subtasks = useSubtasksOfTask(task.id)
 
-  const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(null)
+  const selectedSubtaskIdParam = useSearchParam('subtask')
+  const selectedSubtaskId = useMemo(() => (
+    selectedSubtaskIdParam === null ? null : parseInt(selectedSubtaskIdParam)
+  ), [selectedSubtaskIdParam])
+  const setSelectedSubtaskId = async (id: Id<Subtask> | null) => {
+    const query = { ...router.query }
+    if (id === null) {
+      delete query.subtask
+    } else {
+      query.subtask = `${id}`
+    }
+    await router.push({ query }, undefined, { shallow: true })
+  }
   const selectedSubtask = useSubtask(selectedSubtaskId)
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
-
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
@@ -74,8 +89,26 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     priorityIcon = <UiIcon.PriorityLow />
   }
 
+  const reportLink = '?report=' + report.id
+  const links: Link[] = [
+    {
+      url: '/ereignisse/' + incident.id,
+      label: incident.title,
+    },
+    {
+      url: '/ereignisse/' + incident.id + reportLink,
+      label: report.title,
+    },
+    {
+      label: task.title,
+    },
+  ]
+
   return (
     <UiContainer>
+      <BlockContainer>
+        <UiBreadcrumb links={links} />
+      </BlockContainer>
       <Details>
         <TitleIconContainer>
           <UiTitle level={1}>
@@ -158,7 +191,8 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
             incident={incident}
             report={report}
             task={task}
-            subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
+            subtasks={subtasks}
+            onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
             activeSubtask={selectedSubtask} />
         </UiGrid.Col>
         <UiGrid.Col size={{ xs: 12, md: true }}>
