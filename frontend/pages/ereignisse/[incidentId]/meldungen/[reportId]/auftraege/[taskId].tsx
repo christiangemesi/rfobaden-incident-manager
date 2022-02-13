@@ -92,15 +92,6 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       label: task.title,
     },
   ]
-  if (selectedSubtask !== null) {
-    links[2] = {
-      url: '/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id,
-      label: task.title,
-    }
-    links[3] = {
-      label: selectedSubtask.title,
-    }
-  }
 
   return (
     <UiContainer>
