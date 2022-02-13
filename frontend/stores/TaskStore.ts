@@ -56,7 +56,7 @@ SubtaskStore.onRemove((subtask) => {
     ...task,
     subtaskIds,
     closedSubtaskIds,
-    isClosed: subtaskIds === closedSubtaskIds,
+    isClosed: subtaskIds.length > 0 && subtaskIds.length === closedSubtaskIds.length,
   })
 })
 
