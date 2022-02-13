@@ -16,7 +16,6 @@ import Incident from '@/models/Incident'
 import { contrastDark } from '@/theme'
 import BackendService from '@/services/BackendService'
 import { useUsername } from '@/models/User'
-import TaskStore from '@/stores/TaskStore'
 import SubtaskStore from '@/stores/SubtaskStore'
 
 

@@ -14,7 +14,7 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import IncidentStore, { useIncident } from '@/stores/IncidentStore'
+import { useIncident } from '@/stores/IncidentStore'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import ReportForm from '@/components/Report/Form/ReportForm'
 
