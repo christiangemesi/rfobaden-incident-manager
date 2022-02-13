@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -57,12 +57,22 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const assigneeName = useUsername(assignee)
   const subtasks = useSubtasksOfTask(task.id)
 
-  const subtaskFromUrl = parseInt(useSearchParam('subtask') ?? '')
-  const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(subtaskFromUrl)
+  const selectedSubtaskIdParam = useSearchParam('subtask')
+  const selectedSubtaskId = useMemo(() => (
+    selectedSubtaskIdParam === null ? null : parseInt(selectedSubtaskIdParam)
+  ), [selectedSubtaskIdParam])
+  const setSelectedSubtaskId = async (id: Id<Subtask> | null) => {
+    const query = { ...router.query }
+    if (id === null) {
+      delete query.subtask
+    } else {
+      query.subtask = `${id}`
+    }
+    await router.push({ query }, undefined, { shallow: true })
+  }
   const selectedSubtask = useSubtask(selectedSubtaskId)
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
-
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
@@ -181,10 +191,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
             report={report}
             task={task}
             subtasks={subtasks}
-            onClick={(subtask) => {
-              setSelectedSubtaskId(subtask.id)
-              router.push('/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id + '?subtask=' + subtask.id)
-            }}
+            onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
             activeSubtask={selectedSubtask} />
         </UiGrid.Col>
         <UiGrid.Col size={{ xs: 12, md: true }}>

@@ -65,8 +65,19 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     tasks.filter((task) => task.incidentId === incident.id)
   ))
 
-  const reportFromUrl = parseInt(useSearchParam('report') ?? '')
-  const [selectedReportId, setSelectedReportId] = useState<Id<Report> | null>(reportFromUrl)
+  const selectedReportIdParam = useSearchParam('report')
+  const selectedReportId = useMemo(() => (
+    selectedReportIdParam === null ? null : parseInt(selectedReportIdParam)
+  ), [selectedReportIdParam])
+  const setSelectedReportId = async (id: Id<Report> | null) => {
+    const query = { ...router.query }
+    if (id === null) {
+      delete query.report
+    } else {
+      query.report = `${id}`
+    }
+    await router.push({ query }, undefined, { shallow: true })
+  }
   const selectedReport = useReport(selectedReportId)
 
   // TODO rewrite print page
@@ -188,10 +199,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           </Actions>
           <ReportList
             reports={reports}
-            onClick={(report) => {
-              setSelectedReportId(report.id)
-              router.push('/ereignisse/' + incident.id + '?report=' + report.id)
-            }}
+            onClick={(report) => setSelectedReportId(report.id)}
             activeReport={selectedReport} />
         </UiGrid.Col>
 
