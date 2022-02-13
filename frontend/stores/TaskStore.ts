@@ -20,10 +20,7 @@ SubtaskStore.onCreate((subtask) => {
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
         : task.subtaskIds
     ),
-    isClosed: (
-      subtask.isClosed
-        ? [...new Set([...task.subtaskIds, subtask.id])] === [...new Set([...task.closedSubtaskIds, subtask.id])]
-        : false
+    isClosed: task.isClosed && subtask.isClosed,
     ),
   })
 })
