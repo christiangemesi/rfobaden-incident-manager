@@ -111,15 +111,13 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
   ), [incident])
 
-  const links: Link[] = [
-    {
+  const links: Link[] = []
+  if (selectedReport !== null) {
+    links[0] = {
       url: '/ereignisse/' + incident.id,
       label: incident.title,
-    },
-  ]
-  if (selectedReport != null) {
+    }
     links[1] = {
-      url: '/ereignisse/' + incident.id, // TODO link for selected report
       label: selectedReport.title,
     }
   }

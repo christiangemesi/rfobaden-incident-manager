@@ -69,28 +69,31 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   let priorityIcon = <UiIcon.PriorityMedium />
   if (task.priority === Priority.HIGH) {
-    priorityIcon= <UiIcon.PriorityHigh />
+    priorityIcon = <UiIcon.PriorityHigh />
   } else if (task.priority === Priority.LOW) {
     priorityIcon = <UiIcon.PriorityLow />
   }
 
+  const reportLink = '?reportId=' + report.id
   const links: Link[] = [
     {
-      url: '/ereignisse' + incident.id,
+      url: '/ereignisse/' + incident.id,
       label: incident.title,
     },
     {
-      url: '/ereignisse/' + incident.id, // TODO link for selected report
+      url: '/ereignisse/' + incident.id + reportLink,
       label: report.title,
     },
     {
-      url: '/ereignisse' + incident.id+ '/meldungen/'+report.id+ '/auftraege/'+task.id,
       label: task.title,
     },
   ]
-  if (selectedSubtask != null) {
+  if (selectedSubtask !== null) {
+    links[2] = {
+      url: '/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id,
+      label: task.title,
+    }
     links[3] = {
-      url: '/ereignisse/' + incident.id, // TODO link for selected subtask
       label: selectedSubtask.title,
     }
   }
