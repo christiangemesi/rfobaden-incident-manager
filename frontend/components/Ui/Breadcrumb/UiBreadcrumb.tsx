@@ -13,9 +13,17 @@ const UiTitle: React.VFC<Props> = ({
     <LinkContainer>
       {links.map((link) => (
         <React.Fragment key={link.label}>
-          <UiLink href={link.url}>
-            {link.label}
-          </UiLink>
+          {link.url !== undefined
+            ? (
+              <UiLink href={link.url}>
+                {link.label}
+              </UiLink>
+            )
+            : (
+              <div>
+                {link.label}
+              </div>
+            )}
           <SpacerArrow>/</SpacerArrow>
         </React.Fragment>
       ))}
@@ -26,7 +34,7 @@ const UiTitle: React.VFC<Props> = ({
 export default UiTitle
 
 export interface Link {
-  url: string
+  url?: string
   label: string
 }
 
@@ -37,8 +45,8 @@ const LinkContainer = styled.div`
 const SpacerArrow = styled.div`
   display: inline-block;
   margin: 0 0.5rem;
-  
-  :last-child{
+
+  :last-child {
     display: none;
   }
 `
