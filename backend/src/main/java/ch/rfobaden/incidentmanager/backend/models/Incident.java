@@ -108,7 +108,10 @@ public class Incident extends Model.Basic implements Serializable {
     }
 
     public List<Long> getClosedReportIds() {
-        return getReports().stream().filter(Report::isClosed).map(Report::getId).collect(Collectors.toList());
+        return getReports().stream()
+            .filter(Report::isClosed)
+            .map(Report::getId)
+            .collect(Collectors.toList());
     }
 
     @Override

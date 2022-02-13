@@ -169,7 +169,10 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     }
 
     public List<Long> getClosedSubtaskIds() {
-        return getSubtasks().stream().filter(Subtask::isClosed).map(Subtask::getId).collect(Collectors.toList());
+        return getSubtasks().stream()
+            .filter(Subtask::isClosed)
+            .map(Subtask::getId)
+            .collect(Collectors.toList());
     }
 
     @JsonProperty("isClosed")

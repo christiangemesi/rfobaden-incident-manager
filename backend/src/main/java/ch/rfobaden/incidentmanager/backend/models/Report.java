@@ -195,7 +195,10 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     }
 
     public List<Long> getClosedTaskIds() {
-        return getTasks().stream().filter(Task::isClosed).map(Task::getId).collect(Collectors.toList());
+        return getTasks().stream()
+            .filter(Task::isClosed)
+            .map(Task::getId)
+            .collect(Collectors.toList());
     }
 
     @JsonProperty("isClosed")
