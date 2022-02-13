@@ -7,7 +7,7 @@ import User, { parseUser, useUsername } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useSearchParam } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import { useTask } from '@/stores/TaskStore'
 import ReportStore, { useReport } from '@/stores/ReportStore'
@@ -30,6 +30,7 @@ import SubtaskView from '@/components/Subtask/View/SubtaskView'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
 import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
+import { useRouter } from 'next/router'
 
 interface Props {
   data: {
@@ -47,6 +48,8 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
+  const router = useRouter()
+
   const incident = useIncident(data.incident)
   const report = useReport(data.report)
   const task = useTask(data.task)
@@ -54,7 +57,8 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const assigneeName = useUsername(assignee)
   const subtasks = useSubtasksOfTask(task.id)
 
-  const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(null)
+  const subtaskFromUrl = parseInt(useSearchParam('subtask') ?? '')
+  const [selectedSubtaskId, setSelectedSubtaskId] = useState<Id<Subtask> | null>(subtaskFromUrl)
   const selectedSubtask = useSubtask(selectedSubtaskId)
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
@@ -185,9 +189,10 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
             incident={incident}
             report={report}
             task={task}
-            subtasks={subtasks} onClick={(subtask) => {
+            subtasks={subtasks}
+            onClick={(subtask) => {
               setSelectedSubtaskId(subtask.id)
-              history.pushState({}, '', '/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id + '?subtask=' + subtask.id)
+              router.push('/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id + '?subtask=' + subtask.id)
             }}
             activeSubtask={selectedSubtask} />
         </UiGrid.Col>
