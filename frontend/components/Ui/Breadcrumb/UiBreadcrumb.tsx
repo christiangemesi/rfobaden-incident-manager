@@ -25,6 +25,8 @@ const UiTitle: React.VFC<Props> = ({
           <SpacerArrow>/</SpacerArrow>
         </React.Fragment>
       ))}
+      {/* to reserve height */}
+      {links.length === 0 ? (<LabelContainer />) : ''}
     </LinkContainer>
   )
 }

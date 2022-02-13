@@ -74,7 +74,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     priorityIcon = <UiIcon.PriorityLow />
   }
 
-  const reportLink = '?reportId=' + report.id
+  const reportLink = '?report=' + report.id
   const links: Link[] = [
     {
       url: '/ereignisse/' + incident.id,
