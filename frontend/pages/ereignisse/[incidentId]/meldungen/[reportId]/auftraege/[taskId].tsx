@@ -7,7 +7,7 @@ import User, { parseUser, useUsername } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
-import { useEffectOnce, useSearchParam } from 'react-use'
+import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import TaskStore, { useTask } from '@/stores/TaskStore'
 import { useReport } from '@/stores/ReportStore'
@@ -57,10 +57,16 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const assigneeName = useUsername(assignee)
   const subtasks = useSubtasksOfTask(task.id)
 
-  const selectedSubtaskIdParam = useSearchParam('subtask')
-  const selectedSubtaskId = useMemo(() => (
-    selectedSubtaskIdParam === null ? null : parseInt(selectedSubtaskIdParam)
-  ), [selectedSubtaskIdParam])
+  const selectedSubtaskIdParam = router.query.subtask
+  const selectedSubtaskId = useMemo(() => {
+    if (selectedSubtaskIdParam === undefined) {
+      return null
+    }
+    return Array.isArray(selectedSubtaskIdParam)
+      ? parseInt(selectedSubtaskIdParam[0])
+      : parseInt(selectedSubtaskIdParam)
+  }, [selectedSubtaskIdParam])
+
   const setSelectedSubtaskId = async (id: Id<Subtask> | null) => {
     const query = { ...router.query }
     if (id === null) {

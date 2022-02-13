@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Incident from '@/models/Incident'
 import IncidentStore, { useIncident } from '@/stores/IncidentStore'
-import { useEffectOnce, useSearchParam } from 'react-use'
+import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -65,10 +65,15 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     tasks.filter((task) => task.incidentId === incident.id)
   ))
 
-  const selectedReportIdParam = useSearchParam('report')
-  const selectedReportId = useMemo(() => (
-    selectedReportIdParam === null ? null : parseInt(selectedReportIdParam)
-  ), [selectedReportIdParam])
+  const selectedReportIdParam = router.query.report
+  const selectedReportId = useMemo(() => {
+    if (selectedReportIdParam === undefined) {
+      return null
+    }
+    return Array.isArray(selectedReportIdParam)
+      ? parseInt(selectedReportIdParam[0])
+      : parseInt(selectedReportIdParam)
+  }, [selectedReportIdParam])
   const setSelectedReportId = async (id: Id<Report> | null) => {
     const query = { ...router.query }
     if (id === null) {
