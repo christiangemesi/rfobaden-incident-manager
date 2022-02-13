@@ -24,7 +24,11 @@ const UiLink: React.VFC<Props> = ({
 }
 export default styled(UiLink)``
 
-// TODO define color for normal and hover ?
 const A = styled.a`
   text-decoration: none;
+  color: ${({ theme }) => theme.colors.primary.value};
+
+  &:hover {
+    filter: brightness(150%);
+  }
 `
