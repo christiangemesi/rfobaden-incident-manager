@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,7 +56,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     private Priority priority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.REMOVE)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     @JsonIgnore
     public User getAssignee() {
@@ -186,6 +188,22 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JsonIgnore
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<Long> getTaskIds() {
+        return getTasks().stream().map(Task::getId).collect(Collectors.toList());
+    }
+
+    public List<Long> getClosedTaskIds() {
+        return getTasks().stream()
+            .filter(Task::isClosed)
+            .map(Task::getId)
+            .collect(Collectors.toList());
+    }
+
+    @JsonProperty("isClosed")
+    public boolean isClosed() {
+        return !getTasks().isEmpty() && getTasks().stream().allMatch(Task::isClosed);
     }
 
     @Override

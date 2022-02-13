@@ -5,24 +5,29 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { parseDate } from '@/models/Date'
 import Priority from '@/models/Priority'
+import Subtask from '@/models/Subtask'
 
 export default interface Task extends Model {
-    title: string
-    description: string | null
-    priority: Priority
-    location: string | null
+  title: string
+  description: string | null
+  priority: Priority
+  location: string | null
 
-    assigneeId: Id<User> | null
+  assigneeId: Id<User> | null
 
-    createdAt: Date
-    updatedAt: Date
-    closedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+  closedAt: Date | null
 
-    startsAt: Date | null
-    endsAt: Date | null
+  startsAt: Date | null
+  endsAt: Date | null
 
-    reportId: Id<Report>
-    incidentId: Id<Incident>
+  reportId: Id<Report>
+  incidentId: Id<Incident>
+
+  closedSubtaskIds: Id<Subtask>[]
+  subtaskIds: Id<Subtask>[]
+  isClosed: boolean
 }
 
 export const parseTask = (data: Task): Task => ({

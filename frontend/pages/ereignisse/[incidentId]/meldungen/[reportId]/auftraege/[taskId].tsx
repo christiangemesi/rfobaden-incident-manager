@@ -9,8 +9,8 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
-import { useTask } from '@/stores/TaskStore'
-import ReportStore, { useReport } from '@/stores/ReportStore'
+import TaskStore, { useTask } from '@/stores/TaskStore'
+import { useReport } from '@/stores/ReportStore'
 import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { GetServerSideProps } from 'next'
@@ -62,13 +62,14 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/`, task.id)
-      ReportStore.remove(task.id)
+
+      TaskStore.remove(task.id)
     }
   }
 
   let priorityIcon = <UiIcon.PriorityMedium />
   if (task.priority === Priority.HIGH) {
-    priorityIcon= <UiIcon.PriorityHigh />
+    priorityIcon = <UiIcon.PriorityHigh />
   } else if (task.priority === Priority.LOW) {
     priorityIcon = <UiIcon.PriorityLow />
   }

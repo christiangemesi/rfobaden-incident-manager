@@ -31,6 +31,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
+
       ReportStore.remove(report.id)
     }
   }

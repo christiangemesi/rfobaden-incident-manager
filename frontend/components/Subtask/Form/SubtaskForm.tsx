@@ -138,5 +138,5 @@ const FormContainer = styled.div`
 
 const PrioritySliderPositioner = styled.div`
   display: flex;
-  justify-content: end; 
+  justify-content: end;
 `
