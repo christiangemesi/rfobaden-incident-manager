@@ -200,7 +200,11 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
               )}</UiModal.Body>
             </UiModal>
           </Actions>
-          <ReportList reports={reports} onClick={(report) => setSelectedReportId(report.id)}
+          <ReportList reports={reports}
+            onClick={(report) => {
+              setSelectedReportId(report.id)
+              history.pushState({}, '', '/ereignisse/' + incident.id + '?report=' + report.id)
+            }}
             activeReport={selectedReport} />
         </UiGrid.Col>
 

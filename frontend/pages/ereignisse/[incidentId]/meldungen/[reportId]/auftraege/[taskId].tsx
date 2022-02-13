@@ -185,7 +185,10 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
             incident={incident}
             report={report}
             task={task}
-            subtasks={subtasks} onClick={(subtask) => setSelectedSubtaskId(subtask.id)}
+            subtasks={subtasks} onClick={(subtask) => {
+              setSelectedSubtaskId(subtask.id)
+              history.pushState({}, '', '/ereignisse/' + incident.id + '/meldungen/' + report.id + '/auftraege/' + task.id + '?subtask=' + subtask.id)
+            }}
             activeSubtask={selectedSubtask} />
         </UiGrid.Col>
         <UiGrid.Col size={{ xs: 12, md: true }}>
