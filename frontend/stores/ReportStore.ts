@@ -3,8 +3,20 @@ import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import TaskStore from '@/stores/TaskStore'
+import { getPriorityIndex } from '@/models/Priority'
 
-const [ReportStore, useReports, useReport] = createModelStore(parseReport)
+const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
+  sortBy: (report) => [
+    // Closed reports are always at the bottom.
+    !report.isClosed,
+
+    // Sort order: key > location-relevant > priority
+    report.isKeyReport,
+    report.isLocationRelevantReport,
+    getPriorityIndex(report.priority),
+    report.title,
+  ],
+})
 export default ReportStore
 
 TaskStore.onCreate((task) => {
