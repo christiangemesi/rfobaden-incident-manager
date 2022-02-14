@@ -3,7 +3,7 @@ import { parseIncident } from '@/models/Incident'
 import ReportStore from '@/stores/ReportStore'
 
 const [IncidentStore, useIncidents, useIncident] = createModelStore(parseIncident, {}, {
-  sortBy: (incident) => [!incident.isClosed, incident.startsAt, incident.endsAt, incident.title],
+  sortBy: (incident) => [!incident.isClosed, incident.startsAt ?? incident.createdAt, incident.endsAt, incident.title],
 })
 export default IncidentStore
 
