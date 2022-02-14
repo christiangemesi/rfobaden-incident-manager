@@ -33,6 +33,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
+import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
 
 interface Props {
   data: {
@@ -210,9 +211,11 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
-          {selectedReport !== null && (
-            <ReportView report={selectedReport} />
-          )}
+          <UiReservedSpace>
+            {selectedReport !== null && (
+              <ReportView report={selectedReport} />
+            )}
+          </UiReservedSpace>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

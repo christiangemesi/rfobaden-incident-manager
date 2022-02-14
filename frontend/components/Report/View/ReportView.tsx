@@ -29,7 +29,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   const tasks = useTasksOfReport(report.id)
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
 
       ReportStore.remove(report.id)
@@ -43,7 +43,6 @@ const ReportView: React.VFC<Props> = ({ report }) => {
     throw new Error('incident of report not found')
   }
 
-  // TODO Split grit into multiple rows.
   return (
     <UiGrid gapH={2} gapV={1}>
       <VerticalSpacer>
