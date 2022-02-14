@@ -49,7 +49,7 @@ const UserForm: React.VFC = () => {
   const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
   return (
     <div>
-      <form>
+      <UiForm form={form}>
         <UiGrid gap={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.firstName}>{(props) => (
@@ -72,7 +72,7 @@ const UserForm: React.VFC = () => {
           <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
-      </form>
+      </UiForm>
     </div>
   )
 }

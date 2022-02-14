@@ -59,7 +59,7 @@ const SessionForm: React.VFC = () => {
           <h1>
             Anmelden
           </h1>
-          <form>
+          <UiForm form={form}>
             <UiForm.Field field={form.email}>{(props) => (
               <UiTextInput {...props} label="E-Mail" />
             )}</UiForm.Field>
@@ -67,7 +67,7 @@ const SessionForm: React.VFC = () => {
               <UiTextInput {...props} label="Passwort" type="password" />
             )}</UiForm.Field>
             <UiForm.Buttons form={form} />
-          </form>
+          </UiForm>
         </UiGrid.Col>
       </CenteredGrid>
     </div>
