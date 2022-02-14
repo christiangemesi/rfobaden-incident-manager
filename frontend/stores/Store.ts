@@ -157,6 +157,12 @@ export function createModelStore<T extends Model, S>(
       if (a === b) {
         continue
       }
+      if (a == null) {
+        return 1
+      }
+      if (b == null) {
+        return -1
+      }
       if (a < b) {
         if (a > b) {
           throw new Error(`values are not comparable: ${a} <=> ${b}`)
