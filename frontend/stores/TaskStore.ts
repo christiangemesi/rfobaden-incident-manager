@@ -3,8 +3,11 @@ import Task, { parseTask } from '@/models/Task'
 import Report from '@/models/Report'
 import Id from '@/models/base/Id'
 import SubtaskStore from '@/stores/SubtaskStore'
+import { getPriorityIndex } from '@/models/Priority'
 
-const [TaskStore, useTasks, useTask] = createModelStore(parseTask)
+const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
+  sortBy: (task) => [!task.isClosed, getPriorityIndex(task.priority), task.title],
+})
 export default TaskStore
 
 SubtaskStore.onCreate((subtask) => {
