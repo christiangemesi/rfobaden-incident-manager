@@ -147,19 +147,25 @@ export function createModelStore<T extends Model, S>(
   }
 
   const sortBy = options?.sortBy
-  const compare = sortBy == undefined ? undefined : run(() => {
-    const compare = (recordA: T, recordB: T): number => {
-      const as = sortBy(recordA)
-      const bs = sortBy(recordB)
+  const factorOf = (order: 'asc' | 'desc') => order === 'asc' ? 1 : -1
+  const compare = sortBy == undefined ? undefined : (recordA: T, recordB: T): number => {
+    const [order, as] = sortBy(recordA)
+    const [_order, bs] = sortBy(recordB)
 
-      for (let i = 0; i < as.length; i++) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const a = as[i] as any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const b = bs[i] as any
-        if (a === b) {
-          continue
-        }
+    for (let i = 0; i < as.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const valueA = as[i] as any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const valueB = bs[i] as any
+
+      const [a, b, factor] = Array.isArray(valueA) && valueA.length === 2
+        ? [valueA[0], valueB[0], factorOf(valueA[1])]
+        : [valueA, valueB, factorOf(order)]
+
+      if (a === b) {
+        continue
+      }
+      const result = run(() => {
         if (a == null) {
           return -1
         }
@@ -173,14 +179,11 @@ export function createModelStore<T extends Model, S>(
           return -1
         }
         return 1
-      }
-      return 0
+      })
+      return result * factor
     }
-    if (options?.order === 'asc') {
-      return compare
-    }
-    return (a: T, b: T) => compare(a, b) * -1
-  })
+    return 0
+  }
 
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     const createListeners: Array<(record: T) => void> = []
@@ -347,6 +350,5 @@ interface ModelStoreState<T> {
 }
 
 interface ModelStoreOptions<T> {
-  sortBy?: (record: T) => unknown[],
-  order?: 'asc' | 'desc'
+  sortBy?: (record: T) => ['asc' | 'desc', (unknown | [unknown, 'asc' | 'desc'])[]],
 }

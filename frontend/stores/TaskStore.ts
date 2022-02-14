@@ -6,7 +6,11 @@ import SubtaskStore from '@/stores/SubtaskStore'
 import { getPriorityIndex } from '@/models/Priority'
 
 const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
-  sortBy: (task) => [!task.isClosed, getPriorityIndex(task.priority), task.title],
+  sortBy: (task) => ['desc', [
+    [task.isClosed, 'asc'],
+    getPriorityIndex(task.priority),
+    [task.title, 'asc'],
+  ]],
 })
 export default TaskStore
 
@@ -21,7 +25,7 @@ SubtaskStore.onCreate((subtask) => {
     closedSubtaskIds: (
       subtask.isClosed
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
-        : task.subtaskIds
+        : task.closedSubtaskIds
     ),
     isClosed: task.isClosed && subtask.isClosed,
   })

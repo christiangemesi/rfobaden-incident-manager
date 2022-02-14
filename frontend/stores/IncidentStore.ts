@@ -3,8 +3,11 @@ import { parseIncident } from '@/models/Incident'
 import ReportStore from '@/stores/ReportStore'
 
 const [IncidentStore, useIncidents, useIncident] = createModelStore(parseIncident, {}, {
-  sortBy: (incident) => [!incident.isClosed, incident.startsAt ?? incident.createdAt, incident.endsAt, incident.title],
-  order: 'asc',
+  sortBy: (incident) => ['asc', [
+    [incident.isClosed, 'desc'],
+    incident.startsAt ?? incident.createdAt,
+    incident.endsAt,
+  ]],
 })
 export default IncidentStore
 
@@ -19,7 +22,7 @@ ReportStore.onCreate((report) => {
     closedReportIds: (
       report.isClosed
         ? [...new Set([...incident.closedReportIds, report.id])]
-        : incident.reportIds
+        : incident.closedReportIds
     ),
   })
 })
