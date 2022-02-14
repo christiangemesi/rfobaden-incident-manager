@@ -88,3 +88,6 @@ VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671',
        (19, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung erstellen',5,4),
        (20, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',5,4),
        (21, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',7,4);
+
+UPDATE hibernate_sequence
+SET next_val = 30;
