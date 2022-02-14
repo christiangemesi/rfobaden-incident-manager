@@ -3,6 +3,7 @@ import { useEffectOnce, useIsomorphicLayoutEffect, useUpdateEffect } from 'react
 import Model from '@/models/base/Model'
 import Id, { isId } from '@/models/base/Id'
 import { Patcher, PatchFn } from '@/utils/update'
+import { run } from '@/utils/control-flow'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]
@@ -54,14 +55,15 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
         if (compare === undefined) {
           return useMemo(() => (
             transform(Object.values(records))
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+          // eslint-disable-next-line react-hooks/exhaustive-deps
           ), [records, ...(depsOrUndefined ?? [])])
         }
         return useMemo(() => (
           transform(Object.values(records).sort(compare))
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         ), [records, ...(depsOrUndefined ?? [])])
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [depsOrUndefined, idsOrTransform])
     return useAction()
   }
@@ -145,34 +147,40 @@ export function createModelStore<T extends Model, S>(
   }
 
   const sortBy = options?.sortBy
-  const compare = sortBy == undefined ? undefined : (recordA: T, recordB: T): number => {
-    const as = sortBy(recordA)
-    const bs = sortBy(recordB)
+  const compare = sortBy == undefined ? undefined : run(() => {
+    const compare = (recordA: T, recordB: T): number => {
+      const as = sortBy(recordA)
+      const bs = sortBy(recordB)
 
-    for (let i = 0; i < as.length; i++) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const a = as[i] as any
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const b = bs[i] as any
-      if (a === b) {
-        continue
-      }
-      if (a == null) {
-        return 1
-      }
-      if (b == null) {
-        return -1
-      }
-      if (a < b) {
-        if (a > b) {
-          throw new Error(`values are not comparable: ${a} <=> ${b}`)
+      for (let i = 0; i < as.length; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const a = as[i] as any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const b = bs[i] as any
+        if (a === b) {
+          continue
+        }
+        if (a == null) {
+          return -1
+        }
+        if (b == null) {
+          return 1
+        }
+        if (a < b) {
+          if (a > b) {
+            throw new Error(`values are not comparable: ${a} <=> ${b}`)
+          }
+          return -1
         }
         return 1
       }
-      return -1
+      return 0
     }
-    return 0
-  }
+    if (options?.order === 'asc') {
+      return compare
+    }
+    return (a: T, b: T) => compare(a, b) * -1
+  })
 
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     const createListeners: Array<(record: T) => void> = []
@@ -339,5 +347,6 @@ interface ModelStoreState<T> {
 }
 
 interface ModelStoreOptions<T> {
-  sortBy?: (record: T) => unknown[]
+  sortBy?: (record: T) => unknown[],
+  order?: 'asc' | 'desc'
 }

@@ -205,7 +205,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           <ReportList
             reports={reports}
             onClick={(report) => setSelectedReportId(report.id)}
-            activeReport={selectedReport} />
+            activeReport={selectedReport}
+          />
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
