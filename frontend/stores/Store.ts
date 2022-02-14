@@ -28,11 +28,15 @@ interface UseRecords<T> {
 
 const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (
   <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O), depsOrUndefined?: unknown[]) => {
+    const { compare } = store[privateKey]
     const useAction = useMemo(() => {
       if (idsOrTransform === undefined) {
         return (): T[] => {
           const { records } = useStore(store)
-          return useMemo(() => Object.values(records), [records])
+          if (compare === undefined) {
+            return useMemo(() => Object.values(records), [records])
+          }
+          return useMemo(() => Object.values(records).sort(compare), [records])
         }
       }
       if (Array.isArray(idsOrTransform)) {
@@ -47,9 +51,15 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
       const transform: ((records: T[]) => O) = idsOrTransform
       return (): O => {
         const { records } = useStore(store)
+        if (compare === undefined) {
+          return useMemo(() => (
+            transform(Object.values(records))
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+          ), [records, ...(depsOrUndefined ?? [])])
+        }
         return useMemo(() => (
-          transform(Object.values(records))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+          transform(Object.values(records).sort(compare))
+          // eslint-disable-next-line react-hooks/exhaustive-deps
         ), [records, ...(depsOrUndefined ?? [])])
       }
     }, [depsOrUndefined, idsOrTransform])
@@ -124,14 +134,40 @@ type ModelStoreParts<T extends Model, S = unknown> =
   [ModelStore<T> & S, UseRecords<T>, UseRecord<T>]
 
 export function createModelStore<T extends Model>(parseRecord: (value: T) => T): ModelStoreParts<T>
-export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions: S): ModelStoreParts<T, S>
+export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions: S, options: ModelStoreOptions<T>): ModelStoreParts<T, S>
 export function createModelStore<T extends Model, S>(
   parseRecord: (value: T) => T,
   actions?: S,
+  options?: ModelStoreOptions<T>,
 ): ModelStoreParts<T,  S> {
   const initialState: ModelStoreState<T> = {
     records: {},
   }
+
+  const sortBy = options?.sortBy
+  const compare = sortBy == undefined ? undefined : (recordA: T, recordB: T): number => {
+    const as = sortBy(recordA)
+    const bs = sortBy(recordB)
+
+    for (let i = 0; i < as.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const a = as[i] as any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const b = bs[i] as any
+      if (a === b) {
+        continue
+      }
+      if (a < b) {
+        if (a > b) {
+          throw new Error(`values are not comparable: ${a} <=> ${b}`)
+        }
+        return 1
+      }
+      return -1
+    }
+    return 0
+  }
+
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     const createListeners: Array<(record: T) => void> = []
     const updateListeners: Array<(newRecord: T, oldRecord: T) => void> = []
@@ -150,13 +186,21 @@ export function createModelStore<T extends Model, S>(
       list(ids?: Id<T>[]): T[] {
         const { records } = getState()
         if (ids === undefined) {
-          return Object.values(records)
+          const result = Object.values(records)
+          if (compare === undefined) {
+            return result
+          }
+          return result.sort(compare)
         }
+
         const result = [] as T[]
         for (const id of ids) {
           result.push(records[id])
         }
-        return result
+        if (compare === undefined) {
+          return result
+        }
+        return result.sort(compare)
       },
       find(id: Id<T>): T | null {
         const { records } = getState()
@@ -238,6 +282,8 @@ export function createModelStore<T extends Model, S>(
   // since the normal store does not know it.
   store[privateKey].parseRecord = parseRecord
 
+  store[privateKey].compare = compare
+
   return [
     store,
     createUseRecords(store),
@@ -272,7 +318,8 @@ interface ModelStore<T> extends Store<ModelStoreState<T>> {
 }
 
 interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
-  parseRecord: (record: T) => T
+  parseRecord: (record: T) => T,
+  compare?: (a: T, b: T) => number,
 }
 
 
@@ -283,4 +330,8 @@ interface CreateActions<T, S> {
 
 interface ModelStoreState<T> {
   records: Record<Id<T>, T>
+}
+
+interface ModelStoreOptions<T> {
+  sortBy?: (record: T) => unknown[]
 }
