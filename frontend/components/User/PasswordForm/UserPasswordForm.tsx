@@ -43,7 +43,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
 
   return (
     <div>
-      <form>
+      <UiForm form={form}>
         <UiForm.Field field={form.password}>{(props) => (
           <UiTextInput {...props} label="Passwort" type="password" />
         )}</UiForm.Field>
@@ -51,7 +51,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
-      </form>
+      </UiForm>
     </div>
   )
 }
