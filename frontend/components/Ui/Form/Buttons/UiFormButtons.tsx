@@ -1,5 +1,5 @@
 import { getFormBaseState, UiFormState } from '@/components/Ui/Form'
-import React, { useCallback } from 'react'
+import React from 'react'
 import UiConfirmButtons from '@/components/Ui/Confirm/Buttons/UiConfirmButtons'
 
 interface Props<T> {
@@ -10,23 +10,11 @@ const UiFormButtons = <T,>({
   form,
 }: Props<T>): JSX.Element => {
   const baseForm = getFormBaseState(form)
-  const {
-    isValid,
-    value,
-  } = baseForm
-
-  const pushSubmit = baseForm.onSubmit
-
-  const handleSubmit = useCallback(async () => {
-    if (isValid && pushSubmit !== null) {
-      await pushSubmit(value)
-    }
-  }, [isValid, value, pushSubmit])
-
+  const { isValid } = baseForm
   return (
     <UiConfirmButtons
+      type="submit"
       allowSubmit={isValid}
-      onSubmit={handleSubmit}
     />
   )
 }

@@ -86,7 +86,7 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
 
 
   return (
-    <form>
+    <UiForm form={form}>
       <FormContainer>
 
         <UiGrid.Col style={{ textAlign: 'right' }}>
@@ -128,7 +128,7 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
 
         <UiForm.Buttons form={form} />
       </FormContainer>
-    </form>
+    </UiForm>
 
   )
 }
