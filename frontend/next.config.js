@@ -15,6 +15,15 @@ const config = {
       'utils',
     ],
   },
+
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.md$/,
+      use: 'raw-loader',
+    })
+    return config
+  },
+
   webpackDevMiddleware: (config) => {
     config.watchOptions = {
       poll: 1000,
