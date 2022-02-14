@@ -18,7 +18,7 @@ const UiForm = <T,>({ form, children }: Props<T>) => {
   const pushSubmit = baseForm.onSubmit
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (isValid && pushSubmit !== null) {
       await pushSubmit(value)
     }
