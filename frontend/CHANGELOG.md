@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Restructured the incidents page at `/incidents`.
+- Renamed the _creator_ role to _agent_.
 
 ## [0.2.0] - 2021-12-03
 ### Added
