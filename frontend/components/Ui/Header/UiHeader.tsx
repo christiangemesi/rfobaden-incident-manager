@@ -44,6 +44,11 @@ const UiHeader: React.VFC = () => {
         </nav>
       </NavContainer>
       <ButtonList>
+        <UiLink href="/changelog">
+          <UiButton>
+            <UiIcon.Clipboard />
+          </UiButton>
+        </UiLink>
         {currentUser === null ? (
           <UiLink href="/anmelden">
             <UiButton type="button">
@@ -62,11 +67,6 @@ const UiHeader: React.VFC = () => {
             </UiButton>
           </React.Fragment>
         )}
-        <div>
-          <UiLink href="/changelog">
-            <UiIcon.EditAction />
-          </UiLink>
-        </div>
       </ButtonList>
     </HeaderContainer>
   )
