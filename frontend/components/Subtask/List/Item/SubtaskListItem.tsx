@@ -47,6 +47,7 @@ const SubtaskListItem: React.VFC<Props> = ({
 
   return (
     <SelectableListItem
+      isClosed={subtask.isClosed}
       isActive={isActive}
       priority={subtask.priority}
       title={subtask.title}

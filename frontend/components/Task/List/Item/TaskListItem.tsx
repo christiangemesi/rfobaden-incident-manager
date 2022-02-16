@@ -17,6 +17,7 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   return (
     <UiLink key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}>
       <UiListItemWithDetails
+        isClosed={task.isClosed}
         title={task.title}
         priority={task.priority}
         user={assigneeName}
