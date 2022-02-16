@@ -6,6 +6,7 @@ import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 
 const UiHeader: React.VFC = () => {
@@ -61,6 +62,11 @@ const UiHeader: React.VFC = () => {
             </UiButton>
           </React.Fragment>
         )}
+        <div>
+          <UiLink href="/changelog">
+            <UiIcon.EditAction />
+          </UiLink>
+        </div>
       </ButtonList>
     </HeaderContainer>
   )
