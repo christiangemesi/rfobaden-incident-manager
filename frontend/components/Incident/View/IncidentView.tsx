@@ -43,7 +43,9 @@ const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
         </UiGrid>
       </div>
       <article style={{ marginTop: '1.5rem' }}>
-        {incident.description}
+        <TextLines>
+          {incident.description}
+        </TextLines>
       </article>
     </Container>
   )
@@ -89,4 +91,9 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
+`
+
+const TextLines = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.2;
 `

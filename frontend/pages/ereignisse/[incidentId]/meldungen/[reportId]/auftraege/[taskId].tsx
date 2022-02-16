@@ -151,7 +151,9 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
         </TitleIconContainer>
         <UiDateLabel start={startDate} end={task.endsAt} />
         <BlockContainer>
-          {task.description}
+          <TextLines>
+            {task.description}
+          </TextLines>
         </BlockContainer>
         {task.location && (
           <BlockContainer>
@@ -316,4 +318,9 @@ const FloatingActionButton = styled.div`
 
 const PriorityIcon = styled.span`
   margin-left: 2rem;
+`
+
+const TextLines = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.2;
 `

@@ -85,7 +85,9 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
         </UiTextWithIcon>
       )}
       <BlockContainer>
-        {subtask.description}
+        <TextLines>
+          {subtask.description}
+        </TextLines>
       </BlockContainer>
     </Details>
   )
@@ -113,4 +115,9 @@ const Details = styled.div`
 
 const BlockContainer = styled.div`
   width: 100%;
+`
+
+const TextLines = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.2;
 `

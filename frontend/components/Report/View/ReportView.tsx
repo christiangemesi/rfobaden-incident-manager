@@ -98,7 +98,9 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         </HorizontalSpacer>
       </VerticalSpacer>
       <BlockContainer>
-        {report.description}
+        <TextLines>
+          {report.description}
+        </TextLines>
       </BlockContainer>
       {report.location && (
         <BlockContainer>
@@ -146,4 +148,9 @@ const VerticalSpacer = styled.div`
 
 const BlockContainer = styled.div`
   width: 100%;
+`
+
+const TextLines = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.2;
 `
