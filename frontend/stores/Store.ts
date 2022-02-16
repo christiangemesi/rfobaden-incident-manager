@@ -3,6 +3,7 @@ import { useEffectOnce, useIsomorphicLayoutEffect, useUpdateEffect } from 'react
 import Model from '@/models/base/Model'
 import Id, { isId } from '@/models/base/Id'
 import { Patcher, PatchFn } from '@/utils/update'
+import { run } from '@/utils/control-flow'
 
 export const useStore = <T>(store: Store<T>): T => {
   const inner = store[privateKey]
@@ -28,11 +29,15 @@ interface UseRecords<T> {
 
 const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (
   <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O), depsOrUndefined?: unknown[]) => {
+    const { compare } = store[privateKey]
     const useAction = useMemo(() => {
       if (idsOrTransform === undefined) {
         return (): T[] => {
           const { records } = useStore(store)
-          return useMemo(() => Object.values(records), [records])
+          if (compare === undefined) {
+            return useMemo(() => Object.values(records), [records])
+          }
+          return useMemo(() => Object.values(records).sort(compare), [records])
         }
       }
       if (Array.isArray(idsOrTransform)) {
@@ -47,11 +52,18 @@ const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> 
       const transform: ((records: T[]) => O) = idsOrTransform
       return (): O => {
         const { records } = useStore(store)
+        if (compare === undefined) {
+          return useMemo(() => (
+            transform(Object.values(records))
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          ), [records, ...(depsOrUndefined ?? [])])
+        }
         return useMemo(() => (
-          transform(Object.values(records))
+          transform(Object.values(records).sort(compare))
         // eslint-disable-next-line react-hooks/exhaustive-deps
         ), [records, ...(depsOrUndefined ?? [])])
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [depsOrUndefined, idsOrTransform])
     return useAction()
   }
@@ -124,14 +136,55 @@ type ModelStoreParts<T extends Model, S = unknown> =
   [ModelStore<T> & S, UseRecords<T>, UseRecord<T>]
 
 export function createModelStore<T extends Model>(parseRecord: (value: T) => T): ModelStoreParts<T>
-export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions: S): ModelStoreParts<T, S>
+export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions: S, options: ModelStoreOptions<T>): ModelStoreParts<T, S>
 export function createModelStore<T extends Model, S>(
   parseRecord: (value: T) => T,
   actions?: S,
+  options?: ModelStoreOptions<T>,
 ): ModelStoreParts<T,  S> {
   const initialState: ModelStoreState<T> = {
     records: {},
   }
+
+  const sortBy = options?.sortBy
+  const factorOf = (order: 'asc' | 'desc') => order === 'asc' ? 1 : -1
+  const compare = sortBy == undefined ? undefined : (recordA: T, recordB: T): number => {
+    const [order, as] = sortBy(recordA)
+    const [_order, bs] = sortBy(recordB)
+
+    for (let i = 0; i < as.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const valueA = as[i] as any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const valueB = bs[i] as any
+
+      const [a, b, factor] = Array.isArray(valueA) && valueA.length === 2
+        ? [valueA[0], valueB[0], factorOf(valueA[1])]
+        : [valueA, valueB, factorOf(order)]
+
+      if (a === b) {
+        continue
+      }
+      const result = run(() => {
+        if (a == null) {
+          return -1
+        }
+        if (b == null) {
+          return 1
+        }
+        if (a < b) {
+          if (a > b) {
+            throw new Error(`values are not comparable: ${a} <=> ${b}`)
+          }
+          return -1
+        }
+        return 1
+      })
+      return result * factor
+    }
+    return 0
+  }
+
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     const createListeners: Array<(record: T) => void> = []
     const updateListeners: Array<(newRecord: T, oldRecord: T) => void> = []
@@ -150,13 +203,21 @@ export function createModelStore<T extends Model, S>(
       list(ids?: Id<T>[]): T[] {
         const { records } = getState()
         if (ids === undefined) {
-          return Object.values(records)
+          const result = Object.values(records)
+          if (compare === undefined) {
+            return result
+          }
+          return result.sort(compare)
         }
+
         const result = [] as T[]
         for (const id of ids) {
           result.push(records[id])
         }
-        return result
+        if (compare === undefined) {
+          return result
+        }
+        return result.sort(compare)
       },
       find(id: Id<T>): T | null {
         const { records } = getState()
@@ -238,6 +299,8 @@ export function createModelStore<T extends Model, S>(
   // since the normal store does not know it.
   store[privateKey].parseRecord = parseRecord
 
+  store[privateKey].compare = compare
+
   return [
     store,
     createUseRecords(store),
@@ -272,7 +335,8 @@ interface ModelStore<T> extends Store<ModelStoreState<T>> {
 }
 
 interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
-  parseRecord: (record: T) => T
+  parseRecord: (record: T) => T,
+  compare?: (a: T, b: T) => number,
 }
 
 
@@ -283,4 +347,8 @@ interface CreateActions<T, S> {
 
 interface ModelStoreState<T> {
   records: Record<Id<T>, T>
+}
+
+interface ModelStoreOptions<T> {
+  sortBy?: (record: T) => ['asc' | 'desc', (unknown | [unknown, 'asc' | 'desc'])[]],
 }

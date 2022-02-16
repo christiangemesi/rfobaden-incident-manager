@@ -48,7 +48,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiHeader />
-        {component}
+        <main>
+          {component}
+        </main>
       </ThemeProvider>
     </>
   )
@@ -70,6 +72,10 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   
   button {
     cursor: pointer;
+  }
+  
+  main {
+    padding-bottom: 3rem;
   }
 
   @media print {

@@ -62,7 +62,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
   useCancel(form, handleClose)
 
   return (
-    <form>
+    <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.title}>{(props) => (
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
@@ -87,7 +87,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
 
         <UiForm.Buttons form={form} />
       </FormContainer>
-    </form>
+    </UiForm>
   )
 }
 

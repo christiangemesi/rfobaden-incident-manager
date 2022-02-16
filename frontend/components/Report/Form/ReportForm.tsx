@@ -92,7 +92,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
   return (
     <div>
-      <form>
+      <UiForm form={form}>
         <FormContainer>
           <UiGrid align="center">
             <UiGrid.Col textAlign="left">
@@ -143,7 +143,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
           )}</UiForm.Field>
           <UiForm.Buttons form={form} />
         </FormContainer>
-      </form>
+      </UiForm>
     </div>
   )
 }
