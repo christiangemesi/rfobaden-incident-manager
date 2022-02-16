@@ -24,7 +24,11 @@ For local development, make sure to have installed JDK 11+ and gradle 7+.
 #### Load Sample Data
 > The backend and database need to be running. The database has to be empty.
 ```bash
-docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sample-data.sql'
+# Load sample data:
+docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /data-sample.sql'
+
+# Load dumped production data:
+docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /data-prod.sql'
 ```
 
 #### Install Checkstyle plugin in IntelliJ IDEA
