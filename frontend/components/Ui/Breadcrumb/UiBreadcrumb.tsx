@@ -18,7 +18,7 @@ const UiTitle: React.VFC<Props> = ({
               {link.label}
             </LabelContainer>
           ) : (
-            <UiLink href={link.url}>
+            <UiLink href={link.url} isText>
               {link.label}
             </UiLink>
           )}

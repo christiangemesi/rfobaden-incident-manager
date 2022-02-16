@@ -58,7 +58,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
 }
 export default IncidentListItem
 
-const Container = styled.span`
+const Container = styled.div`
   color: ${({ theme }) => theme.colors.primary.value};
   background-color: ${({ theme }) => theme.colors.primary.contrast};
 
