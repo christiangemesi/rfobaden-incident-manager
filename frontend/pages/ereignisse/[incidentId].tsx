@@ -33,6 +33,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
+import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
 
 interface Props {
   data: {
@@ -106,8 +107,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
-      IncidentStore.remove(incident.id)
       await router.push('/ereignisse')
+      IncidentStore.remove(incident.id)
     }
   }
 
@@ -205,13 +206,16 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           <ReportList
             reports={reports}
             onClick={(report) => setSelectedReportId(report.id)}
-            activeReport={selectedReport} />
+            activeReport={selectedReport}
+          />
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
-          {selectedReport !== null && (
-            <ReportView report={selectedReport} />
-          )}
+          <UiReservedSpace>
+            {selectedReport !== null && (
+              <ReportView report={selectedReport} />
+            )}
+          </UiReservedSpace>
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

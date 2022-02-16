@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -55,7 +54,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @Column(nullable = false)
     private Priority priority;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
     @JsonIgnore

@@ -54,7 +54,8 @@ services:
       - "3002:3306"
     volumes:
       - database:/var/lib/mysql
-      - ./sample-data.sql:/sample-data.sql
+      - ./data-sample.sql:/data-sample.sql
+      - ./data-prod.sql:/data-prod.sql
     env_file:
       - .env
 

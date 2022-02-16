@@ -3,8 +3,20 @@ import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import TaskStore from '@/stores/TaskStore'
+import { getPriorityIndex } from '@/models/Priority'
 
-const [ReportStore, useReports, useReport] = createModelStore(parseReport)
+const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
+  sortBy: (report) => ['desc', [
+    // Closed reports are always at the bottom.
+    [report.isClosed, 'asc'],
+
+    // Sort order: key > location-relevant > priority
+    report.isKeyReport,
+    report.isLocationRelevantReport,
+    getPriorityIndex(report.priority),
+    [report.title, 'asc'],
+  ]],
+})
 export default ReportStore
 
 TaskStore.onCreate((task) => {
@@ -12,13 +24,14 @@ TaskStore.onCreate((task) => {
   if (report === null) {
     return
   }
+
   ReportStore.save({
     ...report,
     taskIds: [...new Set([...report.taskIds, task.id])],
     closedTaskIds: (
       task.isClosed
         ? [...new Set([...report.closedTaskIds, task.id])]
-        : report.taskIds
+        : report.closedTaskIds
     ),
     isClosed: report.isClosed && task.isClosed,
   })
@@ -28,6 +41,7 @@ TaskStore.onUpdate((task, oldTask) => {
   if (report === null || task.isClosed === oldTask.isClosed) {
     return
   }
+
   const closedTaskIds = new Set(report.closedTaskIds)
   if (task.isClosed) {
     closedTaskIds.add(task.id)

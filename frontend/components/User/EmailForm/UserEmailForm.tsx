@@ -44,12 +44,12 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
 
   return (
     <div>
-      <form>
+      <UiForm form={form}>
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
-      </form>
+      </UiForm>
     </div>
   )
 }
