@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -47,7 +46,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @Column(nullable = false)
     private Priority priority;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
     @JsonIgnore

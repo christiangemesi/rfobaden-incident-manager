@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -41,7 +40,7 @@ public class Incident extends Model.Basic implements Serializable {
     @Column(nullable = false)
     private boolean isClosed;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
     public String getTitle() {
