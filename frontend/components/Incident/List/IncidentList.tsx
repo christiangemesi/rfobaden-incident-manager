@@ -2,6 +2,12 @@ import React from 'react'
 import Incident from '@/models/Incident'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentListItem from '@/components/Incident/List/Item/IncidentListItem'
+import IncidentCreateButton from '@/components/Incident/CreateButton/IncidentCreateButton'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import IncidentForm from '@/components/Incident/Form/IncidentForm'
 
 interface Props {
   incidents: Incident[]
@@ -15,6 +21,21 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
           <IncidentListItem incident={incident} />
         </UiGrid.Col>
       ))}
+      <UiGrid.Col size={4}>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <IncidentCreateButton onClick={open}>
+              <UiIcon.CreateAction size={7} />
+            </IncidentCreateButton>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <UiContainer>
+              <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
+              <IncidentForm onClose={close} />
+            </UiContainer>
+          )}</UiModal.Body>
+        </UiModal>
+      </UiGrid.Col>
     </UiGrid>
   )
 }

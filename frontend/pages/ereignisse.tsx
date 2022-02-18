@@ -7,11 +7,7 @@ import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
-import IncidentForm from '@/components/Incident/Form/IncidentForm'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import IncidentList from '@/components/Incident/List/IncidentList'
 import Report, { parseReport } from '@/models/Report'
 import ReportStore from '@/stores/ReportStore'
@@ -40,21 +36,6 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
             <UiTitle level={1}>
               Ereignisse
             </UiTitle>
-          </UiGrid.Col>
-          <UiGrid.Col size="auto">
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiActionButton onClick={open}>
-                  <UiIcon.CreateAction />
-                </UiActionButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <UiContainer>
-                  <UiTitle level={1} isCentered>Ereignis erstellen</UiTitle>
-                  <IncidentForm onClose={close} />
-                </UiContainer>
-              )}</UiModal.Body>
-            </UiModal>
           </UiGrid.Col>
         </UiGrid>
 
