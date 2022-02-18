@@ -37,7 +37,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
 
             </UiGrid.Col>
             <UiGrid.Col>
-              <UiCircularProgress done={69} total={84} />
+              <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
             </UiGrid.Col>
           </UiGrid>
         </div>
@@ -58,7 +58,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
 }
 export default IncidentListItem
 
-const Container = styled.span`
+const Container = styled.div`
   color: ${({ theme }) => theme.colors.primary.value};
   background-color: ${({ theme }) => theme.colors.primary.contrast};
 

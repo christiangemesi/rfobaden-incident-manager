@@ -17,6 +17,9 @@ WORKDIR /app
 ARG RFO_BACKEND_URL
 ENV NEXT_PUBLIC_RFO_BACKEND_URL=${RFO_BACKEND_URL}
 
+ARG RFO_STAGE
+ENV RFO_STAGE=${RFO_STAGE}
+
 COPY . .
 COPY --from=deps /app/node_modules node_modules
 

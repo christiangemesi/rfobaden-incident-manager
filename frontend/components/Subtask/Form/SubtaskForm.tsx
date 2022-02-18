@@ -81,7 +81,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
   return (
-    <form>
+    <UiForm form={form}>
       <FormContainer>
         <PrioritySliderPositioner>
           <UiForm.Field field={form.priority}>{(props) => (
@@ -118,7 +118,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
 
         <UiForm.Buttons form={form} />
       </FormContainer>
-    </form>
+    </UiForm>
   )
 }
 export default SubtaskForm
@@ -138,5 +138,5 @@ const FormContainer = styled.div`
 
 const PrioritySliderPositioner = styled.div`
   display: flex;
-  justify-content: end; 
+  justify-content: end;
 `

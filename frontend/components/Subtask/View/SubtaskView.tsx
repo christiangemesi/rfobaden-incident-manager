@@ -15,8 +15,8 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { contrastDark } from '@/theme'
 import BackendService from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
 import { useUsername } from '@/models/User'
+import SubtaskStore from '@/stores/SubtaskStore'
 
 
 interface Props {
@@ -35,7 +35,10 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Teilauftrag "${subtask.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id)
-      ReportStore.remove(subtask.id)
+
+      // todo what about report and incident? also updating or leaving
+
+      SubtaskStore.remove(subtask.id)
     }
   }
 
@@ -82,7 +85,9 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
         </UiTextWithIcon>
       )}
       <BlockContainer>
-        {subtask.description}
+        <TextLines>
+          {subtask.description}
+        </TextLines>
       </BlockContainer>
     </Details>
   )
@@ -103,11 +108,16 @@ const Line = styled.div`
 `
 
 const Details = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   gap: 1rem;
 `
 
 const BlockContainer = styled.div`
   width: 100%;
+`
+
+const TextLines = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.2;
 `

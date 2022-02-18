@@ -39,6 +39,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     endsAt: null,
     isKeyReport: false,
     isLocationRelevantReport: false,
+    closedTaskIds: [],
+    taskIds: [],
+    isClosed: false,
   }))
 
   useValidate(form, (validate) => {
@@ -63,6 +66,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       endsAt: [],
       isKeyReport: [],
       isLocationRelevantReport: [],
+      closedTaskIds: [],
+      taskIds: [],
+      isClosed: [],
     })
   })
 
@@ -84,11 +90,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
-  console.log(form)
-
   return (
     <div>
-      <form>
+      <UiForm form={form}>
         <FormContainer>
           <UiGrid align="center">
             <UiGrid.Col textAlign="left">
@@ -139,7 +143,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
           )}</UiForm.Field>
           <UiForm.Buttons form={form} />
         </FormContainer>
-      </form>
+      </UiForm>
     </div>
   )
 }
@@ -153,7 +157,7 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 }
 
 const FormContainer = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `

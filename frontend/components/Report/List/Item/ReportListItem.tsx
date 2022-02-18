@@ -1,7 +1,6 @@
 import Report from '@/models/Report'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useUser } from '@/stores/UserStore'
-import { useTasksOfReport } from '@/stores/TaskStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled, { css } from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
@@ -22,15 +21,10 @@ const ReportListItem: React.VFC<Props> = ({
 
   const assigneeName = useUsername(assignee)
 
-  const tasksAll = useTasksOfReport(report.id)
-
-  const tasksDone = useMemo(() => (
-    tasksAll.filter((task) => task.closedAt != null)
-  ), [tasksAll])
-
   return (
     <SelectableListItem
       isActive={isActive}
+      isClosed={report.isClosed}
       title={report.title}
       priority={report.priority}
       user={assigneeName ?? ''}
@@ -51,7 +45,7 @@ const ReportListItem: React.VFC<Props> = ({
         )}
       </LeftSpacer>
       <LeftSpacer>
-        {tasksDone.length}/{tasksAll.length}
+        {report.closedTaskIds.length}/{report.taskIds.length}
       </LeftSpacer>
     </SelectableListItem>
   )

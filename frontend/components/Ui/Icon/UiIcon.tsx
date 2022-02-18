@@ -22,6 +22,7 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
+  mdiClipboardTextOutline,
 } from '@mdi/js'
 
 
@@ -87,4 +88,5 @@ export default {
   UserInCircle: makeNamedIcon(mdiAccountCircle),
   AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
   Calendar: makeNamedIcon(mdiCalendar),
+  Clipboard: makeNamedIcon(mdiClipboardTextOutline),
 }

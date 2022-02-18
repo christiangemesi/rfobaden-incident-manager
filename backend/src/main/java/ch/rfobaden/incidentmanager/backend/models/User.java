@@ -55,7 +55,7 @@ public final class User extends Model.Basic implements Serializable {
     private Role role;
 
     @Valid
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserCredentials credentials;
 
@@ -151,26 +151,32 @@ public final class User extends Model.Basic implements Serializable {
         organization.setId(id);
     }
 
+    @JsonIgnore
     public List<Report> getAssignedReports() {
         return assignedReports;
     }
 
+    @JsonIgnore
     public void setAssignedReports(List<Report> assignedReports) {
         this.assignedReports = assignedReports;
     }
 
+    @JsonIgnore
     public List<Task> getAssignedTasks() {
         return assignedTasks;
     }
 
+    @JsonIgnore
     public void setAssignedTasks(List<Task> assignedTasks) {
         this.assignedTasks = assignedTasks;
     }
 
+    @JsonIgnore
     public List<Subtask> getAssignedSubtasks() {
         return assignedSubtasks;
     }
 
+    @JsonIgnore
     public void setAssignedSubtasks(List<Subtask> assignedSubtasks) {
         this.assignedSubtasks = assignedSubtasks;
     }
@@ -205,7 +211,7 @@ public final class User extends Model.Basic implements Serializable {
     }
 
     public enum Role {
-        CREATOR,
+        AGENT,
         ADMIN,
     }
 }

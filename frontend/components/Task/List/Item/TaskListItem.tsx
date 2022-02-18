@@ -17,14 +17,14 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   return (
     <UiLink key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}>
       <UiListItemWithDetails
+        isClosed={task.isClosed}
         title={task.title}
         priority={task.priority}
         user={assigneeName}
         onClick={handleClick && (() => handleClick(task))}
       >
         <LeftSpacer>
-          {/* TODO Show actual number of subtasks */}
-          0/0
+          {task.closedSubtaskIds.length}/{task.subtaskIds.length}
         </LeftSpacer>
       </UiListItemWithDetails>
     </UiLink>

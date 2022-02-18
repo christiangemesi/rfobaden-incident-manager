@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -39,8 +40,8 @@ public class Incident extends Model.Basic implements Serializable {
     @Column(nullable = false)
     private boolean isClosed;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incident", cascade = CascadeType.REMOVE)
-    private List<Report> reports;
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
+    private List<Report> reports = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -99,6 +100,17 @@ public class Incident extends Model.Basic implements Serializable {
     @JsonIgnore
     public void setReports(List<Report> reports) {
         this.reports = reports;
+    }
+
+    public List<Long> getReportIds() {
+        return getReports().stream().map(Report::getId).collect(Collectors.toList());
+    }
+
+    public List<Long> getClosedReportIds() {
+        return getReports().stream()
+            .filter(Report::isClosed)
+            .map(Report::getId)
+            .collect(Collectors.toList());
     }
 
     @Override

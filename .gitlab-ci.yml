@@ -8,49 +8,74 @@ workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "master"
 
+.backend_cache: &backend_cache
+  key: backend-${$CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/.gradle
+    - backend/build
+    - backend/.sonar/cache
+
+.frontend_cache: &frontend_cache
+  key: frontend-${$CI_COMMIT_REF_SLUG}
+  paths:
+    - frontend/node_modules
+    - frontend/coverage
+    - frontend/.sonar/cache
+
+backend.checkstyle:
+  stage: lint
+  image: gradle:7.2.0-jdk11
+  cache:
+    <<: *backend_cache
+  script:
+    - cd backend
+    - gradle --no-daemon clean checkstyleMain checkstyleTest
+
 frontend.eslint:
   stage: lint
   image: node:16-alpine3.13
+  cache:
+    <<: *frontend_cache
   script:
     - cd frontend
     - npm install --quiet
     - npm run lint
 
-backend.checkstyle:
-  stage: lint
-  image: gradle:7.2.0-jdk11
-  script:
-    - cd backend
-    - gradle --no-daemon checkstyleMain checkstyleTest
-
 backend.test:
   stage: test
   image: gradle:7.2.0-jdk11
+  cache:
+    <<: *backend_cache
   script:
     - cd backend
-    - gradle --no-daemon clean test jacocoTestReport --rerun-tasks
+    - gradle --no-daemon test jacocoTestReport --rerun-tasks
+
+frontend.test:
+  stage: test
+  image: node:16-alpine3.13
+  cache:
+    <<: *frontend_cache
+  script:
+    - cd frontend
+    - npm run test -- --coverage
 
 backend.sonarqube:
   stage: analyze
   image: gradle:7.2.0-jdk11
   cache:
-    key: ${CI_JOB_NAME}
-    paths:
-      - backend/.sonar/cache
+    <<: *backend_cache
   allow_failure: true
   script:
     - cd backend
-    - gradle --no-daemon jacocoTestReport sonarqube
+    - gradle --no-daemon sonarqube
 
 frontend.sonarqube:
   stage: analyze
   image: sonarsource/sonar-scanner-cli:latest
+  cache:
+    <<: *frontend_cache
   variables:
     EXCLUDE: node_modules/**
-  cache:
-    key: ${CI_JOB_NAME}
-    paths:
-      - frontend/.sonar/cache
   allow_failure: true
   script:
     - cd frontend
@@ -69,12 +94,5 @@ deploy.jenkins:
       curl --user "${JENKINS_DEPLOY_USER}:${JENKINS_DEPLOY_TOKEN}" "https://im.rfobaden.ch/jenkins/job/IncidentManager%20${CI_COMMIT_BRANCH}/build?token=${JENKINS_PIPELINE_TOKEN}&cause=gitlab-ci"
 
 
-
 variables:
   GIT_DEPTH: 0
-
-cache:
-  key: ${CI_JOB_NAME}
-  paths:
-    - backend/.gradle
-    - frontend/node_modules

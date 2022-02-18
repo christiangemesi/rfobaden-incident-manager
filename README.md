@@ -8,7 +8,7 @@
 
 ## Development
 ### Setup
-Install frontend dependencies:
+#### Install frontend dependencies
 ```shell
 docker compose run --no-deps frontend sh -c "npm install"
 ```
@@ -20,6 +20,16 @@ cd frontend && npm install
 ```
 Backend dependencies are automatically fetched on startup.
 For local development, make sure to have installed JDK 11+ and gradle 7+.
+
+#### Load Sample Data
+> The backend and database need to be running. The database has to be empty.
+```bash
+# Load sample data:
+docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /data-sample.sql'
+
+# Load dumped production data:
+docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /data-prod.sql'
+```
 
 #### Install Checkstyle plugin in IntelliJ IDEA
 1. Download the Checkstyle plugin in the settings, and restart your IDE.
@@ -93,6 +103,9 @@ docker volume rm rfobaden-incident-manager_frontend.node_modules
 Drop the database:
 ```shell
 docker volume rm rfobaden-incident-manager_database
+
+# Remove all remaining containers, drop the database, then restart:
+docker compose down && docker volume rm rfobaden-incident-manager_database && docker compose up
 ```
 
 ## Testing
@@ -116,13 +129,13 @@ npm run test
 
 # locally, using the interactive test runner
 cd frontend
-npm run test --watch
+npm run test -- --watch
 
 # in docker
-docker compose run --no-deps npm run test
+docker compose run --no-deps frontend npm run test
 
 # in docker, using the interactive test runner
-docker compose run --no-deps npm run test --watch 
+docker compose run --no-deps frontend npm run test --watch 
 ```
 
 Backend tests can also be run inside IntelliJ, which also offers built-in coverage testing.

@@ -13,12 +13,20 @@ const UiTitle: React.VFC<Props> = ({
     <LinkContainer>
       {links.map((link) => (
         <React.Fragment key={link.label}>
-          <UiLink href={link.url}>
-            {link.label}
-          </UiLink>
+          {link.url === undefined ? (
+            <LabelContainer>
+              {link.label}
+            </LabelContainer>
+          ) : (
+            <UiLink href={link.url} isText>
+              {link.label}
+            </UiLink>
+          )}
           <SpacerArrow>/</SpacerArrow>
         </React.Fragment>
       ))}
+      {/* to reserve height */}
+      {links.length === 0 ? (<LabelContainer />) : ''}
     </LinkContainer>
   )
 }
@@ -26,9 +34,13 @@ const UiTitle: React.VFC<Props> = ({
 export default UiTitle
 
 export interface Link {
-  url: string
+  url?: string
   label: string
 }
+
+const LabelContainer = styled.div`
+  display: inline-block;
+`
 
 const LinkContainer = styled.div`
   margin: 1rem 0;
@@ -37,8 +49,8 @@ const LinkContainer = styled.div`
 const SpacerArrow = styled.div`
   display: inline-block;
   margin: 0 0.5rem;
-  
-  :last-child{
+
+  :last-child {
     display: none;
   }
 `

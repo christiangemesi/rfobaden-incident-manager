@@ -1,5 +1,5 @@
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Priority from '@/models/Priority'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -12,6 +12,7 @@ interface Props extends StyledProps {
   title: string
   user: string
   color?: ColorName
+  isClosed?: boolean
   children: ReactNode
   onClick?: EventHandler<MouseEvent>
 }
@@ -23,6 +24,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   color,
   className,
   style,
+  isClosed = false,
   children,
   onClick: handleClick,
 }: Props) => {
@@ -35,7 +37,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   }
 
   return (
-    <UiListItem onClick={handleClick} color={color} style={style} className={className}>
+    <StyledListItem isClosed={isClosed} color={color} style={style} className={className} onClick={handleClick}>
       <CenterBox>
         <StyledPriority>
           {priorityIcon}
@@ -50,10 +52,25 @@ const UiListItemWithDetails: React.VFC<Props> = ({
       <CenterBox>
         {children}
       </CenterBox>
-    </UiListItem>
+    </StyledListItem>
   )
 }
 export default styled(UiListItemWithDetails)``
+
+const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
+  transition: 150ms ease-in;
+  transition-property: filter, opacity, color, background-color;
+  
+  ${({ isClosed }) => isClosed && css`
+    filter: grayscale(0.75);
+    opacity: 0.75;
+    
+    &:hover {
+      filter: grayscale(0.75);
+      opacity: 1;
+    }
+  `}
+`
 
 const StyledPriority = styled.div`
   display: inline-flex;

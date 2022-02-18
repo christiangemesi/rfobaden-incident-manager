@@ -27,6 +27,8 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closedAt: null,
     startsAt: null,
     endsAt: null,
+    closedReportIds: [],
+    reportIds: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -42,6 +44,8 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closedAt: [],
     isClosed: [],
     endsAt: [],
+    closedReportIds: [],
+    reportIds: [],
   }))
 
   useSubmit(form, async (incidentData: ModelData<Incident>) => {
@@ -58,7 +62,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
   useCancel(form, handleClose)
 
   return (
-    <form>
+    <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.title}>{(props) => (
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
@@ -83,7 +87,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
 
         <UiForm.Buttons form={form} />
       </FormContainer>
-    </form>
+    </UiForm>
   )
 }
 
