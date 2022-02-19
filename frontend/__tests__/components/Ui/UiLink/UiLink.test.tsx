@@ -12,6 +12,7 @@ describe('UiLink', () => {
   it('should be "a" tag with content', () => {
     const html = shallow(<UiLink href={url}>{content}</UiLink>)
     expect(html.html()).toContain('</a>') // check on end tag as otherwise could be in text
+    expect(html.html()).toContain(`href="${content}"`)
     expect(html.html()).toContain(content)
   })
 })
