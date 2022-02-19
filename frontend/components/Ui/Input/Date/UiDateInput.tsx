@@ -17,14 +17,14 @@ interface Props extends UiInputProps<Date | null> {
 }
 
 const UiDateInput: React.VFC<Props> = ({
+  value,
   label,
   placeholder = '',
   onChange: handleChange,
   errors = [],
 }) => {
 
-  // const [text, setText] = useState<string | null>(null)
-  const [date, setDate] = useState<Date | null>(null)
+  const [date, setDate] = useState<Date | null>(value)
   const [isInvalid, setInvalid] = useState<boolean>(false)
 
   useUpdateEffect(() => {
@@ -33,10 +33,6 @@ const UiDateInput: React.VFC<Props> = ({
       setInvalid(false)
       return
     }
-    // const [date, time] = text.split(' ', 2).map((n) => n.trim())
-    // const [hour, min] = time === undefined ? [0, 0] : time.split(':', 2).map((n) => parseInt(n.trim()))
-    // const [day, month, year] = date.split('.', 3).map((n) => parseInt(n.trim()))
-    // const newDate = new Date(Date.UTC(year, month - 1, day, hour - 1, min))
 
     if (isNaN(date.getTime())) {
       handleChange(null)
