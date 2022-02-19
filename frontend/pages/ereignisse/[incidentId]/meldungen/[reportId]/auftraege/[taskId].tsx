@@ -279,6 +279,7 @@ const Details = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 `
 
 const BlockContainer = styled.div`

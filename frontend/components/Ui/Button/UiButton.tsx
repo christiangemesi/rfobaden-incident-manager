@@ -4,7 +4,7 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { ColorName, contrastDark } from '@/theme'
 import { PropsOf } from '@emotion/react'
 
-interface Props extends StyledProps {
+export interface Props extends StyledProps {
 
   /**
    * Tooltip while hovering.
