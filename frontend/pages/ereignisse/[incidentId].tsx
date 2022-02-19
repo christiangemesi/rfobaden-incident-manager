@@ -16,7 +16,6 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
-import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import * as ReactDOM from 'react-dom'
@@ -24,7 +23,6 @@ import IncidentView from '@/components/Incident/View/IncidentView'
 import Task, { parseTask } from '@/models/Task'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import ReportForm from '@/components/Report/Form/ReportForm'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
@@ -186,24 +184,8 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
       <UiGrid gapH={4}>
 
         <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
-          <Actions>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiActionButton onClick={open}>
-                  <UiIcon.CreateAction />
-                </UiActionButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung erfassen
-                  </UiTitle>
-                  <ReportForm incident={incident} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-          </Actions>
           <ReportList
+            incident={incident}
             reports={reports}
             onClick={(report) => setSelectedReportId(report.id)}
             activeReport={selectedReport}
@@ -323,8 +305,3 @@ const BlockContainer = styled.div`
   width: 100%;
 `
 
-const Actions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-`

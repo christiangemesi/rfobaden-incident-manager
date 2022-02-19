@@ -15,7 +15,6 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import { useIncident } from '@/stores/IncidentStore'
-import TaskForm from '@/components/Task/Form/TaskForm'
 import ReportForm from '@/components/Report/Form/ReportForm'
 
 interface Props {
@@ -74,22 +73,6 @@ const ReportView: React.VFC<Props> = ({ report }) => {
               )}</UiModal.Body>
             </UiModal>
 
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiIconButton onClick={open}>
-                  <UiIcon.CreateAction />
-                </UiIconButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <div>
-                  <UiTitle level={1} isCentered>
-                    Auftrag erfassen
-                  </UiTitle>
-                  <TaskForm incident={incident} report={report} onClose={close} />
-                </div>
-              )}</UiModal.Body>
-            </UiModal>
-
             <UiIconButton onClick={handleDelete}>
               <UiIcon.DeleteAction />
             </UiIconButton>
@@ -123,8 +106,12 @@ const ReportView: React.VFC<Props> = ({ report }) => {
           </UiTextWithIcon>
         </VerticalSpacer>
       )}
+
       <BlockContainer>
-        <TaskList tasks={tasks} />
+        <TaskList
+          incident={incident}
+          report={report}
+          tasks={tasks} />
       </BlockContainer>
     </UiGrid>
   )

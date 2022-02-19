@@ -6,7 +6,6 @@ import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import User, { parseUser, useUsername } from '@/models/User'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUser } from '@/stores/UserStore'
 import TaskStore, { useTask } from '@/stores/TaskStore'
@@ -25,7 +24,6 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import TaskForm from '@/components/Task/Form/TaskForm'
-import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import SubtaskView from '@/components/Subtask/View/SubtaskView'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
@@ -173,28 +171,6 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
       <UiGrid gapH={4}>
         <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
-          <FloatingActionButton>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiActionButton onClick={open}>
-                  <UiIcon.CreateAction />
-                </UiActionButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <div>
-                  <UiTitle level={1} isCentered>
-                    Teilauftrag erfassen
-                  </UiTitle>
-                  <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
-                </div>
-              )}</UiModal.Body>
-            </UiModal>
-          </FloatingActionButton>
-        </UiGrid.Col>
-      </UiGrid>
-
-      <UiGrid gapH={4}>
-        <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
           <SubtaskList
             incident={incident}
             report={report}
@@ -303,17 +279,11 @@ const Details = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 `
 
 const BlockContainer = styled.div`
   width: 100%;
-`
-
-const FloatingActionButton = styled.div`
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: end;
-  right: 0;
 `
 
 const PriorityIcon = styled.span`
