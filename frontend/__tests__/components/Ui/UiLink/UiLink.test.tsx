@@ -5,7 +5,7 @@
 import { shallow } from 'enzyme'
 import UiLink from '@/components/Ui/Link/UiLink'
 
-const url = 'www.google.com'
+const url = 'https://google.com'
 const content = 'A link to google'
 
 describe('UiLink', () => {
