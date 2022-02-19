@@ -6,7 +6,7 @@ import DateFnsUtils from '@date-io/date-fns'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import styled, { css } from 'styled-components'
 import { contrastDark, defaultTheme } from '@/theme'
-import { createMuiTheme, IconButton, InputAdornment } from '@material-ui/core'
+import { createTheme, IconButton, InputAdornment } from '@material-ui/core'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ThemeProvider } from '@material-ui/styles'
 
@@ -50,9 +50,7 @@ const UiDateInput: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
 
-  const materialTheme = createMuiTheme({
-
-  })
+  const materialTheme = createTheme({})
 
   return (
     <Label>
@@ -123,14 +121,29 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
     padding: 0.5rem;
   }
 
+  .MuiInputAdornment-root {
+    height: 100%;
+  }
+
   .MuiIconButton-root {
     background: ${defaultTheme.colors.primary.value};
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 0.15rem 0.6rem;
     border: solid 1px ${contrastDark};
+    height: 120%;
+
+    :hover {
+      background: ${defaultTheme.colors.primary.value};
+      filter: brightness(130%);
+    }
+
+    .MuiIconButton-label {
+      height: 100%;
+    }
 
     .MuiSvgIcon-root {
       fill: white;
+      max-height: 90%;
     }
   }
 
