@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Closed report, task and subtask list items will now appear slightly greyed out.
 
 ### Changed
-- Restructured the incidents.
+- Restructured the incidents page.
 - Renamed the _creator_ role to _agent_.
 - The design of the priority icons has been updated.
 - The design of the create buttons has been updated, and the buttons have been positioned differently.
