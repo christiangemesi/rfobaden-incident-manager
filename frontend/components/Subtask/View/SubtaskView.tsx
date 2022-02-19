@@ -17,6 +17,7 @@ import { contrastDark } from '@/theme'
 import BackendService from '@/services/BackendService'
 import { useUsername } from '@/models/User'
 import SubtaskStore from '@/stores/SubtaskStore'
+import { useRouter } from 'next/router'
 
 
 interface Props {
@@ -32,12 +33,11 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
 
   const startDate = subtask.startsAt !== null ? subtask.startsAt : subtask.createdAt
 
+  const router = useRouter()
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Teilauftrag "${subtask.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id)
-
-      // todo what about report and incident? also updating or leaving
-
+      await router.push(`/ereignisse/${incident.id}/meldungen/${report.id}/auftraege/${task.id}`, undefined, { shallow: true })
       SubtaskStore.remove(subtask.id)
     }
   }
