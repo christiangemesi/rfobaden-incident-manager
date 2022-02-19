@@ -9,6 +9,7 @@ const UiDateInputExample: React.VFC = () => {
   return(
     <UiContainer>
       <UiDateInput value={value} onChange={setValue} label="Date Input" placeholder="dd.MM.yyyy hh:mm" />
+      <div>Normal Input showing change</div>
       <UiTextInput value={value?.toLocaleString()??''} onChange={function () {return}} />
     </UiContainer>
   )
