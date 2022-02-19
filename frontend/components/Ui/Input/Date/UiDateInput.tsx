@@ -5,10 +5,12 @@ import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pi
 import DateFnsUtils from '@date-io/date-fns'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import styled, { css } from 'styled-components'
-import { contrastDark, defaultTheme } from '@/theme'
+import { contrastDark, contrastLight, defaultTheme } from '@/theme'
 import { createTheme, IconButton, InputAdornment } from '@material-ui/core'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ThemeProvider } from '@material-ui/styles'
+import UiButton from '@/components/Ui/Button/UiButton'
+import { de } from 'date-fns/locale'
 
 
 interface Props extends UiInputProps<Date | null> {
@@ -46,7 +48,129 @@ const UiDateInput: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
 
-  const materialTheme = createTheme({})
+  const materialTheme = createTheme({
+    overrides: {
+      MuiPickersToolbar: {
+        toolbar: {
+          backgroundColor: defaultTheme.colors.primary.value,
+          '& *': {
+            fontFamily: defaultTheme.fonts.body,
+          },
+          '& h3': {
+            fontSize: '2rem',
+          },
+          '& h4': {
+            fontSize: '1.7rem',
+            paddingRight: '0.5rem',
+          },
+        },
+      },
+      MuiPickerDTTabs: {
+        tabs: {
+          backgroundColor: defaultTheme.colors.primary.value,
+          color: defaultTheme.colors.primary.contrast,
+          fontFamily: defaultTheme.fonts.body,
+        },
+        'button': {
+          ':hover': {
+            filter: 'brightness(130%)',
+          },
+        },
+      },
+      MuiPickersCalendarHeader: {
+        switchHeader: {
+          '& *': {
+            color: contrastDark,
+            fontFamily: defaultTheme.fonts.body,
+          },
+        },
+        dayLabel: {
+          color: contrastDark,
+          fontFamily: defaultTheme.fonts.body,
+        },
+      },
+      MuiPickersDay: {
+        day: {
+          color: defaultTheme.colors.primary.value,
+          fontFamily: defaultTheme.fonts.body,
+          '&:hover': {
+            backgroundColor: defaultTheme.colors.secondary.value,
+            color: defaultTheme.colors.secondary.contrast,
+          },
+          '& *': {
+            fontFamily: defaultTheme.fonts.body,
+          },
+        },
+        daySelected: {
+          color: defaultTheme.colors.primary.contrast,
+          backgroundColor: defaultTheme.colors.primary.value,
+          fontFamily: defaultTheme.fonts.body,
+          '&:hover': {
+            color: defaultTheme.colors.primary.contrast,
+            backgroundColor: defaultTheme.colors.primary.value,
+            filter: 'brightness(130%)',
+          },
+        },
+        dayDisabled: {
+          color: defaultTheme.colors.primary.value,
+          fontFamily: defaultTheme.fonts.body,
+        },
+        current: {
+          color: contrastDark,
+          fontFamily: defaultTheme.fonts.body,
+        },
+      },
+      MuiPickersYear: {
+        yearSelected: {
+          color: defaultTheme.colors.primary.value,
+          fontFamily: defaultTheme.fonts.body,
+        },
+        root: {
+          color: contrastDark,
+          fontFamily: defaultTheme.fonts.body,
+          '&:hover': {
+            backgroundColor: defaultTheme.colors.secondary.value,
+          },
+        },
+      },
+      MuiPickersClockNumber: {
+        clockNumber: {
+          fontFamily: defaultTheme.fonts.body,
+          color: contrastDark,
+        },
+        clockNumberSelected: {
+          fontFamily: defaultTheme.fonts.body,
+          color: contrastLight,
+        },
+      },
+      MuiPickersClock: {
+        pin: {
+          backgroundColor: defaultTheme.colors.primary.value,
+        },
+      },
+      MuiPickersClockPointer: {
+        thumb: {
+          borderColor: defaultTheme.colors.primary.value,
+        },
+        noPoint: {
+          backgroundColor: defaultTheme.colors.primary.value,
+        },
+        pointer: {
+          backgroundColor: defaultTheme.colors.primary.value,
+        },
+        animateTransform: {
+          transition: 'none',
+        },
+      },
+      MuiPickersModal: {
+        dialogAction: {
+          color: defaultTheme.colors.primary.value,
+          fontFamily: defaultTheme.fonts.body,
+        },
+
+      },
+    },
+  })
 
   return (
     <Label>
@@ -57,16 +181,21 @@ const UiDateInput: React.VFC<Props> = ({
       )}
       <InputAndErrorBox hasError={hasError}>
         <ThemeProvider theme={materialTheme}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <MuiPickersUtilsProvider locale={de} utils={DateFnsUtils}>
             <KeyboardDateTimePicker
               autoOk
               clearable
-              ampm={false}
               value={date}
-              onChange={setDate}
-              format="dd.MM.yyyy   HH:mm"
-              placeholder={placeholder}
               error={isInvalid}
+              onChange={setDate}
+              placeholder={placeholder}
+              ampm={false}
+              allowKeyboardControl={true}
+              format="dd.MM.yyyy   HH:mm"
+              invalidDateMessage="muss das Format TT.MM.JJJJ hh:mm haben"
+              okLabel={<UiButton color="success"><UiIcon.SubmitAction /></UiButton>}
+              cancelLabel={<UiButton color="error"><UiIcon.CancelAction /></UiButton>}
+              clearLabel={<UiButton color="secondary">Leeren</UiButton>}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
