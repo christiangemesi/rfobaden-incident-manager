@@ -9,10 +9,11 @@ import {
   mdiCheck,
   mdiCheckboxBlankOutline,
   mdiCheckboxMarked,
+  mdiClipboardTextOutline,
   mdiClose,
   mdiDelete,
-  mdiFlash,
   mdiImageFilterHdr,
+  mdiKey,
   mdiMap,
   mdiMapMarker,
   mdiMenu,
@@ -20,7 +21,6 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
-  mdiClipboardTextOutline,
 } from '@mdi/js'
 
 
@@ -65,7 +65,7 @@ const makeNamedIcon = (path: string): React.VFC<NamedIconProps> => {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   Empty: makeNamedIcon(''),
-  KeyMessage: makeNamedIcon(mdiFlash),
+  KeyMessage: makeNamedIcon(mdiKey),
   LocationRelevancy: makeNamedIcon(mdiImageFilterHdr),
   Attachments: makeNamedIcon(mdiPaperclip),
   CreateAction: makeNamedIcon(mdiPlus),
