@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { UiInputProps } from '@/components/Ui/Input'
 import { useUpdateEffect } from 'react-use'
-import { DateTimePicker } from '@material-ui/pickers'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 
 interface Props extends UiInputProps<Date | null> {
@@ -18,11 +17,12 @@ const UiDateInput: React.VFC<Props> = ({
   errors = [],
 }) => {
 
-  const [text, setText] = useState<string|null>(null)
+  const [text, setText] = useState<string | null>(null)
+  const [date, setDate] = useState<Date | null>(null)
   const [isInvalid, setInvalid] = useState<boolean>(false)
 
   useUpdateEffect(() => {
-    if(text === null) {
+    if (text === null) {
       handleChange(null)
       setInvalid(false)
       return
@@ -30,7 +30,7 @@ const UiDateInput: React.VFC<Props> = ({
     const [date, time] = text.split(' ', 2).map((n) => n.trim())
     const [hour, min] = time === undefined ? [0, 0] : time.split(':', 2).map((n) => parseInt(n.trim()))
     const [day, month, year] = date.split('.', 3).map((n) => parseInt(n.trim()))
-    const newDate = new Date(Date.UTC(year, month - 1, day, hour - 1, min ))
+    const newDate = new Date(Date.UTC(year, month - 1, day, hour - 1, min))
 
     if (isNaN(newDate.getTime())) {
       handleChange(null)
@@ -41,22 +41,23 @@ const UiDateInput: React.VFC<Props> = ({
     setInvalid(false)
   }, [text])
 
-  return(
+  return (
     <div>
-      <UiTextInput label={label} placeholder={placeholder} value={text} onChange={setText} errors={isInvalid ? ['ist invalid', ...errors] : errors}>
-        <UiIcon.Calendar />
-      </UiTextInput>
-      <DateTimePicker
-        autoOk
-        ampm={false}
-        disableFuture
-        value={text}
-        onChange={setText}
-        label={label}
-        format="dd.MM.yyyy HH:mm"
-      />
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        {/*<UiTextInput label={label} placeholder={placeholder} value={text} onChange={setText} errors={isInvalid ? ['ist invalid', ...errors] : errors}>*/}
+        {/*  <UiIcon.Calendar />*/}
+        {/*</UiTextInput>*/}
+        <DateTimePicker
+          autoOk
+          ampm={false}
+          disableFuture
+          value={date}
+          onChange={setDate}
+          label={label}
+          format="dd.MM.yyyy HH:mm"
+        />
+      </MuiPickersUtilsProvider>
     </div>
-
   )
 }
 
