@@ -76,8 +76,8 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
 
   transition: 250ms ease;
   transition-property: border-color;
-
 `
+
 const AdditionalInput = styled.div<{ isClickable: boolean }>`
   background: ${defaultTheme.colors.primary.value};
   margin-top: 0.25rem;
@@ -100,6 +100,7 @@ const AdditionalInput = styled.div<{ isClickable: boolean }>`
     cursor: pointer;
   `}
 `
+
 const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
@@ -115,8 +116,7 @@ const StyledLabel = styled.label`
 
 const InputAndErrorBox = styled.div<{hasError: boolean}>`
   display: flex;
-
-
+  
   ${({ hasError }) => !hasError && css`
     & > ${StyledInput} {
       :active, :focus {
