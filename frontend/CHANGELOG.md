@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > The next full release will contain all of these `dev` releases, which will also be reflected in this changelog.  
 > Be aware that `dev` releases **do not** follow semantic versioning.
 
+## [0.3.0-dev4] - 2022-02-18
+### Changed
+- The design of the priority icons has been updated.
+
 ## [0.3.0-dev3] - 2022-02-16
 ### Added
 - The changelog is now available under `/changelog`.
