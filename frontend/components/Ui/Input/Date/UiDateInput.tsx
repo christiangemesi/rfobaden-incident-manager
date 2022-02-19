@@ -3,6 +3,7 @@ import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { UiInputProps } from '@/components/Ui/Input'
 import { useUpdateEffect } from 'react-use'
+import { DateTimePicker } from '@material-ui/pickers'
 
 
 interface Props extends UiInputProps<Date | null> {
@@ -45,6 +46,15 @@ const UiDateInput: React.VFC<Props> = ({
       <UiTextInput label={label} placeholder={placeholder} value={text} onChange={setText} errors={isInvalid ? ['ist invalid', ...errors] : errors}>
         <UiIcon.Calendar />
       </UiTextInput>
+      <DateTimePicker
+        autoOk
+        ampm={false}
+        disableFuture
+        value={text}
+        onChange={setText}
+        label={label}
+        format="dd.MM.yyyy HH:mm"
+      />
     </div>
 
   )
