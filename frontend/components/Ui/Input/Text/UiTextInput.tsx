@@ -2,7 +2,6 @@ import React, { ChangeEvent, ReactNode, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
-import { contrastDark, defaultTheme } from '@/theme'
 
 interface Props extends UiInputProps<string | null> {
   label?: string
@@ -45,11 +44,17 @@ const UiTextInput: React.VFC<Props> = ({
         </span>
       )}
       <InputAndErrorBox hasError={hasError}>
-        <StyledInput value={value ?? ''} onChange={handleChange} type={type} placeholder={placeholder} hasChildren={hasChildren} />
-        {hasChildren ?
+        <StyledInput
+          value={value ?? ''}
+          onChange={handleChange}
+          type={type}
+          placeholder={placeholder}
+          hasChildren={hasChildren} />
+        {hasChildren && (
           <AdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
             {children}
-          </AdditionalInput>: null}
+          </AdditionalInput>
+        )}
       </InputAndErrorBox>
 
       <UiInputErrors errors={errors} />
@@ -58,14 +63,14 @@ const UiTextInput: React.VFC<Props> = ({
 }
 export default UiTextInput
 
-const StyledInput = styled.input<{hasChildren: boolean}>`
+const StyledInput = styled.input<{ hasChildren: boolean }>`
   padding: 0.5rem;
   margin-top: 0.25rem;
   font-size: 0.9rem;
   border-radius: 0.5rem;
   outline: none;
   width: 100%;
-  border: 1px solid ${contrastDark};
+  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
   font-family: ${({ theme }) => theme.fonts.body};
 
   ${({ hasChildren }) => hasChildren && css`
@@ -76,30 +81,31 @@ const StyledInput = styled.input<{hasChildren: boolean}>`
 
   transition: 250ms ease;
   transition-property: border-color;
-
 `
+
 const AdditionalInput = styled.div<{ isClickable: boolean }>`
-  background: ${defaultTheme.colors.primary.value};
+  background: ${({ theme }) => theme.colors.primary.value};
   margin-top: 0.25rem;
-  outline: none; 
-  border: 1px solid ${contrastDark};
-  border-radius: 0  0.5rem 0.5rem 0;
+  outline: none;
+  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border-radius: 0 0.5rem 0.5rem 0;
   width: 40px;
   height: 35px;
-  
+
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  
-  color: ${defaultTheme.colors.primary.contrast};
+
+  color: ${({ theme }) => theme.colors.primary.contrast};
 
   transition: 250ms ease;
   transition-property: border-color;
-  
+
   ${({ isClickable }) => isClickable && css`
     cursor: pointer;
   `}
 `
+
 const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
@@ -113,16 +119,16 @@ const StyledLabel = styled.label`
   }
 `
 
-const InputAndErrorBox = styled.div<{hasError: boolean}>`
+const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   display: flex;
-
 
   ${({ hasError }) => !hasError && css`
     & > ${StyledInput} {
       :active, :focus {
-        border-color:  ${defaultTheme.colors.primary.value};
+        border-color: ${({ theme }) => theme.colors.primary.value};
+
         & + ${AdditionalInput} {
-          border-color:  ${defaultTheme.colors.primary.value};
+          border-color: ${({ theme }) => theme.colors.primary.value};
         }
       }
     }
@@ -131,9 +137,10 @@ const InputAndErrorBox = styled.div<{hasError: boolean}>`
   ${({ hasError }) => hasError && css`
     & > ${StyledInput} {
 
-      border-color:  ${defaultTheme.colors.error.value};
+      border-color: ${({ theme }) => theme.colors.error.value};
+
       & + ${AdditionalInput} {
-        border-color:  ${defaultTheme.colors.error.value};
+        border-color: ${({ theme }) => theme.colors.error.value};
       }
     }
   `}

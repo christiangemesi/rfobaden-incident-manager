@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The design of the priority icons has been updated.
 - The design of the create buttons has been updated, and the buttons have been positioned differently.
 - The icon for key reports has been changed to an actual key.
+- Date inputs can now be changed using a dialog containing a date/time selection.
 
 ### Fixed
 - Forms can now be submitted by clicking the enter key.

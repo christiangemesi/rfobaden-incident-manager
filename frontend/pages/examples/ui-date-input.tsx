@@ -1,14 +1,16 @@
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import { useState } from 'react'
+import UiContainer from '@/components/Ui/Container/UiContainer'
 
 const UiDateInputExample: React.VFC = () => {
   const [value, setValue] = useState<Date | null>(null)
 
-  return(
-    <div>
-      <UiDateInput value={value} onChange={setValue} label="Date Input" placeholder="dd.mm.yyyy hh:mm" />
+  return (
+    <UiContainer>
+      <UiDateInput value={value} onChange={setValue} label="Date Input" placeholder="dd.MM.yyyy hh:mm" />
+      <div>Date:</div>
       {value?.toLocaleString()}
-    </div>
+    </UiContainer>
   )
 }
 

@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
-import { contrastDark, defaultTheme } from '@/theme'
 
 interface Props extends UiInputProps<string | null> {
   label?: string,
@@ -56,7 +55,7 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   min-width: 100%; // so you cant resize it horizontally
   min-height: 2.1rem; // so you cant resize smaller then 1 row
-  border: 1px solid ${contrastDark};
+  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
   resize: vertical;
   transition: 250ms ease;
   transition-property: border-color;
@@ -81,14 +80,14 @@ const StyledDiv = styled.div<{ hasError: boolean }>`
   ${({ hasError }) => !hasError && css`
     & > ${StyledTextArea} {
       :active, :focus {
-        border-color: ${defaultTheme.colors.primary.value};
+        border-color: ${({ theme }) => theme.colors.primary.value};
       }
     }
   `}
 
   ${({ hasError }) => hasError && css`
     & > ${StyledTextArea} {
-      border-color: ${defaultTheme.colors.error.value};
+      border-color: ${({ theme }) => theme.colors.error.value};
     }
   `}
 `
