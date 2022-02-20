@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
 import { useUpdateEffect } from 'react-use'
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
-import styled, { css } from 'styled-components'
-import { contrastDark, contrastLight, defaultTheme } from '@/theme'
-import { createTheme, IconButton, InputAdornment } from '@material-ui/core'
+import styled, { css, useTheme } from 'styled-components'
+import { createTheme, IconButton, InputAdornment, Theme } from '@material-ui/core'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ThemeProvider } from '@material-ui/styles'
 import UiButton from '@/components/Ui/Button/UiButton'
@@ -48,129 +47,120 @@ const UiDateInput: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
 
-  const materialTheme = createTheme({
-    overrides: {
-      MuiPickersToolbar: {
-        toolbar: {
-          backgroundColor: defaultTheme.colors.primary.value,
-          '& *': {
-            fontFamily: defaultTheme.fonts.body,
+  const theme = useTheme()
+  const materialTheme: Theme = useMemo(() => {
+    return createTheme({
+      overrides: {
+        MuiPickersToolbar: {
+          toolbar: {
+            backgroundColor: theme.colors.primary.value,
+            '& *': {
+              fontFamily: theme.fonts.body,
+            },
+            '& h3': {
+              fontSize: '2rem',
+            },
+            '& h4': {
+              fontSize: '1.7rem',
+              paddingRight: '0.5rem',
+            },
           },
-          '& h3': {
-            fontSize: '2rem',
+        },
+        MuiPickerDTTabs: {
+          tabs: {
+            backgroundColor: theme.colors.primary.value,
+            color: theme.colors.primary.contrast,
+            fontFamily: theme.fonts.body,
           },
-          '& h4': {
-            fontSize: '1.7rem',
-            paddingRight: '0.5rem',
+        },
+        MuiPickersCalendarHeader: {
+          switchHeader: {
+            '& *': {
+              color: theme.colors.tertiary.contrast,
+              fontFamily: theme.fonts.body,
+            },
+          },
+          dayLabel: {
+            color: theme.colors.tertiary.contrast,
+            fontFamily: theme.fonts.body,
+          },
+        },
+        MuiPickersDay: {
+          day: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              backgroundColor: theme.colors.secondary.value,
+              color: theme.colors.secondary.contrast,
+            },
+            '& *': {
+              fontFamily: theme.fonts.body,
+            },
+          },
+          daySelected: {
+            color: theme.colors.primary.contrast,
+            backgroundColor: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              color: theme.colors.primary.contrast,
+              backgroundColor: theme.colors.primary.value,
+              filter: 'brightness(130%)',
+            },
+          },
+          dayDisabled: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+          },
+          current: {
+            color: theme.colors.tertiary.contrast,
+            fontFamily: theme.fonts.body,
+          },
+        },
+        MuiPickersYear: {
+          yearSelected: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+          },
+          root: {
+            color: theme.colors.tertiary.contrast,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              backgroundColor: theme.colors.secondary.value,
+            },
+          },
+        },
+        MuiPickersClockNumber: {
+          clockNumber: {
+            fontFamily: theme.fonts.body,
+            color: theme.colors.tertiary.contrast,
+          },
+          clockNumberSelected: {
+            fontFamily: theme.fonts.body,
+            color: theme.colors.tertiary.value,
+          },
+        },
+        MuiPickersClock: {
+          pin: {
+            backgroundColor: theme.colors.primary.value,
+          },
+        },
+        MuiPickersClockPointer: {
+          thumb: {
+            borderColor: theme.colors.primary.value,
+          },
+          noPoint: {
+            backgroundColor: theme.colors.primary.value,
+          },
+          pointer: {
+            backgroundColor: theme.colors.primary.value,
+          },
+          animateTransform: {
+            transition: 'none',
           },
         },
       },
-      MuiPickerDTTabs: {
-        tabs: {
-          backgroundColor: defaultTheme.colors.primary.value,
-          color: defaultTheme.colors.primary.contrast,
-          fontFamily: defaultTheme.fonts.body,
-        },
-        'button': {
-          ':hover': {
-            filter: 'brightness(130%)',
-          },
-        },
-      },
-      MuiPickersCalendarHeader: {
-        switchHeader: {
-          '& *': {
-            color: contrastDark,
-            fontFamily: defaultTheme.fonts.body,
-          },
-        },
-        dayLabel: {
-          color: contrastDark,
-          fontFamily: defaultTheme.fonts.body,
-        },
-      },
-      MuiPickersDay: {
-        day: {
-          color: defaultTheme.colors.primary.value,
-          fontFamily: defaultTheme.fonts.body,
-          '&:hover': {
-            backgroundColor: defaultTheme.colors.secondary.value,
-            color: defaultTheme.colors.secondary.contrast,
-          },
-          '& *': {
-            fontFamily: defaultTheme.fonts.body,
-          },
-        },
-        daySelected: {
-          color: defaultTheme.colors.primary.contrast,
-          backgroundColor: defaultTheme.colors.primary.value,
-          fontFamily: defaultTheme.fonts.body,
-          '&:hover': {
-            color: defaultTheme.colors.primary.contrast,
-            backgroundColor: defaultTheme.colors.primary.value,
-            filter: 'brightness(130%)',
-          },
-        },
-        dayDisabled: {
-          color: defaultTheme.colors.primary.value,
-          fontFamily: defaultTheme.fonts.body,
-        },
-        current: {
-          color: contrastDark,
-          fontFamily: defaultTheme.fonts.body,
-        },
-      },
-      MuiPickersYear: {
-        yearSelected: {
-          color: defaultTheme.colors.primary.value,
-          fontFamily: defaultTheme.fonts.body,
-        },
-        root: {
-          color: contrastDark,
-          fontFamily: defaultTheme.fonts.body,
-          '&:hover': {
-            backgroundColor: defaultTheme.colors.secondary.value,
-          },
-        },
-      },
-      MuiPickersClockNumber: {
-        clockNumber: {
-          fontFamily: defaultTheme.fonts.body,
-          color: contrastDark,
-        },
-        clockNumberSelected: {
-          fontFamily: defaultTheme.fonts.body,
-          color: contrastLight,
-        },
-      },
-      MuiPickersClock: {
-        pin: {
-          backgroundColor: defaultTheme.colors.primary.value,
-        },
-      },
-      MuiPickersClockPointer: {
-        thumb: {
-          borderColor: defaultTheme.colors.primary.value,
-        },
-        noPoint: {
-          backgroundColor: defaultTheme.colors.primary.value,
-        },
-        pointer: {
-          backgroundColor: defaultTheme.colors.primary.value,
-        },
-        animateTransform: {
-          transition: 'none',
-        },
-      },
-      MuiPickersModal: {
-        dialogAction: {
-          color: defaultTheme.colors.primary.value,
-          fontFamily: defaultTheme.fonts.body,
-        },
-
-      },
-    },
-  })
+    })
+  }, [theme])
 
   return (
     <Label>
@@ -185,17 +175,17 @@ const UiDateInput: React.VFC<Props> = ({
             <KeyboardDateTimePicker
               autoOk
               clearable
+              allowKeyboardControl
               value={date}
               error={isInvalid}
               onChange={setDate}
               placeholder={placeholder}
               ampm={false}
-              allowKeyboardControl={true}
-              format="dd.MM.yyyy   HH:mm"
-              invalidDateMessage="muss das Format TT.MM.JJJJ hh:mm haben"
+              format="dd.MM.yyyy HH:mm"
+              invalidDateMessage="muss das Format dd.MM.yyyy hh:mm haben"
               okLabel={<UiButton color="success"><UiIcon.SubmitAction /></UiButton>}
               cancelLabel={<UiButton color="error"><UiIcon.CancelAction /></UiButton>}
-              clearLabel={<UiButton color="secondary">Leeren</UiButton>}
+              clearLabel={<UiButton color="warning">Zurücksetzen</UiButton>}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -251,14 +241,14 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   }
 
   .MuiIconButton-root {
-    background: ${defaultTheme.colors.primary.value};
+    background: ${({ theme }) => theme.colors.primary.value};
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 0.15rem 0.6rem;
-    border: solid 1px ${contrastDark};
+    border: solid 1px ${({ theme }) => theme.colors.tertiary.contrast};
     height: 120%;
 
     :hover {
-      background: ${defaultTheme.colors.primary.value};
+      background: ${({ theme }) => theme.colors.primary.value};
       filter: brightness(130%);
     }
 
@@ -279,7 +269,7 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
     outline: none;
     width: 100%;
     background: white;
-    border: 1px solid ${contrastDark};
+    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
     font-family: ${({ theme }) => theme.fonts.body};
 
     transition: 250ms ease;
@@ -289,14 +279,14 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   ${({ hasError }) => !hasError && css`
     input {
       :active, :focus {
-        border-color: ${defaultTheme.colors.primary.value};
+        border-color: ${({ theme }) => theme.colors.primary.value};
       }
     }
   `}
 
   ${({ hasError }) => hasError && css`
     input {
-      border-color: ${defaultTheme.colors.error.value};
+      border-color: ${({ theme }) => theme.colors.error.value};
     }
   `}
 `
