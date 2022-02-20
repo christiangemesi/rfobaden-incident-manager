@@ -9,7 +9,7 @@ const ChangelogPage : React.VFC = () => {
   return (
     <UiContainer>
       <LogContainer className="markdown-body">
-        <ReactMarkdown children={changelog} />
+        <ReactMarkdown children={changelog} linkTarget="_blank" />
       </LogContainer>
     </UiContainer>
   )
@@ -22,5 +22,9 @@ const LogContainer = styled.div`
   
   ul {
     list-style: disc;
+  }
+  
+  em {
+    font-style: italic;
   }
 `

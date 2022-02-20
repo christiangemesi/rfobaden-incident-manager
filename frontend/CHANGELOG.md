@@ -4,50 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-> Releases labelled with `dev` are not yet production ready. They are, however, available on our development environment.  
-> The next full release will contain all of these `dev` releases, which will also be reflected in this changelog.  
-> Be aware that `dev` releases **do not** follow semantic versioning.
-
-## [0.3.0-dev5] - 2022-02-18
-### Changed
-- The design of the create buttons has been updated, and the buttons have been positioned differently.
-
-## [0.3.0-dev4] - 2022-02-18
-### Changed
-- The design of the priority icons has been updated.
-
-## [0.3.0-dev3] - 2022-02-16
+## [Unreleased]
 ### Added
-- The changelog is now available under `/changelog`.
+- Organizations can now be managed at `/organizations`.
+- Users can now belong to an organization.
+- The organizations involved with a specific incident are shown in the incident list.
+- The organizations involved with a specific incident are shown in that incidents detail page at.
+- All pages now include a shared header.
+- The changelog is now available at `/changelog`.
+- The task view now includes breadcrumbs to navigate back to the report and incident it belongs to.
 - Incidents, reports, tasks and subtask are now sorted according to priority and close status.
 - Closed report, task and subtask list items will now appear slightly greyed out.
 
+### Changed
+- Restructured the incidents page.
+- Renamed the _creator_ role to _agent_.
+- The design of the priority icons has been updated.
+- The design of the create buttons has been updated, and the buttons have been positioned differently.
+- The icon for key reports has been changed to an actual key.
+
 ### Fixed
+- Forms can now be submitted by clicking the enter key.
 - Incident deletion now correctly clears local data, which means incidents will no longer be visible right after deletion.
+- The amount of closed subparts (e.g. closed reports in an incident) now gets displayed and updated correctly.
 - Hovering of incident and report list items no longer causes the items to light up excessively.
 - Line breaks in the description of incidents, reports, tasks and subtasks will now be displayed correctly.
 - Changing from a report with a large amount of tasks to one with a smaller amount will no longer cause the page scroll to jump upwards.
-
-## [0.3.0-dev2] - 2022-02-06
-### Added
-- Added breadcrumbs to easily navigate and differentiate between the parts of an incident.
-
-### Changed
-- Forms can now be submitted by clicking the enter key.
-
-### Fixed
-- The amount of closed subparts (e.g. closed reports in an incident) now gets displayed and updated correctly.
-
-## [0.3.0-dev1] - 2022-01-19
-### Added
-- Added organization management.
-- Users can now belong to an organization.
-- The organizations involved with a specific incident are listed on it.
-- Add a page header.
-
-### Changed
-- Restructured the incidents page at `/incidents`.
-- Renamed the _creator_ role to _agent_.
+- Deletion of tasks and subtasks now correctly reroutes back to the respective parent page.
 
 ## [0.2.0] - 2021-12-03
 ### Added
