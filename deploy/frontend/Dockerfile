@@ -1,7 +1,7 @@
 # Dependency Stage.
 # Only downloads (and caches) node_modules.
 # This allows us to skip this step if no dependencies have changed since the last build.
-FROM node:16-alpine3.11 as deps
+FROM node:16-alpine3.15 as deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -11,7 +11,7 @@ RUN npm install --quiet
 
 # Build Stage.
 # Compiles the frontend code.
-FROM node:16-alpine3.11 as build
+FROM node:16-alpine3.15 as build
 WORKDIR /app
 
 ARG RFO_BACKEND_URL
@@ -29,7 +29,7 @@ RUN npm install --production --ignore-scripts
 
 
 # Production stage.
-FROM node:16-alpine3.11
+FROM node:16-alpine3.15
 WORKDIR /app
 
 ENV NODE_ENV production
