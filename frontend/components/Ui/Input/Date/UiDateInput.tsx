@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
 import { useUpdateEffect } from 'react-use'
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import styled, { css, useTheme } from 'styled-components'
-import { createTheme, IconButton, InputAdornment } from '@material-ui/core'
+import { createTheme, IconButton, InputAdornment, Theme } from '@material-ui/core'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ThemeProvider } from '@material-ui/styles'
 import UiButton from '@/components/Ui/Button/UiButton'
@@ -48,121 +48,119 @@ const UiDateInput: React.VFC<Props> = ({
   const hasError = errors.length !== 0
 
   const theme = useTheme()
-  // const dateTimePicker = useMemo(() -> {
-  const materialTheme = createTheme({
-    overrides: {
-      MuiPickersToolbar: {
-        toolbar: {
-          backgroundColor: theme.colors.primary.value,
-          '& *': {
+  const materialTheme: Theme = useMemo(() => {
+    return createTheme({
+      overrides: {
+        MuiPickersToolbar: {
+          toolbar: {
+            backgroundColor: theme.colors.primary.value,
+            '& *': {
+              fontFamily: theme.fonts.body,
+            },
+            '& h3': {
+              fontSize: '2rem',
+            },
+            '& h4': {
+              fontSize: '1.7rem',
+              paddingRight: '0.5rem',
+            },
+          },
+        },
+        MuiPickerDTTabs: {
+          tabs: {
+            backgroundColor: theme.colors.primary.value,
+            color: theme.colors.primary.contrast,
             fontFamily: theme.fonts.body,
           },
-          '& h3': {
-            fontSize: '2rem',
-          },
-          '& h4': {
-            fontSize: '1.7rem',
-            paddingRight: '0.5rem',
-          },
         },
-      },
-      MuiPickerDTTabs: {
-        tabs: {
-          backgroundColor: theme.colors.primary.value,
-          color: theme.colors.primary.contrast,
-          fontFamily: theme.fonts.body,
-        },
-      },
-      MuiPickersCalendarHeader: {
-        switchHeader: {
-          '& *': {
+        MuiPickersCalendarHeader: {
+          switchHeader: {
+            '& *': {
+              color: theme.colors.tertiary.contrast,
+              fontFamily: theme.fonts.body,
+            },
+          },
+          dayLabel: {
             color: theme.colors.tertiary.contrast,
             fontFamily: theme.fonts.body,
           },
         },
-        dayLabel: {
-          color: theme.colors.tertiary.contrast,
-          fontFamily: theme.fonts.body,
-        },
-      },
-      MuiPickersDay: {
-        day: {
-          color: theme.colors.primary.value,
-          fontFamily: theme.fonts.body,
-          '&:hover': {
-            backgroundColor: theme.colors.secondary.value,
-            color: theme.colors.secondary.contrast,
+        MuiPickersDay: {
+          day: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              backgroundColor: theme.colors.secondary.value,
+              color: theme.colors.secondary.contrast,
+            },
+            '& *': {
+              fontFamily: theme.fonts.body,
+            },
           },
-          '& *': {
+          daySelected: {
+            color: theme.colors.primary.contrast,
+            backgroundColor: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              color: theme.colors.primary.contrast,
+              backgroundColor: theme.colors.primary.value,
+              filter: 'brightness(130%)',
+            },
+          },
+          dayDisabled: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+          },
+          current: {
+            color: theme.colors.tertiary.contrast,
             fontFamily: theme.fonts.body,
           },
         },
-        daySelected: {
-          color: theme.colors.primary.contrast,
-          backgroundColor: theme.colors.primary.value,
-          fontFamily: theme.fonts.body,
-          '&:hover': {
-            color: theme.colors.primary.contrast,
+        MuiPickersYear: {
+          yearSelected: {
+            color: theme.colors.primary.value,
+            fontFamily: theme.fonts.body,
+          },
+          root: {
+            color: theme.colors.tertiary.contrast,
+            fontFamily: theme.fonts.body,
+            '&:hover': {
+              backgroundColor: theme.colors.secondary.value,
+            },
+          },
+        },
+        MuiPickersClockNumber: {
+          clockNumber: {
+            fontFamily: theme.fonts.body,
+            color: theme.colors.tertiary.contrast,
+          },
+          clockNumberSelected: {
+            fontFamily: theme.fonts.body,
+            color: theme.colors.tertiary.value,
+          },
+        },
+        MuiPickersClock: {
+          pin: {
             backgroundColor: theme.colors.primary.value,
-            filter: 'brightness(130%)',
           },
         },
-        dayDisabled: {
-          color: theme.colors.primary.value,
-          fontFamily: theme.fonts.body,
-        },
-        current: {
-          color: theme.colors.tertiary.contrast,
-          fontFamily: theme.fonts.body,
-        },
-      },
-      MuiPickersYear: {
-        yearSelected: {
-          color: theme.colors.primary.value,
-          fontFamily: theme.fonts.body,
-        },
-        root: {
-          color: theme.colors.tertiary.contrast,
-          fontFamily: theme.fonts.body,
-          '&:hover': {
-            backgroundColor: theme.colors.secondary.value,
+        MuiPickersClockPointer: {
+          thumb: {
+            borderColor: theme.colors.primary.value,
+          },
+          noPoint: {
+            backgroundColor: theme.colors.primary.value,
+          },
+          pointer: {
+            backgroundColor: theme.colors.primary.value,
+          },
+          animateTransform: {
+            transition: 'none',
           },
         },
       },
-      MuiPickersClockNumber: {
-        clockNumber: {
-          fontFamily: theme.fonts.body,
-          color: theme.colors.tertiary.contrast,
-        },
-        clockNumberSelected: {
-          fontFamily: theme.fonts.body,
-          color: theme.colors.tertiary.value,
-        },
-      },
-      MuiPickersClock: {
-        pin: {
-          backgroundColor: theme.colors.primary.value,
-        },
-      },
-      MuiPickersClockPointer: {
-        thumb: {
-          borderColor: theme.colors.primary.value,
-        },
-        noPoint: {
-          backgroundColor: theme.colors.primary.value,
-        },
-        pointer: {
-          backgroundColor: theme.colors.primary.value,
-        },
-        animateTransform: {
-          transition: 'none',
-        },
-      },
-    },
-  })
-  // return <ThemeProvider theme={materialTheme}>
-  {/*}, [theme, ])*/
-  }
+    })
+  }, [theme])
 
   return (
     <Label>
