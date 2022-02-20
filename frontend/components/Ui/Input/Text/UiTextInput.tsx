@@ -50,10 +50,11 @@ const UiTextInput: React.VFC<Props> = ({
           type={type}
           placeholder={placeholder}
           hasChildren={hasChildren} />
-        {hasChildren ?
+        {hasChildren && (
           <AdditionalInput isClickable={handleClick !== undefined} onClick={handleClick}>
             {children}
-          </AdditionalInput> : null}
+          </AdditionalInput>
+        )}
       </InputAndErrorBox>
 
       <UiInputErrors errors={errors} />
