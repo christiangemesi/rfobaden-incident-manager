@@ -39,6 +39,7 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
   cursor: pointer;
   overflow: hidden;
   color: ${({ theme }) => theme.colors.secondary.contrast};
+  text-decoration: none;
 
   transition: 150ms ease;
   transition-property: filter, opacity;
