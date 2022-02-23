@@ -1,11 +1,10 @@
-import React, { EventHandler, MouseEvent, ReactNode, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ColorName } from '@/theme'
-import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends UiListItemProps {
   priority: Priority

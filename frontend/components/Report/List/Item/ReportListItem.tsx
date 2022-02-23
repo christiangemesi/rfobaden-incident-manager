@@ -2,7 +2,7 @@ import Report from '@/models/Report'
 import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'
 

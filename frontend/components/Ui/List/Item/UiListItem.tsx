@@ -1,6 +1,5 @@
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
-import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import Link from 'next/link'
 
