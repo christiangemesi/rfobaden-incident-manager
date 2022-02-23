@@ -8,6 +8,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
+import styled from 'styled-components'
 
 interface Props {
   incidents: Incident[]
@@ -25,7 +26,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
             <IncidentCreateButton onClick={open}>
-              <UiIcon.CreateAction size={7} />
+              <UiIcon.CreateAction size={2} />
             </IncidentCreateButton>
           )}</UiModal.Activator>
           <UiModal.Body>{({ close }) => (

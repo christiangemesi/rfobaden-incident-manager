@@ -23,7 +23,7 @@ const TaskList: React.VFC<Props> = ({ incident, report, tasks, onClick: handleCl
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
           <UiCreatButton onClick={open}>
-            <UiIcon.CreateAction size={1.4} />
+            <UiIcon.CreateAction size={1.5} />
           </UiCreatButton>
         )}</UiModal.Activator>
         <UiModal.Body>{({ close }) => (
