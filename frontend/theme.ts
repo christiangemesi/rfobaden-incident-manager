@@ -7,6 +7,7 @@ export type Theme = {
     error: Color
     warning: Color
     info: Color
+    grey: Color
   }
   fonts: {
     heading: string
@@ -67,6 +68,10 @@ export const defaultTheme: Theme = {
     info: {
       value: '#7465C6',
       contrast: contrastLight,
+    },
+    grey: {
+      value: '#b0b0b0',
+      contrast: contrastDark,
     },
   },
   fonts: {
