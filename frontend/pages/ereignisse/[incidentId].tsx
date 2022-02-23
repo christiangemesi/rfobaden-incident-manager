@@ -193,7 +193,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </UiGrid.Col>
 
         <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
-          <UiReservedSpace>
+          <UiReservedSpace reserveHeight>
             {selectedReport !== null && (
               <ReportView report={selectedReport} />
             )}
