@@ -1,5 +1,5 @@
 import Subtask, { parseSubtask } from '@/models/Subtask'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
@@ -33,7 +33,7 @@ const SubtaskListItem: React.VFC<Props> = ({
 
   const [isClosed, setClosed] = useState(subtask.isClosed)
 
-  const handleChange = async () => {
+  const handleChange = useCallback(async () => {
     const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, {
       ...subtask,
       isClosed: !subtask.isClosed,
@@ -43,26 +43,19 @@ const SubtaskListItem: React.VFC<Props> = ({
     }
     SubtaskStore.save(parseSubtask(newSubtask))
     setClosed(newSubtask.isClosed)
-  }
+  }, [incident.id, report.id, task.id, subtask])
 
   return (
-    <SelectableListItem
+    <UiListItemWithDetails
       isClosed={subtask.isClosed}
       isActive={isActive}
       priority={subtask.priority}
       title={subtask.title}
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(subtask))}>
-      <UiCheckbox label="" value={isClosed} onChange={handleChange} color="tertiary" />
-    </SelectableListItem>
+      <UiCheckbox label="" value={isClosed} onChange={handleChange} />
+    </UiListItemWithDetails>
   )
 }
 
 export default SubtaskListItem
-
-const SelectableListItem = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive, theme }) => isActive && css`
-    background: ${theme.colors.secondary.contrast};
-    color: ${theme.colors.secondary.value};
-  `}
-`

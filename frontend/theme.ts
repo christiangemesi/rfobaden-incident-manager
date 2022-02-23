@@ -44,7 +44,8 @@ export const defaultTheme: Theme = {
       contrast: contrastLight,
     },
     secondary: {
-      value: '#A3CCE7',
+      // value: '#E8F2F9',
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
     tertiary: {
@@ -52,7 +53,7 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     success: {
-      value: '#4fac54',
+      value: '#05A74E',
       contrast: contrastLight,
     },
     error: {
@@ -69,8 +70,8 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    heading: 'Montserrat, sans-serif',
-    body: 'Montserrat, sans-serif',
+    heading: 'Manrope, sans-serif',
+    body: 'Manrope, sans-serif',
   },
   breakpoints: {
     xs: {

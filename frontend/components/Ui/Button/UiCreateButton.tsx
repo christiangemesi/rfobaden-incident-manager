@@ -4,7 +4,7 @@ import UiButton, { Props as UiButtonProps } from '@/components/Ui/Button/UiButto
 
 export type Props = UiButtonProps;
 
-const UiCreateButton: React.VFC<Props> = ({ color = 'secondary', isFull= true, ...props }) => {
+const UiCreateButton: React.VFC<Props> = ({ color = 'primary', isFull= true, ...props }) => {
   return (
     <CreateButton {...props} color={color} isFull={isFull} />
   )
