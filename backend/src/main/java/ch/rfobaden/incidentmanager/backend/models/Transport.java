@@ -17,7 +17,7 @@ public final class Transport extends Model.Basic {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Report report;
+    private Incident incident;
 
     @ManyToOne
     @JoinColumn
@@ -42,12 +42,12 @@ public final class Transport extends Model.Basic {
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
-    public Report getReport() {
-        return report;
+    public Incident getIncident() {
+        return incident;
     }
 
-    public void setReport(Report report) {
-        this.report = report;
+    public void setIncident(Incident incident) {
+        this.incident = incident;
     }
 
     public Priority getPriority() {
@@ -156,14 +156,14 @@ public final class Transport extends Model.Basic {
             && Objects.equals(assignee, that.assignee)
             && Objects.equals(startsAt, that.startsAt)
             && Objects.equals(endsAt, that.endsAt)
-            && Objects.equals(report, that.report);
+            && Objects.equals(incident, that.incident);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(priority, title, description, note,
             location, assignee, startsAt, endsAt,
-            isKeyReport, isLocationRelevantReport, report);
+            isKeyReport, isLocationRelevantReport, incident);
     }
 }
 

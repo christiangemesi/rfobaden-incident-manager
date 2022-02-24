@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
 import ch.rfobaden.incidentmanager.backend.models.Priority;
-import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ public class TransportGenerator extends ModelGenerator<Transport> {
     UserGenerator userGenerator;
 
     @Autowired
-    ReportGenerator reportGenerator;
+    IncidentGenerator incidentGenerator;
 
     @Override
     public Transport generateNew() {
@@ -25,7 +24,7 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setLocation(doMaybe(() -> faker.country().capital()));
         transport.setStartsAt(doMaybe(this::randomDateTime));
         transport.setEndsAt(doMaybe(this::randomDateTime));
-        transport.setReport(reportGenerator.generate());
+        transport.setIncident(incidentGenerator.generate());
 
 
         return transport;
