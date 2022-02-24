@@ -28,10 +28,8 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
       setLevel(globalLevel + 1)
       setGlobalLevel(globalLevel + 1)
     } else {
-      if (context.isOpen) {
-        setLevel(globalLevel - 1)
-        setGlobalLevel(globalLevel - 1)
-      }
+      setLevel(globalLevel - 1)
+      setGlobalLevel(globalLevel - 1)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.isOpen])
