@@ -18,11 +18,11 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
   return (
     <UiGrid gap={1.5}>
       {incidents.map((incident) => (
-        <UiGrid.Col key={incident.id} size={4}>
+        <UiGrid.Col key={incident.id} size={{ sm: 6, lg: 4 }}>
           <IncidentListItem incident={incident} />
         </UiGrid.Col>
       ))}
-      <UiGrid.Col size={4}>
+      <UiGrid.Col size={{ sm: 6, lg: 4 }}>
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
             <IncidentCreateButton onClick={open}>
