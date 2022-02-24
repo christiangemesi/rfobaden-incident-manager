@@ -16,6 +16,10 @@ import javax.persistence.Table;
 public final class Transport extends Model.Basic {
 
     @ManyToOne
+    @JoinColumn(nullable = false)
+    private Report report;
+
+    @ManyToOne
     @JoinColumn
     private User assignee;
 
@@ -38,6 +42,13 @@ public final class Transport extends Model.Basic {
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    public Report getReport() {
+        return report;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
+    }
 
     public Priority getPriority() {
         return priority;
@@ -144,14 +155,15 @@ public final class Transport extends Model.Basic {
             && Objects.equals(location, that.location)
             && Objects.equals(assignee, that.assignee)
             && Objects.equals(startsAt, that.startsAt)
-            && Objects.equals(endsAt, that.endsAt);
+            && Objects.equals(endsAt, that.endsAt)
+            && Objects.equals(report, that.report);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(priority, title, description, note,
             location, assignee, startsAt, endsAt,
-            isKeyReport, isLocationRelevantReport);
+            isKeyReport, isLocationRelevantReport, report);
     }
 }
 
