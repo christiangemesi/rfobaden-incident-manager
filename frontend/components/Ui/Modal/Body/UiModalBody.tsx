@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalContext, {
   animationMillis,
@@ -9,8 +9,9 @@ import styled, { css, keyframes } from 'styled-components'
 import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
-import { createGlobalState, useKey, useMount, useMountedState, useUnmount } from 'react-use'
+import { createGlobalState, useKey, useMountedState, useUpdateEffect } from 'react-use'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import ScrollHelper from '@/utils/helpers/ScrollHelper'
 
 interface Props {
   children: ReactNode | ((state: UiModalState) => ReactNode)
@@ -18,20 +19,27 @@ interface Props {
 
 const UiModalBody: React.VFC<Props> = ({ children }) => {
   const [globalLevel, setGlobalLevel] = useModalLevel()
+
   const [level, setLevel] = useState(1)
 
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
 
-  useEffect(() => {
+  useUpdateEffect(() => {
+    console.log(globalLevel)
     if (context.isOpen) {
+      if (globalLevel === 0) {
+        ScrollHelper.disableScroll()
+      }
       setLevel(globalLevel + 1)
       setGlobalLevel(globalLevel + 1)
     } else {
+      if (globalLevel === 1) {
+        ScrollHelper.enableScroll()
+      }
       setLevel(globalLevel - 1)
       setGlobalLevel(globalLevel - 1)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.isOpen])
 
   const [isShaking, setShaking] = useState(false)
@@ -100,9 +108,12 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
 }
 export default UiModalBody
 
+const useModalLevel = createGlobalState(0)
+
 const ignoreClick = (e: MouseEvent) => {
   e.stopPropagation()
 }
+
 
 const Background = styled.div<{ visibility: UiModalVisibility }>`
   position: fixed;
@@ -233,5 +244,3 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
     }
   `}
 `
-
-const useModalLevel = createGlobalState(0)
