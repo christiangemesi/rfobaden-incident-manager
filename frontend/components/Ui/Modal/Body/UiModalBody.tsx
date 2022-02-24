@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
+import React, { MouseEvent, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalContext, {
   animationMillis,
@@ -9,7 +9,7 @@ import styled, { css, keyframes } from 'styled-components'
 import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
-import { useMountedState } from 'react-use'
+import { createGlobalState, useKey, useMount, useMountedState, useUnmount } from 'react-use'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
@@ -17,12 +17,28 @@ interface Props {
 }
 
 const UiModalBody: React.VFC<Props> = ({ children }) => {
+  const [globalLevel, setGlobalLevel] = useModalLevel()
+  const [level, setLevel] = useState(1)
+
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
 
+  useEffect(() => {
+    if (context.isOpen) {
+      setLevel(globalLevel + 1)
+      setGlobalLevel(globalLevel + 1)
+    } else {
+      if (context.isOpen) {
+        setLevel(globalLevel - 1)
+        setGlobalLevel(globalLevel - 1)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.isOpen])
+
   const [isShaking, setShaking] = useState(false)
 
-  const handleOutsideClick = useCallback(() => {
+  const handleCloseAttempt = useCallback(() => {
     if (context.isPersistent) {
       setShaking(true)
       setTimeout(() => {
@@ -32,7 +48,14 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
       context.close()
     }
   }, [context])
-  
+
+  useKey('Escape', () => {
+    if (!context.isOpen || level !== globalLevel) {
+      return
+    }
+    handleCloseAttempt()
+  }, { event: 'keyup' }, [context, level, globalLevel])
+
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
       <DialogContainer isShaking={isShaking} isFull={context.isFull}>
@@ -62,7 +85,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
   }
 
   return ReactDOM.createPortal((
-    <Background visibility={context.visibility} onClick={handleOutsideClick}>
+    <Background visibility={context.visibility} onClick={handleCloseAttempt}>
       <UiContainer>
         {context.isFull ? (
           <UiGrid style={{ justifyContent: 'center', width: '100%' }}>
@@ -212,3 +235,5 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
     }
   `}
 `
+
+const useModalLevel = createGlobalState(0)
