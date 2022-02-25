@@ -91,11 +91,13 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         IncidentStore.save(parseIncident(data))
       }
     } else {
-      const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)
-      if (message !== null) {
+      const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+      if (message !== null && message.trim() !== '') {
         const messageData = { message }
         const [data] = await BackendService.update<CloseMessageData, Incident>(`incidents/${incident.id}/close`, messageData)
         IncidentStore.save(parseIncident(data))
+      } else if (message !== null) {
+        confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
       }
     }
   }
