@@ -1,4 +1,4 @@
-import Report from '@/models/Report'
+import Report, { parseReport } from '@/models/Report'
 import React from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -8,7 +8,7 @@ import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import { useTasksOfReport } from '@/stores/TaskStore'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
@@ -27,6 +27,15 @@ const ReportView: React.VFC<Props> = ({ report }) => {
 
   const tasks = useTasksOfReport(report.id)
 
+  const handleClose = async () => {
+    const text = report.isClosed ? 'erneut öffnen' : 'schliessen'
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" ${text} wollen?`)) {
+      const newReport = { ...report, isClosed: !report.isClosed }
+      const [data]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
+      ReportStore.save(parseReport(data))
+    }
+  }
+
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
@@ -36,7 +45,6 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   }
 
   const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
-
   const incident = useIncident(report.incidentId)
   if (incident === null) {
     throw new Error('incident of report not found')
@@ -53,6 +61,13 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
+            <UiIconButton onClick={handleClose}>
+              {/*TODO add close and reopen icon*/}
+              {report.isClosed
+                ? <UiIcon.CancelAction />
+                : <UiIcon.SubmitAction />
+              }
+            </UiIconButton>
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>
