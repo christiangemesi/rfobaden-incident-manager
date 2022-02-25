@@ -85,11 +85,18 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   const selectedReport = useReport(selectedReportId)
 
   const handleClose = async () => {
-    const text = incident.isClosed ? 'erneut öffnen' : 'schliessen'
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" ${text} wollen?`)) {
-      const newIncident = { ...incident, isClosed: !incident.isClosed }
-      const [data]: BackendResponse<Incident> = await BackendService.update('incidents', incident.id, newIncident)
-      IncidentStore.save(parseIncident(data))
+    if (incident.isClosed) {
+      if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
+        const [data] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
+        IncidentStore.save(parseIncident(data))
+      }
+    } else {
+      const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)
+      if (message !== null) {
+        const messageData = { message }
+        const [data] = await BackendService.update<CloseMessageData, Incident>(`incidents/${incident.id}/close`, messageData)
+        IncidentStore.save(parseIncident(data))
+      }
     }
   }
 
@@ -223,6 +230,10 @@ export default IncidentPage
 
 type Query = {
   incidentId: string
+}
+
+interface CloseMessageData {
+  message: string
 }
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
