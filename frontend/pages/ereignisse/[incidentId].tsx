@@ -4,7 +4,7 @@ import ReportStore, { useReport, useReportsOfIncident } from '@/stores/ReportSto
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Incident from '@/models/Incident'
+import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
@@ -84,6 +84,15 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }
   const selectedReport = useReport(selectedReportId)
 
+  const handleClose = async () => {
+    const text = incident.isClosed ? 'erneut öffnen' : 'schliessen'
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" ${text} wollen?`)) {
+      const newIncident = { ...incident, isClosed: !incident.isClosed }
+      const [data]: BackendResponse<Incident> = await BackendService.update('incidents', incident.id, newIncident)
+      IncidentStore.save(parseIncident(data))
+    }
+  }
+
   // TODO rewrite print page
   const [printer, setPrinter] = useState<ReactNode>()
   const handlePrint = () => {
@@ -103,7 +112,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       await router.push('/ereignisse')
       IncidentStore.remove(incident.id)
@@ -138,6 +147,13 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           <HorizontalSpacer>
             <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
             <UiIconButtonGroup>
+              <UiIconButton onClick={handleClose}>
+                {/*TODO add close and reopen icon*/}
+                {incident.isClosed
+                  ? <UiIcon.CancelAction />
+                  : <UiIcon.SubmitAction />
+                }
+              </UiIconButton>
               <UiIconButton onClick={handlePrint}>
                 <UiIcon.PrintAction />
                 {printer}
