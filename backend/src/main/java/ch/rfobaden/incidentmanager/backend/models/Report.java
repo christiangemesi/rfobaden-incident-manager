@@ -46,6 +46,9 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     private String location;
 
     @Column(nullable = false)
+    private boolean isClosed;
+
+    @Column(nullable = false)
     private boolean isKeyReport;
 
     @Column(nullable = false)
@@ -202,7 +205,13 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return !getTasks().isEmpty() && getTasks().stream().allMatch(Task::isClosed);
+        return isClosed
+            || !getTasks().isEmpty()
+            && getTasks().stream().allMatch(Task::isClosed);
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
     @Override
@@ -223,6 +232,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
             && Objects.equals(location, report.location)
+            && Objects.equals(isClosed, report.isClosed)
             && Objects.equals(isKeyReport, report.isKeyReport)
             && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport)
             && priority == report.priority;
@@ -232,7 +242,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     public int hashCode() {
         return Objects.hash(assignee, incident, title,
             description, notes, startsAt,
-            endsAt, location, isKeyReport, isLocationRelevantReport, priority);
+            endsAt, location, isClosed, isKeyReport, isLocationRelevantReport, priority);
     }
 
     @Override
