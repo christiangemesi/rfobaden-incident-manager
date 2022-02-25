@@ -28,11 +28,15 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   const tasks = useTasksOfReport(report.id)
 
   const handleClose = async () => {
-    const text = report.isClosed ? 'erneut öffnen' : 'schliessen'
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" ${text} wollen?`)) {
-      const newReport = { ...report, isClosed: !report.isClosed }
-      const [data]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
-      ReportStore.save(parseReport(data))
+    if(report.closedTaskIds.length === report.taskIds.length && report.taskIds.length > 0){
+      alert('Es sind alle Aufträge geschlossen.')
+    } else {
+      const text = report.isClosed ? 'erneut öffnen' : 'schliessen'
+      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" ${text} wollen?`)) {
+        const newReport = { ...report, isClosed: !report.isClosed }
+        const [data]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
+        ReportStore.save(parseReport(data))
+      }
     }
   }
 

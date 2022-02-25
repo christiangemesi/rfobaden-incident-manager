@@ -88,10 +88,14 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   }
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
-      await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
-      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
-      TaskStore.remove(task.id)
+    if (task.closedSubtaskIds.length === task.subtaskIds.length && task.subtaskIds.length > 0) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+    } else {
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
+        await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
+        await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+        TaskStore.remove(task.id)
+      }
     }
   }
 
