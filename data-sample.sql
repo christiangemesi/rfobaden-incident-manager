@@ -49,22 +49,22 @@ VALUES (1, _utf8'2021-12-02 14:57:40.302645', _utf8'2021-12-02 15:30:37.272910',
        (2, _utf8'2021-12-02 14:58:08.700227', _utf8'2021-12-02 15:30:37.272910', _utf8'Dachstock',NULL,TRUE,NULL, _utf8'Brand Turgi',3);
 
 INSERT IGNORE INTO report
-VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:06:18.886201', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.', _utf8'2021-12-22 15:00:01.257671',TRUE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2, _utf8'2021-12-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke 2',1,1),
-       (2, _utf8'2021-12-02 15:06:39.928700', _utf8'2021-12-02 15:06:39.928737', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.', _utf8'2021-12-12 15:00:01.257671',TRUE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1,NULL, _utf8'Bedrohung alte Holzbrücke',3,1),
-       (3, _utf8'2021-12-02 15:06:46.951669', _utf8'2021-12-02 15:07:11.104841', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',0, _utf8'2021-11-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke',3,1),
-       (4, _utf8'2021-12-02 15:06:54.018947', _utf8'2021-12-02 15:06:54.018980', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1, _utf8'2022-12-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke',5,1),
-       (5, _utf8'2021-12-02 15:07:01.171723', _utf8'2021-12-02 15:07:01.171755', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,TRUE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1,NULL, _utf8'Bedrohung alte Holzbrücke',7,1),
-       (6, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257717', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,TRUE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2,NULL, _utf8'Bedrohung alte Holzbrücke',1,1),
-       (7, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257717', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2,NULL, _utf8'Bedrohung alte Holzbrücke',1,1);
+VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:06:18.886201', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.', _utf8'2021-12-22 15:00:01.257671',FALSE,TRUE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2, _utf8'2021-12-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke 2',1,1),
+       (2, _utf8'2021-12-02 15:06:39.928700', _utf8'2021-12-02 15:06:39.928737', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.', _utf8'2021-12-12 15:00:01.257671',FALSE,TRUE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1,NULL, _utf8'Bedrohung alte Holzbrücke',3,1),
+       (3, _utf8'2021-12-02 15:06:46.951669', _utf8'2021-12-02 15:07:11.104841', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,FALSE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',0, _utf8'2021-11-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke',3,1),
+       (4, _utf8'2021-12-02 15:06:54.018947', _utf8'2021-12-02 15:06:54.018980', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,TRUE,FALSE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1, _utf8'2022-12-02 15:00:01.257671', _utf8'Bedrohung alte Holzbrücke',5,1),
+       (5, _utf8'2021-12-02 15:07:01.171723', _utf8'2021-12-02 15:07:01.171755', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,TRUE,TRUE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',1,NULL, _utf8'Bedrohung alte Holzbrücke',7,1),
+       (6, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257717', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,FALSE,TRUE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2,NULL, _utf8'Bedrohung alte Holzbrücke',1,1),
+       (7, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257717', _utf8'Baumstämme und Schutt bedrohen die alte Holzbrücke am Limmatweg.',NULL,TRUE,FALSE,FALSE, _utf8'Turgi', _utf8'ACHTUNG: starke Strömung und morsches Holz',2,NULL, _utf8'Bedrohung alte Holzbrücke',1,1);
 
 INSERT IGNORE INTO task
-VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test 1',NULL, _utf8'Turgi',0,NULL, _utf8'Umleitung aufstellen',1,1),
-       (2, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Turgi',1,NULL, _utf8'Brücke sperren',1,1),
-       (3, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Visp',2,NULL, _utf8'Brücke sperren',1,1),
-       (4, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Turgi',1,NULL, _utf8'Brücke sperren',1,1),
-       (5, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Turgi',0,NULL, _utf8'Brücke sperren',1,1),
-       (6, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Herzogenbuchsee',0,NULL, _utf8'Brücke sperren',1,1),
-       (7, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL, _utf8'Turgi',0,NULL, _utf8'Brücke sperren',1,1);
+VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test 1',NULL,FALSE, _utf8'Turgi',0,NULL, _utf8'Umleitung aufstellen',1,1),
+       (2, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE, _utf8'Turgi',1,NULL, _utf8'Brücke sperren',1,1),
+       (3, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE, _utf8'Visp',2,NULL, _utf8'Brücke sperren',1,1),
+       (4, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE, _utf8'Turgi',1,NULL, _utf8'Brücke sperren',1,1),
+       (5, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE, _utf8'Turgi',0,NULL, _utf8'Brücke sperren',1,1),
+       (6, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE, _utf8'Herzogenbuchsee',0,NULL, _utf8'Brücke sperren',1,1),
+       (7, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE, _utf8'Turgi',0,NULL, _utf8'Brücke sperren',1,1);
 
 INSERT IGNORE INTO subtask
 VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung aufstellen',1,1),
