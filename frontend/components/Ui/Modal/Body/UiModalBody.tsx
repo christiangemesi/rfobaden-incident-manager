@@ -9,20 +9,42 @@ import styled, { css, keyframes } from 'styled-components'
 import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
-import { useMountedState } from 'react-use'
+import { createGlobalState, useKey, useMountedState, useUpdateEffect } from 'react-use'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import ScrollHelper from '@/utils/helpers/ScrollHelper'
 
 interface Props {
   children: ReactNode | ((state: UiModalState) => ReactNode)
 }
 
 const UiModalBody: React.VFC<Props> = ({ children }) => {
+  const [globalLevel, setGlobalLevel] = useModalLevel()
+
+  const [level, setLevel] = useState(1)
+
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
 
+  useUpdateEffect(() => {
+    console.log(globalLevel)
+    if (context.isOpen) {
+      if (globalLevel === 0) {
+        ScrollHelper.disableScroll()
+      }
+      setLevel(globalLevel + 1)
+      setGlobalLevel(globalLevel + 1)
+    } else {
+      if (globalLevel === 1) {
+        ScrollHelper.enableScroll()
+      }
+      setLevel(globalLevel - 1)
+      setGlobalLevel(globalLevel - 1)
+    }
+  }, [context.isOpen])
+
   const [isShaking, setShaking] = useState(false)
 
-  const handleOutsideClick = useCallback(() => {
+  const handleCloseAttempt = useCallback(() => {
     if (context.isPersistent) {
       setShaking(true)
       setTimeout(() => {
@@ -32,7 +54,14 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
       context.close()
     }
   }, [context])
-  
+
+  useKey('Escape', () => {
+    if (!context.isOpen || level !== globalLevel) {
+      return
+    }
+    handleCloseAttempt()
+  }, { event: 'keyup' }, [context, level, globalLevel])
+
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
       <DialogContainer isShaking={isShaking} isFull={context.isFull}>
@@ -62,7 +91,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
   }
 
   return ReactDOM.createPortal((
-    <Background visibility={context.visibility} onClick={handleOutsideClick}>
+    <Background visibility={context.visibility} onClick={handleCloseAttempt}>
       <UiContainer>
         {context.isFull ? (
           <UiGrid style={{ justifyContent: 'center', width: '100%' }}>
@@ -79,9 +108,12 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
 }
 export default UiModalBody
 
+const useModalLevel = createGlobalState(0)
+
 const ignoreClick = (e: MouseEvent) => {
   e.stopPropagation()
 }
+
 
 const Background = styled.div<{ visibility: UiModalVisibility }>`
   position: fixed;
