@@ -10,6 +10,7 @@ interface Props extends StyledProps {
   gapV?: number
   justify?: CSSProperties['justifyContent']
   align?: CSSProperties['alignItems']
+  direction?: CSSProperties['flexDirection']
   children?: ReactNode
 }
 
@@ -17,8 +18,9 @@ const UiGrid = styled.div<Props>`
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
   flex: 0 1 auto;
+  flex-direction: ${({ direction }) => direction};
+  width: 100%;
 
   justify-content: ${({ justify }) => justify};
   align-items: ${({ align }) => align};

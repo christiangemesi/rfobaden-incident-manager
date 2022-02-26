@@ -33,11 +33,9 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   width: 100%;
   cursor: pointer;
-  overflow: hidden;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   text-decoration: none;
 
@@ -59,10 +57,13 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
   
   ${({ isActive, theme }) => isActive && css`
     :after {
-      background: ${theme.colors.primary.value};
-      opacity: 0.6;
-      filter: grayscale(0.1);
+      // background: ${theme.colors.primary.value};
+      // opacity: 0.6;
+      // filter: grayscale(0.1);
+      
+      background: ${theme.colors.tertiary.value};
     }
+    box-shadow: 0 0 4px 2px gray;
   `}
   
   ${({ isActive }) => !isActive && css`
@@ -70,4 +71,18 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
       filter: brightness(0.9);
     }
   `}
+
+  :first-child {
+    &, :after {
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+  }
+
+  :last-child {
+    &, :after {
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
 `

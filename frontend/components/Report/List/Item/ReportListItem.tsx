@@ -2,7 +2,7 @@ import Report from '@/models/Report'
 import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'
 
@@ -22,7 +22,7 @@ const ReportListItem: React.VFC<Props> = ({
   const assigneeName = useUsername(assignee)
 
   return (
-    <UiListItemWithDetails
+    <Li
       isActive={isActive}
       isClosed={report.isClosed}
       title={report.title}
@@ -47,11 +47,46 @@ const ReportListItem: React.VFC<Props> = ({
       <LeftSpacer>
         {report.closedTaskIds.length}/{report.taskIds.length}
       </LeftSpacer>
-    </UiListItemWithDetails>
+
+      <BridgeClip>
+        <Bridge isActive={isActive ?? false} />
+      </BridgeClip>
+    </Li>
   )
 }
 export default ReportListItem
 
+const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+  ${({ isActive }) => isActive && css`
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;;
+  `}
+`
+
 const LeftSpacer = styled.div`
   margin-left: 1rem;
+`
+
+const Bridge = styled.div<{ isActive: boolean }>`
+  width: 100%;
+  height: 100%;
+  
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  box-shadow: 0 0 4px 2px gray;
+  
+  ${({ isActive }) => !isActive && css`
+    background-color: transparent;
+    box-shadow: none;
+  `}
+`
+
+const BridgeClip = styled.div`
+  position: absolute;
+  left: calc(100% - 1px);
+  width: calc(2rem + 2px);
+  height: calc(100%);
+  z-index: 5;
+  
+  overflow-x: clip;
+  overflow-y: visible;
 `

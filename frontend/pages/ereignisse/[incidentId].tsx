@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReportStore, { useReport, useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
@@ -20,25 +20,19 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import * as ReactDOM from 'react-dom'
 import IncidentView from '@/components/Incident/View/IncidentView'
-import Task, { parseTask } from '@/models/Task'
-import TaskStore, { useTasks } from '@/stores/TaskStore'
+import { useTasks } from '@/stores/TaskStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
-import ReportView from '@/components/Report/View/ReportView'
 import Id from '@/models/base/Id'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
-import Subtask, { parseSubtask } from '@/models/Subtask'
-import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
+import { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
-import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
 
 interface Props {
   data: {
     incident: Incident
     reports: Report[]
-    tasks: Task[]
-    subtasks: Subtask[]
     users: User[]
     organizations: Organization[]
   }
@@ -48,8 +42,6 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
-    TaskStore.saveAll(data.tasks.map(parseTask))
-    SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
 
@@ -64,25 +56,16 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     tasks.filter((task) => task.incidentId === incident.id)
   ))
 
-  const selectedReportIdParam = router.query.report
-  const selectedReportId = useMemo(() => {
-    if (selectedReportIdParam === undefined) {
-      return null
-    }
-    return Array.isArray(selectedReportIdParam)
-      ? parseInt(selectedReportIdParam[0])
-      : parseInt(selectedReportIdParam)
-  }, [selectedReportIdParam])
-  const setSelectedReportId = async (id: Id<Report> | null) => {
-    const query = { ...router.query }
-    if (id === null) {
-      delete query.report
-    } else {
-      query.report = `${id}`
-    }
-    await router.push({ query }, undefined, { shallow: true })
-  }
-  const selectedReport = useReport(selectedReportId)
+  // TODO re-add URL param for report
+  // const selectedReportIdParam = router.query.report
+  // const selectedReportId = useMemo(() => {
+  //   if (selectedReportIdParam === undefined) {
+  //     return null
+  //   }
+  //   return Array.isArray(selectedReportIdParam)
+  //     ? parseInt(selectedReportIdParam[0])
+  //     : parseInt(selectedReportIdParam)
+  // }, [selectedReportIdParam])
 
   // TODO rewrite print page
   const [printer, setPrinter] = useState<ReactNode>()
@@ -127,80 +110,70 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   ), [incident])
 
   return (
-    <UiContainer>
-      <SpacerUiGrid gapH={2} gapV={1}>
-        <BlockContainer>
-          <UiTitle level={1}>
-            {incident.title}
-          </UiTitle>
-        </BlockContainer>
-        <VerticalSpacer>
-          <HorizontalSpacer>
-            <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
-            <UiIconButtonGroup>
-              <UiIconButton onClick={handlePrint}>
-                <UiIcon.PrintAction />
-                {printer}
-              </UiIconButton>
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiIconButton onClick={open}>
-                    <UiIcon.EditAction />
-                  </UiIconButton>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Ereignis bearbeiten
-                    </UiTitle>
-                    <IncidentForm incident={incident} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-              <UiIconButton onClick={handleDelete}>
-                <UiIcon.DeleteAction />
-              </UiIconButton>
-            </UiIconButtonGroup>
-          </HorizontalSpacer>
-        </VerticalSpacer>
-        <VerticalSpacer>
-          <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-            {incident.description}
-          </UiGrid.Col>
-        </VerticalSpacer>
-        <VerticalSpacer>
-          <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-            <UiTextWithIcon text={
-              activeOrganisations.length === 0
-                ? 'Keine Organisationen beteiligt'
-                : activeOrganisations.reduce((a, b) => a + ', ' + b)
-            }>
-              <UiIcon.UserInCircle />
-            </UiTextWithIcon>
-          </UiGrid.Col>
-        </VerticalSpacer>
-      </SpacerUiGrid>
-
-      <UiGrid gapH={4}>
-
-        <UiGrid.Col size={{ xs: 12, md: 6, lg: 5 }}>
+    <Container>
+      <Heading>
+        <UiContainer>
+          <BlockContainer>
+            <UiTitle level={1}>
+              {incident.title}
+            </UiTitle>
+          </BlockContainer>
+          <VerticalSpacer>
+            <HorizontalSpacer>
+              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
+              <UiIconButtonGroup>
+                <UiIconButton onClick={handlePrint}>
+                  <UiIcon.PrintAction />
+                  {printer}
+                </UiIconButton>
+                <UiModal isFull>
+                  <UiModal.Activator>{({ open }) => (
+                    <UiIconButton onClick={open}>
+                      <UiIcon.EditAction />
+                    </UiIconButton>
+                  )}</UiModal.Activator>
+                  <UiModal.Body>{({ close }) => (
+                    <React.Fragment>
+                      <UiTitle level={1} isCentered>
+                        Ereignis bearbeiten
+                      </UiTitle>
+                      <IncidentForm incident={incident} onClose={close} />
+                    </React.Fragment>
+                  )}</UiModal.Body>
+                </UiModal>
+                <UiIconButton onClick={handleDelete}>
+                  <UiIcon.DeleteAction />
+                </UiIconButton>
+              </UiIconButtonGroup>
+            </HorizontalSpacer>
+          </VerticalSpacer>
+          <VerticalSpacer>
+            <UiGrid.Col size={{ lg: 6, xs: 12 }}>
+              {incident.description}
+            </UiGrid.Col>
+          </VerticalSpacer>
+          <VerticalSpacer>
+            <UiGrid.Col size={{ lg: 6, xs: 12 }}>
+              <UiTextWithIcon text={
+                activeOrganisations.length === 0
+                  ? 'Keine Organisationen beteiligt'
+                  : activeOrganisations.reduce((a, b) => a + ', ' + b)
+              }>
+                <UiIcon.UserInCircle />
+              </UiTextWithIcon>
+            </UiGrid.Col>
+          </VerticalSpacer>
+        </UiContainer>
+      </Heading>
+      <Content>
+        <UiContainer>
           <ReportList
             incident={incident}
             reports={reports}
-            onClick={(report) => setSelectedReportId(report.id)}
-            activeReport={selectedReport}
           />
-        </UiGrid.Col>
-
-        <UiGrid.Col size={{ xs: 12, md: true }} style={{ marginTop: 'calc(56px + 0.5rem)' }}>
-          <UiReservedSpace reserveHeight>
-            {selectedReport !== null && (
-              <ReportView report={selectedReport} />
-            )}
-          </UiReservedSpace>
-        </UiGrid.Col>
-      </UiGrid>
-    </UiContainer>
+        </UiContainer>
+      </Content>
+    </Container>
   )
 }
 export default IncidentPage
@@ -242,25 +215,15 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     throw reportsError
   }
 
-  const tasks = await reports.reduce(async (all, report) => {
-    const [tasks, tasksError]: BackendResponse<Task[]> = await BackendService.list(
-      `incidents/${incidentId}/reports/${report.id}/tasks`,
-    )
-    if (tasksError !== null) {
-      throw tasksError
-    }
-    return [...(await all), ...tasks]
-  }, Promise.resolve([] as Task[]))
-
-  const subtasks = await tasks.reduce(async (all, task) => {
-    const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await BackendService.list(
-      `incidents/${incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks/`,
-    )
-    if (subtasksError !== null) {
-      throw subtasksError
-    }
-    return [...(await all), ...subtasks]
-  }, Promise.resolve([] as Subtask[]))
+  // const subtasks = await tasks.reduce(async (all, task) => {
+  //   const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await BackendService.list(
+  //     `incidents/${incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks/`,
+  //   )
+  //   if (subtasksError !== null) {
+  //     throw subtasksError
+  //   }
+  //   return [...(await all), ...subtasks]
+  // }, Promise.resolve([] as Subtask[]))
 
 
   const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
@@ -273,8 +236,6 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
       data: {
         incident,
         reports,
-        tasks,
-        subtasks,
         users,
         organizations,
       },
@@ -296,9 +257,27 @@ const VerticalSpacer = styled.div`
     margin-bottom: 0;
   }
 `
-const SpacerUiGrid = styled(UiGrid)`
-  margin-bottom: 2rem;
-  margin-top: 2rem;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 7rem);
+`
+
+const Heading = styled.div`
+  padding-bottom: 1.5rem;
+  box-shadow: 0 4px 2px -2px gray;
+  margin-top: -2rem;
+  z-index: 7;
+`
+
+const Content = styled.div`
+  flex: 1;
+  padding: 2rem 0;
+  
+  display: flex;
+  overflow-x: visible;
+  overflow-y: auto;
 `
 
 const BlockContainer = styled.div`

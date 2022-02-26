@@ -73,10 +73,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   button {
     cursor: pointer;
   }
-  
-  main {
-    padding-bottom: 3rem;
-  }
 
   @media print {
     @page {

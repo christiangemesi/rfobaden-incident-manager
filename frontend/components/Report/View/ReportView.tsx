@@ -1,14 +1,14 @@
 import Report from '@/models/Report'
-import React from 'react'
-import styled from 'styled-components'
+import React, { useEffect } from 'react'
+import styled, { useTheme } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
-import { useTasksOfReport } from '@/stores/TaskStore'
-import BackendService from '@/services/BackendService'
+import TaskStore, { useTasksOfReport } from '@/stores/TaskStore'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
@@ -16,16 +16,32 @@ import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import { useIncident } from '@/stores/IncidentStore'
 import ReportForm from '@/components/Report/Form/ReportForm'
+import { useAsync } from 'react-use'
+import Id from '@/models/base/Id'
+import Task, { parseTask } from '@/models/Task'
 
 interface Props {
   report: Report
 }
 
 const ReportView: React.VFC<Props> = ({ report }) => {
+  const tasks = useTasksOfReport(report.id)
+  const { loading: isLoading } = useAsync(async () => {
+    if (loadedReports.has(report.id)) {
+      return
+    }
+    const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
+      `incidents/${report.incidentId}/reports/${report.id}/tasks`,
+    )
+    if (error !== null) {
+      throw error
+    }
+    TaskStore.saveAll(tasks.map(parseTask))
+    loadedReports.add(report.id)
+  }, [report.id])
+
   const assignee = useUser(report.assigneeId)
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
-
-  const tasks = useTasksOfReport(report.id)
 
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
@@ -43,12 +59,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   }
 
   return (
-    <UiGrid gapH={2} gapV={1}>
-      <VerticalSpacer>
-        <UiTitle level={2}>
-          {report.title}
-        </UiTitle>
-      </VerticalSpacer>
+    <UiGrid gapH={2} gapV={1} direction="column" style={{ minHeight: '100%' }}>
       <VerticalSpacer>
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={report.endsAt} />
@@ -107,16 +118,23 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         </VerticalSpacer>
       )}
 
-      <BlockContainer>
-        <TaskList
-          incident={incident}
-          report={report}
-          tasks={tasks} />
-      </BlockContainer>
+      <TaskContainer>
+        {isLoading ? (
+          <UiIcon.Loader isSpinner />
+        ) : (
+          <TaskList
+            incident={incident}
+            report={report}
+            tasks={tasks}
+          />
+        )}
+      </TaskContainer>
     </UiGrid>
   )
 }
 export default ReportView
+
+const loadedReports = new Set<Id<Report>>()
 
 const HorizontalSpacer = styled.div`
   display: flex;
@@ -140,4 +158,10 @@ const BlockContainer = styled.div`
 const TextLines = styled.div`
   white-space: pre-wrap;
   line-height: 1.2;
+`
+
+const TaskContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `

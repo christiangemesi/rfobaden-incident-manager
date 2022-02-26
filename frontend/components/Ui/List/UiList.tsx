@@ -17,5 +17,5 @@ export default UiList
 const Box = styled.ul`
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 0.4rem;
 `

@@ -9,6 +9,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
+import styled from 'styled-components'
 
 interface Props {
   incident: Incident
@@ -19,7 +20,7 @@ interface Props {
 
 const TaskList: React.VFC<Props> = ({ incident, report, tasks, onClick: handleClick }) => {
   return (
-    <UiList>
+    <Container>
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
           <UiCreatButton onClick={open}>
@@ -35,11 +36,21 @@ const TaskList: React.VFC<Props> = ({ incident, report, tasks, onClick: handleCl
           </div>
         )}</UiModal.Body>
       </UiModal>
-      {tasks.map((task) => (
-        <TaskListItem key={task.id} task={task} onClick={handleClick} />
-      ))}
-    </UiList>
+
+      <UiList>
+        {tasks.map((task) => (
+          <TaskListItem key={task.id} task={task} onClick={handleClick} />
+        ))}
+      </UiList>
+    </Container>
   )
 
 }
 export default TaskList
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+`

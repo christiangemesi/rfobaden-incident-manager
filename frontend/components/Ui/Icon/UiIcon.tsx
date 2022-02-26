@@ -14,7 +14,7 @@ import {
   mdiClose,
   mdiDelete,
   mdiImageFilterHdr,
-  mdiKey,
+  mdiKey, mdiLoading,
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiMap,
@@ -98,4 +98,5 @@ export default Object.assign(StyledUiIcon, {
   Changelog: makeNamedIcon(mdiClipboardTextOutline),
   Login: makeNamedIcon(mdiLoginVariant),
   Logout: makeNamedIcon(mdiLogoutVariant),
+  Loader: makeNamedIcon(mdiLoading),
 })
