@@ -74,11 +74,9 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
 
         {selected && (
           <UiGrid.Col style={{ height: '100%' }}>
-            <SelectedScroll>
-              <ReportViewContainer>
-                <ReportView report={selected} />
-              </ReportViewContainer>
-            </SelectedScroll>
+            <ReportViewContainer>
+              <ReportView report={selected} />
+            </ReportViewContainer>
           </UiGrid.Col>
         )}
       </UiGrid>
@@ -121,21 +119,19 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   
 `
 
-const SelectedScroll = styled.div`
-  height: 100%;
-  overflow: auto;
-  box-shadow: 0 0 4px 2px gray;
-`
-
 const ReportViewContainer = styled.div`
   //--y-offset: 4.65rem;
   --y-offset: 0px;
   
+  height: 100%;
+  overflow: auto;
+  
   display: flex;
+  box-shadow: 0 0 4px 2px gray;
   
   margin-top: var(--y-offset);
 
   // TODO remove scrollbar width from padding if the element is scrollable.
-  ${UiContainer.variables};
-  padding: 1rem var(--ui-container--padding) 1rem 2rem;
+  // ${UiContainer.variables};
+  // padding: 1rem var(--ui-container--padding) 1rem 2rem;
 `

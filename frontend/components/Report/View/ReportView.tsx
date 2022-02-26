@@ -19,6 +19,7 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import { useAsync } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
+import UiContainer from '@/components/Ui/Container/UiContainer'
 
 interface Props {
   report: Report
@@ -59,59 +60,60 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   }
 
   return (
-    <UiGrid gapV={1} direction="column" style={{ minHeight: '100%' }}>
-      <UiGrid justify="space-between" align="center">
-        <UiTitle level={3}>
-          {report.title}
-        </UiTitle>
+    <Container>
+      <Heading>
+        <UiGrid justify="space-between" align="center">
+          <UiTitle level={3}>
+            {report.title}
+          </UiTitle>
 
-        <UiIconButtonGroup>
-          <UiIconButton onClick={() => alert('not yet implemented')}>
-            <UiIcon.PrintAction />
-          </UiIconButton>
-          <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
-              <UiIconButton onClick={open}>
-                <UiIcon.EditAction />
-              </UiIconButton>
-            )}</UiModal.Activator>
-            <UiModal.Body>{({ close }) => (
-              <React.Fragment>
-                <UiTitle level={1} isCentered>
-                  Meldung bearbeiten
-                </UiTitle>
-                <ReportForm incident={incident} report={report} onClose={close} />
-              </React.Fragment>
-            )}</UiModal.Body>
-          </UiModal>
+          <UiIconButtonGroup>
+            <UiIconButton onClick={() => alert('not yet implemented')}>
+              <UiIcon.PrintAction />
+            </UiIconButton>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiIconButton onClick={open}>
+                  <UiIcon.EditAction />
+                </UiIconButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Meldung bearbeiten
+                  </UiTitle>
+                  <ReportForm incident={incident} report={report} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
 
-          <UiIconButton onClick={handleDelete}>
-            <UiIcon.DeleteAction />
-          </UiIconButton>
-        </UiIconButtonGroup>
-      </UiGrid>
-      <UiDateLabel start={startDate} end={report.endsAt} />
-      <TextLines>
-        {report.description}
-      </TextLines>
+            <UiIconButton onClick={handleDelete}>
+              <UiIcon.DeleteAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </UiGrid>
+        <UiDateLabel start={startDate} end={report.endsAt} />
+        <TextLines>
+          {report.description}
+        </TextLines>
 
-      {report.location && (
-        <UiTextWithIcon text={report.location ?? ''}>
-          <UiIcon.Location />
-        </UiTextWithIcon>
-      )}
-      {assignee && (
-        <UiTextWithIcon text={assigneeName}>
-          <UiIcon.UserInCircle />
-        </UiTextWithIcon>
-      )}
-      {report.notes !== null && (
-        <UiTextWithIcon text={report.notes}>
-          <UiIcon.AlertCircle />
-        </UiTextWithIcon>
-      )}
-
-      <div>
+        {report.location && (
+          <UiTextWithIcon text={report.location ?? ''}>
+            <UiIcon.Location />
+          </UiTextWithIcon>
+        )}
+        {assignee && (
+          <UiTextWithIcon text={assigneeName}>
+            <UiIcon.UserInCircle />
+          </UiTextWithIcon>
+        )}
+        {report.notes !== null && (
+          <UiTextWithIcon text={report.notes}>
+            <UiIcon.AlertCircle />
+          </UiTextWithIcon>
+        )}
+      </Heading>
+      <Content>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -123,31 +125,36 @@ const ReportView: React.VFC<Props> = ({ report }) => {
             />
           )}
         </TaskContainer>
-      </div>
-    </UiGrid>
+      </Content>
+    </Container>
   )
 }
 export default ReportView
 
 const loadedReports = new Set<Id<Report>>()
 
-const HorizontalSpacer = styled.div`
+const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  
+  width: 100%;
+  height: 100%;
 `
 
-const VerticalSpacer = styled.div`
+const Heading = styled.div`
+  padding: 1rem 2rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 1rem;
-
-  :last-child {
-    margin-bottom: 0;
-  }
 `
 
-const BlockContainer = styled.div`
-  width: 100%;
+const Content = styled.div`
+  flex: 1;
+  padding: 1rem 2rem 1rem 2rem;
+
+  height: 100%;
+  overflow: auto;
 `
 
 const TextLines = styled.div`
