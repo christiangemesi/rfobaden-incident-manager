@@ -36,7 +36,7 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
   return (
     <Container>
       <UiGrid gapH={2} align="stretch">
-        <UiGrid.Col size={selected ? 4 : 12}>
+        <UiGrid.Col size={selected ? { md: 4, xl: 3 } : 12}>
           <ListContainer>
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (

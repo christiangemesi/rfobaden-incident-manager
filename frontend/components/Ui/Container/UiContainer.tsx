@@ -17,15 +17,8 @@ const UiContainer = styled(StyleHelper.tag<Props>('div'))`
       max-width: ${({ theme }) => theme.breakpoints.sm.min}px;
     }
     ${Themed.media.md.min} {
-      max-width: ${({ theme }) => theme.breakpoints.md.min}px;
-    }
-    ${Themed.media.lg.min} {
-      padding: 0 2rem;
-      max-width: ${({ theme }) => theme.breakpoints.lg.min}px;
-    }
-    ${Themed.media.xl.min} {
       padding: 0 4rem;
-      max-width: ${({ theme }) => theme.breakpoints.xl.min}px;
+      max-width: 100%;
     }
   `}
 `
