@@ -166,12 +166,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </UiContainer>
       </Heading>
       <Content>
-        <UiContainer>
-          <ReportList
-            incident={incident}
-            reports={reports}
-          />
-        </UiContainer>
+        <ReportList
+          incident={incident}
+          reports={reports}
+        />
       </Content>
     </Container>
   )
@@ -243,21 +241,6 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
   }
 }
 
-const HorizontalSpacer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const VerticalSpacer = styled.div`
-  width: 100%;
-  margin-bottom: 1rem;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-`
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -273,11 +256,23 @@ const Heading = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  padding: 2rem 0;
-  
   display: flex;
-  overflow-x: visible;
-  overflow-y: auto;
+  overflow: auto;
+`
+
+const HorizontalSpacer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const VerticalSpacer = styled.div`
+  width: 100%;
+  margin-bottom: 1rem;
+
+  :last-child {
+    margin-bottom: 0;
+  }
 `
 
 const BlockContainer = styled.div`

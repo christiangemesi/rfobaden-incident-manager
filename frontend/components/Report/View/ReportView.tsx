@@ -111,17 +111,19 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         </UiTextWithIcon>
       )}
 
-      <TaskContainer>
-        {isLoading ? (
-          <UiIcon.Loader isSpinner />
-        ) : (
-          <TaskList
-            incident={incident}
-            report={report}
-            tasks={tasks}
-          />
-        )}
-      </TaskContainer>
+      <div>
+        <TaskContainer>
+          {isLoading ? (
+            <UiIcon.Loader isSpinner />
+          ) : (
+            <TaskList
+              incident={incident}
+              report={report}
+              tasks={tasks}
+            />
+          )}
+        </TaskContainer>
+      </div>
     </UiGrid>
   )
 }

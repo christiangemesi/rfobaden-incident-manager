@@ -8,9 +8,12 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import { Themed } from '@/theme'
+import { useScrollbarWidth } from 'react-use'
 
 interface Props {
   incident: Incident
@@ -35,43 +38,47 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
   }
   return (
     <Container>
-      <UiGrid gapH={2} align="stretch">
-        <UiGrid.Col size={selected ? { md: 4, xl: 3 } : 12}>
-          <ListContainer>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiCreatButton onClick={open}>
-                  <UiIcon.CreateAction size={1.5} />
-                </UiCreatButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung erfassen
-                  </UiTitle>
-                  <ReportForm incident={incident} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
+      <UiGrid style={{ height: '100%' }}>
+        <UiGrid.Col size={selected ? { md: 4, xl: 3 } : 12} style={{ height: '100%' }}>
+          <ListSpacer>
+            <ListContainer hasSelected={selected !== null}>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiCreatButton onClick={open}>
+                    <UiIcon.CreateAction size={1.5} />
+                  </UiCreatButton>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Meldung erfassen
+                    </UiTitle>
+                    <ReportForm incident={incident} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
 
-            <UiList>
-              {reports.map((report) => (
-                <ReportListItem
-                  key={report.id}
-                  report={report}
-                  onClick={setSelectedAndCallback}
-                  isActive={selected?.id === report.id}
-                />
-              ))}
-            </UiList>
-          </ListContainer>
+              <UiList>
+                {reports.map((report) => (
+                  <ReportListItem
+                    key={report.id}
+                    report={report}
+                    onClick={setSelectedAndCallback}
+                    isActive={selected?.id === report.id}
+                  />
+                ))}
+              </UiList>
+            </ListContainer>
+          </ListSpacer>
         </UiGrid.Col>
 
         {selected && (
-          <UiGrid.Col style={{ minHeight: '100%' }}>
-            <ReportViewContainer>
-              <ReportView report={selected} />
-            </ReportViewContainer>
+          <UiGrid.Col style={{ height: '100%' }}>
+            <SelectedScroll>
+              <ReportViewContainer>
+                <ReportView report={selected} />
+              </ReportViewContainer>
+            </SelectedScroll>
           </UiGrid.Col>
         )}
       </UiGrid>
@@ -81,15 +88,43 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
 export default ReportList
 
 const Container = styled.div`
-  min-height: 100%;
-  margin-bottom: 2rem;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 `
 
-const ListContainer = styled.div`
+const ListSpacer = styled.div`
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0;
+  
+  // Move scrollbar to the left.
+  direction: rtl;
+  & > * {
+    direction: ltr;
+  }
+`
+
+const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  ${UiContainer.variables};
+  padding-left: ${() => {
+    const scrollbarWidth = useScrollbarWidth()
+    return css`calc(var(--ui-container--padding) - ${scrollbarWidth}px)`
+  }};
+  padding-right: ${({ hasSelected }) => hasSelected ? '1rem' : 'var(--ui-container--padding)'};
+  
+`
+
+const SelectedScroll = styled.div`
   height: 100%;
+  overflow: auto;
+  box-shadow: 0 0 4px 2px gray;
 `
 
 const ReportViewContainer = styled.div`
@@ -97,14 +132,10 @@ const ReportViewContainer = styled.div`
   --y-offset: 0px;
   
   display: flex;
-  width: 100%;
-  min-height: calc(100% - var(--y-offset));
-
-  box-shadow: 0 0 4px 2px gray;
-  padding: 1rem 2rem;
-  margin-top: var(--y-offset);
   
-  transition: 120ms ease-in;
-  transition-property: transform;
-  transform-origin: left center;
+  margin-top: var(--y-offset);
+
+  // TODO remove scrollbar width from padding if the element is scrollable.
+  ${UiContainer.variables};
+  padding: 1rem var(--ui-container--padding) 1rem 2rem;
 `

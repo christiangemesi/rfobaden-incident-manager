@@ -12,14 +12,25 @@ const UiContainer = styled(StyleHelper.tag<Props>('div'))`
   width: 100%;
   margin-inline: auto;
   ${({ isFluid }) => !isFluid && css`
-    padding: 0 0.8rem;
+    ${() => variables}
+    padding: 0 var(--ui-container--padding);
     ${Themed.media.sm.min} {
       max-width: ${({ theme }) => theme.breakpoints.sm.min}px;
     }
     ${Themed.media.md.min} {
-      padding: 0 4rem;
       max-width: 100%;
     }
   `}
 `
-export default UiContainer
+
+const variables = css`
+  --ui-container--padding: 0.8rem;
+
+  ${Themed.media.md.min} {
+    --ui-container--padding: 4rem;
+  }
+`
+
+export default Object.assign(UiContainer, {
+  variables,
+})
