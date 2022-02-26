@@ -59,63 +59,56 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   }
 
   return (
-    <UiGrid gapH={2} gapV={1} direction="column" style={{ minHeight: '100%' }}>
-      <VerticalSpacer>
-        <HorizontalSpacer>
-          <UiDateLabel start={startDate} end={report.endsAt} />
-          <UiIconButtonGroup>
-            <UiIconButton onClick={() => alert('not yet implemented')}>
-              <UiIcon.PrintAction />
-            </UiIconButton>
+    <UiGrid gapV={1} direction="column" style={{ minHeight: '100%' }}>
+      <UiGrid justify="space-between" align="center">
+        <UiTitle level={3}>
+          {report.title}
+        </UiTitle>
 
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiIconButton onClick={open}>
-                  <UiIcon.EditAction />
-                </UiIconButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung bearbeiten
-                  </UiTitle>
-                  <ReportForm incident={incident} report={report} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
+        <UiIconButtonGroup>
+          <UiIconButton onClick={() => alert('not yet implemented')}>
+            <UiIcon.PrintAction />
+          </UiIconButton>
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiIconButton onClick={open}>
+                <UiIcon.EditAction />
+              </UiIconButton>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <React.Fragment>
+                <UiTitle level={1} isCentered>
+                  Meldung bearbeiten
+                </UiTitle>
+                <ReportForm incident={incident} report={report} onClose={close} />
+              </React.Fragment>
+            )}</UiModal.Body>
+          </UiModal>
 
-            <UiIconButton onClick={handleDelete}>
-              <UiIcon.DeleteAction />
-            </UiIconButton>
+          <UiIconButton onClick={handleDelete}>
+            <UiIcon.DeleteAction />
+          </UiIconButton>
+        </UiIconButtonGroup>
+      </UiGrid>
+      <UiDateLabel start={startDate} end={report.endsAt} />
+      <TextLines>
+        {report.description}
+      </TextLines>
 
-          </UiIconButtonGroup>
-        </HorizontalSpacer>
-      </VerticalSpacer>
-      <BlockContainer>
-        <TextLines>
-          {report.description}
-        </TextLines>
-      </BlockContainer>
       {report.location && (
-        <BlockContainer>
-          <UiTextWithIcon text={report.location ?? ''}>
-            <UiIcon.Location />
-          </UiTextWithIcon>
-        </BlockContainer>
+        <UiTextWithIcon text={report.location ?? ''}>
+          <UiIcon.Location />
+        </UiTextWithIcon>
       )}
       {assignee && (
-        <BlockContainer>
-          <UiTextWithIcon text={assigneeName}>
-            <UiIcon.UserInCircle />
-          </UiTextWithIcon>
-        </BlockContainer>
+        <UiTextWithIcon text={assigneeName}>
+          <UiIcon.UserInCircle />
+        </UiTextWithIcon>
       )}
       {report.notes !== null && (
-        <VerticalSpacer>
-          <UiTextWithIcon text={report.notes}>
-            <UiIcon.AlertCircle />
-          </UiTextWithIcon>
-        </VerticalSpacer>
+        <UiTextWithIcon text={report.notes}>
+          <UiIcon.AlertCircle />
+        </UiTextWithIcon>
       )}
 
       <TaskContainer>
