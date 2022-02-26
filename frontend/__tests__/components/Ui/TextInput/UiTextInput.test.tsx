@@ -23,10 +23,6 @@ describe('UiTextInput', () => {
     it('Should have type text', () => {
       const mockCallBack = jest.fn()
       const html = shallow(<UiTextInput value={text} type="text" onChange={mockCallBack} /> )
-      // const input = html.find('input').first()
-      // expect(input.value).toBe(text)
-      const input = html.find('span').first()
-      expect(input.html()).toContain('span')
     })
   })
 })
