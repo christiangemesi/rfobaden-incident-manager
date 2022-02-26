@@ -25,10 +25,22 @@ const UiIconButton: React.VFC<Props> = ({
 export default styled(UiIconButton)``
 
 const StyledButton = styled.button`
-  background: none;
+  display: inline-flex;
+  align-items: center;
+
   border: none;
+  background: transparent;
   cursor: pointer;
   margin: 0 0.2rem;
+  
+  will-change: background-color;
+  transition: 200ms ease-out;
+  transition-property: background-color;
+
+  :hover {
+    background-color: ${({ theme }) => theme.colors.grey.value};
+  }
+  
   &:first-child {
     margin-left: 0;
   } 
@@ -36,16 +48,9 @@ const StyledButton = styled.button`
     margin-right: 0;
   }
 
-  will-change: transform;
-  transition: 250ms ease-in-out;
-  transition-property: filter;
 
   color: ${({
     theme,
     color,
   }) => color === undefined ? contrastDark : theme.colors[color].value};
-
-  :hover {
-    filter: brightness(130%);
-  }
 `

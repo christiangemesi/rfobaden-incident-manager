@@ -1,6 +1,6 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import ReportStore, { useReport, useReportsOfIncident } from '@/stores/ReportStore'
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -16,18 +16,17 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import * as ReactDOM from 'react-dom'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import { useTasks } from '@/stores/TaskStore'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import IncidentForm from '@/components/Incident/Form/IncidentForm'
-import Id from '@/models/base/Id'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import IncidentForm from '@/components/Incident/Form/IncidentForm'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props {
   data: {
@@ -113,24 +112,23 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     <Container>
       <Heading>
         <UiContainer>
-          <BlockContainer>
-            <UiTitle level={1}>
-              {incident.title}
-            </UiTitle>
-          </BlockContainer>
-          <VerticalSpacer>
-            <HorizontalSpacer>
-              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
-              <UiIconButtonGroup>
-                <UiIconButton onClick={handlePrint}>
-                  <UiIcon.PrintAction />
-                  {printer}
-                </UiIconButton>
+          <UiGrid align="center">
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                {incident.title}
+              </UiTitle>
+            </UiGrid.Col>
+            <UiGrid.Col size="auto">
+              <UiDropDown>
+                <UiDropDown.Trigger>
+                  <UiIconButton>
+                    <UiIcon.More />
+                  </UiIconButton>
+                </UiDropDown.Trigger>
+
                 <UiModal isFull>
                   <UiModal.Activator>{({ open }) => (
-                    <UiIconButton onClick={open}>
-                      <UiIcon.EditAction />
-                    </UiIconButton>
+                    <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                   )}</UiModal.Activator>
                   <UiModal.Body>{({ close }) => (
                     <React.Fragment>
@@ -141,10 +139,14 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                     </React.Fragment>
                   )}</UiModal.Body>
                 </UiModal>
-                <UiIconButton onClick={handleDelete}>
-                  <UiIcon.DeleteAction />
-                </UiIconButton>
-              </UiIconButtonGroup>
+
+                <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+              </UiDropDown>
+            </UiGrid.Col>
+          </UiGrid>
+          <VerticalSpacer>
+            <HorizontalSpacer>
+              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
             </HorizontalSpacer>
           </VerticalSpacer>
           <VerticalSpacer>

@@ -67,10 +67,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};
-      
-      // TODO remove these.
-      overflow-x: hidden;
-      overflow-y: hidden;
     }
   `}
   

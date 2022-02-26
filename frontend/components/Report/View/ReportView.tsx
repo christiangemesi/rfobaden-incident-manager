@@ -20,6 +20,7 @@ import { useAsync } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 
 interface Props {
   report: Report
@@ -75,16 +76,17 @@ const ReportView: React.VFC<Props> = ({ report }) => {
           <UiTitle level={3}>
             {report.title}
           </UiTitle>
-
-          <UiIconButtonGroup>
-            <UiIconButton onClick={() => alert('not yet implemented')}>
-              <UiIcon.PrintAction />
-            </UiIconButton>
+          <UiDropDown>
+            <UiDropDown.Trigger>
+              <UiIconButton>
+                <UiIcon.More />
+              </UiIconButton>
+            </UiDropDown.Trigger>
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (
-                <UiIconButton onClick={open}>
-                  <UiIcon.EditAction />
-                </UiIconButton>
+                <UiDropDown.Item onClick={open}>
+                  Bearbeiten
+                </UiDropDown.Item>
               )}</UiModal.Activator>
               <UiModal.Body>{({ close }) => (
                 <React.Fragment>
@@ -95,11 +97,10 @@ const ReportView: React.VFC<Props> = ({ report }) => {
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
-
-            <UiIconButton onClick={handleDelete}>
-              <UiIcon.DeleteAction />
-            </UiIconButton>
-          </UiIconButtonGroup>
+            <UiDropDown.Item onClick={handleDelete}>
+              Löschen
+            </UiDropDown.Item>
+          </UiDropDown>
         </UiGrid>
         <UiDateLabel start={startDate} end={report.endsAt} />
         <TextLines>

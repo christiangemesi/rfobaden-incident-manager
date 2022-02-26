@@ -10,6 +10,13 @@ import { useAsync } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import TaskForm from '@/components/Task/Form/TaskForm'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
+import TaskStore from '@/stores/TaskStore'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import { router } from 'next/client'
 
 interface Props {
   task: Task
@@ -41,11 +48,47 @@ const TaskView: React.VFC<Props> = ({ task }) => {
     loadedTasks.add(task.id)
   }, [report.id])
 
+  const handleDelete = async () => {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+      await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
+      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+      TaskStore.remove(task.id)
+    }
+  }
+
   return (
     <div>
-      <UiTitle level={4}>
-        {task.title}
-      </UiTitle>
+      <UiGrid justify="space-between" align="center">
+        <UiTitle level={4}>
+          {task.title}
+        </UiTitle>
+
+        <UiDropDown>
+          <UiDropDown.Trigger>
+            <UiIconButton>
+              <UiIcon.More />
+            </UiIconButton>
+          </UiDropDown.Trigger>
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiDropDown.Item onClick={open}>
+                Bearbeiten
+              </UiDropDown.Item>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <React.Fragment>
+                <UiTitle level={1} isCentered>
+                  Task bearbeiten
+                </UiTitle>
+                <TaskForm incident={incident} report={report} task={task} onClose={close} />
+              </React.Fragment>
+            )}</UiModal.Body>
+          </UiModal>
+          <UiDropDown.Item onClick={handleDelete}>
+            Löschen
+          </UiDropDown.Item>
+        </UiDropDown>
+      </UiGrid>
 
       <div>
         {isLoading ? (

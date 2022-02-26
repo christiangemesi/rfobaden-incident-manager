@@ -12,7 +12,7 @@ import {
   mdiCheckboxMarked,
   mdiClipboardTextOutline,
   mdiClose,
-  mdiDelete,
+  mdiDelete, mdiDotsHorizontal,
   mdiImageFilterHdr,
   mdiKey, mdiLoading,
   mdiLoginVariant,
@@ -99,4 +99,5 @@ export default Object.assign(StyledUiIcon, {
   Login: makeNamedIcon(mdiLoginVariant),
   Logout: makeNamedIcon(mdiLogoutVariant),
   Loader: makeNamedIcon(mdiLoading),
+  More: makeNamedIcon(mdiDotsHorizontal),
 })
