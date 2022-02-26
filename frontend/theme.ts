@@ -75,8 +75,8 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    heading: 'Manrope, sans-serif',
-    body: 'Manrope, sans-serif',
+    heading: 'Raleway, sans-serif',
+    body: 'Raleway, sans-serif',
   },
   breakpoints: {
     xs: {
