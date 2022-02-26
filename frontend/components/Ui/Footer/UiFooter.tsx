@@ -12,7 +12,7 @@ export default UiFooter
 const FooterContainer = styled.footer`
   background: ${({ theme }) => theme.colors.secondary.value};
   height: 4rem;
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
   right: 0;
