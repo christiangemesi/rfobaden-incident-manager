@@ -19,7 +19,6 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
       title={task.title}
       priority={task.priority}
       user={assigneeName}
-      href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}
       isClosed={task.isClosed}
       onClick={handleClick && (() => handleClick(task))}
     >

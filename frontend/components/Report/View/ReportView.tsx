@@ -1,6 +1,6 @@
 import Report from '@/models/Report'
-import React, { useEffect } from 'react'
-import styled, { useTheme } from 'styled-components'
+import React, { useCallback, useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
@@ -19,7 +19,7 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import { useAsync } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
-import UiContainer from '@/components/Ui/Container/UiContainer'
+import TaskView from '@/components/Task/View/TaskView'
 
 interface Props {
   report: Report
@@ -59,9 +59,18 @@ const ReportView: React.VFC<Props> = ({ report }) => {
     throw new Error('incident of report not found')
   }
 
+  const [selected, setSelected] = useState<Task | null>()
+  const selectTask = useCallback((task: Task) => {
+    setSelected(task)
+  }, [])
+
+  useEffect(() => {
+    setSelected(null)
+  }, [report.id])
+
   return (
     <Container>
-      <Heading>
+      <Heading onClick={() => setSelected(null)}>
         <UiGrid justify="space-between" align="center">
           <UiTitle level={3}>
             {report.title}
@@ -113,7 +122,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
           </UiTextWithIcon>
         )}
       </Heading>
-      <Content>
+      <Content hasSelected={selected !== null}>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -122,9 +131,15 @@ const ReportView: React.VFC<Props> = ({ report }) => {
               incident={incident}
               report={report}
               tasks={tasks}
+              onClick={selectTask}
             />
           )}
         </TaskContainer>
+        <TaskOverlay hasSelected={selected !== null}>
+          {selected && (
+            <TaskView task={selected} />
+          )}
+        </TaskOverlay>
       </Content>
     </Container>
   )
@@ -142,19 +157,20 @@ const Container = styled.div`
 `
 
 const Heading = styled.div`
-  padding: 1rem 2rem 1rem 2rem;
+  padding: 1rem 2rem 0 2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 1rem;
 `
 
-const Content = styled.div`
+const Content = styled.div<{ hasSelected: boolean }>`
+  position: relative;
   flex: 1;
-  padding: 1rem 2rem 1rem 2rem;
-
   height: 100%;
-  overflow: auto;
+  
+  ${({ hasSelected }) => css`
+    overflow: ${hasSelected ? 'hidden' : 'auto'};
+  `}
 `
 
 const TextLines = styled.div`
@@ -165,5 +181,33 @@ const TextLines = styled.div`
 const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding: 1rem 2rem 1rem 2rem;
   width: 100%;
+`
+
+const TaskOverlay = styled.div<{ hasSelected: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  
+  z-index: 2;
+  
+  width: calc(100% - 2rem);
+  height: 100%;
+  
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  box-shadow: 0 0 4px 2px gray;
+  
+  transition: 150ms ease-out;
+  transition-property: transform;
+  
+  transform: scaleY(0);
+  transform-origin: bottom;
+  
+  margin-top: 1rem;
+  padding: 1rem 2rem 1rem 2rem;
+  
+  ${({ hasSelected }) => hasSelected && css`
+    transform: scaleY(1);
+  `}
 `

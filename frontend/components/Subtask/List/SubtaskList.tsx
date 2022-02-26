@@ -10,6 +10,7 @@ import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   incident: Incident
@@ -28,35 +29,40 @@ const SubtaskList: React.VFC<Props> = ({
   activeSubtask,
   onClick: handleClick }) => {
   return (
-    <UiList>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiCreatButton onClick={open}>
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreatButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Teilauftrag erfassen
-            </UiTitle>
-            <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
+    <UiGrid direction="column" gap={1}>
+      <UiList>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiCreatButton onClick={open}>
+              <UiIcon.CreateAction size={1.5} />
+            </UiCreatButton>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <div>
+              <UiTitle level={1} isCentered>
+                Teilauftrag erfassen
+              </UiTitle>
+              <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+            </div>
+          )}</UiModal.Body>
+        </UiModal>
+      </UiList>
+      <UiList>
 
-      {subtasks.map((subtask) => (
-        <SubtaskListItem
-          incident={incident}
-          report={report}
-          task={task}
-          key={subtask.id}
-          subtask={subtask}
-          onClick={handleClick}
-          isActive={activeSubtask !== null && activeSubtask.id == subtask.id}
-        />
-      ))}
-    </UiList>
+
+        {subtasks.map((subtask) => (
+          <SubtaskListItem
+            incident={incident}
+            report={report}
+            task={task}
+            key={subtask.id}
+            subtask={subtask}
+            onClick={handleClick}
+            isActive={activeSubtask !== null && activeSubtask.id == subtask.id}
+          />
+        ))}
+      </UiList>
+    </UiGrid>
   )
 }
 export default SubtaskList

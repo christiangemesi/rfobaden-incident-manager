@@ -1,18 +1,18 @@
 import { noop, run } from '@/utils/control-flow'
 
 class ScrollHelper {
-  disableScroll() {
-    window.addEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
-    window.addEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // modern desktop
-    window.addEventListener('touchmove', handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // mobile
-    window.addEventListener('keydown', handleWithPreventDefaultForScrollKeys, false)
+  disableScroll(element: EventTarget) {
+    element.addEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
+    element.addEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // modern desktop
+    element.addEventListener('touchmove', handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // mobile
+    element.addEventListener('keydown', handleWithPreventDefaultForScrollKeys as never, false)
   }
 
-  enableScroll() {
-    window.removeEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
-    window.removeEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault) // modern desktop
-    window.removeEventListener('touchmove', handleWithPreventDefault) // mobile
-    window.removeEventListener('keydown', handleWithPreventDefaultForScrollKeys, false)
+  enableScroll(element: EventTarget) {
+    element.removeEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
+    element.removeEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault) // modern desktop
+    element.removeEventListener('touchmove', handleWithPreventDefault) // mobile
+    element.removeEventListener('keydown', handleWithPreventDefaultForScrollKeys as never, false)
   }
 
   get isPassiveSupported() {

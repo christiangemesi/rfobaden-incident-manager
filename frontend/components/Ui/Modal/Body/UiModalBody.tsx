@@ -29,13 +29,13 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
     console.log(globalLevel)
     if (context.isOpen) {
       if (globalLevel === 0) {
-        ScrollHelper.disableScroll()
+        ScrollHelper.disableScroll(window)
       }
       setLevel(globalLevel + 1)
       setGlobalLevel(globalLevel + 1)
     } else {
       if (globalLevel === 1) {
-        ScrollHelper.enableScroll()
+        ScrollHelper.enableScroll(window)
       }
       setLevel(globalLevel - 1)
       setGlobalLevel(globalLevel - 1)
