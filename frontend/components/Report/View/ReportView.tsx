@@ -186,6 +186,7 @@ const Content = styled.div`
   flex: 1;
   height: 100%;
   padding-right: 4rem;
+  overflow: hidden;
 
   ${Themed.media.lg.max} {
     padding: 0;
@@ -204,12 +205,15 @@ const TextLines = styled.div`
 `
 
 const TaskContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   padding: 0 2rem 1rem 2rem;
   margin-right: 4rem;
   width: 100%;
+  z-index: 0;
 
+  
   ${Themed.media.lg.max} {
     padding: 0;
   }
@@ -220,7 +224,7 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   top: 0;
   left: 1rem;
   
-  z-index: 100;
+  z-index: 2;
   
   width: calc(100% - 1rem);
   height: 100%;
@@ -228,6 +232,7 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
 
+  will-change: transform;
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
   
