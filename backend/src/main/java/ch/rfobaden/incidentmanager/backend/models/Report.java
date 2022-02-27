@@ -203,11 +203,16 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
             .collect(Collectors.toList());
     }
 
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getTasks().isEmpty()
+            && (getTasks().stream().allMatch(Task::isClosed)
+            || getTasks().stream().allMatch(Task::isDone));
+    }
+
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return isClosed
-            || !getTasks().isEmpty()
-            && getTasks().stream().allMatch(Task::isClosed);
+        return isClosed;
     }
 
     public void setClosed(boolean closed) {

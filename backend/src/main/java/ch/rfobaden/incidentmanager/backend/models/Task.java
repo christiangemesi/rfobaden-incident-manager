@@ -177,11 +177,15 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
             .collect(Collectors.toList());
     }
 
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getSubtasks().isEmpty()
+            && getSubtasks().stream().allMatch(Subtask::isClosed);
+    }
+
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return isClosed
-            || !getSubtasks().isEmpty()
-            && getSubtasks().stream().allMatch(Subtask::isClosed);
+        return isClosed;
     }
 
     public void setClosed(boolean closed) {
