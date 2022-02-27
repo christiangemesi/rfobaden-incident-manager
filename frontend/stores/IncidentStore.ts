@@ -16,6 +16,7 @@ ReportStore.onCreate((report) => {
   if (incident === null) {
     return
   }
+
   IncidentStore.save({
     ...incident,
     reportIds: [...new Set([...incident.reportIds, report.id])],
@@ -27,17 +28,19 @@ ReportStore.onCreate((report) => {
     isDone: incident.isDone && report.isClosed,
   })
 })
-ReportStore.onUpdate((report, oldReport) => {
+ReportStore.onUpdate((report) => {
   const incident = IncidentStore.find(report.incidentId)
-  if (incident === null || report.isClosed === oldReport.isClosed && report.isDone === oldReport.isDone) {
+  if (incident === null) {
     return
   }
+
   const closedReportIds = new Set(incident.closedReportIds)
   if (report.isClosed || report.isDone) {
     closedReportIds.add(report.id)
   } else {
     closedReportIds.delete(report.id)
   }
+
   IncidentStore.save({
     ...incident,
     closedReportIds: [...closedReportIds],
@@ -49,12 +52,15 @@ ReportStore.onRemove((report) => {
   if (incident === null) {
     return
   }
+
   const reportIds = [...incident.reportIds]
   reportIds.splice(reportIds.indexOf(report.id), 1)
+
   const closedReportIds = [...incident.closedReportIds]
   if (report.isClosed || report.isDone) {
     closedReportIds.splice(closedReportIds.indexOf(report.id), 1)
   }
+
   IncidentStore.save({
     ...incident,
     reportIds,

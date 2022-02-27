@@ -24,6 +24,7 @@ TaskStore.onCreate((task) => {
   if (report === null) {
     return
   }
+
   ReportStore.save({
     ...report,
     taskIds: [...new Set([...report.taskIds, task.id])],
@@ -35,17 +36,19 @@ TaskStore.onCreate((task) => {
     isDone: report.isDone && task.isClosed,
   })
 })
-TaskStore.onUpdate((task, oldTask) => {
+TaskStore.onUpdate((task) => {
   const report = ReportStore.find(task.reportId)
-  if (report === null || task.isClosed === oldTask.isClosed && task.isDone === oldTask.isDone) {
+  if (report === null) {
     return
   }
+
   const closedTaskIds = new Set(report.closedTaskIds)
   if (task.isClosed || task.isDone) {
     closedTaskIds.add(task.id)
   } else {
     closedTaskIds.delete(task.id)
   }
+
   ReportStore.save({
     ...report,
     closedTaskIds: [...closedTaskIds],
@@ -57,6 +60,7 @@ TaskStore.onRemove((task) => {
   if (report === null) {
     return
   }
+
   const taskIds = [...report.taskIds]
   taskIds.splice(taskIds.indexOf(task.id), 1)
 

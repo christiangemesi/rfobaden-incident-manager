@@ -19,6 +19,7 @@ SubtaskStore.onCreate((subtask) => {
   if (task === null) {
     return
   }
+
   TaskStore.save({
     ...task,
     subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
@@ -30,17 +31,19 @@ SubtaskStore.onCreate((subtask) => {
     isDone: task.isDone && subtask.isClosed,
   })
 })
-SubtaskStore.onUpdate((subtask, oldSubtask) => {
+SubtaskStore.onUpdate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
-  if (task === null || subtask.isClosed === oldSubtask.isClosed) {
+  if (task === null) {
     return
   }
+
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
   } else {
     closedSubtaskIds.delete(subtask.id)
   }
+
   TaskStore.save({
     ...task,
     closedSubtaskIds: [...closedSubtaskIds],
@@ -52,12 +55,15 @@ SubtaskStore.onRemove((subtask) => {
   if (task === null) {
     return
   }
+
   const subtaskIds = [...task.subtaskIds]
   subtaskIds.splice(subtaskIds.indexOf(subtask.id), 1)
+
   const closedSubtaskIds = [...task.closedSubtaskIds]
   if (subtask.isClosed) {
     closedSubtaskIds.splice(closedSubtaskIds.indexOf(subtask.id), 1)
   }
+
   TaskStore.save({
     ...task,
     subtaskIds,
