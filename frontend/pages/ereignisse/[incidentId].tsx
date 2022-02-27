@@ -85,23 +85,23 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   const selectedReport = useReport(selectedReportId)
 
   const handleClose = async () => {
-    if (incident.isClosed) {
-      if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
-        const [data] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
-        IncidentStore.save(parseIncident(data))
+
+    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+    if (message !== null && message.trim().length > 0) {
+      const messageData = { message }
+      const [data, error] = await BackendService.update<CloseMessageData, Incident>(`incidents/${incident.id}/close`, messageData)
+      if (error !== null) {
+        throw error
       }
-    } else {
-      const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
-      if (message !== null && message.trim() !== '') {
-        const messageData = { message }
-        const [data, error] = await BackendService.update<CloseMessageData, Incident>(`incidents/${incident.id}/close`, messageData)
-        if (error !== null) {
-          throw error
-        }
-        IncidentStore.save(parseIncident(data))
-      } else if (message !== null) {
-        confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
-      }
+      IncidentStore.save(parseIncident(data))
+    } else if (message !== null) {
+      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
+    }
+  }
+  const handleReopen = async () => {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
+      const [data] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
+      IncidentStore.save(parseIncident(data))
     }
   }
 
@@ -159,13 +159,16 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           <HorizontalSpacer>
             <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
             <UiIconButtonGroup>
-              <UiIconButton onClick={handleClose}>
-                {/*TODO add close and reopen icon*/}
-                {incident.isClosed
-                  ? <UiIcon.CancelAction />
-                  : <UiIcon.SubmitAction />
-                }
-              </UiIconButton>
+              {/*TODO add close and reopen icon*/}
+              {incident.isClosed ? (
+                <UiIconButton onClick={handleClose}>
+                  <UiIcon.CancelAction />
+                </UiIconButton>
+              ) : (
+                <UiIconButton onClick={handleReopen}>
+                  <UiIcon.SubmitAction />
+                </UiIconButton>
+              )}
               <UiIconButton onClick={handlePrint}>
                 <UiIcon.PrintAction />
                 {printer}

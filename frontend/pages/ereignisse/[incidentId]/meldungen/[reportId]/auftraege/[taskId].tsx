@@ -140,7 +140,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           </UiTitle>
 
           <UiIconButtonGroup>
-            {!task.isDone ? (
+            {!task.isDone && (
               <UiIconButton onClick={handleClose}>
                 {/*TODO add close and reopen icon*/}
                 {task.isClosed
@@ -148,7 +148,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
                   : <UiIcon.SubmitAction />
                 }
               </UiIconButton>
-            ) : ''}
+            )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>

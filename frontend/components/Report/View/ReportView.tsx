@@ -67,7 +67,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
-            {!report.isDone ? (
+            {!report.isDone && (
               <UiIconButton onClick={handleClose}>
                 {/*TODO add close and reopen icon*/}
                 {report.isClosed
@@ -75,7 +75,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
                   : <UiIcon.SubmitAction />
                 }
               </UiIconButton>
-            ) : ''}
+            )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>
