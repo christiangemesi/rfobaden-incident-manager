@@ -16,7 +16,7 @@ const UiLink: React.VFC<Props> = ({
   style,
   children,
   isText = false,
-  target = '_self',
+  target,
 }) => {
   const AComponent = isText ? TextA : A
   return (
