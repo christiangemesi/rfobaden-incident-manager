@@ -22,6 +22,7 @@ import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import { Themed } from '@/theme'
+import UiContainer from '@/components/Ui/Container/UiContainer'
 
 interface Props {
   report: Report
@@ -177,6 +178,7 @@ const Heading = styled.div`
   width: 100%;
   
   ${Themed.media.lg.max} {
+    ${UiContainer.fluidCss};
     padding: 0;
   }
 `
@@ -212,9 +214,9 @@ const TaskContainer = styled.div`
   margin-right: 4rem;
   width: 100%;
   z-index: 0;
-
   
   ${Themed.media.lg.max} {
+    ${UiContainer.fluidCss};
     padding: 0;
   }
 `
@@ -247,6 +249,7 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   `}
   
   ${Themed.media.lg.max} {
+    ${UiContainer.fluidCss};
     left: 0;
     width: 100%;
   }

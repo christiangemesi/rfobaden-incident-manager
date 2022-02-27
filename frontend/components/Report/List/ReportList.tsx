@@ -147,8 +147,6 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   `}
   
   ${Themed.media.lg.max} {
-    ${UiContainer.fluidCss};
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding: 1rem 0;
   }
 `
