@@ -78,6 +78,8 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
+  const isNotAutoClosed = task.isClosed && !task.isDone
+
   const handleClose = async () => {
     if (task.closedSubtaskIds.length === task.subtaskIds.length && task.subtaskIds.length > 0) {
       alert('Es sind alle Teilaufträge geschlossen.')
@@ -140,13 +142,15 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           </UiTitle>
 
           <UiIconButtonGroup>
-            <UiIconButton onClick={handleClose}>
-              {/*TODO add close and reopen icon*/}
-              {task.isClosed
-                ? <UiIcon.CancelAction />
-                : <UiIcon.SubmitAction />
-              }
-            </UiIconButton>
+            {isNotAutoClosed ? (
+              <UiIconButton onClick={handleClose}>
+                {/*TODO add close and reopen icon*/}
+                {task.isClosed
+                  ? <UiIcon.CancelAction />
+                  : <UiIcon.SubmitAction />
+                }
+              </UiIconButton>
+            ) : ''}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>
