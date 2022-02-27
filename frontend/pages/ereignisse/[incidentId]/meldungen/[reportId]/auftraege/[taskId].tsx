@@ -79,7 +79,7 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
   const handleClose = async () => {
-    if (task.closedSubtaskIds.length === task.subtaskIds.length && task.subtaskIds.length > 0) {
+    if (task.isDone) {
       alert('Es sind alle Teilaufträge geschlossen.')
     } else {
       const text = task.isClosed ? 'erneut öffnen' : 'schliessen'

@@ -28,7 +28,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
   const tasks = useTasksOfReport(report.id)
 
   const handleClose = async () => {
-    if (report.closedTaskIds.length === report.taskIds.length && report.taskIds.length > 0) {
+    if (report.isDone) {
       alert('Es sind alle Aufträge geschlossen.')
     } else {
       const text = report.isClosed ? 'erneut öffnen' : 'schliessen'
