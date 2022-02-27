@@ -178,8 +178,8 @@ const Heading = styled.div`
   width: 100%;
   
   ${Themed.media.lg.max} {
-    ${UiContainer.fluidCss};
     padding: 0;
+    ${UiContainer.fluidCss};
   }
 `
 
@@ -216,8 +216,8 @@ const TaskContainer = styled.div`
   z-index: 0;
   
   ${Themed.media.lg.max} {
-    ${UiContainer.fluidCss};
     padding: 0;
+    ${UiContainer.fluidCss};
   }
 `
 

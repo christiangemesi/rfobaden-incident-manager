@@ -8,12 +8,17 @@ interface Props {
 }
 
 const UiContainer = styled.div<Props>`
+  ${({ isFluid }) => !isFluid ? fluidCss : sharedCss}
+`
+
+const sharedCss = css`
   width: 100%;
   margin-inline: auto;
-  ${({ isFluid }) => !isFluid && fluidCss}
 `
 
 const fluidCss = css`
+  ${sharedCss};
+  
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   
