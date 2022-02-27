@@ -24,9 +24,10 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 
 interface Props {
   report: Report
+  onClose?: () => void
 }
 
-const ReportView: React.VFC<Props> = ({ report }) => {
+const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
   const tasks = useTasksOfReport(report.id)
   const { loading: isLoading } = useAsync(async () => {
     if (loadedReports.has(report.id)) {
@@ -76,31 +77,37 @@ const ReportView: React.VFC<Props> = ({ report }) => {
           <UiTitle level={3}>
             {report.title}
           </UiTitle>
-          <UiDropDown>
-            <UiDropDown.Trigger>
-              <UiIconButton>
-                <UiIcon.More />
-              </UiIconButton>
-            </UiDropDown.Trigger>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiDropDown.Item onClick={open}>
-                  Bearbeiten
-                </UiDropDown.Item>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung bearbeiten
-                  </UiTitle>
-                  <ReportForm incident={incident} report={report} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-            <UiDropDown.Item onClick={handleDelete}>
-              Löschen
-            </UiDropDown.Item>
-          </UiDropDown>
+          <UiIconButtonGroup>
+            <UiDropDown>
+              <UiDropDown.Trigger>
+                <UiIconButton>
+                  <UiIcon.More />
+                </UiIconButton>
+              </UiDropDown.Trigger>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>
+                    Bearbeiten
+                  </UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Meldung bearbeiten
+                    </UiTitle>
+                    <ReportForm incident={incident} report={report} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
+              <UiDropDown.Item onClick={handleDelete}>
+                Löschen
+              </UiDropDown.Item>
+            </UiDropDown>
+
+            <UiIconButton onClick={handleClose}>
+              <UiIcon.CancelAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
         </UiGrid>
         <UiDateLabel start={startDate} end={report.endsAt} />
         <TextLines>

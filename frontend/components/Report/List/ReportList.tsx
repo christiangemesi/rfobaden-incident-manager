@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
@@ -22,7 +22,7 @@ interface Props {
 
 const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelect, onDeselect: handleDeselect  }) => {
   const [selected, setSelected] = useState<Report | null>(null)
-  const setSelectedAndCallback = (report: Report | null) => {
+  const setSelectedAndCallback = useCallback((report: Report | null) => {
     if (report === null) {
       if (handleDeselect) {
         handleDeselect()
@@ -33,7 +33,10 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
       }
     }
     setSelected(report)
-  }
+  }, [handleSelect, handleDeselect])
+  const clearSelected = useCallback(() => {
+    setSelectedAndCallback(null)
+  }, [setSelectedAndCallback])
 
   return (
     <Container>
@@ -74,7 +77,7 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
         {selected && (
           <UiGrid.Col style={{ height: '100%' }}>
             <ReportViewContainer>
-              <ReportView report={selected} />
+              <ReportView report={selected} onClose={clearSelected} />
             </ReportViewContainer>
           </UiGrid.Col>
         )}
