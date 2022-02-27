@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Modals can now be closed by pressing the escape key.
+- Added page footer.
 
 ### Fixed
 - Scroll is now disabled while a modal is open.
