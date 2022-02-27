@@ -27,8 +27,6 @@ const ReportView: React.VFC<Props> = ({ report }) => {
 
   const tasks = useTasksOfReport(report.id)
 
-  const isNotAutoClosed = report.isClosed && !report.isDone
-
   const handleClose = async () => {
     if (report.closedTaskIds.length === report.taskIds.length && report.taskIds.length > 0) {
       alert('Es sind alle Aufträge geschlossen.')
@@ -69,7 +67,7 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
-            {isNotAutoClosed ? (
+            {!report.isDone ? (
               <UiIconButton onClick={handleClose}>
                 {/*TODO add close and reopen icon*/}
                 {report.isClosed
