@@ -133,19 +133,21 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
           </UiTextWithIcon>
         )}
       </Heading>
-      <Content hasSelected={selected !== null}>
-        <TaskContainer>
-          {isLoading ? (
-            <UiIcon.Loader isSpinner />
-          ) : (
-            <TaskList
-              incident={incident}
-              report={report}
-              tasks={tasks}
-              onClick={selectTask}
-            />
-          )}
-        </TaskContainer>
+      <Content>
+        <ContentScroll>
+          <TaskContainer>
+            {isLoading ? (
+              <UiIcon.Loader isSpinner />
+            ) : (
+              <TaskList
+                incident={incident}
+                report={report}
+                tasks={tasks}
+                onClick={selectTask}
+              />
+            )}
+          </TaskContainer>
+        </ContentScroll>
         <TaskOverlay hasSelected={selected !== null}>
           {selected && (
             <TaskView task={selected} onClose={clearSelected} />
@@ -168,20 +170,23 @@ const Container = styled.div`
 `
 
 const Heading = styled.div`
-  padding: 1rem 2rem 0 2rem;
+  padding: 1rem 4rem 0 2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
 `
 
-const Content = styled.div<{ hasSelected: boolean }>`
+const Content = styled.div`
   position: relative;
   flex: 1;
   height: 100%;
-  
-  ${({ hasSelected }) => css`
-    overflow: ${hasSelected ? 'hidden' : 'auto'};
-  `}
+  padding-right: 4rem;
+`
+
+const ContentScroll = styled.div`
+  height: calc(100% - 1rem);
+  overflow: auto;
+  margin-top: 1rem;
 `
 
 const TextLines = styled.div`
@@ -192,7 +197,8 @@ const TextLines = styled.div`
 const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: 1rem 2rem 1rem 2rem;
+  padding: 0 2rem 1rem 2rem;
+  margin-right: 4rem;
   width: 100%;
 `
 
@@ -201,24 +207,24 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   top: 0;
   left: 1rem;
   
-  z-index: 2;
+  z-index: 100;
   
   width: calc(100% - 1rem);
   height: 100%;
   
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
-  
-  transition: 150ms ease-out;
+
+  transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
   
-  transform: scaleY(0);
+  transform: translateY(100%);
   transform-origin: bottom;
   
   margin-top: 1rem;
-  padding: 1rem 2rem 1rem 2rem;
+  padding: 1rem 4rem 1rem 2rem;
   
   ${({ hasSelected }) => hasSelected && css`
-    transform: scaleY(1);
+    transform: translateY(0);
   `}
 `

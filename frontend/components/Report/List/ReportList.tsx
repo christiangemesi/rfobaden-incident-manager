@@ -8,7 +8,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
@@ -74,13 +74,11 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
           </ListSpacer>
         </UiGrid.Col>
 
-        {selected && (
-          <UiGrid.Col style={{ height: '100%' }}>
-            <ReportViewContainer>
-              <ReportView report={selected} onClose={clearSelected} />
-            </ReportViewContainer>
-          </UiGrid.Col>
-        )}
+        <UiGrid.Col style={{ height: '100%' }}>
+          <ReportOverlay hasSelected={selected !== null}>
+            {selected && <ReportView report={selected} onClose={clearSelected} />}
+          </ReportOverlay>
+        </UiGrid.Col>
       </UiGrid>
     </Container>
   )
@@ -113,23 +111,33 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   gap: 1rem;
   
   ${UiContainer.variables}
-  padding-right: ${({ hasSelected }) => hasSelected ? '1rem' : 'var(--ui-container--padding)'};
+  padding-right: ${({ hasSelected }) => hasSelected ? '0' : 'var(--ui-container--padding)'};
   padding-left: var(--ui-container--padding);
+  margin-right: 2rem;
 `
 
-const ReportViewContainer = styled.div`
-  //--y-offset: 4.65rem;
-  --y-offset: 0px;
-  
-  height: 100%;
-  overflow: auto;
-  
-  display: flex;
-  box-shadow: 0 0 4px 2px gray;
-  
-  margin-top: var(--y-offset);
+const ReportOverlay = styled.div<{ hasSelected: boolean }>`
+  position: absolute;
 
-  // TODO remove scrollbar width from padding if the element is scrollable.
-  // ${UiContainer.variables};
-  // padding: 1rem var(--ui-container--padding) 1rem 2rem;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  box-shadow: 0 0 4px 2px gray;
+
+  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition-property: transform;
+
+  transform: translateY(100%);
+  transform-origin: bottom;
+
+  padding: 1rem 0 1rem 2rem;
+  
+  overflow: hidden;
+
+  ${({ hasSelected }) => hasSelected && css`
+    transform: translateY(0);
+  `}
 `

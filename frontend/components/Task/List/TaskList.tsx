@@ -3,7 +3,7 @@ import Task from '@/models/Task'
 import UiList from '@/components/Ui/List/UiList'
 import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
+import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
@@ -23,9 +23,9 @@ const TaskList: React.VFC<Props> = ({ incident, report, tasks, onClick: handleCl
     <Container>
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
-          <UiCreatButton onClick={open}>
+          <UiCreateButton onClick={open}>
             <UiIcon.CreateAction size={1.5} />
-          </UiCreatButton>
+          </UiCreateButton>
         )}</UiModal.Activator>
         <UiModal.Body>{({ close }) => (
           <div>

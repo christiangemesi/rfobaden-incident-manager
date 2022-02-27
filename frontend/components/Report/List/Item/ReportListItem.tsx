@@ -83,7 +83,7 @@ const Bridge = styled.div<{ isActive: boolean }>`
 const BridgeClip = styled.div`
   position: absolute;
   left: calc(100% - 1px);
-  width: calc(2rem + 2px);
+  width: calc(2rem + 3px);
   height: calc(100%);
   z-index: 5;
   
