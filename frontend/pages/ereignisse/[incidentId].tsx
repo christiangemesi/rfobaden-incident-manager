@@ -250,8 +250,6 @@ const Container = styled.div`
 `
 
 const Heading = styled.div`
-  padding-bottom: 1.5rem;
-  box-shadow: 0 4px 2px -2px gray;
   margin-top: -2rem;
   z-index: 7;
 `

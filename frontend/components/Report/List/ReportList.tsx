@@ -107,14 +107,14 @@ const ListSpacer = styled.div`
 `
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
+  ${UiContainer.fluidCss}
+  
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-right: 2rem;
-
-  ${UiContainer.fluidCss}
 
   ${({ hasSelected }) => hasSelected && css`
+    margin-right: 2rem;
     ${Themed.media.xl.min} {
       padding-right: 0;
     }
@@ -127,7 +127,8 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   z-index: 2;
 
   width: 100%;
-  height: 100%;
+  height: calc(100% - 1rem);
+  top: 1rem;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
@@ -137,8 +138,6 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
 
   transform: translateY(100%);
   transform-origin: bottom;
-
-  padding: 1rem 0 1rem 2rem;
   
   overflow: hidden;
 

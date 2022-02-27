@@ -188,7 +188,7 @@ const Content = styled.div`
   flex: 1;
   height: 100%;
   padding-right: 4rem;
-  overflow: hidden;
+  overflow-y: hidden;
 
   ${Themed.media.lg.max} {
     padding: 0;
@@ -224,11 +224,11 @@ const TaskContainer = styled.div`
 const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   position: absolute;
   top: 0;
-  left: 1rem;
+  left: 2rem;
   
   z-index: 2;
   
-  width: calc(100% - 1rem);
+  width: calc(100% - 2rem);
   height: 100%;
   
   background-color: ${({ theme }) => theme.colors.tertiary.value};
