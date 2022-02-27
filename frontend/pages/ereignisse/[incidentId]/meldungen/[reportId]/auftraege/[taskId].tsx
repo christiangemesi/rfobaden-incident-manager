@@ -29,6 +29,7 @@ import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
 import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
 import { useRouter } from 'next/router'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
   data: {
@@ -141,13 +142,13 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
           <UiIconButtonGroup>
             {!task.isDone && (
-              <UiIconButton onClick={handleClose}>
+              <UiButton onClick={handleClose}>
                 {/*TODO add close and reopen icon*/}
                 {task.isClosed
-                  ? <UiIcon.CancelAction />
-                  : <UiIcon.SubmitAction />
+                  ? 'Öffnen'
+                  : 'Schliessen'
                 }
-              </UiIconButton>
+              </UiButton>
             )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />

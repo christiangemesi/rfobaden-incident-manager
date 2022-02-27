@@ -32,6 +32,7 @@ import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
 import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
   data: {
@@ -161,13 +162,13 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
             <UiIconButtonGroup>
               {/*TODO add close and reopen icon*/}
               {incident.isClosed ? (
-                <UiIconButton onClick={handleClose}>
-                  <UiIcon.CancelAction />
-                </UiIconButton>
+                <UiButton onClick={handleReopen}>
+                  Öffnen
+                </UiButton>
               ) : (
-                <UiIconButton onClick={handleReopen}>
-                  <UiIcon.SubmitAction />
-                </UiIconButton>
+                <UiButton onClick={handleClose}>
+                  Schliessen
+                </UiButton>
               )}
               <UiIconButton onClick={handlePrint}>
                 <UiIcon.PrintAction />

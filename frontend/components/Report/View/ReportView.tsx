@@ -16,6 +16,7 @@ import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import { useIncident } from '@/stores/IncidentStore'
 import ReportForm from '@/components/Report/Form/ReportForm'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
   report: Report
@@ -68,13 +69,13 @@ const ReportView: React.VFC<Props> = ({ report }) => {
           <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
             {!report.isDone && (
-              <UiIconButton onClick={handleClose}>
+              <UiButton onClick={handleClose}>
                 {/*TODO add close and reopen icon*/}
                 {report.isClosed
-                  ? <UiIcon.CancelAction />
-                  : <UiIcon.SubmitAction />
+                  ? 'Öffnen'
+                  : 'Schliessen'
                 }
-              </UiIconButton>
+              </UiButton>
             )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
