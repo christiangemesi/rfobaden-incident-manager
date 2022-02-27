@@ -65,6 +65,9 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
   const selectTask = useCallback((task: Task) => {
     setSelected(task)
   }, [])
+  const clearSelected = useCallback(() => {
+    setSelected(null)
+  }, [])
 
   useEffect(() => {
     setSelected(null)
@@ -145,7 +148,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
         </TaskContainer>
         <TaskOverlay hasSelected={selected !== null}>
           {selected && (
-            <TaskView task={selected} />
+            <TaskView task={selected} onClose={clearSelected} />
           )}
         </TaskOverlay>
       </Content>

@@ -18,12 +18,14 @@ import TaskStore from '@/stores/TaskStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import { router } from 'next/client'
 import { useRouter } from 'next/router'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 
 interface Props {
   task: Task
+  onClose?: () => void
 }
 
-const TaskView: React.VFC<Props> = ({ task }) => {
+const TaskView: React.VFC<Props> = ({ task, onClose: handleClose }) => {
   const incident = useIncident(task.incidentId)
   if (incident === null) {
     throw new Error('incident is missing')
@@ -65,31 +67,36 @@ const TaskView: React.VFC<Props> = ({ task }) => {
           {task.title}
         </UiTitle>
 
-        <UiDropDown>
-          <UiDropDown.Trigger>
-            <UiIconButton>
-              <UiIcon.More />
-            </UiIconButton>
-          </UiDropDown.Trigger>
-          <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
-              <UiDropDown.Item onClick={open}>
-                Bearbeiten
-              </UiDropDown.Item>
-            )}</UiModal.Activator>
-            <UiModal.Body>{({ close }) => (
-              <React.Fragment>
-                <UiTitle level={1} isCentered>
-                  Task bearbeiten
-                </UiTitle>
-                <TaskForm incident={incident} report={report} task={task} onClose={close} />
-              </React.Fragment>
-            )}</UiModal.Body>
-          </UiModal>
-          <UiDropDown.Item onClick={handleDelete}>
-            Löschen
-          </UiDropDown.Item>
-        </UiDropDown>
+        <UiIconButtonGroup>
+          <UiDropDown>
+            <UiDropDown.Trigger>
+              <UiIconButton>
+                <UiIcon.More />
+              </UiIconButton>
+            </UiDropDown.Trigger>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiDropDown.Item onClick={open}>
+                  Bearbeiten
+                </UiDropDown.Item>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Task bearbeiten
+                  </UiTitle>
+                  <TaskForm incident={incident} report={report} task={task} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
+            <UiDropDown.Item onClick={handleDelete}>
+              Löschen
+            </UiDropDown.Item>
+          </UiDropDown>
+          <UiIconButton onClick={handleClose}>
+            <UiIcon.CancelAction />
+          </UiIconButton>
+        </UiIconButtonGroup>
       </UiGrid>
 
       <div>
