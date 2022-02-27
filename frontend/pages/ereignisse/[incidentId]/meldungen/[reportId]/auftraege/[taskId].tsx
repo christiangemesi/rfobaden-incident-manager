@@ -79,24 +79,25 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
   const handleClose = async () => {
-    const text = task.isClosed ? 'erneut öffnen' : 'schliessen'
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" ${text} wollen?`)) {
-      const newTask = { ...task, isClosed: !task.isClosed }
-      const [data]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
-      TaskStore.save(parseTask(data))
+    if (task.closedSubtaskIds.length === task.subtaskIds.length && task.subtaskIds.length > 0) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+    } else {
+      const text = task.isClosed ? 'erneut öffnen' : 'schliessen'
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" ${text} wollen?`)) {
+        const newTask = { ...task, isClosed: !task.isClosed }
+        const [data]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        TaskStore.save(parseTask(data))
+      }
     }
   }
 
   const handleDelete = async () => {
-    if (task.closedSubtaskIds.length === task.subtaskIds.length && task.subtaskIds.length > 0) {
-      alert('Es sind alle Teilaufträge geschlossen.')
-    } else {
-      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
-        await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
-        await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
-        TaskStore.remove(task.id)
-      }
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
+      await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
+      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+      TaskStore.remove(task.id)
     }
+
   }
 
   let priorityIcon = <UiIcon.PriorityMedium />
