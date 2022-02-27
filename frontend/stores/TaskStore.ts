@@ -7,7 +7,7 @@ import { getPriorityIndex } from '@/models/Priority'
 
 const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
   sortBy: (task) => ['desc', [
-    [task.isClosed, 'asc'],
+    [task.isClosed || task.isDone, 'asc'],
     getPriorityIndex(task.priority),
     [task.title, 'asc'],
   ]],
@@ -19,7 +19,7 @@ SubtaskStore.onCreate((subtask) => {
   if (task === null) {
     return
   }
-  const isDone = task.isClosed && subtask.isClosed
+  const isDone = (task.isClosed || task.isDone) && subtask.isClosed
   TaskStore.save({
     ...task,
     subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
@@ -29,7 +29,6 @@ SubtaskStore.onCreate((subtask) => {
         : task.closedSubtaskIds
     ),
     isDone,
-    isClosed: isDone,
   })
 })
 SubtaskStore.onUpdate((subtask, oldSubtask) => {
@@ -37,6 +36,7 @@ SubtaskStore.onUpdate((subtask, oldSubtask) => {
   if (task === null || subtask.isClosed === oldSubtask.isClosed) {
     return
   }
+  console.log('test')
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
@@ -48,7 +48,6 @@ SubtaskStore.onUpdate((subtask, oldSubtask) => {
     ...task,
     closedSubtaskIds: [...closedSubtaskIds],
     isDone,
-    isClosed: task.isClosed || isDone || isDone === task.isDone,
   })
 })
 SubtaskStore.onRemove((subtask) => {
@@ -68,7 +67,6 @@ SubtaskStore.onRemove((subtask) => {
     subtaskIds,
     closedSubtaskIds,
     isDone,
-    isClosed: task.isClosed || isDone,
   })
 })
 

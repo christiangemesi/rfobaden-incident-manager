@@ -8,7 +8,7 @@ import { getPriorityIndex } from '@/models/Priority'
 const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
   sortBy: (report) => ['desc', [
     // Closed reports are always at the bottom.
-    [report.isClosed, 'asc'],
+    [report.isClosed || report.isDone, 'asc'],
 
     // Sort order: key > location-relevant > priority
     report.isKeyReport,
@@ -24,37 +24,35 @@ TaskStore.onCreate((task) => {
   if (report === null) {
     return
   }
-  const isDone = report.isClosed && task.isClosed
+  const isDone = (report.isClosed || report.isDone) && (task.isClosed || task.isDone)
   ReportStore.save({
     ...report,
     taskIds: [...new Set([...report.taskIds, task.id])],
     closedTaskIds: (
-      task.isClosed
+      task.isClosed || task.isDone
         ? [...new Set([...report.closedTaskIds, task.id])]
         : report.closedTaskIds
     ),
     isDone,
-    isClosed: isDone,
   })
 })
 TaskStore.onUpdate((task, oldTask) => {
   const report = ReportStore.find(task.reportId)
-  if (report === null || task.isClosed === oldTask.isClosed) {
+  if (report === null || task.isClosed === oldTask.isClosed && task.isDone === oldTask.isDone) {
     return
   }
-
+  console.log('test')
   const closedTaskIds = new Set(report.closedTaskIds)
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.add(task.id)
   } else {
     closedTaskIds.delete(task.id)
   }
-  const isDone = closedTaskIds.size === task.subtaskIds.length
+  const isDone = closedTaskIds.size === report.taskIds.length
   ReportStore.save({
     ...report,
     closedTaskIds: [...closedTaskIds],
     isDone,
-    isClosed: report.isClosed || isDone || isDone === report.isDone,
   })
 })
 TaskStore.onRemove((task) => {
@@ -65,7 +63,7 @@ TaskStore.onRemove((task) => {
   const taskIds = [...report.taskIds]
   taskIds.splice(taskIds.indexOf(task.id), 1)
   const closedTaskIds = [...report.closedTaskIds]
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
   }
   const isDone = taskIds.length > 0 && taskIds.length === closedTaskIds.length
@@ -74,7 +72,6 @@ TaskStore.onRemove((task) => {
     taskIds,
     closedTaskIds,
     isDone,
-    isClosed: report.isClosed || isDone,
   })
 })
 
