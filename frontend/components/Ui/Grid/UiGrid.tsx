@@ -46,7 +46,6 @@ interface ColProps {
 
 const Col = styled.div<ColProps>`
   position: relative;
-  display: block;
   // width: 100%;
   text-align: ${({ textAlign }) => textAlign};
   
@@ -112,11 +111,13 @@ const mapOrder = (order: Order | null | undefined): any => {
 
 const colSizeStyles = {
   default: css`
+    display: block;
     flex-basis: 0;
     flex-grow: 1;
     max-width: 100%;
   `,
   auto: css`
+    display: block;
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
@@ -148,6 +149,7 @@ const colSizeStyles = {
       `
     })
     return css`
+      display: block;
       flex: 1 0 ${basis};
       width: 100%;
       max-width: ${basis};

@@ -21,6 +21,7 @@ import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
+import { Themed } from '@/theme'
 
 interface Props {
   report: Report
@@ -174,6 +175,10 @@ const Heading = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  
+  ${Themed.media.lg.max} {
+    padding: 0;
+  }
 `
 
 const Content = styled.div`
@@ -181,6 +186,10 @@ const Content = styled.div`
   flex: 1;
   height: 100%;
   padding-right: 4rem;
+
+  ${Themed.media.lg.max} {
+    padding: 0;
+  }
 `
 
 const ContentScroll = styled.div`
@@ -200,6 +209,10 @@ const TaskContainer = styled.div`
   padding: 0 2rem 1rem 2rem;
   margin-right: 4rem;
   width: 100%;
+
+  ${Themed.media.lg.max} {
+    padding: 0;
+  }
 `
 
 const TaskOverlay = styled.div<{ hasSelected: boolean }>`
@@ -227,4 +240,9 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   ${({ hasSelected }) => hasSelected && css`
     transform: translateY(0);
   `}
+  
+  ${Themed.media.lg.max} {
+    left: 0;
+    width: 100%;
+  }
 `

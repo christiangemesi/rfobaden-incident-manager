@@ -12,6 +12,7 @@ import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
+import { Themed } from '@/theme'
 
 interface Props {
   incident: Incident
@@ -41,7 +42,7 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
   return (
     <Container>
       <UiGrid style={{ height: '100%' }}>
-        <UiGrid.Col size={selected ? { md: 4, xl: 3 } : 12} style={{ height: '100%' }}>
+        <UiGrid.Col size={selected ? { xs: 0, xl: 3 } : 12} style={{ height: '100%' }}>
           <ListSpacer>
             <ListContainer hasSelected={selected !== null}>
               <UiModal isFull>
@@ -140,4 +141,9 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   ${({ hasSelected }) => hasSelected && css`
     transform: translateY(0);
   `}
+  
+  ${Themed.media.lg.max} {
+    ${UiContainer.variables}
+    padding: 1rem var(--ui-container--padding);
+  }
 `
