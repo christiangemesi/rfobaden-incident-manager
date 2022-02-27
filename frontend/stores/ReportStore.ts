@@ -34,6 +34,7 @@ TaskStore.onCreate((task) => {
         : report.closedTaskIds
     ),
     isDone: report.isDone && task.isClosed,
+    isClosed: task.isClosed && report.isClosed,
   })
 })
 TaskStore.onUpdate((task) => {
@@ -53,6 +54,7 @@ TaskStore.onUpdate((task) => {
     ...report,
     closedTaskIds: [...closedTaskIds],
     isDone: closedTaskIds.size === report.taskIds.length,
+    isClosed: task.isClosed && report.isClosed,
   })
 })
 TaskStore.onRemove((task) => {

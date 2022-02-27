@@ -29,6 +29,7 @@ SubtaskStore.onCreate((subtask) => {
         : task.closedSubtaskIds
     ),
     isDone: task.isDone && subtask.isClosed,
+    isClosed: subtask.isClosed && task.isClosed,
   })
 })
 SubtaskStore.onUpdate((subtask) => {
@@ -48,6 +49,7 @@ SubtaskStore.onUpdate((subtask) => {
     ...task,
     closedSubtaskIds: [...closedSubtaskIds],
     isDone: closedSubtaskIds.size === task.subtaskIds.length,
+    isClosed: subtask.isClosed && task.isClosed,
   })
 })
 SubtaskStore.onRemove((subtask) => {
