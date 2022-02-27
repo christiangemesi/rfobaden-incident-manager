@@ -85,7 +85,10 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
       const text = task.isClosed ? 'erneut öffnen' : 'schliessen'
       if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" ${text} wollen?`)) {
         const newTask = { ...task, isClosed: !task.isClosed }
-        const [data]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        if (error !== null) {
+          throw error
+        }
         TaskStore.save(parseTask(data))
       }
     }
