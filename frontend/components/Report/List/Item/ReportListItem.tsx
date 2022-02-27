@@ -24,7 +24,7 @@ const ReportListItem: React.VFC<Props> = ({
   return (
     <SelectableListItem
       isActive={isActive}
-      isClosed={report.isClosed}
+      isClosed={report.isClosed || report.isDone}
       title={report.title}
       priority={report.priority}
       user={assigneeName ?? ''}
