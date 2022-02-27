@@ -101,7 +101,7 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_closedSubtasks() {
+    public void testIsDone_closedSubtasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -109,6 +109,6 @@ public class TaskTest extends ModelTest<Task> {
         value.getSubtasks().forEach((subtask) -> subtask.setClosed(true));
 
         // Then
-        assertThat(value.isClosed()).isTrue();
+        assertThat(value.isDone()).isTrue();
     }
 }
