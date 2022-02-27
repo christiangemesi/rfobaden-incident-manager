@@ -37,7 +37,7 @@ TaskStore.onCreate((task) => {
     isClosed: task.isClosed && report.isClosed,
   })
 })
-TaskStore.onUpdate((task) => {
+TaskStore.onUpdate((task, oldTask) => {
   const report = ReportStore.find(task.reportId)
   if (report === null) {
     return
@@ -54,7 +54,7 @@ TaskStore.onUpdate((task) => {
     ...report,
     closedTaskIds: [...closedTaskIds],
     isDone: closedTaskIds.size === report.taskIds.length,
-    isClosed: task.isClosed && report.isClosed,
+    isClosed: report.isClosed && task.isClosed && !oldTask.isClosed,
   })
 })
 TaskStore.onRemove((task) => {
