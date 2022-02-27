@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import StyleHelper from '@/utils/helpers/StyleHelper'
-import { Themed } from '@/theme'
+import { Theme, Themed } from '@/theme'
 
 interface Props {
   isFluid?: boolean
@@ -23,7 +23,7 @@ const UiContainer = styled(StyleHelper.tag<Props>('div'))`
   `}
 `
 
-const variables = css`
+const variables = css<{ theme: Theme }>`
   --ui-container--padding: 0.8rem;
 
   ${Themed.media.md.min} {

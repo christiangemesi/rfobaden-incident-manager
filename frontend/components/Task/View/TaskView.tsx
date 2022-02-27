@@ -1,5 +1,5 @@
 import Task from '@/models/Task'
-import React from 'react'
+import React, { useCallback } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import { useIncident } from '@/stores/IncidentStore'
@@ -17,6 +17,7 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import TaskStore from '@/stores/TaskStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import { router } from 'next/client'
+import { useRouter } from 'next/router'
 
 interface Props {
   task: Task
@@ -48,13 +49,14 @@ const TaskView: React.VFC<Props> = ({ task }) => {
     loadedTasks.add(task.id)
   }, [report.id])
 
-  const handleDelete = async () => {
+  const router = useRouter()
+  const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
-      await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
-      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+      await BackendService.delete(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id)
+      await router.push({ pathname: `/ereignisse/${task.incidentId}`, query: { report: task.reportId }})
       TaskStore.remove(task.id)
     }
-  }
+  }, [task, router])
 
   return (
     <div>

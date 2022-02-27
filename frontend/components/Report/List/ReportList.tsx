@@ -8,12 +8,10 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import { Themed } from '@/theme'
-import { useScrollbarWidth } from 'react-use'
 
 interface Props {
   incident: Incident
@@ -36,6 +34,7 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
     }
     setSelected(report)
   }
+
   return (
     <Container>
       <UiGrid style={{ height: '100%' }}>
@@ -109,14 +108,10 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  ${UiContainer.variables};
-  padding-left: ${() => {
-    const scrollbarWidth = useScrollbarWidth()
-    return css`calc(var(--ui-container--padding) - ${scrollbarWidth}px)`
-  }};
-  padding-right: ${({ hasSelected }) => hasSelected ? '1rem' : 'var(--ui-container--padding)'};
   
+  ${UiContainer.variables}
+  padding-right: ${({ hasSelected }) => hasSelected ? '1rem' : 'var(--ui-container--padding)'};
+  padding-left: var(--ui-container--padding);
 `
 
 const ReportViewContainer = styled.div`

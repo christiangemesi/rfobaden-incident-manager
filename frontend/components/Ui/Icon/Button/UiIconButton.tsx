@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import React, { EventHandler, forwardRef, MouseEvent, ReactNode } from 'react'
 import { ColorName, contrastDark } from '@/theme'
 
 interface Props {
@@ -9,19 +9,19 @@ interface Props {
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiIconButton: React.VFC<Props> = ({
+const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner ({
   children,
   title = '',
   color,
   onClick: handleClick,
-}: Props) => {
-
+}, ref) {
   return (
-    <StyledButton type="button" title={title} color={color} onClick={handleClick}>
+    <StyledButton type="button" title={title} color={color} ref={ref} onClick={handleClick}>
       {children}
     </StyledButton>
   )
-}
+})
+
 export default styled(UiIconButton)``
 
 const StyledButton = styled.button`
