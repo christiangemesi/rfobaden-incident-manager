@@ -83,9 +83,23 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
     if (task.isDone) {
       alert('Es sind alle Teilaufträge geschlossen.')
     } else {
-      const text = task.isClosed ? 'erneut öffnen' : 'schliessen'
-      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" ${text} wollen?`)) {
-        const newTask = { ...task, isClosed: !task.isClosed }
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+        const newTask = { ...task, isClosed: true }
+        const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        if (error !== null) {
+          throw error
+        }
+        TaskStore.save(parseTask(data))
+      }
+    }
+  }
+
+  const handleReopen = async () => {
+    if (task.isDone) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+    } else {
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" öffnen wollen?`)) {
+        const newTask = { ...task, isClosed: false }
         const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
         if (error !== null) {
           throw error
@@ -98,10 +112,12 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
   const handleDelete = async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
-      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+      await router.push({
+        pathname: `/ereignisse/${incident.id}`,
+        query: { report: report.id },
+      })
       TaskStore.remove(task.id)
     }
-
   }
 
   let priorityIcon = <UiIcon.PriorityMedium />
@@ -141,14 +157,17 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           </UiTitle>
 
           <UiIconButtonGroup>
+            {/*TODO add close and reopen icon*/}
             {!task.isDone && (
-              <UiButton onClick={handleClose}>
-                {/*TODO add close and reopen icon*/}
-                {task.isClosed
-                  ? 'Öffnen'
-                  : 'Schliessen'
-                }
-              </UiButton>
+              task.isClosed ? (
+                <UiButton onClick={handleReopen}>
+                  Öffnen
+                </UiButton>
+              ) : (
+                <UiButton onClick={handleClose}>
+                  Schliessen
+                </UiButton>
+              )
             )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />

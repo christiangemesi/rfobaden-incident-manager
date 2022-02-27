@@ -32,9 +32,23 @@ const ReportView: React.VFC<Props> = ({ report }) => {
     if (report.isDone) {
       alert('Es sind alle Aufträge geschlossen.')
     } else {
-      const text = report.isClosed ? 'erneut öffnen' : 'schliessen'
-      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" ${text} wollen?`)) {
-        const newReport = { ...report, isClosed: !report.isClosed }
+      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+        const newReport = { ...report, isClosed: true }
+        const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
+        if (error !== null) {
+          throw error
+        }
+        ReportStore.save(parseReport(data))
+      }
+    }
+  }
+
+  const handleReopen = async () => {
+    if (report.isDone) {
+      alert('Es sind alle Aufträge geschlossen.')
+    } else {
+      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" öffnen wollen?`)) {
+        const newReport = { ...report, isClosed: false }
         const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
         if (error !== null) {
           throw error
@@ -68,14 +82,17 @@ const ReportView: React.VFC<Props> = ({ report }) => {
         <HorizontalSpacer>
           <UiDateLabel start={startDate} end={report.endsAt} />
           <UiIconButtonGroup>
+            {/*TODO add close and reopen icon*/}
             {!report.isDone && (
-              <UiButton onClick={handleClose}>
-                {/*TODO add close and reopen icon*/}
-                {report.isClosed
-                  ? 'Öffnen'
-                  : 'Schliessen'
-                }
-              </UiButton>
+              report.isClosed ? (
+                <UiButton onClick={handleReopen}>
+                  Öffnen
+                </UiButton>
+              ) : (
+                <UiButton onClick={handleClose}>
+                  Schliessen
+                </UiButton>
+              )
             )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
