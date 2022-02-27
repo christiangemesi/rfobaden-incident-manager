@@ -36,7 +36,6 @@ SubtaskStore.onUpdate((subtask, oldSubtask) => {
   if (task === null || subtask.isClosed === oldSubtask.isClosed) {
     return
   }
-  console.log('test')
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
