@@ -78,6 +78,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   
   main {
     padding-bottom: 3rem;
+    min-height: calc(100vh - 4rem - 3rem - 4rem);
   }
 
   @media print {
