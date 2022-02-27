@@ -110,11 +110,15 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  
-  ${UiContainer.variables}
-  padding-right: ${({ hasSelected }) => hasSelected ? '0' : 'var(--ui-container--padding)'};
-  padding-left: var(--ui-container--padding);
   margin-right: 2rem;
+
+  ${UiContainer.fluidCss}
+
+  ${({ hasSelected }) => hasSelected && css`
+    ${Themed.media.xl.min} {
+      padding-right: 0;
+    }
+  `}
 `
 
 const ReportOverlay = styled.div<{ hasSelected: boolean }>`
@@ -143,7 +147,8 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   `}
   
   ${Themed.media.lg.max} {
-    ${UiContainer.variables}
-    padding: 1rem var(--ui-container--padding);
+    ${UiContainer.fluidCss};
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 `

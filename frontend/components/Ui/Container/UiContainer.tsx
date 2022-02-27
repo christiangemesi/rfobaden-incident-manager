@@ -1,36 +1,33 @@
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
-import StyleHelper from '@/utils/helpers/StyleHelper'
-import { Theme, Themed } from '@/theme'
+import { Themed } from '@/theme'
 
 interface Props {
   isFluid?: boolean
   children?: ReactNode
 }
 
-const UiContainer = styled(StyleHelper.tag<Props>('div'))`
+const UiContainer = styled.div<Props>`
   width: 100%;
   margin-inline: auto;
-  ${({ isFluid }) => !isFluid && css`
-    ${() => variables}
-    padding: 0 var(--ui-container--padding);
-    ${Themed.media.sm.min} {
-      max-width: ${({ theme }) => theme.breakpoints.sm.min}px;
-    }
-    ${Themed.media.md.min} {
-      max-width: 100%;
-    }
-  `}
+  ${({ isFluid }) => !isFluid && fluidCss}
 `
 
-const variables = css<{ theme: Theme }>`
-  --ui-container--padding: 0.8rem;
-
+const fluidCss = css`
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  
+  ${Themed.media.sm.min} {
+    max-width: ${({ theme }) => theme.breakpoints.sm.min}px;
+  }
   ${Themed.media.md.min} {
-    --ui-container--padding: 4rem;
+    max-width: 100%;
+    
+    padding-right: 4rem;
+    padding-left: 4rem;
   }
 `
 
 export default Object.assign(UiContainer, {
-  variables,
+  fluidCss,
 })
