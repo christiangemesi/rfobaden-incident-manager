@@ -92,6 +92,13 @@ public class Incident extends Model.Basic implements Serializable {
         isClosed = closed;
     }
 
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getReports().isEmpty()
+            && (getReports().stream().allMatch(Report::isClosed)
+            || getReports().stream().allMatch(Report::isDone));
+    }
+
     @JsonIgnore
     public List<Report> getReports() {
         return reports;
