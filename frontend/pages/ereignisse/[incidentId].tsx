@@ -4,7 +4,7 @@ import ReportStore, { useReport, useReportsOfIncident } from '@/stores/ReportSto
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Incident from '@/models/Incident'
+import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
@@ -32,6 +32,7 @@ import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
 import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
   data: {
@@ -84,6 +85,27 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }
   const selectedReport = useReport(selectedReportId)
 
+  const handleClose = async () => {
+
+    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+    if (message !== null && message.trim().length > 0) {
+      const messageData = { message }
+      const [data, error] = await BackendService.update<CloseMessageData, Incident>(`incidents/${incident.id}/close`, messageData)
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
+    } else if (message !== null) {
+      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
+    }
+  }
+  const handleReopen = async () => {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
+      const [data] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
+      IncidentStore.save(parseIncident(data))
+    }
+  }
+
   // TODO rewrite print page
   const [printer, setPrinter] = useState<ReactNode>()
   const handlePrint = () => {
@@ -103,7 +125,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }
 
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       await router.push('/ereignisse')
       IncidentStore.remove(incident.id)
@@ -138,6 +160,16 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           <HorizontalSpacer>
             <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
             <UiIconButtonGroup>
+              {/*TODO add close and reopen icon*/}
+              {incident.isClosed ? (
+                <UiButton onClick={handleReopen}>
+                  Öffnen
+                </UiButton>
+              ) : (
+                <UiButton onClick={handleClose}>
+                  Schliessen
+                </UiButton>
+              )}
               <UiIconButton onClick={handlePrint}>
                 <UiIcon.PrintAction />
                 {printer}
@@ -207,6 +239,10 @@ export default IncidentPage
 
 type Query = {
   incidentId: string
+}
+
+interface CloseMessageData {
+  message: string
 }
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
