@@ -1,9 +1,9 @@
 import { AppProps } from 'next/app'
-import React, { useMemo } from 'react'
+import React, { createContext, useMemo } from 'react'
 import Head from 'next/head'
-import { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { useAsync } from 'react-use'
+import { createGlobalState, useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { getSessionToken } from '@/stores/SessionStore'
 
@@ -39,6 +39,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
 
+  const [state, _] = useAppState()
+
   return (
     <>
       <Head>
@@ -49,10 +51,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiHeader />
-        <main>
+        <Main hasFooter={state.hasFooter}>
           {component}
-        </main>
-        <UiFooter />
+        </Main>
+        {state.hasFooter && (
+          <UiFooter />
+        )}
       </ThemeProvider>
     </>
   )
@@ -74,11 +78,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   
   button {
     cursor: pointer;
-  }
-  
-  main {
-    padding-bottom: 3rem;
-    min-height: calc(100vh - 4rem - 3rem - 4rem);
   }
 
   @media print {
@@ -104,3 +103,14 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     }
   }
 `
+
+const Main = styled.div<{ hasFooter: boolean }>`
+  ${({ hasFooter }) => hasFooter && css`
+    padding-bottom: 3rem;
+    min-height: calc(100vh - 4rem - 3rem - 4rem);
+  `}
+`
+
+export const useAppState = createGlobalState({
+  hasFooter: true,
+})

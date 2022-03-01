@@ -27,6 +27,7 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import { useAppState } from '@/pages/_app'
 
 interface Props {
   data: {
@@ -42,6 +43,11 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
+  })
+
+  const [appState, setAppState] = useAppState()
+  useEffectOnce(() => {
+    setAppState({ ...appState, hasFooter: false })
   })
 
   const router = useRouter()

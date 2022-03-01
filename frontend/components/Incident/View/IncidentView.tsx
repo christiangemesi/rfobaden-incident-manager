@@ -9,7 +9,6 @@ interface Props {
 }
 
 const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
-
   return (
     <Container ref={innerRef}>
       <h1>
