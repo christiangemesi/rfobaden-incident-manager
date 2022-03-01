@@ -1,4 +1,4 @@
-import Report from '@/models/Report'
+import Report, { parseReport } from '@/models/Report'
 import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -29,7 +29,7 @@ interface Props {
   onClose?: () => void
 }
 
-const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
+const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
   const tasks = useTasksOfReport(report.id)
   const { loading: isLoading } = useAsync(async () => {
     if (loadedReports.has(report.id)) {
@@ -48,16 +48,41 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
   const assignee = useUser(report.assigneeId)
   const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
-
       ReportStore.remove(report.id)
     }
-  }
+  }, [report])
+
+  const handleClose = useCallback(async () => {
+    if (report.isDone) {
+      alert('Es sind alle Aufträge geschlossen.')
+      return
+    }
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+      const newReport = { ...report, isClosed: true }
+      const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
+      if (error !== null) {
+        throw error
+      }
+      ReportStore.save(parseReport(data))
+    }
+  }, [report])
+
+  const handleReopen = useCallback(async () => {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" öffnen wollen?`)) {
+      const newReport = { ...report, isClosed: false }
+      const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
+      if (error !== null) {
+        throw error
+      }
+      ReportStore.save(parseReport(data))
+    }
+  }, [report])
+
 
   const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
-
   const incident = useIncident(report.incidentId)
   if (incident === null) {
     throw new Error('incident of report not found')
@@ -104,12 +129,24 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleClose }) => {
                   </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
+              {!report.isDone && (
+                report.isClosed ? (
+                  <UiDropDown.Item onClick={handleReopen}>
+                    Öffnen
+                  </UiDropDown.Item>
+                ) : (
+                  <UiDropDown.Item onClick={handleClose}>
+                    Schliessen
+                  </UiDropDown.Item>
+                )
+              )}
+
               <UiDropDown.Item onClick={handleDelete}>
                 Löschen
               </UiDropDown.Item>
             </UiDropDown>
 
-            <UiIconButton onClick={handleClose}>
+            <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />
             </UiIconButton>
           </UiIconButtonGroup>

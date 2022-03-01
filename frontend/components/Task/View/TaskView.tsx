@@ -1,4 +1,4 @@
-import Task from '@/models/Task'
+import Task, { parseTask } from '@/models/Task'
 import React, { useCallback } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
@@ -25,7 +25,7 @@ interface Props {
   onClose?: () => void
 }
 
-const TaskView: React.VFC<Props> = ({ task, onClose: handleClose }) => {
+const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
   const incident = useIncident(task.incidentId)
   if (incident === null) {
     throw new Error('incident is missing')
@@ -60,6 +60,37 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleClose }) => {
     }
   }, [task, router])
 
+  const handleClose = useCallback(async () => {
+    if (task.isDone) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+      return
+    }
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+      const newTask = { ...task, isClosed: true }
+      const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id, newTask)
+      if (error !== null) {
+        throw error
+      }
+      TaskStore.save(parseTask(data))
+    }
+  }, [task])
+
+  const handleReopen = useCallback(async () => {
+    if (task.isDone) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+      return
+    }
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" öffnen wollen?`)) {
+      const newTask = { ...task, isClosed: false }
+      const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id, newTask)
+      if (error !== null) {
+        throw error
+      }
+      TaskStore.save(parseTask(data))
+    }
+  }, [task])
+
+
   return (
     <div>
       <UiGrid justify="space-between" align="center">
@@ -89,11 +120,22 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleClose }) => {
                 </React.Fragment>
               )}</UiModal.Body>
             </UiModal>
+            {!task.isDone && (
+              task.isClosed ? (
+                <UiDropDown.Item onClick={handleReopen}>
+                  Öffnen
+                </UiDropDown.Item>
+              ) : (
+                <UiDropDown.Item onClick={handleClose}>
+                  Schliessen
+                </UiDropDown.Item>
+              )
+            )}
             <UiDropDown.Item onClick={handleDelete}>
               Löschen
             </UiDropDown.Item>
           </UiDropDown>
-          <UiIconButton onClick={handleClose}>
+          <UiIconButton onClick={handleCloseView}>
             <UiIcon.CancelAction />
           </UiIconButton>
         </UiIconButtonGroup>

@@ -1,10 +1,10 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Incident from '@/models/Incident'
+import Incident, { parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncident } from '@/stores/IncidentStore'
 import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
@@ -72,31 +72,39 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   //     : parseInt(selectedReportIdParam)
   // }, [selectedReportIdParam])
 
-  // TODO rewrite print page
-  const [printer, setPrinter] = useState<ReactNode>()
-  const handlePrint = () => {
-    const Printer: React.VFC = () => {
-      const ref = useRef<HTMLDivElement | null>(null)
-      useEffect(() => {
-        window.print()
-        setPrinter(undefined)
-      }, [ref])
-      return <IncidentView innerRef={ref} incident={incident} />
-    }
-    setPrinter(ReactDOM.createPortal((
-      <div id="print-only" style={{ margin: '4rem' }}>
-        <Printer />
-      </div>
-    ), document.body))
-  }
-
-  const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?`)) {
+  const handleDelete = useCallback(async () => {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
       await BackendService.delete('incidents', incident.id)
       await router.push('/ereignisse')
       IncidentStore.remove(incident.id)
     }
-  }
+  }, [incident, router])
+
+  const handleClose = useCallback(async () => {
+    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+    if (message === null) {
+      return
+    }
+    if (message.trim().length === 0) {
+      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
+      return
+    }
+    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, { message })
+    if (error !== null) {
+      throw error
+    }
+    IncidentStore.save(parseIncident(data))
+  }, [incident])
+
+  const handleReopen = useCallback(async () => {
+    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
+      const [data, error] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
+      if (error !== null) {
+        throw error
+      }
+      IncidentStore.save(parseIncident(data))
+    }
+  }, [incident])
 
   const assigneeIds = new Set([
     ...reports.map((report) => report.assigneeId),
@@ -145,7 +153,15 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                     </React.Fragment>
                   )}</UiModal.Body>
                 </UiModal>
-
+                {incident.isClosed ? (
+                  <UiDropDown.Item onClick={handleReopen}>
+                    Öffnen
+                  </UiDropDown.Item>
+                ) : (
+                  <UiDropDown.Item onClick={handleClose}>
+                    Schliessen
+                  </UiDropDown.Item>
+                )}
                 <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
               </UiDropDown>
             </UiGrid.Col>
