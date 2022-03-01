@@ -11,6 +11,7 @@ import 'reset-css/reset.css'
 import { parseUser } from '@/models/User'
 import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
+import UiFooter from '@/components/Ui/Footer/UiFooter'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -51,6 +52,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <main>
           {component}
         </main>
+        <UiFooter />
       </ThemeProvider>
     </>
   )
@@ -72,6 +74,11 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   
   button {
     cursor: pointer;
+  }
+  
+  main {
+    padding-bottom: 3rem;
+    min-height: calc(100vh - 4rem - 3rem - 4rem);
   }
 
   @media print {

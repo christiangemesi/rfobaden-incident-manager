@@ -27,6 +27,7 @@ export default interface Task extends Model {
 
   closedSubtaskIds: Id<Subtask>[]
   subtaskIds: Id<Subtask>[]
+  isDone: boolean
   isClosed: boolean
 }
 

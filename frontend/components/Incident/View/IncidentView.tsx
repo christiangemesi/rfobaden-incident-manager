@@ -77,6 +77,9 @@ const getStatusMessage = (incident: Incident): string => {
   if (incident.isClosed) {
     return 'geschlossen'
   }
+  if (incident.isDone) {
+    return 'geöffnet fertig'
+  }
   if (incident.startsAt !== null && incident.startsAt > new Date()) {
     return 'ungeöffnet'
   }

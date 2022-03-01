@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
+import React, { MouseEvent, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalContext, {
   animationMillis,
@@ -19,24 +19,16 @@ interface Props {
 
 const UiModalBody: React.VFC<Props> = ({ children }) => {
   const [globalLevel, setGlobalLevel] = useModalLevel()
-
   const [level, setLevel] = useState(1)
 
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
 
   useUpdateEffect(() => {
-    console.log(globalLevel)
     if (context.isOpen) {
-      if (globalLevel === 0) {
-        ScrollHelper.disableScroll(window)
-      }
       setLevel(globalLevel + 1)
       setGlobalLevel(globalLevel + 1)
     } else {
-      if (globalLevel === 1) {
-        ScrollHelper.enableScroll(window)
-      }
       setLevel(globalLevel - 1)
       setGlobalLevel(globalLevel - 1)
     }
@@ -62,6 +54,22 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
     handleCloseAttempt()
   }, { event: 'keyup' }, [context, level, globalLevel])
 
+  const dialogRef = useRef<HTMLElement | null>(null)
+  const backgroundRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (backgroundRef.current === null || dialogRef.current === null) {
+      return
+    }
+    if (context.visibility === UiModalVisibility.OPEN) {
+      ScrollHelper.disableScroll(backgroundRef.current)
+      ScrollHelper.enableScrollCapture(dialogRef.current)
+    }
+    if (context.visibility === UiModalVisibility.CLOSING) {
+      ScrollHelper.enableScroll(backgroundRef.current)
+      ScrollHelper.disableScrollCapture(dialogRef.current)
+    }
+  }, [context.visibility])
+
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
       <DialogContainer isShaking={isShaking} isFull={context.isFull}>
@@ -70,6 +78,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
           visibility={context.visibility}
           isFull={context.isFull}
           onClick={ignoreClick}
+          ref={dialogRef}
         >
           <CloseButton type="button" onClick={context.close}>
             <UiIcon.CancelAction />
@@ -91,7 +100,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
   }
 
   return ReactDOM.createPortal((
-    <Background visibility={context.visibility} onClick={handleCloseAttempt}>
+    <Background visibility={context.visibility} ref={backgroundRef} onClick={handleCloseAttempt}>
       <UiContainer>
         {context.isFull ? (
           <UiGrid style={{ justifyContent: 'center', width: '100%' }}>
@@ -213,8 +222,7 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   position: static;
   display: block;
   border: none;
-  overflow: hidden;
-  overflow-y: auto;
+  overflow: auto;
   max-height: 90vh;
   width: ${({ isFull }) => isFull && '100%'};
   
