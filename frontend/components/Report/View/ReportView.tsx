@@ -52,8 +52,11 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
       ReportStore.remove(report.id)
+      if (handleCloseView) {
+        handleCloseView()
+      }
     }
-  }, [report])
+  }, [report, handleCloseView])
 
   const handleClose = useCallback(async () => {
     if (report.isDone) {

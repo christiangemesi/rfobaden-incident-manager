@@ -51,14 +51,15 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
     loadedTasks.add(task.id)
   }, [report.id])
 
-  const router = useRouter()
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
       await BackendService.delete(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id)
-      await router.push({ pathname: `/ereignisse/${task.incidentId}`, query: { report: task.reportId }})
       TaskStore.remove(task.id)
+      if (handleCloseView) {
+        handleCloseView()
+      }
     }
-  }, [task, router])
+  }, [task, handleCloseView])
 
   const handleClose = useCallback(async () => {
     if (task.isDone) {
