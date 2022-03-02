@@ -24,33 +24,32 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
     <UiLink href={`/ereignisse/${incident.id}`}>
       <Container>
         <div>
-          <UiGrid align="center" style={{ height: '8rem' }}>
-            <UiGrid.Col size={7}>
-
-              <UiBadge value={10}>
-                <UiIcon.Organization />
-              </UiBadge>
-              <div style={{ marginTop: '1rem' }} />
-              <UiBadge value={keyMessageCount}>
-                <UiIcon.KeyMessage />
-              </UiBadge>
-
+          <UiGrid align="stretch">
+            <UiGrid.Col size="auto">
+              <BadgeContainer>
+                <UiBadge value={10}>
+                  <UiIcon.Organization />
+                </UiBadge>
+                <UiBadge value={keyMessageCount}>
+                  <UiIcon.KeyMessage />
+                </UiBadge>
+              </BadgeContainer>
             </UiGrid.Col>
             <UiGrid.Col>
-              <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+              <ProgressContainer>
+                <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+              </ProgressContainer>
             </UiGrid.Col>
           </UiGrid>
         </div>
         <div>
-
           <UiDateLabel
             start={incident.startsAt ?? incident.createdAt}
             end={incident.endsAt}
           />
-          <UiTitle level={5}>
+          <ItemTitle level={5}>
             {incident.title}
-          </UiTitle>
-
+          </ItemTitle>
         </div>
       </Container>
     </UiLink>
@@ -59,24 +58,21 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
 export default IncidentListItem
 
 const Container = styled.div`
-  color: ${({ theme }) => theme.colors.primary.value};
-  background-color: ${({ theme }) => theme.colors.primary.contrast};
-
-  width: 100%;
-  height: 15rem;
-  padding: 1rem;
-
-  border: 2px solid ${({ theme }) => theme.colors.primary.value};
-  border-radius: 0.5rem;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  width: 100%;
+  height: 15rem;
+  padding: 1.5rem 2rem;
+
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+  background-color: ${({ theme }) => theme.colors.secondary.value};
+
+  border-radius: 0.5rem;
 
   transition: 250ms ease;
-  transition-property: filter, box-shadow;
+  transition-property: filter;
 
   :hover:not(&[disabled]), :active:not(&[disabled]) {
     cursor: pointer;
@@ -84,6 +80,25 @@ const Container = styled.div`
   }
 
   :active:not(&[disabled]) {
-    box-shadow: none;
+      // TODO
   }
+`
+
+const ItemTitle = styled(UiTitle)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const BadgeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1rem 0;
+`
+
+const ProgressContainer = styled.div`
+  display: flex;
+  justify-content: end;
 `

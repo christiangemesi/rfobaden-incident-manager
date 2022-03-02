@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "npm run eslint && npm run typecheck",
+    "eslint": "next lint",
+    "typecheck": "tsc --noemit",
     "analyze": "cross-env ANALYZE=true next build",
     "test": "jest"
   },

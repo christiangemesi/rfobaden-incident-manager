@@ -7,6 +7,7 @@ export type Theme = {
     error: Color
     warning: Color
     info: Color
+    grey: Color
   }
   fonts: {
     heading: string
@@ -44,7 +45,8 @@ export const defaultTheme: Theme = {
       contrast: contrastLight,
     },
     secondary: {
-      value: '#A3CCE7',
+      // value: '#E8F2F9',
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
     tertiary: {
@@ -52,7 +54,7 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     success: {
-      value: '#4fac54',
+      value: '#05A74E',
       contrast: contrastLight,
     },
     error: {
@@ -67,10 +69,14 @@ export const defaultTheme: Theme = {
       value: '#7465C6',
       contrast: contrastLight,
     },
+    grey: {
+      value: '#b0b0b0',
+      contrast: contrastDark,
+    },
   },
   fonts: {
-    heading: 'Montserrat, sans-serif',
-    body: 'Montserrat, sans-serif',
+    heading: 'Manrope, sans-serif',
+    body: 'Manrope, sans-serif',
   },
   breakpoints: {
     xs: {

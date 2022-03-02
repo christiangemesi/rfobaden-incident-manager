@@ -53,7 +53,7 @@ class IncidentTest extends ModelTest<Incident> {
             });
         });
         var allClosedReportIds = value.getReports()
-            .stream().filter(Report::isClosed)
+            .stream().filter((r) -> r.isClosed() || r.isDone())
             .map(Report::getId)
             .collect(Collectors.toList());
 
@@ -77,7 +77,7 @@ class IncidentTest extends ModelTest<Incident> {
             });
         });
         var allClosedReportIds = value.getReports()
-            .stream().filter(Report::isClosed)
+            .stream().filter((r) -> r.isClosed() || r.isDone())
             .map(Report::getId)
             .collect(Collectors.toList());
 

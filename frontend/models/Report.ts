@@ -30,6 +30,7 @@ export default interface Report extends Model {
 
   closedTaskIds: Id<Task>[]
   taskIds: Id<Task>[]
+  isDone: boolean
   isClosed: boolean
 }
 

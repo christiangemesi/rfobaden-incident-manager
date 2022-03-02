@@ -44,6 +44,9 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     private String location;
 
     @Column(nullable = false)
+    private boolean isClosed;
+
+    @Column(nullable = false)
     private Priority priority;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
@@ -174,9 +177,19 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
             .collect(Collectors.toList());
     }
 
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getSubtasks().isEmpty()
+            && getSubtasks().stream().allMatch(Subtask::isClosed);
+    }
+
     @JsonProperty("isClosed")
     public boolean isClosed() {
-        return !getSubtasks().isEmpty() && getSubtasks().stream().allMatch(Subtask::isClosed);
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
     @Override
@@ -195,6 +208,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
             && Objects.equals(description, task.description)
             && Objects.equals(startsAt, task.startsAt)
             && Objects.equals(endsAt, task.endsAt)
+            && Objects.equals(isClosed, task.isClosed)
             && Objects.equals(location, task.location)
             && priority == task.priority;
     }
@@ -203,7 +217,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     public int hashCode() {
         return Objects.hash(modelHashCode(), assignee, report, title,
             description, startsAt,
-            endsAt, location, priority);
+            endsAt, location, isClosed, priority);
     }
 
 

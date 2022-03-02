@@ -2,7 +2,7 @@ import Report from '@/models/Report'
 import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'
 
@@ -22,9 +22,9 @@ const ReportListItem: React.VFC<Props> = ({
   const assigneeName = useUsername(assignee)
 
   return (
-    <SelectableListItem
+    <UiListItemWithDetails
       isActive={isActive}
-      isClosed={report.isClosed}
+      isClosed={report.isClosed || report.isDone}
       title={report.title}
       priority={report.priority}
       user={assigneeName ?? ''}
@@ -47,18 +47,11 @@ const ReportListItem: React.VFC<Props> = ({
       <LeftSpacer>
         {report.closedTaskIds.length}/{report.taskIds.length}
       </LeftSpacer>
-    </SelectableListItem>
+    </UiListItemWithDetails>
   )
 }
 export default ReportListItem
 
 const LeftSpacer = styled.div`
   margin-left: 1rem;
-`
-
-const SelectableListItem = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive, theme }) => isActive && css`
-    background: ${theme.colors.secondary.contrast};
-    color: ${theme.colors.secondary.value};
-  `}
 `
