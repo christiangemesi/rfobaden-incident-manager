@@ -15,7 +15,7 @@ import Incident from '@/models/Incident'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
-import Task from '@/models/Task'
+import Task, { parseTask } from '@/models/Task'
 import { useIncident } from '@/stores/IncidentStore'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore, { useSubtask, useSubtasksOfTask } from '@/stores/SubtaskStore'
@@ -29,6 +29,7 @@ import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
 import UiBreadcrumb, { Link } from '@/components/Ui/Breadcrumb/UiBreadcrumb'
 import { useRouter } from 'next/router'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 interface Props {
   data: {
@@ -78,10 +79,43 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
 
   const startDate = task.startsAt !== null ? task.startsAt : task.createdAt
 
+  const handleClose = async () => {
+    if (task.isDone) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+    } else {
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+        const newTask = { ...task, isClosed: true }
+        const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        if (error !== null) {
+          throw error
+        }
+        TaskStore.save(parseTask(data))
+      }
+    }
+  }
+
+  const handleReopen = async () => {
+    if (task.isDone) {
+      alert('Es sind alle Teilaufträge geschlossen.')
+    } else {
+      if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" öffnen wollen?`)) {
+        const newTask = { ...task, isClosed: false }
+        const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, newTask)
+        if (error !== null) {
+          throw error
+        }
+        TaskStore.save(parseTask(data))
+      }
+    }
+  }
+
   const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id)
-      await router.push({ pathname: `/ereignisse/${incident.id}`, query: { report: report.id }})
+      await router.push({
+        pathname: `/ereignisse/${incident.id}`,
+        query: { report: report.id },
+      })
       TaskStore.remove(task.id)
     }
   }
@@ -123,6 +157,18 @@ const TaskPage: React.VFC<Props> = ({ data }) => {
           </UiTitle>
 
           <UiIconButtonGroup>
+            {/*TODO add close and reopen icon*/}
+            {!task.isDone && (
+              task.isClosed ? (
+                <UiButton onClick={handleReopen}>
+                  Öffnen
+                </UiButton>
+              ) : (
+                <UiButton onClick={handleClose}>
+                  Schliessen
+                </UiButton>
+              )
+            )}
             <UiIconButton onClick={() => alert('not yet implemented')}>
               <UiIcon.PrintAction />
             </UiIconButton>

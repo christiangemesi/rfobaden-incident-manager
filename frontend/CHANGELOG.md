@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Modals can now be closed by pressing the escape key.
+- Incidents, reports and tasks now support manual closing.
+- Added page footer.
+
+### Fixed
+- Scroll is now disabled while a modal is open.
+
+## [0.3.0] - 24.02.2022
+### Added
 - Organizations can now be managed at `/organizations`.
 - Users can now belong to an organization.
 - The organizations involved with a specific incident are shown in the incident list.

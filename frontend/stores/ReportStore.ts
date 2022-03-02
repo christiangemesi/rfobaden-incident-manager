@@ -8,7 +8,7 @@ import { getPriorityIndex } from '@/models/Priority'
 const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
   sortBy: (report) => ['desc', [
     // Closed reports are always at the bottom.
-    [report.isClosed, 'asc'],
+    [report.isClosed || report.isDone, 'asc'],
 
     // Sort order: key > location-relevant > priority
     report.isKeyReport,
@@ -29,29 +29,31 @@ TaskStore.onCreate((task) => {
     ...report,
     taskIds: [...new Set([...report.taskIds, task.id])],
     closedTaskIds: (
-      task.isClosed
+      task.isClosed || task.isDone
         ? [...new Set([...report.closedTaskIds, task.id])]
         : report.closedTaskIds
     ),
-    isClosed: report.isClosed && task.isClosed,
+    isDone: report.isDone && task.isClosed,
+    isClosed: task.isClosed && report.isClosed,
   })
 })
-TaskStore.onUpdate((task, oldTask) => {
+TaskStore.onUpdate((task) => {
   const report = ReportStore.find(task.reportId)
-  if (report === null || task.isClosed === oldTask.isClosed) {
+  if (report === null) {
     return
   }
 
   const closedTaskIds = new Set(report.closedTaskIds)
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.add(task.id)
   } else {
     closedTaskIds.delete(task.id)
   }
+
   ReportStore.save({
     ...report,
     closedTaskIds: [...closedTaskIds],
-    isClosed: closedTaskIds.size === task.subtaskIds.length,
+    isDone: closedTaskIds.size === report.taskIds.length,
   })
 })
 TaskStore.onRemove((task) => {
@@ -59,17 +61,20 @@ TaskStore.onRemove((task) => {
   if (report === null) {
     return
   }
+
   const taskIds = [...report.taskIds]
   taskIds.splice(taskIds.indexOf(task.id), 1)
+
   const closedTaskIds = [...report.closedTaskIds]
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
   }
+
   ReportStore.save({
     ...report,
     taskIds,
     closedTaskIds,
-    isClosed: taskIds.length > 0 && taskIds.length === closedTaskIds.length,
+    isDone: taskIds.length > 0 && taskIds.length === closedTaskIds.length,
   })
 })
 

@@ -15,18 +15,19 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
   return (
-    <UiListItemWithDetails
-      title={task.title}
-      priority={task.priority}
-      user={assigneeName}
-      href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}
-      isClosed={task.isClosed}
-      onClick={handleClick && (() => handleClick(task))}
-    >
-      <LeftSpacer>
-        {task.closedSubtaskIds.length}/{task.subtaskIds.length}
-      </LeftSpacer>
-    </UiListItemWithDetails>
+    <UiLink key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}>
+      <UiListItemWithDetails
+        isClosed={task.isClosed || task.isDone}
+        title={task.title}
+        priority={task.priority}
+        user={assigneeName}
+        onClick={handleClick && (() => handleClick(task))}
+      >
+        <LeftSpacer>
+          {task.closedSubtaskIds.length}/{task.subtaskIds.length}
+        </LeftSpacer>
+      </UiListItemWithDetails>
+    </UiLink>
   )
 }
 export default TaskListItem
