@@ -8,7 +8,6 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
-import styled from 'styled-components'
 
 interface Props {
   incidents: Incident[]
