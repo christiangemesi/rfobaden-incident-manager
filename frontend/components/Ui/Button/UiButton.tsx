@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 import { PropsOf } from '@emotion/react'
 
 export interface Props extends StyledProps {
@@ -77,7 +77,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
     width: 100%;
   `}
   :focus {
-    outline: 1px solid ${contrastDark};
+    outline: 1px solid ${({ theme, color }) => theme.colors[color].contrast};
   }
   
   :hover:not(&[disabled]) {
@@ -95,6 +95,6 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
     cursor: not-allowed;
     box-shadow: none;
     background: rgb(200, 200, 200);
-    color: ${contrastDark};
+    color: ${({ theme, color }) => theme.colors[color].contrast};
   }
 `
