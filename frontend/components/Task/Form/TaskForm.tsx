@@ -42,6 +42,7 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     closedSubtaskIds: [],
     subtaskIds: [],
     isClosed: false,
+    isDone: false,
   }))
 
   useValidate(form, (validate) => ({
@@ -64,6 +65,7 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     closedSubtaskIds: [],
     subtaskIds: [],
     isClosed: [],
+    isDone: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Task>) => {

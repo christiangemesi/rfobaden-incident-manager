@@ -20,8 +20,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: '500MB'
+          cpus: '3'
+          memory: '1GB'
 
   backend:
     image: gradle:7.3.1-jdk11-alpine
@@ -39,6 +39,7 @@ services:
       - TZ=Europe/Zurich
     volumes:
       - ./backend:/app
+      - backend.cache:/home/gradle/.gradle
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - database
@@ -71,10 +72,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.1'
           memory: '500MB'
 
 
 volumes:
   frontend.node_modules:
+  backend.cache:
   database:
