@@ -8,8 +8,6 @@ import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
-//TODO pls just feedback for this why this fails thanks :)
-
 @WebMvcTest(TransportController.class)
 public class TransportControllerTest
     extends ModelControllerTest.Basic<Transport, TransportService> {

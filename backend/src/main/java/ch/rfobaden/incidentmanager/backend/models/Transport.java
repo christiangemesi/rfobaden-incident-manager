@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
@@ -8,14 +9,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "transport")
+@Table(name = "Transport")
 public final class Transport extends Model.Basic {
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
@@ -42,12 +44,30 @@ public final class Transport extends Model.Basic {
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    @JsonIgnore
     public Incident getIncident() {
         return incident;
     }
 
+    @JsonIgnore
     public void setIncident(Incident incident) {
         this.incident = incident;
+    }
+
+    public Long getIncidentId() {
+        if (incident == null) {
+            return null;
+        }
+        return incident.getId();
+    }
+
+    public void setIncidentId(Long id) {
+        if (id == null) {
+            incident = null;
+            return;
+        }
+        incident = new Incident();
+        incident.setId(id);
     }
 
     public Priority getPriority() {
@@ -123,7 +143,6 @@ public final class Transport extends Model.Basic {
     public void setKeyReport(boolean keyReport) {
         isKeyReport = keyReport;
     }
-
 
     @JsonProperty("isLocationRelevantReport")
     public boolean isLocationRelevantReport() {
