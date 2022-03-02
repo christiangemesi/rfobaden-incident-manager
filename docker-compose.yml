@@ -17,6 +17,11 @@ services:
       - backend
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '500MB'
 
   backend:
     image: gradle:7.3.1-jdk11-alpine
@@ -39,6 +44,11 @@ services:
       - database
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '3GB'
 
   database:
     image: mysql:8.0
@@ -58,6 +68,11 @@ services:
       - ./data-prod.sql:/data-prod.sql
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '500MB'
 
 
 volumes:
