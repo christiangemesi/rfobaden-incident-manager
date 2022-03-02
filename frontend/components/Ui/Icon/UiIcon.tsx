@@ -1,6 +1,7 @@
 import Icon from '@mdi/react'
 import React from 'react'
-
+import styled from 'styled-components'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 import {
   mdiAccountCircle,
   mdiAccountMultiple,
@@ -14,6 +15,8 @@ import {
   mdiDelete,
   mdiImageFilterHdr,
   mdiKey,
+  mdiLoginVariant,
+  mdiLogoutVariant,
   mdiMap,
   mdiMapMarker,
   mdiMenu,
@@ -24,7 +27,7 @@ import {
 } from '@mdi/js'
 
 
-interface NamedIconProps {
+interface NamedIconProps extends StyledProps {
   /**
    * Size multiplier.
    * Default is `1`.
@@ -45,25 +48,31 @@ const UiIcon: React.VFC<Props> = ({
   path,
   size = 1,
   isSpinner = false,
+  className,
+  style,
 }) => {
   return (
     <Icon
       path={path}
       size={`${24 * size}px`}
       spin={isSpinner}
+      className={className}
+      style={style}
     />
   )
 }
 
-const makeNamedIcon = (path: string): React.VFC<NamedIconProps> => {
+const StyledUiIcon = styled(UiIcon)``
+
+const makeNamedIcon = (path: string) => {
   // eslint-disable-next-line react/display-name
-  return (props) => (
-    <UiIcon {...props} path={path} />
-  )
+  return styled((props: NamedIconProps) => (
+    <StyledUiIcon {...props} path={path} />
+  ))``
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {
+export default Object.assign(StyledUiIcon, {
   Empty: makeNamedIcon(''),
   KeyMessage: makeNamedIcon(mdiKey),
   LocationRelevancy: makeNamedIcon(mdiImageFilterHdr),
@@ -86,5 +95,7 @@ export default {
   UserInCircle: makeNamedIcon(mdiAccountCircle),
   AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
   Calendar: makeNamedIcon(mdiCalendar),
-  Clipboard: makeNamedIcon(mdiClipboardTextOutline),
-}
+  Changelog: makeNamedIcon(mdiClipboardTextOutline),
+  Login: makeNamedIcon(mdiLoginVariant),
+  Logout: makeNamedIcon(mdiLogoutVariant),
+})
