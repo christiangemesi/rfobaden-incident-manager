@@ -16,9 +16,8 @@ import TaskForm from '@/components/Task/Form/TaskForm'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import TaskStore from '@/stores/TaskStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import { router } from 'next/client'
-import { useRouter } from 'next/router'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
+import styled from 'styled-components'
 
 interface Props {
   task: Task
@@ -93,7 +92,7 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
 
 
   return (
-    <div>
+    <Container>
       <UiGrid justify="space-between" align="center">
         <UiTitle level={4}>
           {task.title}
@@ -149,9 +148,14 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
           <SubtaskList incident={incident} report={report} task={task} subtasks={subtasks} activeSubtask={null} />
         )}
       </div>
-    </div>
+    </Container>
   )
 }
 export default TaskView
 
 const loadedTasks = new Set<Id<Task>>()
+
+const Container = styled.div`
+  height: 100%;
+  overflow: auto;
+`
