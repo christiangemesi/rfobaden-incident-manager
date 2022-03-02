@@ -108,7 +108,7 @@ docker volume rm rfobaden-incident-manager_database
 docker compose down && docker volume rm rfobaden-incident-manager_database && docker compose up
 ```
 
-## Testing
+# Testing
 > Tests can also be run locally, without requiring a docker container.
 
 Test the backend:
@@ -143,3 +143,16 @@ For this to work correctly, make sure to go to `File > Settings... > Build, Exec
 where you can configure `Build and run using:` as `Gradle (default)` and `Run tests using:` as `Intellij IDEA`.
 
 Frontend tests can also be run inside IntelliJ, altough they are remarkably slow compared to just testing using the command line.
+
+# Deployment
+The project is continuously deployed.
+- Commits to the `development` branch are deployed to the staging environment at [https://dev.im.rfobaden.ch]().
+- Commits to the `master` branch are deployed to the production environment at [https://im.rfobaden.ch]().
+
+# Other
+## Database Export
+The database can be dumped using the following command:
+```bash
+dkc exec database sh -c 'mysqldump -u root --password=${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} --no-create-info --no-create-db'
+```
+> The database service has to be running.

@@ -7,7 +7,7 @@ import { getPriorityIndex } from '@/models/Priority'
 
 const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
   sortBy: (task) => ['desc', [
-    [task.isClosed, 'asc'],
+    [task.isClosed || task.isDone, 'asc'],
     getPriorityIndex(task.priority),
     [task.title, 'asc'],
   ]],
@@ -19,6 +19,7 @@ SubtaskStore.onCreate((subtask) => {
   if (task === null) {
     return
   }
+
   TaskStore.save({
     ...task,
     subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
@@ -27,24 +28,27 @@ SubtaskStore.onCreate((subtask) => {
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
         : task.closedSubtaskIds
     ),
-    isClosed: task.isClosed && subtask.isClosed,
+    isDone: task.isDone && subtask.isClosed,
+    isClosed: subtask.isClosed && task.isClosed,
   })
 })
-SubtaskStore.onUpdate((subtask, oldSubtask) => {
+SubtaskStore.onUpdate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
-  if (task === null || subtask.isClosed === oldSubtask.isClosed) {
+  if (task === null) {
     return
   }
+
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
   } else {
     closedSubtaskIds.delete(subtask.id)
   }
+
   TaskStore.save({
     ...task,
     closedSubtaskIds: [...closedSubtaskIds],
-    isClosed: closedSubtaskIds.size === task.subtaskIds.length,
+    isDone: closedSubtaskIds.size === task.subtaskIds.length,
   })
 })
 SubtaskStore.onRemove((subtask) => {
@@ -52,17 +56,20 @@ SubtaskStore.onRemove((subtask) => {
   if (task === null) {
     return
   }
+
   const subtaskIds = [...task.subtaskIds]
   subtaskIds.splice(subtaskIds.indexOf(subtask.id), 1)
+
   const closedSubtaskIds = [...task.closedSubtaskIds]
   if (subtask.isClosed) {
     closedSubtaskIds.splice(closedSubtaskIds.indexOf(subtask.id), 1)
   }
+
   TaskStore.save({
     ...task,
     subtaskIds,
     closedSubtaskIds,
-    isClosed: subtaskIds.length > 0 && subtaskIds.length === closedSubtaskIds.length,
+    isDone: subtaskIds.length > 0 && subtaskIds.length === closedSubtaskIds.length,
   })
 })
 
