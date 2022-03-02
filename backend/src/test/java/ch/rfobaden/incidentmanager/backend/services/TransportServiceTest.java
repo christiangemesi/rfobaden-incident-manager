@@ -13,17 +13,4 @@ import java.util.Optional;
 @SpringBootTest
 public class TransportServiceTest
     extends ModelRepositoryServiceTest.Basic<Transport, TransportService, TransportRepository> {
-
-    @MockBean
-    IncidentService incidentService;
-
-    @Override
-    protected void mockRelations(Transport transport, EmptyPath path) {
-        var address = transport.getIncident();
-        if (address != null) {
-            Mockito.when(incidentService.find(address.getId()))
-                .thenReturn(Optional.of(address));
-        }
-    }
-
 }

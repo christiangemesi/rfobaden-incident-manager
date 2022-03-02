@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "Transport")
 public final class Transport extends Model.Basic {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
@@ -70,6 +70,8 @@ public final class Transport extends Model.Basic {
         incident.setId(id);
     }
 
+
+
     public Priority getPriority() {
         return priority;
     }
@@ -117,6 +119,26 @@ public final class Transport extends Model.Basic {
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
+
+    public Long getAssigneeId() {
+        if (assignee == null) {
+            return null;
+        }
+        return assignee.getId();
+    }
+
+    public void setAssigneeId(Long id) {
+        if (id == null) {
+            assignee = null;
+            return;
+        }
+        //TODO this prob wrong
+        assignee = new User();
+        assignee.setId(id);
+    }
+
+
+
 
     public LocalDateTime getStartsAt() {
         return startsAt;
