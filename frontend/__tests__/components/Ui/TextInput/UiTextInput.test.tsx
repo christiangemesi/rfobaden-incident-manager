@@ -2,28 +2,46 @@
  * @jest-environment jsdom
  */
 
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
+import { ThemeProvider } from 'styled-components'
+import { defaultTheme } from '@/theme'
 
 const text = 'abcABC123#'
 
 describe('UiTextInput', () => {
-  describe('With label text', () => {
-    it('should correctly display the label text', () => {
-      const mockCallBack = jest.fn()
-      const html = shallow(<UiTextInput value="" label={text} onChange={mockCallBack} /> )
-
-      const span = html.find('span')
-      expect(span.html()).toContain('</span>')
-      expect(span.html()).toContain(text)
-    })
+  it('should have type text', () => {
+    const mockCallBack = jest.fn()
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiTextInput value="" type="text" label={text} onChange={mockCallBack} />
+      </ThemeProvider>)
+    console.log(wrapper.find('input').first().props())
+    expect(wrapper.find('input').first().props().type).toBe('text')
   })
-
-  describe('With input type text', () => {
-    it('Should have type text', () => {
-      const mockCallBack = jest.fn()
-      const html = shallow(<UiTextInput value={text} type="text" onChange={mockCallBack} /> )
-    })
+  it('should have type password', () => {
+    const mockCallBack = jest.fn()
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiTextInput value="" type="password" label={text} onChange={mockCallBack} />
+      </ThemeProvider>)
+    expect(wrapper.find('input').first().props().type).toBe('password')
+  })
+  it('should display a placeholder', () => {
+    const mockCallBack = jest.fn()
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiTextInput value="" type="text" placeholder={text} label={text} onChange={mockCallBack} />
+      </ThemeProvider>)
+    expect(wrapper.find('input').first().props().placeholder).toBe(text)
+  })
+  it('should display a label', () => {
+    const mockCallBack = jest.fn()
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiTextInput value="" label={text} onChange={mockCallBack} />
+      </ThemeProvider>)
+    expect(wrapper.find('span').first().html()).toContain(text)
   })
 })
 
