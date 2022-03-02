@@ -8,6 +8,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
+import styled from 'styled-components'
 
 interface Props {
   incident: Incident
@@ -18,11 +19,11 @@ interface Props {
 
 const ReportList: React.VFC<Props> = ({ incident, reports, activeReport, onClick: handleClick }) => {
   return (
-    <UiList>
+    <Container>
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
           <UiCreatButton onClick={open}>
-            <UiIcon.CreateAction size={1.4} />
+            <UiIcon.CreateAction size={1.5} />
           </UiCreatButton>
         )}</UiModal.Activator>
         <UiModal.Body>{({ close }) => (
@@ -34,16 +35,24 @@ const ReportList: React.VFC<Props> = ({ incident, reports, activeReport, onClick
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>
-      {reports.map((report) => (
-        <ReportListItem
-          key={report.id}
-          report={report}
-          onClick={handleClick}
-          isActive={activeReport !== null && activeReport.id == report.id}
-        />
-      ))}
-    </UiList>
+
+      <UiList>
+        {reports.map((report) => (
+          <ReportListItem
+            key={report.id}
+            report={report}
+            onClick={handleClick}
+            isActive={activeReport !== null && activeReport.id == report.id}
+          />
+        ))}
+      </UiList>
+    </Container>
   )
 }
 export default ReportList
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`

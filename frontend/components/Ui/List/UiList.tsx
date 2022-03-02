@@ -14,8 +14,8 @@ const UiList: React.VFC<Props> = ({ children }) => {
 }
 export default UiList
 
-const Box = styled.div`
+const Box = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 1rem 0;
+  row-gap: 1rem;
 `
