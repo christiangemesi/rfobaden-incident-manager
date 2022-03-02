@@ -158,4 +158,8 @@ const loadedTasks = new Set<Id<Task>>()
 const Container = styled.div`
   height: 100%;
   overflow: auto;
+  direction: rtl;
+  & > * {
+    direction: ltr;
+  }
 `
