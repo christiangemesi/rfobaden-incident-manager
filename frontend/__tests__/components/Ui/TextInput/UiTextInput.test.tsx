@@ -16,7 +16,6 @@ describe('UiTextInput', () => {
       <ThemeProvider theme={defaultTheme}>
         <UiTextInput value="" type="text" label={text} onChange={mockCallBack} />
       </ThemeProvider>)
-    console.log(wrapper.find('input').first().props())
     expect(wrapper.find('input').first().props().type).toBe('text')
   })
   it('should have type password', () => {
