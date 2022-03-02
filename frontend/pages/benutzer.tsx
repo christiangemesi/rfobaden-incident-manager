@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import UserForm from '@/components/User/Form/UserForm'
+import UserCreateForm from '@/components/User/Form/UserCreateForm'
 import React from 'react'
 import User, { parseUser } from '@/models/User'
 import { GetServerSideProps } from 'next'
@@ -10,6 +10,8 @@ import { useEffectOnce } from 'react-use'
 import UserStore, { useUsers } from '@/stores/UserStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import OrganizationStore from '@/stores/OrganizationStore'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import IncidentList from '@/components/Incident/List/IncidentList'
 
 interface Props {
   data: {
@@ -28,20 +30,33 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
 
   return (
     <UiContainer>
-      <h1>
-        Benutzer verwalten
-      </h1>
-      <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <UserForm />
-        </UiGrid.Col>
-      </UiGrid>
-
-      <UiGrid style={{ justifyContent: 'center' }}>
+      <section>
+        <UiGrid>
+          <UiGrid.Col>
+            <UiTitle level={1}>
+              Benutzer verwalten
+            </UiTitle>
+          </UiGrid.Col>
+        </UiGrid>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
           <UserList users={users} />
         </UiGrid.Col>
-      </UiGrid>
+      </section>
+
+      {/*  <h1>*/}
+      {/*    Benutzer verwalten*/}
+      {/*  </h1>*/}
+      {/*  <UiGrid style={{ justifyContent: 'center' }}>*/}
+      {/*    <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>*/}
+      {/*      <UserForm />*/}
+      {/*    </UiGrid.Col>*/}
+      {/*  </UiGrid>*/}
+
+      {/*  <UiGrid style={{ justifyContent: 'center' }}>*/}
+      {/*    <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>*/}
+      {/*      <UserList users={users} />*/}
+      {/*    </UiGrid.Col>*/}
+      {/*  </UiGrid>*/}
     </UiContainer>
   )
 }

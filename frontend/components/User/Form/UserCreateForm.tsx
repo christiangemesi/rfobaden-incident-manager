@@ -13,7 +13,7 @@ import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Id from '@/models/base/Id'
 import Organization from '@/models/Organization'
 
-const UserForm: React.VFC = () => {
+const UserCreateForm: React.VFC = () => {
   const form = useForm<ModelData<User>>(() => ({
     email: '',
     firstName: '',
@@ -76,7 +76,7 @@ const UserForm: React.VFC = () => {
     </div>
   )
 }
-export default UserForm
+export default UserCreateForm
 
 const mapOrganizationIdToName = (id: Id<Organization>): string | null => {
   const organization = OrganizationStore.find(id)
