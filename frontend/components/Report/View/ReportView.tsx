@@ -176,7 +176,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
         )}
       </Heading>
       <Content>
-        <ContentScroll>
+        <ContentScroll isOverlayed={selected !== null}>
           <TaskContainer>
             {isLoading ? (
               <UiIcon.Loader isSpinner />
@@ -235,10 +235,14 @@ const Content = styled.div`
   }
 `
 
-const ContentScroll = styled.div`
+const ContentScroll = styled.div<{ isOverlayed: boolean }>`
   height: calc(100% - 1rem);
   overflow: auto;
   margin-top: 1rem;
+  
+  ${({ isOverlayed }) => isOverlayed && css`
+    visibility: hidden;
+  `}
 `
 
 const TextLines = styled.div`
@@ -253,7 +257,6 @@ const TaskContainer = styled.div`
   padding: 0 2rem 1rem 2rem;
   margin-right: 4rem;
   width: 100%;
-  z-index: 0;
   
   ${Themed.media.lg.max} {
     padding: 0;
