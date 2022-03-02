@@ -5,33 +5,37 @@ import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
 @WebMvcTest(TransportController.class)
 public class TransportControllerTest
-    extends ModelControllerTest.Basic<Transport, TransportService> {
-
-    @Override
-    protected String getEndpointFor(EmptyPath emptyPath) {
-        return "/api/v1/transports/";
-    }
+    extends ModelControllerTest<Transport, TransportPath, TransportService> {
 
     @MockBean
     IncidentService incidentService;
 
+    @MockBean
+    UserService userService;
+
     @Override
-    protected void mockRelations(Transport transport, EmptyPath path) {
-        var incident = transport.getIncident();
-        if (incident != null) {
-            Mockito.when(incidentService.find(incident.getId()))
-                .thenReturn(Optional.of(incident));
-        }
+    protected String getEndpointFor(TransportPath path) {
+        return "/api/v1/incidents/" + path.getIncidentId() + "/transport/";
     }
+
+    @Override
+    protected void mockRelations(TransportPath path, Transport transport) {
+        Mockito.when(incidentService.find(path, path.getIncidentId()))
+            .thenReturn(Optional.of(transport.getIncident()));
+    }
+
 }

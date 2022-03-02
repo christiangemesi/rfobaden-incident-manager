@@ -5,31 +5,37 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
+import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 @RestController
-@RequestMapping(path = "api/v1/transports")
-public class TransportController extends ModelController.Basic<Transport, TransportService> {
+@RequestMapping(path = "/api/v1/incidents/{incidentId}/transport/{transportId}/")
+public class TransportController extends ModelController<Transport, TransportPath, TransportService> {
 
     private final IncidentService incidentService;
+    private final UserService userService;
 
-    public TransportController(IncidentService incidentService) {
+
+    public TransportController(IncidentService incidentService, UserService userService) {
         this.incidentService = incidentService;
+        this.userService = userService;
     }
 
     @Override
-    protected void loadRelations(Transport transport, EmptyPath path) {
-        if (transport.getIncident() != null) {
-            var incident = incidentService.find(transport.getIncident().getId())
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "incident not found"));
-            transport.setIncident(incident);
-        }
+    protected void loadRelations(TransportPath path, Transport transport) {
+        var incident = incidentService.find(path, path.getIncidentId()).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "incident not found")
+            ));
+
+        var assignee = userService.find(path, path.getIncidentId()).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "assignee not found")
+        ));
     }
-
-
-
 }

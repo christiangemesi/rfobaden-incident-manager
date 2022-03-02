@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Transport")
-public final class Transport extends Model.Basic {
+public final class Transport extends Model implements PathConvertible<TransportPath> {
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -38,16 +40,12 @@ public final class Transport extends Model.Basic {
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
 
-    @Column(nullable = false)
-    private boolean isKeyReport;
-
-    @Column(nullable = false)
-    private boolean isLocationRelevantReport;
 
     @JsonIgnore
     public Incident getIncident() {
         return incident;
     }
+
 
     @JsonIgnore
     public void setIncident(Incident incident) {
@@ -69,8 +67,6 @@ public final class Transport extends Model.Basic {
         incident = new Incident();
         incident.setId(id);
     }
-
-
 
     public Priority getPriority() {
         return priority;
@@ -138,8 +134,6 @@ public final class Transport extends Model.Basic {
     }
 
 
-
-
     public LocalDateTime getStartsAt() {
         return startsAt;
     }
@@ -156,25 +150,6 @@ public final class Transport extends Model.Basic {
         this.endsAt = endsAt;
     }
 
-    @JsonProperty("isKeyReport")
-    public boolean isKeyReport() {
-        return isKeyReport;
-    }
-
-    @JsonProperty("setKeyReport")
-    public void setKeyReport(boolean keyReport) {
-        isKeyReport = keyReport;
-    }
-
-    @JsonProperty("isLocationRelevantReport")
-    public boolean isLocationRelevantReport() {
-        return isLocationRelevantReport;
-    }
-
-    @JsonProperty("setLocationRelevantReport")
-    public void setLocationRelevantReport(boolean locationRelevantReport) {
-        isLocationRelevantReport = locationRelevantReport;
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -187,8 +162,6 @@ public final class Transport extends Model.Basic {
         var that = (Transport) other;
 
         return equalsModel(that)
-            && Objects.equals(isKeyReport, that.isKeyReport)
-            && Objects.equals(isLocationRelevantReport, that.isLocationRelevantReport)
             && Objects.equals(priority, that.priority)
             && Objects.equals(title, that.title)
             && Objects.equals(description, that.description)
@@ -203,8 +176,14 @@ public final class Transport extends Model.Basic {
     @Override
     public int hashCode() {
         return Objects.hash(priority, title, description, note,
-            location, assignee, startsAt, endsAt,
-            isKeyReport, isLocationRelevantReport, incident);
+            location, assignee, startsAt, endsAt, incident);
+    }
+
+    @Override
+    public TransportPath toPath() {
+        var path = new TransportPath();
+        path.setIncidentId(getIncidentId());
+        return path;
     }
 }
 
