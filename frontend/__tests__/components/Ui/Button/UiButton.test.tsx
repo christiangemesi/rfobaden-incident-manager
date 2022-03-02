@@ -10,7 +10,16 @@ import { ThemeProvider } from 'styled-components'
 
 
 describe('UiButton', () => {
-  it('should be "button" tag', () => {
+  it('should be a "button" tag', () => {
+    const wrapper = shallow(
+      <ThemeProvider theme={defaultTheme}>
+        <UiButton />
+      </ThemeProvider>,
+    )
+    expect(wrapper.html()).toContain('</button>')
+  })
+
+  it('should call the onClick function', () => {
     const mockCallBack = jest.fn()
     const wrapper = shallow(
       <ThemeProvider theme={defaultTheme}>
@@ -19,7 +28,6 @@ describe('UiButton', () => {
     )
     wrapper.find('UiButton').simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
-    expect(wrapper.html()).toContain('</button>')
   })
 })
 
