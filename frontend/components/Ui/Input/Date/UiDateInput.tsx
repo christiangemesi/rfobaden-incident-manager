@@ -60,9 +60,9 @@ const UiDateInput: React.VFC<Props> = ({
       <InputAndErrorBox hasError={hasError}>
         <DateTimePicker isNull={date == null}>
           <DatePicker
+            locale={de}
             selected={date}
             onChange={(date) => setDate(date)}
-            locale={de}
             yearDropdownItemNumber={3}
             placeholderText={placeholder}
             timeInputLabel={labelTime}
@@ -73,7 +73,7 @@ const UiDateInput: React.VFC<Props> = ({
             calendarClassName={className + ' dateTimePopup'}
             withPortal={isModal}
             shouldCloseOnSelect
-            // showTimeInput
+            showTimeInput
             showMonthDropdown
             showYearDropdown
             showWeekNumbers
