@@ -37,32 +37,14 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
   width: 100%;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.secondary.contrast};
+  background-color: ${({ theme }) => theme.colors.secondary.value};
   text-decoration: none;
 
-  transition: 150ms ease;
-  transition-property: filter, opacity;
-  
-  :after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    transition: 150ms ease;
-    background: ${({ theme }) => theme.colors.secondary.value};
-    transition-property: background-color, opacity;
-  }
+  transition: 150ms ease-out;
+  transition-property: filter, background-color, opacity;
   
   ${({ isActive, theme }) => isActive && css`
-    :after {
-      // background: ${theme.colors.primary.value};
-      // opacity: 0.6;
-      // filter: grayscale(0.1);
-      
-      background: ${theme.colors.tertiary.value};
-    }
+    background-color: ${theme.colors.tertiary.value};
     box-shadow: 0 0 4px 2px gray;
   `}
   

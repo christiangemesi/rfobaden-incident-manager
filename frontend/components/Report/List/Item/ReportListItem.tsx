@@ -57,7 +57,9 @@ const ReportListItem: React.VFC<Props> = ({
 export default ReportListItem
 
 const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+  transition-timing-function: cubic-bezier(1, 0.23, 1, 0.32);
   ${({ isActive }) => isActive && css`
+    transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;;
   `}
@@ -73,15 +75,19 @@ const Bridge = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 100%;
   
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
-  box-shadow: 0 0 4px 2px gray;
+  background-color: ${({ theme }) => theme.colors.secondary.value};
 
-  transition: 300ms cubic-bezier(.23,1,.32,1);
-  transition-property: background-color, box-shadow;
+  transition: 750ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-property: transform, background-color, box-shadow;
+  transform-origin: left center;
+  transform: scaleX(0);
   
-  ${({ isActive }) => !isActive && css`
-    background-color: transparent;
-    box-shadow: none;
+  ${({ isActive, theme }) => isActive && css`
+    transform: scaleX(1);
+    transform-origin: right center;
+    
+    background-color: ${theme.colors.tertiary.value};
+    box-shadow: 0 0 4px 2px gray;
   `}
 `
 

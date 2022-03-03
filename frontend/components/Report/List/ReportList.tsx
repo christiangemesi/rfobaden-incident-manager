@@ -72,7 +72,7 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
   padding: 1rem 0;
 
   will-change: width;
-  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: width;
   
   ${({ hasSelected }) => hasSelected && css`
