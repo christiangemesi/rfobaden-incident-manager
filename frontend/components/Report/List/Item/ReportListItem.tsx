@@ -68,11 +68,16 @@ const LeftSpacer = styled.div`
 `
 
 const Bridge = styled.div<{ isActive: boolean }>`
+  position: relative;
+  z-index: 5;
   width: 100%;
   height: 100%;
   
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
+
+  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition-property: background-color, box-shadow;
   
   ${({ isActive }) => !isActive && css`
     background-color: transparent;
@@ -83,7 +88,7 @@ const Bridge = styled.div<{ isActive: boolean }>`
 const BridgeClip = styled.div`
   position: absolute;
   left: calc(100% - 1px);
-  width: calc(2rem + 3px);
+  width: calc(2rem + 1px);
   height: calc(100%);
   z-index: 5;
   

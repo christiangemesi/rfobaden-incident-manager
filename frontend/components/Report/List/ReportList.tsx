@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
@@ -13,6 +13,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
+import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 interface Props {
   incident: Incident
@@ -39,48 +40,46 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
     setSelectedAndCallback(null)
   }, [setSelectedAndCallback])
 
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
   return (
-    <Container>
-      <UiGrid style={{ height: '100%' }}>
-        <UiGrid.Col size={selected ? { xs: 0, xl: 3 } : 12} style={{ height: '100%' }}>
-          <ListSpacer>
-            <ListContainer hasSelected={selected !== null}>
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiCreatButton onClick={open}>
-                    <UiIcon.CreateAction size={1.5} />
-                  </UiCreatButton>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Meldung erfassen
-                    </UiTitle>
-                    <ReportForm incident={incident} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
+    <Container ref={containerRef}>
+      <UiScroll style={{ height: '100%' }} isLeft={selected !== null} disableX>
+        <ListSpacer hasSelected={selected !== null}>
+          <ListContainer hasSelected={selected !== null}>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiCreatButton onClick={open}>
+                  <UiIcon.CreateAction size={1.5} />
+                </UiCreatButton>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Meldung erfassen
+                  </UiTitle>
+                  <ReportForm incident={incident} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
 
-              <UiList>
-                {reports.map((report) => (
-                  <ReportListItem
-                    key={report.id}
-                    report={report}
-                    onClick={setSelectedAndCallback}
-                    isActive={selected?.id === report.id}
-                  />
-                ))}
-              </UiList>
-            </ListContainer>
-          </ListSpacer>
-        </UiGrid.Col>
+            <UiList>
+              {reports.map((report) => (
+                <ReportListItem
+                  key={report.id}
+                  report={report}
+                  onClick={setSelectedAndCallback}
+                  isActive={selected?.id === report.id}
+                />
+              ))}
+            </UiList>
+          </ListContainer>
+        </ListSpacer>
 
-        <UiGrid.Col style={{ height: '100%' }}>
-          <ReportOverlay hasSelected={selected !== null}>
-            {selected && <ReportView report={selected} onClose={clearSelected} />}
-          </ReportOverlay>
-        </UiGrid.Col>
-      </UiGrid>
+        <ReportOverlay offset={containerRef.current?.getBoundingClientRect()?.y ?? 0} hasSelected={selected !== null}>
+          {selected && <ReportView report={selected} onClose={clearSelected} />}
+        </ReportOverlay>
+      </UiScroll>
     </Container>
   )
 }
@@ -89,21 +88,21 @@ export default ReportList
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  overflow: auto;
 `
 
-const ListSpacer = styled.div`
+const ListSpacer = styled.div<{ hasSelected: boolean }>`
   height: 100%;
   width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   padding: 1rem 0;
+
+  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition-property: width;
   
-  // Move scrollbar to the left.
-  direction: rtl;
-  & > * {
-    direction: ltr;
-  }
+  ${({ hasSelected }) => hasSelected && css`
+    ${Themed.media.xl.min} {
+      width: 35vw;
+    }
+  `}
 `
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
@@ -114,21 +113,20 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   gap: 1rem;
 
   ${({ hasSelected }) => hasSelected && css`
-    margin-right: 2rem;
     ${Themed.media.xl.min} {
-      padding-right: 0;
+      padding-right: 2rem;
     }
   `}
 `
 
-const ReportOverlay = styled.div<{ hasSelected: boolean }>`
-  position: absolute;
+const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
+  position: fixed;
+  top: calc(${({ offset }) => offset}px + 1rem);
 
   z-index: 2;
 
   width: 100%;
-  height: calc(100% - 1rem);
-  top: 1rem;
+  height: calc(100% - 1rem - ${({ offset }) => offset}px);
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
@@ -136,16 +134,21 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
 
-  transform: translateY(100%);
-  transform-origin: bottom;
+  transform: translateX(100%);
+  transform-origin: right center;
   
   overflow: hidden;
 
   ${({ hasSelected }) => hasSelected && css`
-    transform: translateY(0);
+    transform: translateX(0);
   `}
   
   ${Themed.media.lg.max} {
     padding: 1rem 0;
+  }
+  
+  ${Themed.media.xl.min} {
+    width: 65vw;
+    left: 35vw;
   }
 `

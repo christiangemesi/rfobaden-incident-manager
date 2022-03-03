@@ -3,7 +3,6 @@ import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import styled from 'styled-components'
-import UiLink from '@/components/Ui/Link/UiLink'
 
 interface Props {
   task: Task

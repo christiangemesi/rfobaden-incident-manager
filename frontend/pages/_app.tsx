@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app'
-import React, { createContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
@@ -73,6 +73,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};
+      overflow: hidden;
     }
   `}
   

@@ -279,7 +279,7 @@ const Heading = styled.div`
 const Content = styled.div`
   flex: 1;
   display: flex;
-  overflow: auto;
+  //overflow: auto;
 `
 
 const HorizontalSpacer = styled.div`
