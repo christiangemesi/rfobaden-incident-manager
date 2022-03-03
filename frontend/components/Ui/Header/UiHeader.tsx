@@ -27,6 +27,7 @@ const UiHeader: React.VFC = () => {
       <NavContainer>
         <ImageContainer>
           <UiLink href="/">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
           </UiLink>
         </ImageContainer>

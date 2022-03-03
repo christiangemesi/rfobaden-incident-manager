@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import styled, { css } from 'styled-components'
-import UiLink from '@/components/Ui/Link/UiLink'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import Link from 'next/link'
 
