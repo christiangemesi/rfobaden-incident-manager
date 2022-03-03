@@ -12,8 +12,14 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Id from '@/models/base/Id'
 import Organization from '@/models/Organization'
+import Incident from '@/models/Incident'
 
-const UserCreateForm: React.VFC = () => {
+interface Props {
+  user?: User | null
+  onClose?: () => void
+}
+
+const UserCreateForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   const form = useForm<ModelData<User>>(() => ({
     email: '',
     firstName: '',
@@ -44,6 +50,7 @@ const UserCreateForm: React.VFC = () => {
     }
     UserStore.save(parseUser(data))
     clearForm(form)
+
   })
 
   const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))

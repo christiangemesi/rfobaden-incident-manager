@@ -15,53 +15,59 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UserCreateForm from '@/components/User/Form/UserCreateForm'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UserEditForm from '@/components/User/Form/UserEditForm'
 
 interface Props extends StyledProps {
   user: User
-  firstName: string
-  lastName: string
-  email: string
-  role: string
-  organization: string
+
+  // firstName: string
+  // lastName: string
+  // email: string
+  // role: string
+  // organization: string
 }
 
 const UserListItem: React.VFC<Props> = ({
   user,
-  firstName,
-  lastName,
-  email,
-  role,
-  organization,
+  // firstName,
+  // lastName,
+  // email,
+  // role,
+  // organization,
 }) => {
+  //const user = useUser(data.user)
+  const employedBy = useOrganization(user.organizationId)
+  
   const handleDelete = async (userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
       await BackendService.delete('users', userId)
       UserStore.remove(userId)
     }
   }
-  const employedBy = useOrganization(user.organizationId)
+  
 
   return (
     <UiListItem>
+      <UiGrid style={{ alignItems: 'center' }} gapH={1.5}>
+        <UiGrid.Col size={7}>
+          <UiTitle level={5}>
+            {user.firstName} {user.lastName}
+          </UiTitle>
+          {user.email}
+        </UiGrid.Col>
 
-      <div>
-        <UiTitle level={5}>
-          {user.firstName} {user.lastName}
-        </UiTitle>
-        {user.email}
-      </div>
-      <AlignmentSpacer>
-        <LeftSpacer>
+        <UiGrid.Col size={2}>
           <UiTitle level={6}>
             {user.role}
           </UiTitle>
-        </LeftSpacer>
-        <LeftSpacer>
+        </UiGrid.Col>
+        <UiGrid.Col size={2}>
           <UiTitle level={6}>
             {employedBy.name}
           </UiTitle>
-        </LeftSpacer>
-        <LeftSpacer>
+        </UiGrid.Col>
+        <UiGrid.Col size={1}>
           <UiModal isFull>
             <UiModal.Activator>{({ open }) => (
               <UiIconButton onClick={open}>
@@ -71,17 +77,17 @@ const UserListItem: React.VFC<Props> = ({
             <UiModal.Body>{({ close }) => (
               <React.Fragment>
                 <UiTitle level={1} isCentered>
-                  Benutzer bearbeiten
+                    Benutzer bearbeiten
                 </UiTitle>
-                <UserCreateForm user={user} onClose={close} />
+                <UserEditForm user={user} onClose={close} />
               </React.Fragment>
             )}</UiModal.Body>
           </UiModal>
           <UiIconButton onClick={() => handleDelete(user.id)}>
             <UiIcon.DeleteAction />
           </UiIconButton>
-        </LeftSpacer>
-      </AlignmentSpacer>
+        </UiGrid.Col>
+      </UiGrid>
     </UiListItem>
   )
 }
@@ -93,12 +99,11 @@ const LeftSpacer = styled.div`
 const AlignmentSpacer = styled.div`
   display: flex;
   `
-
-// const SelectableListItem = styled(UiListItem)<{ isActive: boolean }>`
-//   ${({ isActive, theme }) => isActive && css`
-//     background: ${theme.colors.secondary.contrast};
-//     color: ${theme.colors.secondary.value};
-//   `}
-/*
+const RightSide = styled.div`
+  display: flex;
+  align-items: center;
+  
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
 `
-*/

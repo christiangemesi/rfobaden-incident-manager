@@ -14,6 +14,7 @@ import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 import UserCreateForm from '@/components/User/Form/UserCreateForm'
 import UserListItem from '@/components/User/List/Item/UserListItem'
 import Report from '@/models/Report'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   users: User[]
@@ -23,10 +24,7 @@ interface Props {
 }
 
 const UserList: React.VFC<Props> = ({ users , activeUser, onClick: handleClick }) => {
-  const handleDelete = async (userId: Id<User>) => {
-    await BackendService.delete('users', userId)
-    UserStore.remove(userId)
-  }
+
 
   return (
     <UiList>
@@ -45,6 +43,20 @@ const UserList: React.VFC<Props> = ({ users , activeUser, onClick: handleClick }
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>
+      <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
+        <UiGrid.Col size={1}>
+          <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Vorname</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={6}>
+          <UiTitle level={6}>Nachname</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col size={2}>
+          <UiTitle level={6}>Rolle</UiTitle>
+        </UiGrid.Col>
+        <UiGrid.Col>
+          <UiTitle level={6}>Organisation</UiTitle>
+        </UiGrid.Col>
+      </UiGrid>
       {users.map((user) => (
         <UserListItem
           key={user.id}
