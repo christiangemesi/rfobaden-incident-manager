@@ -258,11 +258,11 @@ const TaskContainer = styled.div`
 const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   position: absolute;
   top: 0;
-  left: 2rem;
+  left: 0;
   
   z-index: 2;
   
-  width: calc(100% - 2rem);
+  width: calc(100%);
   height: 100%;
   
   background-color: ${({ theme }) => theme.colors.tertiary.value};

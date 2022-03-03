@@ -39,7 +39,7 @@ const UiScroll: React.VFC<Props> = ({
 export default styled(UiScroll)`
   ${({ isLeft }) => isLeft && css`
     direction: rtl;
-    & > * {
+    .os-content {
       direction: ltr;
     }
   `}

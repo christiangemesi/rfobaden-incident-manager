@@ -29,7 +29,7 @@ const SubtaskList: React.VFC<Props> = ({
   activeSubtask,
   onClick: handleClick }) => {
   return (
-    <UiGrid direction="column" gap={1} style={{ height: '100%' }}>
+    <UiGrid direction="column" gap={1}>
       <UiList>
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
@@ -48,8 +48,6 @@ const SubtaskList: React.VFC<Props> = ({
         </UiModal>
       </UiList>
       <UiList>
-
-
         {subtasks.map((subtask) => (
           <SubtaskListItem
             incident={incident}
