@@ -24,6 +24,8 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import TaskForm from '@/components/Task/Form/TaskForm'
+import { sleep } from '@/utils/control-flow'
 
 interface Props {
   report: Report
@@ -36,6 +38,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     if (loadedReports.has(report.id)) {
       return
     }
+    await sleep(300)
     const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
       `incidents/${report.incidentId}/reports/${report.id}/tasks`,
     )
@@ -118,6 +121,23 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
                   <UiIcon.More />
                 </UiIconButton>
               </UiDropDown.Trigger>
+
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>
+                    Neuer Auftrag
+                  </UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <div>
+                    <UiTitle level={1} isCentered>
+                      Auftrag erfassen
+                    </UiTitle>
+                    <TaskForm incident={incident} report={report} onClose={close} />
+                  </div>
+                )}</UiModal.Body>
+              </UiModal>
+
               <UiModal isFull>
                 <UiModal.Activator>{({ open }) => (
                   <UiDropDown.Item onClick={open}>
@@ -183,8 +203,6 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
               <UiIcon.Loader isSpinner />
             ) : (
               <TaskList
-                incident={incident}
-                report={report}
                 tasks={tasks}
                 onClick={selectTask}
               />
@@ -261,7 +279,7 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   left: 0;
   
   z-index: 2;
-  
+
   width: calc(100%);
   height: 100%;
   

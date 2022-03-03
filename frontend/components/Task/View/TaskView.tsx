@@ -19,6 +19,8 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import styled from 'styled-components'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
+import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 
 interface Props {
   task: Task
@@ -106,6 +108,21 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
                 <UiIcon.More />
               </UiIconButton>
             </UiDropDown.Trigger>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiDropDown.Item onClick={open}>
+                  Teilauftrag erfassen
+                </UiDropDown.Item>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <div>
+                  <UiTitle level={1} isCentered>
+                    Neuer Teilauftrag
+                  </UiTitle>
+                  <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+                </div>
+              )}</UiModal.Body>
+            </UiModal>
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (
                 <UiDropDown.Item onClick={open}>

@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
@@ -16,8 +16,6 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
-import * as ReactDOM from 'react-dom'
-import IncidentView from '@/components/Incident/View/IncidentView'
 import { useTasks } from '@/stores/TaskStore'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
@@ -28,6 +26,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useAppState } from '@/pages/_app'
+import ReportForm from '@/components/Report/Form/ReportForm'
 
 interface Props {
   data: {
@@ -140,6 +139,23 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
                   </UiIconButton>
                 </UiDropDown.Trigger>
 
+
+                <UiModal isFull>
+                  <UiModal.Activator>{({ open }) => (
+                    <UiDropDown.Item onClick={open}>
+                      Neue Meldung
+                    </UiDropDown.Item>
+                  )}</UiModal.Activator>
+                  <UiModal.Body>{({ close }) => (
+                    <React.Fragment>
+                      <UiTitle level={1} isCentered>
+                        Meldung erfassen
+                      </UiTitle>
+                      <ReportForm incident={incident} onClose={close} />
+                    </React.Fragment>
+                  )}</UiModal.Body>
+                </UiModal>
+
                 <UiModal isFull>
                   <UiModal.Activator>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
@@ -190,10 +206,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         </UiContainer>
       </Heading>
       <Content>
-        <ReportList
-          incident={incident}
-          reports={reports}
-        />
+        <ReportList reports={reports} />
       </Content>
     </Container>
   )
@@ -295,9 +308,5 @@ const VerticalSpacer = styled.div`
   :last-child {
     margin-bottom: 0;
   }
-`
-
-const BlockContainer = styled.div`
-  width: 100%;
 `
 

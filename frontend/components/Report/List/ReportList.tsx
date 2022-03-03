@@ -2,27 +2,20 @@ import React, { useCallback, useRef, useState } from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
-import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
 import styled, { css } from 'styled-components'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 interface Props {
-  incident: Incident
   reports: Report[]
   onSelect?: (report: Report) => void
   onDeselect?: () => void
 }
 
-const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelect, onDeselect: handleDeselect  }) => {
+const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDeselect: handleDeselect  }) => {
   const [selected, setSelected] = useState<Report | null>(null)
   const setSelectedAndCallback = useCallback((report: Report | null) => {
     if (report === null) {
@@ -47,22 +40,6 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
       <UiScroll style={{ height: '100%' }} isLeft={selected !== null} disableX>
         <ListSpacer hasSelected={selected !== null}>
           <ListContainer hasSelected={selected !== null}>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiCreatButton onClick={open}>
-                  <UiIcon.CreateAction size={1.5} />
-                </UiCreatButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung erfassen
-                  </UiTitle>
-                  <ReportForm incident={incident} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-
             <UiList>
               {reports.map((report) => (
                 <ReportListItem
