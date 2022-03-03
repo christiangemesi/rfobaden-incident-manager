@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
@@ -7,6 +7,7 @@ import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   reports: Report[]
@@ -34,13 +35,36 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
 
   const containerRef = useRef<HTMLDivElement | null>(null)
 
+  const [keyReports, normalReports] = useMemo(() => (
+    reports.reduce(([key, normal], report) => {
+      if (report.isKeyReport) {
+        key.push(report)
+      } else {
+        normal.push(report)
+      }
+      return [key, normal]
+    }, [[] as Report[], [] as Report[]])
+  ), [reports])
+
   return (
     <Container ref={containerRef}>
       <UiScroll style={{ height: '100%' }} isLeft={selected === null} disableX>
         <ListSpacer hasSelected={selected !== null}>
           <ListContainer hasSelected={selected !== null}>
             <UiList>
-              {reports.map((report) => (
+              {keyReports.map((report) => (
+                <ReportListItem
+                  key={report.id}
+                  report={report}
+                  isActive={selected?.id === report.id}
+                  isSmall={selected !== null}
+                  onClick={setSelectedAndCallback}
+                />
+              ))}
+            </UiList>
+
+            <UiList>
+              {normalReports.map((report) => (
                 <ReportListItem
                   key={report.id}
                   report={report}
@@ -93,7 +117,7 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 
   ${({ hasSelected }) => hasSelected && css`
     ${Themed.media.xl.min} {
