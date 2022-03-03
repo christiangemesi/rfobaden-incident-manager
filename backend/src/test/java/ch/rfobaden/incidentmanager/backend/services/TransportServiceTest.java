@@ -7,7 +7,7 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryServiceT
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TransportServiceTest
-    extends ModelRepositoryServiceTest<Transport, TransportPath, TransportService, TransportRepository> {
+public class TransportServiceTest extends ModelRepositoryServiceTest
+    <Transport, TransportPath, TransportService, TransportRepository> {
 
 }

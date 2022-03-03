@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path = "/api/v1/incidents/{incidentId}/transport/{transportId}/")
-public class TransportController extends ModelController<Transport, TransportPath, TransportService> {
+@RequestMapping(path = "/api/v1/incidents/{incidentId}/transport/")
+public class TransportController
+    extends ModelController<Transport, TransportPath, TransportService> {
 
     private final IncidentService incidentService;
     private final UserService userService;
@@ -30,12 +31,14 @@ public class TransportController extends ModelController<Transport, TransportPat
 
     @Override
     protected void loadRelations(TransportPath path, Transport transport) {
-        var incident = incidentService.find(path, path.getIncidentId()).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "incident not found")
-            ));
+        var incident = incidentService.find(path, path.getIncidentId())
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "incident not found"));
+        transport.setIncident(incident);
 
-        var assignee = userService.find(path, path.getIncidentId()).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "assignee not found")
-        ));
+        if (transport.getAssignee() != null) {
+            var assignee = userService.find(transport.getAssignee().getId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "assignee not found"));
+            transport.setAssignee(assignee);
+        }
     }
 }

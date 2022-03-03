@@ -24,9 +24,6 @@ public class TransportControllerTest
     @MockBean
     IncidentService incidentService;
 
-    @MockBean
-    UserService userService;
-
     @Override
     protected String getEndpointFor(TransportPath path) {
         return "/api/v1/incidents/" + path.getIncidentId() + "/transport/";
