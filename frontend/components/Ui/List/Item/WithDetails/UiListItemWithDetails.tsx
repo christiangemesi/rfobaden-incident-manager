@@ -54,6 +54,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 export default styled(UiListItemWithDetails)``
 
 const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
+  
   ${({ isClosed }) => isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;

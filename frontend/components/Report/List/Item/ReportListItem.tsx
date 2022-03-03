@@ -59,7 +59,6 @@ export default ReportListItem
 const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
   display: flex;
   row-gap: 1rem;
-  
   transition-timing-function: cubic-bezier(1, 0.23, 1, 0.32);
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;
@@ -69,8 +68,6 @@ const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
 `
 
 const Bridge = styled.div<{ isActive: boolean }>`
-  position: relative;
-  z-index: 5;
   width: 100%;
   height: 100%;
   
@@ -80,6 +77,7 @@ const Bridge = styled.div<{ isActive: boolean }>`
   transition-property: transform, background-color, box-shadow;
   transform-origin: left center;
   transform: scaleX(0);
+  will-change: transform, background-color, box-shadow;
   
   ${({ isActive, theme }) => isActive && css`
     transform: scaleX(1);
@@ -95,7 +93,7 @@ const BridgeClip = styled.div`
   left: calc(100% - 1px);
   width: calc(2rem + 1px);
   height: calc(100%);
-  z-index: 5;
+  z-index: 3;
   
   overflow-x: clip;
   overflow-y: visible;

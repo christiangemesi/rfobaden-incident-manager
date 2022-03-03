@@ -41,7 +41,8 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
   text-decoration: none;
 
   transition: 150ms ease-out;
-  transition-property: filter, background-color, opacity;
+  transition-property: filter, background-color, opacity, box-shadow;
+  will-change: filter, background-color, opacity, box-shadow;
   
   ${({ isActive, theme }) => isActive && css`
     background-color: ${theme.colors.tertiary.value};

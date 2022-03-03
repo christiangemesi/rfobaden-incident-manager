@@ -277,7 +277,6 @@ const TaskOverlay = styled.div<{ hasSelected: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
-  
   z-index: 2;
 
   width: calc(100%);
