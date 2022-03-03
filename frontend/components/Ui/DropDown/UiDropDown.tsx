@@ -4,7 +4,6 @@ import DropDown from 'rc-dropdown'
 import Menu from 'rc-menu'
 import 'rc-dropdown/assets/index.css'
 import UiDropDownTrigger from '@/components/Ui/DropDown/Trigger/UiDropDownTrigger'
-import { useTheme } from 'styled-components'
 
 interface Props {
   children: ReactNode
@@ -26,7 +25,6 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
     )
   }, [children])
 
-  const theme = useTheme()
   return (
     <DropDown
       trigger={['click']}
