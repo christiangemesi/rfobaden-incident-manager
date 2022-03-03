@@ -6,7 +6,7 @@ import 'overlayscrollbars/css/OverlayScrollbars.min.css'
 import OverlayScrollbars from 'overlayscrollbars'
 
 interface Props extends StyledProps {
-  isLeft: boolean
+  isLeft?: boolean
   disableX?: boolean
   disableY?: boolean
   children: ReactNode

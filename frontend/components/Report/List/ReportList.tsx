@@ -95,6 +95,7 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
   width: 100%;
   padding: 1rem 0;
 
+  will-change: width;
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: width;
   

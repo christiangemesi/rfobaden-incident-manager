@@ -18,6 +18,7 @@ import TaskStore from '@/stores/TaskStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import styled from 'styled-components'
+import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 interface Props {
   task: Task
@@ -141,13 +142,13 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
         </UiIconButtonGroup>
       </UiGrid>
 
-      <div>
-        {isLoading ? (
-          <UiIcon.Loader isSpinner />
-        ) : (
+      {isLoading ? (
+        <UiIcon.Loader isSpinner />
+      ) : (
+        <UiScroll style={{ height: '100%' }}>
           <SubtaskList incident={incident} report={report} task={task} subtasks={subtasks} activeSubtask={null} />
-        )}
-      </div>
+        </UiScroll>
+      )}
     </Container>
   )
 }
@@ -157,9 +158,4 @@ const loadedTasks = new Set<Id<Task>>()
 
 const Container = styled.div`
   height: 100%;
-  overflow: auto;
-  direction: rtl;
-  & > * {
-    direction: ltr;
-  }
 `

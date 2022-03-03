@@ -23,6 +23,7 @@ import TaskView from '@/components/Task/View/TaskView'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 interface Props {
   report: Report
@@ -176,7 +177,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
         )}
       </Heading>
       <Content>
-        <ContentScroll isOverlayed={selected !== null}>
+        <UiScroll style={{ height: '100%' }}>
           <TaskContainer>
             {isLoading ? (
               <UiIcon.Loader isSpinner />
@@ -189,7 +190,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
               />
             )}
           </TaskContainer>
-        </ContentScroll>
+        </UiScroll>
         <TaskOverlay hasSelected={selected !== null}>
           {selected && (
             <TaskView task={selected} onClose={clearSelected} />
@@ -227,22 +228,12 @@ const Content = styled.div`
   position: relative;
   flex: 1;
   height: 100%;
+  padding-top: 1rem;
   padding-right: 4rem;
-  overflow-y: hidden;
 
   ${Themed.media.lg.max} {
     padding: 0;
   }
-`
-
-const ContentScroll = styled.div<{ isOverlayed: boolean }>`
-  height: calc(100% - 1rem);
-  overflow: auto;
-  margin-top: 1rem;
-  
-  ${({ isOverlayed }) => isOverlayed && css`
-    visibility: hidden;
-  `}
 `
 
 const TextLines = styled.div`
