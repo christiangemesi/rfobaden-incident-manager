@@ -81,6 +81,9 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
     ${Themed.media.xl.min} {
       width: 35vw;
     }
+    ${Themed.media.xxl.min} {
+      width: 25vw;
+    }
   `}
 `
 
@@ -127,7 +130,12 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
   }
   
   ${Themed.media.xl.min} {
-    width: 65vw;
     left: 35vw;
+    width: 65vw;
+  }
+
+  ${Themed.media.xxl.min} {
+    left: 25vw;
+    width: 75vw;
   }
 `
