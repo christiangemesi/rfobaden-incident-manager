@@ -69,7 +69,7 @@ const Container = styled.div`
 const ListSpacer = styled.div<{ hasSelected: boolean }>`
   height: 100%;
   width: 100%;
-  padding: 1rem 0;
+  margin-top: 4px;
 
   will-change: width;
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -98,12 +98,12 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
 
 const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
   position: fixed;
-  top: calc(${({ offset }) => offset}px + 1rem);
+  top: calc(${({ offset }) => offset}px + 4px);
 
   z-index: 2;
 
   width: 100%;
-  height: calc(100% - 1rem - ${({ offset }) => offset}px);
+  height: calc(100% - 4px - ${({ offset }) => offset}px);
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;

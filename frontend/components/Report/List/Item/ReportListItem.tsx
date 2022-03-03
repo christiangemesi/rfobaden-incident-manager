@@ -30,23 +30,23 @@ const ReportListItem: React.VFC<Props> = ({
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(report))}
     >
-      <LeftSpacer>
+      <div>
         {report.isKeyReport ? (
           <UiIcon.KeyMessage />
         ) : (
           <UiIcon.Empty />
         )}
-      </LeftSpacer>
-      <LeftSpacer>
+      </div>
+      <div>
         {report.isLocationRelevantReport ? (
           <UiIcon.LocationRelevancy />
         ) : (
           <UiIcon.Empty />
         )}
-      </LeftSpacer>
-      <LeftSpacer>
+      </div>
+      <div>
         {report.closedTaskIds.length}/{report.taskIds.length}
-      </LeftSpacer>
+      </div>
 
       <BridgeClip>
         <Bridge isActive={isActive ?? false} />
@@ -57,16 +57,15 @@ const ReportListItem: React.VFC<Props> = ({
 export default ReportListItem
 
 const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+  display: flex;
+  row-gap: 1rem;
+  
   transition-timing-function: cubic-bezier(1, 0.23, 1, 0.32);
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;;
   `}
-`
-
-const LeftSpacer = styled.div`
-  margin-left: 1rem;
 `
 
 const Bridge = styled.div<{ isActive: boolean }>`

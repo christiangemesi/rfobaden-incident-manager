@@ -286,6 +286,7 @@ const Container = styled.div`
 
 const Heading = styled.div`
   margin-top: -2rem;
+  padding-bottom: 0.5rem;
   z-index: 7;
 `
 
