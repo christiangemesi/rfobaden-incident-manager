@@ -11,6 +11,7 @@ interface Props extends UiListItemProps {
   title: string
   user: string
   isClosed?: boolean
+  isSmall?: boolean
 }
 
 const UiListItemWithDetails: React.VFC<Props> = ({
@@ -18,6 +19,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   title,
   user,
   isClosed = false,
+  isSmall = false,
   children,
   ...props
 }: Props) => {
@@ -33,11 +35,21 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   }, [priority])
 
   return (
-    <StyledListItem {...props} isClosed={isClosed}>
+    <StyledListItem {...props} isClosed={isClosed} isSmall={isSmall}>
       <LeftSide>
-        <PriorityContainer color={priorityColor}>
-          <PriorityIcon size={1.5} />
-        </PriorityContainer>
+        {(isSmall && !isSmall) ? (
+          <PriorityDot color={priorityColor} />
+
+        // <PriorityBar color={priorityColor}>
+        //   <PriorityBarItem color="error" isActive={priority === Priority.HIGH} />
+        //   <PriorityBarItem color="warning" isActive={priority === Priority.MEDIUM} />
+        //   <PriorityBarItem color="success" isActive={priority === Priority.LOW} />
+        // </PriorityBar>
+        ) : (
+          <PriorityContainer color={priorityColor} isSmall={isSmall}>
+            <PriorityIcon size={isSmall ? 1 : 1.5} />
+          </PriorityContainer>
+        )}
         <TextContent>
           <ItemTitle level={5}>
             {title}
@@ -53,8 +65,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 }
 export default styled(UiListItemWithDetails)``
 
-const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
-  
+const StyledListItem = styled(UiListItem)<{ isClosed: boolean, isSmall: boolean }>`
   ${({ isClosed }) => isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;
@@ -63,6 +74,13 @@ const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
       filter: grayscale(0.8) brightness(0.8);
       opacity: 1;
     }
+  `}
+  
+  ${({ isSmall }) => isSmall && css`
+    // For priority bars:
+    // padding-left: 2rem;
+    
+    padding-left: 0.5rem;
   `}
 `
 
@@ -94,8 +112,45 @@ const ItemTitle = styled(UiTitle)`
   overflow: hidden;
 `
 
-const PriorityContainer = styled.div<{ color: ColorName }>`
+const PriorityContainer = styled.div<{ color: ColorName, isSmall: boolean }>`
   display: inline-flex;
-  margin-right: 1rem;
+  margin-right: ${({ isSmall }) => isSmall ? '0.5rem' : '1rem'};
   color: ${({ theme, color }) => theme.colors[color].value};
 `
+
+const PriorityDot = styled.div<{ color: ColorName }>`
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 1rem;
+  border-radius: 100%;
+  background-color: ${({ theme, color }) => theme.colors[color].value};
+`
+
+//
+// const PriorityBar = styled.ul<{ color: ColorName }>`
+//   position: absolute;
+//   left: 0;
+//   top: 0;
+//
+//   height: 100%;
+//   width: calc(19.3px - 4px);
+//
+//   display: flex;
+//   flex-direction: column;
+//
+//   border: 4px solid ${({ theme, color }) => theme.colors[color].value};;
+//   border-top: none;
+//   border-bottom: none;
+//   border-left: none;
+// `
+//
+// const PriorityBarItem = styled.li<{ color: ColorName, isActive: boolean }>`
+//   height: calc(100% / 3);
+//   width: 100%;
+//
+//   // background-color: ${({ theme }) => theme.colors.grey.value};
+//   ${({ theme, color, isActive }) => isActive && css`
+//     background-color: ${theme.colors[color].value};
+//   `}
+//
+// `

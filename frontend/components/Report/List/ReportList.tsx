@@ -36,7 +36,7 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
 
   return (
     <Container ref={containerRef}>
-      <UiScroll style={{ height: '100%' }} isLeft={selected !== null} disableX>
+      <UiScroll style={{ height: '100%' }} isLeft={selected === null} disableX>
         <ListSpacer hasSelected={selected !== null}>
           <ListContainer hasSelected={selected !== null}>
             <UiList>
@@ -44,8 +44,9 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
                 <ReportListItem
                   key={report.id}
                   report={report}
-                  onClick={setSelectedAndCallback}
                   isActive={selected?.id === report.id}
+                  isSmall={selected !== null}
+                  onClick={setSelectedAndCallback}
                 />
               ))}
             </UiList>
@@ -68,7 +69,7 @@ const Container = styled.div`
 
 const ListSpacer = styled.div<{ hasSelected: boolean }>`
   position: relative;
-  height: 100%;
+  height: calc(100% - 4px);
   width: 100%;
   margin-top: 4px;
   z-index: 3;

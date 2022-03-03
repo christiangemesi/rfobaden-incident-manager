@@ -5,16 +5,19 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled, { css } from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   report: Report
   isActive: boolean
+  isSmall: boolean
   onClick?: (report: Report) => void
 }
 
 const ReportListItem: React.VFC<Props> = ({
   report,
   isActive,
+  isSmall,
   onClick: handleClick,
 }) => {
   const assignee = useUser(report.assigneeId)
@@ -25,27 +28,29 @@ const ReportListItem: React.VFC<Props> = ({
     <Li
       isActive={isActive}
       isClosed={report.isClosed || report.isDone}
+      isSmall={isSmall}
       title={report.title}
       priority={report.priority}
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(report))}
     >
-      <div>
-        {report.isKeyReport ? (
-          <UiIcon.KeyMessage />
-        ) : (
-          <UiIcon.Empty />
-        )}
-      </div>
-      <div>
-        {report.isLocationRelevantReport ? (
-          <UiIcon.LocationRelevancy />
-        ) : (
-          <UiIcon.Empty />
-        )}
-      </div>
-      <div>
-        {report.closedTaskIds.length}/{report.taskIds.length}
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+        <UiGrid direction="column">
+          {report.isKeyReport ? (
+            <UiIcon.KeyMessage size={ICON_MULTIPLIER} />
+          ) : (
+            <UiIcon.Empty size={ICON_MULTIPLIER} />
+          )}
+          {report.isLocationRelevantReport ? (
+            <UiIcon.LocationRelevancy size={ICON_MULTIPLIER} />
+          ) : (
+            <UiIcon.Empty size={ICON_MULTIPLIER} />
+          )}
+        </UiGrid>
+
+        <div>
+          {report.closedTaskIds.length}/{report.taskIds.length}
+        </div>
       </div>
 
       <BridgeClip>
@@ -56,24 +61,25 @@ const ReportListItem: React.VFC<Props> = ({
 }
 export default ReportListItem
 
+const ICON_MULTIPLIER = 0.75
+
 const Li = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  display: flex;
-  row-gap: 1rem;
-  transition-timing-function: cubic-bezier(1, 0.23, 1, 0.32);
+  transition-timing-function: ease-out;
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;;
+    border-bottom-right-radius: 0 !important;
   `}
 `
 
 const Bridge = styled.div<{ isActive: boolean }>`
+  
   width: 100%;
   height: 100%;
   
   background-color: ${({ theme }) => theme.colors.secondary.value};
 
-  transition: 750ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition: 500ms ease-in-out;
   transition-property: transform, background-color, box-shadow;
   transform-origin: left center;
   transform: scaleX(0);
