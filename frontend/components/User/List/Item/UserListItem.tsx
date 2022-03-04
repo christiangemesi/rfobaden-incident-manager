@@ -1,11 +1,9 @@
-import Report from '@/models/Report'
 import React from 'react'
-import UserStore, { useUser } from '@/stores/UserStore'
+import UserStore from '@/stores/UserStore'
 import { useOrganization } from '@/stores/OrganizationStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled, { css } from 'styled-components'
-import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
-import User, { useUsername } from '@/models/User'
+import styled from 'styled-components'
+import User from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -13,8 +11,6 @@ import Id from '@/models/base/Id'
 import BackendService from '@/services/BackendService'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import IncidentForm from '@/components/Incident/Form/IncidentForm'
-import UserCreateForm from '@/components/User/Form/UserCreateForm'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserEditForm from '@/components/User/Form/UserEditForm'
 
@@ -64,7 +60,7 @@ const UserListItem: React.VFC<Props> = ({
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            {employedBy.name}
+            {/*{employedBy}*/}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>

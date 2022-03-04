@@ -1,29 +1,23 @@
 import React from 'react'
 import User from '@/models/User'
 import styled from 'styled-components'
-import BackendService from '@/services/BackendService'
-import UserStore from '@/stores/UserStore'
-import Id from '@/models/base/Id'
 import UiList from '@/components/Ui/List/UiList'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import ReportForm from '@/components/Report/Form/ReportForm'
-import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 import UserCreateForm from '@/components/User/Form/UserCreateForm'
 import UserListItem from '@/components/User/List/Item/UserListItem'
-import Report from '@/models/Report'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   users: User[]
   //user: User
-  activeUser: User
+  //activeUser: User
   onClick?: (user: User) => void
 }
 
-const UserList: React.VFC<Props> = ({ users , activeUser, onClick: handleClick }) => {
+const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
 
 
   return (
@@ -45,16 +39,24 @@ const UserList: React.VFC<Props> = ({ users , activeUser, onClick: handleClick }
       </UiModal>
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
         <UiGrid.Col size={1}>
-          <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Vorname</UiTitle>
+          <SortButton>
+            <UiTitle level={6}>Vorname</UiTitle>
+          </SortButton>
         </UiGrid.Col>
         <UiGrid.Col size={6}>
-          <UiTitle level={6}>Nachname</UiTitle>
+          <SortButton>
+            <UiTitle level={6}>Nachname</UiTitle>
+          </SortButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiTitle level={6}>Rolle</UiTitle>
+          <SortButton>
+            <UiTitle level={6}>Rolle</UiTitle>
+          </SortButton>
         </UiGrid.Col>
         <UiGrid.Col>
-          <UiTitle level={6}>Organisation</UiTitle>
+          <SortButton>
+            <UiTitle level={6}>Organisation</UiTitle>
+          </SortButton>
         </UiGrid.Col>
       </UiGrid>
       {users.map((user) => (
@@ -139,4 +141,13 @@ const StyledTdSmall = styled(StyledTd)`
 const StyledButton = styled.button`
   display: block;
   width: 100%;
+`
+const SortButton = styled.button`
+  border: none;
+  background: none;
+  
+  :hover{
+    background: white;
+    
+  }
 `
