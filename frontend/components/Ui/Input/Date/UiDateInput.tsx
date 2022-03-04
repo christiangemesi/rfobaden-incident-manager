@@ -48,7 +48,7 @@ const UiDateInput: React.VFC<Props> = ({
   }, [date])
 
   const Label = label == null ? 'div' : StyledLabel
-  const hasError = errors.length !== 0
+  const hasError = errors.length !== 0 || isInvalid
 
   return (
     <Label>
@@ -73,7 +73,7 @@ const UiDateInput: React.VFC<Props> = ({
             calendarClassName={className + ' dateTimePopup'}
             withPortal={isModal}
             shouldCloseOnSelect
-            showTimeInput
+            showTimeSelect
             showMonthDropdown
             showYearDropdown
             showWeekNumbers
@@ -158,10 +158,11 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
   .react-datepicker__input-time-container {
     width: 100%;
     margin: 0;
-    padding: 0.25rem;
+    padding: 0.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: ${({ theme }) => theme.colors.secondary.value};
 
     div.react-datepicker-time__input {
       margin: 0;
@@ -169,12 +170,13 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     }
 
     input.react-datepicker-time__input, input.timeInput {
-      margin: 0;
+      margin: 0.2rem;
+      padding: 0 0.2rem;
       font-size: 0.9rem;
-      border-radius: 0.5rem;
+      border-radius: 5px;
       outline: none;
       width: 100%;
-      border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+      border: none;
       font-family: ${({ theme }) => theme.fonts.body};
 
       transition: 250ms ease;
@@ -182,25 +184,12 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     }
   }
 
-  .timeInput {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    svg {
-      position: absolute;
-      right: 0.5rem;
-      z-index: 10;
-    }
-  }
-
   .dateTimePopup {
     font-family: ${({ theme }) => theme.fonts.body};
     border-color: ${({ theme }) => theme.colors.primary.value};
-    background: ${({ theme }) => theme.colors.tertiary.value};
+    background: white;
     color: ${({ theme }) => theme.colors.tertiary.contrast};
-
-
+    
     .react-datepicker__navigation-icon::before {
       border-color: ${({ theme }) => theme.colors.primary.value};
     }
@@ -208,6 +197,7 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     .react-datepicker__header {
       background: ${({ theme }) => theme.colors.secondary.value};
       color: ${({ theme }) => theme.colors.secondary.contrast};
+      border-color: ${({ theme }) => theme.colors.secondary.value};
 
       .react-datepicker__current-month {
         display: flex;
@@ -220,7 +210,7 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
       .react-datepicker__header__dropdown {
         height: 1.5rem;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: center;
         align-items: center;
 
         .react-datepicker__month-dropdown-container {
@@ -252,6 +242,7 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
             top: auto;
             position: relative;
             padding: 0.2rem;
+            margin: 0.1rem;
             border-color: ${({ theme }) => theme.colors.primary.value};
             background: ${({ theme }) => theme.colors.tertiary.value};
 
@@ -317,7 +308,8 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
       }
 
       .react-datepicker__day-name {
-
+        line-height: 1.2;
+        margin-top: 0.5rem;
       }
     }
 
@@ -327,6 +319,7 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
       &::before, &::after {
         border-bottom-color: ${({ theme }) => theme.colors.secondary.value};
+        border-top-color: ${({ theme }) => theme.colors.secondary.value};
       }
     }
 
@@ -347,6 +340,11 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
       color: ${({ theme }) => theme.colors.secondary.value};
     }
 
+    .react-datepicker__month-container,
+    .react-datepicker__time-container,
+    .react-datepicker__time{
+      border-color: ${({ theme }) => theme.colors.primary.value};
+    }
 
     .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
       background: ${({ theme }) => theme.colors.primary.value};
@@ -363,6 +361,12 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
     .react-datepicker__day--today:not(:hover):not(.react-datepicker__day--selected) {
       color: ${({ theme }) => theme.colors.error.value};
+    }
+    
+    .react-datepicker__time-box {
+      background: white;
+      color: ${({ theme }) => theme.colors.tertiary.contrast};
+      border-right: 1px solid ${({ theme }) => theme.colors.primary.value};
     }
   }
 `
