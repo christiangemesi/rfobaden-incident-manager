@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path = "/api/v1/incidents/{incidentId}/transport/")
+@RequestMapping(path = "/api/v1/incidents/{incidentId}/transports")
 public class TransportController
     extends ModelController<Transport, TransportPath, TransportService> {
 

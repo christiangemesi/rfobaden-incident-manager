@@ -20,44 +20,32 @@ public interface TransportRepository
             + " FROM "
             + "Transport transport"
             + " WHERE "
-            + "transport.assignee.id = :#{#path.assigneeId}"
-            + " AND "
             + "transport.incident.id = :#{#path.incidentId}"
-            + " AND "
-            + "transport.id = :id"
     )
-
     @Override
     boolean existsByPath(TransportPath path, Long id);
 
-
     @Query(
-        "SELECT CASE WHEN COUNT(transport) > 0 THEN true ELSE false END"
+        "SELECT transport"
             + " FROM "
             + "Transport transport"
             + " WHERE "
-            + "transport.assignee.id = :#{#path.assigneeId}"
-            + " AND "
             + "transport.incident.id = :#{#path.incidentId}"
             + " AND "
             + "transport.id = :id"
     )
-
     @Override
     Optional<Transport> findByPath(@Param("path") TransportPath path, @Param("id") Long id);
 
     @Query(
-        "SELECT CASE WHEN COUNT(transport) > 0 THEN true ELSE false END"
+        "SELECT transport"
             + " FROM "
             + "Transport transport"
             + " WHERE "
-            + "transport.assignee.id = :#{#path.assigneeId}"
-            + " AND "
             + "transport.incident.id = :#{#path.incidentId}"
             + " AND "
             + "transport.id = :id"
     )
-
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
 }
