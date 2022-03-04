@@ -78,7 +78,6 @@ const UiDateInput: React.VFC<Props> = ({
             showYearDropdown
             showWeekNumbers
             isClearable
-            // startOpen // todo
           />
         </DateTimePicker>
       </InputAndErrorBox>
