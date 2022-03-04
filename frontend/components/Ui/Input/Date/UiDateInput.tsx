@@ -8,6 +8,8 @@ import { de } from 'date-fns/locale'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import 'rc-time-picker/assets/index.css'
+import { Themed } from '@/theme'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props extends UiInputProps<Date | null> {
   label?: string
@@ -30,6 +32,7 @@ const UiDateInput: React.VFC<Props> = ({
 
   const [date, setDate] = useState<Date | null>(value)
   const [isInvalid, setInvalid] = useState<boolean>(false)
+  const [isIconOpened, setIconOpened] = useState<boolean>(false)
 
   useUpdateEffect(() => {
     if (date === null) {
@@ -58,19 +61,20 @@ const UiDateInput: React.VFC<Props> = ({
         </span>
       )}
       <InputAndErrorBox hasError={hasError}>
-        <DateTimePicker isNull={date == null}>
+        <DateTimePicker isNull={date == null} isModal={isModal} isOpened={isIconOpened}>
           <DatePicker
             locale={de}
             selected={date}
             onChange={(date) => setDate(date)}
-            yearDropdownItemNumber={3}
+            onCalendarClose={() => setIconOpened(false)}
             placeholderText={placeholder}
             timeInputLabel={labelTime}
-            dateFormat="dd.MM.yyyy HH:mm"
-            timeFormat="HH:mm"
             className={className + ' dateTimeInput'}
             popperClassName={className + ' dateTimePopupContainer'}
             calendarClassName={className + ' dateTimePopup'}
+            dateFormat="dd.MM.yyyy HH:mm"
+            yearDropdownItemNumber={3}
+            timeIntervals={15}
             withPortal={isModal}
             shouldCloseOnSelect
             showTimeSelect
@@ -78,7 +82,11 @@ const UiDateInput: React.VFC<Props> = ({
             showYearDropdown
             showWeekNumbers
             isClearable
+            preventOpenOnFocus
           />
+          <AdditionalInput isModal={isModal} onClick={() => setIconOpened(true)}>
+            <UiIcon.Calendar />
+          </AdditionalInput>
         </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
@@ -87,6 +95,30 @@ const UiDateInput: React.VFC<Props> = ({
 }
 
 export default UiDateInput
+
+const AdditionalInput = styled.div<{ isModal: boolean }>`
+  background: ${({ theme }) => theme.colors.primary.value};
+  outline: none;
+  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border-radius: 0 0.5rem 0.5rem 0;
+  width: 60px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${({ theme }) => theme.colors.primary.contrast};
+  cursor: pointer;
+
+  transition: 250ms ease;
+  transition-property: border-color;
+
+  ${Themed.media.sm.max} {
+    ${({ isModal }) => isModal && css`
+      display: none;
+    `}
+  }
+`
 
 const StyledLabel = styled.label`
   display: flex;
@@ -119,9 +151,21 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   `}
 `
 
-const DateTimePicker = styled.div<{ isNull: boolean }>`
+const DateTimePicker = styled.div<{ isNull: boolean, isModal: boolean, isOpened: boolean }>`
   width: 100%;
   height: 100%;
+  margin-top: 0.25rem;
+  display: flex;
+  position: relative;
+
+  > div:first-child {
+    width: calc(100% - 60px);
+    ${Themed.media.sm.max} {
+      ${({ isModal }) => isModal && css`
+        width: 100%;
+    `}
+    }
+  }
 
   .react-datepicker__input-container {
     position: relative;
@@ -144,15 +188,23 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     width: 100%;
     height: 100%;
     padding: 0.5rem;
-    margin-top: 0.25rem;
     font-size: 0.9rem;
-    border-radius: 0.5rem;
     outline: none;
     border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
     font-family: ${({ theme }) => theme.fonts.body};
 
     transition: 250ms ease;
     transition-property: border-color;
+
+    border-radius: 0.5rem 0 0 0.5rem;
+    border-right: none;
+    
+    ${Themed.media.sm.max} {
+      ${({ isModal }) => isModal && css`
+        border-radius: 0.5rem;
+        border-right: solid 1px;
+    `}
+    }
   }
 
   .react-datepicker__input-time-container {
@@ -189,7 +241,7 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     border-color: ${({ theme }) => theme.colors.primary.value};
     background: white;
     color: ${({ theme }) => theme.colors.tertiary.contrast};
-    
+
     .react-datepicker__navigation-icon::before {
       border-color: ${({ theme }) => theme.colors.primary.value};
     }
@@ -223,9 +275,8 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
         .react-datepicker__month-dropdown-container,
         .react-datepicker__year-dropdown-container {
-          background: ${({ theme }) => theme.colors.tertiary.value};
-          color: ${({ theme }) => theme.colors.tertiary.contrast};
           position: relative;
+          padding: 0;
 
           .react-datepicker__year-dropdown {
             left: auto;
@@ -239,12 +290,13 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
           .react-datepicker__year-dropdown,
           .react-datepicker__month-dropdown {
             width: 100%;
+            height: 100%;
             top: auto;
             position: relative;
             padding: 0.2rem;
             margin: 0.1rem;
             border-color: ${({ theme }) => theme.colors.primary.value};
-            background: ${({ theme }) => theme.colors.tertiary.value};
+            background: white;
 
             .react-datepicker__navigation {
               color: ${({ theme }) => theme.colors.tertiary.contrast};
@@ -271,6 +323,8 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
             .react-datepicker__month-option,
             .react-datepicker__year-option {
+              padding: 0.1rem;
+
               &:hover {
                 background: ${({ theme }) => theme.colors.secondary.value};
                 color: ${({ theme }) => theme.colors.secondary.contrast};
@@ -281,6 +335,8 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
         .react-datepicker__month-read-view,
         .react-datepicker__year-read-view {
+          background: ${({ theme }) => theme.colors.tertiary.value};
+          color: ${({ theme }) => theme.colors.tertiary.contrast};
           display: flex;
           justify-content: space-between;
           flex-direction: row-reverse;
@@ -292,6 +348,16 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
 
           span {
             position: relative;
+          }
+
+          :last-child {
+            :not(:first-child) {
+              display: none;
+            }
+
+            :first-child {
+              border-radius: 0;
+            }
           }
 
           .react-datepicker__month-read-view--down-arrow,
@@ -324,15 +390,44 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
     }
 
     .react-datepicker__day--today {
-      color: ${({ theme }) => theme.colors.error.value};
+      border: 2px solid ${({ theme }) => theme.colors.secondary.value};
     }
 
+    li.react-datepicker__time-list-item {
+      :first-child {
+        margin-top: 1px;
+      }
+
+      :last-child {
+        border-bottom-right-radius: 0.3rem;
+      }
+    }
+
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+      border-radius: 0.1rem;
+      padding: 1rem;
+      line-height: 0;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .react-datepicker__day-name {
+      padding: 0.2rem 0.5rem;
+    }
+
+    .react-datepicker__week-number {
+      color: ${({ theme }) => theme.colors.grey.value};
+    }
+
+    li.react-datepicker__time-list-item,
     .react-datepicker__day {
       color: ${({ theme }) => theme.colors.tertiary.contrast};
 
       &:hover {
-        background: ${({ theme }) => theme.colors.secondary.value};
-        color: ${({ theme }) => theme.colors.secondary.contrast};
+        background: ${({ theme }) => theme.colors.secondary.value} !important;
+        color: ${({ theme }) => theme.colors.secondary.contrast} !important;
       }
     }
 
@@ -340,33 +435,53 @@ const DateTimePicker = styled.div<{ isNull: boolean }>`
       color: ${({ theme }) => theme.colors.secondary.value};
     }
 
+    .react-datepicker__month {
+      margin: 0;
+    }
+
     .react-datepicker__month-container,
     .react-datepicker__time-container,
-    .react-datepicker__time{
+    .react-datepicker__time {
       border-color: ${({ theme }) => theme.colors.primary.value};
     }
 
-    .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+    .react-datepicker__time-list-item--selected,
+    .react-datepicker__day--selected,
+    .react-datepicker__day--keyboard-selected {
       background: ${({ theme }) => theme.colors.primary.value};
       color: ${({ theme }) => theme.colors.primary.contrast};
+      font-weight: bold;
+
       ${({ isNull }) => isNull && css`
         background: ${({ theme }) => theme.colors.tertiary.value};
         color: ${({ theme }) => theme.colors.tertiary.contrast};
-
-        &.react-datepicker__day--today {
-          color: ${({ theme }) => theme.colors.error.value};
-        }
       `}
     }
 
-    .react-datepicker__day--today:not(:hover):not(.react-datepicker__day--selected) {
-      color: ${({ theme }) => theme.colors.error.value};
-    }
-    
     .react-datepicker__time-box {
       background: white;
       color: ${({ theme }) => theme.colors.tertiary.contrast};
       border-right: 1px solid ${({ theme }) => theme.colors.primary.value};
+    }
+  }
+
+  ${({ isOpened }) => !isOpened && css`
+    .react-datepicker__portal,
+    .react-datepicker-popper {
+      display: none;
+    }
+  `}
+  ${Themed.media.sm.max} {
+    max-width: 100%;
+
+    .react-datepicker__time-container {
+      display: none;
+    }
+
+    .react-datepicker__portal {
+      ${({ isModal }) => isModal && css`
+        display: none;
+      `}
     }
   }
 `
