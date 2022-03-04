@@ -1,32 +1,35 @@
-import React, { CSSProperties, EventHandler, MouseEvent, ReactNode } from 'react'
-import styled from 'styled-components'
-import { ColorName } from '@/theme'
+import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import Link from 'next/link'
 
-interface Props extends StyledProps {
-  color?: ColorName
-  children: ReactNode
-  className?: string
-  style?: CSSProperties
+export interface Props extends StyledProps {
+  href?: string | URL
+  isActive?: boolean
   onClick?: EventHandler<MouseEvent>
+  children: ReactNode
 }
 
 const UiListItem: React.VFC<Props> = ({
-  color = 'primary',
-  children,
-  className,
-  style,
-  onClick: handleClick,
-}: Props) => {
+  isActive = false,
+  href = null,
+  ...props
+}) => {
+  if (href !== null) {
+    return (
+      <Link href={href} passHref>
+        <StyledListItem {...props} as="a" isActive={isActive} />
+      </Link>
+    )
+  }
   return (
-    <StyledListItem style={style} className={className} color={color} onClick={handleClick}>
-      {children}
-    </StyledListItem>
+    <StyledListItem {...props} isActive={isActive} />
   )
 }
 export default styled(UiListItem)``
 
-const StyledListItem = styled.div`
+const StyledListItem = styled.li<{ isActive: boolean }>`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,19 +37,37 @@ const StyledListItem = styled.div`
   padding: 0.5rem 1rem;
   width: 100%;
   cursor: pointer;
-  background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
-  color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  overflow: hidden;
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+  text-decoration: none;
 
-  transition: 250ms ease;
-  transition-property: filter, box-shadow;
-
-  :hover {
-    filter: brightness(90%);
+  transition: 150ms ease;
+  transition-property: filter, opacity;
+  
+  :after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: 150ms ease;
+    background: ${({ theme }) => theme.colors.secondary.value};
+    transition-property: background-color, opacity;
   }
-
-  :active {
-    filter: brightness(75%);
-    box-shadow: none;
-  }
+  
+  ${({ isActive, theme }) => isActive && css`
+    :after {
+      background: ${theme.colors.primary.value};
+      opacity: 0.6;
+      filter: grayscale(0.1);
+    }
+  `}
+  
+  ${({ isActive }) => !isActive && css`
+    :hover {
+      filter: brightness(0.9);
+    }
+  `}
 `

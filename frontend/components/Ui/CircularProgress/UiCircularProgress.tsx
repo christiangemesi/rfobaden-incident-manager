@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
@@ -35,11 +35,17 @@ const Circle = styled.div<{ percentDecimal: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: conic-gradient(${({
-    theme,
-    percentDecimal,
-  }) => theme.colors.success.value + ' ' + (percentDecimal * 100) + '%' + ',0,' + theme.colors.secondary.value + ' ' + (100 - (percentDecimal * 100)) + '%'});
-  /* This is done so there aren't 4 inline parts*/
+  
+  ${({ theme, percentDecimal }) => css`
+    --circle-color: ${theme.colors.grey.value};
+    --progress-color: ${theme.colors.success.value};
+    --progress-ratio: ${percentDecimal * 100}%;
+  `}
+  
+  background: conic-gradient(
+    var(--progress-color) var(--progress-ratio), 0,
+    var(--circle-color) calc(100% - var(--progress-ratio))
+  );
 `
 
 
@@ -51,13 +57,13 @@ const CircleOverlay = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.primary.contrast};
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
 `
 
 const CompletionRate = styled.div`
-  color: ${({ theme }) => theme.colors.primary.value};
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
 `
 
 const Percent = styled.div`
-  color: ${({ theme }) => theme.colors.primary.value};
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
 `
