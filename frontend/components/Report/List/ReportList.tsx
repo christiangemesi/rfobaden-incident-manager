@@ -7,7 +7,7 @@ import ReportView from '@/components/Report/View/ReportView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
-import UiTitle from '@/components/Ui/Title/UiTitle'
+import useBreakpoint from '@/utils/hooks/useBreakpoints'
 
 interface Props {
   reports: Report[]
@@ -46,6 +46,11 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
     }, [[] as Report[], [] as Report[]])
   ), [reports])
 
+  const canListBeSmall = useBreakpoint({
+    xs: false,
+    lg: true,
+  })
+
   return (
     <Container ref={containerRef}>
       <UiScroll style={{ height: '100%' }} isLeft={selected === null} disableX>
@@ -57,7 +62,7 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
                   key={report.id}
                   report={report}
                   isActive={selected?.id === report.id}
-                  isSmall={selected !== null}
+                  isSmall={canListBeSmall && selected !== null}
                   onClick={setSelectedAndCallback}
                 />
               ))}
@@ -69,7 +74,7 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
                   key={report.id}
                   report={report}
                   isActive={selected?.id === report.id}
-                  isSmall={selected !== null}
+                  isSmall={canListBeSmall && selected !== null}
                   onClick={setSelectedAndCallback}
                 />
               ))}
@@ -96,8 +101,12 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
   height: calc(100% - 4px);
   width: 100%;
   margin-top: 4px;
-  z-index: 3;
-
+  
+  z-index: 0;
+  ${Themed.media.lg.min} {
+    z-index: 3;
+  }
+  
   will-change: width;
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: width;
@@ -142,12 +151,19 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
   transition-property: transform;
 
   transform: translateX(100%);
+  ${Themed.media.md.max} {
+    transform: translateY(100%);
+  }
+  
   transform-origin: right center;
   
   overflow: hidden;
 
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
+    ${Themed.media.md.max} {
+      transform: translateY(0);
+    }
   `}
   
   ${Themed.media.lg.max} {
