@@ -9,6 +9,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserCreateForm from '@/components/User/Form/UserCreateForm'
 import UserListItem from '@/components/User/List/Item/UserListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiSortButton from '@/components/Ui/Button/UiSortButton'
 
 interface Props {
   users: User[]
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
+  //const sort = ()
 
 
   return (
@@ -39,24 +41,25 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
       </UiModal>
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
         <UiGrid.Col size={1}>
-          <SortButton>
+          <UiSortButton>
+            {/*onClick={sort("firstName")}>*/}
             <UiTitle level={6}>Vorname</UiTitle>
-          </SortButton>
+          </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={6}>
-          <SortButton>
+          <UiSortButton>
             <UiTitle level={6}>Nachname</UiTitle>
-          </SortButton>
+          </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <SortButton>
+          <UiSortButton>
             <UiTitle level={6}>Rolle</UiTitle>
-          </SortButton>
+          </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col>
-          <SortButton>
+          <UiSortButton>
             <UiTitle level={6}>Organisation</UiTitle>
-          </SortButton>
+          </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
       {users.map((user) => (

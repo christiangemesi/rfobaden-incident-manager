@@ -60,7 +60,7 @@ const UserListItem: React.VFC<Props> = ({
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            {/*{employedBy}*/}
+            {employedBy?.name}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
