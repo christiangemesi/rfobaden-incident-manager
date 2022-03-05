@@ -1,4 +1,5 @@
 import React from 'react'
+import { run } from '@/utils/control-flow'
 
 interface Props {
   value: Date
@@ -11,16 +12,22 @@ const UiDate: React.VFC<Props> = ({ value, type = 'datetime' }) => {
   const year = value.getFullYear()
   const hours = prefixZero(value.getHours())
   const minutes = prefixZero(value.getMinutes())
-  switch (type) {
-  case 'date':
-    return <React.Fragment>{day}.{month}.{year}</React.Fragment>
-  case 'time':
-    return <React.Fragment>{hours}:{minutes}</React.Fragment>
-  case 'datetime':
-    return <React.Fragment>{day}.{month}.{year} {hours}:{minutes}</React.Fragment>
-  default:
-    throw new Error('Invalid type passed to UiDate')
-  }
+  return (
+    <span suppressHydrationWarning={true}>
+      {run(() => {
+        switch (type) {
+        case 'date':
+          return <React.Fragment>{day}.{month}.{year}</React.Fragment>
+        case 'time':
+          return <React.Fragment>{hours}:{minutes}</React.Fragment>
+        case 'datetime':
+          return <React.Fragment>{day}.{month}.{year} {hours}:{minutes}</React.Fragment>
+        default:
+          throw new Error('Invalid type passed to UiDate')
+        }
+      })}
+    </span>
+  )
 }
 export default UiDate
 
