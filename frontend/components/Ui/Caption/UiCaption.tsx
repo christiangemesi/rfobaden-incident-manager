@@ -10,7 +10,7 @@ const UiCaption: React.VFC<Props> = (props) => {
 }
 export default UiCaption
 
-const Caption = styled.caption`
+const Caption = styled.div`
   font-size: 0.9em;
   opacity: 0.7;
 `

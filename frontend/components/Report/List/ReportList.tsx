@@ -46,10 +46,10 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
     }, [[] as Report[], [] as Report[]])
   ), [reports])
 
-  const canListBeSmall = useBreakpoint({
+  const canListBeSmall = useBreakpoint(() => ({
     xs: false,
     lg: true,
-  })
+  }))
 
   return (
     <Container ref={containerRef}>
