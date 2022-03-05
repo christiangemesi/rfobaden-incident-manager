@@ -50,12 +50,12 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
 
   const canListBeSmall = useBreakpoint(() => ({
     xs: false,
-    lg: true,
+    xl: true,
   }))
 
   const canDeselectByClick = useBreakpoint(() => ({
     xs: true,
-    lg: false,
+    xl: false,
   }))
   useEvent('click', useCallback(() => {
     if (canDeselectByClick) {
@@ -115,7 +115,7 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
   margin-top: 4px;
   
   z-index: 0;
-  ${Themed.media.lg.min} {
+  ${Themed.media.xl.min} {
     z-index: 3;
   }
   
@@ -163,7 +163,7 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
   transition-property: transform;
 
   transform: translateX(100%);
-  ${Themed.media.md.max} {
+  ${Themed.media.lg.max} {
     transform: translateY(100%);
   }
   
@@ -173,7 +173,7 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
 
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
-    ${Themed.media.md.max} {
+    ${Themed.media.lg.max} {
       transform: translateY(0);
     }
   `}

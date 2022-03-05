@@ -113,7 +113,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
 
   const canDeselectByClick = useBreakpoint(() => ({
     xs: true,
-    lg: false,
+    xl: false,
   }))
   const handleDeselectByClick = useCallback(() => {
     if (canDeselectByClick) {
