@@ -124,7 +124,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
   return (
     <Container>
       <Heading onClick={handleDeselectByClick}>
-        <UiGrid justify="space-between" align="center">
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <UiCaption>
               Meldung

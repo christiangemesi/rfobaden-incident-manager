@@ -105,7 +105,7 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
   return (
     <Container>
       <Heading onClick={EventHelper.stopPropagation}>
-        <UiGrid justify="space-between" align="center">
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <UiCaption>
               Auftrag

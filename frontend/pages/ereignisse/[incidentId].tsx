@@ -139,7 +139,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   return (
     <Container>
       <Heading>
-        <UiGrid align="center">
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <UiGrid.Col>
             <UiCaption>
               Ereignis
