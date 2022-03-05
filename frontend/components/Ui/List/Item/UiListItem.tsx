@@ -5,14 +5,15 @@ import Link from 'next/link'
 
 export interface Props extends StyledProps {
   href?: string | URL
+  title?: string
   isActive?: boolean
   onClick?: EventHandler<MouseEvent>
   children: ReactNode
 }
 
 const UiListItem: React.VFC<Props> = ({
-  isActive = false,
   href = null,
+  isActive = false,
   ...props
 }) => {
   if (href !== null) {

@@ -89,7 +89,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
   }, [report])
 
 
-  const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
+  const startsAt = report.startsAt ?? report.createdAt
   const incident = useIncident(report.incidentId)
   if (incident === null) {
     throw new Error('incident of report not found')
@@ -175,7 +175,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
             </UiIconButton>
           </UiIconButtonGroup>
         </UiGrid>
-        <UiDateLabel start={startDate} end={report.endsAt} />
+        <UiDateLabel start={startsAt} end={report.endsAt} />
         <TextLines>
           {report.description}
         </TextLines>
