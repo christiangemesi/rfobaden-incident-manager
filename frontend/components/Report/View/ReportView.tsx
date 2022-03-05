@@ -26,6 +26,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   report: Report
@@ -111,9 +112,14 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     <Container>
       <Heading onClick={() => setSelected(null)}>
         <UiGrid justify="space-between" align="center">
-          <UiTitle level={3}>
-            {report.title}
-          </UiTitle>
+          <div>
+            <UiCaption>
+              Meldung
+            </UiCaption>
+            <UiTitle level={3}>
+              {report.title}
+            </UiTitle>
+          </div>
           <UiIconButtonGroup>
             <UiDropDown>
               <UiDropDown.Trigger>

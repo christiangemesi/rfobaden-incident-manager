@@ -20,6 +20,7 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import styled from 'styled-components'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   task: Task
@@ -96,9 +97,14 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
   return (
     <Container>
       <UiGrid justify="space-between" align="center">
-        <UiTitle level={4}>
-          {task.title}
-        </UiTitle>
+        <div>
+          <UiCaption>
+            Auftrag
+          </UiCaption>
+          <UiTitle level={4}>
+            {task.title}
+          </UiTitle>
+        </div>
 
         <UiIconButtonGroup>
           <UiDropDown>

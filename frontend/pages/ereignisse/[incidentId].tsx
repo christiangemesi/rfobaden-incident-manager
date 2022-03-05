@@ -27,6 +27,7 @@ import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useAppState } from '@/pages/_app'
 import ReportForm from '@/components/Report/Form/ReportForm'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   data: {
@@ -127,6 +128,9 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
         <UiContainer>
           <UiGrid align="center">
             <UiGrid.Col>
+              <UiCaption>
+                Ereignis
+              </UiCaption>
               <UiTitle level={1}>
                 {incident.title}
               </UiTitle>
