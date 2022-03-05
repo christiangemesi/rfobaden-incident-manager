@@ -8,6 +8,8 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
+import { useEvent } from 'react-use'
+import EventHelper from '@/utils/helpers/EventHelper'
 
 interface Props {
   reports: Report[]
@@ -51,8 +53,18 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
     lg: true,
   }))
 
+  const canDeselectByClick = useBreakpoint(() => ({
+    xs: true,
+    lg: false,
+  }))
+  useEvent('click', useCallback(() => {
+    if (canDeselectByClick) {
+      setSelected(null)
+    }
+  }, [canDeselectByClick]))
+
   return (
-    <Container ref={containerRef}>
+    <Container ref={containerRef} onClick={EventHelper.stopPropagation}>
       <UiScroll style={{ height: '100%' }} isLeft={selected === null} disableX>
         <ListSpacer hasSelected={selected !== null}>
           <ListContainer hasSelected={selected !== null}>
@@ -83,7 +95,7 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
         </ListSpacer>
 
         <ReportOverlay offset={containerRef.current?.getBoundingClientRect()?.y ?? 0} hasSelected={selected !== null}>
-          {selected && <ReportView report={selected} onClose={clearSelected} />}
+          {selected !== null && <ReportView report={selected} onClose={clearSelected} />}
         </ReportOverlay>
       </UiScroll>
     </Container>

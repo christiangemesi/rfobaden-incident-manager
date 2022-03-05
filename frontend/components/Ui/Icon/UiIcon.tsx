@@ -10,7 +10,7 @@ import {
   mdiCheck,
   mdiCheckboxBlankOutline,
   mdiCheckboxMarked,
-  mdiClipboardTextOutline,
+  mdiClipboardTextOutline, mdiClockOutline,
   mdiClose,
   mdiDelete, mdiDotsHorizontal,
   mdiImageFilterHdr,
@@ -58,16 +58,23 @@ const UiIcon: React.VFC<Props> = ({
   style,
 }) => {
   return (
-    <Icon
+    <StyledIcon
       path={path}
-      size={`${24 * size}px`}
       spin={isSpinner}
+      $size={size}
       title={title}
       className={className}
       style={style}
     />
   )
 }
+
+const StyledIcon = styled(Icon)<{ $size: number }>`
+  --size: ${({ $size }) => $size};
+  
+  width: calc(var(--size) * 24px);
+  height: calc(var(--size) * 24px);
+`
 
 const StyledUiIcon = styled(UiIcon)``
 
@@ -111,4 +118,5 @@ export default Object.assign(StyledUiIcon, {
   Logout: makeNamedIcon(mdiLogoutVariant),
   Loader: makeNamedIcon(mdiLoading),
   More: makeNamedIcon(mdiDotsHorizontal),
+  Clock: makeNamedIcon(mdiClockOutline),
 })

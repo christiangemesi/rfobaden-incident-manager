@@ -21,6 +21,13 @@ import styled from 'styled-components'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import UiDescription from '@/components/Ui/Description/UiDescription'
+import UiLabel from '@/components/Ui/Label/UiLabel'
+import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
+import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
+import { useUsername } from '@/models/User'
+import { useUser } from '@/stores/UserStore'
+import EventHelper from '@/utils/helpers/EventHelper'
 
 interface Props {
   task: Task
@@ -37,6 +44,8 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
   if (report === null) {
     throw new Error('report is missing')
   }
+
+  const assigneeName = useUsername(useUser(task.assigneeId))
 
   const subtasks = useSubtasksOfTask(task.id)
   const { loading: isLoading } = useAsync(async () => {
@@ -93,76 +102,98 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
     }
   }, [task])
 
-
   return (
     <Container>
-      <UiGrid justify="space-between" align="center">
-        <div>
-          <UiCaption>
-            Auftrag
-          </UiCaption>
-          <UiTitle level={4}>
-            {task.title}
-          </UiTitle>
-        </div>
+      <Heading onClick={EventHelper.stopPropagation}>
+        <UiGrid justify="space-between" align="center">
+          <div>
+            <UiCaption>
+              Auftrag
+            </UiCaption>
+            <UiTitle level={4}>
+              {task.title}
+            </UiTitle>
+          </div>
 
-        <UiIconButtonGroup>
-          <UiDropDown>
-            <UiDropDown.Trigger>
-              <UiIconButton>
-                <UiIcon.More />
-              </UiIconButton>
-            </UiDropDown.Trigger>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiDropDown.Item onClick={open}>
-                  Teilauftrag erfassen
-                </UiDropDown.Item>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <div>
-                  <UiTitle level={1} isCentered>
-                    Neuer Teilauftrag
-                  </UiTitle>
-                  <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
-                </div>
-              )}</UiModal.Body>
-            </UiModal>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiDropDown.Item onClick={open}>
-                  Bearbeiten
-                </UiDropDown.Item>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Task bearbeiten
-                  </UiTitle>
-                  <TaskForm incident={incident} report={report} task={task} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-            {!task.isDone && (
-              task.isClosed ? (
-                <UiDropDown.Item onClick={handleReopen}>
-                  Öffnen
-                </UiDropDown.Item>
-              ) : (
-                <UiDropDown.Item onClick={handleClose}>
-                  Schliessen
-                </UiDropDown.Item>
-              )
-            )}
-            <UiDropDown.Item onClick={handleDelete}>
-              Löschen
-            </UiDropDown.Item>
-          </UiDropDown>
-          <UiIconButton onClick={handleCloseView}>
-            <UiIcon.CancelAction />
-          </UiIconButton>
-        </UiIconButtonGroup>
-      </UiGrid>
+          <UiIconButtonGroup>
+            <UiDropDown>
+              <UiDropDown.Trigger>
+                <UiIconButton>
+                  <UiIcon.More />
+                </UiIconButton>
+              </UiDropDown.Trigger>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>
+                    Teilauftrag erfassen
+                  </UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <div>
+                    <UiTitle level={1} isCentered>
+                      Neuer Teilauftrag
+                    </UiTitle>
+                    <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+                  </div>
+                )}</UiModal.Body>
+              </UiModal>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>
+                    Bearbeiten
+                  </UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Task bearbeiten
+                    </UiTitle>
+                    <TaskForm incident={incident} report={report} task={task} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
+              {!task.isDone && (
+                task.isClosed ? (
+                  <UiDropDown.Item onClick={handleReopen}>
+                    Öffnen
+                  </UiDropDown.Item>
+                ) : (
+                  <UiDropDown.Item onClick={handleClose}>
+                    Schliessen
+                  </UiDropDown.Item>
+                )
+              )}
+              <UiDropDown.Item onClick={handleDelete}>
+                Löschen
+              </UiDropDown.Item>
+            </UiDropDown>
+            <UiIconButton onClick={handleCloseView}>
+              <UiIcon.CancelAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </UiGrid>
+
+        <UiLabelList>
+          {task.location && (
+            <UiLabel>
+              <UiIcon.Location />
+              {report.location}
+            </UiLabel>
+          )}
+          {assigneeName && (
+            <UiLabel>
+              <UiIcon.UserInCircle />
+              {assigneeName}
+            </UiLabel>
+          )}
+          <UiLabel>
+            <UiIcon.Clock />
+            <UiDateLabel start={task.startsAt ?? task.createdAt} end={report.endsAt} />
+          </UiLabel>
+        </UiLabelList>
+
+        <UiDescription description={task.description} />
+      </Heading>
 
       {isLoading ? (
         <UiIcon.Loader isSpinner />
@@ -180,4 +211,11 @@ const loadedTasks = new Set<Id<Task>>()
 
 const Container = styled.div`
   height: 100%;
+`
+
+const Heading = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
 `

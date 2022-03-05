@@ -1,10 +1,9 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import TaskStore, { useTasksOfReport } from '@/stores/TaskStore'
@@ -16,7 +15,7 @@ import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import { useIncident } from '@/stores/IncidentStore'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import { useAsync } from 'react-use'
+import { useAsync, useEvent, useMount } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
@@ -27,6 +26,12 @@ import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import UiDescription from '@/components/Ui/Description/UiDescription'
+import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
+import UiLabel from '@/components/Ui/Label/UiLabel'
+import { useUsername } from '@/models/User'
+import useBreakpoint from '@/utils/hooks/useBreakpoints'
+import EventHelper from '@/utils/helpers/EventHelper'
 
 interface Props {
   report: Report
@@ -50,8 +55,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     loadedReports.add(report.id)
   }, [report.id])
 
-  const assignee = useUser(report.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
+  const assigneeName = useUsername(useUser(report.assigneeId))
 
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
@@ -89,7 +93,6 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     }
   }, [report])
 
-
   const startsAt = report.startsAt ?? report.createdAt
   const incident = useIncident(report.incidentId)
   if (incident === null) {
@@ -108,9 +111,19 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     setSelected(null)
   }, [report.id])
 
+  const canDeselectByClick = useBreakpoint(() => ({
+    xs: true,
+    lg: false,
+  }))
+  const handleDeselectByClick = useCallback(() => {
+    if (canDeselectByClick) {
+      setSelected(null)
+    }
+  }, [canDeselectByClick])
+
   return (
     <Container>
-      <Heading onClick={() => setSelected(null)}>
+      <Heading onClick={handleDeselectByClick}>
         <UiGrid justify="space-between" align="center">
           <div>
             <UiCaption>
@@ -181,28 +194,29 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
             </UiIconButton>
           </UiIconButtonGroup>
         </UiGrid>
-        <UiDateLabel start={startsAt} end={report.endsAt} />
-        <TextLines>
-          {report.description}
-        </TextLines>
 
-        {report.location && (
-          <UiTextWithIcon text={report.location ?? ''}>
-            <UiIcon.Location />
-          </UiTextWithIcon>
-        )}
-        {assignee && (
-          <UiTextWithIcon text={assigneeName}>
-            <UiIcon.UserInCircle />
-          </UiTextWithIcon>
-        )}
-        {report.notes !== null && (
-          <UiTextWithIcon text={report.notes}>
-            <UiIcon.AlertCircle />
-          </UiTextWithIcon>
-        )}
+        <UiLabelList>
+          {report.location && (
+            <UiLabel>
+              <UiIcon.Location />
+              {report.location}
+            </UiLabel>
+          )}
+          {assigneeName && (
+            <UiLabel>
+              <UiIcon.UserInCircle />
+              {assigneeName}
+            </UiLabel>
+          )}
+          <UiLabel>
+            <UiIcon.Clock />
+            <UiDateLabel start={startsAt} end={report.endsAt} />
+          </UiLabel>
+        </UiLabelList>
+
+        <UiDescription description={report.description} notes={report.notes} />
       </Heading>
-      <Content>
+      <Content onClick={EventHelper.stopPropagation}>
         <UiScroll style={{ height: '100%' }}>
           <TaskContainer>
             {isLoading ? (
@@ -240,6 +254,7 @@ const Heading = styled.div`
   padding: 1rem 4rem 0 2rem;
   display: flex;
   flex-direction: column;
+  row-gap: 0.5rem;
   width: 100%;
   
   ${Themed.media.lg.max} {
@@ -258,11 +273,6 @@ const Content = styled.div`
   ${Themed.media.lg.max} {
     padding: 0;
   }
-`
-
-const TextLines = styled.div`
-  white-space: pre-wrap;
-  line-height: 1.2;
 `
 
 const TaskContainer = styled.div`

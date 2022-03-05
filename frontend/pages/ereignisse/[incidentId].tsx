@@ -28,6 +28,9 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useAppState } from '@/pages/_app'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import UiDescription from '@/components/Ui/Description/UiDescription'
+import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
+import UiLabel from '@/components/Ui/Label/UiLabel'
 
 interface Props {
   data: {
@@ -118,96 +121,108 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
-  const startDate = useMemo(() => (
+  const startsAt = useMemo(() => (
     incident.startsAt !== null ? incident.startsAt : incident.createdAt
   ), [incident])
+
+  // Shows
+  const isFullDay = useMemo(() => {
+    if (incident.startsAt !== null && !isDateWithoutTime(incident.startsAt)) {
+      return false
+    }
+    if (incident.endsAt !== null && !isDateWithoutTime(incident.endsAt)) {
+      return false
+    }
+    return true
+  }, [incident])
 
   return (
     <Container>
       <Heading>
-        <UiContainer>
-          <UiGrid align="center">
-            <UiGrid.Col>
-              <UiCaption>
-                Ereignis
-              </UiCaption>
-              <UiTitle level={1}>
-                {incident.title}
-              </UiTitle>
-            </UiGrid.Col>
-            <UiGrid.Col size="auto">
-              <UiDropDown>
-                <UiDropDown.Trigger>
-                  <UiIconButton>
-                    <UiIcon.More />
-                  </UiIconButton>
-                </UiDropDown.Trigger>
+        <UiGrid align="center">
+          <UiGrid.Col>
+            <UiCaption>
+              Ereignis
+            </UiCaption>
+            <UiTitle level={1}>
+              {incident.title}
+            </UiTitle>
+          </UiGrid.Col>
+          <UiGrid.Col size="auto">
+            <UiDropDown>
+              <UiDropDown.Trigger>
+                <UiIconButton>
+                  <UiIcon.More />
+                </UiIconButton>
+              </UiDropDown.Trigger>
 
-
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
-                    <UiDropDown.Item onClick={open}>
-                      Neue Meldung
-                    </UiDropDown.Item>
-                  )}</UiModal.Activator>
-                  <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        Meldung erfassen
-                      </UiTitle>
-                      <ReportForm incident={incident} onClose={close} />
-                    </React.Fragment>
-                  )}</UiModal.Body>
-                </UiModal>
-
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
-                    <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Activator>
-                  <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        Ereignis bearbeiten
-                      </UiTitle>
-                      <IncidentForm incident={incident} onClose={close} />
-                    </React.Fragment>
-                  )}</UiModal.Body>
-                </UiModal>
-                {incident.isClosed ? (
-                  <UiDropDown.Item onClick={handleReopen}>
-                    Öffnen
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>
+                    Neue Meldung
                   </UiDropDown.Item>
-                ) : (
-                  <UiDropDown.Item onClick={handleClose}>
-                    Schliessen
-                  </UiDropDown.Item>
-                )}
-                <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
-              </UiDropDown>
-            </UiGrid.Col>
-          </UiGrid>
-          <VerticalSpacer>
-            <HorizontalSpacer>
-              <UiDateLabel start={startDate} end={incident.endsAt} type="datetime" />
-            </HorizontalSpacer>
-          </VerticalSpacer>
-          <VerticalSpacer>
-            <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-              {incident.description}
-            </UiGrid.Col>
-          </VerticalSpacer>
-          <VerticalSpacer>
-            <UiGrid.Col size={{ lg: 6, xs: 12 }}>
-              <UiTextWithIcon text={
-                activeOrganisations.length === 0
-                  ? 'Keine Organisationen beteiligt'
-                  : activeOrganisations.reduce((a, b) => a + ', ' + b)
-              }>
-                <UiIcon.UserInCircle />
-              </UiTextWithIcon>
-            </UiGrid.Col>
-          </VerticalSpacer>
-        </UiContainer>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Meldung erfassen
+                    </UiTitle>
+                    <ReportForm incident={incident} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
+
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Ereignis bearbeiten
+                    </UiTitle>
+                    <IncidentForm incident={incident} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
+              {incident.isClosed ? (
+                <UiDropDown.Item onClick={handleReopen}>
+                  Öffnen
+                </UiDropDown.Item>
+              ) : (
+                <UiDropDown.Item onClick={handleClose}>
+                  Schliessen
+                </UiDropDown.Item>
+              )}
+              <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+            </UiDropDown>
+          </UiGrid.Col>
+        </UiGrid>
+
+        <UiLabelList>
+          <UiLabel>
+            <UiIcon.UserInCircle />
+            {activeOrganisations.length}
+            &nbsp;
+            {activeOrganisations.length === 1 ? 'Organisation' : 'Organisationen'}
+          </UiLabel>
+          <UiLabel>
+            <UiIcon.Clock />
+            <UiDateLabel start={startsAt} end={incident.endsAt} type={isFullDay ? 'date' : 'datetime'} />
+          </UiLabel>
+        </UiLabelList>
+
+        <UiDescription description={incident.description} />
+
+        {/*<UiGrid.Col size={{ lg: 6, xs: 12 }}>*/}
+        {/*  <UiTextWithIcon text={*/}
+        {/*    activeOrganisations.length === 0*/}
+        {/*      ? 'Keine Organisationen beteiligt'*/}
+        {/*      : activeOrganisations.reduce((a, b) => a + ', ' + b)*/}
+        {/*  }>*/}
+        {/*    <UiIcon.UserInCircle />*/}
+        {/*  </UiTextWithIcon>*/}
+        {/*</UiGrid.Col>*/}
       </Heading>
       <Content>
         <ReportList reports={reports} />
@@ -216,6 +231,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   )
 }
 export default IncidentPage
+
+const isDateWithoutTime = (date: Date): boolean => (
+  date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0
+)
 
 type Query = {
   incidentId: string
@@ -288,9 +307,13 @@ const Container = styled.div`
   height: calc(100vh - 7rem);
 `
 
-const Heading = styled.div`
+const Heading = styled(UiContainer)`
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  
   margin-top: -2rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
   z-index: 7;
 `
 
@@ -299,19 +322,3 @@ const Content = styled.div`
   display: flex;
   //overflow: auto;
 `
-
-const HorizontalSpacer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const VerticalSpacer = styled.div`
-  width: 100%;
-  margin-bottom: 1rem;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-`
-
