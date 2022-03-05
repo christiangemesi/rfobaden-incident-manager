@@ -245,8 +245,11 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
         }
 
         &.react-datepicker__navigation--next {
-          right: 0;
+          right: 90px;
 
+          ${Themed.media.sm.max} {
+            right: 0;
+          }
         }
 
         .react-datepicker__navigation-icon {
@@ -260,6 +263,10 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
         background: ${({ theme }) => theme.colors.secondary.value};
         color: ${({ theme }) => theme.colors.secondary.contrast};
         border-color: ${({ theme }) => theme.colors.secondary.value};
+
+        ${Themed.media.sm.max} {
+          border-top-right-radius: 0.3rem;
+        }
       }
 
       .react-datepicker__month-container {
