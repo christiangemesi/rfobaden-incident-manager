@@ -11,20 +11,12 @@ import Task from '@/models/Task'
 import SubtaskStore from '@/stores/SubtaskStore'
 
 interface Props {
-  incident: Incident
-  report: Report
-  task: Task
   subtask: Subtask,
-  isActive: boolean,
   onClick?: (Subtask: Subtask) => void,
 }
 
 const SubtaskListItem: React.VFC<Props> = ({
-  incident,
-  report,
-  task,
   subtask,
-  isActive,
   onClick: handleClick }) => {
 
   const assignee = useUser(subtask.assigneeId)
@@ -33,7 +25,7 @@ const SubtaskListItem: React.VFC<Props> = ({
   const [isClosed, setClosed] = useState(subtask.isClosed)
 
   const handleChange = useCallback(async () => {
-    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, {
+    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id, {
       ...subtask,
       isClosed: !subtask.isClosed,
     })
@@ -42,12 +34,11 @@ const SubtaskListItem: React.VFC<Props> = ({
     }
     SubtaskStore.save(parseSubtask(newSubtask))
     setClosed(newSubtask.isClosed)
-  }, [incident.id, report.id, task.id, subtask])
+  }, [subtask])
 
   return (
     <UiListItemWithDetails
       isClosed={subtask.isClosed}
-      isActive={isActive}
       priority={subtask.priority}
       title={subtask.title}
       user={assigneeName ?? ''}

@@ -21,13 +21,12 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 
 interface Props {
-  incident: Incident
   report: Report
   task?: Task | null
   onClose?: () => void
 }
 
-const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: handleClose }) => {
+const TaskForm: React.VFC<Props> = ({ report, task = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Task>>(task, () => ({
     title: '',
     description: null,
@@ -69,9 +68,10 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
   }))
 
   useSubmit(form, async (formData: ModelData<Task>) => {
+    const apiEndpoint = `incidents/${report.incidentId}/reports/${report.id}/tasks`
     const [data, error]: BackendResponse<Task> = task === null
-      ? await BackendService.create(`incidents/${incident.id}/reports/${report.id}/tasks`, formData)
-      : await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, formData)
+      ? await BackendService.create(apiEndpoint, formData)
+      : await BackendService.update(apiEndpoint, task.id, formData)
     if (error !== null) {
       throw error
     }
@@ -80,7 +80,7 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     if (handleClose) {
       handleClose()
     }
-  }, [task])
+  }, [report, task])
 
   useCancel(form, handleClose)
 

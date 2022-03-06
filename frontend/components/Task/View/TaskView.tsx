@@ -2,8 +2,6 @@ import Task, { parseTask } from '@/models/Task'
 import React, { useCallback } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
-import { useIncident } from '@/stores/IncidentStore'
-import { useReport } from '@/stores/ReportStore'
 import SubtaskStore, { useSubtasksOfTask } from '@/stores/SubtaskStore'
 import Id from '@/models/base/Id'
 import { useAsync } from 'react-use'
@@ -28,23 +26,15 @@ import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
 import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import EventHelper from '@/utils/helpers/EventHelper'
+import Report from '@/models/Report'
 
 interface Props {
+  report: Report
   task: Task
   onClose?: () => void
 }
 
-const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
-  const incident = useIncident(task.incidentId)
-  if (incident === null) {
-    throw new Error('incident is missing')
-  }
-
-  const report = useReport(task.reportId)
-  if (report === null) {
-    throw new Error('report is missing')
-  }
-
+const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) => {
   const assigneeName = useUsername(useUser(task.assigneeId))
 
   const subtasks = useSubtasksOfTask(task.id)
@@ -53,14 +43,14 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
       return
     }
     const [subtasks, error]: BackendResponse<Subtask[]> = await BackendService.list(
-      `incidents/${report.incidentId}/reports/${report.id}/tasks/${task.id}/subtasks`,
+      `incidents/${task.incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks`,
     )
     if (error !== null) {
       throw error
     }
     SubtaskStore.saveAll(subtasks.map(parseSubtask))
     loadedTasks.add(task.id)
-  }, [report.id])
+  }, [task])
 
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
@@ -133,7 +123,7 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
                     <UiTitle level={1} isCentered>
                       Neuer Teilauftrag
                     </UiTitle>
-                    <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
+                    <SubtaskForm task={task} onClose={close} />
                   </div>
                 )}</UiModal.Body>
               </UiModal>
@@ -148,7 +138,7 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
                     <UiTitle level={1} isCentered>
                       Task bearbeiten
                     </UiTitle>
-                    <TaskForm incident={incident} report={report} task={task} onClose={close} />
+                    <TaskForm report={report} task={task} onClose={close} />
                   </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
@@ -177,7 +167,7 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
           {task.location && (
             <UiLabel>
               <UiIcon.Location />
-              {report.location}
+              {task.location}
             </UiLabel>
           )}
           {assigneeName && (
@@ -188,20 +178,22 @@ const TaskView: React.VFC<Props> = ({ task, onClose: handleCloseView }) => {
           )}
           <UiLabel>
             <UiIcon.Clock />
-            <UiDateLabel start={task.startsAt ?? task.createdAt} end={report.endsAt} />
+            <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
           </UiLabel>
         </UiLabelList>
 
         <UiDescription description={task.description} />
       </Heading>
 
-      {isLoading ? (
-        <UiIcon.Loader isSpinner />
-      ) : (
-        <UiScroll style={{ height: '100%' }}>
-          <SubtaskList incident={incident} report={report} task={task} subtasks={subtasks} activeSubtask={null} />
-        </UiScroll>
-      )}
+      <Content>
+        {isLoading ? (
+          <UiIcon.Loader isSpinner />
+        ) : (
+          <UiScroll style={{ width: '100%', height: '100%' }}>
+            <SubtaskList subtasks={subtasks} />
+          </UiScroll>
+        )}
+      </Content>
     </Container>
   )
 }
@@ -217,5 +209,12 @@ const Heading = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+`
+
+const Content = styled.div`
+  display: flex;
+  justify-content: center;
   width: 100%;
 `

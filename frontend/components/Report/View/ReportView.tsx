@@ -152,7 +152,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
                     <UiTitle level={1} isCentered>
                       Auftrag erfassen
                     </UiTitle>
-                    <TaskForm incident={incident} report={report} onClose={close} />
+                    <TaskForm report={report} onClose={close} />
                   </div>
                 )}</UiModal.Body>
               </UiModal>
@@ -231,7 +231,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
         </UiScroll>
         <TaskOverlay hasSelected={selected !== null}>
           {selected && (
-            <TaskView task={selected} onClose={clearSelected} />
+            <TaskView report={report} task={selected} onClose={clearSelected} />
           )}
         </TaskOverlay>
       </Content>
@@ -271,7 +271,7 @@ const Content = styled.div`
   padding-right: 4rem;
 
   ${Themed.media.lg.max} {
-    padding: 0;
+    padding-right: 0;
   }
 `
 

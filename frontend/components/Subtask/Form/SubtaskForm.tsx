@@ -22,14 +22,12 @@ import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 
 interface Props {
-  incident: Incident
-  report: Report
-  task: Task
+  task: Task,
   subtask?: Subtask | null
   onClose?: () => void
 }
 
-const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null, onClose: handleClose }) => {
+const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Subtask>>(subtask, () => ({
     title: '',
     description: null,
@@ -63,9 +61,10 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
   }))
 
   useSubmit(form, async (formData: ModelData<Subtask>) => {
+    const apiEndpoint = `incidents/${task.incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks`
     const [data, error]: BackendResponse<Subtask> = subtask === null
-      ? await BackendService.create(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, formData)
-      : await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, formData)
+      ? await BackendService.create(apiEndpoint, formData)
+      : await BackendService.update(apiEndpoint, subtask.id, formData)
     if (error !== null) {
       throw error
     }
@@ -74,7 +73,7 @@ const SubtaskForm: React.VFC<Props> = ({ incident, report, task, subtask = null,
     if (handleClose) {
       handleClose()
     }
-  }, [subtask])
+  }, [task, subtask])
 
   useCancel(form, handleClose)
 
