@@ -23,45 +23,34 @@ export const useStore = <T>(store: Store<T>): T => {
 }
 
 interface UseRecords<T> {
-  (ids?: Id<T>[]): T[]
-  <O>(transform: (records: T[]) => O, deps?: unknown[]): O
+  (ids?: Id<T>[]): readonly T[]
+  <O>(transform: (records: readonly T[]) => O, deps?: unknown[]): O
 }
 
 const createUseRecords = <T extends Model>(store: ModelStore<T>): UseRecords<T> => (
-  <O>(idsOrTransform?: Id<T>[] | ((records: T[]) => O), depsOrUndefined?: unknown[]) => {
-    const { compare } = store[privateKey]
+  <O>(idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O), depsOrUndefined?: unknown[]) => {
     const useAction = useMemo(() => {
       if (idsOrTransform === undefined) {
-        return (): T[] => {
-          const { records } = useStore(store)
-          if (compare === undefined) {
-            return useMemo(() => Object.values(records), [records])
-          }
-          return useMemo(() => Object.values(records).sort(compare), [records])
+        return (): readonly T[] => {
+          return useStore(store).recordList
         }
       }
       if (Array.isArray(idsOrTransform)) {
         const ids: Id<T>[] = idsOrTransform
-        return (): T[] => {
-          const { records } = useStore(store)
+        return (): readonly T[] => {
+          const { recordMapping } = useStore(store)
           // eslint-disable-next-line react-hooks/exhaustive-deps
-          return useMemo(() => store.list(ids), [records])
+          return useMemo(() => store.list(ids), [recordMapping])
         }
       }
 
-      const transform: ((records: T[]) => O) = idsOrTransform
+      const transform: ((records: readonly T[]) => O) = idsOrTransform
       return (): O => {
-        const { records } = useStore(store)
-        if (compare === undefined) {
-          return useMemo(() => (
-            transform(Object.values(records))
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          ), [records, ...(depsOrUndefined ?? [])])
-        }
+        const { recordList } = useStore(store)
         return useMemo(() => (
-          transform(Object.values(records).sort(compare))
+          transform(recordList)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        ), [records, ...(depsOrUndefined ?? [])])
+        ), [recordList, ...(depsOrUndefined ?? [])])
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [depsOrUndefined, idsOrTransform])
@@ -80,11 +69,11 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
     if (idOrRecord === null || isId(idOrRecord)) {
       const id: Id<T> | null = idOrRecord
       return (): T => {
-        const { records } = useStore(store)
+        const { recordMapping } = useStore(store)
         if (id === null) {
           return null as unknown as T
         }
-        return records[id] ?? null as unknown as T
+        return recordMapping[id] ?? null as unknown as T
       }
     }
     return (): T => {
@@ -96,7 +85,7 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
         store.save(record)
       })
 
-      const { records: { [record.id]: storedRecord }} = useStore(store)
+      const { recordMapping: { [record.id]: storedRecord }} = useStore(store)
       useUpdateEffect(() => {
         setRecord(storedRecord)
       }, [storedRecord ?? record])
@@ -143,7 +132,8 @@ export function createModelStore<T extends Model, S>(
   options?: ModelStoreOptions<T>,
 ): ModelStoreParts<T,  S> {
   const initialState: ModelStoreState<T> = {
-    records: {},
+    recordList: [],
+    recordMapping: {},
   }
 
   const sortBy = options?.sortBy
@@ -185,6 +175,51 @@ export function createModelStore<T extends Model, S>(
     return 0
   }
 
+  /**
+   * Find the index at which a new record should be inserted into the stores' list.
+   * If the new record should be inserted at the end of the list, then `records.length` is returned.
+   *
+   * @param records The list of currently stored records.
+   * @param newRecord The record to be stored.
+   *
+   * @returns the index at which the new record should be inserted.
+   */
+  const getStoreIndexOf = (records: T[], newRecord: T): number => {
+    if (compare === undefined) {
+      return records.length
+    }
+    for (let i = 0; i < records.length; i++) {
+      const record = records[i]
+      const diff = compare(record, newRecord)
+      if (diff === 0) {
+        return i + 1
+      }
+      if (diff > 0) {
+        return i
+      }
+    }
+    return records.length
+  }
+
+  /**
+   * Stores a new record into the stores' list.
+   * The insertion happens in place, so the stores' list has to be copied outside this function to
+   * ensure that the existing store does not get mutated.
+   *
+   * @param records The list of currently stored records.
+   * @param newRecord The record to be stored.
+   * @param oldRecord The records' old entry, if it exists. Will be removed.
+   * @param index The index at which the record should be inserted. If left `undefined`, a fitting position will be determined
+   *              using the stores' sort configuration.
+   */
+  const storeRecordIntoList = (records: T[], newRecord: T, oldRecord: T | undefined, index?: number) => {
+    if (oldRecord !== undefined) {
+      records.splice(records.indexOf(oldRecord), 1)
+    }
+    const storeIndex = index ?? getStoreIndexOf(records, newRecord)
+    records.splice(storeIndex, 0, newRecord)
+  }
+
   const store = createStore<ModelStoreState<T>, ModelStore<T> & S>(initialState, (getState, setState) => {
     const createListeners: Array<(record: T) => void> = []
     const updateListeners: Array<(newRecord: T, oldRecord: T) => void> = []
@@ -200,56 +235,64 @@ export function createModelStore<T extends Model, S>(
 
     return {
       ...(actions ?? {} as S),
-      list(ids?: Id<T>[]): T[] {
-        const { records } = getState()
+      list(ids?: Id<T>[]): readonly T[] {
+        const state = getState()
         if (ids === undefined) {
-          const result = Object.values(records)
-          if (compare === undefined) {
-            return result
+          return state.recordList
+        }
+        const result = Array(ids.length)
+        for (let i = 0; i < ids.length; i++) {
+          const id = ids[i]
+          const record = state.recordMapping[id]
+          if (record === undefined) {
+            throw new Error(`id not found in store: ${id}`)
           }
-          return result.sort(compare)
+          result.splice(i, 0, record)
         }
-
-        const result = [] as T[]
-        for (const id of ids) {
-          result.push(records[id])
-        }
-        if (compare === undefined) {
-          return result
-        }
-        return result.sort(compare)
+        return result
       },
       find(id: Id<T>): T | null {
-        const { records } = getState()
-        return records[id] ?? null
+        const { recordMapping } = getState()
+        return recordMapping[id] ?? null
       },
-      save(record: T) {
-        const oldRecord = getState().records[record.id] as T | undefined
-        setState((state) => ({
-          records: {
-            ...state.records,
-            [record.id]: record,
-          },
-        }))
+      save(newRecord: T, options = {}) {
+        const oldRecord = getState().recordMapping[newRecord.id] as T | undefined
+        setState((state) => {
+          const recordList = [...state.recordList]
+          storeRecordIntoList(recordList, newRecord, oldRecord, options.index)
+          return {
+            recordList,
+            recordMapping: {
+              ...state.recordMapping,
+              [newRecord.id]: newRecord,
+            },
+          }
+        })
         if (oldRecord === undefined) {
-          createListeners.forEach((receive) => receive(record))
+          createListeners.forEach((receive) => receive(newRecord))
         } else {
-          updateListeners.forEach((receive) => receive(record, oldRecord))
+          updateListeners.forEach((receive) => receive(newRecord, oldRecord))
         }
       },
-      saveAll(records: Iterable<T>) {
-        const newRecords: ModelStoreState<T>['records'] = {}
+      saveAll(newRecords: Iterable<T>) {
+        const newRecordMapping: Record<Id<T>, T> = {}
         const newAndOld: Array<[T, T | undefined]> = []
-        for (const record of records) {
-          newRecords[record.id] = record
-          newAndOld.push([record, getState().records[record.id]])
-        }
-        setState((state) => ({
-          records: {
-            ...state.records,
-            ...newRecords,
-          },
-        }))
+        setState((state) => {
+          const recordList = [...state.recordList]
+          for (const newRecord of newRecords) {
+            const oldRecord = getState().recordMapping[newRecord.id]
+            newRecordMapping[newRecord.id] = newRecord
+            newAndOld.push([newRecord, oldRecord])
+            storeRecordIntoList(recordList, newRecord, oldRecord)
+          }
+          return {
+            recordList: Object.freeze(recordList),
+            recordMapping: Object.freeze({
+              ...state.recordMapping,
+              ...newRecordMapping,
+            }),
+          }
+        })
         for (const [record, oldRecord] of newAndOld) {
           if (oldRecord === undefined) {
             createListeners.forEach((receive) => receive(record))
@@ -259,17 +302,21 @@ export function createModelStore<T extends Model, S>(
         }
       },
       remove(id: Id<T>) {
-        const record = getState().records[id] as T | undefined
+        const record = getState().recordMapping[id] as T | undefined
+        if (record === undefined) {
+          return
+        }
         setState((state) => {
-          const records = { ...state.records }
-          delete records[id]
+          const recordList = [...state.recordList]
+          recordList.splice(recordList.indexOf(record), 1)
+          const recordMapping = { ...state.recordMapping }
+          delete recordMapping[id]
           return {
-            records,
+            recordList: Object.freeze(recordList),
+            recordMapping: Object.freeze(recordMapping),
           }
         })
-        if (record !== undefined) {
-          removeListeners.forEach((receive) => receive(record))
-        }
+        removeListeners.forEach((receive) => receive(record))
       },
 
       onCreate(receive: (record: T) => void): () => void {
@@ -299,8 +346,6 @@ export function createModelStore<T extends Model, S>(
   // since the normal store does not know it.
   store[privateKey].parseRecord = parseRecord
 
-  store[privateKey].compare = compare
-
   return [
     store,
     createUseRecords(store),
@@ -320,9 +365,9 @@ interface StoreInternals<T> {
 }
 
 interface ModelStore<T> extends Store<ModelStoreState<T>> {
-  list(ids?: Id<T>[]): T[]
+  list(ids?: Id<T>[]): readonly T[]
   find(id: Id<T>): T | null
-  save(record: T): void
+  save(record: T, options?: ModelSaveOptions): void
   saveAll(records: Iterable<T>): void
   remove(id: Id<T>): void
 
@@ -334,9 +379,12 @@ interface ModelStore<T> extends Store<ModelStoreState<T>> {
   readonly [privateKey]: ModelStoreInternals<T>
 }
 
+interface ModelSaveOptions {
+  index?: number
+}
+
 interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
-  parseRecord: (record: T) => T,
-  compare?: (a: T, b: T) => number,
+  parseRecord: (record: T) => T
 }
 
 
@@ -346,7 +394,8 @@ interface CreateActions<T, S> {
 
 
 interface ModelStoreState<T> {
-  records: Record<Id<T>, T>
+  recordList: readonly T[]
+  recordMapping: Readonly<Record<Id<T>, T>>
 }
 
 interface ModelStoreOptions<T> {
