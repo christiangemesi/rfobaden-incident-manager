@@ -32,6 +32,7 @@ import UiLabel from '@/components/Ui/Label/UiLabel'
 import { useUsername } from '@/models/User'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import EventHelper from '@/utils/helpers/EventHelper'
+import ReportInfo from '@/components/Report/Info/ReportInfo'
 
 interface Props {
   report: Report
@@ -195,24 +196,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
           </UiIconButtonGroup>
         </UiGrid>
 
-        <UiLabelList>
-          {report.location && (
-            <UiLabel>
-              <UiIcon.Location />
-              {report.location}
-            </UiLabel>
-          )}
-          {assigneeName && (
-            <UiLabel>
-              <UiIcon.UserInCircle />
-              {assigneeName}
-            </UiLabel>
-          )}
-          <UiLabel>
-            <UiIcon.Clock />
-            <UiDateLabel start={startsAt} end={report.endsAt} />
-          </UiLabel>
-        </UiLabelList>
+        <ReportInfo report={report} />
 
         <UiDescription description={report.description} notes={report.notes} />
       </Heading>
