@@ -195,13 +195,13 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
 
   .react-datepicker__portal,
   .react-datepicker-popper {
-    max-width: 100%;
 
     .dateTimePopup.react-datepicker {
       background: white;
       color: ${({ theme }) => theme.colors.tertiary.contrast};
       border-color: ${({ theme }) => theme.colors.primary.value};
       font-family: ${({ theme }) => theme.fonts.body};
+      display: flex;
 
       .react-datepicker__triangle {
         left: 50% !important;
@@ -531,6 +531,10 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
     }
   `}
   ${Themed.media.sm.max} {
+    .dateTimePopup.react-datepicker {
+      max-width: 100%;
+    }
+
     .react-datepicker__time-container {
       display: none;
     }
