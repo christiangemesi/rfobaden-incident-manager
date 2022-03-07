@@ -23,7 +23,7 @@ import {
   mdiPaperclip,
   mdiPencil,
   mdiPlus,
-  mdiPrinter,
+  mdiPrinter, mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending,
 } from '@mdi/js'
 
 
@@ -98,4 +98,6 @@ export default Object.assign(StyledUiIcon, {
   Changelog: makeNamedIcon(mdiClipboardTextOutline),
   Login: makeNamedIcon(mdiLoginVariant),
   Logout: makeNamedIcon(mdiLogoutVariant),
+  SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
+  SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
 })

@@ -6,10 +6,9 @@ import { getOrganizationName } from '@/models/Organization'
 
 const [UserStore, useUsers, useUser] = createModelStore(parseUser, {}, {
   sortBy: (user) => ['asc', [
-    user.firstName.toLocaleLowerCase(),
-    user.lastName.toLocaleLowerCase(),
+    user.firstName.toLowerCase(),
+    user.lastName.toLowerCase(),
     user.role,
-    getOrganizationName(user.organizationId).then((response) => {response.toLocaleLowerCase()}),
   ]],
 })
 export default UserStore
