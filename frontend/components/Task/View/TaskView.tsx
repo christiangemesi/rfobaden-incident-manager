@@ -202,6 +202,8 @@ export default TaskView
 const loadedTasks = new Set<Id<Task>>()
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
 `
 
@@ -214,6 +216,7 @@ const Heading = styled.div`
 `
 
 const Content = styled.div`
+  flex: 1;
   display: flex;
   justify-content: center;
   width: 100%;

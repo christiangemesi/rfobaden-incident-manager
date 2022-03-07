@@ -1,6 +1,8 @@
 import React from 'react'
 // eslint-disable-next-line @next/next/no-document-import-in-page
-import Document, { Head, Html, Main, NextScript } from 'next/document'
+import Document, { Head, Html, Main, NextScript, DocumentContext } from 'next/document'
+import { resetServerContext } from 'react-beautiful-dnd'
+import { DocumentInitialProps } from 'next/dist/shared/lib/utils'
 
 class AppDocument extends Document {
   render(): JSX.Element {
@@ -21,6 +23,12 @@ class AppDocument extends Document {
         </body>
       </Html>
     )
+  }
+
+  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
+    const initialProps = await Document.getInitialProps(ctx)
+    resetServerContext()
+    return { ...initialProps }
   }
 }
 export default AppDocument
