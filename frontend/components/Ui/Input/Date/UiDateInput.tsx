@@ -26,7 +26,7 @@ const UiDateInput: React.VFC<Props> = ({
   labelTime = 'Zeit: ',
   placeholder = 'dd.MM.yyyy',
   placement = 'top',
-  className = '',
+  className,
   isModal = false,
   onChange: handleChange,
   errors = [],
