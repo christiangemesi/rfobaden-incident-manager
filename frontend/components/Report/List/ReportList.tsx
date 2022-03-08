@@ -65,7 +65,7 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
 
   return (
     <Container ref={containerRef} onClick={EventHelper.stopPropagation}>
-      <UiScroll style={{ height: '100%' }} isLeft={selected === null} disableX>
+      <UiScroll style={{ height: '100%' }} isLeft={selected !== null} disableX>
         <ListSpacer hasSelected={selected !== null}>
           <ListContainer hasSelected={selected !== null}>
             <UiList>
