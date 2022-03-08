@@ -380,7 +380,8 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
 
           .react-datepicker__day-name {
             line-height: 1.2;
-            padding: 0.2rem 0.5rem;
+            margin: 0;
+            padding: calc(0.166rem + 0.5rem) calc(0.166rem + 1rem);
           }
         }
 
@@ -408,12 +409,15 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
               color: ${({ theme }) => theme.colors.tertiary.contrast};
               border: 1px solid transparent;
 
-              &:hover {
+              transition: 150ms ease;
+              transition-property: background-color, color, border-color;
+
+              &:hover:not(.react-datepicker__day--selected) {
                 background: ${({ theme }) => theme.colors.secondary.value};
                 color: ${({ theme }) => theme.colors.secondary.contrast};
               }
 
-              &:focus {
+              &:focus:not(.react-datepicker__day--selected) {
                 outline: none;
                 border-color: ${({ theme }) => theme.colors.primary.value};
               }
@@ -462,6 +466,9 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
               }
 
               .react-datepicker__time-list-item {
+                transition: 150ms ease;
+                transition-property: background-color, color, font-weight;
+                
                 &:first-child {
                   margin-top: 1px;
                 }
@@ -470,7 +477,7 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
                   border-bottom-right-radius: 0.3rem;
                 }
 
-                &:hover {
+                &:hover:not(.react-datepicker__time-list-item--selected) {
                   background: ${({ theme }) => theme.colors.secondary.value};
                   color: ${({ theme }) => theme.colors.secondary.contrast};
                 }
