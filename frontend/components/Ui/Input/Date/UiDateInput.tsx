@@ -77,13 +77,11 @@ const UiDateInput: React.VFC<Props> = ({
             yearDropdownItemNumber={3}
             timeIntervals={15}
             withPortal={isModal}
-            shouldCloseOnSelect
             showTimeSelect
             showMonthDropdown
             showYearDropdown
             showWeekNumbers
             isClearable
-            preventOpenOnFocus
           />
           <PickerButton isModal={isModal} onClick={toggleOpen}>
             <UiIcon.Calendar />
@@ -418,7 +416,6 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
               &:focus {
                 outline: none;
                 border-color: ${({ theme }) => theme.colors.primary.value};
-                border-radius: 0.5rem;
               }
             }
 
