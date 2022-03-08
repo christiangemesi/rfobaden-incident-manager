@@ -32,7 +32,7 @@ const UiDateInput: React.VFC<Props> = ({
   errors = [],
 }) => {
 
-  const [date, setDate] = useState<Date | null>(value)
+  const [date, setDate] = useState(value)
   const [isInvalid, setInvalid] = useState(false)
   const [isIconOpened, setIconOpened] = useState<boolean>(false)
 
