@@ -73,7 +73,6 @@ const UiDateInput: React.VFC<Props> = ({
             timeInputLabel={labelTime}
             className={className}
             popperClassName={className + ' dateTimePopupContainer'}
-            calendarClassName={className + ' dateTimePopup'}
             dateFormat="dd.MM.yyyy HH:mm"
             popperPlacement={placement}
             yearDropdownItemNumber={3}
