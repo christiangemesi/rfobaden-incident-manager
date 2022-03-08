@@ -67,7 +67,7 @@ const UiDateInput: React.VFC<Props> = ({
           <DatePicker
             locale={de}
             selected={date}
-            onChange={(date) => setDate(date)}
+            onChange={setDate}
             onCalendarClose={() => setIconOpened(false)}
             placeholderText={placeholder}
             timeInputLabel={labelTime}
