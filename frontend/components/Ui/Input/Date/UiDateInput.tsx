@@ -84,7 +84,6 @@ const UiDateInput: React.VFC<Props> = ({
             showYearDropdown
             showWeekNumbers
             isClearable
-            preventOpenOnFocus
           />
           <AdditionalInput isModal={isModal} onClick={() => setIconOpened(true)}>
             <UiIcon.Calendar />
