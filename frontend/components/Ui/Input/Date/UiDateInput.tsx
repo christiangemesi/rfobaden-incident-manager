@@ -164,7 +164,7 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
     position: relative;
   }
 
-  .dateTimeInput {
+  .react-datepicker__input-container > input {
     width: 100%;
     height: 100%;
     padding: 0.5rem;
