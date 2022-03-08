@@ -531,7 +531,7 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
     }
   `}
   ${Themed.media.sm.max} {
-    .dateTimePopup.react-datepicker {
+    .react-datepicker {
       max-width: 100%;
     }
 
