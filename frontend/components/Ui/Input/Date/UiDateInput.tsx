@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
-import { useUpdateEffect } from 'react-use'
+import { useToggle, useUpdateEffect } from 'react-use'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import styled, { css } from 'styled-components'
 import DatePicker from 'react-datepicker'
@@ -13,19 +13,17 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props extends UiInputProps<Date | null> {
   label?: string
-  labelTime?: string
   placeholder?: string
   className?: string
   isModal?: boolean
-  placement?: 'top' | 'bottom'
+  placement?: 'top' | 'bottom' | 'auto'
 }
 
 const UiDateInput: React.VFC<Props> = ({
   value,
   label = '',
-  labelTime = 'Zeit: ',
   placeholder = 'dd.MM.yyyy',
-  placement = 'top',
+  placement = 'auto',
   className,
   isModal = false,
   onChange: handleChange,
@@ -34,7 +32,7 @@ const UiDateInput: React.VFC<Props> = ({
 
   const [date, setDate] = useState(value)
   const [isInvalid, setInvalid] = useState(false)
-  const [isIconOpened, setIconOpened] = useState<boolean>(false)
+  const [isOpen, toggleOpen] = useToggle(false)
 
   useUpdateEffect(() => {
     if (date === null) {
@@ -63,18 +61,19 @@ const UiDateInput: React.VFC<Props> = ({
         </span>
       )}
       <InputAndErrorBox hasError={hasError}>
-        <DateTimePicker isModal={isModal} isOpened={isIconOpened}>
+        <DateTimePicker isModal={isModal} isOpened={isOpen}>
           <DatePicker
             locale={de}
             selected={date}
             onChange={setDate}
-            onCalendarClose={() => setIconOpened(false)}
+            onInputClick={() => toggleOpen(false)}
+            onCalendarClose={() => toggleOpen(false)}
+            open={isOpen}
             placeholderText={placeholder}
-            timeInputLabel={labelTime}
             className={className}
-            popperClassName={className + ' dateTimePopupContainer'}
-            dateFormat="dd.MM.yyyy HH:mm"
             popperPlacement={placement}
+            dateFormat="dd.MM.yyyy HH:mm"
+            timeCaption="Zeit"
             yearDropdownItemNumber={3}
             timeIntervals={15}
             withPortal={isModal}
@@ -86,9 +85,9 @@ const UiDateInput: React.VFC<Props> = ({
             isClearable
             preventOpenOnFocus
           />
-          <AdditionalInput isModal={isModal} onClick={() => setIconOpened(true)}>
+          <PickerButton isModal={isModal} onClick={toggleOpen}>
             <UiIcon.Calendar />
-          </AdditionalInput>
+          </PickerButton>
         </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
@@ -106,6 +105,7 @@ const PickerButton = styled.button.attrs(() => ({
   border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
   border-radius: 0 0.5rem 0.5rem 0;
   width: 60px;
+  margin: 0;
 
   display: inline-flex;
   justify-content: center;
@@ -119,7 +119,7 @@ const PickerButton = styled.button.attrs(() => ({
 
   ${Themed.media.sm.max} {
     ${({ isModal }) => isModal && css`
-      display: none;
+      display: none !important;
     `}
   }
 `
@@ -164,21 +164,6 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
 
   .react-datepicker__input-container {
     position: relative;
-  }
-
-  .react-datepicker__input-container > input {
-    width: 100%;
-    height: 100%;
-    padding: 0.5rem;
-    font-size: 0.9rem;
-    outline: none;
-    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
-    font-family: ${({ theme }) => theme.fonts.body};
-    border-radius: 0.5rem 0 0 0.5rem;
-    border-right: none;
-
-    transition: 250ms ease;
-    transition-property: border-color;
   }
 
   .react-datepicker__close-icon {
@@ -500,19 +485,19 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
     }
   }
 
-  // for additional input
-  > div:first-child {
-    width: calc(100% - 60px);
+  .react-datepicker__input-container > input {
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+    font-family: ${({ theme }) => theme.fonts.body};
 
-    ${Themed.media.sm.max} {
-      ${({ isModal }) => isModal && css`
-        width: 100%;
-      `}
-    }
-  }
+    transition: 250ms ease;
+    transition-property: border-color;
 
-  // for additional input
-  input.dateTimeInput {
+    // for additional input
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
 
@@ -520,6 +505,17 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
       ${({ isModal }) => isModal && css`
         border-radius: 0.5rem;
         border-right: solid 1px;
+      `}
+    }
+  }
+
+  // for additional input
+  > div:first-child {
+    width: calc(100% - 60px);
+
+    ${Themed.media.sm.max} {
+      ${({ isModal }) => isModal && css`
+        width: 100%;
       `}
     }
   }
