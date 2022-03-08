@@ -433,7 +433,6 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
               &:focus {
                 outline: none;
                 border-color: ${({ theme }) => theme.colors.primary.value};
-                border-radius: 0.5rem;
               }
             }
 
