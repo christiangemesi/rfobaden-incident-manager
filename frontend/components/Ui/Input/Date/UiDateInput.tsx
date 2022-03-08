@@ -195,7 +195,7 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
   .react-datepicker__portal,
   .react-datepicker-popper {
 
-    .dateTimePopup.react-datepicker {
+    .react-datepicker {
       background: white;
       color: ${({ theme }) => theme.colors.tertiary.contrast};
       border-color: ${({ theme }) => theme.colors.primary.value};
