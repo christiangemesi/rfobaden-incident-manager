@@ -98,7 +98,9 @@ const UiDateInput: React.VFC<Props> = ({
 
 export default UiDateInput
 
-const AdditionalInput = styled.div<{ isModal: boolean }>`
+const PickerButton = styled.button.attrs(() => ({
+  type: 'button',
+}))<{ isModal: boolean }>`
   background: ${({ theme }) => theme.colors.primary.value};
   outline: none;
   border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
