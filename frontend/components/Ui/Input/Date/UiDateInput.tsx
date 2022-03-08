@@ -71,7 +71,7 @@ const UiDateInput: React.VFC<Props> = ({
             onCalendarClose={() => setIconOpened(false)}
             placeholderText={placeholder}
             timeInputLabel={labelTime}
-            className={className + ' dateTimeInput'}
+            className={className}
             popperClassName={className + ' dateTimePopupContainer'}
             calendarClassName={className + ' dateTimePopup'}
             dateFormat="dd.MM.yyyy HH:mm"
