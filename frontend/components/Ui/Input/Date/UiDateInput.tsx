@@ -5,11 +5,10 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import styled, { css } from 'styled-components'
 import DatePicker from 'react-datepicker'
 import { de } from 'date-fns/locale'
-
-import 'react-datepicker/dist/react-datepicker.css'
-import 'rc-time-picker/assets/index.css'
 import { Themed } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
   label?: string
