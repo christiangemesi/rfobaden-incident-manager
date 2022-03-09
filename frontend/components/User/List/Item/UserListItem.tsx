@@ -1,44 +1,38 @@
 import React from 'react'
-import UserStore from '@/stores/UserStore'
+import UserStore, { useUser } from '@/stores/UserStore'
 import { useOrganization } from '@/stores/OrganizationStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled from 'styled-components'
-import User from '@/models/User'
+import User, { parseUser } from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import Id from '@/models/base/Id'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserForm from '@/components/User/Form/UserForm'
+import userStore from '@/stores/UserStore'
 
 interface Props extends StyledProps {
   user: User
-
-  // firstName: string
-  // lastName: string
-  // email: string
-  // role: string
-  // organization: string
 }
 
 const UserListItem: React.VFC<Props> = ({
   user,
-  // firstName,
-  // lastName,
-  // email,
-  // role,
-  // organization,
 }) => {
-  //const user = useUser(data.user)
   const employedBy = useOrganization(user.organizationId)
   
   const handleDelete = async (userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
       await BackendService.delete('users', userId)
       UserStore.remove(userId)
+    }
+  }
+  const resendPassword = async (userId: Id<User>) => {
+    if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
+      alert('not possible yet')
     }
   }
   
@@ -79,7 +73,9 @@ const UserListItem: React.VFC<Props> = ({
               </React.Fragment>
             )}</UiModal.Body>
           </UiModal>
-          <UiIconButton onClick={() => handleDelete(user.id)}>
+          <UiIconButton onClick={() => resendPassword(user.id)}>
+            <UiIcon.PwReset />
+          </UiIconButton><UiIconButton onClick={() => handleDelete(user.id)}>
             <UiIcon.DeleteAction />
           </UiIconButton>
         </UiGrid.Col>

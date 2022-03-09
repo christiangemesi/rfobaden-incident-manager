@@ -14,7 +14,7 @@ import {
   mdiClose,
   mdiDelete,
   mdiImageFilterHdr,
-  mdiKey,
+  mdiKey, mdiLockReset,
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiMap,
@@ -100,4 +100,5 @@ export default Object.assign(StyledUiIcon, {
   Logout: makeNamedIcon(mdiLogoutVariant),
   SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
   SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
+  PwReset: makeNamedIcon(mdiLockReset),
 })
