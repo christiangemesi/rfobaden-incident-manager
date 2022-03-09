@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
 import { useToggle, useUpdateEffect } from 'react-use'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
@@ -14,7 +14,6 @@ interface Props extends UiInputProps<Date | null> {
   label?: string
   placeholder?: string
   className?: string
-  isModal?: boolean
   placement?: 'top' | 'bottom' | 'auto'
 }
 
@@ -24,7 +23,6 @@ const UiDateInput: React.VFC<Props> = ({
   placeholder = 'dd.MM.yyyy',
   placement = 'auto',
   className,
-  isModal = false,
   onChange: handleChange,
   errors = [],
 }) => {
@@ -49,6 +47,8 @@ const UiDateInput: React.VFC<Props> = ({
     setInvalid(false)
   }, [date])
 
+  const close = useCallback( () => toggleOpen(false),[toggleOpen])
+
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0 || isInvalid
 
@@ -60,13 +60,13 @@ const UiDateInput: React.VFC<Props> = ({
         </span>
       )}
       <InputAndErrorBox hasError={hasError}>
-        <DateTimePicker isModal={isModal} isOpened={isOpen}>
+        <DateTimePicker isOpened={isOpen}>
           <DatePicker
             locale={de}
             selected={date}
             onChange={setDate}
-            onInputClick={() => toggleOpen(false)}
-            onCalendarClose={() => toggleOpen(false)}
+            onCalendarClose={close}
+            onClickOutside={close}
             open={isOpen}
             placeholderText={placeholder}
             className={className}
@@ -75,14 +75,14 @@ const UiDateInput: React.VFC<Props> = ({
             timeCaption="Zeit"
             yearDropdownItemNumber={3}
             timeIntervals={15}
-            withPortal={isModal}
+            shouldCloseOnSelect={false}
             showTimeSelect
             showMonthDropdown
             showYearDropdown
             showWeekNumbers
             isClearable
           />
-          <PickerButton isModal={isModal} onClick={toggleOpen}>
+          <PickerButton onClick={toggleOpen}>
             <UiIcon.Calendar />
           </PickerButton>
         </DateTimePicker>
@@ -96,7 +96,7 @@ export default UiDateInput
 
 const PickerButton = styled.button.attrs(() => ({
   type: 'button',
-}))<{ isModal: boolean }>`
+}))`
   background: ${({ theme }) => theme.colors.primary.value};
   outline: none;
   border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
@@ -113,12 +113,6 @@ const PickerButton = styled.button.attrs(() => ({
 
   transition: 250ms ease;
   transition-property: border-color;
-
-  ${Themed.media.sm.max} {
-    ${({ isModal }) => isModal && css`
-      display: none !important;
-    `}
-  }
 `
 
 const StyledLabel = styled.label`
@@ -152,7 +146,7 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   `}
 `
 
-const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
+const DateTimePicker = styled.div<{ isOpened: boolean }>`
   width: 100%;
   height: 100%;
   margin-top: 0.25rem;
@@ -379,15 +373,14 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
 
           .react-datepicker__day-name {
             line-height: 1.2;
-            margin: 0;
-            padding: calc(0.166rem + 0.5rem) calc(0.166rem + 1rem);
           }
         }
 
         .react-datepicker__day-name,
         .react-datepicker__day {
           border-radius: 0.1rem;
-          padding: 0.5rem 1rem;
+          margin: 0;
+          padding: calc(0.166rem + 0.5rem) calc(0.166rem + 1rem);
           line-height: 1;
           display: inline-flex;
           justify-content: center;
@@ -449,7 +442,6 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
         }
 
         .react-datepicker__time {
-            //border-color: ${({ theme }) => theme.colors.primary.value};
 
           .react-datepicker__time-box {
             background: white;
@@ -467,7 +459,7 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
               .react-datepicker__time-list-item {
                 transition: 150ms ease;
                 transition-property: background-color, color, font-weight;
-                
+
                 &:first-child {
                   margin-top: 1px;
                 }
@@ -503,24 +495,11 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
     // for additional input
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
-
-    ${Themed.media.sm.max} {
-      ${({ isModal }) => isModal && css`
-        border-radius: 0.5rem;
-        border-right: solid 1px;
-      `}
-    }
   }
 
   // for additional input
   > div:first-child {
     width: calc(100% - 60px);
-
-    ${Themed.media.sm.max} {
-      ${({ isModal }) => isModal && css`
-        width: 100%;
-      `}
-    }
   }
 
   // function of calender icon
@@ -537,12 +516,6 @@ const DateTimePicker = styled.div<{ isModal: boolean, isOpened: boolean }>`
 
     .react-datepicker__time-container {
       display: none;
-    }
-
-    .react-datepicker__portal {
-      ${({ isModal }) => isModal && css`
-        display: none;
-      `}
     }
   }
 `
