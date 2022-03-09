@@ -5,7 +5,7 @@ import DateHelper from '@/utils/helpers/DateHelper'
 interface Props {
   start: Date
   end?: Date | null
-  type?: UiDateType | 'auto'
+  type?: UiDateType
 }
 
 const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'auto' }) => {
