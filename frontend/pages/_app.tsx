@@ -73,7 +73,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};
-      overflow: hidden;
     }
   `}
   
