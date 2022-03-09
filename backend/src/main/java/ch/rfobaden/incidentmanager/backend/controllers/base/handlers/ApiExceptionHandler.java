@@ -1,6 +1,12 @@
 package ch.rfobaden.incidentmanager.backend.controllers.base.handlers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.errors.RfoMailException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.errors.ValidationException;
 import org.slf4j.Logger;
@@ -13,11 +19,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -33,6 +34,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(UpdateConflictException e) {
         var res = new ErrorResponse("update conflict: the resource has already been modified");
         return new ResponseEntity<>(res, HttpStatus.PRECONDITION_REQUIRED);
+    }
+
+    @ExceptionHandler(RfoMailException.class)
+    public ResponseEntity<ErrorResponse> handle(RfoMailException e) {
+        var res = new ErrorResponse(
+            "mail failed: failed to send email to: " + e.getReceiver() + "with text: " +
+                e.getText() + "\n" + e.getMessage());
+        return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AuthenticationException.class)

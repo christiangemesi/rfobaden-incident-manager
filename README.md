@@ -5,7 +5,7 @@
 ## Email information
 | Mailadresse                       | im@rfo-baden.ch                   |
 | Passwort                          | 54Rf0_ImT00l.17                   |
-| Benutzername                      | im@rfo-baden                      |
+| Benutzername                      | im@rfo-baden.ch                   |
 | Posteingangs- und Ausgangsserver  | lx52.hoststar.hosting             |
 | Ports mit SSL/TLS                 | POP3: 995 / IMAP: 993 / SMTP: 465 |
 | Ports ohne SSL/TLS                | POP3: 110 / IMAP: 143 / SMTP: 587 |

@@ -1,5 +1,11 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
+
+import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
@@ -12,22 +18,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
 public class UserService extends ModelRepositoryService.Basic<User, UserRepository> {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final PasswordEncoder passwordEncoder;
 
+    private final EmailConfig emailConfig;
+
     private final SecureRandom passwordRandom = new SecureRandom();
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, EmailConfig emailConfig) {
         this.passwordEncoder = passwordEncoder;
+        this.emailConfig = emailConfig;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -49,7 +53,10 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         newUser.setCredentials(credentials);
         var user = super.create(path, newUser);
 
-        // TODO send the generated email to the user by mail.
+        //
+        emailConfig.sendSimpleMessage(user.getEmail(), "IM-Tool RFOBaden: Benutzer erstellt",
+            emailConfig.getPasswordTemplateMessage(user.getEmail(), plainPassword));
+
         // Log the password for now so we can actually now what it is.
         logger.info("Password for {}: {}", user.getEmail(), plainPassword);
         return user;
