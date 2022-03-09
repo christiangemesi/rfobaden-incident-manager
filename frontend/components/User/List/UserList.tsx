@@ -6,15 +6,13 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UserCreateForm from '@/components/User/Form/UserCreateForm'
+import UserForm from '@/components/User/Form/UserForm'
 import UserListItem from '@/components/User/List/Item/UserListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSortButton from '@/components/Ui/Button/UiSortButton'
 
 interface Props {
   users: User[]
-  //user: User
-  //activeUser: User
   onClick?: (user: User) => void
 }
 
@@ -96,7 +94,7 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
             <UiTitle level={1} isCentered>
               Benutzer erfassen
             </UiTitle>
-            <UserCreateForm />
+            <UserForm />
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>

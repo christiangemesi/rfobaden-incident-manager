@@ -12,7 +12,7 @@ import BackendService from '@/services/BackendService'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UserEditForm from '@/components/User/Form/UserEditForm'
+import UserForm from '@/components/User/Form/UserForm'
 
 interface Props extends StyledProps {
   user: User
@@ -75,7 +75,7 @@ const UserListItem: React.VFC<Props> = ({
                 <UiTitle level={1} isCentered>
                     Benutzer bearbeiten
                 </UiTitle>
-                <UserEditForm user={user} onClose={close} />
+                <UserForm user={user} onClose={close} />
               </React.Fragment>
             )}</UiModal.Body>
           </UiModal>
