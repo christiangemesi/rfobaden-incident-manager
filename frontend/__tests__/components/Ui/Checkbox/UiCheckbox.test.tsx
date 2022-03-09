@@ -52,7 +52,7 @@ describe('UiCheckbox', () => {
     const error2 = 'error2'
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
-        <UiCheckbox value={false} label={text} errors={[error1,error2]} onChange={mockCallBack} />
+        <UiCheckbox value={false} label={text} errors={[error1, error2]} onChange={mockCallBack} />
       </ThemeProvider>,
     )
     const errors = wrapper.find('UiInputErrors__Errors')

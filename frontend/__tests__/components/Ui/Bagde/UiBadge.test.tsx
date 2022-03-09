@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import UiBadge from '@/components/Ui/Badge/UiBadge'
 import { ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
@@ -14,7 +14,7 @@ describe('UiBadge', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiBadge value={value} children={children} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
     expect(wrapper.find('span').first().html()).toContain('</span>')
   })
@@ -24,7 +24,7 @@ describe('UiBadge', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiBadge value={value} children={children} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
 
     const content = wrapper.find('span')

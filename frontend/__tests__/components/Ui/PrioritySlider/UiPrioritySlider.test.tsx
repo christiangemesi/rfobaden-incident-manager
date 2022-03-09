@@ -14,7 +14,7 @@ describe('UiPrioritySlider', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiPrioritySlider value={Priority.LOW} onChange={mockCallBack} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
     const slider = wrapper.find('UiPrioritySlider__Selector')
     expect(slider.props().value).toBe('LOW')
@@ -24,7 +24,7 @@ describe('UiPrioritySlider', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiPrioritySlider value={Priority.MEDIUM} onChange={mockCallBack} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
     const slider = wrapper.find('UiPrioritySlider__Selector')
     expect(slider.props().value).toBe('MEDIUM')
@@ -34,7 +34,7 @@ describe('UiPrioritySlider', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiPrioritySlider value={Priority.HIGH} onChange={mockCallBack} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
     const slider = wrapper.find('UiPrioritySlider__Selector')
     expect(slider.props().value).toBe('HIGH')
@@ -46,7 +46,7 @@ describe('UiPrioritySlider', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiPrioritySlider value={Priority.MEDIUM} errors={[error1, error2]} onChange={mockCallBack} />
-      </ThemeProvider>
+      </ThemeProvider>,
     )
     const errors = wrapper.find('UiInputErrors__Errors')
     expect(errors.html()).toContain(error1)

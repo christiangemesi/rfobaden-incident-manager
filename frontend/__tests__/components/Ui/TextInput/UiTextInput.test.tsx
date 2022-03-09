@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import { ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
