@@ -31,14 +31,7 @@ const SubtaskList: React.VFC<Props> = ({
 
   ), [subtasks])
 
-  const [isDragInProgress, setDragInProgress] = useState(false)
-
-  const handleDragStart = useCallback(() => {
-    setDragInProgress(true)
-  }, [])
-
   const handleDragEnd = useCallback(async (result: DropResult) => {
-    setDragInProgress(false)
     if (result.destination == null) {
       return
     }
@@ -63,7 +56,7 @@ const SubtaskList: React.VFC<Props> = ({
   }, [openSubtasks])
 
   return (
-    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <Container>
         <Side>
           <UiCaption>
@@ -75,21 +68,19 @@ const SubtaskList: React.VFC<Props> = ({
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              <UiScroll style={{ width: '100%', height: '100%' }}>
-                <List>
-                  {openSubtasks.map((subtask, i) => (
-                    <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
-                      <SubtaskListItem
-                        subtask={subtask}
-                        onClick={handleClick}
-                        provided={provided}
-                        snapshot={snapshot}
-                      />
-                    )}</Draggable>
-                  ))}
-                </List>
-                {provided.placeholder}
-              </UiScroll>
+              <List>
+                {openSubtasks.map((subtask, i) => (
+                  <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
+                    <SubtaskListItem
+                      subtask={subtask}
+                      onClick={handleClick}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
+                  )}</Draggable>
+                ))}
+              </List>
+              {provided.placeholder}
             </DropTarget>
           )}</Droppable>
         </Side>
@@ -104,21 +95,19 @@ const SubtaskList: React.VFC<Props> = ({
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              <UiScroll style={{ width: '100%', height: '100%' }}>
-                <List>
-                  {closedSubtasks.map((subtask, i) => (
-                    <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
-                      <SubtaskListItem
-                        subtask={subtask}
-                        onClick={handleClick}
-                        provided={provided}
-                        snapshot={snapshot}
-                      />
-                    )}</Draggable>
-                  ))}
-                </List>
-                {provided.placeholder}
-              </UiScroll>
+              <List>
+                {closedSubtasks.map((subtask, i) => (
+                  <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
+                    <SubtaskListItem
+                      subtask={subtask}
+                      onClick={handleClick}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
+                  )}</Draggable>
+                ))}
+              </List>
+              {provided.placeholder}
             </DropTarget>
           )}</Droppable>
         </Side>
