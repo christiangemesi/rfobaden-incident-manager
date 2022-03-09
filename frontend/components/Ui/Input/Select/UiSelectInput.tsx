@@ -3,7 +3,7 @@ import Select, { StylesConfig } from 'react-select'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
-import { defaultTheme, contrastDark } from '@/theme'
+import { contrastDark, defaultTheme } from '@/theme'
 import { useMountedState } from 'react-use'
 
 interface Props<T> extends UiInputProps<T | null> {
@@ -13,6 +13,7 @@ interface Props<T> extends UiInputProps<T | null> {
   isDisabled?: boolean,
   isSearchable?: boolean,
   placeholder?: string,
+  menuPlacement?: 'auto' | 'top' | 'bottom'
 }
 
 const UiSelectInput = <T, >({
@@ -25,6 +26,7 @@ const UiSelectInput = <T, >({
   isDisabled = false,
   isSearchable = false,
   placeholder = '',
+  menuPlacement = 'auto',
 }: Props<T>): JSX.Element => {
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
@@ -66,6 +68,7 @@ const UiSelectInput = <T, >({
       ...styles,
       borderRadius: '0.5rem',
       marginTop: 2,
+      marginBottom: 0,
     }),
     // style of option element
     option: (styles, { isDisabled, isSelected }) => {
@@ -128,6 +131,7 @@ const UiSelectInput = <T, >({
         isDisabled={isDisabled}
         isSearchable={isSearchable}
         styles={customStyles}
+        menuPlacement={menuPlacement}
       />
       <UiInputErrors errors={errors} />
     </Label>
