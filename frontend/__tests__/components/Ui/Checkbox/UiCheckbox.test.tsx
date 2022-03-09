@@ -32,4 +32,31 @@ describe('UiCheckbox', () => {
     wrapper.find('UiCheckbox__Container').simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
   })
+
+  it('should be disabled', () => {
+    const mockCallBack = jest.fn()
+    const text = 'abcABC123#'
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiCheckbox value={false} label={text} isDisabled={true} onChange={mockCallBack} />
+      </ThemeProvider>,
+    )
+    const checkbox = wrapper.find('UiCheckbox__Container')
+    expect(checkbox.props().isDisabled).toBe(true)
+  })
+
+  it('should display multiple errors', () => {
+    const mockCallBack = jest.fn()
+    const text = 'abcABC123#'
+    const error1 = 'error1'
+    const error2 = 'error2'
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiCheckbox value={false} label={text} errors={[error1,error2]} onChange={mockCallBack} />
+      </ThemeProvider>,
+    )
+    const errors = wrapper.find('UiInputErrors__Errors')
+    expect(errors.html()).toContain(error1)
+    expect(errors.html()).toContain(error2)
+  })
 })
