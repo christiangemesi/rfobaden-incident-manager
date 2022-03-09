@@ -10,14 +10,16 @@ import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { useEvent } from 'react-use'
 import EventHelper from '@/utils/helpers/EventHelper'
+import Incident from '@/models/Incident'
 
 interface Props {
+  incident: Incident,
   reports: Report[]
   onSelect?: (report: Report) => void
   onDeselect?: () => void
 }
 
-const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDeselect: handleDeselect  }) => {
+const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelect, onDeselect: handleDeselect  }) => {
   const [selected, setSelected] = useState<Report | null>(null)
   const setSelectedAndCallback = useCallback((report: Report | null) => {
     if (report === null) {
@@ -95,7 +97,9 @@ const ReportList: React.VFC<Props> = ({ reports, onSelect: handleSelect, onDesel
         </ListSpacer>
 
         <ReportOverlay offset={containerRef.current?.getBoundingClientRect()?.y ?? 0} hasSelected={selected !== null}>
-          {selected !== null && <ReportView report={selected} onClose={clearSelected} />}
+          {selected !== null && (
+            <ReportView incident={incident} report={selected} onClose={clearSelected} />
+          )}
         </ReportOverlay>
       </UiScroll>
     </Container>

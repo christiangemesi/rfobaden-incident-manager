@@ -6,7 +6,7 @@ interface Props {
   type?: UiDateType
 }
 
-const UiDate: React.VFC<Props> = ({ value, type = 'datetime' }) => {
+const UiDate: React.VFC<Props> = ({ value, type = 'auto' }) => {
   const day = prefixZero(value.getDate())
   const month = prefixZero(value.getMonth() + 1)
   const year = value.getFullYear()

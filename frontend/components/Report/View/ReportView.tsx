@@ -1,9 +1,8 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import TaskStore, { useTasksOfReport } from '@/stores/TaskStore'
@@ -11,11 +10,9 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import { useUser } from '@/stores/UserStore'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import { useIncident } from '@/stores/IncidentStore'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import { useAsync, useEvent, useMount } from 'react-use'
+import { useAsync } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
@@ -25,20 +22,19 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
-import UiLabel from '@/components/Ui/Label/UiLabel'
-import { useUsername } from '@/models/User'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import EventHelper from '@/utils/helpers/EventHelper'
+import ReportInfo from '@/components/Report/Info/ReportInfo'
+import Incident from '@/models/Incident'
 
 interface Props {
+  incident: Incident
   report: Report
   onClose?: () => void
 }
 
-const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
+const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
   const tasks = useTasksOfReport(report.id)
   const { loading: isLoading } = useAsync(async () => {
     if (loadedReports.has(report.id)) {
@@ -54,8 +50,6 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     TaskStore.saveAll(tasks.map(parseTask))
     loadedReports.add(report.id)
   }, [report.id])
-
-  const assigneeName = useUsername(useUser(report.assigneeId))
 
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
@@ -93,12 +87,6 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
     }
   }, [report])
 
-  const startsAt = report.startsAt ?? report.createdAt
-  const incident = useIncident(report.incidentId)
-  if (incident === null) {
-    throw new Error('incident of report not found')
-  }
-
   const [selected, setSelected] = useState<Task | null>()
   const selectTask = useCallback((task: Task) => {
     setSelected(task)
@@ -126,9 +114,7 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
       <Heading onClick={handleDeselectByClick}>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
-            <UiCaption>
-              Meldung
-            </UiCaption>
+            <ReportInfo report={report} />
             <UiTitle level={3}>
               {report.title}
             </UiTitle>
@@ -194,25 +180,6 @@ const ReportView: React.VFC<Props> = ({ report, onClose: handleCloseView }) => {
             </UiIconButton>
           </UiIconButtonGroup>
         </UiGrid>
-
-        <UiLabelList>
-          {report.location && (
-            <UiLabel>
-              <UiIcon.Location />
-              {report.location}
-            </UiLabel>
-          )}
-          {assigneeName && (
-            <UiLabel>
-              <UiIcon.UserInCircle />
-              {assigneeName}
-            </UiLabel>
-          )}
-          <UiLabel>
-            <UiIcon.Clock />
-            <UiDateLabel start={startsAt} end={report.endsAt} />
-          </UiLabel>
-        </UiLabelList>
 
         <UiDescription description={report.description} notes={report.notes} />
       </Heading>

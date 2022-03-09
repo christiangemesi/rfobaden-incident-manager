@@ -9,7 +9,7 @@ import {
   mdiCalendar,
   mdiCheck,
   mdiCheckboxBlankOutline,
-  mdiCheckboxMarked,
+  mdiCheckboxMarked, mdiCircleSmall,
   mdiClipboardTextOutline, mdiClockOutline,
   mdiClose,
   mdiDelete, mdiDotsHorizontal,
@@ -119,4 +119,5 @@ export default Object.assign(StyledUiIcon, {
   Loader: makeNamedIcon(mdiLoading),
   More: makeNamedIcon(mdiDotsHorizontal),
   Clock: makeNamedIcon(mdiClockOutline),
+  Dot: makeNamedIcon(mdiCircleSmall),
 })

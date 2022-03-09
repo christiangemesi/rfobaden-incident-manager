@@ -18,15 +18,10 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import styled from 'styled-components'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import UiLabel from '@/components/Ui/Label/UiLabel'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
-import { useUsername } from '@/models/User'
-import { useUser } from '@/stores/UserStore'
 import EventHelper from '@/utils/helpers/EventHelper'
 import Report from '@/models/Report'
+import TaskInfo from '@/components/Task/Info/TaskInfo'
 
 interface Props {
   report: Report
@@ -35,8 +30,6 @@ interface Props {
 }
 
 const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) => {
-  const assigneeName = useUsername(useUser(task.assigneeId))
-
   const subtasks = useSubtasksOfTask(task.id)
   const { loading: isLoading } = useAsync(async () => {
     if (loadedTasks.has(task.id)) {
@@ -97,9 +90,7 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
       <Heading onClick={EventHelper.stopPropagation}>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
-            <UiCaption>
-              Auftrag
-            </UiCaption>
+            <TaskInfo task={task} />
             <UiTitle level={4}>
               {task.title}
             </UiTitle>
@@ -163,25 +154,6 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
           </UiIconButtonGroup>
         </UiGrid>
 
-        <UiLabelList>
-          {task.location && (
-            <UiLabel>
-              <UiIcon.Location />
-              {task.location}
-            </UiLabel>
-          )}
-          {assigneeName && (
-            <UiLabel>
-              <UiIcon.UserInCircle />
-              {assigneeName}
-            </UiLabel>
-          )}
-          <UiLabel>
-            <UiIcon.Clock />
-            <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
-          </UiLabel>
-        </UiLabelList>
-
         <UiDescription description={task.description} />
       </Heading>
 
@@ -189,7 +161,9 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
         {isLoading ? (
           <UiIcon.Loader isSpinner />
         ) : (
-          <UiScroll style={{ width: '100%', height: '100%' }}>
+          // This scrollbar is fully disabled, but it's still required for the drag-and-drop inside
+          // the SubtaskList to work. Why is not clear right now, but hey, it works like this.
+          <UiScroll style={{ width: '100%', height: '100%' }} disableX disableY>
             <SubtaskList subtasks={subtasks} />
           </UiScroll>
         )}
