@@ -53,11 +53,9 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         newUser.setCredentials(credentials);
         var user = super.create(path, newUser);
 
-        //
         emailConfig.sendSimpleMessage(user.getEmail(), "IM-Tool RFOBaden: Benutzer erstellt",
             emailConfig.getPasswordTemplateMessage(user.getEmail(), plainPassword));
 
-        // Log the password for now so we can actually now what it is.
         logger.info("Password for {}: {}", user.getEmail(), plainPassword);
         return user;
     }

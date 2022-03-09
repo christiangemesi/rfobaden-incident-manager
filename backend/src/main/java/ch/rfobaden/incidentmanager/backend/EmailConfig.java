@@ -52,6 +52,25 @@ public class EmailConfig {
         return msg.toString();
     }
 
+    public String getPasswordTemplateMessage(String incident, String title, String beschreibung) {
+        StringBuilder msg = new StringBuilder();
+        msg.append("<h1>Incident Manager RFOBaden</h1>");
+        msg.append("<p>Ihnen wurde etwas zugeteilt.</p><br>");
+        msg.append("<table>");
+        msg.append("<tr>\n" +
+            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">E-Mail</th>\n" +
+            "     <td>"+receiver+"</td>\n" +
+            "   </tr>");
+        msg.append("<tr>\n" +
+            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Password</th>\n" +
+            "     <td>"+plainPassword+"</td>\n" +
+            "   </tr>");
+        msg.append("</table><br>");
+        msg.append("<p>Sie können sich unter <a href=\\\"https://im.rfobaden.ch\\\">https://im.rfobaden.ch</a> und dann das Passwort ändern.</p>");
+        msg.append("<b style=\"color:red;\">Dies ist eine automatisch generierte mail. Bitte antworten sie nicht auf diese E-Mail.</b>");
+        return msg.toString();
+    }
+
     public void sendSimpleMessage(String receiver, String subject, String text) {
         try {
             MimeMessage mimeMessage = getJavaMailSender().createMimeMessage();
