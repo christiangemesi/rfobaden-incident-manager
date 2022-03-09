@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import ReportStore, { useReportsOfIncident } from '@/stores/ReportStore'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { GetServerSideProps } from 'next'
@@ -10,16 +10,12 @@ import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import ReportList from '@/components/Report/List/ReportList'
-import { useTasks } from '@/stores/TaskStore'
-import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
+import OrganizationStore from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
-import { useSubtasks } from '@/stores/SubtaskStore'
 import { useRouter } from 'next/router'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiModal from '@/components/Ui/Modal/UiModal'
@@ -27,10 +23,8 @@ import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useAppState } from '@/pages/_app'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import UiLabelList from '@/components/Ui/Label/List/UiLabelList'
-import UiLabel from '@/components/Ui/Label/UiLabel'
+import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
 
 interface Props {
   data: {
@@ -57,12 +51,6 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
 
   const incident = useIncident(data.incident)
   const reports = useReportsOfIncident(incident.id)
-  const subtasks = useSubtasks((subtasks) => (
-    subtasks.filter((subtask) => subtask.incidentId === incident.id)
-  ))
-  const tasks = useTasks((tasks) => (
-    tasks.filter((task) => task.incidentId === incident.id)
-  ))
 
   // TODO re-add URL param for report
   // const selectedReportIdParam = router.query.report
@@ -109,41 +97,12 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     }
   }, [incident])
 
-  const assigneeIds = new Set([
-    ...reports.map((report) => report.assigneeId),
-    ...tasks.map((task) => task.assigneeId),
-    ...subtasks.map((subtask) => subtask.assigneeId),
-  ])
-
-  const activeOrganisations = useOrganizations((organizations) => (
-    organizations
-      .filter(({ userIds }) => userIds.some((id) => assigneeIds.has(id)))
-      .map(({ name }) => name)
-  ), [assigneeIds])
-
-  const startsAt = useMemo(() => (
-    incident.startsAt !== null ? incident.startsAt : incident.createdAt
-  ), [incident])
-
-  // Shows
-  const isFullDay = useMemo(() => {
-    if (incident.startsAt !== null && !isDateWithoutTime(incident.startsAt)) {
-      return false
-    }
-    if (incident.endsAt !== null && !isDateWithoutTime(incident.endsAt)) {
-      return false
-    }
-    return true
-  }, [incident])
-
   return (
     <Container>
       <Heading>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <UiGrid.Col>
-            <UiCaption>
-              Ereignis
-            </UiCaption>
+            <IncidentInfo incident={incident} />
             <UiTitle level={1}>
               {incident.title}
             </UiTitle>
@@ -199,42 +158,15 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
           </UiGrid.Col>
         </UiGrid>
 
-        <UiLabelList>
-          <UiLabel>
-            <UiIcon.UserInCircle />
-            {activeOrganisations.length}
-            &nbsp;
-            {activeOrganisations.length === 1 ? 'Organisation' : 'Organisationen'}
-          </UiLabel>
-          <UiLabel>
-            <UiIcon.Clock />
-            <UiDateLabel start={startsAt} end={incident.endsAt} type={isFullDay ? 'date' : 'datetime'} />
-          </UiLabel>
-        </UiLabelList>
-
         <UiDescription description={incident.description} />
-
-        {/*<UiGrid.Col size={{ lg: 6, xs: 12 }}>*/}
-        {/*  <UiTextWithIcon text={*/}
-        {/*    activeOrganisations.length === 0*/}
-        {/*      ? 'Keine Organisationen beteiligt'*/}
-        {/*      : activeOrganisations.reduce((a, b) => a + ', ' + b)*/}
-        {/*  }>*/}
-        {/*    <UiIcon.UserInCircle />*/}
-        {/*  </UiTextWithIcon>*/}
-        {/*</UiGrid.Col>*/}
       </Heading>
       <Content>
-        <ReportList reports={reports} />
+        <ReportList incident={incident} reports={reports} />
       </Content>
     </Container>
   )
 }
 export default IncidentPage
-
-const isDateWithoutTime = (date: Date): boolean => (
-  date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0
-)
 
 type Query = {
   incidentId: string
@@ -320,5 +252,4 @@ const Heading = styled(UiContainer)`
 const Content = styled.div`
   flex: 1;
   display: flex;
-  //overflow: auto;
 `

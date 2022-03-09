@@ -1,26 +1,25 @@
-import Report from '@/models/Report'
 import React from 'react'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import Task from '@/models/Task'
 
 interface Props {
-  report: Report
+  task: Task
 }
 
-const ReportInfo: React.VFC<Props> = ({ report }) => {
-  const assigneeName = useUsername(useUser(report.assigneeId))
-
+const TaskInfo: React.VFC<Props> = ({ task }) => {
+  const assigneeName = useUsername(useUser(task.assigneeId))
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
-        Meldung
+        Auftrag
       </UiCaption>
-      {report.location && (
+      {task.location && (
         <UiCaption>
-          {report.location}
+          {task.location}
         </UiCaption>
       )}
       {assigneeName && (
@@ -29,9 +28,9 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         </UiCaption>
       )}
       <UiCaption>
-        <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
+        <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
       </UiCaption>
     </UiCaptionList>
   )
 }
-export default ReportInfo
+export default TaskInfo
