@@ -10,6 +10,8 @@ import UserForm from '@/components/User/Form/UserForm'
 import UserListItem from '@/components/User/List/Item/UserListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSortButton from '@/components/Ui/Button/UiSortButton'
+import useSort from '@/utils/hooks/useSort'
+import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props {
   users: User[]
@@ -18,68 +20,29 @@ interface Props {
 
 const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
 
-  const [sortAttributes, setSortAttributes] = useState<[SortAttribute, 'asc' | 'desc'][]>([])
-  const setSort = useCallback((attribute, direction) => {
-    const attributes = [...sortAttributes]
-    const i = attributes.findIndex(([a]) => a === attribute)
-    if (i !== (-1)){
-      attributes.splice(i,1)
-    }
-    attributes.push([attribute, direction])
-    setSortAttributes(attributes)
-  }, [sortAttributes])
+  const [sortedUsers, sort] = useSort(users, () => ({
+    firstName: String,
+    lastName: String,
+    role: String,
+    organization: ({ organizationId: a },  { organizationId: b }) => {
+      if (a === b){
+        return 0
+      }
+      if(a === null) {
+        return -1
+      }
+      if(b === null) {
+        return 1
+      }
+      const aOrg = OrganizationStore.find(a)
+      const bOrg = OrganizationStore.find(b)
 
-  console.log(sortAttributes)
-  const [sortedUsers, setSortedUsers] = useState(() => [...users])
-
-  useEffect( () => {
-    setSortedUsers([...users])
-  }, [users])
-
-  const [skipSort, setSkipSort] = useState(false)
-  useEffect(() => {
-    setSkipSort(!skipSort)
-    if (skipSort){
-      return
-    }
-    const users = [...sortedUsers]
-    for (const [attribute, direction] of sortAttributes){
-      switch (attribute){
-      case SortAttribute.FIRST_NAME: {
-        let compareUsers = (a: User, b: User) => a.firstName.localeCompare(b.firstName)
-        if (direction === 'desc') {
-          const compareUsersAsc = compareUsers
-          compareUsers = (a, b) => compareUsersAsc(a,b)*(-1)
-        }
-        users.sort(compareUsers)
-        break
+      if ( aOrg === null || bOrg === null) {
+        throw new Error('organization not found')
       }
-      case SortAttribute.LAST_NAME:{
-        let compareUsers = (a: User, b: User) => a.lastName.localeCompare(b.lastName)
-        if (direction === 'desc') {
-          const compareUsersAsc = compareUsers
-          compareUsers = (a, b) => compareUsersAsc(a,b)*(-1)
-        }
-        users.sort(compareUsers)
-        break
-      }
-      case SortAttribute.ROLE:{
-        let compareUsers = (a: User, b: User) => a.role.localeCompare(b.role)
-        if (direction === 'desc') {
-          const compareUsersAsc = compareUsers
-          compareUsers = (a, b) => compareUsersAsc(a,b)*(-1)
-        }
-        users.sort(compareUsers)
-        break
-      }
-      case SortAttribute.ORGANIZATION:{
-
-        break
-      }
-      }
-    }
-    setSortedUsers(users)
-  },[sortAttributes, sortedUsers])
+      return aOrg.name.localeCompare(bOrg.name)
+    },
+  }))
 
   return (
     <UiList>
@@ -100,22 +63,22 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
       </UiModal>
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
         <UiGrid.Col size={1}>
-          <UiSortButton onClick={(direction) => setSort(SortAttribute.FIRST_NAME, direction)}>
+          <UiSortButton field={sort.firstName}>
             <UiTitle level={6}>Vorname</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={6}>
-          <UiSortButton onClick={(direction) => setSort(SortAttribute.LAST_NAME, direction)}>
+          <UiSortButton field={sort.lastName}>
             <UiTitle level={6}>Nachname</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiSortButton onClick={(direction) => setSort(SortAttribute.ROLE, direction)}>
+          <UiSortButton field={sort.role}>
             <UiTitle level={6}>Rolle</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col>
-          <UiSortButton onClick={(direction) => setSort(SortAttribute.ORGANIZATION, direction)}>
+          <UiSortButton field={sort.organization}>
             <UiTitle level={6}>Organisation</UiTitle>
           </UiSortButton>
         </UiGrid.Col>

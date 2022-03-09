@@ -1,34 +1,30 @@
-import React, { EventHandler, MouseEvent, ReactNode, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
-import UiButton, { Props as UiButtonProps } from '@/components/Ui/Button/UiButton'
-import User from '@/models/User'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { SortField } from '@/utils/hooks/useSort'
 
 interface Props {
-  onClick: (direction: 'asc' | 'desc') => void
+  field: SortField
   children: ReactNode
 }
 
-const UiSortButton: React.VFC<Props> = ({ children, onClick: handleClick }) => {
-  const [direction, setDirection] = useState<null | 'asc' | 'desc'>(null)
+const UiSortButton: React.VFC<Props> = ({ children, field }) => {
   const handleSortClick = () => {
-    switch (direction) {
+    switch (field.direction) {
     case null:
     case 'desc':
-      setDirection('asc')
-      handleClick('asc')
+      field.setDirection('asc')
       break
     case 'asc':
-      setDirection('desc')
-      handleClick('desc')
+      field.setDirection('desc')
       break
     }
   }
  
   return (
     <SortButton onClick={handleSortClick}>
-      {direction !== null && (
-        direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />
+      {field.direction !== null && (
+        field.direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />
       )}
       {children}
     </SortButton>
