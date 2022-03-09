@@ -29,5 +29,35 @@ describe('UiButton', () => {
     wrapper.find('UiButton').simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
   })
+
+  it('should correctly display the color', () => {
+    const wrapper = shallow(
+      <ThemeProvider theme={defaultTheme}>
+        <UiButton color="primary" />
+      </ThemeProvider>,
+    )
+    const btn = wrapper.find('UiButton')
+    expect(btn.props().color).toBe('primary')
+  })
+
+  it('should be disabled', () => {
+    const wrapper = shallow(
+      <ThemeProvider theme={defaultTheme}>
+        <UiButton isDisabled={true} />
+      </ThemeProvider>,
+    )
+    const btn = wrapper.find('UiButton')
+    expect(btn.props().isDisabled).toBe(true)
+  })
+
+  it('should be a submit button', () => {
+    const wrapper = shallow(
+      <ThemeProvider theme={defaultTheme}>
+        <UiButton type={'submit'} />
+      </ThemeProvider>,
+    )
+    const btn = wrapper.find('UiButton')
+    expect(btn.props().type).toBe('submit')
+  })
 })
 
