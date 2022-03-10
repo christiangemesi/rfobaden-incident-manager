@@ -3,7 +3,6 @@ import { parseDate } from '@/models/Date'
 import User from '@/models/User'
 import Id from '@/models/base/Id'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Incident from '@/models/Incident'
 
 export default interface Organization extends Model {
   id: number
