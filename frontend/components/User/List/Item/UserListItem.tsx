@@ -14,6 +14,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserForm from '@/components/User/Form/UserForm'
 import userStore from '@/stores/UserStore'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 
 interface Props extends StyledProps {
   user: User
@@ -58,26 +59,30 @@ const UserListItem: React.VFC<Props> = ({
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
-          <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
-              <UiIconButton onClick={open}>
-                <UiIcon.EditAction />
+          <UiDropDown>
+            <UiDropDown.Trigger>
+              <UiIconButton>
+                <UiIcon.More />
               </UiIconButton>
-            )}</UiModal.Activator>
-            <UiModal.Body>{({ close }) => (
-              <React.Fragment>
-                <UiTitle level={1} isCentered>
+            </UiDropDown.Trigger>
+
+            <UiDropDown.Item onClick={() => resendPassword(user.id)}>neues Passwort senden</UiDropDown.Item>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
                     Benutzer bearbeiten
-                </UiTitle>
-                <UserForm user={user} onClose={close} />
-              </React.Fragment>
-            )}</UiModal.Body>
-          </UiModal>
-          <UiIconButton onClick={() => resendPassword(user.id)}>
-            <UiIcon.PwReset />
-          </UiIconButton><UiIconButton onClick={() => handleDelete(user.id)}>
-            <UiIcon.DeleteAction />
-          </UiIconButton>
+                  </UiTitle>
+                  <UserForm user={user} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
+            <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
+          </UiDropDown>
+
         </UiGrid.Col>
       </UiGrid>
     </UiListItem>
