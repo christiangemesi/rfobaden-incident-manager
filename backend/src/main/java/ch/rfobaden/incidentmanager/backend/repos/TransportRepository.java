@@ -21,6 +21,8 @@ public interface TransportRepository
             + "Transport transport"
             + " WHERE "
             + "transport.incident.id = :#{#path.incidentId}"
+            + " AND "
+            + "transport.id = :id"
     )
     @Override
     boolean existsByPath(TransportPath path, Long id);

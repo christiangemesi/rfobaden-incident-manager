@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,34 +17,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Transport")
 public final class Transport extends Model implements PathConvertible<TransportPath> {
-
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
+
+    @Column(nullable = false)
+    private String title;
+
+    private long peopleInvolved;
+
+    private String description;
+
+    private String trailer;
+
+    private LocalDateTime startsAt;
+    private LocalDateTime endsAt;
+
+    private String vehicle;
+
+    private String destinationPlace;
+    private String sourcePlace;
 
     @ManyToOne
     @JoinColumn
     private User assignee;
 
-    @Column(nullable = false)
-    private Priority priority;
-
-    @Column(nullable = false)
-    private String title;
-
-    private String description;
-    private String note;
-    private String location;
-
-    private LocalDateTime startsAt;
-    private LocalDateTime endsAt;
-
-
     @JsonIgnore
     public Incident getIncident() {
         return incident;
     }
-
 
     @JsonIgnore
     public void setIncident(Incident incident) {
@@ -68,12 +68,45 @@ public final class Transport extends Model implements PathConvertible<TransportP
         incident.setId(id);
     }
 
-    public Priority getPriority() {
-        return priority;
+
+    public String getVehicle() {
+        return vehicle;
     }
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getDestinationPlace() {
+        return destinationPlace;
+    }
+
+    public void setDestinationPlace(String destinationPlace) {
+        this.destinationPlace = destinationPlace;
+    }
+
+    public String getSourcePlace() {
+        return sourcePlace;
+    }
+
+    public void setSourcePlace(String sourcePlace) {
+        this.sourcePlace = sourcePlace;
+    }
+
+    public long getPeopleInvolved() {
+        return peopleInvolved;
+    }
+
+    public void setPeopleInvolved(long peopleInvolved) {
+        this.peopleInvolved = peopleInvolved;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
 
     public String getTitle() {
@@ -90,22 +123,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public User getAssignee() {
@@ -128,11 +145,9 @@ public final class Transport extends Model implements PathConvertible<TransportP
             assignee = null;
             return;
         }
-        //TODO this prob wrong
         assignee = new User();
         assignee.setId(id);
     }
-
 
     public LocalDateTime getStartsAt() {
         return startsAt;
@@ -150,7 +165,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.endsAt = endsAt;
     }
 
-
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -162,21 +176,23 @@ public final class Transport extends Model implements PathConvertible<TransportP
         var that = (Transport) other;
 
         return equalsModel(that)
-            && Objects.equals(priority, that.priority)
             && Objects.equals(title, that.title)
+            && Objects.equals(incident, that.incident)
+            && Objects.equals(peopleInvolved, that.peopleInvolved)
             && Objects.equals(description, that.description)
-            && Objects.equals(note, that.note)
-            && Objects.equals(location, that.location)
-            && Objects.equals(assignee, that.assignee)
+            && Objects.equals(trailer, that.trailer)
             && Objects.equals(startsAt, that.startsAt)
             && Objects.equals(endsAt, that.endsAt)
-            && Objects.equals(incident, that.incident);
+            && Objects.equals(vehicle, that.vehicle)
+            && Objects.equals(destinationPlace, that.destinationPlace)
+            && Objects.equals(sourcePlace, that.sourcePlace)
+            && Objects.equals(assignee, that.assignee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(priority, title, description, note,
-            location, assignee, startsAt, endsAt, incident);
+        return Objects.hash(title, incident, peopleInvolved, description, trailer,
+            startsAt, endsAt, vehicle, destinationPlace, sourcePlace, assignee);
     }
 
     @Override

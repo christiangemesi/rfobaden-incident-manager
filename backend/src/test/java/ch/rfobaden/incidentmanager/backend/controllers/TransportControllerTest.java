@@ -10,6 +10,7 @@ import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +21,9 @@ import java.util.Optional;
 @WebMvcTest(TransportController.class)
 public class TransportControllerTest
     extends ModelControllerTest<Transport, TransportPath, TransportService> {
+
+    @Autowired
+    protected UserService userService;
 
     @MockBean
     IncidentService incidentService;
@@ -34,5 +38,4 @@ public class TransportControllerTest
         Mockito.when(incidentService.find(path, path.getIncidentId()))
             .thenReturn(Optional.of(transport.getIncident()));
     }
-
 }
