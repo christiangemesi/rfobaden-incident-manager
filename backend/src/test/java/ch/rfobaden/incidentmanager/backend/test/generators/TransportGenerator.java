@@ -28,7 +28,6 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setDestinationPlace(faker.address().buildingNumber());
         transport.setSourcePlace(faker.address().buildingNumber());
         transport.setAssignee(doMaybe(userGenerator::generate));
-
         return transport;
     }
 }

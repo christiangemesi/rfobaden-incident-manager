@@ -37,5 +37,11 @@ public class TransportControllerTest
     protected void mockRelations(TransportPath path, Transport transport) {
         Mockito.when(incidentService.find(path, path.getIncidentId()))
             .thenReturn(Optional.of(transport.getIncident()));
+
+        var assignee = transport.getAssignee();
+        if (assignee != null) {
+            Mockito.when(userService.find(assignee.getId()))
+                .thenReturn(Optional.of(assignee));
+        }
     }
 }
