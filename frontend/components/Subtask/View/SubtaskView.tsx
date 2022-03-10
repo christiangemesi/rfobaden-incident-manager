@@ -65,7 +65,7 @@ const SubtaskView: React.VFC<Props> = ({ subtask, task, report, incident }) => {
                 <UiTitle level={1} isCentered>
                   Teilauftrag bearbeiten
                 </UiTitle>
-                <SubtaskForm incident={incident} report={report} task={task} subtask={subtask} onClose={close} />
+                <SubtaskForm task={task} subtask={subtask} onClose={close} />
               </React.Fragment>
             )}</UiModal.Body>
           </UiModal>

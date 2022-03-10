@@ -22,6 +22,9 @@ import UiDescription from '@/components/Ui/Description/UiDescription'
 import EventHelper from '@/utils/helpers/EventHelper'
 import Report from '@/models/Report'
 import TaskInfo from '@/components/Task/Info/TaskInfo'
+import UiLevel from '@/components/Ui/Level/UiLevel'
+import useAsyncCached from '@/utils/hooks/useAsyncCached'
+import { sleep } from '@/utils/control-flow'
 
 interface Props {
   report: Report
@@ -31,10 +34,12 @@ interface Props {
 
 const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) => {
   const subtasks = useSubtasksOfTask(task.id)
-  const { loading: isLoading } = useAsync(async () => {
-    if (loadedTasks.has(task.id)) {
-      return
-    }
+
+  // Load subtasks from the backend.
+  const { loading: isLoading } = useAsyncCached(TaskView, task.id, async () => {
+    // Wait for any animations to play out before fetching data.
+    // The load is a relatively expensive operation, and may interrupt some animations.
+    await sleep(300)
     const [subtasks, error]: BackendResponse<Subtask[]> = await BackendService.list(
       `incidents/${task.incidentId}/reports/${task.reportId}/tasks/${task.id}/subtasks`,
     )
@@ -42,8 +47,7 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
       throw error
     }
     SubtaskStore.saveAll(subtasks.map(parseSubtask))
-    loadedTasks.add(task.id)
-  }, [task])
+  })
 
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
@@ -86,8 +90,8 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
   }, [task])
 
   return (
-    <Container>
-      <Heading onClick={EventHelper.stopPropagation}>
+    <UiLevel>
+      <UiLevel.Header onClick={EventHelper.stopPropagation}>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <TaskInfo task={task} />
@@ -155,43 +159,21 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
         </UiGrid>
 
         <UiDescription description={task.description} />
-      </Heading>
+      </UiLevel.Header>
 
       <Content>
-        {isLoading ? (
+        {isLoading  ? (
           <UiIcon.Loader isSpinner />
         ) : (
-          // This scrollbar is fully disabled, but it's still required for the drag-and-drop inside
-          // the SubtaskList to work. Why is not clear right now, but hey, it works like this.
-          <UiScroll style={{ width: '100%', height: '100%' }} disableX disableY>
-            <SubtaskList subtasks={subtasks} />
-          </UiScroll>
+          <SubtaskList subtasks={subtasks} />
         )}
       </Content>
-    </Container>
+    </UiLevel>
   )
 }
 export default TaskView
 
-const loadedTasks = new Set<Id<Task>>()
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
-
-const Heading = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5rem;
-  width: 100%;
-  margin-bottom: 1rem;
-`
-
-const Content = styled.div`
-  flex: 1;
+const Content = styled(UiLevel.Content)`
   display: flex;
   justify-content: center;
-  width: 100%;
 `

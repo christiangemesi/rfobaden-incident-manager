@@ -123,7 +123,7 @@ const LIST_CLOSED_ID = 'list-closed'
 const Container = styled.div`
   display: flex;
   flex-wrap: nowrap;
-  height: 100%;
+  min-height: 100%;
   column-gap: 2rem;
   padding: 4px 4px 0 4px;
   
@@ -160,6 +160,5 @@ const List = styled.ul`
   flex-grow: 1;
   max-width: 100%;
   
-  height: 100%;
   width: 100%;
 `

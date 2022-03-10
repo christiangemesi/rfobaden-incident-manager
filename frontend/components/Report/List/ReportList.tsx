@@ -11,6 +11,8 @@ import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { useEvent } from 'react-use'
 import EventHelper from '@/utils/helpers/EventHelper'
 import Incident from '@/models/Incident'
+import UiReservedSpace from '@/components/Ui/ReservedSpace/UiReservedSpace'
+import UiLevel from '@/components/Ui/Level/UiLevel'
 
 interface Props {
   incident: Incident,
@@ -67,47 +69,48 @@ const ReportList: React.VFC<Props> = ({ incident, reports, onSelect: handleSelec
 
   return (
     <Container ref={containerRef} onClick={EventHelper.stopPropagation}>
-      <UiScroll style={{ height: '100%' }} isLeft={selected !== null} disableX>
-        <ListSpacer hasSelected={selected !== null}>
-          <ListContainer hasSelected={selected !== null}>
-            <UiList>
-              {keyReports.map((report) => (
-                <ReportListItem
-                  key={report.id}
-                  report={report}
-                  isActive={selected?.id === report.id}
-                  isSmall={canListBeSmall && selected !== null}
-                  onClick={setSelectedAndCallback}
-                />
-              ))}
-            </UiList>
+      <ListSpacer hasSelected={selected !== null}>
+        <ListContainer hasSelected={selected !== null}>
+          <UiList>
+            {keyReports.map((report) => (
+              <ReportListItem
+                key={report.id}
+                report={report}
+                isActive={selected?.id === report.id}
+                isSmall={canListBeSmall && selected !== null}
+                onClick={setSelectedAndCallback}
+              />
+            ))}
+          </UiList>
 
-            <UiList>
-              {normalReports.map((report) => (
-                <ReportListItem
-                  key={report.id}
-                  report={report}
-                  isActive={selected?.id === report.id}
-                  isSmall={canListBeSmall && selected !== null}
-                  onClick={setSelectedAndCallback}
-                />
-              ))}
-            </UiList>
-          </ListContainer>
-        </ListSpacer>
+          <UiList>
+            {normalReports.map((report) => (
+              <ReportListItem
+                key={report.id}
+                report={report}
+                isActive={selected?.id === report.id}
+                isSmall={canListBeSmall && selected !== null}
+                onClick={setSelectedAndCallback}
+              />
+            ))}
+          </UiList>
+        </ListContainer>
+      </ListSpacer>
 
-        <ReportOverlay offset={containerRef.current?.getBoundingClientRect()?.y ?? 0} hasSelected={selected !== null}>
+      <ReportOverlay offset={containerRef.current?.getBoundingClientRect()?.y ?? 0} hasSelected={selected !== null}>
+        <UiReservedSpace reserveHeight style={{ flex: 1, display: 'flex' }}>
           {selected !== null && (
             <ReportView incident={incident} report={selected} onClose={clearSelected} />
           )}
-        </ReportOverlay>
-      </UiScroll>
+        </UiReservedSpace>
+      </ReportOverlay>
     </Container>
   )
 }
 export default ReportList
 
 const Container = styled.div`
+  position: relative;
   height: 100%;
   width: 100%;
 `
@@ -129,10 +132,10 @@ const ListSpacer = styled.div<{ hasSelected: boolean }>`
   
   ${({ hasSelected }) => hasSelected && css`
     ${Themed.media.xl.min} {
-      width: 35vw;
+      width: 35%;
     }
     ${Themed.media.xxl.min} {
-      width: 25vw;
+      width: 25%;
     }
   `}
 `
@@ -152,13 +155,14 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
 `
 
 const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
-  position: fixed;
-  top: calc(${({ offset }) => offset}px + 4px);
+  position: absolute;
+  display: flex;
+  top: 4px;
 
   z-index: 2;
 
   width: 100%;
-  height: calc(100% - 4px - ${({ offset }) => offset}px);
+  min-height: calc(100% - 4px);
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
@@ -167,7 +171,7 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
   transition-property: transform;
 
   transform: translateX(100%);
-  ${Themed.media.lg.max} {
+  ${Themed.media.md.max} {
     transform: translateY(100%);
   }
   
@@ -177,22 +181,24 @@ const ReportOverlay = styled.div<{ offset: number, hasSelected: boolean }>`
 
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
-    ${Themed.media.lg.max} {
+    ${Themed.media.md.max} {
       transform: translateY(0);
     }
   `}
   
-  ${Themed.media.lg.max} {
-    padding: 1rem 0;
+  ${Themed.media.lg.min} {
+    ${UiLevel.Header}, ${UiLevel.Content} {
+      padding-left: 2rem;
+    }
   }
   
   ${Themed.media.xl.min} {
-    left: 35vw;
-    width: 65vw;
+    left: 35%;
+    width: 65%;
   }
 
   ${Themed.media.xxl.min} {
-    left: 25vw;
-    width: 75vw;
+    left: 25%;
+    width: 75%;
   }
 `

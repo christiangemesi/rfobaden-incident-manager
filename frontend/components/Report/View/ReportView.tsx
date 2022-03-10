@@ -1,6 +1,6 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import React, { useCallback, useState } from 'react'
+import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -12,14 +12,13 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import { useAsync } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
 import UiDescription from '@/components/Ui/Description/UiDescription'
@@ -27,6 +26,9 @@ import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import EventHelper from '@/utils/helpers/EventHelper'
 import ReportInfo from '@/components/Report/Info/ReportInfo'
 import Incident from '@/models/Incident'
+import UiLevel from '@/components/Ui/Level/UiLevel'
+import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
+import useAsyncCached from '@/utils/hooks/useAsyncCached'
 
 interface Props {
   incident: Incident
@@ -36,11 +38,13 @@ interface Props {
 
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
   const tasks = useTasksOfReport(report.id)
-  const { loading: isLoading } = useAsync(async () => {
-    if (loadedReports.has(report.id)) {
-      return
-    }
+
+  // Load tasks from the backend.
+  const { loading: isLoading } = useAsyncCached(ReportView, report.id, async () => {
+    // Wait for any animations to play out before fetching data.
+    // The load is a relatively expensive operation, and may interrupt some animations.
     await sleep(300)
+
     const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
       `incidents/${report.incidentId}/reports/${report.id}/tasks`,
     )
@@ -48,8 +52,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
       throw error
     }
     TaskStore.saveAll(tasks.map(parseTask))
-    loadedReports.add(report.id)
-  }, [report.id])
+  })
 
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
@@ -87,17 +90,14 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
     }
   }, [report])
 
-  const [selected, setSelected] = useState<Task | null>()
-  const selectTask = useCallback((task: Task) => {
-    setSelected(task)
-  }, [])
+  const [selected, setSelected] = useState<Task | null>(null)
   const clearSelected = useCallback(() => {
     setSelected(null)
   }, [])
 
-  useEffect(() => {
-    setSelected(null)
-  }, [report.id])
+  // Clear the selected task if the report changes.
+  // Two reports never contain the same task.
+  useUpdateEffect(clearSelected, [report.id])
 
   const canDeselectByClick = useBreakpoint(() => ({
     xs: true,
@@ -110,8 +110,8 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   }, [canDeselectByClick])
 
   return (
-    <Container>
-      <Heading onClick={handleDeselectByClick}>
+    <UiLevel>
+      <UiLevel.Header onClick={handleDeselectByClick}>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <ReportInfo report={report} />
@@ -182,65 +182,29 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
         </UiGrid>
 
         <UiDescription description={report.description} notes={report.notes} />
-      </Heading>
-      <Content onClick={EventHelper.stopPropagation}>
-        <UiScroll style={{ height: '100%' }}>
-          <TaskContainer>
-            {isLoading ? (
-              <UiIcon.Loader isSpinner />
-            ) : (
-              <TaskList
-                tasks={tasks}
-                onClick={selectTask}
-              />
-            )}
-          </TaskContainer>
-        </UiScroll>
-        <TaskOverlay hasSelected={selected !== null}>
+      </UiLevel.Header>
+
+      <UiLevel.Content onClick={EventHelper.stopPropagation}>
+        <TaskContainer>
+          {isLoading ? (
+            <UiIcon.Loader isSpinner />
+          ) : (
+            <TaskList
+              tasks={tasks}
+              onClick={setSelected}
+            />
+          )}
+        </TaskContainer>
+        <UiInlineDrawer isOpen={selected !== null} onClose={clearSelected}>
           {selected && (
             <TaskView report={report} task={selected} onClose={clearSelected} />
           )}
-        </TaskOverlay>
-      </Content>
-    </Container>
+        </UiInlineDrawer>
+      </UiLevel.Content>
+    </UiLevel>
   )
 }
 export default ReportView
-
-const loadedReports = new Set<Id<Report>>()
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  
-  width: 100%;
-  height: 100%;
-`
-
-const Heading = styled.div`
-  padding: 1rem 4rem 0 2rem;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5rem;
-  width: 100%;
-  
-  ${Themed.media.lg.max} {
-    padding: 0;
-    ${UiContainer.fluidCss};
-  }
-`
-
-const Content = styled.div`
-  position: relative;
-  flex: 1;
-  height: 100%;
-  padding-top: 1rem;
-  padding-right: 4rem;
-
-  ${Themed.media.lg.max} {
-    padding-right: 0;
-  }
-`
 
 const TaskContainer = styled.div`
   position: relative;
@@ -253,38 +217,5 @@ const TaskContainer = styled.div`
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};
-  }
-`
-
-const TaskOverlay = styled.div<{ hasSelected: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-
-  width: calc(100%);
-  height: 100%;
-  
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
-  box-shadow: 0 0 4px 2px gray;
-
-  will-change: transform;
-  transition: 300ms cubic-bezier(.23,1,.32,1);
-  transition-property: transform;
-  
-  transform: translateY(100%);
-  transform-origin: bottom;
-  
-  margin-top: 1rem;
-  padding: 1rem 4rem 1rem 2rem;
-  
-  ${({ hasSelected }) => hasSelected && css`
-    transform: translateY(0);
-  `}
-  
-  ${Themed.media.lg.max} {
-    ${UiContainer.fluidCss};
-    left: 0;
-    width: 100%;
   }
 `

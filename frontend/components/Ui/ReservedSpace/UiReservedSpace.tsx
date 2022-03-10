@@ -1,7 +1,8 @@
 import React, { CSSProperties, ReactNode, useRef } from 'react'
 import { useMeasure, useSetState, useUpdateEffect, useWindowScroll } from 'react-use'
+import { ElementProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends ElementProps<HTMLDivElement> {
   /**
    * Allow width to be reserved.
    */
@@ -29,7 +30,7 @@ interface Props {
  * The component will consistently monitor the current window scroll, and reduce the reserved space if it can
  * without affecting the scroll position.
  */
-const UiReservedSpace: React.VFC<Props> = ({ reserveWidth = false, reserveHeight = false, children }) => {
+const UiReservedSpace: React.VFC<Props> = ({ reserveWidth = false, reserveHeight = false, style = {}, ...props }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [setMeasureRef, { width, height }] = useMeasure<HTMLDivElement>()
   useUpdateEffect(() => {
@@ -67,9 +68,7 @@ const UiReservedSpace: React.VFC<Props> = ({ reserveWidth = false, reserveHeight
   }, [scroll])
 
   return (
-    <div ref={ref} style={makeReservedStyle(reserved)}>
-      {children}
-    </div>
+    <div ref={ref} {...props} style={makeReservedStyle(style, reserved)} />
   )
 }
 export default UiReservedSpace
@@ -79,9 +78,9 @@ interface Reserved {
   height: number | null
 }
 
-const makeReservedStyle = (reserved: Reserved): CSSProperties => {
-  const props: CSSProperties = {}
-  props.minWidth = reserved.width ?? undefined
-  props.minHeight = reserved.height ?? undefined
-  return props
+const makeReservedStyle = (style: CSSProperties, reserved: Reserved): CSSProperties => {
+  const newStyle = { ...style }
+  newStyle.minWidth = reserved.width ?? undefined
+  newStyle.minHeight = reserved.height ?? undefined
+  return newStyle
 }
