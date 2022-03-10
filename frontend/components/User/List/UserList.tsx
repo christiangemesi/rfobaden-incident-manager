@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React from 'react'
 import User from '@/models/User'
-import styled from 'styled-components'
 import UiList from '@/components/Ui/List/UiList'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
@@ -57,17 +56,17 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
             <UiTitle level={1} isCentered>
               Benutzer erfassen
             </UiTitle>
-            <UserForm />
+            <UserForm onClose={close} />
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
-        <UiGrid.Col size={1}>
+        <UiGrid.Col size={2}>
           <UiSortButton field={sort.firstName}>
             <UiTitle level={6}>Vorname</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
-        <UiGrid.Col size={6}>
+        <UiGrid.Col size={4}>
           <UiSortButton field={sort.lastName}>
             <UiTitle level={6}>Nachname</UiTitle>
           </UiSortButton>
@@ -90,95 +89,7 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
         />
       ))}
     </UiList>
-    //
-    // <StyledTable>
-    //   <thead>
-    //     <StyledTr>
-    //       <StyledTh>
-    //         Benutzer
-    //       </StyledTh>
-    //       <StyledTh>
-    //         E-Mail
-    //       </StyledTh>
-    //       <StyledTh>
-    //
-    //       </StyledTh>
-    //       <StyledTh>
-    //
-    //       </StyledTh>
-    //     </StyledTr>
-    //   </thead>
-    //   <tbody>
-    //     {users.map((user) => (
-    //       <StyledTr key={user.id}>
-    //         <StyledTd style={{ width: 0 }}>
-    //           {user.firstName} {user.lastName}
-    //         </StyledTd>
-    //         <StyledTd>
-    //           {user.email}
-    //         </StyledTd>
-    //         <StyledTd>
-    //
-    //         </StyledTd>
-    //
-    //         <StyledTdSmall>
-    //           <StyledButton type="button" onClick={() => handleDelete(user.id)}>
-    //             Löschen
-    //           </StyledButton>
-    //         </StyledTdSmall>
-    //       </StyledTr>
-    //     ))}
-    //   </tbody>
-    // </StyledTable>
   )
 }
 export default UserList
 
-enum SortAttribute{
-  FIRST_NAME = 'FIRST_NAME',
-  LAST_NAME = 'LAST_NAME',
-  ROLE = 'ROLE',
-  ORGANIZATION = 'ORGANIZATION',
-}
-
-const StyledTable = styled.table`
-  display: block;
-  width: 100%;
-  border: 1px solid lightgray;
-  border-radius: 0.25rem;
-  margin-top: 2rem;
-`
-const StyledTr = styled.tr`
-  width: 100%;
-  :nth-child(2n) {
-    background-color: lightgray;
-  }
-`
-const StyledTh = styled.th`
-  padding: 0.5rem;
-  vertical-align: middle;
-  font-weight: bold;
-  text-align: left;
-`
-const StyledTd = styled.td`
-  padding: 0.5rem;
-  vertical-align: middle;
-  width: 100%;
-  white-space: nowrap;
-`
-const StyledTdSmall = styled(StyledTd)`
-  width: 0;
-`
-const StyledButton = styled.button`
-  display: block;
-  width: 100%;
-`
-const SortButton = styled.button`
-  border: none;
-  background: none;
-  
-  :hover{
-    background: white;
-    
-  }
-`

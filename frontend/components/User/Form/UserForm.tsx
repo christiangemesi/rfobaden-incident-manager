@@ -12,7 +12,6 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Id from '@/models/base/Id'
 import Organization from '@/models/Organization'
-import Incident from '@/models/Incident'
 
 interface Props {
   user?: User | null

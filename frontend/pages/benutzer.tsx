@@ -40,21 +40,6 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
           <UserList users={users} />
         </UiGrid.Col>
       </section>
-
-      {/*  <h1>*/}
-      {/*    Benutzer verwalten*/}
-      {/*  </h1>*/}
-      {/*  <UiGrid style={{ justifyContent: 'center' }}>*/}
-      {/*    <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>*/}
-      {/*      <UserForm />*/}
-      {/*    </UiGrid.Col>*/}
-      {/*  </UiGrid>*/}
-
-      {/*  <UiGrid style={{ justifyContent: 'center' }}>*/}
-      {/*    <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>*/}
-      {/*      <UserList users={users} />*/}
-      {/*    </UiGrid.Col>*/}
-      {/*  </UiGrid>*/}
     </UiContainer>
   )
 }

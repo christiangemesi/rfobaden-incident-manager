@@ -1,19 +1,17 @@
 import React from 'react'
-import UserStore, { useUser } from '@/stores/UserStore'
+import UserStore from '@/stores/UserStore'
 import { useOrganization } from '@/stores/OrganizationStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled from 'styled-components'
-import User, { parseUser } from '@/models/User'
+import User from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import Id from '@/models/base/Id'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService from '@/services/BackendService'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserForm from '@/components/User/Form/UserForm'
-import userStore from '@/stores/UserStore'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 
 interface Props extends StyledProps {
@@ -31,17 +29,16 @@ const UserListItem: React.VFC<Props> = ({
       UserStore.remove(userId)
     }
   }
-  const resendPassword = async (userId: Id<User>) => {
+  const resendPassword = async (userId: Id<User>) => { //TODO: is not working yet
     if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
       alert('not possible yet')
     }
   }
-  
 
   return (
     <UiListItem>
-      <UiGrid style={{ alignItems: 'center' }} gapH={1.5}>
-        <UiGrid.Col size={7}>
+      <UiGrid style={{ alignItems: 'center', flexWrap: 'nowrap' }} gapH={1.5}>
+        <UiGrid.Col size={6}>
           <UiTitle level={5}>
             {user.firstName} {user.lastName}
           </UiTitle>
@@ -53,7 +50,7 @@ const UserListItem: React.VFC<Props> = ({
             {user.role}
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={3}>
           <UiTitle level={6}>
             {employedBy?.name}
           </UiTitle>
@@ -66,7 +63,7 @@ const UserListItem: React.VFC<Props> = ({
               </UiIconButton>
             </UiDropDown.Trigger>
 
-            <UiDropDown.Item onClick={() => resendPassword(user.id)}>neues Passwort senden</UiDropDown.Item>
+            <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
             <UiModal isFull>
               <UiModal.Activator>{({ open }) => (
                 <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
@@ -89,18 +86,3 @@ const UserListItem: React.VFC<Props> = ({
   )
 }
 export default UserListItem
-
-const LeftSpacer = styled.div`
-  margin-left: 2rem;
-`
-const AlignmentSpacer = styled.div`
-  display: flex;
-  `
-const RightSide = styled.div`
-  display: flex;
-  align-items: center;
-  
-  flex: 0 0 auto;
-  width: auto;
-  max-width: 100%;
-`
