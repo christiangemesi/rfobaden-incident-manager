@@ -30,7 +30,7 @@ const Article = styled.article`
 `
 
 const Paragraph = styled.p`
-  white-space: pre;
+  white-space: pre-wrap;
   display: flex;
   align-items: center;
   
