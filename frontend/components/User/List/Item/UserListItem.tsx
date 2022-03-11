@@ -12,7 +12,6 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UserForm from '@/components/User/Form/UserForm'
-import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 
 interface Props extends StyledProps {
   user: User
@@ -29,7 +28,9 @@ const UserListItem: React.VFC<Props> = ({
       UserStore.remove(userId)
     }
   }
-  const resendPassword = async (userId: Id<User>) => { //TODO: is not working yet
+
+  // TODO: is not working yet
+  const resendPassword = async (userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
       alert('not possible yet')
     }
@@ -44,7 +45,6 @@ const UserListItem: React.VFC<Props> = ({
           </UiTitle>
           {user.email}
         </UiGrid.Col>
-
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
             {user.role}
@@ -56,30 +56,29 @@ const UserListItem: React.VFC<Props> = ({
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
-          <UiDropDown>
-            <UiDropDown.Trigger>
-              <UiIconButton>
-                <UiIcon.More />
-              </UiIconButton>
-            </UiDropDown.Trigger>
+          {/*<UiDropDown>*/}
+          {/*  <UiDropDown.Trigger>*/}
+          {/*    <UiIconButton>*/}
+          {/*      <UiIcon.More />*/}
+          {/*    </UiIconButton>*/}
+          {/*  </UiDropDown.Trigger>*/}
 
-            <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Benutzer bearbeiten
-                  </UiTitle>
-                  <UserForm user={user} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-            <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
-          </UiDropDown>
-
+          {/*  <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>*/}
+          {/*  <UiModal isFull>*/}
+          {/*    <UiModal.Activator>{({ open }) => (*/}
+          {/*      <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>*/}
+          {/*    )}</UiModal.Activator>*/}
+          {/*    <UiModal.Body>{({ close }) => (*/}
+          {/*      <React.Fragment>*/}
+          {/*        <UiTitle level={1} isCentered>*/}
+          {/*          Benutzer bearbeiten*/}
+          {/*        </UiTitle>*/}
+          {/*        <UserForm user={user} onClose={close} />*/}
+          {/*      </React.Fragment>*/}
+          {/*    )}</UiModal.Body>*/}
+          {/*  </UiModal>*/}
+          {/*  <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>*/}
+          {/*</UiDropDown>*/}
         </UiGrid.Col>
       </UiGrid>
     </UiListItem>
