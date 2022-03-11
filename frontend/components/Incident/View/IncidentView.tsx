@@ -142,8 +142,8 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
         <UiDescription description={incident.description} />
 
       </UiLevel.Header>
-      <UiLevel.Content ref={contentRef} style={{ minHeight: overlayMax.height, flex: 'none' }}>
-        <Content>
+      <StyledUiLevelContent ref={contentRef} overlayHeight={overlayMax.height}>
+        <RelativeContent>
           <ListContainer hasSelected={selected !== null}>
             <ReportList reports={reports} selected={selected} onSelect={setSelected} />
           </ListContainer>
@@ -156,14 +156,19 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
               <ReportView incident={incident} report={selected} onClose={clearSelected} />
             )}
           </ReportOverlay>
-        </Content>
-      </UiLevel.Content>
+        </RelativeContent>
+      </StyledUiLevelContent>
     </UiLevel>
   )
 }
 export default IncidentView
 
-const Content = styled.div`
+const StyledUiLevelContent = styled(UiLevel.Content)<{ overlayHeight: number }>`
+  overflow: hidden;
+  min-height: calc(${({ overlayHeight }) => overlayHeight}px + 2rem)
+`
+
+const RelativeContent = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
@@ -215,7 +220,7 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
 
   transform: translateX(calc(100% + 4px));
   ${Themed.media.md.max} {
-    transform: translateY(100%);
+    transform: translateY(100vh);
   }
   
   transform-origin: right center;

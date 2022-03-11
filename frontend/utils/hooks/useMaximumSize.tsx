@@ -80,7 +80,7 @@ export const useMaximumSizeScrollControl = <E extends HTMLElement>(max: MaximumS
         max.update((max) => ({ ...max, height: max.height + invisibleHeight }))
       }
     })
-  }, [scroll])
+  }, [scroll, max])
   return ref
 }
 
