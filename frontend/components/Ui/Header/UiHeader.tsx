@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { Themed } from '@/theme'
 
 
 const UiHeader: React.VFC = () => {
@@ -77,6 +78,11 @@ const Header = styled.header`
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background: ${({ theme }) => theme.colors.secondary.value};
+  
+  // TODO implement mobile view
+  ${Themed.media.xs.only} {
+    display: none;
+  }
 `
 const NavContainer = styled.div`
   display: flex;
