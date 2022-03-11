@@ -26,10 +26,10 @@ const UiSortButton: React.VFC<Props> = ({ children, field }) => {
  
   return (
     <SortButton onClick={handleSortClick}>
+      {children}
       {field.direction === null ? <UiIcon.Empty /> : (
         field.direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />
       )}
-      {children}
     </SortButton>
   )
 }
@@ -60,11 +60,9 @@ const SortButton = styled.div`
   &:last-child{
     margin-right: 0;
   }
-
-
+  
   color: ${({
     theme,
     color,
   }) => color === undefined ? contrastDark : theme.colors[color].value};
-
 `

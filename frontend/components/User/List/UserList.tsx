@@ -18,7 +18,6 @@ interface Props {
 }
 
 const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
-
   const [sortedUsers, sort] = useSort(users, () => ({
     firstName: String,
     lastName: String,
@@ -27,16 +26,15 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
       if (a === b){
         return 0
       }
-      if(a === null) {
+      if (a === null) {
         return -1
       }
-      if(b === null) {
+      if (b === null) {
         return 1
       }
       const aOrg = OrganizationStore.find(a)
       const bOrg = OrganizationStore.find(b)
-
-      if ( aOrg === null || bOrg === null) {
+      if (aOrg === null || bOrg === null) {
         throw new Error('organization not found')
       }
       return aOrg.name.localeCompare(bOrg.name)
@@ -92,4 +90,3 @@ const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
   )
 }
 export default UserList
-
