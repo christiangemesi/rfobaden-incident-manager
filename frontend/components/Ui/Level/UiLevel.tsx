@@ -29,11 +29,13 @@ const UiLevel: React.VFC<Props> = ({ ...props }) => {
   )
 }
 export default Object.assign(styled(UiLevel)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  
   width: 100%; // Take full width.
+  min-height: 100%;
   flex: 1; // Take full height if parent is a flex container.
-
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 `, {
   Header: UiLevelHeader,
   Content: UiLevelContent,

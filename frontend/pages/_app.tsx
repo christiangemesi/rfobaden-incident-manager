@@ -107,7 +107,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 const Main = styled.div<{ hasFooter: boolean }>`
   ${({ hasFooter }) => hasFooter && css`
     padding-bottom: 3rem;
-    min-height: calc(100vh - 4rem - 3rem - 4rem);
+    min-height: calc(100vh - 4rem - 1rem - 4rem);
   `}
 `
 

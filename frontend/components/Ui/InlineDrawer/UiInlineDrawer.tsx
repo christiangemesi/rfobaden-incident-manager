@@ -33,7 +33,7 @@ export default styled(UiInlineDrawer)`
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
 
-  transform: translateY(100%);
+  transform: translateY(calc(100% + 4px));
   transform-origin: bottom;
 
   ${({ isOpen }) => isOpen && css`

@@ -210,8 +210,6 @@ const TaskContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  padding: 0 2rem 1rem 2rem;
-  margin-right: 4rem;
   width: 100%;
   
   ${Themed.media.lg.max} {
