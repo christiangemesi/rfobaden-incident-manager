@@ -16,5 +16,6 @@ export default styled(forwardRef<HTMLDivElement, Props>(function UiLevelContent(
   
   position: relative;
   flex: 1;
-  padding: 1rem 0;
+  padding-top: 1rem;
+  padding-left: 1rem;
 `
