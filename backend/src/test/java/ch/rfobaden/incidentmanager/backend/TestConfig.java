@@ -26,7 +26,7 @@ import java.util.Locale;
     TaskGenerator.class,
     SubtaskGenerator.class,
     OrganizationGenerator.class,
-    TransportGenerator.class
+    TransportGenerator.class,
 })
 public class TestConfig {
     @Bean

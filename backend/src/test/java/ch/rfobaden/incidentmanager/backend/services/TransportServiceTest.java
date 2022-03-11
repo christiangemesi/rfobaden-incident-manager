@@ -10,6 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-public class TransportServiceTest extends ModelRepositoryServiceTest
-    <Transport, TransportPath, TransportService, TransportRepository> {
+public class TransportServiceTest
+    extends ModelRepositoryServiceTest<
+        Transport,
+        TransportPath,
+        TransportService,
+        TransportRepository
+    > {
 }

@@ -22,7 +22,6 @@ public class TransportController
     private final IncidentService incidentService;
     private final UserService userService;
 
-
     public TransportController(IncidentService incidentService, UserService userService) {
         this.incidentService = incidentService;
         this.userService = userService;

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "Transport")
+@Table(name = "transport")
 public final class Transport extends Model implements PathConvertible<TransportPath> {
     @ManyToOne
     @JoinColumn(nullable = false)

@@ -5,7 +5,6 @@ import java.util.Objects;
 public class TransportPath extends EmptyPath {
     private Long incidentId;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
