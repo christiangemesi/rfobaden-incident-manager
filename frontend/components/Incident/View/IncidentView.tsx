@@ -21,6 +21,8 @@ import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import { useMeasure, usePreviousDistinct } from 'react-use'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -29,10 +31,12 @@ interface Props extends StyledProps {
 const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
   const reports = useReportsOfIncident(incident.id)
   const [selected, setSelected] = useState<Report | null>(null)
-
   const clearSelected = useCallback(() => {
     setSelected(null)
   }, [])
+
+  const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
+  const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
   const router = useRouter()
   const handleClose = useCallback(async () => {
@@ -139,11 +143,11 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
 
       </UiLevel.Header>
       <StyledUiLevelContent $hasSelected={selected !== null}>
-        <ListContainer $hasSelected={selected !== null}>
+        <ListContainer ref={setReportListRef} $hasSelected={selected !== null}>
           <ReportList reports={reports} selected={selected} onSelect={setSelected} />
         </ListContainer>
 
-        <ReportOverlay hasSelected={selected !== null}>
+        <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
           {selected !== null && (
             <ReportView incident={incident} report={selected} onClose={clearSelected} />
           )}
@@ -156,8 +160,15 @@ export default IncidentView
 
 const StyledUiLevelContent = styled(UiLevel.Content)<{ $hasSelected: boolean }>`
   overflow: hidden;
-  display: flex;
-  padding-right: 0;
+  ${Themed.media.lg.min} {
+    display: flex;
+    padding-right: 0;
+  }
+
+  ${Themed.media.md.max} {
+    padding-left: 0;
+    padding-right: 0;
+  }
 `
 
 const ListContainer = styled.div<{ $hasSelected: boolean }>`
@@ -173,12 +184,12 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
     z-index: 3;
   }
   
-  will-change: min-width, max-width, width;
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: min-width, max-width, width;
   transition-property: min-width, max-width, width;
   
   ${({ $hasSelected }) => $hasSelected && css`
-    ${Themed.media.xl.min} {
+    ${Themed.media.lg.min} {
       min-width: 35%;
       max-width: 35%;
       
@@ -191,16 +202,22 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
       max-width: 25%;
     }
   `}
+
+
+  ${Themed.media.md.max} {
+    ${UiContainer.fluidCss};
+    
+    ${({ $hasSelected }) => $hasSelected && css`
+      max-height: 0;
+    `}
+  }
 `
 
-const ReportOverlay = styled.div<{ hasSelected: boolean }>`
-  //position: absolute;
+const ReportOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
   display: flex;
-
-  z-index: 2;
-
-  //width: 100%;
   min-height: 100%;
+  overflow: hidden;
+  z-index: 2;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
@@ -209,19 +226,9 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   transition-property: transform;
 
   transform: translateX(calc(100% + 4px)); // 4px to hide box shadow
-  ${Themed.media.md.max} {
-    transform: translateY(calc(100% + 4px + 1rem)); // 4px to hide box shadow, 1rem for parent padding
-  }
-  
   transform-origin: right center;
-  
-  overflow: hidden;
-
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
-    ${Themed.media.md.max} {
-      transform: translateY(0);
-    }
   `}
 
   ${Themed.media.lg.min} {
@@ -234,5 +241,16 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   }
   ${Themed.media.xxl.min} {
     width: calc(75% + 4rem);
+  }
+
+  ${Themed.media.md.max} {
+    width: 100%;
+    min-height: ${({ $listHeight }) => $listHeight}px;
+    transform: translateY(calc(100% + 44px));
+    ${({ hasSelected }) => hasSelected && css`
+      transform: translateY(0);
+    `}
+    
+    // transform: translateY(calc(100% + 4px + 1rem)); // 4px to hide box shadow, 1rem for parent padding
   }
 `
