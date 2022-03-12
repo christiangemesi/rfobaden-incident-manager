@@ -153,6 +153,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
                 Löschen
               </UiDropDown.Item>
             </UiDropDown>
+
             <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />
             </UiIconButton>

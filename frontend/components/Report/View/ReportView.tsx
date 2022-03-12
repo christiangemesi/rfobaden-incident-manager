@@ -1,18 +1,18 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
-import TaskStore, { useTasksOfReport } from '@/stores/TaskStore'
+import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
+import { useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
@@ -22,7 +22,6 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import EventHelper from '@/utils/helpers/EventHelper'
 import ReportInfo from '@/components/Report/Info/ReportInfo'
 import Incident from '@/models/Incident'
@@ -38,10 +37,14 @@ interface Props {
 
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
   const tasks = useTasksOfReport(report.id)
-  
-  const [selected, setSelected] = useState<Task | null>(null)
+
+  const [selectedId, setSelectedId] = useState<Id<Task> | null>(null)
+  const selected = useTask(selectedId)
+  const setSelected = useCallback((task: Task | null) => {
+    setSelectedId(task?.id ?? null)
+  }, [])
   const clearSelected = useCallback(() => {
-    setSelected(null)
+    setSelectedId(null)
   }, [])
 
   const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
@@ -101,19 +104,9 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   // Two reports never contain the same task.
   useUpdateEffect(clearSelected, [report.id])
 
-  const canDeselectByClick = useBreakpoint(() => ({
-    xs: true,
-    xl: false,
-  }))
-  const handleDeselectByClick = useCallback(() => {
-    if (canDeselectByClick) {
-      setSelected(null)
-    }
-  }, [canDeselectByClick])
-
   return (
     <UiLevel>
-      <UiLevel.Header onClick={handleDeselectByClick}>
+      <UiLevel.Header>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <ReportInfo report={report} />

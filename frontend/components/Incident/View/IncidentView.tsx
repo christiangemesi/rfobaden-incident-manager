@@ -14,7 +14,7 @@ import UiDescription from '@/components/Ui/Description/UiDescription'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import { useRouter } from 'next/router'
-import { useReportsOfIncident } from '@/stores/ReportStore'
+import { useReport, useReportsOfIncident } from '@/stores/ReportStore'
 import ReportList from '@/components/Report/List/ReportList'
 import ReportView from '@/components/Report/View/ReportView'
 import styled, { css } from 'styled-components'
@@ -23,6 +23,7 @@ import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { useMeasure, usePreviousDistinct } from 'react-use'
+import Id from '@/models/base/Id'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -30,9 +31,14 @@ interface Props extends StyledProps {
 
 const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
   const reports = useReportsOfIncident(incident.id)
-  const [selected, setSelected] = useState<Report | null>(null)
+
+  const [selectedId, setSelectedId] = useState<Id<Report> | null>(null)
+  const selected = useReport(selectedId)
+  const setSelected = useCallback((report: Report | null) => {
+    setSelectedId(report?.id ?? null)
+  }, [])
   const clearSelected = useCallback(() => {
-    setSelected(null)
+    setSelectedId(null)
   }, [])
 
   const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
