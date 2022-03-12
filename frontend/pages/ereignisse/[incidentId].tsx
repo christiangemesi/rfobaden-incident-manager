@@ -12,6 +12,7 @@ import OrganizationStore from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import styled from 'styled-components'
+import UiLevel from '@/components/Ui/Level/UiLevel'
 
 interface Props {
   data: {
@@ -38,7 +39,15 @@ export default IncidentPage
 
 const StyledIncidentView = styled(IncidentView)`
   padding-top: 0;
-  min-height: calc(100vh - 4rem - 4rem - 3rem - 1rem);
+  min-height: calc(100vh - 4rem - 4rem - 2rem);
+  flex: 1;
+  
+  & > ${UiLevel.Header} {
+    padding-top: 0;
+  }
+  & > ${UiLevel.Content} {
+    padding-bottom: 4px;
+  }
 `
 
 type Query = {

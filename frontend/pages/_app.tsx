@@ -104,6 +104,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 `
 
 const Main = styled.main`
-  padding-bottom: 3rem;
+  padding-bottom: 1rem;
   min-height: calc(100vh - 4rem - 1rem - 4rem);
 `
