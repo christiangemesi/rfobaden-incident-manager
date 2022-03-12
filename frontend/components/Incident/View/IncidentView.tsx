@@ -16,6 +16,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import { useMeasure, usePreviousDistinct } from 'react-use'
 import Id from '@/models/base/Id'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -51,6 +52,7 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
 
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
+            <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
           </UiGrid.Col>
         </UiGrid>
 
