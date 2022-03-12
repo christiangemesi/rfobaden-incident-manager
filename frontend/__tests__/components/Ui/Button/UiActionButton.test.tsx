@@ -28,7 +28,7 @@ describe('UiActionButton', () => {
         <UiActionButton children={children} onClick={mockCallBack} />
       </ThemeProvider>,
     )
-    wrapper.find('UiActionButton').simulate('click')
+    wrapper.find(UiActionButton).simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
   })
 })

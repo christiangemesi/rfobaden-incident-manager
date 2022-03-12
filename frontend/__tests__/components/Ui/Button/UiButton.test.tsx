@@ -26,7 +26,7 @@ describe('UiButton', () => {
         <UiButton onClick={mockCallBack} />
       </ThemeProvider>,
     )
-    wrapper.find('UiButton').simulate('click')
+    wrapper.find(UiButton).simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
   })
 
@@ -36,7 +36,7 @@ describe('UiButton', () => {
         <UiButton color="primary" />
       </ThemeProvider>,
     )
-    const btn = wrapper.find('UiButton')
+    const btn = wrapper.find(UiButton)
     expect(btn.props().color).toBe('primary')
   })
 
@@ -46,7 +46,7 @@ describe('UiButton', () => {
         <UiButton isDisabled={true} />
       </ThemeProvider>,
     )
-    const btn = wrapper.find('UiButton')
+    const btn = wrapper.find(UiButton)
     expect(btn.props().isDisabled).toBe(true)
   })
 
@@ -56,7 +56,7 @@ describe('UiButton', () => {
         <UiButton type={'submit'} />
       </ThemeProvider>,
     )
-    const btn = wrapper.find('UiButton')
+    const btn = wrapper.find(UiButton)
     expect(btn.props().type).toBe('submit')
   })
 })
