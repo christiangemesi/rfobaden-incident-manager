@@ -8,10 +8,6 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import Id from '@/models/base/Id'
 import BackendService from '@/services/BackendService'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UserForm from '@/components/User/Form/UserForm'
 
 interface Props extends StyledProps {
   user: User
@@ -38,7 +34,7 @@ const UserListItem: React.VFC<Props> = ({
 
   return (
     <UiListItem>
-      <UiGrid style={{ alignItems: 'center', flexWrap: 'nowrap' }} gapH={1.5}>
+      <UiGrid align="center" gapH={1.5}>
         <UiGrid.Col size={6}>
           <UiTitle level={5}>
             {user.firstName} {user.lastName}
