@@ -1,19 +1,10 @@
-import Incident, { parseIncident } from '@/models/Incident'
+import Incident from '@/models/Incident'
 import React, { useCallback, useState } from 'react'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import ReportForm from '@/components/Report/Form/ReportForm'
-import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import BackendService, { BackendResponse } from '@/services/BackendService'
-import IncidentStore from '@/stores/IncidentStore'
-import { useRouter } from 'next/router'
 import { useReport, useReportsOfIncident } from '@/stores/ReportStore'
 import ReportList from '@/components/Report/List/ReportList'
 import ReportView from '@/components/Report/View/ReportView'
@@ -24,12 +15,14 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { useMeasure, usePreviousDistinct } from 'react-use'
 import Id from '@/models/base/Id'
+import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 
 interface Props extends StyledProps {
   incident: Incident
+  onDelete?: () => void
 }
 
-const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
+const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
   const reports = useReportsOfIncident(incident.id)
 
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(null)
@@ -44,46 +37,11 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
   const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
   const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
-  const router = useRouter()
-  const handleClose = useCallback(async () => {
-    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
-    if (message === null) {
-      return
-    }
-    if (message.trim().length === 0) {
-      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
-      return
-    }
-    const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, { message })
-    if (error !== null) {
-      throw error
-    }
-    IncidentStore.save(parseIncident(data))
-  }, [incident])
-
-  const handleReopen = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" wieder öffnen wollen?`)) {
-      const [data, error] = await BackendService.update<number, Incident>(`incidents/${incident.id}/reopen`, incident.id)
-      if (error !== null) {
-        throw error
-      }
-      IncidentStore.save(parseIncident(data))
-    }
-  }, [incident])
-
-  const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie das Ereignis "${incident.title}" löschen wollen?`)) {
-      await BackendService.delete('incidents', incident.id)
-      await router.push('/ereignisse')
-      IncidentStore.remove(incident.id)
-    }
-  }, [incident, router])
 
   return (
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-
           <UiGrid.Col>
             <IncidentInfo incident={incident} />
             <UiTitle level={1}>
@@ -92,61 +50,11 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
           </UiGrid.Col>
 
           <UiGrid.Col size="auto">
-            <UiDropDown>
-
-              <UiDropDown.Trigger>
-                <UiIconButton>
-                  <UiIcon.More />
-                </UiIconButton>
-              </UiDropDown.Trigger>
-
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>
-                    Neue Meldung
-                  </UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Meldung erfassen
-                    </UiTitle>
-                    <ReportForm incident={incident} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Ereignis bearbeiten
-                    </UiTitle>
-                    <IncidentForm incident={incident} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-
-              {incident.isClosed ? (
-                <UiDropDown.Item onClick={handleReopen}>
-                  Öffnen
-                </UiDropDown.Item>
-              ) : (
-                <UiDropDown.Item onClick={handleClose}>
-                  Schliessen
-                </UiDropDown.Item>
-              )}
-              <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
-
-            </UiDropDown>
+            <IncidentActions incident={incident} onDelete={handleDelete} />
           </UiGrid.Col>
         </UiGrid>
 
         <UiDescription description={incident.description} />
-
       </UiLevel.Header>
       <StyledUiLevelContent $hasSelected={selected !== null}>
         <ListContainer ref={setReportListRef} $hasSelected={selected !== null}>

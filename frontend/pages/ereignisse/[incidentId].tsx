@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React from 'react'
+import React, { useCallback } from 'react'
 import ReportStore from '@/stores/ReportStore'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -13,6 +13,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import styled from 'styled-components'
 import UiLevel from '@/components/Ui/Level/UiLevel'
+import { router } from 'next/client'
 
 interface Props {
   data: {
@@ -30,9 +31,13 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
 
+  const handleDelete = useCallback(async () => {
+    await router.push('/ereignisse')
+  }, [])
+
   const incident = useIncident(data.incident)
   return (
-    <StyledIncidentView incident={incident} />
+    <StyledIncidentView incident={incident} onDelete={handleDelete} />
   )
 }
 export default IncidentPage

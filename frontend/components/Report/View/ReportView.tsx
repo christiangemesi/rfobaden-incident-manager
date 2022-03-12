@@ -1,4 +1,4 @@
-import Report, { parseReport } from '@/models/Report'
+import Report from '@/models/Report'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -7,19 +7,14 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import ReportForm from '@/components/Report/Form/ReportForm'
 import { useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
-import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import TaskForm from '@/components/Task/Form/TaskForm'
 import { sleep } from '@/utils/control-flow'
 import UiDescription from '@/components/Ui/Description/UiDescription'
 import EventHelper from '@/utils/helpers/EventHelper'
@@ -28,6 +23,7 @@ import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
 import useAsyncCached from '@/utils/hooks/useAsyncCached'
+import ReportActions from '@/components/Report/Actions/ReportActions'
 
 interface Props {
   incident: Incident
@@ -64,42 +60,6 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
     TaskStore.saveAll(tasks.map(parseTask))
   })
 
-  const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
-      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
-      ReportStore.remove(report.id)
-      if (handleCloseView) {
-        handleCloseView()
-      }
-    }
-  }, [report, handleCloseView])
-
-  const handleClose = useCallback(async () => {
-    if (report.isDone) {
-      alert('Es sind alle Aufträge geschlossen.')
-      return
-    }
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
-      const newReport = { ...report, isClosed: true }
-      const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
-      if (error !== null) {
-        throw error
-      }
-      ReportStore.save(parseReport(data))
-    }
-  }, [report])
-
-  const handleReopen = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" öffnen wollen?`)) {
-      const newReport = { ...report, isClosed: false }
-      const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
-      if (error !== null) {
-        throw error
-      }
-      ReportStore.save(parseReport(data))
-    }
-  }, [report])
-
   // Clear the selected task if the report changes.
   // Two reports never contain the same task.
   useUpdateEffect(clearSelected, [report.id])
@@ -115,60 +75,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
             </UiTitle>
           </div>
           <UiIconButtonGroup>
-            <UiDropDown>
-              <UiDropDown.Trigger>
-                <UiIconButton>
-                  <UiIcon.More />
-                </UiIconButton>
-              </UiDropDown.Trigger>
-
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>
-                    Neuer Auftrag
-                  </UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <div>
-                    <UiTitle level={1} isCentered>
-                      Auftrag erfassen
-                    </UiTitle>
-                    <TaskForm report={report} onClose={close} />
-                  </div>
-                )}</UiModal.Body>
-              </UiModal>
-
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>
-                    Bearbeiten
-                  </UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Meldung bearbeiten
-                    </UiTitle>
-                    <ReportForm incident={incident} report={report} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-              {!report.isDone && (
-                report.isClosed ? (
-                  <UiDropDown.Item onClick={handleReopen}>
-                    Öffnen
-                  </UiDropDown.Item>
-                ) : (
-                  <UiDropDown.Item onClick={handleClose}>
-                    Schliessen
-                  </UiDropDown.Item>
-                )
-              )}
-
-              <UiDropDown.Item onClick={handleDelete}>
-                Löschen
-              </UiDropDown.Item>
-            </UiDropDown>
+            <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
 
             <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />
