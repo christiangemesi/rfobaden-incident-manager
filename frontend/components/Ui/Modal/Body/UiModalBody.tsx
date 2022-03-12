@@ -243,6 +243,7 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   transition-property: transform;
 
   ${({ visibility }) => visibility !== UiModalVisibility.OPEN && css`
+    transition: ${animationMillis}ms cubic-bezier(1, 0.23, 1,0.32);
     transform: scale(40%);
     
     // Hide the close button when closing, since it's clipping
