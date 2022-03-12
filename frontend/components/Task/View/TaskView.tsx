@@ -167,7 +167,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
         {isLoading  ? (
           <UiIcon.Loader isSpinner />
         ) : (
-          <SubtaskList subtasks={subtasks} />
+          <SubtaskList task={task} subtasks={subtasks} />
         )}
       </Content>
     </UiLevel>

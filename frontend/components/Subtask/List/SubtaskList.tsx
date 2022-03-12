@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
@@ -7,15 +7,17 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import BackendService from '@/services/BackendService'
-import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import Task from '@/models/Task'
 
 
 interface Props {
+  task: Task
   subtasks: Subtask[]
   onClick?: (subtask: Subtask) => void
 }
 
 const SubtaskList: React.VFC<Props> = ({
+  task,
   subtasks,
   onClick: handleClick,
 }) => {
@@ -72,6 +74,7 @@ const SubtaskList: React.VFC<Props> = ({
                 {openSubtasks.map((subtask, i) => (
                   <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
                     <SubtaskListItem
+                      task={task}
                       subtask={subtask}
                       onClick={handleClick}
                       provided={provided}
@@ -99,6 +102,7 @@ const SubtaskList: React.VFC<Props> = ({
                 {closedSubtasks.map((subtask, i) => (
                   <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
                     <SubtaskListItem
+                      task={task}
                       subtask={subtask}
                       onClick={handleClick}
                       provided={provided}

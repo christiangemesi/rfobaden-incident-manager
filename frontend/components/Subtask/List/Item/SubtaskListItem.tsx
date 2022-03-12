@@ -9,8 +9,11 @@ import styled, { css } from 'styled-components'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import SubtaskStore from '@/stores/SubtaskStore'
 import BackendService from '@/services/BackendService'
+import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
+import Task from '@/models/Task'
 
 interface Props {
+  task: Task
   subtask: Subtask,
   provided: DraggableProvided
   snapshot: DraggableStateSnapshot
@@ -18,6 +21,7 @@ interface Props {
 }
 
 const SubtaskListItem: React.VFC<Props> = ({
+  task,
   subtask,
   provided,
   snapshot,
@@ -59,7 +63,9 @@ const SubtaskListItem: React.VFC<Props> = ({
         title={subtask.title}
         user={assigneeName ?? ''}
         isDragging={isDragging && !snapshot.isDropAnimating}
-        onClick={handleClick && (() => handleClick(subtask))}>
+        onClick={handleClick && (() => handleClick(subtask))}
+      >
+        <SubtaskActions task={task} subtask={subtask} />
         <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
       </Item>
     </div>
