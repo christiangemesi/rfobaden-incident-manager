@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -12,7 +12,7 @@ import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGro
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import ReportForm from '@/components/Report/Form/ReportForm'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
@@ -38,6 +38,13 @@ interface Props {
 
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
   const tasks = useTasksOfReport(report.id)
+  
+  const [selected, setSelected] = useState<Task | null>(null)
+  const clearSelected = useCallback(() => {
+    setSelected(null)
+  }, [])
+
+  const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
 
   // Load tasks from the backend.
   const { loading: isLoading } = useAsyncCached(ReportView, report.id, async () => {
@@ -89,11 +96,6 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
       ReportStore.save(parseReport(data))
     }
   }, [report])
-
-  const [selected, setSelected] = useState<Task | null>(null)
-  const clearSelected = useCallback(() => {
-    setSelected(null)
-  }, [])
 
   // Clear the selected task if the report changes.
   // Two reports never contain the same task.
@@ -184,7 +186,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
         <UiDescription description={report.description} notes={report.notes} />
       </UiLevel.Header>
 
-      <UiLevel.Content onClick={EventHelper.stopPropagation}>
+      <AnimatedUiLevelContent onClick={EventHelper.stopPropagation} style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -197,14 +199,19 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
         </TaskContainer>
         <UiInlineDrawer isOpen={selected !== null} onClose={clearSelected}>
           {selected && (
-            <TaskView report={report} task={selected} onClose={clearSelected} />
+            <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
         </UiInlineDrawer>
-      </UiLevel.Content>
+      </AnimatedUiLevelContent>
     </UiLevel>
   )
 }
 export default ReportView
+
+const AnimatedUiLevelContent = styled(UiLevel.Content)`
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-property: min-height;
+`
 
 const TaskContainer = styled.div`
   position: relative;

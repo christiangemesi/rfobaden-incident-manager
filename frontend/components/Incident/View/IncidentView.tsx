@@ -21,7 +21,6 @@ import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
-import useMaximumSize, { useMaximumSizeScrollControl } from '@/utils/hooks/useMaximumSize'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -30,13 +29,10 @@ interface Props extends StyledProps {
 const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
   const reports = useReportsOfIncident(incident.id)
   const [selected, setSelected] = useState<Report | null>(null)
+
   const clearSelected = useCallback(() => {
     setSelected(null)
   }, [])
-
-  // These two hooks track the overlays' maximum size, and resize the window for it to have enough space.
-  const [setOverlayMaxRef, overlayMax] = useMaximumSize()
-  const contentRef = useMaximumSizeScrollControl<HTMLDivElement>(overlayMax)
 
   const router = useRouter()
   const handleClose = useCallback(async () => {
@@ -142,74 +138,68 @@ const IncidentView: React.VFC<Props> = ({ incident, className, style }) => {
         <UiDescription description={incident.description} />
 
       </UiLevel.Header>
-      <StyledUiLevelContent ref={contentRef} overlayHeight={overlayMax.height}>
-        <RelativeContent>
-          <ListContainer hasSelected={selected !== null}>
-            <ReportList reports={reports} selected={selected} onSelect={setSelected} />
-          </ListContainer>
+      <StyledUiLevelContent $hasSelected={selected !== null}>
+        <ListContainer $hasSelected={selected !== null}>
+          <ReportList reports={reports} selected={selected} onSelect={setSelected} />
+        </ListContainer>
 
-          <ReportOverlay
-            ref={setOverlayMaxRef}
-            hasSelected={selected !== null}
-          >
-            {selected !== null && (
-              <ReportView incident={incident} report={selected} onClose={clearSelected} />
-            )}
-          </ReportOverlay>
-        </RelativeContent>
+        <ReportOverlay hasSelected={selected !== null}>
+          {selected !== null && (
+            <ReportView incident={incident} report={selected} onClose={clearSelected} />
+          )}
+        </ReportOverlay>
       </StyledUiLevelContent>
     </UiLevel>
   )
 }
 export default IncidentView
 
-const StyledUiLevelContent = styled(UiLevel.Content)<{ overlayHeight: number }>`
+const StyledUiLevelContent = styled(UiLevel.Content)<{ $hasSelected: boolean }>`
   overflow: hidden;
-  min-height: calc(${({ overlayHeight }) => overlayHeight}px + 2rem)
+  display: flex;
+  padding-right: 0;
 `
 
-const RelativeContent = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`
-
-const ListContainer = styled.div<{ hasSelected: boolean }>`
+const ListContainer = styled.div<{ $hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
-  width: 100%;
+  min-width: calc(100% - 0.8rem);
+  ${Themed.media.md.min} {
+    min-width: calc(100% - 4rem);
+  }
   
   z-index: 0;
   ${Themed.media.xl.min} {
     z-index: 3;
   }
   
-  will-change: width;
+  will-change: min-width, max-width, width;
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  transition-property: width;
+  transition-property: min-width, max-width, width;
   
-  ${({ hasSelected }) => hasSelected && css`
+  ${({ $hasSelected }) => $hasSelected && css`
     ${Themed.media.xl.min} {
-      width: 35%;
+      min-width: 35%;
+      max-width: 35%;
       
       & > ${ReportList} {
         padding-right: 2rem;
       }
     }
     ${Themed.media.xxl.min} {
-      width: 25%;
+      min-width: 25%;
+      max-width: 25%;
     }
   `}
 `
 
 const ReportOverlay = styled.div<{ hasSelected: boolean }>`
-  position: absolute;
+  //position: absolute;
   display: flex;
-  top: 0;
 
   z-index: 2;
 
-  width: 100%;
+  //width: 100%;
   min-height: 100%;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
@@ -218,9 +208,9 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
 
-  transform: translateX(calc(100% + 4px));
+  transform: translateX(calc(100% + 4px)); // 4px to hide box shadow
   ${Themed.media.md.max} {
-    transform: translateY(100vh);
+    transform: translateY(calc(100% + 4px + 1rem)); // 4px to hide box shadow, 1rem for parent padding
   }
   
   transform-origin: right center;
@@ -233,20 +223,16 @@ const ReportOverlay = styled.div<{ hasSelected: boolean }>`
       transform: translateY(0);
     }
   `}
-  
+
   ${Themed.media.lg.min} {
     ${UiLevel.Header}, ${UiLevel.Content} {
       padding-left: 2rem;
     }
   }
-  
   ${Themed.media.xl.min} {
-    left: 35%;
     width: calc(65% + 4rem);
   }
-
   ${Themed.media.xxl.min} {
-    left: 25%;
     width: calc(75% + 4rem);
   }
 `

@@ -12,6 +12,7 @@ import { parseUser } from '@/models/User'
 import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
+import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -39,8 +40,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
 
-  const [state, _] = useAppState()
-
   return (
     <>
       <Head>
@@ -50,13 +49,13 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-        <UiHeader />
-        <Main hasFooter={state.hasFooter}>
-          {component}
-        </Main>
-        {state.hasFooter && (
+        <UiScroll>
+          <UiHeader />
+          <Main>
+            {component}
+          </Main>
           <UiFooter />
-        )}
+        </UiScroll>
       </ThemeProvider>
     </>
   )
@@ -104,13 +103,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   }
 `
 
-const Main = styled.div<{ hasFooter: boolean }>`
-  ${({ hasFooter }) => hasFooter && css`
-    padding-bottom: 3rem;
-    min-height: calc(100vh - 4rem - 1rem - 4rem);
-  `}
+const Main = styled.main`
+  padding-bottom: 3rem;
+  min-height: calc(100vh - 4rem - 1rem - 4rem);
 `
-
-export const useAppState = createGlobalState({
-  hasFooter: true,
-})

@@ -1,5 +1,5 @@
 import Task, { parseTask } from '@/models/Task'
-import React, { useCallback } from 'react'
+import React, { Ref, RefObject, useCallback } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import SubtaskStore, { useSubtasksOfTask } from '@/stores/SubtaskStore'
@@ -30,9 +30,10 @@ interface Props {
   report: Report
   task: Task
   onClose?: () => void
+  innerRef?: Ref<HTMLDivElement>
 }
 
-const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) => {
+const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleCloseView }) => {
   const subtasks = useSubtasksOfTask(task.id)
 
   // Load subtasks from the backend.
@@ -90,7 +91,7 @@ const TaskView: React.VFC<Props> = ({ report, task, onClose: handleCloseView }) 
   }, [task])
 
   return (
-    <UiLevel>
+    <UiLevel ref={innerRef}>
       <UiLevel.Header onClick={EventHelper.stopPropagation}>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
