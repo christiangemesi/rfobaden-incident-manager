@@ -30,7 +30,7 @@ public class TransportControllerTest
 
     @Override
     protected String getEndpointFor(TransportPath path) {
-        return "/api/v1/incidents/" + path.getIncidentId() + "/transport/";
+        return "/api/v1/incidents/" + path.getIncidentId() + "/transports/";
     }
 
     @Override
