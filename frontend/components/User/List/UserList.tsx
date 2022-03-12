@@ -14,10 +14,9 @@ import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props {
   users: User[]
-  onClick?: (user: User) => void
 }
 
-const UserList: React.VFC<Props> = ({ users , onClick: handleClick }) => {
+const UserList: React.VFC<Props> = ({ users }) => {
   const [sortedUsers, sort] = useSort(users, () => ({
     firstName: String,
     lastName: String,
