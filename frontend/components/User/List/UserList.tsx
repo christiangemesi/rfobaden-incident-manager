@@ -58,12 +58,10 @@ const UserList: React.VFC<Props> = ({ users }) => {
         )}</UiModal.Body>
       </UiModal>
       <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={5}>
           <UiSortButton field={sort.firstName}>
             <UiTitle level={6}>Vorname</UiTitle>
           </UiSortButton>
-        </UiGrid.Col>
-        <UiGrid.Col size={4}>
           <UiSortButton field={sort.lastName}>
             <UiTitle level={6}>Nachname</UiTitle>
           </UiSortButton>
@@ -73,7 +71,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
             <UiTitle level={6}>Rolle</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
-        <UiGrid.Col>
+        <UiGrid.Col size={4}>
           <UiSortButton field={sort.organization}>
             <UiTitle level={6}>Organisation</UiTitle>
           </UiSortButton>

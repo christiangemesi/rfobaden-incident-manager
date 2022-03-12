@@ -1,12 +1,9 @@
 import React from 'react'
-import UserStore from '@/stores/UserStore'
 import { useOrganization } from '@/stores/OrganizationStore'
 import User from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import Id from '@/models/base/Id'
-import BackendService from '@/services/BackendService'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props extends StyledProps {
@@ -18,24 +15,24 @@ const UserListItem: React.VFC<Props> = ({
 }) => {
   const organization = useOrganization(user.organizationId)
 
-  const handleDelete = async (userId: Id<User>) => {
-    if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
-      await BackendService.delete('users', userId)
-      UserStore.remove(userId)
-    }
-  }
+  // const handleDelete = async (userId: Id<User>) => {
+  //   if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
+  //     await BackendService.delete('users', userId)
+  //     UserStore.remove(userId)
+  //   }
+  // }
 
   // TODO: is not working yet
-  const resendPassword = async (userId: Id<User>) => {
-    if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-      alert('not possible yet')
-    }
-  }
+  // const resendPassword = async (userId: Id<User>) => {
+  //   if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
+  //     alert('not possible yet')
+  //   }
+  // }
 
   return (
     <UiListItem>
       <UiGrid align="center" gapH={1.5}>
-        <UiGrid.Col size={6}>
+        <UiGrid.Col size={5}>
           <UiTitle level={5}>
             {user.firstName} {user.lastName}
           </UiTitle>
@@ -46,7 +43,7 @@ const UserListItem: React.VFC<Props> = ({
             {user.role}
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={3}>
+        <UiGrid.Col size={4}>
           <UiTitle level={6}>
             {organization?.name}
           </UiTitle>
