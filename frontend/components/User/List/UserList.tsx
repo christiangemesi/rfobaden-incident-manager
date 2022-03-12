@@ -6,7 +6,7 @@ import UserStore from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 
 interface Props {
-  users: User[]
+  users: readonly User[]
 }
 
 const UserList: React.VFC<Props> = ({ users }) => {

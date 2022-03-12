@@ -8,9 +8,8 @@ interface Props extends ElementProps<HTMLDivElement> {
   children: ReactNode
 }
 
-const UiInlineDrawer: React.VFC<Props> = ({ isOpen, onClose: handleClose, ...props }) => {
-  // TODO close
-
+const UiInlineDrawer: React.VFC<Props> = ({ ...props }) => {
+  // TODO Close on outside click.
   return (
     <section {...props} />
   )

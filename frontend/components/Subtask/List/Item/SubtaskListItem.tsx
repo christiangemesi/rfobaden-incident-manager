@@ -1,5 +1,5 @@
 import Subtask, { parseSubtask } from '@/models/Subtask'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'

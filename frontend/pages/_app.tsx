@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { createGlobalState, useAsync } from 'react-use'
+import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { getSessionToken } from '@/stores/SessionStore'
 
