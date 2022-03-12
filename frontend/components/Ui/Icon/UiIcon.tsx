@@ -101,5 +101,5 @@ export default Object.assign(StyledUiIcon, {
   More: makeNamedIcon(mdiDotsHorizontal),
   SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
   SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
-  PwReset: makeNamedIcon(mdiLockReset),
+  ResetPassword: makeNamedIcon(mdiLockReset),
 })
