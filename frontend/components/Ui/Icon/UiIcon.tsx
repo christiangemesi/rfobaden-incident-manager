@@ -12,9 +12,9 @@ import {
   mdiCheckboxMarked,
   mdiClipboardTextOutline,
   mdiClose,
-  mdiDelete,
+  mdiDelete, mdiDotsHorizontal,
   mdiImageFilterHdr,
-  mdiKey,
+  mdiKey, mdiLockReset,
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiMap,
@@ -23,7 +23,7 @@ import {
   mdiPaperclip,
   mdiPencil,
   mdiPlus,
-  mdiPrinter,
+  mdiPrinter, mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending,
 } from '@mdi/js'
 
 
@@ -98,4 +98,8 @@ export default Object.assign(StyledUiIcon, {
   Changelog: makeNamedIcon(mdiClipboardTextOutline),
   Login: makeNamedIcon(mdiLoginVariant),
   Logout: makeNamedIcon(mdiLogoutVariant),
+  More: makeNamedIcon(mdiDotsHorizontal),
+  SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
+  SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
+  ResetPassword: makeNamedIcon(mdiLockReset),
 })
