@@ -28,7 +28,7 @@ const UiListContainerExample: React.VFC = () => {
       <UiGrid gap={0.5}>
         <UiGrid.Col>
           <UiList>
-            <UiListItem color="secondary">
+            <UiListItem>
               <UiIcon.PriorityHigh />
             </UiListItem>
             <UiListItem onClick={() => alert('test')}>

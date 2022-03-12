@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import UiDate from '@/components/Ui/Date/UiDate'
+import UiDate, { UiDateType } from '@/components/Ui/Date/UiDate'
 import { shallow } from 'enzyme'
 
 // Be aware! https://stackoverflow.com/questions/2552483/why-does-the-month-argument-range-from-0-to-11-in-javascripts-date-constructor
@@ -23,7 +23,7 @@ describe('UiDate', () => {
   })
   describe('with incorrect type', () => {
     it('should throw an error', () => {
-      expect(()=>shallow(<UiDate value={singleDigitDate} type="Banana" />)).toThrow('Invalid type passed to UiDate')
+      expect(()=>shallow(<UiDate value={singleDigitDate} type={'Banana' as UiDateType} />)).toThrow('Invalid type passed to UiDate')
     })
   })
   describe('with type date', () => {
