@@ -11,6 +11,7 @@ import SubtaskStore from '@/stores/SubtaskStore'
 import BackendService from '@/services/BackendService'
 import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
 import Task from '@/models/Task'
+import UiDescription from '@/components/Ui/Description/UiDescription'
 
 interface Props {
   task: Task
@@ -64,6 +65,9 @@ const SubtaskListItem: React.VFC<Props> = ({
         user={assigneeName ?? ''}
         isDragging={isDragging && !snapshot.isDropAnimating}
         onClick={handleClick && (() => handleClick(subtask))}
+        body={subtask.description && (
+          <UiDescription description={subtask.description} />
+        )}
       >
         <SubtaskActions task={task} subtask={subtask} />
         <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
