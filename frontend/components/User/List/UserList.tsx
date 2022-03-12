@@ -57,7 +57,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>
-      <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
+      <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
         <UiGrid.Col size={2}>
           <UiSortButton field={sort.firstName}>
             <UiTitle level={6}>Vorname</UiTitle>
