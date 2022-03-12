@@ -1,16 +1,16 @@
 import React from 'react'
 import UserStore from '@/stores/UserStore'
 import { useOrganization } from '@/stores/OrganizationStore'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import User from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import Id from '@/models/base/Id'
 import BackendService from '@/services/BackendService'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UserForm from '@/components/User/Form/UserForm'
 
 interface Props extends StyledProps {
@@ -20,8 +20,8 @@ interface Props extends StyledProps {
 const UserListItem: React.VFC<Props> = ({
   user,
 }) => {
-  const employedBy = useOrganization(user.organizationId)
-  
+  const organization = useOrganization(user.organizationId)
+
   const handleDelete = async (userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
       await BackendService.delete('users', userId)
@@ -52,10 +52,12 @@ const UserListItem: React.VFC<Props> = ({
         </UiGrid.Col>
         <UiGrid.Col size={3}>
           <UiTitle level={6}>
-            {employedBy?.name}
+            {organization?.name}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
+
+          {/*TODO: already prepared for dropdown*/}
           {/*<UiDropDown>*/}
           {/*  <UiDropDown.Trigger>*/}
           {/*    <UiIconButton>*/}
