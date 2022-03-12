@@ -81,6 +81,10 @@ const StyledListItem = styled(UiListItem)<{ $isClosed: boolean }>`
 const LeftSide = styled.div`
   display: flex;
   align-items: center;
+
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
   
   min-width: 0; // Causes the children of this element to not be able to overflow.
 `
