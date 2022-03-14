@@ -8,6 +8,7 @@ import { defaultTheme } from '@/theme'
 import { ThemeProvider } from 'styled-components'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 
 describe('UiCheckbox', () => {
@@ -30,11 +31,23 @@ describe('UiCheckbox', () => {
         <UiCheckbox value={false} label={text} onChange={mockCallBack} />
       </ThemeProvider>,
     )
-    wrapper.find('UiCheckbox__Container').simulate('click')
+    wrapper.find('label').simulate('click')
     expect(mockCallBack.mock.calls).toHaveLength(1)
   })
 
-  it('should correctly display the icon', () => {
+  it('should correctly display the inactive icon', () => {
+    const mockCallBack = jest.fn()
+    const text = 'abcABC123#'
+    const wrapper = mount(
+      <ThemeProvider theme={defaultTheme}>
+        <UiCheckbox value={true} label={text} isDisabled={false} onChange={mockCallBack} />
+      </ThemeProvider>,
+    )
+    const icon = wrapper.find(UiIcon.CheckboxInactive)
+    expect(icon.exists()).toBe(true)
+  })
+
+  it('should correctly display the active icon', () => {
     const mockCallBack = jest.fn()
     const text = 'abcABC123#'
     const wrapper = mount(
@@ -42,13 +55,8 @@ describe('UiCheckbox', () => {
         <UiCheckbox value={true} label={text} isDisabled={true} onChange={mockCallBack} />
       </ThemeProvider>,
     )
-
-    const icon = wrapper.find('svg')
-    console.log(icon.children().html())
-    // idea: compare the svg paths
-    // how I get the svg path from UiIcon ?!
-    console.log(UiIcon.CheckboxInactive)
-    console.log(UiIcon.CheckboxActive)
+    const icon = wrapper.find(UiIcon.CheckboxActive)
+    expect(icon.exists()).toBe(true)
   })
 
   it('should display multiple errors', () => {
@@ -61,7 +69,7 @@ describe('UiCheckbox', () => {
         <UiCheckbox value={false} label={text} errors={[error1, error2]} onChange={mockCallBack} />
       </ThemeProvider>,
     )
-    const errors = wrapper.find('UiInputErrors')
+    const errors = wrapper.find(UiInputErrors)
     expect(errors.html()).toContain(error1)
     expect(errors.html()).toContain(error2)
   })

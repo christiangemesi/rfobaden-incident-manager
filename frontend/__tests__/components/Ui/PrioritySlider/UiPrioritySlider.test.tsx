@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components'
 import { defaultTheme } from '@/theme'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
+import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 describe('UiPrioritySlider', () => {
   it('should correctly display priority low', () => {
@@ -48,7 +49,7 @@ describe('UiPrioritySlider', () => {
         <UiPrioritySlider value={Priority.MEDIUM} errors={[error1, error2]} onChange={mockCallBack} />
       </ThemeProvider>,
     )
-    const errors = wrapper.find('UiInputErrors')
+    const errors = wrapper.find(UiInputErrors)
     expect(errors.html()).toContain(error1)
     expect(errors.html()).toContain(error2)
   })
