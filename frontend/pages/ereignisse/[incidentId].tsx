@@ -13,7 +13,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import IncidentView from '@/components/Incident/View/IncidentView'
 import styled from 'styled-components'
 import UiLevel from '@/components/Ui/Level/UiLevel'
-import { router } from 'next/client'
+import { useRouter } from 'next/router'
 
 interface Props {
   data: {
@@ -31,9 +31,10 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
 
+  const router = useRouter()
   const handleDelete = useCallback(async () => {
     await router.push('/ereignisse')
-  }, [])
+  }, [router])
 
   const incident = useIncident(data.incident)
   return (
