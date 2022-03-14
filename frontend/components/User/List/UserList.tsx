@@ -13,7 +13,7 @@ import useSort from '@/utils/hooks/useSort'
 import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props {
-  users: User[]
+  users: readonly User[]
 }
 
 const UserList: React.VFC<Props> = ({ users }) => {

@@ -20,7 +20,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '3'
+          cpus: '1'
           memory: '1GB'
 
   backend:
@@ -45,6 +45,11 @@ services:
       - database
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '3GB'
 
   database:
     image: mysql:8.0

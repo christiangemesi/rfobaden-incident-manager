@@ -27,6 +27,7 @@ export type Breakpoint =
   | 'md'
   | 'lg'
   | 'xl'
+  | 'xxl'
 
 export type ColorName = keyof Theme['colors']
 
@@ -75,8 +76,8 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    heading: 'Manrope, sans-serif',
-    body: 'Manrope, sans-serif',
+    heading: 'Raleway, sans-serif',
+    body: 'Raleway, sans-serif',
   },
   breakpoints: {
     xs: {
@@ -89,14 +90,18 @@ export const defaultTheme: Theme = {
     },
     md: {
       min: 768,
-      max: 1023.99,
+      max: 1_023.99,
     },
     lg: {
-      min: 1024,
-      max: 1535.99,
+      min: 1_024,
+      max: 1_535.99,
     },
     xl: {
-      min: 1536,
+      min: 1_536,
+      max: 2_047.99,
+    },
+    xxl: {
+      min: 2_048,
       max: Number.MAX_SAFE_INTEGER,
     },
   },

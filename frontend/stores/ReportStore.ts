@@ -14,7 +14,7 @@ const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
     report.isKeyReport,
     report.isLocationRelevantReport,
     getPriorityIndex(report.priority),
-    [report.title, 'asc'],
+    [report.title.toLowerCase(), 'asc'],
   ]],
 })
 export default ReportStore

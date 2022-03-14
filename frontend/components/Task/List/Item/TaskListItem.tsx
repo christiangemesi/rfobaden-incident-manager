@@ -3,7 +3,6 @@ import React from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import styled from 'styled-components'
-import UiLink from '@/components/Ui/Link/UiLink'
 
 interface Props {
   task: Task
@@ -15,19 +14,17 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
   return (
-    <UiLink key={task.id} href={`/ereignisse/${task.incidentId}/meldungen/${task.reportId}/auftraege/${task.id}`}>
-      <UiListItemWithDetails
-        isClosed={task.isClosed || task.isDone}
-        title={task.title}
-        priority={task.priority}
-        user={assigneeName}
-        onClick={handleClick && (() => handleClick(task))}
-      >
-        <LeftSpacer>
-          {task.closedSubtaskIds.length}/{task.subtaskIds.length}
-        </LeftSpacer>
-      </UiListItemWithDetails>
-    </UiLink>
+    <UiListItemWithDetails
+      title={task.title}
+      priority={task.priority}
+      user={assigneeName}
+      isClosed={task.isClosed}
+      onClick={handleClick && (() => handleClick(task))}
+    >
+      <LeftSpacer>
+        {task.closedSubtaskIds.length}/{task.subtaskIds.length}
+      </LeftSpacer>
+    </UiListItemWithDetails>
   )
 }
 export default TaskListItem
