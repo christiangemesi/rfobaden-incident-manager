@@ -3,7 +3,7 @@ import { useStatic } from '@/utils/hooks/useStatic'
 import { useGetSet } from 'react-use'
 import { run } from '@/utils/control-flow'
 
-const useSort = <T, K extends string>(elements: T[], config: () => SortConfig<T, K>): [T[], SortState<K>] => {
+const useSort = <T, K extends string>(elements: readonly T[], config: () => SortConfig<T, K>): [readonly T[], SortState<K>] => {
   const comparesByKeys: Record<K, Compare<T>> = useStatic(() => {
     const keys = {} as Record<K, Compare<T>>
     const configByKeys = config()
@@ -25,7 +25,7 @@ const useSort = <T, K extends string>(elements: T[], config: () => SortConfig<T,
 
   const [getElements, setElements] = useGetSet(elements)
 
-  const sort = useCallback((unsorted: T[], state: SortState<K>): T[] => {
+  const sort = useCallback((unsorted: readonly T[], state: SortState<K>): readonly T[] => {
     const sorted = [...unsorted]
     let sortCounter = 0
     console.log()
@@ -45,7 +45,7 @@ const useSort = <T, K extends string>(elements: T[], config: () => SortConfig<T,
     return sortCounter === 0 ? getElements() : sorted
   }, [comparesByKeys, getElements])
   
-  const [get, set] = useGetSet<[T[], SortState<K>]>(() => {
+  const [get, set] = useGetSet<[readonly T[], SortState<K>]>(() => {
     const state = Object.keys(comparesByKeys).reduce((state, key) => {
       state[key] = {
         direction: null,
