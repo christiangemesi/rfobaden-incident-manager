@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 
 interface Props {
   title?: string
@@ -49,7 +49,7 @@ const ActionButton = styled.button<{ color: string }>`
   }
   
   :disabled {
-    color: ${contrastDark};
+    color: ${({ theme, color }) => theme.colors[color].contrast};
     cursor: not-allowed;
     box-shadow: none;
     background: rgb(200, 200, 200);

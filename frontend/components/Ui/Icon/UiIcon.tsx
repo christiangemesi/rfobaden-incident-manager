@@ -9,12 +9,17 @@ import {
   mdiCalendar,
   mdiCheck,
   mdiCheckboxBlankOutline,
-  mdiCheckboxMarked, mdiCircleSmall,
-  mdiClipboardTextOutline, mdiClockOutline,
+  mdiCheckboxMarked,
+  mdiCircleSmall,
+  mdiClipboardTextOutline,
+  mdiClockOutline,
   mdiClose,
-  mdiDelete, mdiDotsHorizontal,
+  mdiDelete,
+  mdiDotsHorizontal,
   mdiImageFilterHdr,
-  mdiKey, mdiLoading,
+  mdiKey,
+  mdiLoading,
+  mdiLockReset,
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiMap,
@@ -24,6 +29,8 @@ import {
   mdiPencil,
   mdiPlus,
   mdiPrinter,
+  mdiSortAlphabeticalAscending,
+  mdiSortAlphabeticalDescending,
 } from '@mdi/js'
 
 
@@ -120,4 +127,7 @@ export default Object.assign(StyledUiIcon, {
   More: makeNamedIcon(mdiDotsHorizontal),
   Clock: makeNamedIcon(mdiClockOutline),
   Dot: makeNamedIcon(mdiCircleSmall),
+  SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
+  SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
+  ResetPassword: makeNamedIcon(mdiLockReset),
 })

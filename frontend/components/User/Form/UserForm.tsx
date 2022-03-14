@@ -1,9 +1,9 @@
 import React from 'react'
 import User, { parseUser, UserRole } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
-import { clearForm, useForm, useSubmit } from '@/components/Ui/Form'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { ModelData } from '@/models/base/Model'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -13,8 +13,13 @@ import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Id from '@/models/base/Id'
 import Organization from '@/models/Organization'
 
-const UserForm: React.VFC = () => {
-  const form = useForm<ModelData<User>>(() => ({
+interface Props {
+  user?: User | null
+  onClose?: () => void
+}
+
+const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
+  const form = useForm<ModelData<User>>(user,() => ({
     email: '',
     firstName: '',
     lastName: '',
@@ -38,13 +43,16 @@ const UserForm: React.VFC = () => {
   }))
 
   useSubmit(form, async (formData: ModelData<User>) => {
-    const [data, error] = await BackendService.create<User>('users', formData)
-    if (error !== null) {
-      throw error
-    }
+    const [data]: BackendResponse<User> = user === null
+      ? await BackendService.create('users', formData)
+      : await BackendService.update('users', user.id, formData)
     UserStore.save(parseUser(data))
     clearForm(form)
+    if (handleClose) {
+      handleClose()
+    }
   })
+  useCancel(form, handleClose)
 
   const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
   return (
