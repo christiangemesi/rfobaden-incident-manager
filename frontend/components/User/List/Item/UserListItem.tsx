@@ -5,6 +5,14 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UserForm from '@/components/User/Form/UserForm'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import BackendService from '@/services/BackendService'
+import UserStore from '@/stores/UserStore'
+import Id from '@/models/base/Id'
 
 interface Props extends StyledProps {
   user: User
@@ -15,19 +23,18 @@ const UserListItem: React.VFC<Props> = ({
 }) => {
   const organization = useOrganization(user.organizationId)
 
-  // const handleDelete = async (userId: Id<User>) => {
-  //   if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
-  //     await BackendService.delete('users', userId)
-  //     UserStore.remove(userId)
-  //   }
-  // }
+  const handleDelete = async (userId: Id<User>) => {
+    if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
+      await BackendService.delete('users', userId)
+      UserStore.remove(userId)
+    }
+  }
 
-  // TODO: is not working yet
-  // const resendPassword = async (userId: Id<User>) => {
-  //   if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-  //     alert('not possible yet')
-  //   }
-  // }
+  const resendPassword = async (_userId: Id<User>) => {
+    if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
+      alert('not yet implemented')
+    }
+  }
 
   return (
     <UiListItem>
@@ -45,35 +52,34 @@ const UserListItem: React.VFC<Props> = ({
         </UiGrid.Col>
         <UiGrid.Col size={4}>
           <UiTitle level={6}>
-            {organization?.name}
+            {organization?.name ?? '-'}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
 
-          {/*TODO: already prepared for dropdown*/}
-          {/*<UiDropDown>*/}
-          {/*  <UiDropDown.Trigger>*/}
-          {/*    <UiIconButton>*/}
-          {/*      <UiIcon.More />*/}
-          {/*    </UiIconButton>*/}
-          {/*  </UiDropDown.Trigger>*/}
+          <UiDropDown>
+            <UiDropDown.Trigger>
+              <UiIconButton>
+                <UiIcon.More />
+              </UiIconButton>
+            </UiDropDown.Trigger>
 
-          {/*  <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>*/}
-          {/*  <UiModal isFull>*/}
-          {/*    <UiModal.Activator>{({ open }) => (*/}
-          {/*      <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>*/}
-          {/*    )}</UiModal.Activator>*/}
-          {/*    <UiModal.Body>{({ close }) => (*/}
-          {/*      <React.Fragment>*/}
-          {/*        <UiTitle level={1} isCentered>*/}
-          {/*          Benutzer bearbeiten*/}
-          {/*        </UiTitle>*/}
-          {/*        <UserForm user={user} onClose={close} />*/}
-          {/*      </React.Fragment>*/}
-          {/*    )}</UiModal.Body>*/}
-          {/*  </UiModal>*/}
-          {/*  <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>*/}
-          {/*</UiDropDown>*/}
+            <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
+            <UiModal isFull>
+              <UiModal.Activator>{({ open }) => (
+                <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
+              )}</UiModal.Activator>
+              <UiModal.Body>{({ close }) => (
+                <React.Fragment>
+                  <UiTitle level={1} isCentered>
+                    Benutzer bearbeiten
+                  </UiTitle>
+                  <UserForm user={user} onClose={close} />
+                </React.Fragment>
+              )}</UiModal.Body>
+            </UiModal>
+            <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
+          </UiDropDown>
         </UiGrid.Col>
       </UiGrid>
     </UiListItem>
