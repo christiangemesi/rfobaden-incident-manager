@@ -13,12 +13,12 @@ describe('UiDate', () => {
   describe('with default type (datetime)', () => {
     it('should correctly display a date and time with leading zeros', () => {
       const html = shallow(<UiDate value={singleDigitDate} />)
-      expect(html.html()).toBe('08.08.2012 01:02')
+      expect(html.find('span').text()).toBe('08.08.2012 01:02')
     })
 
     it('should correctly display a date and time', () => {
       const html = shallow(<UiDate value={normalDate} />)
-      expect(html.html()).toBe('20.11.2013 20:30')
+      expect(html.find('span').text()).toBe('20.11.2013 20:30')
     })
   })
   describe('with incorrect type', () => {
@@ -29,34 +29,34 @@ describe('UiDate', () => {
   describe('with type date', () => {
     it('should correctly display a date with leading zeros', () => {
       const html = shallow(<UiDate value={singleDigitDate} type="date" />)
-      expect(html.html()).toBe('08.08.2012')
+      expect(html.find('span').text()).toBe('08.08.2012')
     })
 
     it('should correctly display a date', () => {
       const html = shallow(<UiDate value={normalDate} type="date" />)
-      expect(html.html()).toBe('20.11.2013')
+      expect(html.find('span').text()).toBe('20.11.2013')
     })
   })
   describe('with type time', () => {
     it('should correctly display a time with leading zeros', () => {
       const html = shallow(<UiDate value={singleDigitDate} type="time" />)
-      expect(html.html()).toBe('01:02')
+      expect(html.find('span').text()).toBe('01:02')
     })
 
     it('should correctly display a time', () => {
       const html = shallow(<UiDate value={normalDate} type="time" />)
-      expect(html.html()).toBe('20:30')
+      expect(html.find('span').text()).toBe('20:30')
     })
   })
   describe('with type datetime', () => {
     it('should correctly display a date and time with leading zeros', () => {
       const html = shallow(<UiDate value={singleDigitDate} type="datetime" />)
-      expect(html.html()).toBe('08.08.2012 01:02')
+      expect(html.find('span').text()).toBe('08.08.2012 01:02')
     })
 
     it('should correctly display a date and time', () => {
       const html = shallow(<UiDate value={normalDate} type="datetime" />)
-      expect(html.html()).toBe('20.11.2013 20:30')
+      expect(html.find('span').text()).toBe('20.11.2013 20:30')
     })
   })
 })
