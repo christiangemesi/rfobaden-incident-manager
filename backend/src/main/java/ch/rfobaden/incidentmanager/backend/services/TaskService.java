@@ -37,7 +37,7 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
         Optional<Task> savedTask = super.update(path, task);
         savedTask.ifPresent(rep -> {
             if (rep.getAssigneeId() != null
-                && rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
+                && !rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });

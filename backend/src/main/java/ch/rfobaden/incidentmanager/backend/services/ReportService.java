@@ -41,7 +41,7 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
         Optional<Report> savedReport = super.update(path, report);
         savedReport.ifPresent(rep -> {
             if (rep.getAssigneeId() != null
-                && rep.getAssigneeId().equals(oldReport.get().getAssigneeId())) {
+                && !rep.getAssigneeId().equals(oldReport.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });
