@@ -1,32 +1,35 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
-import { useUpdateEffect } from 'react-use'
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
+import { useToggle, useUpdateEffect } from 'react-use'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
-import styled, { css, useTheme } from 'styled-components'
-import { createTheme, IconButton, InputAdornment, Theme } from '@material-ui/core'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { ThemeProvider } from '@material-ui/styles'
-import UiButton from '@/components/Ui/Button/UiButton'
+import styled, { css } from 'styled-components'
+import DatePicker from 'react-datepicker'
 import { de } from 'date-fns/locale'
+import { Themed } from '@/theme'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
   label?: string
   placeholder?: string
+  className?: string
+  placement?: 'top' | 'bottom' | 'auto'
 }
 
 const UiDateInput: React.VFC<Props> = ({
   value,
-  label,
-  placeholder = '',
+  label = '',
+  placeholder = 'dd.MM.yyyy',
+  placement = 'auto',
+  className,
   onChange: handleChange,
   errors = [],
 }) => {
 
-  const [date, setDate] = useState<Date | null>(value)
-  const [isInvalid, setInvalid] = useState<boolean>(false)
+  const [date, setDate] = useState(value)
+  const [isInvalid, setInvalid] = useState(false)
+  const [isOpen, toggleOpen] = useToggle(false)
 
   useUpdateEffect(() => {
     if (date === null) {
@@ -44,123 +47,10 @@ const UiDateInput: React.VFC<Props> = ({
     setInvalid(false)
   }, [date])
 
-  const Label = label == null ? 'div' : StyledLabel
-  const hasError = errors.length !== 0
+  const close = useCallback( () => toggleOpen(false),[toggleOpen])
 
-  const theme = useTheme()
-  const materialTheme: Theme = useMemo(() => {
-    return createTheme({
-      overrides: {
-        MuiPickersToolbar: {
-          toolbar: {
-            backgroundColor: theme.colors.primary.value,
-            '& *': {
-              fontFamily: theme.fonts.body,
-            },
-            '& h3': {
-              fontSize: '2rem',
-            },
-            '& h4': {
-              fontSize: '1.7rem',
-              paddingRight: '0.5rem',
-            },
-          },
-        },
-        MuiPickerDTTabs: {
-          tabs: {
-            backgroundColor: theme.colors.primary.value,
-            color: theme.colors.primary.contrast,
-            fontFamily: theme.fonts.body,
-          },
-        },
-        MuiPickersCalendarHeader: {
-          switchHeader: {
-            '& *': {
-              color: theme.colors.tertiary.contrast,
-              fontFamily: theme.fonts.body,
-            },
-          },
-          dayLabel: {
-            color: theme.colors.tertiary.contrast,
-            fontFamily: theme.fonts.body,
-          },
-        },
-        MuiPickersDay: {
-          day: {
-            color: theme.colors.primary.value,
-            fontFamily: theme.fonts.body,
-            '&:hover': {
-              backgroundColor: theme.colors.secondary.value,
-              color: theme.colors.secondary.contrast,
-            },
-            '& *': {
-              fontFamily: theme.fonts.body,
-            },
-          },
-          daySelected: {
-            color: theme.colors.primary.contrast,
-            backgroundColor: theme.colors.primary.value,
-            fontFamily: theme.fonts.body,
-            '&:hover': {
-              color: theme.colors.primary.contrast,
-              backgroundColor: theme.colors.primary.value,
-              filter: 'brightness(130%)',
-            },
-          },
-          dayDisabled: {
-            color: theme.colors.primary.value,
-            fontFamily: theme.fonts.body,
-          },
-          current: {
-            color: theme.colors.tertiary.contrast,
-            fontFamily: theme.fonts.body,
-          },
-        },
-        MuiPickersYear: {
-          yearSelected: {
-            color: theme.colors.primary.value,
-            fontFamily: theme.fonts.body,
-          },
-          root: {
-            color: theme.colors.tertiary.contrast,
-            fontFamily: theme.fonts.body,
-            '&:hover': {
-              backgroundColor: theme.colors.secondary.value,
-            },
-          },
-        },
-        MuiPickersClockNumber: {
-          clockNumber: {
-            fontFamily: theme.fonts.body,
-            color: theme.colors.tertiary.contrast,
-          },
-          clockNumberSelected: {
-            fontFamily: theme.fonts.body,
-            color: theme.colors.tertiary.value,
-          },
-        },
-        MuiPickersClock: {
-          pin: {
-            backgroundColor: theme.colors.primary.value,
-          },
-        },
-        MuiPickersClockPointer: {
-          thumb: {
-            borderColor: theme.colors.primary.value,
-          },
-          noPoint: {
-            backgroundColor: theme.colors.primary.value,
-          },
-          pointer: {
-            backgroundColor: theme.colors.primary.value,
-          },
-          animateTransform: {
-            transition: 'none',
-          },
-        },
-      },
-    })
-  }, [theme])
+  const Label = label == null ? 'div' : StyledLabel
+  const hasError = errors.length !== 0 || isInvalid
 
   return (
     <Label>
@@ -170,34 +60,32 @@ const UiDateInput: React.VFC<Props> = ({
         </span>
       )}
       <InputAndErrorBox hasError={hasError}>
-        <ThemeProvider theme={materialTheme}>
-          <MuiPickersUtilsProvider locale={de} utils={DateFnsUtils}>
-            <KeyboardDateTimePicker
-              autoOk
-              clearable
-              allowKeyboardControl
-              value={date}
-              error={isInvalid}
-              onChange={setDate}
-              placeholder={placeholder}
-              ampm={false}
-              format="dd.MM.yyyy HH:mm"
-              invalidDateMessage="muss das Format dd.MM.yyyy hh:mm haben"
-              okLabel={<UiButton color="success"><UiIcon.SubmitAction /></UiButton>}
-              cancelLabel={<UiButton color="error"><UiIcon.CancelAction /></UiButton>}
-              clearLabel={<UiButton color="warning">Zurücksetzen</UiButton>}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <UiIcon.Calendar />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </MuiPickersUtilsProvider>
-        </ThemeProvider>
+        <DateTimePicker isOpened={isOpen}>
+          <DatePicker
+            locale={de}
+            selected={date}
+            onChange={setDate}
+            onCalendarClose={close}
+            onClickOutside={close}
+            open={isOpen}
+            placeholderText={placeholder}
+            className={className}
+            popperPlacement={placement}
+            dateFormat="dd.MM.yyyy HH:mm"
+            timeCaption="Zeit"
+            yearDropdownItemNumber={3}
+            timeIntervals={15}
+            shouldCloseOnSelect={false}
+            showTimeSelect
+            showMonthDropdown
+            showYearDropdown
+            showWeekNumbers
+            isClearable
+          />
+          <PickerButton onClick={toggleOpen}>
+            <UiIcon.Calendar />
+          </PickerButton>
+        </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
     </Label>
@@ -205,6 +93,27 @@ const UiDateInput: React.VFC<Props> = ({
 }
 
 export default UiDateInput
+
+const PickerButton = styled.button.attrs(() => ({
+  type: 'button',
+}))`
+  background: ${({ theme }) => theme.colors.primary.value};
+  outline: none;
+  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border-radius: 0 0.5rem 0.5rem 0;
+  width: 60px;
+  margin: 0;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${({ theme }) => theme.colors.primary.contrast};
+  cursor: pointer;
+
+  transition: 250ms ease;
+  transition-property: border-color;
+`
 
 const StyledLabel = styled.label`
   display: flex;
@@ -222,60 +131,6 @@ const StyledLabel = styled.label`
 const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   display: flex;
 
-  .MuiInput-underline {
-    :after, :before {
-      content: none;
-    }
-  }
-
-  .MuiTextField-root {
-    width: 100%;
-  }
-
-  .MuiInput-input {
-    padding: 0.5rem;
-  }
-
-  .MuiInputAdornment-root {
-    height: 100%;
-  }
-
-  .MuiIconButton-root {
-    background: ${({ theme }) => theme.colors.primary.value};
-    border-radius: 0 0.5rem 0.5rem 0;
-    padding: 0.15rem 0.6rem;
-    border: solid 1px ${({ theme }) => theme.colors.tertiary.contrast};
-    height: 120%;
-
-    :hover {
-      background: ${({ theme }) => theme.colors.primary.value};
-      filter: brightness(130%);
-    }
-
-    .MuiIconButton-label {
-      height: 100%;
-    }
-
-    .MuiSvgIcon-root {
-      fill: white;
-      max-height: 90%;
-    }
-  }
-
-  .MuiInput-root {
-    margin-top: 0.25rem;
-    font-size: 0.9rem;
-    border-radius: 0.5rem;
-    outline: none;
-    width: 100%;
-    background: white;
-    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
-    font-family: ${({ theme }) => theme.fonts.body};
-
-    transition: 250ms ease;
-    transition-property: border-color;
-  }
-
   ${({ hasError }) => !hasError && css`
     input {
       :active, :focus {
@@ -289,4 +144,378 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
       border-color: ${({ theme }) => theme.colors.error.value};
     }
   `}
+`
+
+const DateTimePicker = styled.div<{ isOpened: boolean }>`
+  width: 100%;
+  height: 100%;
+  margin-top: 0.25rem;
+  display: flex;
+  position: relative;
+
+  .react-datepicker__input-container {
+    position: relative;
+  }
+
+  .react-datepicker__close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    &::after {
+      background: transparent;
+      color: black;
+      font-size: 14px;
+    }
+  }
+
+  .react-datepicker__portal,
+  .react-datepicker-popper {
+
+    .react-datepicker {
+      background: white;
+      color: ${({ theme }) => theme.colors.tertiary.contrast};
+      border-color: ${({ theme }) => theme.colors.primary.value};
+      font-family: ${({ theme }) => theme.fonts.body};
+      display: flex;
+
+      .react-datepicker__triangle {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+
+        &::before, &::after {
+          border-bottom-color: ${({ theme }) => theme.colors.secondary.value};
+          border-top-color: ${({ theme }) => theme.colors.secondary.value};
+        }
+      }
+
+      .react-datepicker__navigation {
+        color: ${({ theme }) => theme.colors.tertiary.contrast};
+
+        &.react-datepicker__navigation--years {
+          display: block;
+          border-top: solid 2px ${({ theme }) => theme.colors.primary.value};
+          border-left: solid 2px ${({ theme }) => theme.colors.primary.value};
+          width: 10px;
+          height: 10px;
+
+          &:hover {
+            filter: brightness(130%);
+          }
+
+          &.react-datepicker__navigation--months-upcoming,
+          &.react-datepicker__navigation--years-upcoming {
+            transform: rotate(45deg);
+            margin-top: 0.5rem;
+          }
+
+          &.react-datepicker__navigation--months-previous,
+          &.react-datepicker__navigation--years-previous {
+            transform: rotate(225deg);
+            margin-bottom: 0.5rem;
+          }
+        }
+
+        &.react-datepicker__navigation--previous {
+          left: 0;
+        }
+
+        &.react-datepicker__navigation--next {
+          right: 90px;
+
+          ${Themed.media.sm.max} {
+            right: 0;
+          }
+        }
+
+        .react-datepicker__navigation-icon {
+          &::before {
+            border-color: ${({ theme }) => theme.colors.primary.value};
+          }
+        }
+      }
+
+      .react-datepicker__header {
+        background: ${({ theme }) => theme.colors.secondary.value};
+        color: ${({ theme }) => theme.colors.secondary.contrast};
+        border-color: ${({ theme }) => theme.colors.secondary.value};
+
+        ${Themed.media.sm.max} {
+          border-top-right-radius: 0.3rem;
+        }
+      }
+
+      .react-datepicker__month-container {
+        border-color: ${({ theme }) => theme.colors.primary.value};
+
+        .react-datepicker__current-month {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0.2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .react-datepicker__header__dropdown {
+          height: 1.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .react-datepicker__month-dropdown-container {
+            width: 40%;
+          }
+
+          .react-datepicker__year-dropdown-container {
+            width: 30%;
+          }
+
+          .react-datepicker__year-dropdown-container,
+          .react-datepicker__month-dropdown-container {
+            position: relative;
+            padding: 0;
+
+            .react-datepicker__year-dropdown {
+              left: auto;
+              right: 0;
+            }
+
+            .react-datepicker__month-dropdown {
+              left: 0;
+            }
+
+            .react-datepicker__year-dropdown,
+            .react-datepicker__month-dropdown {
+              position: relative;
+              top: auto;
+              width: 100%;
+              height: 100%;
+              padding: 0.2rem;
+              margin: 0.1rem;
+              background: white;
+              border-color: ${({ theme }) => theme.colors.primary.value};
+
+              .react-datepicker__month-option,
+              .react-datepicker__year-option {
+                padding: 0.1rem;
+
+                &:hover {
+                  background: ${({ theme }) => theme.colors.secondary.value};
+                  color: ${({ theme }) => theme.colors.secondary.contrast};
+                }
+              }
+
+              .react-datepicker__year-option:hover {
+
+                &:first-child,
+                &:last-child {
+                  background: transparent;
+                }
+              }
+
+              .react-datepicker__year-option--selected_year,
+              .react-datepicker__month-option--selected_month {
+                background: ${({ theme }) => theme.colors.primary.value};
+                color: ${({ theme }) => theme.colors.primary.contrast};
+
+                .react-datepicker__year-option--selected,
+                .react-datepicker__month-option--selected {
+                  display: none;
+                }
+              }
+            }
+
+            .react-datepicker__year-read-view,
+            .react-datepicker__month-read-view {
+              background: ${({ theme }) => theme.colors.tertiary.value};
+              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              height: 100%;
+              display: flex;
+              justify-content: space-between;
+              flex-direction: row-reverse;
+              align-items: center;
+              font-size: 10px;
+              padding: 0.2rem;
+
+              span {
+                position: relative;
+              }
+
+              &:last-child {
+                &:not(&:first-child) {
+                  display: none;
+                }
+
+                &:first-child {
+                  border-radius: 0;
+                }
+              }
+
+              .react-datepicker__year-read-view--down-arrow,
+              .react-datepicker__month-read-view--down-arrow {
+                border-color: ${({ theme }) => theme.colors.tertiary.contrast};
+                right: auto;
+                height: 6px;
+                width: 6px;
+                border-width: 1px 1px 0 0;
+                margin: 0.2rem;
+                transform: translateY(-30%) rotate(135deg);
+              }
+            }
+          }
+        }
+
+        .react-datepicker__day-names {
+          margin-top: 0.5rem;
+          display: flex;
+          justify-content: space-evenly;
+
+          .react-datepicker__day-name {
+            line-height: 1.2;
+          }
+        }
+
+        .react-datepicker__day-name,
+        .react-datepicker__day {
+          border-radius: 0.1rem;
+          margin: 0;
+          padding: calc(0.166rem + 0.5rem) calc(0.166rem + 1rem);
+          line-height: 1;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .react-datepicker__month {
+          margin: 0;
+
+          .react-datepicker__week {
+
+            .react-datepicker__week-number {
+              color: ${({ theme }) => theme.colors.grey.value};
+            }
+
+            .react-datepicker__day {
+              background: transparent;
+              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              border: 1px solid transparent;
+
+              transition: 150ms ease;
+              transition-property: background-color, color, border-color;
+
+              &:hover:not(.react-datepicker__day--selected) {
+                background: ${({ theme }) => theme.colors.secondary.value};
+                color: ${({ theme }) => theme.colors.secondary.contrast};
+              }
+
+              &:focus:not(.react-datepicker__day--selected) {
+                outline: none;
+                border-color: ${({ theme }) => theme.colors.primary.value};
+              }
+            }
+
+            .react-datepicker__day--selected {
+              background: ${({ theme }) => theme.colors.primary.value};
+              color: ${({ theme }) => theme.colors.primary.contrast};
+              font-weight: bold;
+            }
+
+            .react-datepicker__day--outside-month {
+              background: transparent;
+              color: ${({ theme }) => theme.colors.secondary.value};
+            }
+
+            .react-datepicker__day--today {
+              border: 2px solid ${({ theme }) => theme.colors.secondary.value};
+            }
+          }
+        }
+      }
+
+      .react-datepicker__time-container {
+        border-color: ${({ theme }) => theme.colors.primary.value};
+
+
+        .react-datepicker-time__header {
+
+        }
+
+        .react-datepicker__time {
+
+          .react-datepicker__time-box {
+            background: white;
+            color: ${({ theme }) => theme.colors.tertiary.contrast};
+            border-right: 1px solid ${({ theme }) => theme.colors.primary.value};
+
+            .react-datepicker__time-list {
+
+              .react-datepicker__time-list-item--selected {
+                background: ${({ theme }) => theme.colors.primary.value};
+                color: ${({ theme }) => theme.colors.primary.contrast};
+                font-weight: bold;
+              }
+
+              .react-datepicker__time-list-item {
+                transition: 150ms ease;
+                transition-property: background-color, color, font-weight;
+
+                &:first-child {
+                  margin-top: 1px;
+                }
+
+                &:last-child {
+                  border-bottom-right-radius: 0.3rem;
+                }
+
+                &:hover:not(.react-datepicker__time-list-item--selected) {
+                  background: ${({ theme }) => theme.colors.secondary.value};
+                  color: ${({ theme }) => theme.colors.secondary.contrast};
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .react-datepicker__input-container > input {
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+    font-family: ${({ theme }) => theme.fonts.body};
+
+    transition: 250ms ease;
+    transition-property: border-color;
+
+    // for additional input
+    border-radius: 0.5rem 0 0 0.5rem;
+    border-right: none;
+  }
+
+  // for additional input
+  > div:first-child {
+    width: calc(100% - 60px);
+  }
+
+  // function of calender icon
+  ${({ isOpened }) => !isOpened && css`
+    .react-datepicker__portal,
+    .react-datepicker-popper {
+      display: none;
+    }
+  `}
+  ${Themed.media.sm.max} {
+    .react-datepicker {
+      max-width: 100%;
+    }
+
+    .react-datepicker__time-container {
+      display: none;
+    }
+  }
 `

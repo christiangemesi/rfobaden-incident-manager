@@ -37,4 +37,4 @@ const UiModalContext = createContext<UiModalState>({
 })
 export default UiModalContext
 
-export const animationMillis = 250
+export const animationMillis = 300

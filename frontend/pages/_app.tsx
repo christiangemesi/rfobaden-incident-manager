@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import Head from 'next/head'
-import { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
 import { useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
@@ -12,6 +12,7 @@ import { parseUser } from '@/models/User'
 import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
+import UiScroll from '@/components/Ui/Scroll/UiScroll'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -48,11 +49,13 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-        <UiHeader />
-        <main>
-          {component}
-        </main>
-        <UiFooter />
+        <UiScroll>
+          <UiHeader />
+          <Main>
+            {component}
+          </Main>
+          <UiFooter />
+        </UiScroll>
       </ThemeProvider>
     </>
   )
@@ -74,11 +77,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   
   button {
     cursor: pointer;
-  }
-  
-  main {
-    padding-bottom: 3rem;
-    min-height: calc(100vh - 4rem - 3rem - 4rem);
   }
 
   @media print {
@@ -103,4 +101,9 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       display: none;
     }
   }
+`
+
+const Main = styled.main`
+  padding-bottom: 1rem;
+  min-height: calc(100vh - 4rem - 1rem - 4rem);
 `

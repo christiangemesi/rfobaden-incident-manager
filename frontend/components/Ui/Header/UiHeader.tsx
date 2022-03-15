@@ -1,16 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import Image from 'next/image'
-import UiButton from '@/components/Ui/Button/UiButton'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { Themed } from '@/theme'
 
 
 const UiHeader: React.VFC = () => {
-
   const { currentUser } = useSession()
 
   const router = useRouter()
@@ -25,63 +23,66 @@ const UiHeader: React.VFC = () => {
   }
 
   return (
-    <HeaderContainer>
+    <Header>
       <NavContainer>
         <ImageContainer>
           <UiLink href="/">
-            <Image src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
           </UiLink>
         </ImageContainer>
         <nav>
           <NavBar>
-            <UiHeaderItem href="/benutzer">
-              Benutzer
-            </UiHeaderItem>
             <UiHeaderItem href="/ereignisse">
               Ereignisse
+            </UiHeaderItem>
+            <UiHeaderItem href="/benutzer">
+              Benutzer
             </UiHeaderItem>
           </NavBar>
         </nav>
       </NavContainer>
       <ButtonList>
-        <UiLink href="/changelog">
-          <UiButton>
-            <UiIcon.Clipboard />
-          </UiButton>
-        </UiLink>
+        <UiHeaderItem href="/changelog" title="Changelog">
+          <UiIcon.Changelog />
+        </UiHeaderItem>
         {currentUser === null ? (
-          <UiLink href="/anmelden">
-            <UiButton type="button">
-              → anmelden
-            </UiButton>
-          </UiLink>
+          <UiHeaderItem href="/anmelden">
+            <UiIcon.Login />
+            <span>anmelden</span>
+          </UiHeaderItem>
         ) : (
-          <React.Fragment>
-            <UiLink href="/profil">
-              <UiButton type="button">
-                {currentUser.firstName} {currentUser.lastName}
-              </UiButton>
-            </UiLink>
-            <UiButton onClick={logout}>
-              abmelden →
-            </UiButton>
-          </React.Fragment>
+          <ButtonList isNarrow>
+            <UiHeaderItem href="/profil" title="Profil">
+              <UiIcon.UserInCircle />
+            </UiHeaderItem>
+            <UiHeaderItem onClick={logout}>
+              <span>{currentUser.firstName} {currentUser.lastName}</span>
+              <UiIcon.Logout />
+            </UiHeaderItem>
+          </ButtonList>
         )}
       </ButtonList>
-    </HeaderContainer>
+    </Header>
   )
 }
 export default UiHeader
 
 
-const HeaderContainer = styled.header`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   width: 100%;
   height: 4rem;
   padding: 10px 50px 10px 50px;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.secondary.contrast};
   background: ${({ theme }) => theme.colors.secondary.value};
+  
+  // TODO implement mobile view
+  ${Themed.media.xs.only} {
+    display: none;
+  }
 `
 const NavContainer = styled.div`
   display: flex;
@@ -89,16 +90,25 @@ const NavContainer = styled.div`
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
+  
+  img {
+    transition: 150ms ease;
+    transition-property: transform;
+    
+    :hover {
+      transform: scale(1.05);
+    }
+  }
 `
 const NavBar = styled.ul`
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   align-items: center;
   margin-left: 2rem;
   list-style: none;
 `
-const ButtonList = styled.div`
+const ButtonList = styled.div<{ isNarrow?: boolean }>`
   display: flex;
-  gap: 1rem;
+  gap: ${({ isNarrow }) => isNarrow ? '0.75rem' : '2rem'};
   align-items: center;
 `

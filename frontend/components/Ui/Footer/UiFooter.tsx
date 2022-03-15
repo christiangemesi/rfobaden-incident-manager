@@ -6,7 +6,7 @@ import Image from 'next/image'
 const UiFooter: React.VFC = () => {
   return (
     <FooterContainer>
-      <UiLink href="https://rfobaden.ch/" target="_blank">
+      <UiLink href="https://rfobaden.ch/" target="_blank" isText>
         RFO Baden
       </UiLink>
       &copy; {new Date().getFullYear()} RFO Baden

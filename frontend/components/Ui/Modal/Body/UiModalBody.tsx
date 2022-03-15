@@ -222,7 +222,8 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   position: static;
   display: block;
   border: none;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   max-height: 90vh;
   width: ${({ isFull }) => isFull && '100%'};
   
@@ -238,11 +239,12 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
     0 3px 14px 2px rgba(0, 0, 0, 0.12),
     0 5px 5px -3px rgba(0, 0, 0, 0.2);
 
-  transition: ${animationMillis}ms ease-in-out;
+  transition: ${animationMillis}ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: transform;
 
   ${({ visibility }) => visibility !== UiModalVisibility.OPEN && css`
-    transform: scale(25%);
+    transition: ${animationMillis}ms cubic-bezier(1, 0.23, 1,0.32);
+    transform: scale(40%);
     
     // Hide the close button when closing, since it's clipping
     // the dialog, which makes it look strange when scaling down.

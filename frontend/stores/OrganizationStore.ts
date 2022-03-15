@@ -8,4 +8,3 @@ export {
   useOrganizations,
   useOrganization,
 }
-

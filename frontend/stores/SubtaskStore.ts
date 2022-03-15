@@ -8,7 +8,7 @@ const [SubtaskStore, useSubtasks, useSubtask] = createModelStore(parseSubtask, {
   sortBy: (subtask) => ['desc', [
     [subtask.isClosed, 'asc'],
     getPriorityIndex(subtask.priority),
-    [subtask.title, 'asc'],
+    [subtask.title.toLowerCase(), 'asc'],
   ]],
 })
 export default SubtaskStore
