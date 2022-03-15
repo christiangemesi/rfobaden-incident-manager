@@ -27,7 +27,6 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
       return null
     }
     if (isId(idOrRecord)) {
-      console.log(idOrRecord, state.mapping)
       return state.mapping[idOrRecord] ?? null
     }
     return state.mapping[idOrRecord.id] ?? oldValue ?? null
@@ -42,7 +41,6 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
       return computeValue(store[privateKey].state, null, idOrRecord)
     })
     useStoreListener(store, (state) => {
-      console.log(store[privateKey].parse, state, idOrRecord)
       setResult(computeValue(state, result, idOrRecord))
     }, [idOrRecord])
     return result as T
@@ -62,6 +60,7 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
   return <O>(idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O), deps: unknown[] = []) => {
     const [result, setResult] = useState(() => computeValue(store[privateKey].state, idsOrTransform))
     useStoreListener(store, (state) => {
+      console.log(store[privateKey].parse, computeValue(state, idsOrTransform), result, result === computeValue(state, idsOrTransform))
       setResult(computeValue(state, idsOrTransform))
     }, [typeof idsOrTransform === 'function' ? null : idsOrTransform, ...deps])
     return result

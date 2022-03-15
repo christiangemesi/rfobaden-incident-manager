@@ -205,10 +205,7 @@ export function createModelStore<T extends Model, S>(parseRecord: (value: T) => 
   }))
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(store as any)[privateKey] = {
-    ...store[privateKey],
-    parse: parseRecord,
-  }
+  ;(store as any)[privateKey].parse = parseRecord
   return store
 }
 
