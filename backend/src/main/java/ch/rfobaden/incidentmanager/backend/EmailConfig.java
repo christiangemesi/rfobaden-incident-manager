@@ -1,6 +1,6 @@
 package ch.rfobaden.incidentmanager.backend;
 
-import ch.rfobaden.incidentmanager.backend.errors.RfoMailException;
+import ch.rfobaden.incidentmanager.backend.errors.MailException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -89,7 +89,7 @@ public class EmailConfig {
             message.setText(text, true);
             getJavaMailSender().send(mimeMessage);
         } catch (MessagingException e) {
-            throw new RfoMailException(e.getMessage(), receiver, text);
+            throw new MailException(e.getMessage());
         }
     }
 }
