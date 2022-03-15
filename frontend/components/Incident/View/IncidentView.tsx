@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
@@ -13,12 +13,12 @@ import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import { useAsync, useEffectOnce, useMeasure, usePreviousDistinct } from 'react-use'
+import { useAsync, useMeasure, usePreviousDistinct } from 'react-use'
 import Id from '@/models/base/Id'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
-import { Query } from '@/pages/ereignisse/[incidentId]'
+import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -27,13 +27,11 @@ interface Props extends StyledProps {
 
 const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
   const router = useRouter()
-
   const reports = useReportsOfIncident(incident.id)
 
-  const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => {
-    const query = router.query as Query
-    return query.reportId === undefined ? null : parseInt(query.reportId)
-  })
+  const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
+    parseIncidentQuery(router.query)?.reportId ?? null
+  ))
   const selected = useReport(selectedId)
   const setSelected = useCallback((report: Report | null) => {
     setSelectedId(report?.id ?? null)
@@ -42,20 +40,21 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
     setSelectedId(null)
   }, [])
 
-
-
   const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
   const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
   useAsync(async function updateRoute() {
-    const query = router.query as Query
+    const query = parseIncidentQuery(router.query)
+    if (query === null) {
+      return
+    }
     if (selected === null) {
-      if (query.reportId !== undefined) {
+      if (query.reportId !== null) {
         await router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
       }
       return
     }
-    if (query.reportId === undefined || parseInt(query.reportId) !== selected.id) {
+    if (query.reportId === null || query.reportId !== selected.id) {
       await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
     }
   }, [incident, router, selected])

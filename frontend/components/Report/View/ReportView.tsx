@@ -9,7 +9,7 @@ import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import { useMeasure, useUpdateEffect } from 'react-use'
+import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task, { parseTask } from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
@@ -24,6 +24,8 @@ import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
 import useAsyncCached from '@/utils/hooks/useAsyncCached'
 import ReportActions from '@/components/Report/Actions/ReportActions'
+import { useRouter } from 'next/router'
+import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 
 interface Props {
   incident: Incident
@@ -32,9 +34,12 @@ interface Props {
 }
 
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
+  const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
-  const [selectedId, setSelectedId] = useState<Id<Task> | null>(null)
+  const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => (
+    parseIncidentQuery(router.query)?.taskId ?? null
+  ))
   const selected = useTask(selectedId)
   const setSelected = useCallback((task: Task | null) => {
     setSelectedId(task?.id ?? null)
@@ -63,6 +68,22 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   // Clear the selected task if the report changes.
   // Two reports never contain the same task.
   useUpdateEffect(clearSelected, [report.id])
+
+  useAsync(async function updateRoute() {
+    const query = parseIncidentQuery(router.query)
+    if (query === null) {
+      return
+    }
+    if (selected === null) {
+      if (query.taskId !== null) {
+        await router.push(`/ereignisse/${report.incidentId}/meldungen/${report.id}`, undefined, { shallow: true })
+      }
+      return
+    }
+    if (query.taskId === null || query.taskId !== selected.id) {
+      await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.reportId}/auftraege/${selected.id}`, undefined, { shallow: true })
+    }
+  }, [report, router, selected])
 
   return (
     <UiLevel>
