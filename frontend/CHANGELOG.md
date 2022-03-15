@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modals can now be closed by pressing the escape key.
 - Incidents, reports and tasks now support manual closing.
 - Added page footer.
+- New users and assignees now receive email notifications.
 
 ### Changed
 - Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
