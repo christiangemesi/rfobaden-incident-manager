@@ -13,7 +13,7 @@ import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import { useMeasure, usePreviousDistinct } from 'react-use'
+import { useAsync, useEffectOnce, useMeasure, usePreviousDistinct } from 'react-use'
 import Id from '@/models/base/Id'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -26,9 +26,14 @@ interface Props extends StyledProps {
 }
 
 const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
+  const router = useRouter()
+
   const reports = useReportsOfIncident(incident.id)
 
-  const [selectedId, setSelectedId] = useState<Id<Report> | null>(null)
+  const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => {
+    const query = router.query as Query
+    return query.reportId === undefined ? null : parseInt(query.reportId)
+  })
   const selected = useReport(selectedId)
   const setSelected = useCallback((report: Report | null) => {
     setSelectedId(report?.id ?? null)
@@ -37,20 +42,21 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
     setSelectedId(null)
   }, [])
 
+
+
   const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
   const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
-  const router = useRouter()
-  useEffect(function updateRoute() {
+  useAsync(async function updateRoute() {
     const query = router.query as Query
     if (selected === null) {
       if (query.reportId !== undefined) {
-        router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
+        await router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
       }
       return
     }
     if (query.reportId === undefined || parseInt(query.reportId) !== selected.id) {
-      router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
+      await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
     }
   }, [incident, router, selected])
 
