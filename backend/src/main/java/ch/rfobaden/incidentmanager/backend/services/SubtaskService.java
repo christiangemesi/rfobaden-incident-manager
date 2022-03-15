@@ -1,15 +1,13 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import java.util.Optional;
-
 import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
-import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class SubtaskService
@@ -39,8 +37,8 @@ public class SubtaskService
         }
         Optional<Subtask> savedSubTask = super.update(path, subTask);
         savedSubTask.ifPresent(rep -> {
-            if (rep.getAssigneeId() != null &&
-                rep.getAssigneeId().equals(oldSubTask.get().getAssigneeId())) {
+            if (rep.getAssigneeId() != null
+                && rep.getAssigneeId().equals(oldSubTask.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });

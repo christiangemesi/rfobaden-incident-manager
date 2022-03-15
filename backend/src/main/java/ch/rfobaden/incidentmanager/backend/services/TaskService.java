@@ -1,13 +1,13 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import java.util.Optional;
-
 import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.TaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepository> {
@@ -36,8 +36,8 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
         }
         Optional<Task> savedTask = super.update(path, task);
         savedTask.ifPresent(rep -> {
-            if (rep.getAssigneeId() != null &&
-                rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
+            if (rep.getAssigneeId() != null
+                && rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });

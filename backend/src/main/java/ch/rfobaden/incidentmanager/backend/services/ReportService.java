@@ -1,7 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import java.util.Optional;
-
 import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
@@ -9,6 +7,8 @@ import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ReportService extends ModelRepositoryService<Report, ReportPath, ReportRepository> {
@@ -40,8 +40,8 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
         }
         Optional<Report> savedReport = super.update(path, report);
         savedReport.ifPresent(rep -> {
-            if (rep.getAssigneeId() != null &&
-                rep.getAssigneeId().equals(oldReport.get().getAssigneeId())) {
+            if (rep.getAssigneeId() != null
+                && rep.getAssigneeId().equals(oldReport.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });
