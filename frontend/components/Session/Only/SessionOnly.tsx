@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import SessionStore from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import User from '@/models/User'
-import { useStore } from '@/stores/Store'
+import { useStore } from '@/stores/base/hooks'
 
 interface Props {
   doRedirect?: boolean

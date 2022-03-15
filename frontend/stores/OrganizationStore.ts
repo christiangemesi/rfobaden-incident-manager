@@ -1,10 +1,11 @@
-import { createModelStore } from '@/stores/Store'
+import { createModelStore } from '@/stores/base/Store'
 import { parseOrganization } from '@/models/Organization'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
-const [OrganizationStore, useOrganizations, useOrganization] = createModelStore(parseOrganization)
+const OrganizationStore = createModelStore(parseOrganization)
+
 export default OrganizationStore
 
-export {
-  useOrganizations,
-  useOrganization,
-}
+export const useOrganization = createUseRecord(OrganizationStore)
+export const useOrganizations = createUseRecords(OrganizationStore)
+

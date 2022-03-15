@@ -1,23 +1,22 @@
-import { createModelStore } from '@/stores/Store'
+import { createModelStore } from '@/stores/base/Store'
 import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import TaskStore from '@/stores/TaskStore'
-import { getPriorityIndex } from '@/models/Priority'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
-const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
-  sortBy: (report) => ['desc', [
-    // Closed reports are always at the bottom.
-    [report.isClosed || report.isDone, 'asc'],
+const ReportStore = createModelStore(parseReport)
 
-    // Sort order: key > location-relevant > priority
-    report.isKeyReport,
-    report.isLocationRelevantReport,
-    getPriorityIndex(report.priority),
-    [report.title.toLowerCase(), 'asc'],
-  ]],
-})
 export default ReportStore
+
+export const useReport = createUseRecord(ReportStore)
+export const useReports = createUseRecords(ReportStore)
+
+export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
+  useReports((reports) => (
+    reports.filter((report) => report.incidentId === incidentId)
+  ), [incidentId])
+)
 
 TaskStore.onCreate((task) => {
   const report = ReportStore.find(task.reportId)
@@ -77,14 +76,3 @@ TaskStore.onRemove((task) => {
     isDone: taskIds.length > 0 && taskIds.length === closedTaskIds.length,
   })
 })
-
-export {
-  useReports,
-  useReport,
-}
-
-export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
-  useReports((reports) => (
-    reports.filter((report) => report.incidentId === incidentId)
-  ), [incidentId])
-)

@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { useOrganizations } from '@/stores/OrganizationStore'
@@ -22,11 +22,11 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     tasks.filter((task) => task.incidentId === incident.id)
   ))
 
-  const assigneeIds = new Set([
+  const assigneeIds = useMemo(() => new Set([
     ...reports.map((report) => report.assigneeId),
     ...tasks.map((task) => task.assigneeId),
     ...subtasks.map((subtask) => subtask.assigneeId),
-  ])
+  ]), [reports, subtasks, tasks])
 
   const activeOrganisations = useOrganizations((organizations) => (
     organizations

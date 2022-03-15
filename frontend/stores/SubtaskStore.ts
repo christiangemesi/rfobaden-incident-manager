@@ -1,22 +1,15 @@
-import { createModelStore } from '@/stores/Store'
+import { createModelStore } from '@/stores/base/Store'
 import Task from '@/models/Task'
 import Id from '@/models/base/Id'
 import Subtask, { parseSubtask } from '@/models/Subtask'
-import { getPriorityIndex } from '@/models/Priority'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
-const [SubtaskStore, useSubtasks, useSubtask] = createModelStore(parseSubtask, {}, {
-  sortBy: (subtask) => ['desc', [
-    [subtask.isClosed, 'asc'],
-    getPriorityIndex(subtask.priority),
-    [subtask.title.toLowerCase(), 'asc'],
-  ]],
-})
+const SubtaskStore = createModelStore(parseSubtask)
+
 export default SubtaskStore
 
-export {
-  useSubtasks,
-  useSubtask,
-}
+export const useSubtask = createUseRecord(SubtaskStore)
+export const useSubtasks = createUseRecords(SubtaskStore)
 
 export const useSubtasksOfTask = (taskId: Id<Task>): Subtask[] => (
   useSubtasks((subtasks) => (
