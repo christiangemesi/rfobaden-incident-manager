@@ -57,7 +57,7 @@ public class EmailConfig {
         return msg.toString();
     }
 
-    public String getAssignedTemplateMessage(String info, String link) {
+    public String getAssignmentTemplateMessage(String info, String link) {
         StringBuilder msg = new StringBuilder();
         msg.append("<h1>Incident Manager RFOBaden</h1>");
         msg.append(

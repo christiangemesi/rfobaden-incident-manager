@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import java.util.Optional;
+
 import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
@@ -21,17 +23,37 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
     public Task create(TaskPath path, Task task) {
         Task savedTask = super.create(path, task);
         if (savedTask.getAssignee() != null) {
-            // Ereignis/Meldung/Auftrag
-            String info = savedTask.getReport().getIncident().getTitle() + "/"
-                + savedTask.getReport().getTitle() + "/" + savedTask.getTitle();
-            // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
-            String link = "ereignisse/" + savedTask.getReport().getIncident().getId()
-                + "/meldungen/" + savedTask.getReport().getId()
-                + "/auftraege/" + savedTask.getId();
-            emailConfig.sendSimpleMessage(savedTask.getAssignee().getEmail(),
-                "IM-Tool RFOBaden: Zuweisung",
-                emailConfig.getAssignedTemplateMessage(info, link));
+            sendAssignmentEmail(savedTask);
         }
         return savedTask;
+    }
+
+    @Override
+    public Optional<Task> update(TaskPath path, Task task) {
+        Optional<Task> oldTask = repository.findById(task.getId());
+        if (oldTask.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<Task> savedTask = super.update(path, task);
+        savedTask.ifPresent(rep -> {
+            if (rep.getAssigneeId() != null &&
+                rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
+                sendAssignmentEmail(rep);
+            }
+        });
+        return savedTask;
+    }
+
+    private void sendAssignmentEmail(Task task) {
+        // Ereignis/Meldung/Auftrag
+        String info = task.getReport().getIncident().getTitle() + "/"
+            + task.getReport().getTitle() + "/" + task.getTitle();
+        // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
+        String link = "ereignisse/" + task.getReport().getIncident().getId()
+            + "/meldungen/" + task.getReport().getId()
+            + "/auftraege/" + task.getId();
+        emailConfig.sendSimpleMessage(task.getAssignee().getEmail(),
+            "IM-Tool RFOBaden: Zuweisung",
+            emailConfig.getAssignmentTemplateMessage(info, link));
     }
 }
