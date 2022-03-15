@@ -34,7 +34,7 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
 
     @Override
     public Optional<Report> update(ReportPath path, Report report) {
-        Optional<Report> oldReport = repository.findById(report.getId());
+        Optional<Report> oldReport = find(path, report.getId());
         if (oldReport.isEmpty()) {
             return Optional.empty();
         }

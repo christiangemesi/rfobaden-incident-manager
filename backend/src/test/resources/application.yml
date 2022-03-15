@@ -16,3 +16,5 @@ rfo:
   frontend:
     # Fixed host for test environment, value does not influence tests.
     host: "localhost:300"
+  mail:
+    enable: false

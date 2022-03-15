@@ -30,7 +30,7 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
 
     @Override
     public Optional<Task> update(TaskPath path, Task task) {
-        Optional<Task> oldTask = repository.findById(task.getId());
+        Optional<Task> oldTask = find(path, task.getId());
         if (oldTask.isEmpty()) {
             return Optional.empty();
         }
