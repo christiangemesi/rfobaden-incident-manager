@@ -1,15 +1,15 @@
 package ch.rfobaden.incidentmanager.backend;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
-
-import ch.rfobaden.incidentmanager.backend.errors.RfoMailException;
+import ch.rfobaden.incidentmanager.backend.errors.MailException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+
+import java.util.Properties;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Configuration
 public class EmailConfig {
@@ -38,40 +38,44 @@ public class EmailConfig {
         msg.append("<h1>Incident Manager RFOBaden</h1>");
         msg.append("<p>Ein Benutzer wurde für Sie im Incident Manager erstellt.</p><br>");
         msg.append("<table>");
-        msg.append("<tr>\n" +
-            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">E-Mail</th>\n" +
-            "     <td>" + receiver + "</td>\n" +
-            "   </tr>");
-        msg.append("<tr>\n" +
-            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Password</th>\n" +
-            "     <td>" + plainPassword + "</td>\n" +
-            "   </tr>");
+        msg.append("<tr>\n"
+            + "     <th style=\"display:block;margin-right: 50px;text-align: left;\">E-Mail</th>\n"
+            + "     <td>" + receiver + "</td>\n"
+            + "   </tr>");
+        msg.append("<tr>\n"
+            + "     <th style=\"display:block;margin-right: 50px;text-align: left;\">"
+            + "Password</th>\n"
+            + "     <td>" + plainPassword + "</td>\n"
+            + "   </tr>");
         msg.append("</table><br>");
         msg.append(
-            "<p>Sie können sich unter <a href=\\\"https://im.rfobaden.ch\\\">https://im.rfobaden.ch</a> und dann das Passwort ändern.</p>");
+            "<p>Sie können sich unter <a href=\\\"https://im.rfobaden.ch\\\">"
+                + "https://im.rfobaden.ch</a> und dann das Passwort ändern.</p>");
         msg.append(
-            "<b style=\"color:red;\">Dies ist eine automatisch generierte mail. Bitte antworten sie nicht auf diese E-Mail.</b>");
+            "<b style=\"color:red;\">Dies ist eine automatisch generierte mail. "
+                + "Bitte antworten sie nicht auf diese E-Mail.</b>");
         return msg.toString();
     }
 
-    public String getAssignedTemplateMessage(String info, String link) {
+    public String getAssignmentTemplateMessage(String info, String link) {
         StringBuilder msg = new StringBuilder();
         msg.append("<h1>Incident Manager RFOBaden</h1>");
         msg.append(
             "<p>Ihnen wurde etwas zugewiesen.</p><br>");
         msg.append("<table>");
-        msg.append("<tr>\n" +
-            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Title</th>\n" +
-            "     <td>" + info + "</td>\n" +
-            "   </tr>");
-        msg.append("<tr>\n" +
-            "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Link</th>\n" +
-            "     <td><a href=\"https://im.rfobaden.ch/" + link + "\">https://im.rfobaden.ch/" +
-            link + "</a></td>\n" +
-            "   </tr>");
+        msg.append("<tr>\n"
+            + "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Title</th>\n"
+            + "     <td>" + info + "</td>\n"
+            + "   </tr>");
+        msg.append("<tr>\n"
+            + "     <th style=\"display:block;margin-right: 50px;text-align: left;\">Link</th>\n"
+            + "     <td><a href=\"https://im.rfobaden.ch/" + link + "\">https://im.rfobaden.ch/"
+            + link + "</a></td>\n"
+            + "   </tr>");
         msg.append("</table><br>");
         msg.append(
-            "<b style=\"color:red;\">Dies ist eine automatisch generierte mail. Bitte antworten sie nicht auf diese E-Mail.</b>");
+            "<b style=\"color:red;\">Dies ist eine automatisch generierte mail. "
+                + "Bitte antworten sie nicht auf diese E-Mail.</b>");
         return msg.toString();
     }
 
@@ -85,7 +89,7 @@ public class EmailConfig {
             message.setText(text, true);
             getJavaMailSender().send(mimeMessage);
         } catch (MessagingException e) {
-            throw new RfoMailException(e.getMessage(), receiver, text);
+            throw new MailException(e.getMessage());
         }
     }
 }

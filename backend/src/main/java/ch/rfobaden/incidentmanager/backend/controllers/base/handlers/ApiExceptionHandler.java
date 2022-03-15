@@ -1,8 +1,9 @@
 package ch.rfobaden.incidentmanager.backend.controllers.base.handlers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.errors.RfoMailException;
+import ch.rfobaden.incidentmanager.backend.errors.MailException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
+import ch.rfobaden.incidentmanager.backend.errors.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,10 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(res, HttpStatus.PRECONDITION_REQUIRED);
     }
 
-    @ExceptionHandler(RfoMailException.class)
-    public ResponseEntity<ErrorResponse> handle(RfoMailException e) {
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ErrorResponse> handle(MailException e) {
         var res = new ErrorResponse(
-            "mail failed: failed to send email to: " + e.getReceiver() + "with text: "
-                + e.getText() + "\n" + e.getMessage());
+            "mail failed:\n" + e.getMessage());
         return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
