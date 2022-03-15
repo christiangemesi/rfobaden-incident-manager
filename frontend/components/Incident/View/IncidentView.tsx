@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
@@ -13,10 +13,12 @@ import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import { useMeasure, usePreviousDistinct } from 'react-use'
+import { useMeasure, usePreviousDistinct, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { useRouter } from 'next/router'
+import { Query } from '@/pages/ereignisse/[incidentId]'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -38,6 +40,19 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
   const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
+  const router = useRouter()
+  useEffect(function updateRoute() {
+    const query = router.query as Query
+    if (selected === null) {
+      if (query.reportId !== undefined) {
+        router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
+      }
+      return
+    }
+    if (query.reportId === undefined || parseInt(query.reportId) !== selected.id) {
+      router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
+    }
+  }, [incident, router, selected])
 
   return (
     <UiLevel className={className} style={style}>

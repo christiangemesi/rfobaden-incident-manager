@@ -56,8 +56,9 @@ const StyledIncidentView = styled(IncidentView)`
   }
 `
 
-type Query = {
-  incidentId: string
+export type Query = {
+  incidentId: string,
+  reportId: string | undefined
 }
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
