@@ -22,8 +22,8 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
         Task savedTask = super.create(path, task);
         if (savedTask.getAssignee() != null) {
             // Ereignis/Meldung/Auftrag
-            String info = savedTask.getReport().getIncident().getTitle() + "/" +
-                savedTask.getReport().getTitle() + "/" + savedTask.getTitle();
+            String info = savedTask.getReport().getIncident().getTitle() + "/"
+                + savedTask.getReport().getTitle() + "/" + savedTask.getTitle();
             // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
             String link = "ereignisse/" + savedTask.getReport().getIncident().getId()
                 + "/meldungen/" + savedTask.getReport().getId()
