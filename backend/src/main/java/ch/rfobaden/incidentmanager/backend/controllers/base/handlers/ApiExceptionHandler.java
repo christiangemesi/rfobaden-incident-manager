@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.controllers.base.handlers;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.errors.MailException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.errors.ValidationException;
 import org.slf4j.Logger;
@@ -33,6 +34,13 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(UpdateConflictException e) {
         var res = new ErrorResponse("update conflict: the resource has already been modified");
         return new ResponseEntity<>(res, HttpStatus.PRECONDITION_REQUIRED);
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ErrorResponse> handle(MailException e) {
+        var res = new ErrorResponse(
+            "mail failed:\n" + e.getMessage());
+        return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AuthenticationException.class)

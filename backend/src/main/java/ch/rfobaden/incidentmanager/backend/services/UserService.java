@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
@@ -23,11 +24,14 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
 
     private final PasswordEncoder passwordEncoder;
 
+    private final EmailConfig emailConfig;
+
     private final SecureRandom passwordRandom = new SecureRandom();
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, EmailConfig emailConfig) {
         this.passwordEncoder = passwordEncoder;
+        this.emailConfig = emailConfig;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -49,8 +53,9 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         newUser.setCredentials(credentials);
         var user = super.create(path, newUser);
 
-        // TODO send the generated email to the user by mail.
-        // Log the password for now so we can actually now what it is.
+        emailConfig.sendSimpleMessage(user.getEmail(), "IM-Tool RFOBaden: Benutzer erstellt",
+            emailConfig.getPasswordTemplateMessage(user.getEmail(), plainPassword));
+
         logger.info("Password for {}: {}", user.getEmail(), plainPassword);
         return user;
     }
