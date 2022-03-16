@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { useIsomorphicLayoutEffect } from 'react-use'
-import { ModelStore, ModelStoreState, privateKey, Store } from './Store'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useIsomorphicLayoutEffect, useRendersCount, useUpdate } from 'react-use'
+import { afterStorePatch, ModelStore, ModelStoreState, privateKey, Store } from './Store'
 import Id, { isId } from '@/models/base/Id'
 import Model from '@/models/base/Model'
-import { useStatic } from '@/utils/hooks/useStatic'
 
 interface UseRecord<T> {
   (id: Id<T> | null): T | null
@@ -33,23 +32,28 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
     return state.mapping[idOrRecord.id] ?? oldValue ?? null
   }
   return (idOrRecord: Id<T> | T | null) => {
-    const [result, setResult] = useState(() => {
+    const createForceUpdate = useCreateSingleUpdate()
+    const result = useRef<T | null>()
+    if (result.current === undefined) {
       if (idOrRecord !== null && !isId(idOrRecord)) {
         const record = store[privateKey].parse(idOrRecord)
         store.save(record)
-        return record
+        result.current = record
+      } else {
+        result.current = computeValue(store[privateKey].state, null, idOrRecord)
       }
-      return computeValue(store[privateKey].state, null, idOrRecord)
-    })
+    }
     useStoreListener(store, (state) => {
-      setResult(computeValue(state, result, idOrRecord))
+      const newResult = computeValue(state, result.current as T | null, idOrRecord)
+      if (newResult !== result.current) {
+        result.current = newResult
+        afterStorePatch(createForceUpdate())
+      }
     }, [idOrRecord])
-    return result as T
+    return result.current as T
   }
 }
 
-
-let nextId = 0
 
 const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
   const computeValue = <O>(state: ModelStoreState<T>, idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O)): readonly T[] | O | null => {
@@ -62,17 +66,21 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
     return idsOrTransform(state.list)
   }
   return <O>(idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O), deps: unknown[] = []) => {
-    const id = useStatic(() => nextId++)
-
-    const [result, setResult] = useState(() => {
-      return computeValue(store[privateKey].state, idsOrTransform)
-    })
-
+    const createForceUpdate = useCreateSingleUpdate()
+    const result = useRef<readonly T[] | O | null>()
+    if (result.current === undefined) {
+      result.current = computeValue(store[privateKey].state, idsOrTransform)
+    }
     useStoreListener(store, (state) => {
-      const result = computeValue(state, idsOrTransform)
-      setResult(Object.freeze(result))
+      const newResult = computeValue(state, idsOrTransform)
+      console.log(newResult, result.current)
+      if (newResult !== result.current) {
+        result.current = newResult
+        console.log('redo')
+        afterStorePatch(createForceUpdate())
+      }
     }, [typeof idsOrTransform === 'function' ? null : idsOrTransform, ...deps])
-    return result
+    return result.current
   }
 }
 
@@ -90,9 +98,33 @@ const useStoreListener = <T>(store: Store<T>, listen: (value: T) => void, deps?:
   // Keep it this way for now, and hope that no one gets the idea to swap a deps array between undefined and array.
   if (deps !== undefined) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    const isFirst = useRef(true)
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useIsomorphicLayoutEffect(() => {
+      // Skip the first call, since it always happens, and causes unnecessary rerenders.
+      // `useStoreListener` does not guarantee a callback directly after initialization.
+      if (isFirst.current) {
+        isFirst.current = false
+        return
+      }
       listen(inner.state)
     }, deps)
+  }
+}
+
+const useCreateSingleUpdate = (): () => () => void => {
+  const forceUpdate = useUpdate()
+  const renderCountRef = useRef(0)
+  renderCountRef.current += 1
+
+  return () => {
+    const startCount = renderCountRef.current
+    return () => {
+      if (startCount === renderCountRef.current) {
+        forceUpdate()
+      }
+    }
   }
 }
 

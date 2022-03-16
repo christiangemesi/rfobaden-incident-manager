@@ -1,5 +1,5 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import ReportStore from '@/stores/ReportStore'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -26,6 +26,11 @@ interface Props {
 }
 
 const IncidentPage: React.VFC<Props> = ({ data }) => {
+  const loadRef = useRef(true)
+  if (loadRef.current) {
+    loadRef.current = false
+  }
+
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
@@ -38,6 +43,9 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }, [router])
 
   const incident = useIncident(data.incident)
+
+  console.log('render page')
+
   return (
     <StyledIncidentView incident={incident} onDelete={handleDelete} />
   )

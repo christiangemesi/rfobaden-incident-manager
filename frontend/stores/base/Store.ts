@@ -232,8 +232,9 @@ const runPatch = <T>(internals: StoreInternals<T>, patch: Patch<T>) => {
     return
   }
 
-  // Set `delayedPatches` to an empty array to signal that a patch is now being executed.
+  // Set global buffers to empty values to signal that a patch is now being executed.
   delayedPatches = []
+  afterPatchCallbacks = []
 
   // Backup the current state, so we can compare to it after applying the patch.
   const oldState = internals.state
@@ -242,19 +243,33 @@ const runPatch = <T>(internals: StoreInternals<T>, patch: Patch<T>) => {
   internals.state = applyPatch(internals.state, patch)
 
   // Run any delayed patches and reset the global patch state.
-  runDelayedPatches()
+  const delayedInternals = runDelayedPatches()
 
   // Broadcast the change to the listeners, if anything has changed at all.
   if (oldState !== internals.state) {
     internals.listeners.forEach((listener) => listener(internals.state))
   }
 
+
+  // Broadcast the changes to the listeners, if anything has changed at all.
+  // for (const [internals, oldState] of delayedInternals) {
+  //   if (internals.state !== oldState) {
+  //     internals.listeners.forEach((listener) => listener(internals.state))
+  //   }
+  // }
+
+  // Run any after-patch callbacks, and reset them.
+  runAfterPatchCallbacks()
 }
 
 /**
  * Run any delayed patches and reset the global patch state.
+ *
+ * @returns A map of internals whose listeners haven't received the newest state update yet.
  */
-const runDelayedPatches = () => {
+const runDelayedPatches = (): Map<StoreInternals<unknown>, unknown> => {
+  const delayedInternals = new Map()
+
   while (delayedPatches !== null && delayedPatches.length !== 0) {
     // Get all delayed patches and reset the global patch buffer.
     const patches = delayedPatches
@@ -263,8 +278,44 @@ const runDelayedPatches = () => {
     // Apply the delayed patches.
     // If these patches trigger other patches, they will get executed in the next while iteration.
     for (const [internals, patch] of patches) {
+      if (!delayedInternals.has(internals)) {
+        delayedInternals.set(internals, internals.state)
+      }
       internals.state = applyPatch(internals.state, patch)
     }
   }
+
   delayedPatches = null
+  return delayedInternals
+}
+
+/**
+ * `afterPatchCallbacks` contains callbacks that are executed right after `runPatch`.
+ * They are only executed once, and then removed from the array.
+ *
+ * `afterPatchCallbacks` is `null` if no patch is currently running.
+ */
+let afterPatchCallbacks: Array<() => void> | null = null
+
+/**
+ * Run a callback after the current store patch has finished.
+ * If no patch is currently running, the callback is executed immediately.
+ * @param callback The callback to execute.
+ */
+export const afterStorePatch = (callback: () => void): void => {
+  if (afterPatchCallbacks === null) {
+    callback()
+  } else {
+    afterPatchCallbacks.push(callback)
+  }
+}
+
+const runAfterPatchCallbacks = () => {
+  if (afterPatchCallbacks !== null) {
+    const callbacks = afterPatchCallbacks
+    afterPatchCallbacks = null
+    for (const callback of callbacks) {
+      callback()
+    }
+  }
 }

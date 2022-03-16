@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useCallback, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
@@ -30,69 +30,75 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   const reports = useReportsOfIncident(incident.id)
 
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
-    parseIncidentQuery(router.query)?.reportId ?? null
+    // parseIncidentQuery(router.query)?.reportId ?? null
+    null
   ))
-  const selected = useReport(selectedId)
-  const setSelected = useCallback((report: Report | null) => {
-    setSelectedId(report?.id ?? null)
-  }, [])
-  const clearSelected = useCallback(() => {
-    setSelectedId(null)
-  }, [])
 
-  const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
-  const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
+  // const selected = useReport(selectedId)
+  // const setSelected = useCallback((report: Report | null) => {
+  //   setSelectedId(report?.id ?? null)
+  // }, [])
+  // const clearSelected = useCallback(() => {
+  //   setSelectedId(null)
+  // }, [])
 
-  useAsync(async function updateRoute() {
-    const query = parseIncidentQuery(router.query)
-    if (query === null) {
-      return
-    }
-    if (selected === null) {
-      if (query.reportId !== null) {
-        await router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
-      }
-      return
-    }
-    if (query.reportId === null || query.reportId !== selected.id) {
-      await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
-    }
-  }, [incident, router, selected])
+  // const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
+  // const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
-  return (
-    <UiLevel className={className} style={style}>
-      <UiLevel.Header>
-        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <UiGrid.Col>
-            <IncidentInfo incident={incident} />
-            <UiTitle level={1}>
-              {incident.title}
-            </UiTitle>
-          </UiGrid.Col>
+  // useAsync(async function updateRoute() {
+  //   const query = parseIncidentQuery(router.query)
+  //   if (query === null) {
+  //     return
+  //   }
+  //   if (selected === null) {
+  //     if (query.reportId !== null) {
+  //       await router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
+  //     }
+  //     return
+  //   }
+  //   if (query.reportId === null || query.reportId !== selected.id) {
+  //     await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
+  //   }
+  // }, [incident, router, selected])
 
-          <UiGrid.Col size="auto">
-            <IncidentActions incident={incident} onDelete={handleDelete} />
-            <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
-          </UiGrid.Col>
-        </UiGrid>
+  console.table('render IncidentView')
 
-        <UiDescription description={incident.description} />
-      </UiLevel.Header>
-      <StyledUiLevelContent $hasSelected={selected !== null}>
-        <ListContainer ref={setReportListRef} $hasSelected={selected !== null}>
-          <ReportList reports={reports} selected={selected} onSelect={setSelected} />
-        </ListContainer>
+  return <div />
 
-        <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
-          {selected !== null && (
-            <ReportView incident={incident} report={selected} onClose={clearSelected} />
-          )}
-        </ReportOverlay>
-      </StyledUiLevelContent>
-    </UiLevel>
-  )
+  // return (
+  //   <UiLevel className={className} style={style}>
+  //     <UiLevel.Header>
+  //       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
+  //         <UiGrid.Col>
+  //           <IncidentInfo incident={incident} />
+  //           <UiTitle level={1}>
+  //             {incident.title}
+  //           </UiTitle>
+  //         </UiGrid.Col>
+  //
+  //         <UiGrid.Col size="auto">
+  //           <IncidentActions incident={incident} onDelete={handleDelete} />
+  //           <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
+  //         </UiGrid.Col>
+  //       </UiGrid>
+  //
+  //       <UiDescription description={incident.description} />
+  //     </UiLevel.Header>
+  //     <StyledUiLevelContent $hasSelected={selectedId !== null}>
+  //       <ListContainer $hasSelected={selectedId !== null}>
+  //         <ReportList reports={reports} selected={null} onSelect={() => {}} />
+  //       </ListContainer>
+  //
+  //       <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
+  //         {selected !== null && (
+  //           <ReportView incident={incident} report={selected} onClose={clearSelected} />
+  //         )}
+  //       </ReportOverlay>
+  //     </StyledUiLevelContent>
+  //   </UiLevel>
+  // )
 }
-export default IncidentView
+export default styled(IncidentView)``
 
 const StyledUiLevelContent = styled(UiLevel.Content)<{ $hasSelected: boolean }>`
   overflow: hidden;
