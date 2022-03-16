@@ -35,10 +35,11 @@ public class SubtaskService
         if (oldSubTask.isEmpty()) {
             return Optional.empty();
         }
+        Long oldSubTaskId = oldSubTask.get().getAssigneeId();
         Optional<Subtask> savedSubTask = super.update(path, subTask);
         savedSubTask.ifPresent(rep -> {
             if (rep.getAssigneeId() != null
-                && rep.getAssigneeId().equals(oldSubTask.get().getAssigneeId())) {
+                && rep.getAssigneeId().equals(oldSubTaskId)) {
                 sendAssignmentEmail(rep);
             }
         });
