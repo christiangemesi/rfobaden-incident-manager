@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
 - Redesigned the incident page.
 - Redesigned the users page.
+- Replaced the date/time input.
 
 ### Fixed
 - Scroll is now disabled while a modal is open.
