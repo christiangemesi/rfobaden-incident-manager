@@ -9,7 +9,7 @@ const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
   sortBy: (task) => ['desc', [
     [task.isClosed || task.isDone, 'asc'],
     getPriorityIndex(task.priority),
-    [task.title, 'asc'],
+    [task.title.toLowerCase(), 'asc'],
   ]],
 })
 export default TaskStore

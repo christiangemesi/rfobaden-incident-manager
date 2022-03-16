@@ -19,6 +19,8 @@ const UiIconButtonGroup: React.VFC<Props> = ({
 export default UiIconButtonGroup
 
 const StyledGroup = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
   > ${UiIconButton} {
     margin: 0 0.5rem;
   }

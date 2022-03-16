@@ -13,6 +13,11 @@ import javax.mail.internet.MimeMessage;
 
 @Configuration
 public class EmailConfig {
+    private final RfoConfig rfoConfig;
+
+    public EmailConfig(RfoConfig rfoConfig) {
+        this.rfoConfig = rfoConfig;
+    }
 
     @Bean
     public JavaMailSender getJavaMailSender() {
@@ -80,6 +85,9 @@ public class EmailConfig {
     }
 
     public void sendSimpleMessage(String receiver, String subject, String text) {
+        if (!rfoConfig.getMail().getEnable()) {
+            return;
+        }
         try {
             MimeMessage mimeMessage = getJavaMailSender().createMimeMessage();
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "utf-8");

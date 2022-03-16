@@ -16,3 +16,5 @@ rfo:
     secret: ${RFO_JWT_SECRET}
   frontend:
     host: ${RFO_FRONTEND_HOST}
+  mail:
+    enable: true

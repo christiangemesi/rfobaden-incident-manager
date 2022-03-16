@@ -30,15 +30,14 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
 
     @Override
     public Optional<Task> update(TaskPath path, Task task) {
-        Optional<Task> oldTask = repository.findById(task.getId());
+        Optional<Task> oldTask = find(path, task.getId());
         if (oldTask.isEmpty()) {
             return Optional.empty();
         }
-        Long oldTaskId = oldTask.get().getAssigneeId();
         Optional<Task> savedTask = super.update(path, task);
         savedTask.ifPresent(rep -> {
             if (rep.getAssigneeId() != null
-                && !rep.getAssigneeId().equals(oldTaskId)) {
+                && !rep.getAssigneeId().equals(oldTask.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });

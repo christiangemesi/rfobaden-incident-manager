@@ -10,9 +10,12 @@ public class RfoConfig {
 
     private final Jwt jwt;
 
-    public RfoConfig(Frontend frontend, Jwt jwt) {
+    private final Mail mail;
+
+    public RfoConfig(Frontend frontend, Jwt jwt, Mail mail) {
         this.frontend = frontend;
         this.jwt = jwt;
+        this.mail = mail;
     }
 
     public Frontend getFrontend() {
@@ -21,6 +24,10 @@ public class RfoConfig {
 
     public Jwt getJwt() {
         return jwt;
+    }
+
+    public Mail getMail() {
+        return mail;
     }
 
     public static class Frontend {
@@ -44,6 +51,18 @@ public class RfoConfig {
 
         public String getSecret() {
             return secret;
+        }
+    }
+
+    public static class Mail {
+        private final boolean enable;
+
+        public Mail(boolean enable) {
+            this.enable = enable;
+        }
+
+        public boolean getEnable() {
+            return enable;
         }
     }
 }

@@ -31,15 +31,14 @@ public class SubtaskService
 
     @Override
     public Optional<Subtask> update(SubtaskPath path, Subtask subTask) {
-        Optional<Subtask> oldSubTask = repository.findById(subTask.getId());
+        Optional<Subtask> oldSubTask = find(path, subTask.getId());
         if (oldSubTask.isEmpty()) {
             return Optional.empty();
         }
-        Long oldSubTaskId = oldSubTask.get().getAssigneeId();
         Optional<Subtask> savedSubTask = super.update(path, subTask);
         savedSubTask.ifPresent(rep -> {
             if (rep.getAssigneeId() != null
-                && !rep.getAssigneeId().equals(oldSubTaskId)) {
+                && !rep.getAssigneeId().equals(oldSubTask.get().getAssigneeId())) {
                 sendAssignmentEmail(rep);
             }
         });

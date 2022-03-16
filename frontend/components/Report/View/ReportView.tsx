@@ -1,184 +1,147 @@
-import Report, { parseReport } from '@/models/Report'
-import React from 'react'
+import Report from '@/models/Report'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
-import { useTasksOfReport } from '@/stores/TaskStore'
+import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import ReportStore from '@/stores/ReportStore'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import { useUser } from '@/stores/UserStore'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import { useIncident } from '@/stores/IncidentStore'
-import ReportForm from '@/components/Report/Form/ReportForm'
-import UiButton from '@/components/Ui/Button/UiButton'
+import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
+import Id from '@/models/base/Id'
+import Task, { parseTask } from '@/models/Task'
+import TaskView from '@/components/Task/View/TaskView'
+import { Themed } from '@/theme'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import { sleep } from '@/utils/control-flow'
+import UiDescription from '@/components/Ui/Description/UiDescription'
+import EventHelper from '@/utils/helpers/EventHelper'
+import ReportInfo from '@/components/Report/Info/ReportInfo'
+import Incident from '@/models/Incident'
+import UiLevel from '@/components/Ui/Level/UiLevel'
+import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
+import useAsyncCached from '@/utils/hooks/useAsyncCached'
+import ReportActions from '@/components/Report/Actions/ReportActions'
+import { useRouter } from 'next/router'
+import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 
 interface Props {
+  incident: Incident
   report: Report
+  onClose?: () => void
 }
 
-const ReportView: React.VFC<Props> = ({ report }) => {
-  const assignee = useUser(report.assigneeId)
-  const assigneeName = assignee?.firstName + ' ' + assignee?.lastName ?? ''
-
+const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
+  const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
-  const handleClose = async () => {
-    if (report.isDone) {
-      alert('Es sind alle Aufträge geschlossen.')
-    } else {
-      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
-        const newReport = { ...report, isClosed: true }
-        const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
-        if (error !== null) {
-          throw error
-        }
-        ReportStore.save(parseReport(data))
+  const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => (
+    parseIncidentQuery(router.query)?.taskId ?? null
+  ))
+  const selected = useTask(selectedId)
+  const setSelected = useCallback((task: Task | null) => {
+    setSelectedId(task?.id ?? null)
+  }, [])
+  const clearSelected = useCallback(() => {
+    setSelectedId(null)
+  }, [])
+
+  const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
+
+  // Load tasks from the backend.
+  const { loading: isLoading } = useAsyncCached(ReportView, report.id, async () => {
+    // Wait for any animations to play out before fetching data.
+    // The load is a relatively expensive operation, and may interrupt some animations.
+    await sleep(300)
+
+    const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
+      `incidents/${report.incidentId}/reports/${report.id}/tasks`,
+    )
+    if (error !== null) {
+      throw error
+    }
+    TaskStore.saveAll(tasks.map(parseTask))
+  })
+
+  // Clear the selected task if the report changes.
+  // Two reports never contain the same task.
+  useUpdateEffect(clearSelected, [report.id])
+
+  useAsync(async function updateRoute() {
+    const query = parseIncidentQuery(router.query)
+    if (query === null) {
+      return
+    }
+    if (selected === null) {
+      if (query.taskId !== null) {
+        await router.push(`/ereignisse/${report.incidentId}/meldungen/${report.id}`, undefined, { shallow: true })
       }
+      return
     }
-  }
-
-  const handleReopen = async () => {
-    if (report.isDone) {
-      alert('Es sind alle Aufträge geschlossen.')
-    } else {
-      if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" öffnen wollen?`)) {
-        const newReport = { ...report, isClosed: false }
-        const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
-        if (error !== null) {
-          throw error
-        }
-        ReportStore.save(parseReport(data))
-      }
+    if (query.taskId === null || query.taskId !== selected.id) {
+      await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.reportId}/auftraege/${selected.id}`, undefined, { shallow: true })
     }
-  }
-
-  const handleDelete = async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
-      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
-      ReportStore.remove(report.id)
-    }
-  }
-
-  const startDate = report.startsAt !== null ? report.startsAt : report.createdAt
-  const incident = useIncident(report.incidentId)
-  if (incident === null) {
-    throw new Error('incident of report not found')
-  }
+  }, [report, router, selected])
 
   return (
-    <UiGrid gapH={2} gapV={1}>
-      <VerticalSpacer>
-        <UiTitle level={2}>
-          {report.title}
-        </UiTitle>
-      </VerticalSpacer>
-      <VerticalSpacer>
-        <HorizontalSpacer>
-          <UiDateLabel start={startDate} end={report.endsAt} />
+    <UiLevel>
+      <UiLevel.Header>
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
+          <div>
+            <ReportInfo report={report} />
+            <UiTitle level={3}>
+              {report.title}
+            </UiTitle>
+          </div>
           <UiIconButtonGroup>
-            {/*TODO add close and reopen icon*/}
-            {!report.isDone && (
-              report.isClosed ? (
-                <UiButton onClick={handleReopen}>
-                  Öffnen
-                </UiButton>
-              ) : (
-                <UiButton onClick={handleClose}>
-                  Schliessen
-                </UiButton>
-              )
-            )}
-            <UiIconButton onClick={() => alert('not yet implemented')}>
-              <UiIcon.PrintAction />
+            <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
+
+            <UiIconButton onClick={handleCloseView}>
+              <UiIcon.CancelAction />
             </UiIconButton>
-
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiIconButton onClick={open}>
-                  <UiIcon.EditAction />
-                </UiIconButton>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Meldung bearbeiten
-                  </UiTitle>
-                  <ReportForm incident={incident} report={report} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-
-            <UiIconButton onClick={handleDelete}>
-              <UiIcon.DeleteAction />
-            </UiIconButton>
-
           </UiIconButtonGroup>
-        </HorizontalSpacer>
-      </VerticalSpacer>
-      <BlockContainer>
-        <TextLines>
-          {report.description}
-        </TextLines>
-      </BlockContainer>
-      {report.location && (
-        <BlockContainer>
-          <UiTextWithIcon text={report.location ?? ''}>
-            <UiIcon.Location />
-          </UiTextWithIcon>
-        </BlockContainer>
-      )}
-      {assignee && (
-        <BlockContainer>
-          <UiTextWithIcon text={assigneeName}>
-            <UiIcon.UserInCircle />
-          </UiTextWithIcon>
-        </BlockContainer>
-      )}
-      {report.notes !== null && (
-        <VerticalSpacer>
-          <UiTextWithIcon text={report.notes}>
-            <UiIcon.AlertCircle />
-          </UiTextWithIcon>
-        </VerticalSpacer>
-      )}
+        </UiGrid>
 
-      <BlockContainer>
-        <TaskList
-          incident={incident}
-          report={report}
-          tasks={tasks} />
-      </BlockContainer>
-    </UiGrid>
+        <UiDescription description={report.description} notes={report.notes} />
+      </UiLevel.Header>
+
+      <AnimatedUiLevelContent onClick={EventHelper.stopPropagation} style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
+        <TaskContainer>
+          {isLoading ? (
+            <UiIcon.Loader isSpinner />
+          ) : (
+            <TaskList
+              tasks={tasks}
+              onClick={setSelected}
+            />
+          )}
+        </TaskContainer>
+        <UiInlineDrawer isOpen={selected !== null} onClose={clearSelected}>
+          {selected && (
+            <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
+          )}
+        </UiInlineDrawer>
+      </AnimatedUiLevelContent>
+    </UiLevel>
   )
 }
 export default ReportView
 
-const HorizontalSpacer = styled.div`
+const AnimatedUiLevelContent = styled(UiLevel.Content)`
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-property: min-height;
+`
+
+const TaskContainer = styled.div`
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const VerticalSpacer = styled.div`
+  justify-content: center;
   width: 100%;
-  margin-bottom: 1rem;
-
-  :last-child {
-    margin-bottom: 0;
+  
+  ${Themed.media.lg.max} {
+    padding: 0;
+    ${UiContainer.fluidCss};
   }
-`
-
-const BlockContainer = styled.div`
-  width: 100%;
-`
-
-const TextLines = styled.div`
-  white-space: pre-wrap;
-  line-height: 1.2;
 `

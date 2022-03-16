@@ -17,7 +17,6 @@ const UiCheckbox: React.VFC<Props> = ({
   isDisabled = false,
   errors = [],
   onChange: handleChange,
-  color = 'primary',
 }) => {
   const handleSelect = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
@@ -27,8 +26,8 @@ const UiCheckbox: React.VFC<Props> = ({
   return (
     <div>
       <Container onClick={handleSelect} isDisabled={isDisabled}>
-        <CheckboxLabel color={color}>
-          <Checkbox color={color}>
+        <CheckboxLabel>
+          <Checkbox>
             {value && !isDisabled ? <UiIcon.CheckboxInactive /> : <UiIcon.CheckboxActive />}
           </Checkbox>
           {label}
@@ -62,19 +61,17 @@ const Container = styled.div<{ isDisabled: boolean }>`
 `}
 `
 
-const CheckboxLabel = styled.label<{ color: ColorName }>`
+const CheckboxLabel = styled.label`
   display: inline-flex;
   align-items: center;
   margin-left: 0.25rem;
-  color: ${({ theme, color }) => theme.colors[color].value};
   
   &:hover {
     cursor: pointer;
   }
 `
 
-const Checkbox = styled.div<{ color: ColorName }>`
-  color: ${({ theme, color }) => theme.colors[color].value};
+const Checkbox = styled.div`
   border: none;
   background: none;
 `

@@ -250,8 +250,9 @@ public abstract class ModelRepositoryServiceTest<
         var record = generator.generate();
         var updatedRecord = generator.copy(record);
         updatedRecord.setUpdatedAt(null);
+        var path = updatedRecord.toPath();
 
-        Mockito.when(repository.findById(record.getId()))
+        Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
 
         // When
