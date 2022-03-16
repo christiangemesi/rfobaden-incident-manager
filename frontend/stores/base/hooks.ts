@@ -3,6 +3,7 @@ import { useIsomorphicLayoutEffect } from 'react-use'
 import { ModelStore, ModelStoreState, privateKey, Store } from './Store'
 import Id, { isId } from '@/models/base/Id'
 import Model from '@/models/base/Model'
+import { useStatic } from '@/utils/hooks/useStatic'
 
 interface UseRecord<T> {
   (id: Id<T> | null): T | null
@@ -47,6 +48,9 @@ const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> =>
   }
 }
 
+
+let nextId = 0
+
 const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
   const computeValue = <O>(state: ModelStoreState<T>, idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O)): readonly T[] | O | null => {
     if (idsOrTransform === undefined) {
@@ -58,10 +62,15 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
     return idsOrTransform(state.list)
   }
   return <O>(idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O), deps: unknown[] = []) => {
-    const [result, setResult] = useState(() => computeValue(store[privateKey].state, idsOrTransform))
+    const id = useStatic(() => nextId++)
+
+    const [result, setResult] = useState(() => {
+      return computeValue(store[privateKey].state, idsOrTransform)
+    })
+
     useStoreListener(store, (state) => {
-      console.log(store[privateKey].parse, computeValue(state, idsOrTransform), result, result === computeValue(state, idsOrTransform))
-      setResult(computeValue(state, idsOrTransform))
+      const result = computeValue(state, idsOrTransform)
+      setResult(Object.freeze(result))
     }, [typeof idsOrTransform === 'function' ? null : idsOrTransform, ...deps])
     return result
   }
@@ -75,7 +84,7 @@ const useStoreListener = <T>(store: Store<T>, listen: (value: T) => void, deps?:
       const i = inner.listeners.indexOf(listen)
       inner.listeners.splice(i, 1)
     }
-  })
+  }, [])
 
   // Conditional hook call - this is kind of really dangerous, but the cleanest way to solve this issue by far.
   // Keep it this way for now, and hope that no one gets the idea to swap a deps array between undefined and array.

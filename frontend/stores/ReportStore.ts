@@ -12,7 +12,7 @@ export default ReportStore
 export const useReport = createUseRecord(ReportStore)
 export const useReports = createUseRecords(ReportStore)
 
-export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
+export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[] => (
   useReports((reports) => (
     reports.filter((report) => report.incidentId === incidentId)
   ), [incidentId])

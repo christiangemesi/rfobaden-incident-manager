@@ -15,18 +15,19 @@ interface Props {
 const IncidentInfo: React.VFC<Props> = ({ incident }) => {
   const reports = useReportsOfIncident(incident.id)
 
-  const subtasks = useSubtasks((subtasks) => (
-    subtasks.filter((subtask) => subtask.incidentId === incident.id)
-  ))
   const tasks = useTasks((tasks) => (
     tasks.filter((task) => task.incidentId === incident.id)
+  ))
+
+  const subtasks = useSubtasks((subtasks) => (
+    subtasks.filter((subtask) => subtask.incidentId === incident.id)
   ))
 
   const assigneeIds = useMemo(() => new Set([
     ...reports.map((report) => report.assigneeId),
     ...tasks.map((task) => task.assigneeId),
     ...subtasks.map((subtask) => subtask.assigneeId),
-  ]), [reports, subtasks, tasks])
+  ]), [reports, tasks, subtasks])
 
   const activeOrganisations = useOrganizations((organizations) => (
     organizations

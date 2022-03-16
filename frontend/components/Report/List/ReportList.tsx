@@ -7,7 +7,7 @@ import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
-  reports: Report[]
+  reports: readonly Report[]
   selected?: Report | null,
   onSelect?: (report: Report) => void
 }
