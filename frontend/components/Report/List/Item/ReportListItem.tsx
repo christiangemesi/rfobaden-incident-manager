@@ -23,7 +23,6 @@ const ReportListItem: React.VFC<Props> = ({
   onClick: handleClick,
 }) => {
   const assignee = useUser(report.assigneeId)
-//no lock
   const assigneeName = useUsername(assignee)
 
   const defaultIcon = useMemo(() => isSmall ? (
