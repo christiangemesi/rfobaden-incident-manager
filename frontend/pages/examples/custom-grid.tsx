@@ -12,7 +12,7 @@ const MediaQueriesExample: React.VFC = () => {
       </UiTitle>
 
       <Grid>
-        <Column xs={12} md={0} lg={6}>
+        <Column xs={12} md={1} lg={6}>
           1
         </Column>
         <Column xs={12} lg={4}>
