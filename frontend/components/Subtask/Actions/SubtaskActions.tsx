@@ -32,30 +32,31 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
 
   return (
     <UiDropDown>
-      <UiDropDown.Trigger>
-        <UiIconButton>
+      <UiDropDown.Trigger>{({ toggle }) => (
+        <UiIconButton onClick={toggle}>
           <UiIcon.More />
         </UiIconButton>
-      </UiDropDown.Trigger>
-
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Bearbeiten
-          </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Teilauftrag bearbeiten
-            </UiTitle>
-            <SubtaskForm task={task} subtask={subtask} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
-      <UiDropDown.Item onClick={handleDelete}>
-        Löschen
-      </UiDropDown.Item>
+      )}</UiDropDown.Trigger>
+      <UiDropDown.Menu>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bearbeiten
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <div>
+              <UiTitle level={1} isCentered>
+                Teilauftrag bearbeiten
+              </UiTitle>
+              <SubtaskForm task={task} subtask={subtask} onClose={close} />
+            </div>
+          )}</UiModal.Body>
+        </UiModal>
+        <UiDropDown.Item onClick={handleDelete}>
+          Löschen
+        </UiDropDown.Item>
+      </UiDropDown.Menu>
     </UiDropDown>
   )
 }

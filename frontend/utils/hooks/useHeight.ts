@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { useCallback } from 'react'
-import { useGetSet, useGetSetState, useUnmount } from 'react-use'
+import { useCallback, useRef } from 'react'
+import { useGetSet, useUnmount } from 'react-use'
 import { noop } from '@/utils/control-flow'
 
 
-const useHeight = <E extends HTMLElement>(): [(ref: E) => void, number] => {
+const useHeight = <E extends HTMLElement>(): [(ref: E | null) => void, number] => {
   if (typeof window === 'undefined') {
     return [noop, 0]
   }
-  
+
+  const ref = useRef<E | null>(null)
   const [getState, setState] = useGetSet(() => ({
     height: 0,
     observer: new ResizeObserver((entries) => {
@@ -21,8 +22,16 @@ const useHeight = <E extends HTMLElement>(): [(ref: E) => void, number] => {
     }),
   }))
   
-  const setRef = useCallback((ref: E) => {
-    getState().observer.observe(ref)
+  const setRef = useCallback((element: E | null) => {
+    const state = getState()
+    if (element === null) {
+      if (ref.current !== null) {
+        state.observer.unobserve(ref.current)
+      }
+    } else {
+      state.observer.observe(element)
+    }
+    ref.current = element
   }, [getState])
   useUnmount(() => {
     getState().observer.disconnect()

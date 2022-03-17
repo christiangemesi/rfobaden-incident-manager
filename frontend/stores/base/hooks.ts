@@ -75,7 +75,6 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
       const newResult = computeValue(state, idsOrTransform)
       if (newResult !== result.current) {
         result.current = newResult
-        console.log('redo')
         afterStorePatch(createForceUpdate())
       }
     }, [typeof idsOrTransform === 'function' ? null : idsOrTransform, ...deps])

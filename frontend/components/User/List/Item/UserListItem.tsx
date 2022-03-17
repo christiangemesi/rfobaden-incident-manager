@@ -58,27 +58,28 @@ const UserListItem: React.VFC<Props> = ({
         <UiGrid.Col size={1}>
 
           <UiDropDown>
-            <UiDropDown.Trigger>
-              <UiIconButton>
+            <UiDropDown.Trigger>{({ toggle }) => (
+              <UiIconButton onClick={toggle}>
                 <UiIcon.More />
               </UiIconButton>
-            </UiDropDown.Trigger>
-
-            <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
-            <UiModal isFull>
-              <UiModal.Activator>{({ open }) => (
-                <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-              )}</UiModal.Activator>
-              <UiModal.Body>{({ close }) => (
-                <React.Fragment>
-                  <UiTitle level={1} isCentered>
-                    Benutzer bearbeiten
-                  </UiTitle>
-                  <UserForm user={user} onClose={close} />
-                </React.Fragment>
-              )}</UiModal.Body>
-            </UiModal>
-            <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
+            )}</UiDropDown.Trigger>
+            <UiDropDown.Menu>
+              <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
+              <UiModal isFull>
+                <UiModal.Activator>{({ open }) => (
+                  <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
+                )}</UiModal.Activator>
+                <UiModal.Body>{({ close }) => (
+                  <React.Fragment>
+                    <UiTitle level={1} isCentered>
+                      Benutzer bearbeiten
+                    </UiTitle>
+                    <UserForm user={user} onClose={close} />
+                  </React.Fragment>
+                )}</UiModal.Body>
+              </UiModal>
+              <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
+            </UiDropDown.Menu>
           </UiDropDown>
         </UiGrid.Col>
       </UiGrid>

@@ -16,7 +16,8 @@ const ReportList: React.VFC<Props> = ({
   reports,
   selected = null,
   onSelect: handleSelect,
-  style, className,
+  style,
+  className,
 }) => {
   const [keyReports, normalReports] = useMemo(() => (
     reports.reduce(([key, normal], report) => {

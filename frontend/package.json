@@ -24,8 +24,6 @@
     "overlayscrollbars": "^1.13.1",
     "overlayscrollbars-react": "^0.2.3",
     "raw-loader": "^4.0.2",
-    "rc-dropdown": "^3.3.2",
-    "rc-menu": "^9.3.2",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-datepicker": "^4.7.0",

@@ -60,55 +60,57 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
 
   return (
     <UiDropDown>
-      <UiDropDown.Trigger>
-        <UiIconButton>
+      <UiDropDown.Trigger>{({ toggle }) => (
+        <UiIconButton onClick={toggle}>
           <UiIcon.More />
         </UiIconButton>
-      </UiDropDown.Trigger>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Teilauftrag erfassen
-          </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Neuer Teilauftrag
-            </UiTitle>
-            <SubtaskForm task={task} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Bearbeiten
-          </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Task bearbeiten
-            </UiTitle>
-            <TaskForm report={report} task={task} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-      {!task.isDone && (
-        task.isClosed ? (
-          <UiDropDown.Item onClick={handleReopen}>
-            Öffnen
-          </UiDropDown.Item>
-        ) : (
-          <UiDropDown.Item onClick={handleClose}>
-            Schliessen
-          </UiDropDown.Item>
-        )
-      )}
-      <UiDropDown.Item onClick={handleDelete}>
-        Löschen
-      </UiDropDown.Item>
+      )}</UiDropDown.Trigger>
+      <UiDropDown.Menu>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Teilauftrag erfassen
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <div>
+              <UiTitle level={1} isCentered>
+                Neuer Teilauftrag
+              </UiTitle>
+              <SubtaskForm task={task} onClose={close} />
+            </div>
+          )}</UiModal.Body>
+        </UiModal>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bearbeiten
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Task bearbeiten
+              </UiTitle>
+              <TaskForm report={report} task={task} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+        {!task.isDone && (
+          task.isClosed ? (
+            <UiDropDown.Item onClick={handleReopen}>
+              Öffnen
+            </UiDropDown.Item>
+          ) : (
+            <UiDropDown.Item onClick={handleClose}>
+              Schliessen
+            </UiDropDown.Item>
+          )
+        )}
+        <UiDropDown.Item onClick={handleDelete}>
+          Löschen
+        </UiDropDown.Item>
+      </UiDropDown.Menu>
     </UiDropDown>
   )
 }

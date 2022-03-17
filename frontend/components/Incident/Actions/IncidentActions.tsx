@@ -57,52 +57,53 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
   
   return (
     <UiDropDown>
-      <UiDropDown.Trigger>
-        <UiIconButton>
+      <UiDropDown.Trigger>{({ toggle }) => (
+        <UiIconButton onClick={toggle}>
           <UiIcon.More />
         </UiIconButton>
-      </UiDropDown.Trigger>
+      )}</UiDropDown.Trigger>
+      <UiDropDown.Menu>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Neue Meldung
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Meldung erfassen
+              </UiTitle>
+              <ReportForm incident={incident} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
 
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Neue Meldung
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Ereignis bearbeiten
+              </UiTitle>
+              <IncidentForm incident={incident} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+
+        {incident.isClosed ? (
+          <UiDropDown.Item onClick={handleReopen}>
+            Öffnen
           </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung erfassen
-            </UiTitle>
-            <ReportForm incident={incident} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Ereignis bearbeiten
-            </UiTitle>
-            <IncidentForm incident={incident} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-
-      {incident.isClosed ? (
-        <UiDropDown.Item onClick={handleReopen}>
-          Öffnen
-        </UiDropDown.Item>
-      ) : (
-        <UiDropDown.Item onClick={handleClose}>
-          Schliessen
-        </UiDropDown.Item>
-      )}
-      <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+        ) : (
+          <UiDropDown.Item onClick={handleClose}>
+            Schliessen
+          </UiDropDown.Item>
+        )}
+        <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+      </UiDropDown.Menu>
     </UiDropDown>
   )
 }
