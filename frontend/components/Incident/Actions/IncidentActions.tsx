@@ -65,22 +65,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
       <UiDropDown.Menu>
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Neue Meldung
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Meldung erfassen
-              </UiTitle>
-              <ReportForm incident={incident} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
-
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
             <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
           )}</UiModal.Activator>
           <UiModal.Body>{({ close }) => (

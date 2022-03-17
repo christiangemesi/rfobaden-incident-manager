@@ -69,21 +69,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
             <UiDropDown.Item onClick={open}>
-              Teilauftrag erfassen
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <div>
-              <UiTitle level={1} isCentered>
-                Neuer Teilauftrag
-              </UiTitle>
-              <SubtaskForm task={task} onClose={close} />
-            </div>
-          )}</UiModal.Body>
-        </UiModal>
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
               Bearbeiten
             </UiDropDown.Item>
           )}</UiModal.Activator>

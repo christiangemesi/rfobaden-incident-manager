@@ -22,10 +22,11 @@ import styled from 'styled-components'
 interface Props {
   report: Report
   task?: Task | null
+  onSave?: (task: Task) => void
   onClose?: () => void
 }
 
-const TaskForm: React.VFC<Props> = ({ report, task = null, onClose: handleClose }) => {
+const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, onClose: handleClose }) => {
   const form = useForm<ModelData<Task>>(task, () => ({
     title: '',
     description: null,
@@ -74,7 +75,11 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onClose: handleClose 
     if (error !== null) {
       throw error
     }
-    TaskStore.save(parseTask(data))
+    const newTask = parseTask(data)
+    TaskStore.save(newTask)
+    if (handleSave) {
+      handleSave(newTask)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()

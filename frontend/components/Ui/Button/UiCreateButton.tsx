@@ -16,5 +16,5 @@ const CreateButton = styled(UiButton)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 58px;
+  min-height: 52px;
 `

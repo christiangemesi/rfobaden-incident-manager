@@ -30,6 +30,8 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
 
+  console.log('render!')
+
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
     parseIncidentQuery(router.query)?.reportId ?? null
   ))
@@ -62,8 +64,8 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   }, [incident, router, selected])
 
   const reportList = useMemo(() => (
-    <ReportList reports={reports} selected={selected} onSelect={setSelected} />
-  ), [reports, selected, setSelected])
+    <ReportList incident={incident} reports={reports} selected={selected} onSelect={setSelected} />
+  ), [incident, reports, selected, setSelected])
   
   const reportView = useMemo(() => selected === null ? undefined : (
     <ReportView incident={incident} report={selected} onClose={clearSelected} />

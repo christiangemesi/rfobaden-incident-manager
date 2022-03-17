@@ -5,7 +5,6 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import TaskForm from '@/components/Task/Form/TaskForm'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
@@ -62,23 +61,6 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Neuer Auftrag
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <div>
-              <UiTitle level={1} isCentered>
-                Auftrag erfassen
-              </UiTitle>
-              <TaskForm report={report} onClose={close} />
-            </div>
-          )}</UiModal.Body>
-        </UiModal>
-
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
             <UiDropDown.Item onClick={open}>

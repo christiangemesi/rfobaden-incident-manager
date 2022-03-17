@@ -45,7 +45,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
 
   return (
     <UiLevel ref={innerRef}>
-      <UiLevel.Header onClick={EventHelper.stopPropagation}>
+      <UiLevel.Header>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <TaskInfo task={task} />

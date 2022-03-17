@@ -108,14 +108,15 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
         <UiDescription description={report.description} notes={report.notes} />
       </UiLevel.Header>
 
-      <AnimatedUiLevelContent onClick={EventHelper.stopPropagation} style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
+      <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
           ) : (
             <TaskList
+              report={report}
               tasks={tasks}
-              onClick={setSelected}
+              onSelect={setSelected}
             />
           )}
         </TaskContainer>

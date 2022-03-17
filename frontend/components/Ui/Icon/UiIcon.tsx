@@ -65,7 +65,7 @@ const UiIcon: React.VFC<Props> = ({
   style,
 }) => {
   return (
-    <span
+    <Container
       title={title}
       className={className}
       style={style}
@@ -75,9 +75,13 @@ const UiIcon: React.VFC<Props> = ({
         spin={isSpinner}
         $size={size}
       />
-    </span>
+    </Container>
   )
 }
+
+const Container = styled.span`
+  line-height: 0;
+`
 
 const StyledIcon = styled(Icon)<{ $size: number }>`
   --size: ${({ $size }) => $size};
