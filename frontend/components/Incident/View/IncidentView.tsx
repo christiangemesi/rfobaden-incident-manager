@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { memo, useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
@@ -13,12 +13,13 @@ import { Themed } from '@/theme'
 import Report from '@/models/Report'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import { useAsync, useMeasure, usePreviousDistinct } from 'react-use'
+import { usePreviousDistinct } from 'react-use'
 import Id from '@/models/base/Id'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
+import useHeight from '@/utils/hooks/useHeight'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -26,8 +27,6 @@ interface Props extends StyledProps {
 }
 
 const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
-  console.log('render IncidentView')
-
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
 
@@ -43,25 +42,33 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
     setSelectedId(null)
   }, [])
 
-  // const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
-  // const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
+  const [setReportListRef, reportListHeight] = useHeight<HTMLDivElement>()
+  const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
 
-  // useAsync(async function updateRoute() {
-  //   const query = parseIncidentQuery(router.query)
-  //   if (query === null) {
-  //     return
-  //   }
-  //   if (selected === null) {
-  //     if (query.reportId !== null) {
-  //       await router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true })
-  //     }
-  //     return
-  //   }
-  //   if (query.reportId === null || query.reportId !== selected.id) {
-  //     await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true })
-  //   }
-  // }, [incident, router, selected])
+  useEffect(function updateRoute() {
+    const query = parseIncidentQuery(router.query)
+    if (query === null) {
+      return
+    }
+    if (selected === null) {
+      if (query.reportId !== null) {
+        router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true }).then()
+      }
+      return
+    }
+    if (query.reportId === null || query.reportId !== selected.id) {
+      router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true }).then()
+    }
+  }, [incident, router, selected])
 
+  const reportList = useMemo(() => (
+    <ReportList reports={reports} selected={selected} onSelect={setSelected} />
+  ), [reports, selected, setSelected])
+  
+  const reportView = useMemo(() => selected === null ? undefined : (
+    <ReportView incident={incident} report={selected} onClose={clearSelected} />
+  ), [incident, selected, clearSelected])
+  
   return (
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
@@ -82,14 +89,12 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
         <UiDescription description={incident.description} />
       </UiLevel.Header>
       <StyledUiLevelContent $hasSelected={selectedId !== null}>
-        <ListContainer /* ref={setReportListRef} */ $hasSelected={selectedId !== null}>
-          <ReportList reports={reports} selected={null} onSelect={setSelected} />
+        <ListContainer ref={setReportListRef} $hasSelected={selectedId !== null}>
+          {reportList}
         </ListContainer>
 
-        <ReportOverlay hasSelected={selected !== null} /* $listHeight={prevReportListHeight} */>
-          {/*{selected !== null && (*/}
-          {/*  <ReportView incident={incident} report={selected} onClose={clearSelected} />*/}
-          {/*)}*/}
+        <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
+          {reportView}
         </ReportOverlay>
       </StyledUiLevelContent>
     </UiLevel>

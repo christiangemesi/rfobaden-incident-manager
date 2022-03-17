@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import useInit from '@/utils/hooks/useInit'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   data: {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const IncidentPage: React.VFC<Props> = ({ data }) => {
-  useInit(() => {
+  useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
@@ -38,8 +38,6 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }, [router])
 
   const incident = useIncident(data.incident)
-
-  console.log('render page')
 
   return (
     <StyledIncidentView incident={incident} onDelete={handleDelete} />
