@@ -4,6 +4,7 @@ import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContex
 import { Themed } from '@/theme'
 import { useMountedState } from 'react-use'
 import ReactDOM from 'react-dom'
+import { run } from '@/utils/control-flow'
 
 interface Props {
   children: ReactNode
@@ -14,18 +15,31 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isMounted = useMountedState()
 
-  const child = useMemo(() => (
-    <Container
-      ref={containerRef}
-      isOpen={context.isOpen}
-      bounds={containerRef.current?.getBoundingClientRect() ?? null}
-      container={context.containerRef.current?.getBoundingClientRect() ?? null}
-    >
-      <DropDown isOpen={context.isOpen}>
-        {children}
-      </DropDown>
-    </Container>
-  ), [children, context.containerRef, context.isOpen])
+  const child = useMemo(() => {
+    const bounds = containerRef.current?.getBoundingClientRect() ?? null
+    const container = context.containerRef.current?.getBoundingClientRect() ?? null
+
+    const [x, y] = run(() => {
+      if (bounds === null || container === null) {
+        return [0, 0]
+      }
+      const x = `min(max(${container.left}px, var(--min-offset)), calc(100vw - ${bounds.width}px - var(--min-offset)))`
+      const y = `${container.y + container.height + 4}px`
+      return [x, y]
+    })
+
+    return (
+      <Container
+        ref={containerRef}
+        isOpen={context.isOpen}
+        style={{ left: x, top: y }}
+      >
+        <DropDown isOpen={context.isOpen}>
+          {children}
+        </DropDown>
+      </Container>
+    )
+  }, [children, context.containerRef, context.isOpen])
 
   if (!isMounted()) {
     return <React.Fragment />
@@ -34,7 +48,7 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
 }
 export default UiDropDownMenu
 
-const Container = styled.div<{ isOpen: boolean, bounds: DOMRect | null, container: DOMRect | null }>`
+const Container = styled.div<{ isOpen: boolean }>`
   --min-offset: 0.8rem;
   ${Themed.media.md.min} {
     --min-offset: 4rem;
@@ -48,11 +62,6 @@ const Container = styled.div<{ isOpen: boolean, bounds: DOMRect | null, containe
   transition-property: z-index;
   ${({ isOpen }) => !isOpen && css`
     z-index: -1;
-  `}
-  
-  ${({ bounds, container }) => (bounds !== null && container !== null) && css`
-    top: ${container.y + container.width + 4}px;
-    left: min(max(${container.left}px, var(--min-offset)), calc(100vw - ${bounds.width}px - var(--min-offset)));
   `}
 `
 

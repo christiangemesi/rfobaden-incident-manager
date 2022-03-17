@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useIsomorphicLayoutEffect, useRendersCount, useUpdate } from 'react-use'
+import { useEffectOnce, useIsomorphicLayoutEffect, useRendersCount, useUpdate } from 'react-use'
 import { afterStorePatch, ModelStore, ModelStoreState, privateKey, Store } from './Store'
 import Id, { isId } from '@/models/base/Id'
 import Model from '@/models/base/Model'
+import { parseTask } from '@/models/Task'
 
 interface UseRecord<T> {
   (id: Id<T> | null): T | null
@@ -77,17 +78,22 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
         result.current = newResult
         afterStorePatch(createForceUpdate())
       }
-    }, [typeof idsOrTransform === 'function' ? null : idsOrTransform, ...deps])
+    }, typeof idsOrTransform === 'function' ? deps : [idsOrTransform, ...deps])
     return result.current
   }
 }
 
 const useStoreListener = <T>(store: Store<T>, listen: (value: T) => void, deps?: unknown[]) => {
   const inner = store[privateKey]
+  const callback = useRef(listen)
+  callback.current = listen
   useIsomorphicLayoutEffect(() => {
-    inner.listeners.push(listen)
+    const listener = (state: T) => {
+      callback.current(state)
+    }
+    inner.listeners.push(listener)
     return () => {
-      const i = inner.listeners.indexOf(listen)
+      const i = inner.listeners.indexOf(listener)
       inner.listeners.splice(i, 1)
     }
   }, [])
@@ -106,24 +112,30 @@ const useStoreListener = <T>(store: Store<T>, listen: (value: T) => void, deps?:
         isFirst.current = false
         return
       }
-      listen(inner.state)
+      afterStorePatch(() => callback.current(inner.state))
     }, deps)
   }
 }
 
 const useCreateSingleUpdate = (): () => () => void => {
   const forceUpdate = useUpdate()
+
   const renderCountRef = useRef(0)
   renderCountRef.current += 1
 
-  return () => {
-    const startCount = renderCountRef.current
-    return () => {
-      if (startCount === renderCountRef.current) {
-        forceUpdate()
-      }
+  const cursorRef = useRef<number | null>(null)
+
+  const forceNextUpdate = useCallback(() => {
+    if (renderCountRef.current === cursorRef.current) {
+      forceUpdate()
+      cursorRef.current = null
     }
-  }
+  }, [forceUpdate])
+
+  return useCallback(() => {
+    cursorRef.current = renderCountRef.current
+    return forceNextUpdate
+  }, [forceNextUpdate])
 }
 
 export {

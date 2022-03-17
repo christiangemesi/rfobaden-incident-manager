@@ -4,7 +4,7 @@ import UiDropDownTrigger from '@/components/Ui/DropDown/Trigger/UiDropDownTrigge
 import UiDropDownContext, { UiDropDownState } from './Context/UiDropDownContext'
 import UiDropDownMenu from '@/components/Ui/DropDown/Menu/UiDropDownMenu'
 import styled from 'styled-components'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useGetSet } from 'react-use'
 import EventHelper from '@/utils/helpers/EventHelper'
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const UiDropDown: React.VFC<Props> = ({ children }) => {
-  const [state, setState] = useState<UiDropDownState>(() => ({
+  const [getState, setState] = useGetSet<UiDropDownState>(() => ({
     containerRef: { current: null },
     isOpen: false,
     setOpen: (isOpen: boolean) => setState((state) => ({ ...state, isOpen })),
@@ -20,7 +20,11 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
   }))
 
   useEffectOnce(() => {
-    const close = () => setState((state) => ({ ...state, isOpen: false }))
+    const close = () => {
+      if (getState().isOpen) {
+        setState((state) => ({ ...state, isOpen: false }))
+      }
+    }
     window.addEventListener('click', close)
     return () => {
       window.removeEventListener('click', close)
@@ -28,8 +32,8 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
   })
 
   return (
-    <UiDropDownContext.Provider value={state}>
-      <Container ref={state.containerRef as RefObject<HTMLDivElement>} onClick={EventHelper.stopPropagation}>
+    <UiDropDownContext.Provider value={getState()}>
+      <Container ref={getState().containerRef as RefObject<HTMLDivElement>} onClick={EventHelper.stopPropagation}>
         {children}
       </Container>
     </UiDropDownContext.Provider>
@@ -42,6 +46,6 @@ export default Object.assign(UiDropDown, {
   Item: UiDropDownItem,
 })
 
-const Container = styled.div`
+const Container = styled.span`
   position: relative;
 `

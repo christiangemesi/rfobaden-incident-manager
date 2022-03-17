@@ -13,7 +13,7 @@ interface Props extends StyledProps {
 }
 
 const ReportList: React.VFC<Props> = ({
-  reports,
+  reports: reports,
   selected = null,
   onSelect: handleSelect,
   style,

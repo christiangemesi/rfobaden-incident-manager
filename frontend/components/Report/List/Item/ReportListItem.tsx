@@ -134,7 +134,7 @@ const BridgeClip = styled.div`
   overflow-x: clip;
   overflow-y: visible;
   
-  ${Themed.media.lg.max} {
+  ${Themed.media.md.max} {
     display: none;
   }
 `

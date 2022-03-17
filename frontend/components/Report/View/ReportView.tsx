@@ -22,7 +22,7 @@ import ReportInfo from '@/components/Report/Info/ReportInfo'
 import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
-import useAsyncCached from '@/utils/hooks/useAsyncCached'
+import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
@@ -40,6 +40,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => (
     parseIncidentQuery(router.query)?.taskId ?? null
   ))
+
   const selected = useTask(selectedId)
   const setSelected = useCallback((task: Task | null) => {
     setSelectedId(task?.id ?? null)
@@ -51,7 +52,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
 
   // Load tasks from the backend.
-  const { loading: isLoading } = useAsyncCached(ReportView, report.id, async () => {
+  const isLoading = useCachedEffect(ReportView, report.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
     await sleep(300)

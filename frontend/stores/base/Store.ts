@@ -1,6 +1,7 @@
 import Id from '@/models/base/Id'
 import { applyPatch, Patch, Patcher } from '@/utils/update'
 import Model from '@/models/base/Model'
+import { run } from '@/utils/control-flow'
 
 export const privateKey = Symbol('store/private')
 
@@ -11,7 +12,7 @@ export interface Store<T> {
 export interface ModelStore<T> extends Store<ModelStoreState<T>> {
   list(ids?: Id<T>[]): readonly T[]
   find(id: Id<T>): T | null
-  save(record: T): void
+  save(record: T, options?: ModelSaveOptions): void
   saveAll(records: Iterable<T>): void
   remove(id: Id<T>): void
 
@@ -21,6 +22,10 @@ export interface ModelStore<T> extends Store<ModelStoreState<T>> {
   onSave(receive: ChangeListener<T,  T |null>): Unregister
 
   readonly [privateKey]: ModelStoreInternals<T>
+}
+
+interface ModelSaveOptions {
+  index?: number
 }
 
 interface CreateStoreActions<T, S> {
@@ -33,6 +38,14 @@ export interface ModelStoreState<T> {
 }
 
 type ModelStoreMapping<T> = Record<Id<T>, T>
+
+interface ModelStoreExtensionActions<T> {
+  sortBy?: SortBy<T>
+}
+
+interface SortBy<T> {
+  (record: T): Array<unknown | [unknown, 'desc']>
+}
 
 interface RecordListener<T> {
   (record: T): void
@@ -86,11 +99,15 @@ export function createModelStore<T extends Model>(parseRecord: (value: T) => T):
  * @param parseRecord Parses plain objects into storable records.
  * @param actions The stores' custom actions.
  */
-export function createModelStore<T extends Model, S>(parseRecord: (value: T) => T, actions?: S): ModelStore<T> & S {
+export function createModelStore<T extends Model, S extends ModelStoreExtensionActions<T>>(parseRecord: (value: T) => T, actions: S): ModelStore<T> & Omit<S, keyof ModelStoreExtensionActions<T>>
+
+export function createModelStore<T extends Model, S extends ModelStoreExtensionActions<T>>(parseRecord: (value: T) => T, actions?: S): ModelStore<T> & Omit<S, keyof ModelStoreExtensionActions<T>> {
   const initialState: ModelStoreState<T> = {
     list: [],
     mapping: {},
   }
+
+  const compare = actions?.sortBy ? createModelCompareFunction(actions.sortBy) : undefined
 
   const createListeners: RecordListener<T>[] = []
   const updateListeners: ChangeListener<T>[] = []
@@ -113,21 +130,49 @@ export function createModelStore<T extends Model, S>(parseRecord: (value: T) => 
   }
 
   /**
+   * Find the index at which a new record should be inserted into the stores' list.
+   * If the new record should be inserted at the end of the list, then `records.length` is returned.
+   *
+   * @param records The list of currently stored records.
+   * @param newRecord The record to be stored.
+   *
+   * @returns the index at which the new record should be inserted.
+   */
+  const getStoreIndexOf = (records: T[], newRecord: T): number => {
+    if (compare === undefined) {
+      return records.length
+    }
+    for (let i = 0; i < records.length; i++) {
+      const record = records[i]
+      const diff = compare(record, newRecord)
+      if (diff === 0) {
+        return i + 1
+      }
+      if (diff > 0) {
+        return i
+      }
+    }
+    return records.length
+  }
+
+  /**
    * Saves a record into a mutable state.
    * @param state The state to insert into.
    * @param record The record to save.
+   * @param index The index at which the record should be inserted. If left `undefined`,
+   *              a fitting position will be determined using the stores' sort configuration.
    */
-  const save = (state: { list: T[], mapping: ModelStoreMapping<T> }, record: T) => {
+  const save = (state: { list: T[], mapping: ModelStoreMapping<T> }, record: T, index?: number) => {
     const oldRecord = state.mapping[record.id] ?? null
     state.mapping[record.id] = record
-    if (oldRecord === null) {
-      state.list.push(record)
-      updateListeners.forEach((listen) => listen(record, oldRecord))
+    if (oldRecord !== null) {
+      state.list.splice(state.list.indexOf(oldRecord), 1)
+      afterStorePatch(() => updateListeners.forEach((listen) => listen(record, oldRecord)))
     } else {
-      const i = state.list.indexOf(oldRecord)
-      state.list[i] = record
-      createListeners.forEach((listen) => listen(record))
+      afterStorePatch(() => createListeners.forEach((listen) => listen(record)))
     }
+    const i = index ?? getStoreIndexOf(state.list, record)
+    state.list.splice(i, 0, record)
   }
 
   const store = createStore(initialState, (getState, setState) => ({
@@ -152,12 +197,12 @@ export function createModelStore<T extends Model, S>(parseRecord: (value: T) => 
       const { mapping } = getState()
       return mapping[id] ?? null
     },
-    save: (record: T): void => setState((state) => {
+    save: (record: T, options: ModelSaveOptions = {}): void => setState((state) => {
       const newState = {
         list: [...state.list],
         mapping: { ...state.mapping },
       }
-      save(newState, record)
+      save(newState, record, options.index)
       return newState
     }),
     saveAll: (records: Iterable<T>): void => setState((state) => {
@@ -181,7 +226,7 @@ export function createModelStore<T extends Model, S>(parseRecord: (value: T) => 
       }
       newState.list.splice(newState.list.indexOf(record), 1)
       delete newState.mapping[id]
-      removeListeners.forEach((listen) => listen(record))
+      afterStorePatch(() => removeListeners.forEach((listen) => listen(record)))
       return newState
     }),
     onCreate: (listen: RecordListener<T>): Unregister => (
@@ -206,7 +251,45 @@ export function createModelStore<T extends Model, S>(parseRecord: (value: T) => 
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(store as any)[privateKey].parse = parseRecord
-  return store
+  return store as ModelStore<T> & Exclude<S, ModelStoreExtensionActions<T>>
+}
+
+
+const createModelCompareFunction = <T>(sortBy: SortBy<T>) => (recordA: T, recordB: T): number => {
+  const as = sortBy(recordA)
+  const bs = sortBy(recordB)
+
+  for (let i = 0; i < as.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const valueA = as[i] as any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const valueB = bs[i] as any
+
+    const [a, b, factor] = Array.isArray(valueA) && valueA.length === 2
+      ? [valueA[0], valueB[0], 1]
+      : [valueA, valueB, -1]
+
+    if (a === b) {
+      continue
+    }
+    const result = run(() => {
+      if (a == null) {
+        return -1
+      }
+      if (b == null) {
+        return 1
+      }
+      if (a < b) {
+        if (a > b) {
+          throw new Error(`values are not comparable: ${a} <=> ${b}`)
+        }
+        return -1
+      }
+      return 1
+    })
+    return result * factor
+  }
+  return 0
 }
 
 /**
@@ -234,7 +317,7 @@ const runPatch = <T>(internals: StoreInternals<T>, patch: Patch<T>) => {
 
   // Set global buffers to empty values to signal that a patch is now being executed.
   delayedPatches = []
-  afterPatchCallbacks = []
+  afterPatchCallbacks = new Set()
 
   // Backup the current state, so we can compare to it after applying the patch.
   const oldState = internals.state
@@ -249,14 +332,11 @@ const runPatch = <T>(internals: StoreInternals<T>, patch: Patch<T>) => {
   if (oldState !== internals.state) {
     internals.listeners.forEach((listener) => listener(internals.state))
   }
-
-
-  // Broadcast the changes to the listeners, if anything has changed at all.
-  // for (const [internals, oldState] of delayedInternals) {
-  //   if (internals.state !== oldState) {
-  //     internals.listeners.forEach((listener) => listener(internals.state))
-  //   }
-  // }
+  for (const [internals, oldState] of delayedInternals) {
+    if (internals.state !== oldState) {
+      internals.listeners.forEach((listener) => listener(internals.state))
+    }
+  }
 
   // Run any after-patch callbacks, and reset them.
   runAfterPatchCallbacks()
@@ -295,7 +375,7 @@ const runDelayedPatches = (): Map<StoreInternals<unknown>, unknown> => {
  *
  * `afterPatchCallbacks` is `null` if no patch is currently running.
  */
-let afterPatchCallbacks: Array<() => void> | null = null
+let afterPatchCallbacks: Set<() => void> | null = null
 
 /**
  * Run a callback after the current store patch has finished.
@@ -306,7 +386,7 @@ export const afterStorePatch = (callback: () => void): void => {
   if (afterPatchCallbacks === null) {
     callback()
   } else {
-    afterPatchCallbacks.push(callback)
+    afterPatchCallbacks.add(callback)
   }
 }
 
