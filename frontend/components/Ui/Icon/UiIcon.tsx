@@ -65,14 +65,17 @@ const UiIcon: React.VFC<Props> = ({
   style,
 }) => {
   return (
-    <StyledIcon
-      path={path}
-      spin={isSpinner}
-      $size={size}
+    <span
       title={title}
       className={className}
       style={style}
-    />
+    >
+      <StyledIcon
+        path={path}
+        spin={isSpinner}
+        $size={size}
+      />
+    </span>
   )
 }
 

@@ -1,11 +1,10 @@
 import Report, { parseReport } from '@/models/Report'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback } from 'react'
 import ReportStore from '@/stores/ReportStore'
 import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Incident from '@/models/Incident'
 import { useIncident } from '@/stores/IncidentStore'
-import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
 import OrganizationStore from '@/stores/OrganizationStore'
@@ -15,6 +14,7 @@ import styled from 'styled-components'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import useInit from '@/utils/hooks/useInit'
 
 interface Props {
   data: {
@@ -26,12 +26,7 @@ interface Props {
 }
 
 const IncidentPage: React.VFC<Props> = ({ data }) => {
-  const loadRef = useRef(true)
-  if (loadRef.current) {
-    loadRef.current = false
-  }
-
-  useEffectOnce(() => {
+  useInit(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
     UserStore.saveAll(data.users.map(parseUser))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))

@@ -26,21 +26,22 @@ interface Props extends StyledProps {
 }
 
 const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
+  console.log('render IncidentView')
+
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
 
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
-    // parseIncidentQuery(router.query)?.reportId ?? null
-    null
+    parseIncidentQuery(router.query)?.reportId ?? null
   ))
 
-  // const selected = useReport(selectedId)
-  // const setSelected = useCallback((report: Report | null) => {
-  //   setSelectedId(report?.id ?? null)
-  // }, [])
-  // const clearSelected = useCallback(() => {
-  //   setSelectedId(null)
-  // }, [])
+  const selected = useReport(selectedId)
+  const setSelected = useCallback((report: Report | null) => {
+    setSelectedId(report?.id ?? null)
+  }, [])
+  const clearSelected = useCallback(() => {
+    setSelectedId(null)
+  }, [])
 
   // const [setReportListRef, { height: reportListHeight }] = useMeasure<HTMLDivElement>()
   // const prevReportListHeight = usePreviousDistinct(reportListHeight) ?? reportListHeight
@@ -61,42 +62,38 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   //   }
   // }, [incident, router, selected])
 
-  console.table('render IncidentView')
+  return (
+    <UiLevel className={className} style={style}>
+      <UiLevel.Header>
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
+          <UiGrid.Col>
+            <IncidentInfo incident={incident} />
+            <UiTitle level={1}>
+              {incident.title}
+            </UiTitle>
+          </UiGrid.Col>
 
-  return <div />
+          <UiGrid.Col size="auto">
+            <IncidentActions incident={incident} onDelete={handleDelete} />
+            <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
+          </UiGrid.Col>
+        </UiGrid>
 
-  // return (
-  //   <UiLevel className={className} style={style}>
-  //     <UiLevel.Header>
-  //       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-  //         <UiGrid.Col>
-  //           <IncidentInfo incident={incident} />
-  //           <UiTitle level={1}>
-  //             {incident.title}
-  //           </UiTitle>
-  //         </UiGrid.Col>
-  //
-  //         <UiGrid.Col size="auto">
-  //           <IncidentActions incident={incident} onDelete={handleDelete} />
-  //           <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
-  //         </UiGrid.Col>
-  //       </UiGrid>
-  //
-  //       <UiDescription description={incident.description} />
-  //     </UiLevel.Header>
-  //     <StyledUiLevelContent $hasSelected={selectedId !== null}>
-  //       <ListContainer $hasSelected={selectedId !== null}>
-  //         <ReportList reports={reports} selected={null} onSelect={() => {}} />
-  //       </ListContainer>
-  //
-  //       <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
-  //         {selected !== null && (
-  //           <ReportView incident={incident} report={selected} onClose={clearSelected} />
-  //         )}
-  //       </ReportOverlay>
-  //     </StyledUiLevelContent>
-  //   </UiLevel>
-  // )
+        <UiDescription description={incident.description} />
+      </UiLevel.Header>
+      <StyledUiLevelContent $hasSelected={selectedId !== null}>
+        <ListContainer /* ref={setReportListRef} */ $hasSelected={selectedId !== null}>
+          <ReportList reports={reports} selected={null} onSelect={setSelected} />
+        </ListContainer>
+
+        <ReportOverlay hasSelected={selected !== null} /* $listHeight={prevReportListHeight} */>
+          {/*{selected !== null && (*/}
+          {/*  <ReportView incident={incident} report={selected} onClose={clearSelected} />*/}
+          {/*)}*/}
+        </ReportOverlay>
+      </StyledUiLevelContent>
+    </UiLevel>
+  )
 }
 export default styled(IncidentView)``
 

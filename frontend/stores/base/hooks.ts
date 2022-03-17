@@ -73,7 +73,6 @@ const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
     }
     useStoreListener(store, (state) => {
       const newResult = computeValue(state, idsOrTransform)
-      console.log(newResult, result.current)
       if (newResult !== result.current) {
         result.current = newResult
         console.log('redo')
