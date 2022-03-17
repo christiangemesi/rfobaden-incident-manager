@@ -4,8 +4,15 @@ import Report from '@/models/Report'
 import Id from '@/models/base/Id'
 import SubtaskStore from '@/stores/SubtaskStore'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
+import { getPriorityIndex } from '@/models/Priority'
 
-const TaskStore = createModelStore(parseTask)
+const TaskStore = createModelStore(parseTask, {
+  sortBy: (task) => [
+    [task.isClosed || task.isDone, 'asc'],
+    getPriorityIndex(task.priority),
+    [task.title.toLowerCase(), 'asc'],
+  ],
+})
 
 export default TaskStore
 
