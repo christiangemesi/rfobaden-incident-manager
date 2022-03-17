@@ -161,9 +161,14 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
    * @param record The record to save.
    * @param index The index at which the record should be inserted. If left `undefined`,
    *              a fitting position will be determined using the stores' sort configuration.
+   *
+   * @returns `true` if the new value was added, `false` if it was equal to its old entry and was thus skipped.
    */
-  const save = (state: { list: T[], mapping: ModelStoreMapping<T> }, record: T, index?: number) => {
+  const save = (state: { list: T[], mapping: ModelStoreMapping<T> }, record: T, index?: number): boolean => {
     const oldRecord = state.mapping[record.id] ?? null
+    if (index === undefined && oldRecord !== null && deepEqual(oldRecord, record)) {
+      return false
+    }
     state.mapping[record.id] = record
     if (oldRecord !== null) {
       state.list.splice(state.list.indexOf(oldRecord), 1)
@@ -173,6 +178,7 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
     }
     const i = index ?? getStoreIndexOf(state.list, record)
     state.list.splice(i, 0, record)
+    return true
   }
 
   const store = createStore(initialState, (getState, setState) => ({
@@ -202,7 +208,9 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
         list: [...state.list],
         mapping: { ...state.mapping },
       }
-      save(newState, record, options.index)
+      if (!save(newState, record, options.index)) {
+        return state
+      }
       return newState
     }),
     saveAll: (records: Iterable<T>): void => setState((state) => {
@@ -210,8 +218,12 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
         list: [...state.list],
         mapping: { ...state.mapping },
       }
+      let changeCount = 0
       for (const record of records) {
-        save(newState, record)
+        changeCount += save(newState, record) ? 1 : 0
+      }
+      if (changeCount === 0) {
+        return state
       }
       return newState
     }),
@@ -390,6 +402,9 @@ export const afterStorePatch = (callback: () => void): void => {
   }
 }
 
+/**
+ * Run all callbacks in `afterPatchCallbacks` and reset it to its default value.
+ */
 const runAfterPatchCallbacks = () => {
   if (afterPatchCallbacks !== null) {
     const callbacks = afterPatchCallbacks
@@ -399,3 +414,58 @@ const runAfterPatchCallbacks = () => {
     }
   }
 }
+
+/**
+ * Deep compare two values two each other.
+ * @param a The first value.
+ * @param b The second value.
+ * @returns `true` if `a` and `b` are deeply equal to each other.
+ */
+const deepEqual = (a: unknown, b: unknown): boolean => {
+  if (Object.is(a, b)) {
+    return true
+  }
+  if (typeof a !== typeof b) {
+    return false
+  }
+  if (typeof a !== 'object' || typeof b !== 'object') {
+    return false
+  }
+  if (a === null) {
+    return b === null
+  }
+  if (b === null) {
+    return false
+  }
+  if (Array.isArray(a)) {
+    if (!Array.isArray(b)) {
+      return false
+    }
+    if (a.length !== b.length) {
+      return false
+    }
+    for (let i = 0; i < a.length; i++) {
+      if (!deepEqual(a[i], b[i])) {
+        return false
+      }
+    }
+    return false
+  }
+  if (a instanceof Date) {
+    return b instanceof Date && a.getTime() === b.getTime()
+  }
+  const aKeys = Object.keys(a)
+  for (const key of Object.keys(a)) {
+    if (!(key in b)) {
+      return false
+    }
+    const av = a[key]
+    const bv = b[key]
+    if (!deepEqual(av, bv)) {
+      return false
+    }
+  }
+  return aKeys.length === Object.keys(b).length
+}
+
+console.log(deepEqual(new Date(), new Date(2009)))
