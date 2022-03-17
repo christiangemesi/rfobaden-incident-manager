@@ -11,11 +11,10 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 import styled from 'styled-components'
 import UiDescription from '@/components/Ui/Description/UiDescription'
-import EventHelper from '@/utils/helpers/EventHelper'
 import Report from '@/models/Report'
 import TaskInfo from '@/components/Task/Info/TaskInfo'
 import UiLevel from '@/components/Ui/Level/UiLevel'
-import useAsyncCached from '@/utils/hooks/useAsyncCached'
+import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import { sleep } from '@/utils/control-flow'
 import TaskActions from '@/components/Task/Actions/TaskActions'
 
@@ -30,7 +29,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
   const subtasks = useSubtasksOfTask(task.id)
 
   // Load subtasks from the backend.
-  const { loading: isLoading } = useAsyncCached(TaskView, task.id, async () => {
+  const isLoading = useCachedEffect(TaskView, task.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
     await sleep(300)
@@ -45,7 +44,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
 
   return (
     <UiLevel ref={innerRef}>
-      <UiLevel.Header onClick={EventHelper.stopPropagation}>
+      <UiLevel.Header>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <div>
             <TaskInfo task={task} />

@@ -5,7 +5,6 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import TaskForm from '@/components/Task/Form/TaskForm'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
@@ -56,58 +55,43 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
 
   return (
     <UiDropDown>
-      <UiDropDown.Trigger>
-        <UiIconButton>
+      <UiDropDown.Trigger>{({ toggle }) => (
+        <UiIconButton onClick={toggle}>
           <UiIcon.More />
         </UiIconButton>
-      </UiDropDown.Trigger>
+      )}</UiDropDown.Trigger>
+      <UiDropDown.Menu>
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bearbeiten
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Meldung bearbeiten
+              </UiTitle>
+              <ReportForm incident={incident} report={report} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+        {!report.isDone && (
+          report.isClosed ? (
+            <UiDropDown.Item onClick={handleReopen}>
+              Öffnen
+            </UiDropDown.Item>
+          ) : (
+            <UiDropDown.Item onClick={handleClose}>
+              Schliessen
+            </UiDropDown.Item>
+          )
+        )}
 
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Neuer Auftrag
-          </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Auftrag erfassen
-            </UiTitle>
-            <TaskForm report={report} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
-
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiDropDown.Item onClick={open}>
-            Bearbeiten
-          </UiDropDown.Item>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung bearbeiten
-            </UiTitle>
-            <ReportForm incident={incident} report={report} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-      {!report.isDone && (
-        report.isClosed ? (
-          <UiDropDown.Item onClick={handleReopen}>
-            Öffnen
-          </UiDropDown.Item>
-        ) : (
-          <UiDropDown.Item onClick={handleClose}>
-            Schliessen
-          </UiDropDown.Item>
-        )
-      )}
-
-      <UiDropDown.Item onClick={handleDelete}>
-        Löschen
-      </UiDropDown.Item>
+        <UiDropDown.Item onClick={handleDelete}>
+          Löschen
+        </UiDropDown.Item>
+      </UiDropDown.Menu>
     </UiDropDown>
   )
 }

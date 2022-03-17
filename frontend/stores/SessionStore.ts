@@ -1,7 +1,8 @@
 import User from '@/models/User'
-import { createStore, useStore } from '@/stores/Store'
+import { createStore } from '@/stores/base/Store'
 import Session from '@/models/Session'
 import UserStore from '@/stores/UserStore'
+import { useStore } from '@/stores/base/hooks'
 
 interface SessionState {
   session: Session | null

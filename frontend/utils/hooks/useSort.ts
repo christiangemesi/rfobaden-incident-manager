@@ -28,13 +28,11 @@ const useSort = <T, K extends string>(elements: readonly T[], config: () => Sort
   const sort = useCallback((unsorted: readonly T[], state: SortState<K>): readonly T[] => {
     const sorted = [...unsorted]
     let sortCounter = 0
-    console.log()
     for (const key of Object.keys(state).reverse()) {
       const direction = state[key].direction
       if (direction === null) {
         continue
       }
-      console.log(key, direction)
       sortCounter += 1
       const compareAsc = comparesByKeys[key]
       const compare: Compare<T> = direction === 'asc'

@@ -1,15 +1,20 @@
-import { createModelStore } from '@/stores/Store'
 import { parseIncident } from '@/models/Incident'
 import ReportStore from '@/stores/ReportStore'
+import { createModelStore } from './base/Store'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
-const [IncidentStore, useIncidents, useIncident] = createModelStore(parseIncident, {}, {
-  sortBy: (incident) => ['asc', [
+const IncidentStore = createModelStore(parseIncident, {
+  sortBy: (incident) => [
     [incident.isClosed, 'desc'],
     incident.startsAt ?? incident.createdAt,
     incident.endsAt,
-  ]],
+  ],
 })
+
 export default IncidentStore
+
+export const useIncident = createUseRecord(IncidentStore)
+export const useIncidents = createUseRecords(IncidentStore)
 
 ReportStore.onCreate((report) => {
   const incident = IncidentStore.find(report.incidentId)
@@ -68,8 +73,3 @@ ReportStore.onRemove((report) => {
     isDone: reportIds.length > 0 && reportIds.length === closedReportIds.length,
   })
 })
-
-export {
-  useIncidents,
-  useIncident,
-}

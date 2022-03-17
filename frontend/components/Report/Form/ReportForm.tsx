@@ -23,10 +23,11 @@ import styled from 'styled-components'
 interface Props {
   incident: Incident
   report?: Report | null
+  onSave?: (report: Report) => void
   onClose?: () => void
 }
 
-const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handleClose }) => {
+const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleSave, onClose: handleClose }) => {
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
@@ -81,7 +82,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     if (error !== null) {
       throw error
     }
-    ReportStore.save(parseReport(data))
+    const newReport = parseReport(data)
+    ReportStore.save(newReport)
+    if (handleSave) {
+      handleSave(newReport)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()

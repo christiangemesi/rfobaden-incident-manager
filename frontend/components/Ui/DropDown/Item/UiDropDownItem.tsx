@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
-import { Item } from 'rc-menu'
+import React, { ReactNode, useCallback, useContext } from 'react'
 import styled, { css } from 'styled-components'
+import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 
 interface Props {
   onClick?: () => void
@@ -8,33 +8,39 @@ interface Props {
 }
 
 const UiDropDownItem: React.VFC<Props> = ({ onClick: handleClick, children }) => {
+  const context = useContext(UiDropDownContext)
+  const click = useCallback(() => {
+    if (handleClick) {
+      handleClick()
+    }
+    context.setOpen(false)
+  }, [context, handleClick])
+
   return (
-    <StyledItem unselectable="on" onClick={handleClick} isClickable={handleClick !== undefined}>
+    <Item onClick={click}>
       {children}
-    </StyledItem>
+    </Item>
   )
 }
 export default UiDropDownItem
 
-const StyledItem = styled(Item)<{ isClickable: boolean }>`
-  .rc-dropdown .rc-dropdown-menu > &.rc-dropdown-menu-item {
-    font-size: 1rem;
-    font-family: ${({ theme }) => theme.fonts.body};
-    color: ${({ theme }) => theme.colors.tertiary.contrast};
-    background-color: ${({ theme }) => theme.colors.tertiary.value};
-    
-    
-    ${({ theme, isClickable }) => isClickable && css`
-      cursor: pointer;
-      transition: 150ms ease-out;
-      transition-property: background-color;
-      :hover {
-        background-color: ${theme.colors.grey.value};
-      }
-    `}
-    
-    :after {
-      display: none;
+const Item = styled.li`
+  display: flex;
+  padding: 1rem 1rem;
+  word-break: keep-all;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition: 150ms ease-out;
+  transition-property: background-color;
+  
+  ${({ theme }) => css`
+    :not(:last-child) {
+      border-bottom: 1px solid ${theme.colors.grey.value};
     }
-  }
+    
+    :hover {
+      background-color: ${theme.colors.grey.value};
+    }
+  `}
 `

@@ -23,7 +23,6 @@ const ReportListItem: React.VFC<Props> = ({
   onClick: handleClick,
 }) => {
   const assignee = useUser(report.assigneeId)
-
   const assigneeName = useUsername(assignee)
 
   const defaultIcon = useMemo(() => isSmall ? (
@@ -49,10 +48,10 @@ const ReportListItem: React.VFC<Props> = ({
 
         <UiGrid direction={isSmall ? 'column' : undefined} gapH={1}>
           {report.isKeyReport ? (
-            <UiIcon.KeyMessage size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} title="Schlüsselmeldung" />
+            <UiIcon.KeyMessage size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} />
           ) : defaultIcon}
           {report.isLocationRelevantReport ? (
-            <UiIcon.LocationRelevancy size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} title="lagerelevant" />
+            <UiIcon.LocationRelevancy size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} />
           ) : defaultIcon}
         </UiGrid>
 
@@ -134,7 +133,7 @@ const BridgeClip = styled.div`
   overflow-x: clip;
   overflow-y: visible;
   
-  ${Themed.media.lg.max} {
+  ${Themed.media.md.max} {
     display: none;
   }
 `

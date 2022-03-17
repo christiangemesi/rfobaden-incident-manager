@@ -5,7 +5,6 @@ import { GetServerSideProps } from 'next'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Incident from '@/models/Incident'
 import { useIncident } from '@/stores/IncidentStore'
-import { useEffectOnce } from 'react-use'
 import User, { parseUser } from '@/models/User'
 import UserStore from '@/stores/UserStore'
 import OrganizationStore from '@/stores/OrganizationStore'
@@ -15,6 +14,7 @@ import styled from 'styled-components'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   data: {
@@ -38,6 +38,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }, [router])
 
   const incident = useIncident(data.incident)
+
   return (
     <StyledIncidentView incident={incident} onDelete={handleDelete} />
   )
