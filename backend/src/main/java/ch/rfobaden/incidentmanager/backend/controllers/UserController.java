@@ -8,6 +8,8 @@ import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,6 @@ public class UserController extends ModelController.Basic<User, UserService> {
     private final JwtHelper jwtHelper;
     private final OrganizationService organizationService;
 
-
     public UserController(
         JwtHelper jwtHelper,
         OrganizationService organizationService
@@ -29,7 +30,6 @@ public class UserController extends ModelController.Basic<User, UserService> {
         this.jwtHelper = jwtHelper;
         this.organizationService = organizationService;
     }
-
 
     @Override
     protected void loadRelations(EmptyPath path, User user) {
@@ -41,8 +41,19 @@ public class UserController extends ModelController.Basic<User, UserService> {
         }
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
+    public User update(
+        @ModelAttribute EmptyPath path,
+        @PathVariable("id") Long id,
+        @RequestBody User user
+    ) {
+        return super.update(path, id, user);
+    }
+
     @PutMapping("/{id}/password")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@auth.isCurrentUser(#id)")
     public SessionController.SessionData updatePassword(
         @PathVariable("id") Long id,
         @RequestBody PasswordData data

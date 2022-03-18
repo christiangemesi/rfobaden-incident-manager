@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers.base.filters;
 
+import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
@@ -34,7 +35,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         var user = processRequest(request);
         if (user != null) {
-            var auth = new UsernamePasswordAuthenticationToken(user, null, List.of());
+            var details = new WebSecurityConfig.DetailsWrapper(user);
+            var auth = new UsernamePasswordAuthenticationToken(user, null, details.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);

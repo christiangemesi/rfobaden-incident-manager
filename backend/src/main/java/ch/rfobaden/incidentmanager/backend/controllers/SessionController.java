@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
@@ -34,16 +35,21 @@ public class SessionController extends AppController {
 
     private final JwtHelper jwtHelper;
 
+    private final AuthService authService;
+
     public SessionController(
         AuthenticationManager authManager,
-        JwtHelper jwtHelper) {
+        JwtHelper jwtHelper,
+        AuthService authService
+    ) {
         this.authManager = authManager;
         this.jwtHelper = jwtHelper;
+        this.authService = authService;
     }
 
     @GetMapping
     public SessionData find(HttpServletRequest request) {
-        return getCurrentUser().map((user) -> {
+        return authService.getCurrentUser().map((user) -> {
             var token = request.getHeader("Authorization").substring(7);
             return new SessionData(token, user);
         }).orElseGet(() -> (
