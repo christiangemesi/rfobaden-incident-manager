@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import com.github.javafaker.Faker;
@@ -16,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +32,9 @@ class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
 
     @MockBean
     OrganizationService organizationService;
+
+    @MockBean(name = "auth")
+    AuthService authService;
 
     @Override
     protected String getEndpointFor(EmptyPath path) {
@@ -55,6 +60,9 @@ class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
             .thenReturn(Optional.of(user));
         Mockito.when(service.updatePassword(user.getId(), newPassword))
             .thenReturn(Optional.of(user));
+
+        Mockito.when(authService.isCurrentUser(user.getId()))
+            .thenReturn(true);
 
         // When
         var mockRequest = MockMvcRequestBuilders.put("/api/v1/users/" + user.getId() + "/password")

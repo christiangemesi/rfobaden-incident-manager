@@ -4,6 +4,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
+import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,8 +16,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -38,7 +42,7 @@ public class AuthServiceTest {
     void testGetCurrentUser() {
         // Given
         var user = userGenerator.generate();
-        securityContextMock.mockAuth(user);
+        securityContextMock.mockUser(user);
 
         // Then
         var result = service.getCurrentUser().orElse(null);
@@ -52,7 +56,7 @@ public class AuthServiceTest {
     @Test
     void testGetCurrentUser_noAuthorization() {
         // Given
-        securityContextMock.mockAuth(null);
+        securityContextMock.mockAuth(null, List.of());
 
         // Then
         var result = service.getCurrentUser();
@@ -65,8 +69,7 @@ public class AuthServiceTest {
     void testGetCurrentUser_unknownPrincipal() {
         // Given
         var principal = new Object();
-        securityContextMock.mockAuth(principal);
-
+        securityContextMock.mockAuth(principal, List.of());
 
         // Then
         var result = service.getCurrentUser();
@@ -79,7 +82,7 @@ public class AuthServiceTest {
     void testRequireCurrentUser() {
         // Given
         var user = userGenerator.generate();
-        securityContextMock.mockAuth(user);
+        securityContextMock.mockUser(user);
 
         // Then
         var result = service.requireCurrentUser();
@@ -93,7 +96,7 @@ public class AuthServiceTest {
     @Test
     void testRequireCurrentUser_noCurrentUser() {
         // Given
-        securityContextMock.mockAuth(null);
+        securityContextMock.mockAuth(null, List.of());
 
         // Then
         var result = catchThrowable(() -> service.requireCurrentUser());
@@ -121,8 +124,12 @@ public class AuthServiceTest {
             return () -> securityContext;
         }
 
-        public void mockAuth(Object principal) {
-            var auth = new UsernamePasswordAuthenticationToken(principal, null, List.of());
+        public void mockUser(User user) {
+            mockAuth(user, new WebSecurityConfig.DetailsWrapper(user).getAuthorities());
+        }
+
+        public void mockAuth(Object principal, Collection<? extends GrantedAuthority> authorities) {
+            var auth = new UsernamePasswordAuthenticationToken(principal, null, authorities);
             Mockito.when(securityContext.getAuthentication())
                 .thenReturn(auth);
         }
