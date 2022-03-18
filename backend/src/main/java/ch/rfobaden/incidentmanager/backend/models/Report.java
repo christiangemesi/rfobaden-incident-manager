@@ -60,6 +60,9 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany
+    private List<Image> images = new ArrayList<>();
+
     @JsonIgnore
     public User getAssignee() {
         return assignee;
