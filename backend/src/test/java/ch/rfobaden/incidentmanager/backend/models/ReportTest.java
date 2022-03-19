@@ -86,7 +86,7 @@ class ReportTest extends ModelTest<Report> {
         );
 
         // Then
-        assertThat(value.getClosedTaskIds().isEmpty()).isTrue();
+        assertThat(value.getClosedTaskIds()).isEmpty();
     }
 
     @RepeatedTest(5)
