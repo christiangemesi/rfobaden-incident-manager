@@ -169,7 +169,7 @@ class ApiExceptionHandlerTest {
 
         @SuppressWarnings("unchecked")
         var fieldErrors = (List<String>) fieldValue;
-        assertThat(fieldErrors.size()).isEqualTo(1);
+        assertThat(fieldErrors).hasSize(1);
         assertThat(fieldErrors.get(0)).isEqualTo("must not be null");
     }
 

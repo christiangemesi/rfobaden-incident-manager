@@ -47,12 +47,10 @@ public class SubtaskService
     }
 
     private void sendAssignmentEmail(Subtask subTask) {
-        // Ereignis/Meldung/Auftrag/Teilauftrag
         String info = subTask.getTask().getReport().getIncident().getTitle() + "/"
             + subTask.getTask().getReport().getTitle() + "/"
             + subTask.getTask().getTitle() + "/"
             + subTask.getTitle();
-        // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
         String link = "ereignisse/" + subTask.getTask().getReport().getIncident().getId()
             + "/meldungen/" + subTask.getTask().getReport().getId()
             + "/auftraege/" + subTask.getTask().getId();

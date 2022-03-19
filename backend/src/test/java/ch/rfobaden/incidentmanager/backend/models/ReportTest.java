@@ -18,7 +18,7 @@ class ReportTest extends ModelTest<Report> {
     SubtaskGenerator subtaskGenerator;
 
     @RepeatedTest(5)
-    public void testGetTaskIds_notEmpty() {
+    void testGetTaskIds_notEmpty() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -34,7 +34,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_allTasksClosed() {
+    void testGetClosedTaskIds_allTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -55,7 +55,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_someTasksClosed() {
+    void testGetClosedTaskIds_someTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -76,7 +76,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_noTasksClosed() {
+    void testGetClosedTaskIds_noTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -90,7 +90,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_unclosedTasks() {
+    void testIsClosed_unclosedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -101,7 +101,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_mixedTasks() {
+    void testIsClosed_mixedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -117,7 +117,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testIsDone_closedTasks() {
+    void testIsDone_closedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
