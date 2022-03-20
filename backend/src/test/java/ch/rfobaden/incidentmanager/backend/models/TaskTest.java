@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.stream.Collectors;
 
-public class TaskTest extends ModelTest<Task> {
+class TaskTest extends ModelTest<Task> {
     @Autowired
     SubtaskGenerator subtaskGenerator;
 
     @RepeatedTest(5)
-    public void testGetSubtaskIds_notEmpty() {
+    void testGetSubtaskIds_notEmpty() {
         // Given
         var amount = (int) (Math.random() * 5);
         var value = generator.generate();
@@ -30,7 +30,7 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedSubtaskIds_allSubtasksClosed() {
+    void testGetClosedSubtaskIds_allSubtasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5);
         var value = generator.generate();
@@ -48,7 +48,7 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedSubtaskIds_someSubtasksClosed() {
+    void testGetClosedSubtaskIds_someSubtasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -66,18 +66,18 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedSubtaskIds_noSubtasksClosed() {
+    void testGetClosedSubtaskIds_noSubtasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5);
         var value = generator.generate();
         value.getSubtasks().addAll(subtaskGenerator.generate(amount));
 
         // Then
-        assertThat(value.getClosedSubtaskIds().isEmpty()).isTrue();
+        assertThat(value.getClosedSubtaskIds()).isEmpty();
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_unclosedSubtasks() {
+    void testIsClosed_unclosedSubtasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -88,7 +88,7 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_mixedSubtasks() {
+    void testIsClosed_mixedSubtasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -101,7 +101,7 @@ public class TaskTest extends ModelTest<Task> {
     }
 
     @RepeatedTest(5)
-    public void testIsDone_closedSubtasks() {
+    void testIsDone_closedSubtasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();

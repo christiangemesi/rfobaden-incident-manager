@@ -4,7 +4,6 @@ import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
-import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +14,10 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
 
     private final EmailConfig emailConfig;
 
-    private final UserRepository userRepository;
 
-    public ReportService(EmailConfig emailConfig, UserRepository userRepository) {
+    public ReportService(EmailConfig emailConfig) {
         super();
         this.emailConfig = emailConfig;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -50,10 +47,8 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
     }
 
     private void sendAssignmentEmail(Report report) {
-        // Ereignis/Meldung
         String info = report.getIncident().getTitle()
             + "/" + report.getTitle();
-        // {host}/ereignisse/{incident-id}/meldungen/{report-id}
         String link = "ereignisse/" + report.getIncident().getId()
             + "/meldungen/" + report.getId();
         emailConfig.sendSimpleMessage(report.getAssignee().getEmail(),

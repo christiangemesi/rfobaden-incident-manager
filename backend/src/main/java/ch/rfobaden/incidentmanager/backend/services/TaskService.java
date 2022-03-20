@@ -46,10 +46,8 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
     }
 
     private void sendAssignmentEmail(Task task) {
-        // Ereignis/Meldung/Auftrag
         String info = task.getReport().getIncident().getTitle() + "/"
             + task.getReport().getTitle() + "/" + task.getTitle();
-        // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
         String link = "ereignisse/" + task.getReport().getIncident().getId()
             + "/meldungen/" + task.getReport().getId()
             + "/auftraege/" + task.getId();
