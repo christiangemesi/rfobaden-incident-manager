@@ -25,6 +25,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
+import File from '@/components/FileUpload/File'
 
 interface Props {
   incident: Incident
@@ -96,8 +97,8 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
             </UiTitle>
           </div>
           <UiIconButtonGroup>
+            <File />
             <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
-
             <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />
             </UiIconButton>
@@ -140,7 +141,7 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  
+
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};
