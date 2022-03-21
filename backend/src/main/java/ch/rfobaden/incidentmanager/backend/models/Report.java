@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "report")
@@ -28,10 +30,12 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JoinColumn
     private User assignee;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
@@ -41,21 +45,27 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @NotNull
     private LocalDateTime startsAt;
 
+    @NotNull
     private LocalDateTime endsAt;
 
     private String location;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    @NotNull
     @Column(nullable = false)
     private Priority priority;
 

@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "task")
@@ -28,25 +30,31 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @JoinColumn
     private User assignee;
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @NotNull
     private LocalDateTime startsAt;
 
+    @NotNull
     private LocalDateTime endsAt;
 
     private String location;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    @NotNull
     @Column(nullable = false)
     private Priority priority;
 

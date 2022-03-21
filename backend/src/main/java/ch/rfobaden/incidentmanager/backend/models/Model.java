@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class Model {
@@ -27,9 +28,11 @@ public abstract class Model {
     @Column(nullable = false, unique = true)
     private Long id;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 

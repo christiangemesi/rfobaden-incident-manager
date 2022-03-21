@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "incident")
@@ -30,14 +31,17 @@ public class Incident extends Model.Basic implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @NotNull
     private LocalDateTime startsAt;
 
+    @NotNull
     private LocalDateTime endsAt;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
