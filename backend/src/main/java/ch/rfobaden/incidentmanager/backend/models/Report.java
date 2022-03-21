@@ -35,8 +35,10 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     private LocalDateTime startsAt;

@@ -27,6 +27,7 @@ public class Incident extends Model.Basic implements Serializable {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;

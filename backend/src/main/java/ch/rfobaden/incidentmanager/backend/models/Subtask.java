@@ -30,6 +30,7 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;

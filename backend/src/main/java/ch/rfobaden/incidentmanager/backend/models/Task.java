@@ -35,6 +35,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;
