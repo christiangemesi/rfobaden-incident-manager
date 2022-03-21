@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,7 +38,6 @@ public final class User extends Model.Basic implements Serializable {
     private Organization organization;
 
     @Email(message = "E-Mail muss korrekt formatiert sein")
-    @UniqueElements(message = "E-Mail muss eindeutig sein")
     @NotBlank(message = "E-Mail darf nicht leer sein")
     @Column(nullable = false, unique = true)
     private String email;
@@ -126,7 +124,7 @@ public final class User extends Model.Basic implements Serializable {
             credentials.setUser(this);
         }
     }
-    
+
     @JsonIgnore
     public Organization getOrganization() {
         return organization;

@@ -31,10 +31,8 @@ public class Incident extends Model.Basic implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -39,10 +39,8 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
     @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")

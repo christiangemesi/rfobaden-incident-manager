@@ -173,7 +173,7 @@ public abstract class Model {
             if (oneToManyAnnotation != null && oneToManyAnnotation.fetch() == FetchType.LAZY) {
                 return;
             }
-            
+
             var type = (ParameterizedType) field.getGenericType();
             var elementType = type.getActualTypeArguments()[0];
             if (!(elementType instanceof Class)) {

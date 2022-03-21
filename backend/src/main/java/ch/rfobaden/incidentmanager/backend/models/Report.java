@@ -47,10 +47,8 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
     private String location;
