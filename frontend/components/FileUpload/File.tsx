@@ -1,9 +1,14 @@
-import { ChakraProvider } from '@chakra-ui/react'
-
 function File() {
-  return (
 
-      <FileUpload />
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
+  return (
+    <form>
+      <input type="file" name="picture" />
+      <button> Submit</button>
+    </form>
   )
 }
 
