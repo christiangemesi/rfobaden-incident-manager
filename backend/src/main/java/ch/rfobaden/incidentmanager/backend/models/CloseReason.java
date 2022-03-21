@@ -24,11 +24,11 @@ public class CloseReason implements Serializable {
     @Column(nullable = false)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Mitteilung darf nicht leer sein")
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    @NotNull
+    @NotNull(message = "Erstelldatum darf nicht leer sein")
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

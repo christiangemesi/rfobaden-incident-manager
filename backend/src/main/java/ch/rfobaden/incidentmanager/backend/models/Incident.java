@@ -24,24 +24,24 @@ import javax.validation.constraints.NotNull;
 public class Incident extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @NotBlank
+    @NotBlank(message = "Titel darf nicht leer sein")
     @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull
+    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
-    @NotNull
+    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
     @Column(nullable = false)
     private boolean isClosed;
 

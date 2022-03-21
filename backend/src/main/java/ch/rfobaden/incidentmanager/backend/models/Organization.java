@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,12 +31,13 @@ public final class Organization extends Model.Basic implements Serializable {
     )
     private List<User> users = new ArrayList<>();
 
-    @Email
-    @NotBlank
+    @Email(message = "E-Mail muss korrekt formatiert sein")
+    @UniqueElements(message = "E-Mail muss eindeutig sein")
+    @NotBlank(message = "E-Mail darf nicht leer sein")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Name darf nicht leer sein")
     @Column(nullable = false)
     private String name;
 

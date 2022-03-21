@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -30,12 +32,12 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JoinColumn
     private User assignee;
 
-    @NotNull
-    @ManyToOne
+    @NotNull(message = "Muss Ereignis zugewiesen werden")
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
-    @NotBlank
+    @NotBlank(message = "Titel darf nicht leer sein")
     @Column(nullable = false)
     private String title;
 
@@ -45,27 +47,28 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @NotNull
+    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull
+    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
     private String location;
 
-    @NotNull
+    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull
+    @NotNull(message = "Wahrheitswert Schlüsselmeldung muss angegeben werden")
     @Column(nullable = false)
     private boolean isKeyReport;
 
-    @NotNull
+    @NotNull(message = "Wahrheitswert Lage-relevant muss angegeben werden")
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
-    @NotNull
+    @NotNull(message = "Priorität muss gesetzt werden")
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 

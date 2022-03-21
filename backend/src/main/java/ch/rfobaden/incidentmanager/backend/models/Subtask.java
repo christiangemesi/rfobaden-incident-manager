@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,29 +27,30 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @JoinColumn
     private User assignee;
 
-    @NotNull
+    @NotNull(message = "Muss Auftrag zugewiesen werden")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
-    @NotBlank
+    @NotBlank(message = "Titel darf nicht leer sein")
     @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+    @NotNull(message = "Startdatum darf nicht leer sein")
     private LocalDateTime startsAt;
 
-    @NotNull
+    @NotNull(message = "Enddatum darf nicht leer sein")
     private LocalDateTime endsAt;
 
-    @NotNull
+    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull
+    @NotNull(message = "Priorität muss gesetzt werden")
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
