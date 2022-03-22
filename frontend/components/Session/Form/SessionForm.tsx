@@ -67,7 +67,7 @@ const SessionForm: React.VFC = () => {
             <UiForm.Field field={form.password}>{(props) => (
               <UiTextInput {...props} placeholder="Passwort" type="password" />
             )}</UiForm.Field>
-            <UiForm.Buttons form={form} />
+            <UiForm.Buttons form={form} /> {/*Anmelden statt check */}
           </UiForm>
         </UiGrid.Col>
       </CenteredGrid>
@@ -83,6 +83,7 @@ interface LoginData {
 
 const StyledTitle = styled(UiTitle)`
   color: ${({ theme }) => theme.colors.tertiary.value};
+  margin-bottom: 2rem;
 `
 const CenteredGrid = styled(UiGrid)`
   height: 100%;

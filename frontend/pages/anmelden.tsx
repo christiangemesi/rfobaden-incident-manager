@@ -1,48 +1,56 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import SessionForm from '@/components/Session/Form/SessionForm'
-import React, { Fragment, useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import { GetServerSideProps } from 'next'
 
-const AnmeldenPage: React.VFC = () => {
-  const images = useMemo(() => (
-    [
-      '/assets/background1.jpg',
-      '/assets/background2.jpg',
-      '/assets/background3.jpg',
-      // '/assets/bg1.jpeg',
-      // '/assets/bg2.jpeg',
-      // '/assets/bg3.jpeg',
-      // '/assets/bg4.jpeg',
-    ]
-  ), [])
+interface Props {
+  imageIndex: number
+}
 
-  // todo st not finished loading - image not shown
-  const index = Math.floor(Math.random() * images.length)
-  const image = images[index]
-  console.log('loaded Bg-Image', index, image)
+const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
 
   return (
-    <Fragment>
-      <CenterContainer>
-        <SessionForm />
-      </CenterContainer>
-      <BackgroundContainer image={image} />
-    </Fragment>
+    <CenterContainer>
+      <SessionForm />
+      <BackgroundContainer image={images[imageIndex]} />
+    </CenterContainer>
   )
 }
 export default AnmeldenPage
+
+const images = [
+  '/assets/background1.jpg',
+  '/assets/background2.jpg',
+  '/assets/background3.jpg',
+  // '/assets/bg1.jpeg',
+  // '/assets/bg2.jpeg',
+  // '/assets/bg3.jpeg',
+  // '/assets/bg4.jpeg',
+]
 
 const CenterContainer = styled(UiContainer)`
   height: 100%;
   position: relative;
 `
 const BackgroundContainer = styled.div<{ image: string }>`
-  position: absolute;
+  position: fixed;
+  left: 0;
+  top: 0;
   height: 100vh;
   width: 100vw;
-  background: url(${({ image }) => image}) center center no-repeat;
+  background: url('${({ image }) => image}') center center no-repeat;
   background-size: cover;
   filter: brightness(30%) grayscale(20%);
   z-index: -1;
   overflow: hidden;
 `
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const index = Math.floor(Math.random() * images.length)
+  return {
+    props: {
+      imageIndex: index,
+    },
+  }
+}
