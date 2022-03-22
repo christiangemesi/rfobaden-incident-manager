@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "task")
@@ -37,6 +38,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @JoinColumn(nullable = false)
     private Report report;
 
+    @Size(max = 100, message = "title can contain max 100 characters")
     @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
@@ -48,6 +50,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     private LocalDateTime endsAt;
 
+    @Size(max = 100, message = "location can contain max 100 characters")
     private String location;
 
     @NotNull(message = "isClosed must be defined")

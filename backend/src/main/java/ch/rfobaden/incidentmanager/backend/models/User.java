@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -37,15 +38,18 @@ public final class User extends Model.Basic implements Serializable {
     @JoinColumn
     private Organization organization;
 
+    @Size(max = 100, message = "email can contain max 100 characters")
     @Email(message = "email must have a correct format")
     @NotBlank(message = "email must not be empty")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Size(max = 100, message = "first name can contain max 100 characters")
     @NotBlank(message = "first name must not be empty")
     @Column(nullable = false)
     private String firstName;
 
+    @Size(max = 100, message = "last name can contain max 100 characters")
     @NotBlank(message = "last name must not be empty")
     @Column(nullable = false)
     private String lastName;

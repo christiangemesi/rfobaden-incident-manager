@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "subtask")
@@ -32,6 +33,7 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @JoinColumn(nullable = false)
     private Task task;
 
+    @Size(max = 100, message = "title can contain max 100 characters")
     @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
