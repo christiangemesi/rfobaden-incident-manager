@@ -13,6 +13,7 @@ import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import { useRouter } from 'next/router'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -40,6 +41,10 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
 
+  // todo
+  const router = useRouter()
+  const disable = router.pathname.includes('anmelden')
+
   return (
     <Fragment>
       <Head>
@@ -50,11 +55,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiScroll>
-          <UiHeader />
-          <Main>
+          {!disable && (<UiHeader />)}
+          <Main disable={disable}>
             {component}
           </Main>
-          <UiFooter />
+          {!disable && (<UiFooter />)}
         </UiScroll>
       </ThemeProvider>
     </Fragment>
@@ -66,7 +71,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   * {
     box-sizing: border-box;
   }
-  
+
   ${({ theme }) => css`
     body {
       font-family: ${theme.fonts.body};
@@ -74,7 +79,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       color: ${theme.colors.tertiary.contrast};
     }
   `}
-  
   button {
     cursor: pointer;
   }
@@ -96,13 +100,24 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       height: 100%;
       min-height: 100%;
     }
-    
+
     .print-only {
       display: none;
     }
   }
 `
 
-const Main = styled.main`
+const Main = styled.main<{ disable: boolean }>`
+  position: relative;
   min-height: calc(100vh - 4rem - 4rem);
+  ${({ disable }) => {
+    if (disable) {
+      return css`
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `
+    }
+  }}
 `

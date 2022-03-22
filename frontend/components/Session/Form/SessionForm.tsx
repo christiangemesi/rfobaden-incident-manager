@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -10,6 +10,7 @@ import { setFormField, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { SessionResponse } from '@/models/Session'
 import { useValidate } from '@/components/Ui/Form/validate'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 const SessionForm: React.VFC = () => {
   const form = useForm<LoginData>(() => ({
@@ -53,24 +54,24 @@ const SessionForm: React.VFC = () => {
   })
 
   return (
-    <div>
+    <Fragment>
+      <StyledTitle level={1} isCentered>
+        Willkommen
+      </StyledTitle>
       <CenteredGrid>
         <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <h1>
-            Anmelden
-          </h1>
           <UiForm form={form}>
             <UiForm.Field field={form.email}>{(props) => (
-              <UiTextInput {...props} label="E-Mail" />
+              <UiTextInput {...props} placeholder="E-Mail" />
             )}</UiForm.Field>
             <UiForm.Field field={form.password}>{(props) => (
-              <UiTextInput {...props} label="Passwort" type="password" />
+              <UiTextInput {...props} placeholder="Passwort" type="password" />
             )}</UiForm.Field>
             <UiForm.Buttons form={form} />
           </UiForm>
         </UiGrid.Col>
       </CenteredGrid>
-    </div>
+    </Fragment>
   )
 }
 export default SessionForm
@@ -80,9 +81,15 @@ interface LoginData {
   password: string
 }
 
+const StyledTitle = styled(UiTitle)`
+  color: ${({ theme }) => theme.colors.tertiary.value};
+`
 const CenteredGrid = styled(UiGrid)`
-  height: 100vh;
+  height: 100%;
   justify-content: center;
   align-items: center;
-  margin-top: -4rem;
+
+  form > div {
+    padding-top: 1rem;
+  }
 `
