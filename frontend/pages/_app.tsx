@@ -3,7 +3,7 @@ import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { createGlobalState, useAsync } from 'react-use'
+import { createGlobalState, useAsync, useEffectOnce } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { getSessionToken } from '@/stores/SessionStore'
 
@@ -13,6 +13,7 @@ import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import { useRouter } from 'next/router'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -36,11 +37,17 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     SessionStore.setSession(data.token, parseUser(data.user))
   })
 
+  const [appState, setAppState] = useAppState()
+  const router = useRouter()
+  useEffectOnce(() => {
+    router.events.on('routeChangeComplete', () => {
+      setAppState({ hasHeader: true, hasFooter: true })
+    })
+  })
+
   const component = useMemo(() => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
-
-  const [appState] = useAppState()
 
   return (
     <Fragment>
