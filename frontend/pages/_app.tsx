@@ -3,7 +3,7 @@ import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { useAsync } from 'react-use'
+import { createGlobalState, useAsync } from 'react-use'
 import BackendService from '@/services/BackendService'
 import SessionStore, { getSessionToken } from '@/stores/SessionStore'
 
@@ -13,7 +13,6 @@ import { SessionResponse } from '@/models/Session'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
-import { useRouter } from 'next/router'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   useAsync(async () => {
@@ -41,9 +40,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return <Component {...pageProps} />
   }, [Component, pageProps])
 
-  // todo
-  const router = useRouter()
-  const disable = router.pathname.includes('anmelden')
+  const [appState] = useAppState()
 
   return (
     <Fragment>
@@ -55,11 +52,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiScroll>
-          {!disable && (<UiHeader />)}
-          <Main disable={disable}>
+          {appState.hasHeader && (<UiHeader />)}
+          <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
           </Main>
-          {!disable && (<UiFooter />)}
+          {appState.hasFooter && (<UiFooter />)}
         </UiScroll>
       </ThemeProvider>
     </Fragment>
@@ -107,17 +104,22 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   }
 `
 
-const Main = styled.main<{ disable: boolean }>`
+const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
+  --header-height: 4rem;
+  --footer-height: 4rem;
+
+  ${({ hasHeader }) => !hasHeader && css`
+    --header-height: 0px;
+  `}
+  ${({ hasFooter }) => !hasFooter && css`
+    --footer-height: 0px;
+  `}
+
   position: relative;
-  min-height: calc(100vh - 4rem - 4rem);
-  ${({ disable }) => {
-    if (disable) {
-      return css`
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      `
-    }
-  }}
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
 `
+
+export const useAppState = createGlobalState({
+  hasHeader: true,
+  hasFooter: true,
+})

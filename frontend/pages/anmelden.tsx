@@ -3,12 +3,19 @@ import SessionForm from '@/components/Session/Form/SessionForm'
 import React from 'react'
 import styled from 'styled-components'
 import { GetServerSideProps } from 'next'
+import { useAppState } from '@/pages/_app'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   imageIndex: number
 }
 
 const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
+  const [_, setAppState] = useAppState()
+
+  useEffectOnce(() => {
+    setAppState({ hasHeader: false, hasFooter: false })
+  })
 
   return (
     <CenterContainer>
@@ -30,8 +37,12 @@ const images = [
 ]
 
 const CenterContainer = styled(UiContainer)`
-  height: 100%;
+  height: 100vh;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 const BackgroundContainer = styled.div<{ image: string }>`
   position: fixed;

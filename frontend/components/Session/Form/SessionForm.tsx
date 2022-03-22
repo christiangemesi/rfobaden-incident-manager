@@ -86,7 +86,6 @@ const StyledTitle = styled(UiTitle)`
   margin-bottom: 2rem;
 `
 const CenteredGrid = styled(UiGrid)`
-  height: 100%;
   justify-content: center;
   align-items: center;
 
