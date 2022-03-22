@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app'
-import React, { useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
@@ -41,7 +41,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, [Component, pageProps])
 
   return (
-    <>
+    <Fragment>
       <Head>
         <title key="title">RFOBaden IncidentManager</title>
         <meta charSet="utf-8" />
@@ -57,7 +57,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           <UiFooter />
         </UiScroll>
       </ThemeProvider>
-    </>
+    </Fragment>
   )
 }
 export default App
@@ -104,6 +104,5 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 `
 
 const Main = styled.main`
-  padding-bottom: 1rem;
-  min-height: calc(100vh - 4rem - 1rem - 4rem);
+  min-height: calc(100vh - 4rem - 4rem);
 `
