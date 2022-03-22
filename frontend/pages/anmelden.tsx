@@ -19,6 +19,9 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
 
   return (
     <CenterContainer>
+      <LogoContainer>
+        <Logo src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="300" height="42" />
+      </LogoContainer>
       <SessionForm />
       <BackgroundContainer image={images[imageIndex]} />
     </CenterContainer>
@@ -36,6 +39,20 @@ const images = [
   // '/assets/bg4.jpeg',
 ]
 
+const Logo = styled.img`
+  display: block;
+`
+const LogoContainer = styled.div`
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  z-index: 0;
+  padding: 1rem;
+  box-shadow: 0 0 4px 4px ${({ theme }) => theme.colors.tertiary.value};
+`
 const CenterContainer = styled(UiContainer)`
   height: 100vh;
   position: relative;
@@ -43,6 +60,7 @@ const CenterContainer = styled(UiContainer)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 10%;
 `
 const BackgroundContainer = styled.div<{ image: string }>`
   position: fixed;
