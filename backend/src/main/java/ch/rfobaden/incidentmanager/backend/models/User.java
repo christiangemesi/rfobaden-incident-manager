@@ -37,16 +37,16 @@ public final class User extends Model.Basic implements Serializable {
     @JoinColumn
     private Organization organization;
 
-    @Email(message = "E-Mail muss korrekt formatiert sein")
-    @NotBlank(message = "E-Mail darf nicht leer sein")
+    @Email(message = "email must have a correct format")
+    @NotBlank(message = "email must not be empty")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Vorname darf nicht leer sein")
+    @NotBlank(message = "first name must not be empty")
     @Column(nullable = false)
     private String firstName;
 
-    @NotBlank(message = "Nachname darf nicht leer sein")
+    @NotBlank(message = "last name must not be empty")
     @Column(nullable = false)
     private String lastName;
 

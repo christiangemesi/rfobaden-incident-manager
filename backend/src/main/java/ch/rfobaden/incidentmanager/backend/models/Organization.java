@@ -30,12 +30,12 @@ public final class Organization extends Model.Basic implements Serializable {
     )
     private List<User> users = new ArrayList<>();
 
-    @Email(message = "E-Mail muss korrekt formatiert sein")
-    @NotBlank(message = "E-Mail darf nicht leer sein")
+    @Email(message = "email must have a correct format")
+    @NotBlank(message = "email must not be empty")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Name darf nicht leer sein")
+    @NotBlank(message = "name must not be empty")
     @Column(nullable = false)
     private String name;
 

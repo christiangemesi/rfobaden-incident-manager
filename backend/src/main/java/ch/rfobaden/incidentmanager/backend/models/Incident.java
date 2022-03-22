@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 public class Incident extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @NotBlank(message = "Titel darf nicht leer sein")
+    @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
 
@@ -39,7 +39,7 @@ public class Incident extends Model.Basic implements Serializable {
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
-    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
+    @NotNull(message = "isClosed must be defined")
     @Column(nullable = false)
     private boolean isClosed;
 

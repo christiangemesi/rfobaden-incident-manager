@@ -27,12 +27,12 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "Muss Auftrag zugewiesen werden")
+    @NotNull(message = "task must be chosen")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
-    @NotBlank(message = "Titel darf nicht leer sein")
+    @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
 
@@ -43,11 +43,11 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
 
     private LocalDateTime endsAt;
 
-    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
+    @NotNull(message = "isClosed must be defined")
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "Priorität muss gesetzt werden")
+    @NotNull(message = "priority must be chosen")
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;

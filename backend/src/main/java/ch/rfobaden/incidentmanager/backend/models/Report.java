@@ -32,12 +32,12 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "Muss Ereignis zugewiesen werden")
+    @NotNull(message = "incident must be chosen")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
-    @NotBlank(message = "Titel darf nicht leer sein")
+    @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
 
@@ -53,19 +53,19 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     private String location;
 
-    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
+    @NotNull(message = "isClosed must be defined")
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "Wahrheitswert Schlüsselmeldung muss angegeben werden")
+    @NotNull(message = "isKeyReport must be defined")
     @Column(nullable = false)
     private boolean isKeyReport;
 
-    @NotNull(message = "Wahrheitswert Lage-relevant muss angegeben werden")
+    @NotNull(message = "isLocationRelevant must be defined")
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
-    @NotNull(message = "Priorität muss gesetzt werden")
+    @NotNull(message = "priority must be chosen")
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;

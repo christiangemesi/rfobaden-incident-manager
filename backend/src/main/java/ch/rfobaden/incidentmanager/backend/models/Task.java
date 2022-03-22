@@ -32,12 +32,12 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "Muss Meldung zugewiesen werden")
+    @NotNull(message = "report must be chosen")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
-    @NotBlank(message = "Titel darf nicht leer sein")
+    @NotBlank(message = "title must not be empty")
     @Column(nullable = false)
     private String title;
 
@@ -50,11 +50,11 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     private String location;
 
-    @NotNull(message = "Wahrheitswert geschlossen muss angegeben werden")
+    @NotNull(message = "isClosed must be defined")
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "Priorität muss gesetzt werden")
+    @NotNull(message = "priority must be chosen")
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;

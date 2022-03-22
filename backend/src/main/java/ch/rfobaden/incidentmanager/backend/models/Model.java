@@ -28,11 +28,11 @@ public abstract class Model {
     @Column(nullable = false, unique = true)
     private Long id;
 
-    @NotNull(message = "Erstelldatum darf nicht leer sein")
+    @NotNull(message = "create date must not be empty")
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @NotNull(message = "Aktualisierungsdatum darf nicht leer sein")
+    @NotNull(message = "update date must not be empty")
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
