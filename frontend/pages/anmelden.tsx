@@ -43,14 +43,14 @@ const Logo = styled.img`
   display: block;
 `
 const LogoContainer = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   z-index: 0;
-  padding: 1rem;
+  padding: 3rem;
   box-shadow: 0 0 4px 4px ${({ theme }) => theme.colors.tertiary.value};
 `
 const CenterContainer = styled(UiContainer)`
@@ -70,7 +70,7 @@ const BackgroundContainer = styled.div<{ image: string }>`
   width: 100vw;
   background: url('${({ image }) => image}') center center no-repeat;
   background-size: cover;
-  filter: brightness(30%) grayscale(20%);
+  filter: brightness(40%) grayscale(20%);
   z-index: -1;
   overflow: hidden;
 `
