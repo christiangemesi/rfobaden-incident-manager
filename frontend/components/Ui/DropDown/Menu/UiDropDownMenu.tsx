@@ -2,7 +2,7 @@ import React, { ReactNode, useContext, useMemo, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 import { Themed } from '@/theme'
-import { useMountedState } from 'react-use'
+import { useEffectOnce, useMountedState, useUpdate } from 'react-use'
 import ReactDOM from 'react-dom'
 import { run } from '@/utils/control-flow'
 
@@ -14,6 +14,16 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   const context = useContext(UiDropDownContext)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isMounted = useMountedState()
+
+
+  const forceUpdate = useUpdate()
+
+  // Render once more after the initial render,
+  // so we can correctly position the dropdown after having initialized
+  // the refs.
+  useEffectOnce(() => {
+    forceUpdate()
+  })
 
   const child = useMemo(() => {
     const bounds = containerRef.current?.getBoundingClientRect() ?? null
