@@ -19,8 +19,7 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   const forceUpdate = useUpdate()
 
   // Render once more after the initial render,
-  // so we can correctly position the dropdown after having initialized
-  // the refs.
+  // so we can correctly position the dropdown after having initialized the refs.
   useEffectOnce(() => {
     forceUpdate()
   })
