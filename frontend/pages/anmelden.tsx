@@ -51,7 +51,7 @@ const LogoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   z-index: 0;
   padding: 3rem;
-  box-shadow: 0 0 4px 4px ${({ theme }) => theme.colors.tertiary.value};
+  box-shadow: 0 0 4px 1px ${({ theme }) => theme.colors.tertiary.contrast}
 `
 const CenterContainer = styled(UiContainer)`
   height: 100vh;

@@ -58,19 +58,21 @@ const SessionForm: React.VFC = () => {
       <StyledTitle level={1} isCentered>
         Willkommen
       </StyledTitle>
-      <CenteredGrid>
-        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
+      <UiGrid align="center" justify="center">
+        <UiGrid.Col size={{ md: 8, lg: 5, xl: 3, xxl: 2 }}>
           <UiForm form={form}>
-            <UiForm.Field field={form.email}>{(props) => (
-              <UiTextInput {...props} placeholder="E-Mail" />
-            )}</UiForm.Field>
-            <UiForm.Field field={form.password}>{(props) => (
-              <UiTextInput {...props} placeholder="Passwort" type="password" />
-            )}</UiForm.Field>
-            <UiForm.Buttons form={form} /> {/*Anmelden statt check */}
+            <GapGrid>
+              <UiForm.Field field={form.email}>{(props) => (
+                <UiTextInput {...props} placeholder="E-Mail" />
+              )}</UiForm.Field>
+              <UiForm.Field field={form.password}>{(props) => (
+                <UiTextInput {...props} placeholder="Passwort" type="password" />
+              )}</UiForm.Field>
+              <UiForm.Buttons form={form} />
+            </GapGrid>
           </UiForm>
         </UiGrid.Col>
-      </CenteredGrid>
+      </UiGrid>
     </Fragment>
   )
 }
@@ -83,13 +85,10 @@ interface LoginData {
 
 const StyledTitle = styled(UiTitle)`
   color: ${({ theme }) => theme.colors.tertiary.value};
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 `
-const CenteredGrid = styled(UiGrid)`
-  justify-content: center;
-  align-items: center;
-
-  form > div {
-    padding-top: 1rem;
-  }
+const GapGrid = styled(UiGrid)`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `
