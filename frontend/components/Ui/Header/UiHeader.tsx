@@ -12,6 +12,7 @@ import UserForm from '@/components/User/Form/UserForm'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 
 
 const UiHeader: React.VFC = () => {
@@ -96,8 +97,7 @@ const UiHeader: React.VFC = () => {
                     <UiTitle level={1} isCentered>
                       E-Mail Adresse ändern
                     </UiTitle>
-                    {/*todo: Create emailform!*/}
-                    <UserForm onClose={close} />
+                    <UserEmailForm user={currentUser} onClose={close} />
                   </React.Fragment>
                 )}</UiModal.Body>
               </UiModal>
