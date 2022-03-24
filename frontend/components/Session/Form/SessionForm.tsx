@@ -17,14 +17,9 @@ const SessionForm: React.VFC = () => {
     email: '',
     password: '',
   }))
-  useValidate(form, (validate) => ({
-    email: [
-      validate.notBlank(),
-      validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
-    ],
-    password: [
-      validate.notBlank(),
-    ],
+  useValidate(form, () => ({
+    email: [],
+    password: [],
   }))
 
   const router = useRouter()
@@ -42,6 +37,9 @@ const SessionForm: React.VFC = () => {
     })
     if (error !== null) {
       if (error.status === 401) {
+        setFormField(form.email, {
+          errors: [''],
+        })
         setFormField(form.password, {
           value: '',
           errors: ['ist nicht korrekt'],
