@@ -33,13 +33,13 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "incident must be chosen")
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
-    @Size(max = 100, message = "title can contain max 100 characters")
-    @NotBlank(message = "title must not be empty")
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
@@ -53,22 +53,22 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     private LocalDateTime endsAt;
 
-    @Size(max = 100, message = "location can contain max 100 characters")
+    @Size(max = 100)
     private String location;
 
-    @NotNull(message = "isClosed must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "isKeyReport must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
-    @NotNull(message = "isLocationRelevant must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
-    @NotNull(message = "priority must be chosen")
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;

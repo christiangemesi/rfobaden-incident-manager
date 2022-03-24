@@ -17,15 +17,15 @@ import javax.validation.constraints.NotNull;
 public final class UserCredentials extends Model implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "user must not be empty")
+    @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
-    @NotBlank(message = "password must not be empty")
+    @NotBlank
     @Column(nullable = false)
     private String encryptedPassword;
 
-    @NotNull(message = "change date must not be empty")
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime lastPasswordChangeAt;
 

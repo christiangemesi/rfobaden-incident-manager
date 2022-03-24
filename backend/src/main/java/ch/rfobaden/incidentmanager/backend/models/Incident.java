@@ -25,8 +25,8 @@ import javax.validation.constraints.Size;
 public class Incident extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Size(max = 100, message = "title can contain max 100 characters")
-    @NotBlank(message = "title must not be empty")
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
@@ -41,7 +41,7 @@ public class Incident extends Model.Basic implements Serializable {
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
-    @NotNull(message = "isClosed must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 

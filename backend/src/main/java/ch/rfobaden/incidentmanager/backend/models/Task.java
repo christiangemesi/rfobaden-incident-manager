@@ -33,13 +33,13 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "report must be chosen")
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
-    @Size(max = 100, message = "title can contain max 100 characters")
-    @NotBlank(message = "title must not be empty")
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
@@ -50,14 +50,14 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     private LocalDateTime endsAt;
 
-    @Size(max = 100, message = "location can contain max 100 characters")
+    @Size(max = 100)
     private String location;
 
-    @NotNull(message = "isClosed must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "priority must be chosen")
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;

@@ -28,13 +28,13 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @JoinColumn
     private User assignee;
 
-    @NotNull(message = "task must be chosen")
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
-    @Size(max = 100, message = "title can contain max 100 characters")
-    @NotBlank(message = "title must not be empty")
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
@@ -45,11 +45,11 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
 
     private LocalDateTime endsAt;
 
-    @NotNull(message = "isClosed must be defined")
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
-    @NotNull(message = "priority must be chosen")
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
