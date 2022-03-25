@@ -17,16 +17,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;
@@ -37,6 +41,7 @@ public class Incident extends Model.Basic implements Serializable {
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 

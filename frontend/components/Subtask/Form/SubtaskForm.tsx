@@ -43,6 +43,7 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
   useValidate(form, (validate) => ({
     title: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     description: [
       validate.notBlank({ allowNull: true }),
