@@ -4,7 +4,6 @@ import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
-import { SessionResponse } from '@/models/Session'
 import SessionStore from '@/stores/SessionStore'
 import { useValidate } from '@/components/Ui/Form/validate'
 

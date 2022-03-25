@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import SessionOnly from '@/components/Session/Only/SessionOnly'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UserPasswordForm from '@/components/User/PasswordForm/UserPasswordForm'
 import UiGrid from '@/components/Ui/Grid/UiGrid'

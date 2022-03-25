@@ -5,11 +5,7 @@ import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
-import BackendService, {
-  BackendResponse,
-  getSessionFromRequest,
-  loadSessionFromRequest,
-} from '@/services/BackendService'
+import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentList from '@/components/Incident/List/IncidentList'
