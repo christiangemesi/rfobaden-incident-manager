@@ -1,39 +1,31 @@
-import { AppProps } from 'next/app'
+import NextApp, { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { useAsync } from 'react-use'
-import BackendService from '@/services/BackendService'
-import SessionStore, { getSessionToken } from '@/stores/SessionStore'
+import { useEffectOnce } from 'react-use'
+import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
+import SessionStore from '@/stores/SessionStore'
 
 import 'reset-css/reset.css'
-import { parseUser } from '@/models/User'
-import { SessionResponse } from '@/models/Session'
+import User from '@/models/User'
 import UiHeader from '@/components/Ui/Header/UiHeader'
 import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
+import { NextApiRequestCookies } from 'next/dist/server/api-utils'
+import { IncomingMessage } from 'http'
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  useAsync(async () => {
-    const token = getSessionToken()
-    if (token === null) {
+interface Props extends AppProps {
+  user: User | null
+}
+
+const App: React.FC<Props> = ({ Component, pageProps, user }) => {
+  useEffectOnce(() => {
+    if (user === null) {
       SessionStore.clear()
-      return
+    } else {
+      SessionStore.setCurrentUser(user)
     }
-    const [data, error] = await BackendService.find<SessionResponse>('session')
-    if (error !== null) {
-      if (error.status === 401) {
-        SessionStore.clear()
-        return
-      }
-      throw error
-    }
-    if (data.user === null) {
-      SessionStore.clear()
-      return
-    }
-    SessionStore.setSession(data.token, parseUser(data.user))
   })
 
   const component = useMemo(() => {
@@ -61,6 +53,29 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   )
 }
 export default App
+
+;(App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
+  let pageUser: User | null = null
+
+  const { req } = appContext.ctx
+  if (req) {
+    // Load the session from the request.
+    // This requires access to the requests' cookies, which exist in the req object,
+    // but are not listed in its type definition, which is why this somewhat strange cast is necessary.
+    const { user, backendService } = await loadSessionFromRequest(req as IncomingMessage & { cookies: NextApiRequestCookies }, BackendService)
+    ;(req as unknown as ServerSideSessionHolder).session = {
+      user,
+      backendService,
+    }
+    pageUser = user
+  }
+
+  const appProps = await NextApp.getInitialProps(appContext)
+  return {
+    ...appProps,
+    user: pageUser,
+  }
+}
 
 const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   * {

@@ -28,11 +28,11 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   }))
 
   useSubmit(form, async (formData: FormData) => {
-    const [data, error] = await BackendService.update<FormData, SessionResponse>(`users/${user.id}/password`, formData)
+    const [data, error] = await BackendService.update<FormData, User>(`users/${user.id}/password`, formData)
     if (error !== null) {
       throw error
     }
-    SessionStore.setSession(data.token, parseUser(data.user))
+    SessionStore.setCurrentUser(parseUser(data))
     clearForm(form)
     if (handleClose) {
       handleClose()
