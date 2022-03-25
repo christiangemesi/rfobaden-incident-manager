@@ -16,7 +16,7 @@ interface Props {
 }
 
 const IncidentList: React.VFC<Props> = ({ incidents }) => {
-  const user = useCurrentUser()
+  const currentUser = useCurrentUser()
 
   return (
     <UiGrid gap={1.5}>
@@ -25,7 +25,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
           <IncidentListItem incident={incident} />
         </UiGrid.Col>
       ))}
-      {isAdmin(user) && (
+      {isAdmin(currentUser) && (
         <UiGrid.Col size={{ sm: 6, lg: 4, xxl: 3 }}>
           <UiModal isFull>
             <UiModal.Activator>{({ open }) => (

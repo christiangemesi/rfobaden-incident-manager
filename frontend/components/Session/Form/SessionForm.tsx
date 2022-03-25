@@ -49,7 +49,7 @@ const SessionForm: React.VFC = () => {
       }
       throw error
     }
-    SessionStore.setSession(data.token, parseUser(data.user))
+    SessionStore.setCurrentUser(parseUser(data.user))
   })
 
   return (

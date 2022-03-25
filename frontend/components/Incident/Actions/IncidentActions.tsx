@@ -17,7 +17,7 @@ interface Props {
 }
 
 const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb }) => {
-  const user = useCurrentUser()
+  const currentUser = useCurrentUser()
 
   const handleClose = useCallback(async () => {
     const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
@@ -79,7 +79,7 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
             </React.Fragment>
           )}</UiModal.Body>
         </UiModal>
-        {isAdmin(user) && (
+        {isAdmin(currentUser) && (
           incident.isClosed ? (
             <UiDropDown.Item onClick={handleReopen}>
               Öffnen
@@ -90,7 +90,7 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
             </UiDropDown.Item>
           )
         )}
-        {isAdmin(user) && (
+        {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
         )}
       </UiDropDown.Menu>

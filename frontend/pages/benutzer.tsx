@@ -2,7 +2,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import React from 'react'
 import User, { parseUser } from '@/models/User'
 import { GetServerSideProps } from 'next'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService, { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import UserList from '@/components/User/List/UserList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import { useEffectOnce } from 'react-use'
@@ -45,10 +45,16 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
 }
 export default BenutzerPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const [users] = await BackendService.list<User>('users')
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+  const { user, backendService } = getSessionFromRequest(req)
+  console.log(user)
+  if (user === null) {
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+  }
 
-  const [organizations, organizationError]: BackendResponse<Organization[]> = await BackendService.list(
+  const [users] = await backendService.list<User>('users')
+
+  const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',
   )
   if (organizationError !== null) {

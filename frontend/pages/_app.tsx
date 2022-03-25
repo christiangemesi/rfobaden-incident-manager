@@ -5,7 +5,7 @@ import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components
 import { defaultTheme, Theme } from '@/theme'
 import { useEffectOnce } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
-import SessionStore from '@/stores/SessionStore'
+import SessionStore, { useSession } from '@/stores/SessionStore'
 
 import 'reset-css/reset.css'
 import User from '@/models/User'
@@ -28,9 +28,13 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     }
   })
 
-  const component = useMemo(() => {
-    return <Component {...pageProps} />
-  }, [Component, pageProps])
+  const { currentUser } = useSession()
+  const component = useMemo(() => (
+    // Render the component only if either there is no active session or if the sessions' user is correctly stored.
+    (user === null || currentUser !== null)
+      ? <Component {...pageProps} />
+      : <React.Fragment />
+  ), [Component, pageProps, currentUser, user])
 
   return (
     <>
