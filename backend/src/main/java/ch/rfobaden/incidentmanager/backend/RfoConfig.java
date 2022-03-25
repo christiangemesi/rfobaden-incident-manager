@@ -6,16 +6,23 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @ConfigurationProperties("rfo")
 public class RfoConfig {
+    private final String stage;
+
     private final Frontend frontend;
 
     private final Jwt jwt;
 
     private final Mail mail;
 
-    public RfoConfig(Frontend frontend, Jwt jwt, Mail mail) {
+    public RfoConfig(String stage, Frontend frontend, Jwt jwt, Mail mail) {
+        this.stage = stage;
         this.frontend = frontend;
         this.jwt = jwt;
         this.mail = mail;
+    }
+
+    public String getStage() {
+        return stage;
     }
 
     public Frontend getFrontend() {
