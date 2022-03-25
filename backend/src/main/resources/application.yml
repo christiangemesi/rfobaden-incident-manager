@@ -10,6 +10,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
 
 rfo:
   jwt:

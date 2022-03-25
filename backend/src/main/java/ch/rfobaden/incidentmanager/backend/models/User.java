@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -37,15 +38,18 @@ public final class User extends Model.Basic implements Serializable {
     @JoinColumn
     private Organization organization;
 
+    @Size(max = 100)
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String firstName;
 
+    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String lastName;
@@ -124,7 +128,7 @@ public final class User extends Model.Basic implements Serializable {
             credentials.setUser(this);
         }
     }
-    
+
     @JsonIgnore
     public Organization getOrganization() {
         return organization;

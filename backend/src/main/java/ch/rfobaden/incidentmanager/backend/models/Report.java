@@ -14,10 +14,15 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "report")
@@ -28,32 +33,43 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
     @JoinColumn
     private User assignee;
 
-    @ManyToOne
+    @NotNull
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
+    @Size(max = 100)
     private String location;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 

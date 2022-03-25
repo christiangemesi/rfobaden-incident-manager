@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "close_reason")
@@ -22,9 +24,11 @@ public class CloseReason implements Serializable {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
