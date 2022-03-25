@@ -2,7 +2,7 @@ import Report, { parseReport } from '@/models/Report'
 import React, { useCallback } from 'react'
 import ReportStore from '@/stores/ReportStore'
 import { GetServerSideProps } from 'next'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService, { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import Incident from '@/models/Incident'
 import { useIncident } from '@/stores/IncidentStore'
 import User, { parseUser } from '@/models/User'
@@ -107,7 +107,12 @@ export const parseIncidentQuery = (query: Query | ParsedUrlQuery): IncidentQuery
   } as IncidentQuery
 }
 
-export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req, params }) => {
+  const { user, backendService } = getSessionFromRequest(req)
+  if (user === null) {
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+  }
+
   if (params === undefined) {
     throw new Error('params is undefined')
   }
@@ -117,7 +122,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     return { notFound: true }
   }
 
-  const [incident, incidentError]: BackendResponse<Incident> = await BackendService.find(
+  const [incident, incidentError]: BackendResponse<Incident> = await backendService.find(
     `incidents/${query.incidentId}`,
   )
   if (incidentError !== null) {
@@ -129,7 +134,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 
   // Check if the report exists.
   if (query.reportId !== null) {
-    const [_, reportError]: BackendResponse<Report> = await BackendService.find(
+    const [_, reportError]: BackendResponse<Report> = await backendService.find(
       `incidents/${incident.id}/reports/${query.reportId}`,
     )
     if (reportError !== null) {
@@ -142,7 +147,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
 
   // Check if the task exists.
   if (query.taskId !== null) {
-    const [_, taskError]: BackendResponse<Report> = await BackendService.find(
+    const [_, taskError]: BackendResponse<Report> = await backendService.find(
       `incidents/${incident.id}/reports/${query.reportId}/tasks/${query.taskId}`,
     )
     if (taskError !== null) {
@@ -153,21 +158,21 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ par
     }
   }
 
-  const [reports, reportsError]: BackendResponse<Report[]> = await BackendService.list(
+  const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
     `incidents/${query.incidentId}/reports`,
   )
   if (reportsError !== null) {
     throw reportsError
   }
 
-  const [organizations, organizationError]: BackendResponse<Organization[]> = await BackendService.list(
+  const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',
   )
   if (organizationError !== null) {
     throw organizationError
   }
 
-  const [users, usersError]: BackendResponse<User[]> = await BackendService.list('users')
+  const [users, usersError]: BackendResponse<User[]> = await backendService.list('users')
   if (usersError !== null) {
     throw usersError
   }

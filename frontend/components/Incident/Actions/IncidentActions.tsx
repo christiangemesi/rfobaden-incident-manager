@@ -8,6 +8,8 @@ import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import Incident, { parseIncident } from '@/models/Incident'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
+import { useCurrentUser } from '@/stores/SessionStore'
+import { isAdmin } from '@/models/User'
 
 interface Props {
   incident: Incident
@@ -15,6 +17,8 @@ interface Props {
 }
 
 const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb }) => {
+  const user = useCurrentUser()
+
   const handleClose = useCallback(async () => {
     const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
     if (message === null) {
@@ -75,17 +79,20 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
             </React.Fragment>
           )}</UiModal.Body>
         </UiModal>
-
-        {incident.isClosed ? (
-          <UiDropDown.Item onClick={handleReopen}>
-            Öffnen
-          </UiDropDown.Item>
-        ) : (
-          <UiDropDown.Item onClick={handleClose}>
-            Schliessen
-          </UiDropDown.Item>
+        {isAdmin(user) && (
+          incident.isClosed ? (
+            <UiDropDown.Item onClick={handleReopen}>
+              Öffnen
+            </UiDropDown.Item>
+          ) : (
+            <UiDropDown.Item onClick={handleClose}>
+              Schliessen
+            </UiDropDown.Item>
+          )
         )}
-        <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+        {isAdmin(user) && (
+          <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
+        )}
       </UiDropDown.Menu>
     </UiDropDown>
   )
