@@ -25,7 +25,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
-import File from '@/components/FileUpload/File'
+import FileInput from '@/components/Ui/Input/FileInput'
 
 
 interface Props {
@@ -98,7 +98,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
             </UiTitle>
           </div>
           <UiIconButtonGroup>
-            <File />
+            <FileInput />
             <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
             <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />

@@ -10,9 +10,8 @@ interface Props extends UiInputProps<string | null> {
   onClick?: () => void
 }
 
-const File: React.VFC<Props> = ({
+const FileInput: React.VFC<Props> = ({
   onChange: setValue,
-
 
 
 }) => {
@@ -30,18 +29,15 @@ const File: React.VFC<Props> = ({
         setValue(newValue)
       }
     }
-
-
   }, [setValue])
 
   return (
     <form>
       <input type="file" name="picture" onChange={handleChange} />
       <button> Submit</button>
-
     </form>
   )
 }
 
-export default File
+export default FileInput
 
