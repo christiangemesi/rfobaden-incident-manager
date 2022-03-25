@@ -47,7 +47,6 @@ export default BenutzerPage
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
   const { user, backendService } = getSessionFromRequest(req)
-  console.log(user)
   if (user === null) {
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }

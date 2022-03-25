@@ -77,8 +77,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     throw incidentsError
   }
 
-  console.log(incidents)
-
   return {
     props: {
       data: {
