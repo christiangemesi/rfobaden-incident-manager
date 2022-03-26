@@ -59,7 +59,7 @@ const SessionForm: React.VFC = () => {
       <UiGrid align="center" justify="center">
         <UiGrid.Col size={{ md: 8, lg: 5, xl: 3, xxl: 2 }}>
           <UiForm form={form}>
-            <GapGrid>
+            <FieldContainer>
               <UiForm.Field field={form.email}>{(props) => (
                 <UiTextInput {...props} placeholder="E-Mail" />
               )}</UiForm.Field>
@@ -67,7 +67,7 @@ const SessionForm: React.VFC = () => {
                 <UiTextInput {...props} placeholder="Passwort" type="password" />
               )}</UiForm.Field>
               <UiForm.Buttons form={form} />
-            </GapGrid>
+            </FieldContainer>
           </UiForm>
         </UiGrid.Col>
       </UiGrid>
@@ -85,7 +85,7 @@ const StyledTitle = styled(UiTitle)`
   color: ${({ theme }) => theme.colors.tertiary.value};
   margin-bottom: 3rem;
 `
-const GapGrid = styled(UiGrid)`
+const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
