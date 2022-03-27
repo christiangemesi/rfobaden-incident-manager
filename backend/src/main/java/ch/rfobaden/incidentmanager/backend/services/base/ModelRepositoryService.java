@@ -80,9 +80,6 @@ public abstract class ModelRepositoryService<
         entity.setUpdatedAt(LocalDateTime.now());
         entity.setCreatedAt(existingRecord.getCreatedAt());
         validate(entity);
-        if (!path.equals(entity.toPath())) {
-            throw new IllegalStateException("record does not match path: " + path);
-        }
         return Optional.of(repository.save(entity));
     }
 
