@@ -14,7 +14,6 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
 
     private final EmailConfig emailConfig;
 
-
     public ReportService(EmailConfig emailConfig) {
         super();
         this.emailConfig = emailConfig;

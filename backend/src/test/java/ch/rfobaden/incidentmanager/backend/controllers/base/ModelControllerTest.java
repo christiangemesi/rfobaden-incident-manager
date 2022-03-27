@@ -175,7 +175,7 @@ public abstract class ModelControllerTest<
         var record = generator.generate();
         var path = record.toPath();
         var updatedRecord = generator.copy(record);
-        updatedRecord.setUpdatedAt(LocalDateTime.now());
+        updatedRecord.setUpdatedAt(generator.randomDateTime());
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.of(updatedRecord));
         mockRelations(path, record);

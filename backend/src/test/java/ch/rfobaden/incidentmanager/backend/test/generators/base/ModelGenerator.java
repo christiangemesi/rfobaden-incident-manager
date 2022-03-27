@@ -1,13 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.test.generators.base;
 
-import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.models.Model;
-import com.github.javafaker.Faker;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class ModelGenerator<T extends Model> extends Generator<T> {
@@ -32,13 +26,9 @@ public abstract class ModelGenerator<T extends Model> extends Generator<T> {
             storedRecord.setId(generateId());
         }
         if (record.getCreatedAt() == null) {
-            storedRecord.setCreatedAt(
-                LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000))
-            );
+            storedRecord.setCreatedAt(randomDateTime());
         }
-        storedRecord.setUpdatedAt(
-            LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000))
-        );
+        storedRecord.setUpdatedAt(randomDateTime());
         return storedRecord;
     }
 }
