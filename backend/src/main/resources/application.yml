@@ -19,4 +19,7 @@ rfo:
   frontend:
     host: ${RFO_FRONTEND_HOST}
   mail:
-    enable: true
+    host: lx52.hoststar.hosting
+    port: 465
+    username: im@rfo-baden.ch
+    password: 54Rf0_ImT00l.17
