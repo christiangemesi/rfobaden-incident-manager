@@ -238,7 +238,7 @@ class JwtHelperTest {
     void testNew_weakKey() {
         // Given
         var secret = faker.leagueOfLegends().champion();
-        var rfoConfig = new RfoConfig(null, new RfoConfig.Jwt(secret), null);
+        var rfoConfig = new RfoConfig(null, new RfoConfig.Jwt(secret));
 
         // When
         var result = catchThrowable(() -> new JwtHelper(rfoConfig, userService));
