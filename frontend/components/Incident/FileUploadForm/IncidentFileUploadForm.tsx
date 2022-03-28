@@ -15,33 +15,38 @@ import IncidentStore from '@/stores/IncidentStore'
 interface Props {
   incident?: Incident | null
   onClose?: () => void
-  file?: File | null
+
 }
 
-const IncidentFileUploadForm: React.VFC<Props> = ({ file , onClose: handleClose }) => {
-  //TODO how do i fix this?
-  const form = useForm<FileUpload>(file, () => ({
-    title: null ?? file?.name,
-
+const IncidentFileUploadForm: React.VFC<Props> = ({ onClose: handleClose }) => {
+  const form = useForm<FileUpload>( () => ({
+    title: '',
+    file: null,
   }))
 
+  useValidate(form, (validate) => ({
+    title: [
+      validate.notBlank(),
+    ],
+    file: [
+      validate.notNull(),
+    ],
+  }))
 
   useSubmit(form, async (fileUpload: FileUpload) => {
     console.log(fileUpload)
   })
 
-
-
-  //TODO onChange: (value: T) => void, what to put into onChange?
   return (
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" placeholder={file?.name} />
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
 
-
-        <FileInput value={'test'} onChange={} />
+        <UiForm.Field field={form.file}>{(props) => (
+          <FileInput {...props} label="Titel" />
+        )}</UiForm.Field>
 
         <UiForm.Buttons form={form} />
       </FormContainer>

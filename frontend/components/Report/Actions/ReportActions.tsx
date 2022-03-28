@@ -9,6 +9,7 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
+import IncidentFileUploadForm from '@/components/Incident/FileUploadForm/IncidentFileUploadForm'
 
 interface Props {
   incident: Incident
@@ -93,9 +94,23 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
             </UiDropDown.Item>
           )
         )}
-        <UiDropDown.Item onClick={handleUploadFile}>
-          UploadFile
-        </UiDropDown.Item>
+
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Fileupload
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Fileuploaden
+              </UiTitle>
+              <IncidentFileUploadForm incident={incident} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

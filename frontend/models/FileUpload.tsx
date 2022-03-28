@@ -1,7 +1,5 @@
 
-
-
 export default interface FileUpload {
   title: string
-  file: File
+  file: File | null
 }
