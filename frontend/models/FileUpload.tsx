@@ -1,6 +1,7 @@
-import Model from '@/models/base/Model'
 
 
-export default interface FileUpload extends Model {
+
+export default interface FileUpload {
+  title: string
   file: File
 }

@@ -54,13 +54,9 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
   }, [report])
 
   const handleUploadFile = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
-      await BackendService.delete(`incidents/${report.incidentId}/reports`, report.id)
-      if (handleDeleteCb) {
-        handleDeleteCb()
-      }
-      ReportStore.remove(report.id)
-    }
+    //TODO wie referenzier ich uf mis fileupload?
+    console.log('Hello')
+
   }, [report, handleDeleteCb])
 
   return (
