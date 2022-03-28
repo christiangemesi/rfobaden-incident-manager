@@ -3,7 +3,6 @@ import React, { ChangeEvent, ReactNode, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
-
 type Props = UiInputProps<File | null>
 
 const FileInput: React.VFC<Props> = ({
@@ -24,25 +23,35 @@ const FileInput: React.VFC<Props> = ({
     <div>
       <StyledLabel>
         <input type="file" onChange={handleChange} />
-
       </StyledLabel>
       {value?.name}
       <UiInputErrors errors={errors} />
     </div>
   )
 }
-
 export default FileInput
 
 //TODO do some css styling
 //TODO drag and drop
 const StyledLabel = styled.label`
-  width: 100%;
-  height: 3rem;
-  background-color: red;
-  display: block;
+  
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20rem;
+  
+ 
+  border: 0.4rem dashed red;
   
   & > input {
     display:none;
   }
 `
+
+
+
+
+
