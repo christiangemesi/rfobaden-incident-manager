@@ -38,8 +38,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(MailException.class)
     public ResponseEntity<ErrorResponse> handle(MailException e) {
-        var res = new ErrorResponse(
-            "mail failed:\n" + e.getMessage());
+        var res = new ErrorResponse("failed to send email: " + e.getMessage());
         return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

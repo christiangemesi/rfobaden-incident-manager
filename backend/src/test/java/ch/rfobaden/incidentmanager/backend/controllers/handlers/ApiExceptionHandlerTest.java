@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.handlers.ApiExceptionHandler;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.errors.MailException;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.errors.ValidationException;
 import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
@@ -101,6 +102,23 @@ class ApiExceptionHandlerTest {
         assertThat(result.getBody()).isNotNull();
         assertThat(result.getBody().getMessage()).isEqualTo(
             "update conflict: the resource has already been modified"
+        );
+    }
+
+    @Test
+    void testHandle_MailException() {
+        // Given
+        var e = new MailException(faker.chuckNorris().fact());
+
+        // When
+        var result = handler.handle(e);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getMessage()).isEqualTo(
+            "failed to send email: " + e.getMessage()
         );
     }
 
