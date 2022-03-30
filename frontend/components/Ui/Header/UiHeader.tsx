@@ -59,51 +59,45 @@ const UiHeader: React.VFC = () => {
             <span>anmelden</span>
           </UiHeaderItem>
         ) : (
-          // <ButtonList isNarrow>
-          //   <UiHeaderItem href="/profil" title="Profil">
-          //     <UiIcon.UserInCircle />
-          //   </UiHeaderItem>
-          //   <UiHeaderItem onClick={logout}>
-          //     <span>{currentUser.firstName} {currentUser.lastName}</span>
-          //     <UiIcon.Logout />
-          //   </UiHeaderItem>
-          // </ButtonList>
-          <UiDropDown>
-            <UiDropDown.Trigger>{({ toggle }) => (
-              <UiIconButton onClick={toggle}>
-                <UiIcon.UserInCircle />
-              </UiIconButton>
-            )}</UiDropDown.Trigger>
-            <UiDropDown.Menu>
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>Passwort Bearbeiten</UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      Passwort Bearbeiten
-                    </UiTitle>
-                    <UserPasswordForm user={currentUser} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-              <UiModal isFull>
-                <UiModal.Activator>{({ open }) => (
-                  <UiDropDown.Item onClick={open}>E-Mail Bearbeiten</UiDropDown.Item>
-                )}</UiModal.Activator>
-                <UiModal.Body>{({ close }) => (
-                  <React.Fragment>
-                    <UiTitle level={1} isCentered>
-                      E-Mail Adresse ändern
-                    </UiTitle>
-                    <UserEmailForm user={currentUser} onClose={close} />
-                  </React.Fragment>
-                )}</UiModal.Body>
-              </UiModal>
-              <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
-            </UiDropDown.Menu>
-          </UiDropDown>
+          <LoggedInUser>
+            {currentUser.firstName} {currentUser.lastName}
+            <UiDropDown>
+              <UiDropDown.Trigger>{({ toggle }) => (
+                <IconButton onClick={toggle}>
+                  <UiIcon.UserInCircle />
+                </IconButton>
+              )}</UiDropDown.Trigger>
+              <UiDropDown.Menu>
+                <UiModal isFull>
+                  <UiModal.Activator>{({ open }) => (
+                    <UiDropDown.Item onClick={open}>Passwort Bearbeiten</UiDropDown.Item>
+                  )}</UiModal.Activator>
+                  <UiModal.Body>{({ close }) => (
+                    <React.Fragment>
+                      <UiTitle level={1} isCentered>
+                        Passwort Bearbeiten
+                      </UiTitle>
+                      <UserPasswordForm user={currentUser} onClose={close} />
+                    </React.Fragment>
+                  )}</UiModal.Body>
+                </UiModal>
+                <UiModal isFull>
+                  <UiModal.Activator>{({ open }) => (
+                    <UiDropDown.Item onClick={open}>E-Mail Bearbeiten</UiDropDown.Item>
+                  )}</UiModal.Activator>
+                  <UiModal.Body>{({ close }) => (
+                    <React.Fragment>
+                      <UiTitle level={1} isCentered>
+                        E-Mail Adresse ändern
+                      </UiTitle>
+                      <UserEmailForm user={currentUser} onClose={close} />
+                    </React.Fragment>
+                  )}</UiModal.Body>
+                </UiModal>
+                <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
+              </UiDropDown.Menu>
+            </UiDropDown>
+          </LoggedInUser>
         )}
       </ButtonList>
     </Header>
@@ -154,4 +148,13 @@ const ButtonList = styled.div<{ isNarrow?: boolean }>`
   display: flex;
   gap: ${({ isNarrow }) => isNarrow ? '0.75rem' : '2rem'};
   align-items: center;
+`
+const LoggedInUser = styled.div`
+  display: flex;
+  align-items: center
+`
+const IconButton = styled(UiIconButton)`  
+   :hover {
+      background-color: ${({ theme }) => theme.colors.secondary.value};
+   }
 `
