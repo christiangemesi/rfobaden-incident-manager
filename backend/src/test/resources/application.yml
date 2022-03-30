@@ -8,6 +8,8 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+  main:
+    allow-bean-definition-overriding: true
 
 rfo:
   jwt:

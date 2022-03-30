@@ -1,9 +1,9 @@
 import NextApp, { AppProps } from 'next/app'
-import React, { useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { useEffectOnce } from 'react-use'
+import { createGlobalState, useEffectOnce } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 
@@ -14,6 +14,7 @@ import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
+import { useRouter } from 'next/router'
 
 interface Props extends AppProps {
   user: User | null
@@ -36,8 +37,16 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       : <React.Fragment />
   ), [Component, pageProps, currentUser, user])
 
+  const [appState, setAppState] = useAppState()
+  const router = useRouter()
+  useEffectOnce(() => {
+    router.events.on('routeChangeComplete', () => {
+      setAppState({ hasHeader: true, hasFooter: true })
+    })
+  })
+
   return (
-    <>
+    <Fragment>
       <Head>
         <title key="title">RFOBaden IncidentManager</title>
         <meta charSet="utf-8" />
@@ -46,14 +55,14 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiScroll>
-          <UiHeader />
-          <Main>
+          {appState.hasHeader && (<UiHeader />)}
+          <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
           </Main>
-          <UiFooter />
+          {appState.hasFooter && (<UiFooter />)}
         </UiScroll>
       </ThemeProvider>
-    </>
+    </Fragment>
   )
 }
 export default App
@@ -85,7 +94,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   * {
     box-sizing: border-box;
   }
-  
+
   ${({ theme }) => css`
     body {
       font-family: ${theme.fonts.body};
@@ -93,7 +102,6 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       color: ${theme.colors.tertiary.contrast};
     }
   `}
-  
   button {
     cursor: pointer;
   }
@@ -115,14 +123,29 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       height: 100%;
       min-height: 100%;
     }
-    
+
     .print-only {
       display: none;
     }
   }
 `
 
-const Main = styled.main`
-  padding-bottom: 1rem;
-  min-height: calc(100vh - 4rem - 1rem - 4rem);
+const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
+  --header-height: 4rem;
+  --footer-height: 4rem;
+
+  ${({ hasHeader }) => !hasHeader && css`
+    --header-height: 0px;
+  `}
+  ${({ hasFooter }) => !hasFooter && css`
+    --footer-height: 0px;
+  `}
+
+  position: relative;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
 `
+
+export const useAppState = createGlobalState({
+  hasHeader: true,
+  hasFooter: true,
+})

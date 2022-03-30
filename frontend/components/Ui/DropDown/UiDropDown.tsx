@@ -5,7 +5,6 @@ import UiDropDownContext, { UiDropDownState } from './Context/UiDropDownContext'
 import UiDropDownMenu from '@/components/Ui/DropDown/Menu/UiDropDownMenu'
 import styled from 'styled-components'
 import { useEffectOnce, useGetSet } from 'react-use'
-import EventHelper from '@/utils/helpers/EventHelper'
 
 interface Props {
   children: ReactNode
@@ -20,7 +19,11 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
   }))
 
   useEffectOnce(() => {
-    const close = () => {
+    const close = (e: MouseEvent) => {
+      const container = getState().containerRef.current
+      if (container !== null && (container === e.target || container.contains(e.target as Node))) {
+        return
+      }
       if (getState().isOpen) {
         setState((state) => ({ ...state, isOpen: false }))
       }
@@ -33,7 +36,7 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
 
   return (
     <UiDropDownContext.Provider value={getState()}>
-      <Container ref={getState().containerRef as RefObject<HTMLDivElement>} onClick={EventHelper.stopPropagation}>
+      <Container ref={getState().containerRef as RefObject<HTMLDivElement>}>
         {children}
       </Container>
     </UiDropDownContext.Provider>

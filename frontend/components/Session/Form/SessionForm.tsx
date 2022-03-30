@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -10,20 +10,16 @@ import { setFormField, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { SessionResponse } from '@/models/Session'
 import { useValidate } from '@/components/Ui/Form/validate'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 const SessionForm: React.VFC = () => {
   const form = useForm<LoginData>(() => ({
     email: '',
     password: '',
   }))
-  useValidate(form, (validate) => ({
-    email: [
-      validate.notBlank(),
-      validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
-    ],
-    password: [
-      validate.notBlank(),
-    ],
+  useValidate(form, () => ({
+    email: [],
+    password: [],
   }))
 
   const router = useRouter()
@@ -41,6 +37,9 @@ const SessionForm: React.VFC = () => {
     })
     if (error !== null) {
       if (error.status === 401) {
+        setFormField(form.email, {
+          errors: [''],
+        })
         setFormField(form.password, {
           value: '',
           errors: ['ist nicht korrekt'],
@@ -53,24 +52,26 @@ const SessionForm: React.VFC = () => {
   })
 
   return (
-    <div>
-      <CenteredGrid>
-        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <h1>
-            Anmelden
-          </h1>
+    <Fragment>
+      <StyledTitle level={1} isCentered>
+        Willkommen
+      </StyledTitle>
+      <UiGrid align="center" justify="center">
+        <UiGrid.Col size={{ md: 8, lg: 5, xl: 3, xxl: 2 }}>
           <UiForm form={form}>
-            <UiForm.Field field={form.email}>{(props) => (
-              <UiTextInput {...props} label="E-Mail" />
-            )}</UiForm.Field>
-            <UiForm.Field field={form.password}>{(props) => (
-              <UiTextInput {...props} label="Passwort" type="password" />
-            )}</UiForm.Field>
-            <UiForm.Buttons form={form} />
+            <FieldContainer>
+              <UiForm.Field field={form.email}>{(props) => (
+                <UiTextInput {...props} placeholder="E-Mail" />
+              )}</UiForm.Field>
+              <UiForm.Field field={form.password}>{(props) => (
+                <UiTextInput {...props} placeholder="Passwort" type="password" />
+              )}</UiForm.Field>
+              <UiForm.Buttons form={form} />
+            </FieldContainer>
           </UiForm>
         </UiGrid.Col>
-      </CenteredGrid>
-    </div>
+      </UiGrid>
+    </Fragment>
   )
 }
 export default SessionForm
@@ -80,9 +81,12 @@ interface LoginData {
   password: string
 }
 
-const CenteredGrid = styled(UiGrid)`
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  margin-top: -4rem;
+const StyledTitle = styled(UiTitle)`
+  color: ${({ theme }) => theme.colors.tertiary.value};
+  margin-bottom: 3rem;
+`
+const FieldContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `
