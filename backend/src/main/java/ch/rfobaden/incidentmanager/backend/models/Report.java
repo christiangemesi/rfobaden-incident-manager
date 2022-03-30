@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -77,7 +78,7 @@ public class Report extends Model
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     @JsonIgnore
@@ -225,7 +226,27 @@ public class Report extends Model
         return isClosed;
     }
 
-    @Override
+
+
+    @JsonIgnore
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @JsonIgnore
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Long> getImageIds() {
+        return getImages().stream().map(Image::getId).collect(Collectors.toList());
+    }
+
+    public boolean addImage(Image image) {
+        return images.add(image);
+    }
+
+    @JsonIgnore
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
