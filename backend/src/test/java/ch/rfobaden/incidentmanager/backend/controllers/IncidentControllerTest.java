@@ -52,7 +52,8 @@ class IncidentControllerTest extends ModelControllerTest.Basic<Incident, Inciden
             .thenReturn(Optional.of(updatedRecord));
 
         // When
-        var mockRequest = MockMvcRequestBuilders.put(getEndpointFor(path, record.getId()) + "/close")
+        var mockRequest = MockMvcRequestBuilders
+            .put(getEndpointFor(path, record.getId()) + "/close")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(closeData));

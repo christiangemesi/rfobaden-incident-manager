@@ -19,7 +19,10 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Duration;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -102,6 +105,10 @@ public class JwtHelper {
             | IllegalArgumentException e) {
             return Optional.empty();
         }
+    }
+
+    public Duration getTokenDuration() {
+        return Duration.of(EXPIRATION_MILLIS, ChronoUnit.MILLIS);
     }
 
     private static Key parseKey(String jwtSecret) {
