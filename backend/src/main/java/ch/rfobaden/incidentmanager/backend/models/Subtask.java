@@ -78,6 +78,10 @@ public class Subtask extends Model
         return getImages().stream().map(Image::getId).collect(Collectors.toList());
     }
 
+    public boolean addImage(Image image) {
+        return images.add(image);
+    }
+
     @JsonIgnore
     public User getAssignee() {
         return assignee;

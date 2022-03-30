@@ -83,6 +83,10 @@ public class Task extends Model
         return getImages().stream().map(Image::getId).collect(Collectors.toList());
     }
 
+    public boolean addImage(Image image) {
+        return images.add(image);
+    }
+
     @JsonIgnore
     @Override
     public User getAssignee() {
@@ -215,6 +219,7 @@ public class Task extends Model
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
+
 
     @Override
     public String getLink() {
