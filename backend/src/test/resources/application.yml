@@ -12,6 +12,7 @@ spring:
     allow-bean-definition-overriding: true
 
 rfo:
+  stage: "test"
   jwt:
     # Fixed JWT for test environment.
     secret: "9OXZSztg+yrDtpP+0tW4BRrXMALxUwlMQojsJMEtSJ4="
