@@ -3,9 +3,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import {
+  mdiAccount,
   mdiAccountCircle,
   mdiAccountMultiple,
   mdiAlertCircleOutline,
+  mdiArrowDecisionOutline,
   mdiCalendar,
   mdiCheck,
   mdiCheckboxBlankOutline,
@@ -125,6 +127,8 @@ export default Object.assign(StyledUiIcon, {
   Location: makeNamedIcon(mdiMapMarker),
   Map: makeNamedIcon(mdiMap),
   UserInCircle: makeNamedIcon(mdiAccountCircle),
+  User: makeNamedIcon(mdiAccount),
+  IncidentManagement: makeNamedIcon(mdiArrowDecisionOutline),
   AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
   Calendar: makeNamedIcon(mdiCalendar),
   Changelog: makeNamedIcon(mdiClipboardTextOutline),
