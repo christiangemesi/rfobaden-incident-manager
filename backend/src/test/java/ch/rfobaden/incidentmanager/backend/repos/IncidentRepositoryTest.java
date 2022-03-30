@@ -17,6 +17,5 @@ public class IncidentRepositoryTest
             closeReason = closeReason.getPrevious();
             closeReasonResult = closeReasonResult.getPrevious();
         }
-
     }
 }
