@@ -73,7 +73,7 @@ class SessionControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(token, user)
+                new SessionController.SessionData(user)
             )));
         verify(userService, times(1)).find(user.getId());
     }
@@ -89,7 +89,7 @@ class SessionControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(null, null)
+                new SessionController.SessionData(null)
             )));
     }
 
