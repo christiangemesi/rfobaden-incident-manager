@@ -13,7 +13,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,7 +72,7 @@ public class ImageController {
 
     private void saveImageToReport(Image image, Long id) {
         Report report = reportService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, " Report not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "Report not found")
         );
         report.addImage(image);
         reportService.update(report);
@@ -81,7 +80,7 @@ public class ImageController {
 
     private void saveImageToTask(Image image, Long id) {
         Task task = taskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, " Task not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "Task not found")
         );
         task.addImage(image);
         taskService.update(task);
@@ -89,7 +88,7 @@ public class ImageController {
 
     private void saveImageToSubtask(Image image, Long id) {
         Subtask subtask = subtaskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, " Subtask not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "Subtask not found")
         );
         subtask.addImage(image);
         subtaskService.update(subtask);
