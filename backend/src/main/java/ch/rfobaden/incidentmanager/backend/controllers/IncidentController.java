@@ -2,10 +2,13 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAdmin;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
+import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "api/v1/incidents")
 public class IncidentController extends ModelController.Basic<Incident, IncidentService> {
-
     @PutMapping("{incidentId}/close")
     @ResponseStatus(HttpStatus.OK)
     public Incident closeIncident(

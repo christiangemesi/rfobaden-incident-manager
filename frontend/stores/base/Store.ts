@@ -467,5 +467,3 @@ const deepEqual = (a: unknown, b: unknown): boolean => {
   }
   return aKeys.length === Object.keys(b).length
 }
-
-console.log(deepEqual(new Date(), new Date(2009)))
