@@ -6,21 +6,22 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiLink from '@/components/Ui/Link/UiLink'
 
-//mdiArrowDecisionOutline, mdiAccount, 
 const DashboardPage: React.VFC = () => {
   return (
     <UiContainer>
       <UiTitle level={1}>Dashboard</UiTitle>
-      {data.map((card) => (
-        <UiLink key={card.label} href={card.link}>
-          <UiGrid.Col size={{ sm: 6, lg: 4, xxl: 3 }}>
-            <Card>
-              <card.icon size={5} />
-              <CardTitle level={4}>{card.label}</CardTitle>
-            </Card>
+      <UiGrid gap={1.5}>
+        {data.map((card) => (
+          <UiGrid.Col key={card.label} size={{ sm: 6, lg: 4, xxl: 3 }}>
+            <UiLink href={card.link}>
+              <Card>
+                <card.icon size={5} />
+                <CardTitle level={4}>{card.label}</CardTitle>
+              </Card>
+            </UiLink>
           </UiGrid.Col>
-        </UiLink>
-      ))}
+        ))}
+      </UiGrid>
     </UiContainer>
   )
 }
@@ -31,10 +32,11 @@ const data = [
 ]
 
 const Card = styled.div`
-  width: 100%;
   height: 15rem;
-  padding: 1.5rem 2rem;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background-color: ${({ theme }) => theme.colors.secondary.value};
 
