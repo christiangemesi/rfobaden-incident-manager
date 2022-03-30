@@ -2,6 +2,7 @@ import { UiInputProps } from '@/components/Ui/Input'
 import React, { ChangeEvent, ReactNode, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 type Props = UiInputProps<File | null>
 
@@ -21,9 +22,13 @@ const FileInput: React.VFC<Props> = ({
 
   return (
     <div>
-      <StyledLabel>
+
+      <StyledForm>
+
         <input type="file" onChange={handleChange} />
-      </StyledLabel>
+        <UiIcon.Upload size={8} />
+
+      </StyledForm>
       {value?.name}
       <UiInputErrors errors={errors} />
     </div>
@@ -33,8 +38,9 @@ export default FileInput
 
 //TODO do some css styling
 //TODO drag and drop
-const StyledLabel = styled.label`
-  
+
+
+const StyledForm = styled.form`
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 
@@ -42,12 +48,20 @@ const StyledLabel = styled.label`
   align-items: center;
   justify-content: center;
   height: 20rem;
-  
- 
-  border: 0.4rem dashed red;
-  
+
+  outline: 2px dashed #92b0b3;
+  outline-offset: -10px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+
+
   & > input {
-    display:none;
+    display: none;
+  }
+
+  :hover {
+    background-color: white;
+    outline-offset: -20px;
   }
 `
 
