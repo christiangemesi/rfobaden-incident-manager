@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -51,6 +52,22 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @JsonIgnore
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Long> getImageIds() {
+        return getImages().stream().map(Image::getId).collect(Collectors.toList());
+    }
 
     @JsonIgnore
     public User getAssignee() {

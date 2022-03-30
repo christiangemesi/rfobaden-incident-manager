@@ -7,11 +7,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,6 +47,22 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
 
     @Column(nullable = false)
     private Priority priority;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @JsonIgnore
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Long> getImageIds() {
+        return getImages().stream().map(Image::getId).collect(Collectors.toList());
+    }
 
     @JsonIgnore
     public User getAssignee() {
