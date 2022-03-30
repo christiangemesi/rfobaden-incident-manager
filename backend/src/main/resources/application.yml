@@ -10,8 +10,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
 
 rfo:
+  stage: ${RFO_STAGE}
   jwt:
     secret: ${RFO_JWT_SECRET}
   frontend:

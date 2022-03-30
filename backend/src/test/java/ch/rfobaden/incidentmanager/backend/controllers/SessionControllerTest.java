@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
+import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +35,7 @@ import java.util.Optional;
 
 @WebMvcTest(SessionController.class)
 @TestPropertySource(properties = "app.mock-user-service=false")
+@Import({ AuthService.class })
 class SessionControllerTest extends AppControllerTest {
     @Autowired
     protected MockMvc mockMvc;
@@ -70,7 +73,7 @@ class SessionControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(token, user)
+                new SessionController.SessionData(user)
             )));
         verify(userService, times(1)).find(user.getId());
     }
@@ -86,7 +89,7 @@ class SessionControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(null, null)
+                new SessionController.SessionData(null)
             )));
     }
 

@@ -10,9 +10,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "subtask")
@@ -23,22 +28,29 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
     @JoinColumn
     private User assignee;
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 

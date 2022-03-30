@@ -31,8 +31,6 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
 
-  console.log('render!')
-
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
     parseIncidentQuery(router.query)?.reportId ?? null
   ))

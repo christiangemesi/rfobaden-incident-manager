@@ -50,6 +50,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     return ({
       title: [
         validate.notBlank(),
+        validate.maxLength(100),
       ],
       description: [
         validate.notBlank({ allowNull: true }),
@@ -59,6 +60,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       ],
       location: [
         validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
       ],
       priority: [],
       incidentId: [],

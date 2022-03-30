@@ -14,10 +14,15 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "task")
@@ -28,24 +33,32 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     @JoinColumn
     private User assignee;
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
+    @Size(max = 100)
     private String location;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
