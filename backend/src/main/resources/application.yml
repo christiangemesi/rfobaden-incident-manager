@@ -14,6 +14,7 @@ spring:
     allow-bean-definition-overriding: true
 
 rfo:
+  stage: ${RFO_STAGE}
   jwt:
     secret: ${RFO_JWT_SECRET}
   frontend:

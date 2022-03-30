@@ -1,8 +1,9 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import SessionForm from '@/components/Session/Form/SessionForm'
 import React from 'react'
-import styled from 'styled-components'
 import { GetServerSideProps } from 'next'
+import { getSessionFromRequest } from '@/services/BackendService'
+import styled from 'styled-components'
 import { useAppState } from '@/pages/_app'
 import { useEffectOnce } from 'react-use'
 
@@ -28,6 +29,20 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
   )
 }
 export default AnmeldenPage
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = getSessionFromRequest(req)
+  if (user !== null) {
+    return { redirect: { statusCode: 302, destination: '/' }}
+  }
+
+  const index = Math.floor(Math.random() * images.length)
+  return {
+    props: {
+      imageIndex: index,
+    },
+  }
+}
 
 const images = [
   '/assets/background1.jpg',
@@ -74,12 +89,3 @@ const BackgroundContainer = styled.div<{ image: string }>`
   z-index: -1;
   overflow: hidden;
 `
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const index = Math.floor(Math.random() * images.length)
-  return {
-    props: {
-      imageIndex: index,
-    },
-  }
-}
