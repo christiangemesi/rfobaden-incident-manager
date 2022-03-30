@@ -69,6 +69,10 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
         return getImages().stream().map(Image::getId).collect(Collectors.toList());
     }
 
+    public boolean addImage(Image image) {
+        return images.add(image);
+    }
+
     @JsonIgnore
     public User getAssignee() {
         return assignee;
@@ -208,6 +212,7 @@ public class Task extends Model implements PathConvertible<TaskPath>, Serializab
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
+
 
     @Override
     public boolean equals(Object o) {

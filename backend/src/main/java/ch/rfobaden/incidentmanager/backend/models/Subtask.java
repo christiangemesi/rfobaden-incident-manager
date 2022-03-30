@@ -64,6 +64,10 @@ public class Subtask extends Model implements PathConvertible<SubtaskPath>, Seri
         return getImages().stream().map(Image::getId).collect(Collectors.toList());
     }
 
+    public boolean addImage(Image image) {
+        return images.add(image);
+    }
+
     @JsonIgnore
     public User getAssignee() {
         return assignee;
