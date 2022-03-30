@@ -65,4 +65,39 @@ class IncidentControllerTest extends ModelControllerTest.Basic<Incident, Inciden
             .andExpect(content().json(mapper.writeValueAsString(updatedRecord)));
         verify(service, times(1)).closeIncident(record.getId(), closeData.getMessage());
     }
+
+    @RepeatedTest(5)
+    void testReopen() throws Exception {
+        // Given
+        var record = generator.generate();
+        var closeReason = closeReasonGenerator.generate();
+
+        var closeData = new IncidentController.CloseMessageData();
+        closeData.setMessage(closeReason.getMessage());
+        record.setCloseReason(closeReason);
+        record.setClosed(true);
+
+        var updatedRecord = generator.copy(record);
+        updatedRecord.setClosed(false);
+        updatedRecord.setUpdatedAt(LocalDateTime.now());
+
+        var path = record.toPath();
+        mockRelations(path, record);
+        Mockito.when(service.reopenIncident(record.getId()))
+            .thenReturn(Optional.of(updatedRecord));
+
+        // When
+        var mockRequest = MockMvcRequestBuilders
+            .put(getEndpointFor(path, record.getId()) + "/reopen")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(closeData));
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(content().json(mapper.writeValueAsString(updatedRecord)));
+        verify(service, times(1)).reopenIncident(record.getId());
+    }
 }
