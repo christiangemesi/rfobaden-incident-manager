@@ -19,15 +19,11 @@ public class Image {
     private String location;
 
     @Column(nullable = false)
-    private String thumbnailLocation;
-
-    @Column(nullable = false)
     private String name;
 
     public Image() {}
 
     public Image(String name) {
-        this.location = location;
         this.name = name;
     }
 
@@ -45,14 +41,6 @@ public class Image {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getThumbnailLocation() {
-        return thumbnailLocation;
-    }
-
-    public void setThumbnailLocation(String thumbnailLocation) {
-        this.thumbnailLocation = thumbnailLocation;
     }
 
     public String getName() {
