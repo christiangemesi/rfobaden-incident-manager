@@ -8,7 +8,6 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { Themed } from '@/theme'
 import UserPasswordForm from '@/components/User/PasswordForm/UserPasswordForm'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
-import UserForm from '@/components/User/Form/UserForm'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -155,6 +154,7 @@ const LoggedInUser = styled.div`
 `
 const IconButton = styled(UiIconButton)`  
    :hover {
-      background-color: ${({ theme }) => theme.colors.secondary.value};
+      background-color: transparent;
+      transform: scale(1.05);
    }
 `
