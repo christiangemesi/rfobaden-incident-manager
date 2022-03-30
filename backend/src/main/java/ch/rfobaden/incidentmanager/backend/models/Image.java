@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,13 +53,30 @@ public class Image {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Image image = (Image) o;
+        return id.equals(image.id)
+            && location.equals(image.location)
+            && name.equals(image.name);
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(id, location, name);
     }
 
+    @Override
+    public String toString() {
+        return "Image{"
+            + "id=" + id
+            + ", location='" + location + '\''
+            + ", name='" + name + '\''
+            + '}';
+    }
 }
