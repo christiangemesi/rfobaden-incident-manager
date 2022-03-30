@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,11 +19,15 @@ public class Image {
     private String location;
 
     @Column(nullable = false)
+    private String thumbnailLocation;
+
+    @Column(nullable = false)
     private String name;
 
     public Image() {}
 
     public Image(String name) {
+        this.location = location;
         this.name = name;
     }
 
@@ -44,6 +47,14 @@ public class Image {
         this.location = location;
     }
 
+    public String getThumbnailLocation() {
+        return thumbnailLocation;
+    }
+
+    public void setThumbnailLocation(String thumbnailLocation) {
+        this.thumbnailLocation = thumbnailLocation;
+    }
+
     public String getName() {
         return name;
     }
@@ -53,30 +64,13 @@ public class Image {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Image image = (Image) o;
-        return id.equals(image.id)
-            && location.equals(image.location)
-            && name.equals(image.name);
+    public boolean equals(Object other) {
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, location, name);
+        return 0;
     }
 
-    @Override
-    public String toString() {
-        return "Image{"
-            + "id=" + id
-            + ", location='" + location + '\''
-            + ", name='" + name + '\''
-            + '}';
-    }
 }
