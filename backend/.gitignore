@@ -90,3 +90,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# files for images and documents
+./files/*
+
