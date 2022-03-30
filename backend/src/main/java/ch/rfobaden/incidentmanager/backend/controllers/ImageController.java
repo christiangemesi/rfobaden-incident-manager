@@ -33,7 +33,6 @@ public class ImageController {
     private final SubtaskService subtaskService;
     private final Map<String, BiConsumer<Image, Long>> mapping;
 
-
     public ImageController(
         FileLocationService fileLocationService,
         ReportService reportService,
@@ -61,13 +60,11 @@ public class ImageController {
         try {
             Image image = fileLocationService.save(file.getBytes(), file.getOriginalFilename());
             mapping.get(modelName).accept(image, id);
+            return image.getId();
         } catch (IOException e) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Server error");
         }
-        return null;
     }
-
-
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public FileSystemResource downloadImage(@RequestParam Long id) {
