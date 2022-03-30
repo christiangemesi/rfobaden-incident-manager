@@ -46,10 +46,4 @@ public class FileLocationService {
             .map(img -> fileSystemRepository.findInFileSystem(img.getLocation()))
             .collect(Collectors.toList());
     }
-
-    public FileSystemResource findThumbnail(Long imageId) {
-        Image image = imageRepository.findById(imageId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return fileSystemRepository.findInFileSystem(image.getThumbnailLocation());
-    }
 }
