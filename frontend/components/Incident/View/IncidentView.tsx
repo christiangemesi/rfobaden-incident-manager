@@ -20,6 +20,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -82,6 +83,10 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
             </UiTitle>
           </UiGrid.Col>
 
+          <ProgressContainer>
+            <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+          </ProgressContainer>
+
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
             <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
@@ -89,6 +94,7 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
         </UiGrid>
 
         <UiDescription description={incident.description} />
+
       </UiLevel.Header>
       <StyledUiLevelContent $hasSelected={selectedId !== null}>
         <ListContainer ref={setReportListRef} $hasSelected={selectedId !== null}>
@@ -199,4 +205,8 @@ const ReportOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     
     // transform: translateY(calc(100% + 4px + 1rem)); // 4px to hide box shadow, 1rem for parent padding
   }
+`
+const ProgressContainer = styled.div`
+  display: flex;
+  justify-content: end;
 `
