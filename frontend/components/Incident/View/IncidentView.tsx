@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
 import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
+import UICircularProgress2 from '@/components/Ui/CircularProgress/UiCircularProgress2'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -82,7 +83,8 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
           </UiGrid.Col>
 
           <ProgressContainer>
-            <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+            <UICircularProgress2 done={incident.closedReportIds.length} total={incident.reportIds.length} />
+            {/*<UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />*/}
           </ProgressContainer>
 
           <UiGrid.Col size="auto">
