@@ -26,7 +26,7 @@ class UserServiceTest
     protected Faker faker;
 
     @RepeatedTest(5)
-    protected void testFindByEmail() {
+    void testFindByEmail() {
         // Given
         var record = generator.generate();
         Mockito.when(repository.findByEmail(record.getEmail()))
@@ -43,7 +43,7 @@ class UserServiceTest
     }
 
     @RepeatedTest(5)
-    protected void testFindByEmail_notFound() {
+    void testFindByEmail_notFound() {
         // Given
         var record = generator.generate();
         Mockito.when(repository.findByEmail(record.getEmail()))

@@ -1,34 +1,57 @@
 import styled from 'styled-components'
-import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import React, { EventHandler, forwardRef, MouseEvent, ReactNode } from 'react'
 import { ColorName, contrastDark } from '@/theme'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends StyledProps {
   title?: string
   color?: ColorName
   children: ReactNode
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiIconButton: React.VFC<Props> = ({
+const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner ({
   children,
   title = '',
   color,
   onClick: handleClick,
-}: Props) => {
-
+  className,
+  style,
+}, ref) {
   return (
-    <StyledButton type="button" title={title} color={color} onClick={handleClick}>
+    <StyledButton
+      type="button"
+      title={title}
+      color={color}
+      ref={ref}
+      onClick={handleClick}
+      className={className}
+      style={style}
+    >
       {children}
     </StyledButton>
   )
-}
+})
+
 export default styled(UiIconButton)``
 
 const StyledButton = styled.button`
-  background: none;
+  display: inline-flex;
+  align-items: center;
+
   border: none;
+  background: transparent;
   cursor: pointer;
   margin: 0 0.2rem;
+  
+  will-change: background-color;
+  transition: 200ms ease-out;
+  transition-property: background-color;
+
+  :hover {
+    background-color: ${({ theme }) => theme.colors.grey.value};
+  }
+  
   &:first-child {
     margin-left: 0;
   } 
@@ -36,16 +59,9 @@ const StyledButton = styled.button`
     margin-right: 0;
   }
 
-  will-change: transform;
-  transition: 250ms ease-in-out;
-  transition-property: filter;
 
   color: ${({
     theme,
     color,
   }) => color === undefined ? contrastDark : theme.colors[color].value};
-
-  :hover {
-    filter: brightness(130%);
-  }
 `

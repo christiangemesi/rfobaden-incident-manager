@@ -24,6 +24,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     authorId: -1,
     closeReason: null,
     isClosed: false,
+    isDone: false,
     closedAt: null,
     startsAt: null,
     endsAt: null,
@@ -34,6 +35,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
   useValidate(form, (validate) => ({
     title: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     description: [
       validate.notBlank({ allowNull: true }),
@@ -43,6 +45,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closeReason: [],
     closedAt: [],
     isClosed: [],
+    isDone: [],
     endsAt: [],
     closedReportIds: [],
     reportIds: [],

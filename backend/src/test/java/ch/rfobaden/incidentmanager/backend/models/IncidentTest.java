@@ -24,7 +24,7 @@ class IncidentTest extends ModelTest<Incident> {
     SubtaskGenerator subtaskGenerator;
 
     @RepeatedTest(5)
-    public void testGetReportIds_notEmpty() {
+    void testGetReportIds_notEmpty() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -40,7 +40,7 @@ class IncidentTest extends ModelTest<Incident> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedReportIds_allReportsClosed() {
+    void testGetClosedReportIds_allReportsClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -53,7 +53,7 @@ class IncidentTest extends ModelTest<Incident> {
             });
         });
         var allClosedReportIds = value.getReports()
-            .stream().filter(Report::isClosed)
+            .stream().filter((r) -> r.isClosed() || r.isDone())
             .map(Report::getId)
             .collect(Collectors.toList());
 
@@ -64,7 +64,7 @@ class IncidentTest extends ModelTest<Incident> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedReportIds_someReportsClosed() {
+    void testGetClosedReportIds_someReportsClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -77,7 +77,7 @@ class IncidentTest extends ModelTest<Incident> {
             });
         });
         var allClosedReportIds = value.getReports()
-            .stream().filter(Report::isClosed)
+            .stream().filter((r) -> r.isClosed() || r.isDone())
             .map(Report::getId)
             .collect(Collectors.toList());
 
@@ -88,7 +88,7 @@ class IncidentTest extends ModelTest<Incident> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedReportIds_noReportsClosed() {
+    void testGetClosedReportIds_noReportsClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -101,6 +101,6 @@ class IncidentTest extends ModelTest<Incident> {
         });
 
         // Then
-        assertThat(value.getClosedReportIds().isEmpty()).isTrue();
+        assertThat(value.getClosedReportIds()).isEmpty();
     }
 }

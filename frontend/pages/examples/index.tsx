@@ -7,6 +7,7 @@ const UiComponentsExample: React.VFC = () => {
   return (
     <Spacer>
       <UiTitle level={3}>Examples</UiTitle>
+      <UiTitle level={4}>Layouts</UiTitle>
       <Link href="examples/ui-grid">
         <a>
           UiGrid
@@ -75,7 +76,7 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <UiTitle level={4}>Page Components</UiTitle>
+      <UiTitle level={4}>Display Components</UiTitle>
       <Link href="examples/ui-badge">
         <a>
           UiBadge
@@ -121,6 +122,13 @@ const UiComponentsExample: React.VFC = () => {
       <Link href="examples/ui-title">
         <a>
           UiTitle
+        </a>
+      </Link>
+      <br />
+      <UiTitle level={4}>Responsive Design</UiTitle>
+      <Link href="examples/custom-grid">
+        <a>
+          Custom Grid
         </a>
       </Link>
       <br />

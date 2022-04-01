@@ -1,83 +1,129 @@
-import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import Priority from '@/models/Priority'
-import UiListItem from '@/components/Ui/List/Item/UiListItem'
+import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { ColorName } from '@/theme'
-import { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props extends StyledProps {
+interface Props extends UiListItemProps {
   priority: Priority
   title: string
   user: string
-  color?: ColorName
+  body?: ReactNode
   isClosed?: boolean
-  children: ReactNode
-  onClick?: EventHandler<MouseEvent>
+  isSmall?: boolean
 }
 
 const UiListItemWithDetails: React.VFC<Props> = ({
   priority,
   title,
   user,
-  color,
-  className,
-  style,
+  body = null,
   isClosed = false,
+  isSmall = false,
   children,
-  onClick: handleClick,
+  ...props
 }: Props) => {
-  let priorityIcon = <UiIcon.PriorityMedium />
-
-  if (priority === Priority.HIGH) {
-    priorityIcon = <UiIcon.PriorityHigh />
-  } else if (priority === Priority.LOW) {
-    priorityIcon = <UiIcon.PriorityLow />
-  }
+  const [PriorityIcon, priorityColor] = useMemo(() => {
+    switch (priority) {
+    case Priority.HIGH:
+      return [UiIcon.PriorityHigh, 'error' as const]
+    case Priority.MEDIUM:
+      return [UiIcon.PriorityMedium, 'warning' as const]
+    case Priority.LOW:
+      return [UiIcon.PriorityLow, 'success' as const]
+    }
+  }, [priority])
 
   return (
-    <StyledListItem isClosed={isClosed} color={color} style={style} className={className} onClick={handleClick}>
-      <CenterBox>
-        <StyledPriority>
-          {priorityIcon}
-        </StyledPriority>
-        <div>
-          <UiTitle level={5}>
+    <StyledListItem {...props} $isClosed={isClosed} title={title}>
+      <LeftSide>
+        <PriorityContainer $color={priorityColor} $isSmall={isSmall}>
+          <PriorityIcon size={1.5} />
+        </PriorityContainer>
+        <TextContent>
+          <ItemTitle level={5}>
             {title}
-          </UiTitle>
+          </ItemTitle>
           {user}
-        </div>
-      </CenterBox>
-      <CenterBox>
+        </TextContent>
+      </LeftSide>
+      <RightSide>
         {children}
-      </CenterBox>
+      </RightSide>
+      {body && (
+        <BottomSide $isSmall={isSmall}>
+          {body}
+        </BottomSide>
+      )}
     </StyledListItem>
   )
 }
 export default styled(UiListItemWithDetails)``
 
-const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
-  transition: 150ms ease-in;
-  transition-property: filter, opacity, color, background-color;
+const StyledListItem = styled(UiListItem)<{ $isClosed: boolean }>`
+  padding-left: 0;
+  transition-property: inherit, padding;
+  flex-wrap: wrap;
   
-  ${({ isClosed }) => isClosed && css`
-    filter: grayscale(0.75);
+  ${({ $isClosed }) => $isClosed && css`
+    filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;
-    
+
     &:hover {
-      filter: grayscale(0.75);
+      filter: grayscale(0.8) brightness(0.8);
       opacity: 1;
     }
   `}
 `
 
-const StyledPriority = styled.div`
-  display: inline-flex;
-  margin-right: 1rem;
-`
-
-const CenterBox = styled.div`
+const LeftSide = styled.div`
   display: flex;
   align-items: center;
+
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  
+  min-width: 0; // Causes the children of this element to not be able to overflow.
+`
+
+const RightSide = styled.div`
+  display: flex;
+  align-items: center;
+  
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+`
+
+const BottomSide = styled.div<{ $isSmall: boolean }>`
+  display: block;
+  flex: 1 0 100%;
+  width: 100%;
+  max-width: 100%;
+  padding-top: 1rem;
+  padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
+`
+
+const TextContent = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const ItemTitle = styled(UiTitle)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const PriorityContainer = styled.div<{ $color: ColorName, $isSmall: boolean }>`
+  display: inline-flex;
+  margin: ${({ $isSmall }) => $isSmall ? '0 0.5rem' : '0 1rem'};
+  color: ${({ theme, $color }) => theme.colors[$color].value};
+
+  transition: 150ms ease-out;
+  transition-property: margin;
 `

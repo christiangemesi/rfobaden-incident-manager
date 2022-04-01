@@ -10,7 +10,7 @@ export interface UpdateFn<T> {
   (prevState: T): T
 }
 
-type Patch<T> =
+export type Patch<T> =
   | PatchFn<T>
   | Partial<T>
 

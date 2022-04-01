@@ -30,3 +30,5 @@ export interface StyledProps {
   className?: string
   style?: CSSProperties
 }
+
+export type ElementProps<E extends Element> = React.DetailedHTMLProps<React.HTMLAttributes<E>, E>

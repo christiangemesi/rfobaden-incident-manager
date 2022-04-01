@@ -38,7 +38,7 @@ const UiButtonExample: React.VFC = () => {
         <UiGrid.Col>
           <UiSelectInput label="error" options={options} value={currentValue4} onChange={(newValue) => {
             setCurrentValue4(newValue)
-          }} errors={['Fail not selected']} placeholder={'error'} />
+          }} errors={['Fail not selected']} menuPlacement={'top'} placeholder={'error'} />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>

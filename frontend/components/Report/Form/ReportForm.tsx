@@ -23,10 +23,11 @@ import styled from 'styled-components'
 interface Props {
   incident: Incident
   report?: Report | null
+  onSave?: (report: Report) => void
   onClose?: () => void
 }
 
-const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handleClose }) => {
+const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleSave, onClose: handleClose }) => {
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
@@ -42,12 +43,14 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     closedTaskIds: [],
     taskIds: [],
     isClosed: false,
+    isDone: false,
   }))
 
   useValidate(form, (validate) => {
     return ({
       title: [
         validate.notBlank(),
+        validate.maxLength(100),
       ],
       description: [
         validate.notBlank({ allowNull: true }),
@@ -57,6 +60,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       ],
       location: [
         validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
       ],
       priority: [],
       incidentId: [],
@@ -69,6 +73,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
       closedTaskIds: [],
       taskIds: [],
       isClosed: [],
+      isDone: [],
     })
   })
 
@@ -79,7 +84,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onClose: handle
     if (error !== null) {
       throw error
     }
-    ReportStore.save(parseReport(data))
+    const newReport = parseReport(data)
+    ReportStore.save(newReport)
+    if (handleSave) {
+      handleSave(newReport)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()

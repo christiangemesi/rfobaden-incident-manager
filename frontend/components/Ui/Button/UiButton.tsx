@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 import { PropsOf } from '@emotion/react'
 
 export interface Props extends StyledProps {
@@ -68,7 +68,6 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   font-size: 1rem;
   background: ${({ theme, color }) => theme.colors[color].value};
   color: ${({ theme, color }) => theme.colors[color].contrast};
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   transition: 250ms ease;
   transition-property: filter, box-shadow;
@@ -76,9 +75,6 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   ${({ isFull }) => isFull && css`
     width: 100%;
   `}
-  :focus {
-    outline: 1px solid ${contrastDark};
-  }
   
   :hover:not(&[disabled]) {
     cursor: pointer;
@@ -87,14 +83,12 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
 
   :active:not(&[disabled]) {
     cursor: pointer;
-    box-shadow: none;
     filter: brightness(75%);
   }
 
   :disabled {
     cursor: not-allowed;
-    box-shadow: none;
     background: rgb(200, 200, 200);
-    color: ${contrastDark};
+    color: ${({ theme, color }) => theme.colors[color].contrast};
   }
 `

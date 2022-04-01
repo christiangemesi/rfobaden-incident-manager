@@ -13,5 +13,6 @@ class IncidentControllerTest extends ModelControllerTest.Basic<Incident, Inciden
     protected String getEndpointFor(EmptyPath path) {
         return "/api/v1/incidents/";
     }
+
     // TODO Test close and reopen, including with invalid id
 }

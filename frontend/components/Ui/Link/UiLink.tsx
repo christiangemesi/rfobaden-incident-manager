@@ -7,6 +7,7 @@ interface Props extends StyledProps {
   href: string
   children?: ReactNode
   isText?: boolean
+  target?: string
 }
 
 const UiLink: React.VFC<Props> = ({
@@ -15,11 +16,12 @@ const UiLink: React.VFC<Props> = ({
   style,
   children,
   isText = false,
+  target,
 }) => {
   const AComponent = isText ? TextA : A
   return (
     <Link href={href} passHref>
-      <AComponent style={style} className={className}>
+      <AComponent target={target} style={style} className={className}>
         {children}
       </AComponent>
     </Link>

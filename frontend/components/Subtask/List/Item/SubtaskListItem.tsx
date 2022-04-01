@@ -1,68 +1,94 @@
 import Subtask, { parseSubtask } from '@/models/Subtask'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useUser } from '@/stores/UserStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
-import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
-import styled, { css } from 'styled-components'
 import { useUsername } from '@/models/User'
-import BackendService from '@/services/BackendService'
-import Incident from '@/models/Incident'
-import Report from '@/models/Report'
-import Task from '@/models/Task'
+import ReactDOM from 'react-dom'
+import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
+import styled, { css } from 'styled-components'
+import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
 import SubtaskStore from '@/stores/SubtaskStore'
+import BackendService from '@/services/BackendService'
+import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
+import Task from '@/models/Task'
+import UiDescription from '@/components/Ui/Description/UiDescription'
 
 interface Props {
-  incident: Incident
-  report: Report
   task: Task
   subtask: Subtask,
-  isActive: boolean,
+  provided: DraggableProvided
+  snapshot: DraggableStateSnapshot
   onClick?: (Subtask: Subtask) => void,
 }
 
 const SubtaskListItem: React.VFC<Props> = ({
-  incident,
-  report,
   task,
   subtask,
-  isActive,
-  onClick: handleClick }) => {
+  provided,
+  snapshot,
+  onClick: handleClick,
+}) => {
 
   const assignee = useUser(subtask.assigneeId)
   const assigneeName = useUsername(assignee)
 
-  const [isClosed, setClosed] = useState(subtask.isClosed)
-
-  const handleChange = async () => {
-    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${incident.id}/reports/${report.id}/tasks/${task.id}/subtasks`, subtask.id, {
+  const handleChange = useCallback(async () => {
+    const isClosed = !subtask.isClosed
+    SubtaskStore.save({ ...subtask, isClosed })
+    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id, {
       ...subtask,
-      isClosed: !subtask.isClosed,
+      isClosed,
     })
     if (error !== null) {
       throw error
     }
     SubtaskStore.save(parseSubtask(newSubtask))
-    setClosed(newSubtask.isClosed)
-  }
+  }, [subtask])
 
-  return (
-    <SelectableListItem
-      isClosed={subtask.isClosed}
-      isActive={isActive}
-      priority={subtask.priority}
-      title={subtask.title}
-      user={assigneeName ?? ''}
-      onClick={handleClick && (() => handleClick(subtask))}>
-      <UiCheckbox label="" value={isClosed} onChange={handleChange} color="tertiary" />
-    </SelectableListItem>
+  // Delay updates to `isDragging` with a timeout, so the css transitions have time to finish.
+  const [isDragging, setDragging] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      setDragging(snapshot.isDragging)
+    })
+  }, [snapshot.isDragging])
+
+  const child = (
+    <div
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    >
+      <Item
+        priority={subtask.priority}
+        title={subtask.title}
+        user={assigneeName ?? ''}
+        isDragging={isDragging && !snapshot.isDropAnimating}
+        onClick={handleClick && (() => handleClick(subtask))}
+        body={subtask.description && (
+          <UiDescription description={subtask.description} />
+        )}
+      >
+        <SubtaskActions task={task} subtask={subtask} />
+        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
+      </Item>
+    </div>
   )
+
+  return snapshot.isDragging
+    ? ReactDOM.createPortal(child, document.body)
+    : child
 }
 
 export default SubtaskListItem
 
-const SelectableListItem = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive, theme }) => isActive && css`
-    background: ${theme.colors.secondary.contrast};
-    color: ${theme.colors.secondary.value};
+const Item = styled(UiListItemWithDetails)<{ isDragging: boolean }>`
+  margin-bottom: 0.5rem;
+  
+  transition: 150ms ease-out;
+  transition-property: transform;
+  
+  ${({ isDragging }) => isDragging && css`
+      transform: rotate(3deg);
   `}
 `

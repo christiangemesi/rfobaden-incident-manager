@@ -1,64 +1,189 @@
-import React from 'react'
-import UiList from '@/components/Ui/List/UiList'
-import Subtask from '@/models/Subtask'
+import React, { useCallback, useMemo } from 'react'
+import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
-import Incident from '@/models/Incident'
-import Report from '@/models/Report'
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
+import SubtaskStore from '@/stores/SubtaskStore'
+import styled from 'styled-components'
+import { Themed } from '@/theme'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
+import BackendService from '@/services/BackendService'
 import Task from '@/models/Task'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
+import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+
 
 interface Props {
-  incident: Incident
-  report: Report
   task: Task
   subtasks: Subtask[]
-  activeSubtask: Subtask | null
   onClick?: (subtask: Subtask) => void
 }
 
 const SubtaskList: React.VFC<Props> = ({
-  incident,
-  report,
   task,
   subtasks,
-  activeSubtask,
-  onClick: handleClick }) => {
-  return (
-    <UiList>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiCreatButton onClick={open}>
-            <UiIcon.CreateAction size={1.4} />
-          </UiCreatButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Teilauftrag erfassen
-            </UiTitle>
-            <SubtaskForm incident={incident} report={report} task={task} onClose={close} />
-          </div>
-        )}</UiModal.Body>
-      </UiModal>
+  onClick: handleClick,
+}) => {
+  const [openSubtasks, closedSubtasks] = useMemo(() => (
+    subtasks.reduce(([open, closed], subtask) => {
+      if (subtask.isClosed) {
+        closed.push(subtask)
+      } else {
+        open.push(subtask)
+      }
+      return [open, closed]
+    }, [[] as Subtask[], [] as Subtask[]])
 
-      {subtasks.map((subtask) => (
-        <SubtaskListItem
-          incident={incident}
-          report={report}
-          task={task}
-          key={subtask.id}
-          subtask={subtask}
-          onClick={handleClick}
-          isActive={activeSubtask !== null && activeSubtask.id == subtask.id}
-        />
-      ))}
-    </UiList>
+  ), [subtasks])
+
+  const handleDragEnd = useCallback(async (result: DropResult) => {
+    if (result.destination == null) {
+      return
+    }
+    const subtask = SubtaskStore.find(parseInt(result.draggableId))
+    if (subtask === null) {
+      throw new Error(`unknown subtask id: ${result.draggableId}`)
+    }
+    const [isClosed, index] = result.destination.droppableId === LIST_CLOSED_ID
+      ? [true, result.destination.index + openSubtasks.length - 1]
+      : [false, result.destination.index]
+    SubtaskStore.save({ ...subtask, isClosed }, { index })
+    if (isClosed !== subtask.isClosed) {
+      const [updatedSubtask, error] = await BackendService.update<Subtask>(`incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id, {
+        ...subtask,
+        isClosed,
+      })
+      if (error !== null) {
+        throw error
+      }
+      SubtaskStore.save(parseSubtask(updatedSubtask), { index })
+    }
+  }, [openSubtasks])
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Container>
+        <Side>
+          <UiCaption>
+            offene Teilaufträge
+          </UiCaption>
+
+          <UiModal isFull>
+            <UiModal.Activator>{({ open }) => (
+              <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
+                <UiIcon.CreateAction size={1.5} />
+              </UiCreateButton>
+            )}</UiModal.Activator>
+            <UiModal.Body>{({ close }) => (
+              <div>
+                <UiTitle level={1} isCentered>
+                  Teilauftrag erfassen
+                </UiTitle>
+                <SubtaskForm task={task} onClose={close} />
+              </div>
+            )}</UiModal.Body>
+          </UiModal>
+
+          <Droppable droppableId={LIST_OPEN_ID}>{(provided) => (
+            <DropTarget
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              <List>
+                {openSubtasks.map((subtask, i) => (
+                  <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
+                    <SubtaskListItem
+                      task={task}
+                      subtask={subtask}
+                      onClick={handleClick}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
+                  )}</Draggable>
+                ))}
+              </List>
+              {provided.placeholder}
+            </DropTarget>
+          )}</Droppable>
+        </Side>
+
+        <Side>
+          <UiCaption>
+            geschlossene Teilaufträge
+          </UiCaption>
+
+          <Droppable droppableId={LIST_CLOSED_ID}>{(provided) => (
+            <DropTarget
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              <List>
+                {closedSubtasks.map((subtask, i) => (
+                  <Draggable key={subtask.id} draggableId={subtask.id.toString()} index={i}>{(provided, snapshot) => (
+                    <SubtaskListItem
+                      task={task}
+                      subtask={subtask}
+                      onClick={handleClick}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
+                  )}</Draggable>
+                ))}
+              </List>
+              {provided.placeholder}
+            </DropTarget>
+          )}</Droppable>
+        </Side>
+      </Container>
+    </DragDropContext>
   )
 }
 export default SubtaskList
 
+const LIST_OPEN_ID = 'list-open'
+const LIST_CLOSED_ID = 'list-closed'
 
+const Container = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  min-height: 100%;
+  column-gap: 2rem;
+  padding: 4px 4px 0 4px;
+  
+  width: 100%;  
+  ${Themed.media.lg.max} {
+    width: 200%;
+  }
+`
+
+const Side = styled.div`
+  width: 100%;
+  height: 100%;
+  
+  padding: 1rem;
+  box-shadow: 0 0 2px 1px gray;
+
+  & > ${UiCaption}:first-child {
+    margin-bottom: 0.5rem;
+  }
+`
+
+const DropTarget = styled.div`
+  height: 100%;
+  width: 100%;
+  
+  max-height: 100%;
+`
+
+const List = styled.ul`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  
+  width: 100%;
+`

@@ -17,9 +17,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class Model {
@@ -28,9 +28,11 @@ public abstract class Model {
     @Column(nullable = false, unique = true)
     private Long id;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
@@ -171,7 +173,7 @@ public abstract class Model {
             if (oneToManyAnnotation != null && oneToManyAnnotation.fetch() == FetchType.LAZY) {
                 return;
             }
-            
+
             var type = (ParameterizedType) field.getGenericType();
             var elementType = type.getActualTypeArguments()[0];
             if (!(elementType instanceof Class)) {

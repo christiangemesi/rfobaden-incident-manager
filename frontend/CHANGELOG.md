@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Modals can now be closed by pressing the escape key.
+- Incidents, reports and tasks now support manual closing.
+- Added page footer.
+- New users and assignees now receive email notifications.
+
+### Changed
+- Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
+- Redesigned the incident page.
+- Redesigned the users page.
+- Replaced the date/time input.
+- Redesigned the login page.
+- Signing in is now mandatory.
+- Agents no longer have access to admin-only actions.
+
+### Fixed
+- Scroll is now disabled while a modal is open.
+
+## [0.3.0] - 24.02.2022
+### Added
 - Organizations can now be managed at `/organizations`.
 - Users can now belong to an organization.
 - The organizations involved with a specific incident are shown in the incident list.

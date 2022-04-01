@@ -13,6 +13,7 @@ export default interface Incident extends Model {
 
   closeReason: CloseReason | null
   isClosed: boolean
+  isDone: boolean
 
   closedReportIds: Id<Report>[]
   reportIds: Id<Report>[]

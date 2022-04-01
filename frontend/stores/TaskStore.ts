@@ -1,24 +1,36 @@
-import { createModelStore } from '@/stores/Store'
+import { createModelStore } from '@/stores/base/Store'
 import Task, { parseTask } from '@/models/Task'
 import Report from '@/models/Report'
 import Id from '@/models/base/Id'
 import SubtaskStore from '@/stores/SubtaskStore'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
-const [TaskStore, useTasks, useTask] = createModelStore(parseTask, {}, {
-  sortBy: (task) => ['desc', [
-    [task.isClosed, 'asc'],
+const TaskStore = createModelStore(parseTask, {
+  sortBy: (task) => [
+    [task.isClosed || task.isDone, 'asc'],
     getPriorityIndex(task.priority),
-    [task.title, 'asc'],
-  ]],
+    [task.title.toLowerCase(), 'asc'],
+  ],
 })
+
 export default TaskStore
+
+export const useTask = createUseRecord(TaskStore)
+export const useTasks = createUseRecords(TaskStore)
+
+export const useTasksOfReport = (reportId: Id<Report>): Task[] => (
+  useTasks((tasks) => (
+    tasks.filter((task) => task.reportId === reportId)
+  ), [reportId])
+)
 
 SubtaskStore.onCreate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {
     return
   }
+
   TaskStore.save({
     ...task,
     subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
@@ -27,24 +39,27 @@ SubtaskStore.onCreate((subtask) => {
         ? [...new Set([...task.closedSubtaskIds, subtask.id])]
         : task.closedSubtaskIds
     ),
-    isClosed: task.isClosed && subtask.isClosed,
+    isDone: task.isDone && subtask.isClosed,
+    isClosed: subtask.isClosed && task.isClosed,
   })
 })
-SubtaskStore.onUpdate((subtask, oldSubtask) => {
+SubtaskStore.onUpdate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
-  if (task === null || subtask.isClosed === oldSubtask.isClosed) {
+  if (task === null) {
     return
   }
+
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
   } else {
     closedSubtaskIds.delete(subtask.id)
   }
+
   TaskStore.save({
     ...task,
     closedSubtaskIds: [...closedSubtaskIds],
-    isClosed: closedSubtaskIds.size === task.subtaskIds.length,
+    isDone: closedSubtaskIds.size === task.subtaskIds.length,
   })
 })
 SubtaskStore.onRemove((subtask) => {
@@ -52,27 +67,19 @@ SubtaskStore.onRemove((subtask) => {
   if (task === null) {
     return
   }
+
   const subtaskIds = [...task.subtaskIds]
   subtaskIds.splice(subtaskIds.indexOf(subtask.id), 1)
+
   const closedSubtaskIds = [...task.closedSubtaskIds]
   if (subtask.isClosed) {
     closedSubtaskIds.splice(closedSubtaskIds.indexOf(subtask.id), 1)
   }
+
   TaskStore.save({
     ...task,
     subtaskIds,
     closedSubtaskIds,
-    isClosed: subtaskIds.length > 0 && subtaskIds.length === closedSubtaskIds.length,
+    isDone: subtaskIds.length > 0 && subtaskIds.length === closedSubtaskIds.length,
   })
 })
-
-export {
-  useTasks,
-  useTask,
-}
-
-export const useTasksOfReport = (reportId: Id<Report>): Task[] => (
-  useTasks((tasks) => (
-    tasks.filter((task) => task.reportId === reportId)
-  ), [reportId])
-)

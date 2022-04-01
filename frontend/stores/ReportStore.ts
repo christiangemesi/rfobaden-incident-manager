@@ -1,23 +1,35 @@
-import { createModelStore } from '@/stores/Store'
+import { createModelStore } from '@/stores/base/Store'
 import Report, { parseReport } from '@/models/Report'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import TaskStore from '@/stores/TaskStore'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
-const [ReportStore, useReports, useReport] = createModelStore(parseReport, {}, {
-  sortBy: (report) => ['desc', [
+const ReportStore = createModelStore(parseReport, {
+  sortBy: (report) => [
     // Closed reports are always at the bottom.
-    [report.isClosed, 'asc'],
+    [report.isClosed || report.isDone, 'asc'],
 
-    // Sort order: key > location-relevant > priority
+    // Sort order: key > location-relevant > priority > start date
     report.isKeyReport,
     report.isLocationRelevantReport,
     getPriorityIndex(report.priority),
-    [report.title, 'asc'],
-  ]],
+    [report.startsAt ?? report.createdAt, 'asc'],
+    report.id,
+  ],
 })
+
 export default ReportStore
+
+export const useReport = createUseRecord(ReportStore)
+export const useReports = createUseRecords(ReportStore)
+
+export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[] => (
+  useReports((reports) => (
+    reports.filter((report) => report.incidentId === incidentId)
+  ), [incidentId])
+)
 
 TaskStore.onCreate((task) => {
   const report = ReportStore.find(task.reportId)
@@ -29,29 +41,31 @@ TaskStore.onCreate((task) => {
     ...report,
     taskIds: [...new Set([...report.taskIds, task.id])],
     closedTaskIds: (
-      task.isClosed
+      task.isClosed || task.isDone
         ? [...new Set([...report.closedTaskIds, task.id])]
         : report.closedTaskIds
     ),
-    isClosed: report.isClosed && task.isClosed,
+    isDone: report.isDone && task.isClosed,
+    isClosed: task.isClosed && report.isClosed,
   })
 })
-TaskStore.onUpdate((task, oldTask) => {
+TaskStore.onUpdate((task) => {
   const report = ReportStore.find(task.reportId)
-  if (report === null || task.isClosed === oldTask.isClosed) {
+  if (report === null) {
     return
   }
 
   const closedTaskIds = new Set(report.closedTaskIds)
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.add(task.id)
   } else {
     closedTaskIds.delete(task.id)
   }
+
   ReportStore.save({
     ...report,
     closedTaskIds: [...closedTaskIds],
-    isClosed: closedTaskIds.size === task.subtaskIds.length,
+    isDone: closedTaskIds.size === report.taskIds.length,
   })
 })
 TaskStore.onRemove((task) => {
@@ -59,27 +73,19 @@ TaskStore.onRemove((task) => {
   if (report === null) {
     return
   }
+
   const taskIds = [...report.taskIds]
   taskIds.splice(taskIds.indexOf(task.id), 1)
+
   const closedTaskIds = [...report.closedTaskIds]
-  if (task.isClosed) {
+  if (task.isClosed || task.isDone) {
     closedTaskIds.splice(closedTaskIds.indexOf(task.id), 1)
   }
+
   ReportStore.save({
     ...report,
     taskIds,
     closedTaskIds,
-    isClosed: taskIds.length > 0 && taskIds.length === closedTaskIds.length,
+    isDone: taskIds.length > 0 && taskIds.length === closedTaskIds.length,
   })
 })
-
-export {
-  useReports,
-  useReport,
-}
-
-export const useReportsOfIncident = (incidentId: Id<Incident>): Report[] => (
-  useReports((reports) => (
-    reports.filter((report) => report.incidentId === incidentId)
-  ), [incidentId])
-)

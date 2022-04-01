@@ -1,12 +1,12 @@
 package ch.rfobaden.incidentmanager.backend;
 
 
+import ch.rfobaden.incidentmanager.backend.test.generators.CloseReasonGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.OrganizationGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.SubtaskGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TaskGenerator;
-import ch.rfobaden.incidentmanager.backend.test.generators.TransportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserCredentialsGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import com.github.javafaker.Faker;
@@ -26,7 +26,7 @@ import java.util.Locale;
     TaskGenerator.class,
     SubtaskGenerator.class,
     OrganizationGenerator.class,
-    TransportGenerator.class,
+    CloseReasonGenerator.class,
 })
 public class TestConfig {
     @Bean

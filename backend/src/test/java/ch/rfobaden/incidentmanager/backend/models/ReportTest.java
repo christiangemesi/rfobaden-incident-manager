@@ -18,7 +18,7 @@ class ReportTest extends ModelTest<Report> {
     SubtaskGenerator subtaskGenerator;
 
     @RepeatedTest(5)
-    public void testGetTaskIds_notEmpty() {
+    void testGetTaskIds_notEmpty() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -34,7 +34,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_allTasksClosed() {
+    void testGetClosedTaskIds_allTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -44,7 +44,7 @@ class ReportTest extends ModelTest<Report> {
             task.getSubtasks().get(0).setClosed(true);
         });
         var allClosedTaskIds = value.getTasks()
-            .stream().filter(Task::isClosed)
+            .stream().filter(t -> t.isClosed() || t.isDone())
             .map(Task::getId)
             .collect(Collectors.toList());
 
@@ -55,7 +55,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_someTasksClosed() {
+    void testGetClosedTaskIds_someTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -65,7 +65,7 @@ class ReportTest extends ModelTest<Report> {
             task.getSubtasks().get(0).setClosed(Math.random() < 0.5);
         });
         var allClosedTaskIds = value.getTasks()
-            .stream().filter(Task::isClosed)
+            .stream().filter(t -> t.isClosed() || t.isDone())
             .map(Task::getId)
             .collect(Collectors.toList());
 
@@ -76,7 +76,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testGetClosedTaskIds_noTasksClosed() {
+    void testGetClosedTaskIds_noTasksClosed() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -86,11 +86,11 @@ class ReportTest extends ModelTest<Report> {
         );
 
         // Then
-        assertThat(value.getClosedTaskIds().isEmpty()).isTrue();
+        assertThat(value.getClosedTaskIds()).isEmpty();
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_unclosedTasks() {
+    void testIsClosed_unclosedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -101,7 +101,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_mixedTasks() {
+    void testIsClosed_mixedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -117,7 +117,7 @@ class ReportTest extends ModelTest<Report> {
     }
 
     @RepeatedTest(5)
-    public void testIsClosed_closedTasks() {
+    void testIsDone_closedTasks() {
         // Given
         var amount = (int) (Math.random() * 5) + 1;
         var value = generator.generate();
@@ -128,6 +128,6 @@ class ReportTest extends ModelTest<Report> {
         });
 
         // Then
-        assertThat(value.isClosed()).isTrue();
+        assertThat(value.isDone()).isTrue();
     }
 }

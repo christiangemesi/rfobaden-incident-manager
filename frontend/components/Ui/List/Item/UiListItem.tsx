@@ -1,52 +1,72 @@
-import React, { CSSProperties, EventHandler, MouseEvent, ReactNode } from 'react'
-import styled from 'styled-components'
-import { ColorName } from '@/theme'
+import React, { EventHandler, MouseEvent, ReactNode } from 'react'
+import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import Link from 'next/link'
 
-interface Props extends StyledProps {
-  color?: ColorName
-  children: ReactNode
-  className?: string
-  style?: CSSProperties
+export interface Props extends StyledProps {
+  href?: string | URL
+  title?: string
+  isActive?: boolean
   onClick?: EventHandler<MouseEvent>
+  children: ReactNode
 }
 
 const UiListItem: React.VFC<Props> = ({
-  color = 'primary',
-  children,
-  className,
-  style,
-  onClick: handleClick,
-}: Props) => {
+  href = null,
+  isActive = false,
+  ...props
+}) => {
+  if (href !== null) {
+    return (
+      <Link href={href} passHref>
+        <StyledListItem {...props} as="a" isActive={isActive} />
+      </Link>
+    )
+  }
   return (
-    <StyledListItem style={style} className={className} color={color} onClick={handleClick}>
-      {children}
-    </StyledListItem>
+    <StyledListItem {...props} isActive={isActive} />
   )
 }
 export default styled(UiListItem)``
 
-const StyledListItem = styled.div`
+const StyledListItem = styled.li<{ isActive: boolean }>`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   width: 100%;
   cursor: pointer;
-  background: ${({ theme, color }) => theme.colors[color ?? 'primary'].value};
-  color: ${({ theme, color }) => theme.colors[color ?? 'primary'].contrast};
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+  background-color: ${({ theme }) => theme.colors.secondary.value};
+  text-decoration: none;
 
-  transition: 250ms ease;
-  transition-property: filter, box-shadow;
+  transition: 150ms ease-out;
+  transition-property: filter, background-color, opacity, box-shadow;
+  will-change: filter, background-color, opacity, box-shadow;
+  
+  ${({ isActive, theme }) => isActive && css`
+    background-color: ${theme.colors.tertiary.value};
+    box-shadow: 0 0 4px 2px gray;
+  `}
+  
+  ${({ isActive }) => !isActive && css`
+    :hover {
+      filter: brightness(0.9);
+    }
+  `}
 
-  :hover {
-    filter: brightness(90%);
+  :first-child {
+    &, :after {
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
   }
 
-  :active {
-    filter: brightness(75%);
-    box-shadow: none;
+  :last-child {
+    &, :after {
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
   }
 `
