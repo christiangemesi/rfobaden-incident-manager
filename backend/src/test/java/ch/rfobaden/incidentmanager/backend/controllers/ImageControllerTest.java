@@ -15,7 +15,6 @@ import ch.rfobaden.incidentmanager.backend.services.FileLocationService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @WithMockAdmin
@@ -157,17 +158,23 @@ class ImageControllerTest extends AppControllerTest {
 
     @WithMockAgent
     @Test
-    @Disabled
     void uploadImageAndFail() throws Exception {
         // given
         String errorMessage = "Server error";
+        MockMultipartFile file2 = new MockMultipartFile("file", FILENAME, "multipart/form-data", bytes) {
+            @Override
+            public byte[] getBytes() throws IOException {
+                throw new IOException(errorMessage);
+            }
+        };
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
-                .file(null)
+                .file(file2)
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
-            .andExpect(status().is4xxClientError())
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.message").value(errorMessage));
     }
 
@@ -181,8 +188,8 @@ class ImageControllerTest extends AppControllerTest {
             .accept(MediaType.IMAGE_JPEG_VALUE);
 
         // when
-        String file = getClass().getResource("ImageController.class").getFile();
-        FileSystemResource resource = new FileSystemResource(file);
+        FileSystemResource resource =
+            new FileSystemResource(Paths.get("src/test/resources/testImage/fish.jpeg"));
         Mockito.when(fileLocationService.find(id)).thenReturn(resource);
 
         // then

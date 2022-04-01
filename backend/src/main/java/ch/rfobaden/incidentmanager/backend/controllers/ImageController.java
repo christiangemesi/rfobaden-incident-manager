@@ -63,7 +63,7 @@ public class ImageController extends AppController {
         try {
             bytes = file.getBytes();
         } catch (IOException e) {
-            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Server error");
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
         Image image = fileLocationService.save(bytes, file.getOriginalFilename());
