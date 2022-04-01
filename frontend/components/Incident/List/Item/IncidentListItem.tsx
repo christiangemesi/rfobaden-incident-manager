@@ -8,7 +8,7 @@ import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
-import UiCircularProgressSVG from '@/components/Ui/CircularProgress/UiCircularProgressSVG'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 interface IncidentCardProps {
   incident: Incident
@@ -37,7 +37,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
             </UiGrid.Col>
             <UiGrid.Col>
               <ProgressContainer>
-                <UiCircularProgressSVG done={incident.closedReportIds.length} total={incident.reportIds.length} />
+                <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
               </ProgressContainer>
             </UiGrid.Col>
           </UiGrid>

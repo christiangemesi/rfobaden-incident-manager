@@ -20,7 +20,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
-import UiCircularProgressSVG from '@/components/Ui/CircularProgress/UiCircularProgressSVG'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -83,7 +83,7 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
           </UiGrid.Col>
           <UiGrid.Col size={{ xs: 0, md: 2, xxl: 7 }}>
             <ProgressContainer>
-              <UiCircularProgressSVG done={incident.closedReportIds.length} total={incident.reportIds.length} />
+              <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
             </ProgressContainer>
           </UiGrid.Col>
           <UiGrid.Col size="auto">

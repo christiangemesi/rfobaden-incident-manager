@@ -1,70 +1,132 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
-import UiTitle from '@/components/Ui/Title/UiTitle'
+import styled, { useTheme } from 'styled-components'
 
 interface Props {
   done: number
   total: number
 }
 
-const UICircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
+const UiCircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
   const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
+  const svgSize = 8*20
+  const svgCenter = svgSize/2
+  const radiusTrack = 4*16
+  const radiusBar = 3.5*16
+  const radiusText = 3*15.9
+
   return (
-    <Circle percentDecimal={decimal}>
-      <CircleOverlay>
-        <CompletionRate>
-          <UiTitle level={5}>
-            {done}/{total}
-          </UiTitle>
-        </CompletionRate>
-        <Percent>
-          <UiTitle level={6}>
-            {(decimal * 100).toFixed(0)}%
-          </UiTitle>
-        </Percent>
-      </CircleOverlay>
-    </Circle>
+    <svg width={svgSize} height={svgSize}>
+      <g transform={`rotate(-90 ${'80 80'})`}>
+        <ProgressTrack radius={radiusTrack} center={svgCenter} />
+        <ProgressBar percentDecimal={decimal} radius={radiusBar} center={svgCenter} />
+        <TextCircle radius={radiusText} center={svgCenter} />
+      </g>
+      <ProgressText done={done} total={total} />
+      <Percentage percentDecimal={decimal} />
+    </svg>
   )
 }
-export default UICircularProgress
+export default UiCircularProgress
 
-const Circle = styled.div<{ percentDecimal: number }>`
-  width: 8rem;
-  height: 8rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  ${({ theme, percentDecimal }) => css`
-    --circle-color: ${theme.colors.tertiary.value};
-    --progress-color: ${theme.colors.success.value};
-    --progress-ratio: ${percentDecimal * 100}%;
-  `}
-  
-  background: conic-gradient(
-    var(--progress-color) var(--progress-ratio), 0,
-    var(--circle-color) calc(100% - var(--progress-ratio))
-  );
-`
+interface BarProps{
+  percentDecimal: number
+  radius: number
+  center: number
+}
 
+const ProgressBar: React.VFC<BarProps> = ({ percentDecimal, radius, center }) => {
+  const theme = useTheme()
+  const color = theme.colors.success.value
+  const circ = 2 * Math.PI * radius
+  const strokePct = ((100 - percentDecimal*100) * circ)/100
 
-const CircleOverlay = styled.div`
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
-`
+  return (
+    <circle
+      r={radius}
+      cx={center}
+      cy={center}
+      fill="transparent"
+      stroke={Math.round( strokePct) !== Math.round(circ)? color : ''}
+      strokeWidth={'1rem'}
+      strokeDasharray={circ}
+      strokeDashoffset={percentDecimal ? strokePct : 0}
+      strokeLinecap="round"
+    />
+  )
+}
 
-const CompletionRate = styled.div`
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
-`
+interface TrackProps{
+  radius: number
+  center: number
+}
+const ProgressTrack:React.VFC<TrackProps> =  ({ radius, center }) => {
+  const theme = useTheme()
 
-const Percent = styled.div`
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
-`
+  return(
+    <circle
+      r={radius}
+      cx={center}
+      cy={center}
+      fill={theme.colors.success.contrast}
+    />
+  )
+}
+
+interface CircleProps{
+  radius: number
+  center: number
+}
+
+const TextCircle:React.VFC<CircleProps> =  ({ radius, center }) => {
+  const theme = useTheme()
+
+  return(
+    <circle
+      r={radius}
+      cx={center}
+      cy={center}
+      fill={theme.colors.secondary.value}
+      stroke={theme.colors.secondary.value}
+      strokeWidth={'1px'}
+    />
+
+  )
+}
+
+interface TextProps {
+  percentDecimal: number
+}
+
+const Percentage: React.VFC<TextProps> =  ({ percentDecimal }) => {
+  return (
+    <text
+      x="50%"
+      y="60%"
+      dominantBaseline="central"
+      textAnchor="middle"
+      fontSize={'15'}
+    >
+      {(percentDecimal * 100).toFixed(0)}%
+    </text>
+  )
+}
+
+interface ProgressProps {
+  done: number
+  total: number
+}
+
+const ProgressText: React.VFC<ProgressProps> = ({ done , total }) => {
+
+  return(
+    <text
+      x="50%"
+      y="45%"
+      dominantBaseline="central"
+      textAnchor="middle"
+      fontSize={'25'}
+    >
+      {done}/{total}
+    </text>)
+}
+
