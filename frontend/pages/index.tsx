@@ -69,9 +69,9 @@ const Card = styled.div`
 `
   
 const CardTitle = styled(UiTitle)`
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
