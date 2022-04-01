@@ -29,3 +29,11 @@ export const useUsername = (user: User | null): string | null => {
     (user === null) ? null : `${user.firstName} ${user.lastName}`
   ), [user])
 }
+
+export const isAgent = (user: User): boolean => (
+  user.role === UserRole.AGENT
+)
+
+export const isAdmin = (user: User): boolean => (
+  user.role === UserRole.ADMIN
+)

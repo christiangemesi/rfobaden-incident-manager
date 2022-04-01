@@ -12,6 +12,7 @@ spring:
     allow-bean-definition-overriding: true
 
 rfo:
+  stage: "test"
   jwt:
     # Fixed JWT for test environment.
     secret: "9OXZSztg+yrDtpP+0tW4BRrXMALxUwlMQojsJMEtSJ4="
@@ -19,4 +20,7 @@ rfo:
     # Fixed host for test environment, value does not influence tests.
     host: "localhost:300"
   mail:
-    enable: false
+    host: none
+    port: 111
+    username: test@user.com
+    password: sosafe
