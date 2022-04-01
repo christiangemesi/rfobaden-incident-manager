@@ -25,8 +25,8 @@ const UiHeader: React.VFC = () => {
     if (error !== null) {
       throw error
     }
-    await router.push('/anmelden')
     SessionStore.clear()
+    await router.push('/anmelden')
   }, [router])
 
   return (
