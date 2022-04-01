@@ -27,8 +27,11 @@ const DashboardPage: React.VFC = () => {
 }
 
 const data = [
-  { icon: UiIcon.IncidentManagement, label: 'Ereignis verwaltung', link: '/ereignisse' }, 
-  { icon: UiIcon.User, label: 'Benutzer verwaltung', link: '/benutzer' },
+  { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse' }, 
+  { icon: UiIcon.Transport, label: 'Transporte', link: '/benutzer' },
+  { icon: UiIcon.Monitoring, label: 'Übersicht', link: '/benutzer' },
+  { icon: UiIcon.User, label: 'Benutzer', link: '/benutzer' },
+  { icon: UiIcon.Organization, label: 'Organizationen', link: '/benutzer' },
 ]
 
 const Card = styled.div`
