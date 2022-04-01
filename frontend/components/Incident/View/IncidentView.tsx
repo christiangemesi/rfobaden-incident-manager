@@ -20,7 +20,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
-import UICircularProgress2 from '@/components/Ui/CircularProgress/UiCircularProgress2'
+import UiCircularProgressSVG from '@/components/Ui/CircularProgress/UiCircularProgressSVG'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -83,8 +83,7 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
           </UiGrid.Col>
           <UiGrid.Col size={{ xs: 0, md: 2, xxl: 7 }}>
             <ProgressContainer>
-              <UICircularProgress2 done={incident.closedReportIds.length} total={incident.reportIds.length} />
-              {/*<UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />*/}
+              <UiCircularProgressSVG done={incident.closedReportIds.length} total={incident.reportIds.length} />
             </ProgressContainer>
           </UiGrid.Col>
           <UiGrid.Col size="auto">
@@ -93,11 +92,11 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
           </UiGrid.Col>
         </UiGrid>
       </UiLevel.Header>
+
       <StyledUiLevelContent $hasSelected={selectedId !== null}>
         <ListContainer ref={setReportListRef} $hasSelected={selectedId !== null}>
           {reportList}
         </ListContainer>
-
         <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
           {reportView}
         </ReportOverlay>

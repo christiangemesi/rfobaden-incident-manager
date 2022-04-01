@@ -6,7 +6,7 @@ interface Props {
   total: number
 }
 
-const UICircularProgress2: React.VFC<Props> = ({ done = 0, total = 0 }) => {
+const UiCircularProgressSVG: React.VFC<Props> = ({ done = 0, total = 0 }) => {
   const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
   const svgSize = 8*20
   const svgCenter = svgSize/2
@@ -26,7 +26,7 @@ const UICircularProgress2: React.VFC<Props> = ({ done = 0, total = 0 }) => {
     </svg>
   )
 }
-export default UICircularProgress2
+export default UiCircularProgressSVG
 
 interface BarProps{
   percentDecimal: number
