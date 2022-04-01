@@ -40,12 +40,4 @@ public class FileLocationService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return fileSystemRepository.findInFileSystem(image.getLocation());
     }
-
-    public List<FileSystemResource> findAllById(List<Long> id) {
-        return imageRepository.findAll()
-            .stream()
-            .filter(img -> !id.contains(img.getId()))
-            .map(img -> fileSystemRepository.findInFileSystem(img.getLocation()))
-            .collect(Collectors.toList());
-    }
 }
