@@ -28,7 +28,9 @@ public class FileLocationService {
     }
 
     public Image save(byte[] bytes, String imageName) {
-        Image image = fileSystemRepository.save(bytes, imageName);
+        String imageLocation = fileSystemRepository.save(bytes, imageName);
+        Image image = new Image(imageName);
+        image.setLocation(imageLocation);
         imageRepository.save(image);
         return image;
     }
