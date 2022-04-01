@@ -8,15 +8,18 @@ interface Props {
 
 const UICircularProgress2: React.VFC<Props> = ({ done = 0, total = 0 }) => {
   const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
-  const theme = useTheme()
+  const svgSize = 8*20
+  const svgCenter = svgSize/2
+  const radiusTrack = 4*16
+  const radiusBar = 3.5*16
+  const radiusText = 3*15.9
 
   return (
-    <svg width={8*20} height={8*20}>
+    <svg width={svgSize} height={svgSize}>
       <g transform={`rotate(-90 ${'80 80'})`}>
-        {/*<circle r={4*16.2} cx={80} cy={80} fill={theme.colors.secondary.value} />*/}
-        <circle r={4*16} cx={80} cy={80} fill={theme.colors.success.contrast} />
-        <CircleBar percentDecimal={decimal} color={ theme.colors.success.value} />
-        <circle r={3*15.9} cx={80} cy={80} fill={theme.colors.secondary.value} stroke={theme.colors.secondary.value} strokeWidth={'1px'} />
+        <ProgressTrack radius={radiusTrack} center={svgCenter} />
+        <ProgressBar percentDecimal={decimal} radius={radiusBar} center={svgCenter} />
+        <TextCircle radius={radiusText} center={svgCenter} />
       </g>
       <ProgressText done={done} total={total} />
       <Percentage percentDecimal={decimal} />
@@ -25,27 +28,68 @@ const UICircularProgress2: React.VFC<Props> = ({ done = 0, total = 0 }) => {
 }
 export default UICircularProgress2
 
-interface CircleProps {
+interface BarProps{
   percentDecimal: number
-  color: string
+  radius: number
+  center: number
 }
 
-const CircleBar: React.VFC<CircleProps> = ({ percentDecimal, color }) => {
-  const r = 3.5 * 16
-  const circ = 2 * Math.PI * r
+const ProgressBar: React.VFC<BarProps> = ({ percentDecimal, radius, center }) => {
+  const theme = useTheme()
+  const color = theme.colors.success.value
+  const circ = 2 * Math.PI * radius
   const strokePct = ((100 - percentDecimal*100) * circ)/100
+
   return (
     <circle
-      r={r}
-      cx={4*20}
-      cy={4*20}
+      r={radius}
+      cx={center}
+      cy={center}
       fill="transparent"
-      stroke={Math.round( strokePct) !== Math.round(circ)? color : ''} // remove colour as 0% sets full circumference
+      stroke={Math.round( strokePct) !== Math.round(circ)? color : ''}
       strokeWidth={'1rem'}
       strokeDasharray={circ}
       strokeDashoffset={percentDecimal ? strokePct : 0}
       strokeLinecap="round"
     />
+  )
+}
+
+interface TrackProps{
+  radius: number
+  center: number
+}
+const ProgressTrack:React.VFC<TrackProps> =  ({ radius, center }) => {
+  const theme = useTheme()
+
+  return(
+    <circle
+      r={radius}
+      cx={center}
+      cy={center}
+      fill={theme.colors.success.contrast}
+    />
+  )
+}
+
+interface CircleProps{
+  radius: number
+  center: number
+}
+
+const TextCircle:React.VFC<CircleProps> =  ({ radius, center }) => {
+  const theme = useTheme()
+
+  return(
+    <circle
+      r={radius}
+      cx={center}
+      cy={center}
+      fill={theme.colors.secondary.value}
+      stroke={theme.colors.secondary.value}
+      strokeWidth={'1px'}
+    />
+
   )
 }
 
