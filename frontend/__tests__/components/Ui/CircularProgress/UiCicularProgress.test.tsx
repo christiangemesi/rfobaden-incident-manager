@@ -3,8 +3,8 @@
  */
 
 import { shallow } from 'enzyme'
-import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 describe('UiCircularProgress', () => {
   describe('With two titles in it', () => {
