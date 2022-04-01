@@ -17,7 +17,7 @@ const HomePage: React.VFC = () => {
       <Subtitle>
         Regionales Führungsorgan Baden
       </Subtitle>
-      <UiGrid gap={1.5}>
+      <UiGrid gap={1.5} justify="center">
         {data.map((card) => (
           <UiGrid.Col key={card.label} size={{ sm: 6, lg: 4, xxl: 3 }}>
             <UiLink href={card.link}>
