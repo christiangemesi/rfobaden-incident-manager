@@ -4,6 +4,8 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import styled from 'styled-components'
 import changelog from '../CHANGELOG.md'
 import 'github-markdown-css/github-markdown-light.css'
+import { GetServerSideProps } from 'next'
+import { getSessionFromRequest } from '@/services/BackendService'
 
 const ChangelogPage : React.VFC = () => {
   return (
@@ -28,3 +30,13 @@ const LogContainer = styled.div`
     font-style: italic;
   }
 `
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = getSessionFromRequest(req)
+  if (user === null) {
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+  }
+  return {
+    props: {},
+  }
+}

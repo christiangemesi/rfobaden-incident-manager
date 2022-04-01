@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "organization")
@@ -30,11 +31,13 @@ public final class Organization extends Model.Basic implements Serializable {
     )
     private List<User> users = new ArrayList<>();
 
+    @Size(max = 100)
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String name;

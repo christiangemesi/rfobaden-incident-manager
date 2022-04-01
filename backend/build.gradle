@@ -36,6 +36,7 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 	testImplementation 'com.h2database:h2:1.4.200'
 	testImplementation 'com.github.javafaker:javafaker:1.0.2'
+	testImplementation 'org.springframework.security:spring-security-test:5.6.2'
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter:5.8.2'
 

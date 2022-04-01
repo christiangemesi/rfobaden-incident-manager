@@ -2,10 +2,10 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
-import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +14,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,38 +32,45 @@ import javax.validation.constraints.NotBlank;
 public class SessionController extends AppController {
     private final AuthenticationManager authManager;
 
-    private final JwtHelper jwtHelper;
+    private final AuthService authService;
+
+    private final SessionHelper sessionHelper;
 
     public SessionController(
         AuthenticationManager authManager,
-        JwtHelper jwtHelper) {
+        AuthService authService,
+        SessionHelper sessionHelper
+    ) {
         this.authManager = authManager;
-        this.jwtHelper = jwtHelper;
+        this.authService = authService;
+        this.sessionHelper = sessionHelper;
     }
 
     @GetMapping
-    public SessionData find(HttpServletRequest request) {
-        return getCurrentUser().map((user) -> {
-            var token = request.getHeader("Authorization").substring(7);
-            return new SessionData(token, user);
-        }).orElseGet(() -> (
+    public SessionData find() {
+        var user = authService.getCurrentUser()
             // Making this a 404 (or any other 4XX) would be preferable,
             // but many browsers show these errors in the console, which we do not want
             // to happen if we just want to check if the user is logged in.
-            new SessionData(null, null)
-        ));
+            .orElse(null);
+        return new SessionData(user);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SessionData create(
         @RequestBody LoginData data,
-        HttpServletRequest request,
         HttpServletResponse response
     ) {
         var user = authenticate(data);
-        var token = jwtHelper.encodeUser(user);
-        return new SessionData(token, user);
+        sessionHelper.addSessionToResponse(response, user);
+        return new SessionData(user);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(HttpServletResponse response) {
+        sessionHelper.deleteSessionFromResponse(response);
     }
 
     private User authenticate(LoginData data) {
@@ -80,6 +87,18 @@ public class SessionController extends AppController {
             throw new ApiException(HttpStatus.FORBIDDEN, "user is locked");
         } catch (BadCredentialsException e) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
+        }
+    }
+
+    public static final class SessionData {
+        private final User user;
+
+        public SessionData(User user) {
+            this.user = user;
+        }
+
+        public User getUser() {
+            return user;
         }
     }
 
@@ -117,25 +136,6 @@ public class SessionController extends AppController {
 
         public void setPersistent(boolean persistent) {
             isPersistent = persistent;
-        }
-    }
-
-    public static final class SessionData {
-        private final String token;
-        private final User user;
-
-        public SessionData(String token, User user) {
-            this.token = token;
-            this.user = user;
-        }
-
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public String getToken() {
-            return token;
-        }
-
-        public User getUser() {
-            return user;
         }
     }
 }

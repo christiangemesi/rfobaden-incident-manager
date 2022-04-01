@@ -31,12 +31,15 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
     email: [
       validate.notBlank(),
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
+      validate.maxLength(100),
     ],
     firstName: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     lastName: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     role: [],
     organizationId: [],
