@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { useTheme } from 'styled-components'
+import React, { useMemo } from 'react'
+import { useTheme } from 'styled-components'
 
 interface Props {
   done: number
@@ -7,38 +7,41 @@ interface Props {
 }
 
 const UiCircularProgress: React.VFC<Props> = ({ done, total }) => {
-  const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
-  const svgSize = 8*20
-  const svgCenter = svgSize/2
-  const radiusTrack = 4*16
-  const radiusBar = 3.5*16
-  const radiusText = 3*15.9
+  return useMemo(() => {
+    const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
 
-  return (
-    <svg width={svgSize} height={svgSize}>
-      <g transform={`rotate(-90 ${'80 80'})`}>
-        <OuterCircle radius={radiusTrack} center={svgCenter} />
-        <ProgressCircle progress={decimal} radius={radiusBar} center={svgCenter} />
-        <InnerCircle radius={radiusText} center={svgCenter} />
-      </g>
-      <ProgressText done={done} total={total} />
-      <Percentage percentDecimal={decimal} />
-    </svg>
-  )
+    return (
+      <svg width={SVG_SIZE} height={SVG_SIZE}>
+        <g transform={`rotate(-90 ${RADIUS_OUTER} ${RADIUS_OUTER})`}>
+          <OuterCircle radius={RADIUS_OUTER} center={SVG_CENTER} />
+          <ProgressCircle progress={progress} radius={RADIUS_PROGRESS} center={SVG_CENTER} />
+          <InnerCircle radius={RADIUS_INNER} center={SVG_CENTER} />
+        </g>
+        <ProgressText done={done} total={total} />
+        <Percentage progress={progress} />
+      </svg>
+    )
+  }, [done, total])
 }
 export default UiCircularProgress
+
+const RADIUS_PROGRESS = 3.5 * 16
+const RADIUS_OUTER = 4 * 16
+const RADIUS_INNER = 3 * 16
+const SVG_SIZE = RADIUS_OUTER * 2
+const SVG_CENTER = SVG_SIZE / 2
 
 interface ProgressCircleProps{
   progress: number
   radius: number
   center: number
-}
+} 
 
 const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, center }) => {
   const theme = useTheme()
   const color = theme.colors.success.value
   const circ = 2 * Math.PI * radius
-  const strokePct = ((100 - progress*100) * circ)/100
+  const strokePct = ((100 - progress * 100) * circ) / 100
 
   return (
     <circle
@@ -46,10 +49,10 @@ const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, cent
       cx={center}
       cy={center}
       fill="transparent"
-      stroke={Math.round( strokePct) !== Math.round(circ)? color : ''}
-      strokeWidth={'1rem'}
+      stroke={Math.round(strokePct) !== Math.round(circ) ? color : ''}
+      strokeWidth="1rem"
       strokeDasharray={circ}
-      strokeDashoffset={progress ? strokePct : 0}
+      strokeDashoffset={progress === 0 ? 0 : strokePct}
       strokeLinecap="round"
     />
   )
@@ -59,6 +62,7 @@ interface OuterCircleProps{
   radius: number
   center: number
 }
+
 const OuterCircle: React.VFC<OuterCircleProps> =  ({ radius, center }) => {
   const theme = useTheme()
 
@@ -77,7 +81,7 @@ interface InnerCircleProps{
   center: number
 }
 
-const InnerCircle:React.VFC<InnerCircleProps> =  ({ radius, center }) => {
+const InnerCircle: React.VFC<InnerCircleProps> =  ({ radius, center }) => {
   const theme = useTheme()
 
   return(
@@ -86,27 +90,24 @@ const InnerCircle:React.VFC<InnerCircleProps> =  ({ radius, center }) => {
       cx={center}
       cy={center}
       fill={theme.colors.secondary.value}
-      stroke={theme.colors.secondary.value}
-      strokeWidth={'1px'}
     />
-
   )
 }
 
 interface TextProps {
-  percentDecimal: number
+  progress: number
 }
 
-const Percentage: React.VFC<TextProps> =  ({ percentDecimal }) => {
+const Percentage: React.VFC<TextProps> =  ({ progress }) => {
   return (
     <text
       x="50%"
       y="60%"
       dominantBaseline="central"
       textAnchor="middle"
-      fontSize={'15'}
+      fontSize="15"
     >
-      {(percentDecimal * 100).toFixed(0)}%
+      {(progress * 100).toFixed(0)}%
     </text>
   )
 }
@@ -117,14 +118,13 @@ interface ProgressProps {
 }
 
 const ProgressText: React.VFC<ProgressProps> = ({ done , total }) => {
-
-  return(
+  return (
     <text
       x="50%"
       y="45%"
       dominantBaseline="central"
       textAnchor="middle"
-      fontSize={'25'}
+      fontSize="25"
     >
       {done}/{total}
     </text>)
