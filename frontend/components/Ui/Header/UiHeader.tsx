@@ -70,7 +70,7 @@ const UiHeader: React.VFC = () => {
               <UiDropDown.Menu>
                 <UiModal isFull>
                   <UiModal.Activator>{({ open }) => (
-                    <UiDropDown.Item onClick={open}>Passwort Bearbeiten</UiDropDown.Item>
+                    <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
                   )}</UiModal.Activator>
                   <UiModal.Body>{({ close }) => (
                     <React.Fragment>
