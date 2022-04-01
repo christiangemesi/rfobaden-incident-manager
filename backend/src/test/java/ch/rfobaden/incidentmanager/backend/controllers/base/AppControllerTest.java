@@ -5,6 +5,7 @@ import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.WebConfig;
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
+import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Import;
     WebConfig.class,
     WebSecurityConfig.class,
     JwtHelper.class,
+    SessionHelper.class,
     AppControllerTest.MockUserServiceConfig.class
 })
 public abstract class AppControllerTest {

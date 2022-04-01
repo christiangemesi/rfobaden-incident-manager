@@ -123,7 +123,6 @@ class SessionControllerTest extends AppControllerTest {
         mockMvc.perform(mockRequest)
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$").exists())
-            .andExpect(jsonPath("$.token").isString())
             .andExpect(jsonPath("$.user").isMap())
             .andExpect(jsonPath("$.user.id").value(user.getId()));
         verify(authManager, times(1)).authenticate(auth);
