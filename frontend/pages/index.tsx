@@ -19,7 +19,7 @@ const HomePage: React.VFC = () => {
       </Subtitle>
       <UiGrid gap={1.5} justify="center">
         {data.map((card) => (
-          <UiGrid.Col key={card.label} size={{ sm: 6, lg: 4, xxl: 3 }}>
+          <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
             <UiLink href={card.link}>
               <Card>
                 <card.icon size={5} />
@@ -34,20 +34,19 @@ const HomePage: React.VFC = () => {
 }
 export default HomePage
 
+const data = [
+  { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse', forAll: true }, 
+  { icon: UiIcon.Transport, label: 'Transporte', link: '/transporte', forAll: true },
+  { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer', forAll: false },
+  { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen', forAll: false },
+]
+
 const Subtitle = styled.div`
   width: 100%;
   text-align: center;
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
 `
-
-
-const data = [
-  { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse', forAll: true }, 
-  { icon: UiIcon.Transport, label: 'Transporte', link: '/benutzer', forAll: true },
-  { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/', forAll: false },
-  { icon: UiIcon.Organization, label: 'Organizationen', link: '/', forAll: false },
-]
   
 const Card = styled.div`
   height: 15rem;
