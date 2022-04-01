@@ -75,7 +75,7 @@ const UiHeader: React.VFC = () => {
                   <UiModal.Body>{({ close }) => (
                     <React.Fragment>
                       <UiTitle level={1} isCentered>
-                        Passwort Bearbeiten
+                        Passwort bearbeiten
                       </UiTitle>
                       <UserPasswordForm user={currentUser} onClose={close} />
                     </React.Fragment>
@@ -83,7 +83,7 @@ const UiHeader: React.VFC = () => {
                 </UiModal>
                 <UiModal isFull>
                   <UiModal.Activator>{({ open }) => (
-                    <UiDropDown.Item onClick={open}>E-Mail Bearbeiten</UiDropDown.Item>
+                    <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
                   )}</UiModal.Activator>
                   <UiModal.Body>{({ close }) => (
                     <React.Fragment>
