@@ -74,27 +74,29 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   return (
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
-        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <UiGrid.Col>
+        {/*<UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>*/}
+        <UiGrid>
+          <UiGrid.Col size={{ xs: 1, md: 9, xxl: 7 }}>
             <IncidentInfo incident={incident} />
             <UiTitle level={1}>
               {incident.title}
             </UiTitle>
           </UiGrid.Col>
 
-          <ProgressContainer>
-            <UICircularProgress2 done={incident.closedReportIds.length} total={incident.reportIds.length} />
-            {/*<UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />*/}
-          </ProgressContainer>
-
+          <UiGrid.Col size={{ xs: 6, md: 2, xxl: 7 }}>
+            <ProgressContainer>
+              <UICircularProgress2 done={incident.closedReportIds.length} total={incident.reportIds.length} />
+              {/*<UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />*/}
+            </ProgressContainer>
+          </UiGrid.Col>
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
             <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
           </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 1, md: 6, xxl: 7 }}>
+            <UiDescription description={incident.description} />
+          </UiGrid.Col>
         </UiGrid>
-
-        <UiDescription description={incident.description} />
-
       </UiLevel.Header>
       <StyledUiLevelContent $hasSelected={selectedId !== null}>
         <ListContainer ref={setReportListRef} $hasSelected={selectedId !== null}>
@@ -207,6 +209,5 @@ const ReportOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
   }
 `
 const ProgressContainer = styled.div`
-  display: flex;
-  justify-content: end;
+  margin-top: 2rem;
 `

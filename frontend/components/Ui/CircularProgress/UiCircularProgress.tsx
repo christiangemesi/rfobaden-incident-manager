@@ -37,7 +37,7 @@ const Circle = styled.div<{ percentDecimal: number }>`
   justify-content: center;
   
   ${({ theme, percentDecimal }) => css`
-    --circle-color: ${theme.colors.grey.value};
+    --circle-color: ${theme.colors.tertiary.value};
     --progress-color: ${theme.colors.success.value};
     --progress-ratio: ${percentDecimal * 100}%;
   `}
@@ -53,6 +53,7 @@ const CircleOverlay = styled.div`
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
