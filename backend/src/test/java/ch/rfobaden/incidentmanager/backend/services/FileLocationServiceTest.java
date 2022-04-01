@@ -21,17 +21,17 @@ import java.util.Optional;
 class FileLocationServiceTest {
 
     public static final String IMAGE_NAME = "name";
+    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
 
     @Autowired
-    FileLocationService fileLocationService;
+    private FileLocationService fileLocationService;
 
     @MockBean
-    FileSystemRepository fileSystemRepository;
+    private FileSystemRepository fileSystemRepository;
 
     @MockBean
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
-    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
 
     @Test
     void saveImageTest() {
