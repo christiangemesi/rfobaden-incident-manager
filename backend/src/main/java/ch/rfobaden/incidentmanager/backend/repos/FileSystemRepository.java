@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ public class FileSystemRepository {
         try {
             Files.write(newFile, content);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
         return newFile.toAbsolutePath().toString();
