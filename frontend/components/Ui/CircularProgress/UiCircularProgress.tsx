@@ -6,7 +6,7 @@ interface Props {
   total: number
 }
 
-const UiCircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
+const UiCircularProgress: React.VFC<Props> = ({ done, total }) => {
   const decimal = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
   const svgSize = 8*20
   const svgCenter = svgSize/2
@@ -17,9 +17,9 @@ const UiCircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
   return (
     <svg width={svgSize} height={svgSize}>
       <g transform={`rotate(-90 ${'80 80'})`}>
-        <ProgressTrack radius={radiusTrack} center={svgCenter} />
-        <ProgressBar percentDecimal={decimal} radius={radiusBar} center={svgCenter} />
-        <TextCircle radius={radiusText} center={svgCenter} />
+        <OuterCircle radius={radiusTrack} center={svgCenter} />
+        <ProgressCircle progress={decimal} radius={radiusBar} center={svgCenter} />
+        <InnerCircle radius={radiusText} center={svgCenter} />
       </g>
       <ProgressText done={done} total={total} />
       <Percentage percentDecimal={decimal} />
@@ -28,17 +28,17 @@ const UiCircularProgress: React.VFC<Props> = ({ done = 0, total = 0 }) => {
 }
 export default UiCircularProgress
 
-interface BarProps{
-  percentDecimal: number
+interface ProgressCircleProps{
+  progress: number
   radius: number
   center: number
 }
 
-const ProgressBar: React.VFC<BarProps> = ({ percentDecimal, radius, center }) => {
+const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, center }) => {
   const theme = useTheme()
   const color = theme.colors.success.value
   const circ = 2 * Math.PI * radius
-  const strokePct = ((100 - percentDecimal*100) * circ)/100
+  const strokePct = ((100 - progress*100) * circ)/100
 
   return (
     <circle
@@ -49,17 +49,17 @@ const ProgressBar: React.VFC<BarProps> = ({ percentDecimal, radius, center }) =>
       stroke={Math.round( strokePct) !== Math.round(circ)? color : ''}
       strokeWidth={'1rem'}
       strokeDasharray={circ}
-      strokeDashoffset={percentDecimal ? strokePct : 0}
+      strokeDashoffset={progress ? strokePct : 0}
       strokeLinecap="round"
     />
   )
 }
 
-interface TrackProps{
+interface OuterCircleProps{
   radius: number
   center: number
 }
-const ProgressTrack:React.VFC<TrackProps> =  ({ radius, center }) => {
+const OuterCircle: React.VFC<OuterCircleProps> =  ({ radius, center }) => {
   const theme = useTheme()
 
   return(
@@ -72,12 +72,12 @@ const ProgressTrack:React.VFC<TrackProps> =  ({ radius, center }) => {
   )
 }
 
-interface CircleProps{
+interface InnerCircleProps{
   radius: number
   center: number
 }
 
-const TextCircle:React.VFC<CircleProps> =  ({ radius, center }) => {
+const InnerCircle:React.VFC<InnerCircleProps> =  ({ radius, center }) => {
   const theme = useTheme()
 
   return(
