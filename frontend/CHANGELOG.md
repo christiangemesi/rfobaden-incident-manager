@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redesigned the users page.
 - Replaced the date/time input.
 - Redesigned the login page.
+- Signing in is now mandatory.
+- Agents no longer have access to admin-only actions.
 
 ### Fixed
 - Scroll is now disabled while a modal is open.
