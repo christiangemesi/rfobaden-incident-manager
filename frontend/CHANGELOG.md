@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incidents, reports and tasks now support manual closing.
 - Added page footer.
 - New users and assignees now receive email notifications.
+- The landing page at `/` now contains a dashboard.
+- The incident page at `/ereignisse/{id}` now contains a progress circle.
+- Profile specific actions are now available as a dropdown via the username in the header.
 
 ### Changed
 - Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
@@ -19,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redesigned the login page.
 - Signing in is now mandatory.
 - Agents no longer have access to admin-only actions.
+
+### Removed
+- The profile page has been removed.
 
 ### Fixed
 - Scroll is now disabled while a modal is open.
