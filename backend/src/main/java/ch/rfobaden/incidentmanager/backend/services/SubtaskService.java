@@ -1,10 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,50 +13,14 @@ import java.util.Optional;
 public class SubtaskService
     extends ModelRepositoryService<Subtask, SubtaskPath, SubtaskRepository> {
 
-    private final EmailConfig emailConfig;
+    private final NotificationService notificationService;
 
-    public SubtaskService(EmailConfig emailConfig) {
-        super();
-        this.emailConfig = emailConfig;
+    public SubtaskService(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 
     @Override
-    public Subtask create(SubtaskPath path, Subtask subTask) {
-        Subtask savedSubTask = super.create(path, subTask);
-        if (savedSubTask.getAssignee() != null) {
-            sendAssignmentEmail(savedSubTask);
-        }
-        return savedSubTask;
-    }
-
-    @Override
-    public Optional<Subtask> update(SubtaskPath path, Subtask subTask) {
-        Optional<Subtask> oldSubTask = find(path, subTask.getId());
-        if (oldSubTask.isEmpty()) {
-            return Optional.empty();
-        }
-        Long oldSubTaskId = oldSubTask.get().getAssigneeId();
-        Optional<Subtask> savedSubTask = super.update(path, subTask);
-        savedSubTask.ifPresent(rep -> {
-            if (rep.getAssigneeId() != null
-                && !rep.getAssigneeId().equals(oldSubTaskId)) {
-                sendAssignmentEmail(rep);
-            }
-        });
-        return savedSubTask;
-    }
-
-    private void sendAssignmentEmail(Subtask subTask) {
-        // Ereignis/Meldung/Auftrag/Teilauftrag
-        String info = subTask.getTask().getReport().getIncident().getTitle() + "/"
-            + subTask.getTask().getReport().getTitle() + "/"
-            + subTask.getTask().getTitle() + "/"
-            + subTask.getTitle();
-        // {host}/ereignisse/{incident-id}/meldungen/{report-id}/auftraege/{task-id}
-        String link = "ereignisse/" + subTask.getTask().getReport().getIncident().getId()
-            + "/meldungen/" + subTask.getTask().getReport().getId()
-            + "/auftraege/" + subTask.getTask().getId();
-        emailConfig.sendSimpleMessage(subTask.getAssignee().getEmail(),
-            "IM-Tool RFOBaden: Zuweisung", emailConfig.getAssignmentTemplateMessage(info, link));
+    protected void afterSave(Subtask oldSubtask, Subtask subtask) {
+        notificationService.notifyAssigneeIfChanged(oldSubtask, subtask);
     }
 }

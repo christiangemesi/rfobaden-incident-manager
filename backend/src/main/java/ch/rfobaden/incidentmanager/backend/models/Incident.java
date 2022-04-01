@@ -17,62 +17,57 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "incident")
-public class Incident extends Model.Basic implements Serializable {
+public class Incident extends Model.Basic
+    implements Describable, Closeable, DateTimeBounded, Serializable {
+
     private static final long serialVersionUID = 1L;
 
+    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    private LocalDateTime startsAt;
-
-    private LocalDateTime endsAt;
+    @NotNull
+    @Column(nullable = false)
+    private boolean isClosed;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
-    @Column(nullable = false)
-    private boolean isClosed;
+    private LocalDateTime startsAt;
+
+    private LocalDateTime endsAt;
 
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     public CloseReason getCloseReason() {
@@ -83,11 +78,12 @@ public class Incident extends Model.Basic implements Serializable {
         this.closeReason = closeReason;
     }
 
-    @JsonProperty("isClosed")
+    @Override
     public boolean isClosed() {
         return isClosed;
     }
 
+    @Override
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
@@ -118,6 +114,26 @@ public class Incident extends Model.Basic implements Serializable {
             .filter(r -> r.isClosed() || r.isDone())
             .map(Report::getId)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public LocalDateTime getStartsAt() {
+        return startsAt;
+    }
+
+    @Override
+    public void setStartsAt(LocalDateTime startsAt) {
+        this.startsAt = startsAt;
+    }
+
+    @Override
+    public LocalDateTime getEndsAt() {
+        return endsAt;
+    }
+
+    @Override
+    public void setEndsAt(LocalDateTime endsAt) {
+        this.endsAt = endsAt;
     }
 
     @Override

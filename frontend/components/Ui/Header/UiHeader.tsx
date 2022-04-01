@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
@@ -12,6 +12,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
+import BackendService from '@/services/BackendService'
 
 
 const UiHeader: React.VFC = () => {
@@ -19,14 +20,14 @@ const UiHeader: React.VFC = () => {
 
   const router = useRouter()
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
+    const error = await BackendService.delete('session')
+    if (error !== null) {
+      throw error
+    }
+    await router.push('/anmelden')
     SessionStore.clear()
-
-    // Should probably not do this everytime, but only if we are on a page
-    // which only signed in users can access. There's currently no nice way to detect this,
-    // so we just do it for every page.
-    await router.push('/')
-  }
+  }, [router])
 
   return (
     <Header>
@@ -114,7 +115,7 @@ const Header = styled.header`
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background: ${({ theme }) => theme.colors.secondary.value};
-  
+
   // TODO implement mobile view
   ${Themed.media.xs.only} {
     display: none;
@@ -126,11 +127,11 @@ const NavContainer = styled.div`
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
-  
+
   img {
     transition: 150ms ease;
     transition-property: transform;
-    
+
     :hover {
       transform: scale(1.05);
     }

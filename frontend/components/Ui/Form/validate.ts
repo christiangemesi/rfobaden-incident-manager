@@ -92,6 +92,17 @@ const validate = Object.freeze({
     }
     return true
   },
+  maxLength: <T, V extends { length: number } | null | undefined>(
+    max: number, options: { message?: string } = {}
+  ): Validator<T, V> => (value) => {
+    const {
+      message = `darf maximal ${max} Zeichen lang sein`,
+    } = options
+    if (value != null && value.length > max) {
+      return message
+    }
+    return true
+  },
 })
 export default validate
 

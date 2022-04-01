@@ -105,7 +105,7 @@ public abstract class ModelRepositoryTest<
         var newRecord = generator.generate();
         var createdRecord = saveWithRelations(generator.copy(newRecord));
         var editedRecord = generator.copy(createdRecord);
-        editedRecord.setUpdatedAt(LocalDateTime.now());
+        editedRecord.setUpdatedAt(generator.randomDateTime());
 
         // When
         var updatedRecord = repository.save(editedRecord);

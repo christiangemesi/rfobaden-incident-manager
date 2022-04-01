@@ -3,7 +3,7 @@
  */
 
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 
 const pastDate = new Date(2012, 10, 9, 10, 20)
 const pastDate2 = new Date(2013, 1, 2, 8, 12)
