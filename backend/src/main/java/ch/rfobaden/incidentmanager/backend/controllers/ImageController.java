@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.models.Report;
@@ -23,9 +25,10 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+@RequireAgent
 @RestController
 @RequestMapping(path = "api/v1/file-system")
-public class ImageController {
+public class ImageController extends AppController {
     private final FileLocationService fileLocationService;
     private final ReportService reportService;
     private final TaskService taskService;
@@ -56,13 +59,17 @@ public class ImageController {
         @RequestParam String modelName,
         @RequestParam Long id) {
 
+        byte[] bytes;
         try {
-            Image image = fileLocationService.save(file.getBytes(), file.getOriginalFilename());
-            mapping.get(modelName).accept(image, id);
-            return image.getId();
+            bytes = file.getBytes();
         } catch (IOException e) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Server error");
         }
+
+        Image image = fileLocationService.save(bytes, file.getOriginalFilename());
+        mapping.get(modelName).accept(image, id);
+        return image.getId();
+
     }
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
