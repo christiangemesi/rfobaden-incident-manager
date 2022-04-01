@@ -1,7 +1,10 @@
 import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 import Id from '@/models/base/Id'
-import { getSessionToken } from '@/stores/SessionStore'
+import { IncomingMessage } from 'http'
+import { SessionResponse } from '@/models/Session'
+import User, { parseUser } from '@/models/User'
+import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -19,6 +22,20 @@ const apiEndpoint = run(() => {
 })
 
 class BackendService {
+  private readonly sessionToken: string | null
+
+  constructor(sessionToken: string | null = null) {
+    this.sessionToken = sessionToken
+  }
+
+  get hasSessionToken(): boolean {
+    return this.sessionToken !== null
+  }
+
+  withSessionToken(sessionToken: string | null): BackendService {
+    return new BackendService(sessionToken)
+  }
+
   list<T>(resourceName: string): Promise<BackendResponse<T[]>> {
     return this.fetchApi({
       path: resourceName,
@@ -70,11 +87,9 @@ class BackendService {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     }
-    const token = getSessionToken()
-    if (token !== null) {
-      headers['Authorization'] = `Bearer ${token}`
+    if (this.sessionToken !== null) {
+      headers['Authorization'] = `Bearer ${this.sessionToken}`
     }
-
     const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
       method: options.method,
       body: JSON.stringify(options.body),
@@ -132,4 +147,45 @@ export class BackendError extends Error {
 
 export interface BackendErrorFields {
   [field: string]: string[] | BackendErrorFields
+}
+
+export interface ServerSideSessionHolder {
+  session: ServerSideSession
+}
+
+export interface ServerSideSession {
+  user: User | null
+  backendService: BackendService
+}
+
+/**
+ * Loads the current session from a request made to the nextjs server.
+ * This works by reading the cookie that is also sent to the API, and reusing the token it contains.
+ *
+ * @param req The nextjs request object.
+ * @param defaultService The BackendService instance used when no session could be found.
+ */
+export const loadSessionFromRequest = async (req: IncomingMessage & { cookies: NextApiRequestCookies }, defaultService: BackendService): Promise<ServerSideSession> => {
+  const sessionToken = req.cookies['rfobaden.incidentmanager.session.token'] ?? null
+  if (sessionToken === null) {
+    return { user: null, backendService: defaultService }
+  }
+  const backendService = new BackendService(sessionToken)
+  const [sessionData, error] = await backendService.find<SessionResponse>('session')
+  if (error !== null) {
+    throw error
+  }
+  if (sessionData.user === null) {
+    return { user: null, backendService: defaultService }
+  }
+  const user = parseUser(sessionData.user)
+  return { user, backendService }
+}
+
+export const getSessionFromRequest = (req: IncomingMessage): ServerSideSession => {
+  const { session } = req as unknown as ServerSideSessionHolder
+  if (session === undefined) {
+    throw new Error('request does not contain a serverside session')
+  }
+  return session
 }

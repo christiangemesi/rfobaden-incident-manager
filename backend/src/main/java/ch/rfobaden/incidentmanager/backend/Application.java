@@ -12,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.function.Supplier;
 
 @SpringBootApplication
-@EnableConfigurationProperties(RfoConfig.class)
+@EnableConfigurationProperties({
+    RfoConfig.class,
+    EmailConfig.class,
+})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

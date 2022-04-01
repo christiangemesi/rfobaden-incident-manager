@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redesigned the incident page.
 - Redesigned the users page.
 - Replaced the date/time input.
+- Redesigned the login page.
 
 ### Fixed
 - Scroll is now disabled while a modal is open.
