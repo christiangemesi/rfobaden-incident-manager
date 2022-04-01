@@ -93,3 +93,4 @@ Temporary Items
 # files for images and documents
 ./files/*
 
+/src/test/resources/testImage/
