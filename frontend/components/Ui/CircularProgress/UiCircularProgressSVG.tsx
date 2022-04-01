@@ -117,7 +117,6 @@ interface ProgressProps {
 }
 
 const ProgressText: React.VFC<ProgressProps> = ({ done , total }) => {
-
   return(
     <text
       x="50%"
