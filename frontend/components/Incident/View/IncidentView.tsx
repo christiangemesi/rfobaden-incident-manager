@@ -20,7 +20,6 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
-import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 import UICircularProgress2 from '@/components/Ui/CircularProgress/UiCircularProgress2'
 
 interface Props extends StyledProps {
@@ -74,16 +73,15 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
   return (
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
-        {/*<UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>*/}
-        <UiGrid>
+        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
           <UiGrid.Col size={{ xs: 1, md: 9, xxl: 7 }}>
             <IncidentInfo incident={incident} />
             <UiTitle level={1}>
               {incident.title}
             </UiTitle>
+            <UiDescription description={incident.description} />
           </UiGrid.Col>
-
-          <UiGrid.Col size={{ xs: 6, md: 2, xxl: 7 }}>
+          <UiGrid.Col size={{ xs: 0, md: 2, xxl: 7 }}>
             <ProgressContainer>
               <UICircularProgress2 done={incident.closedReportIds.length} total={incident.reportIds.length} />
               {/*<UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />*/}
@@ -92,9 +90,6 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
             <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
-          </UiGrid.Col>
-          <UiGrid.Col size={{ xs: 1, md: 6, xxl: 7 }}>
-            <UiDescription description={incident.description} />
           </UiGrid.Col>
         </UiGrid>
       </UiLevel.Header>
