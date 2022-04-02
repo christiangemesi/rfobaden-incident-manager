@@ -94,6 +94,7 @@ public class Incident extends Model.Basic
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getReports().isEmpty()
+            && getTransports().stream().allMatch(Transport::isClosed)
             && (getReports().stream().allMatch(Report::isClosed)
             || getReports().stream().allMatch(Report::isDone));
     }
