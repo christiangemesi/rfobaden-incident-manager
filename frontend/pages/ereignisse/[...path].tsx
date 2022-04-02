@@ -15,6 +15,7 @@ import UiLevel from '@/components/Ui/Level/UiLevel'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffectOnce } from 'react-use'
+import Transport from '@/models/Transport'
 
 interface Props {
   data: {
