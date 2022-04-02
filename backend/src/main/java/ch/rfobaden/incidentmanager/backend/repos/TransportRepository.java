@@ -25,7 +25,7 @@ public interface TransportRepository
             + "transport.id = :id"
     )
     @Override
-    boolean existsByPath(TransportPath path, Long id);
+    boolean existsByPath(@Param("path") TransportPath path, @Param("id") Long id);
 
     @Query(
         "SELECT transport"
