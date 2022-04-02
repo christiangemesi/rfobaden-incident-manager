@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 @Repository
 public class ImageFileRepository {
-    public static final String RESOURCES_DIR = "files/im-image-";
+    public static final String RESOURCES_DIR = "files/images/";
 
     public void save(byte[] content, Long id) {
         Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
