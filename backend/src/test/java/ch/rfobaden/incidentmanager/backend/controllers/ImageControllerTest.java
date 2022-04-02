@@ -196,12 +196,13 @@ class ImageControllerTest extends AppControllerTest {
     void uploadImageAndFail() throws Exception {
         // Given
         String errorMessage = "Server error";
-        MockMultipartFile file2 = new MockMultipartFile("file", FILENAME, "multipart/form-data", bytes) {
-            @Override
-            public byte[] getBytes() throws IOException {
-                throw new IOException(errorMessage);
-            }
-        };
+        MockMultipartFile file2 =
+            new MockMultipartFile("file", FILENAME, "multipart/form-data", bytes) {
+                @Override
+                public byte[] getBytes() throws IOException {
+                    throw new IOException(errorMessage);
+                }
+            };
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
