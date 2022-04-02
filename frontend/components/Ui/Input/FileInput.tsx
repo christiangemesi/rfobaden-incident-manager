@@ -68,7 +68,6 @@ const FileInput: React.VFC<Props> = ({
 }
 export default FileInput
 
-
 const StyledLabel = styled.label<{ isDropReady: boolean }>`
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
@@ -87,13 +86,9 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
     display: none;
   }
   
+  
   ${({ isDropReady }) => isDropReady && css`
     background-color: white;
     outline-offset: -20px;
   `}
 `
-
-
-
-
-

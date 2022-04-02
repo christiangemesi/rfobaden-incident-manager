@@ -9,7 +9,8 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
-import IncidentFileUploadForm from '@/components/Incident/FileUploadForm/IncidentFileUploadForm'
+import ReportFileUploadForm from '@/components/Report/FileUploadForm/ReportFileUploadForm'
+
 
 interface Props {
   incident: Incident
@@ -54,11 +55,6 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     }
   }, [report])
 
-  const handleUploadFile = useCallback(async () => {
-    //TODO wie referenzier ich uf mis fileupload?
-    console.log('Hello')
-
-  }, [report, handleDeleteCb])
 
   return (
     <UiDropDown>
@@ -107,7 +103,7 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
               <UiTitle level={1} isCentered>
                 Fileuploaden
               </UiTitle>
-              <IncidentFileUploadForm incident={incident} onClose={close} />
+              <ReportFileUploadForm incident={incident} onClose={close} />
             </React.Fragment>
           )}</UiModal.Body>
         </UiModal>
