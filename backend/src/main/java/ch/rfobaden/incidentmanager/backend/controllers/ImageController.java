@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 @RequireAgent
 @RestController
@@ -33,7 +31,6 @@ public class ImageController extends AppController {
     private final ReportService reportService;
     private final TaskService taskService;
     private final SubtaskService subtaskService;
-    private final Map<String, BiConsumer<Image, Long>> mapping;
 
     public ImageController(
         FileLocationService fileLocationService,
@@ -45,12 +42,6 @@ public class ImageController extends AppController {
         this.reportService = reportService;
         this.taskService = taskService;
         this.subtaskService = subtaskService;
-
-        mapping = Map.of(
-            "report",   this::saveImageToReport,
-            "task",     this::saveImageToTask,
-            "subtask",  this::saveImageToSubtask
-        );
     }
 
     @PostMapping("/image")
@@ -65,11 +56,22 @@ public class ImageController extends AppController {
         } catch (IOException e) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-
         Image image = fileLocationService.save(bytes, file.getOriginalFilename());
-        mapping.get(modelName).accept(image, id);
-        return image.getId();
 
+        switch (modelName.toLowerCase()) {
+            case "report":
+                saveImageToReport(id, image);
+                break;
+            case "task":
+                saveImageToTask(id, image);
+                break;
+            case "subtask":
+                saveImageToSubtask(id, image);
+                break;
+            default:
+                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "ModelName not found");
+        }
+        return image.getId();
     }
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -77,7 +79,7 @@ public class ImageController extends AppController {
         return fileLocationService.find(id);
     }
 
-    private void saveImageToReport(Image image, Long id) {
+    private void saveImageToReport(Long id, Image image) {
         Report report = reportService.find(id).orElseThrow(
             () -> new ApiException(HttpStatus.NOT_FOUND, "Report not found")
         );
@@ -85,7 +87,7 @@ public class ImageController extends AppController {
         reportService.update(report);
     }
 
-    private void saveImageToTask(Image image, Long id) {
+    private void saveImageToTask(Long id, Image image) {
         Task task = taskService.find(id).orElseThrow(
             () -> new ApiException(HttpStatus.NOT_FOUND, "Task not found")
         );
@@ -93,7 +95,7 @@ public class ImageController extends AppController {
         taskService.update(task);
     }
 
-    private void saveImageToSubtask(Image image, Long id) {
+    private void saveImageToSubtask(Long id, Image image) {
         Subtask subtask = subtaskService.find(id).orElseThrow(
             () -> new ApiException(HttpStatus.NOT_FOUND, "Subtask not found")
         );
