@@ -15,7 +15,7 @@ public class ImageFileRepository {
     public static final String RESOURCES_DIR = "files/im-image-";
 
     public void save(byte[] content, Long id) {
-        Path newFile = Paths.get(RESOURCES_DIR  + id + ".jpeg");
+        Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
 
         try {
             Files.write(newFile, content);
@@ -25,6 +25,6 @@ public class ImageFileRepository {
     }
 
     public FileSystemResource findInFileSystem(Long id) {
-        return new FileSystemResource(Paths.get(RESOURCES_DIR  + id + ".jpeg"));
+        return new FileSystemResource(Paths.get(RESOURCES_DIR + id + ".jpeg"));
     }
 }

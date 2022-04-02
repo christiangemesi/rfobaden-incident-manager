@@ -69,7 +69,7 @@ public class ImageController extends AppController {
                 saveImageToSubtask(id, image);
                 break;
             default:
-                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "modelName not found");
+                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "model name not found");
         }
         return image.getId();
     }

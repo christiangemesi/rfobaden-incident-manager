@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 class ImageFileRepositoryTest {
 
     public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/fish.jpeg";
@@ -30,7 +29,7 @@ class ImageFileRepositoryTest {
 
     @AfterEach
     private void cleanUp() throws IOException {
-        Files.delete(Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg"));
+        Files.delete(Paths.get(RESOURCES_DIR + image.getId() + ".jpeg"));
     }
 
     @Test
@@ -44,7 +43,7 @@ class ImageFileRepositoryTest {
         // When
         imageFileRepository.save(bytes, image.getId());
         FileSystemResource resourceIn = new FileSystemResource(
-            Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg"));
+            Paths.get(RESOURCES_DIR + image.getId() + ".jpeg"));
 
         // Then
         assertArrayEquals(
@@ -56,7 +55,7 @@ class ImageFileRepositoryTest {
     @Test
     void loadImageTest() throws IOException {
         // Given
-        Path newFile = Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg");
+        Path newFile = Paths.get(RESOURCES_DIR + image.getId() + ".jpeg");
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
         Files.write(newFile, resource.getInputStream().readAllBytes());

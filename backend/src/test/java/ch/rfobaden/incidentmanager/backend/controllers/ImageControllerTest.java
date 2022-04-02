@@ -90,7 +90,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "report")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("Report not found"));
+            .andExpect(jsonPath("$.message").value("report not found"));
     }
 
     @WithMockAgent
@@ -122,7 +122,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "task")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("Task not found"));
+            .andExpect(jsonPath("$.message").value("task not found"));
     }
 
     @WithMockAgent
@@ -153,7 +153,22 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("Subtask not found"));
+            .andExpect(jsonPath("$.message").value("subtask not found"));
+    }
+
+    @WithMockAgent
+    @Test
+    void uploadImageWithNoValidModelName() throws Exception {
+        // When
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+                .file(file)
+                .param("modelName", "not valid")
+                .param("id", image.getId().toString()))
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonPath("$.message").value("model name not found"));
     }
 
     @WithMockAgent

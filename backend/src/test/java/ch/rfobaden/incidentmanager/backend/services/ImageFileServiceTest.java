@@ -32,11 +32,12 @@ class ImageFileServiceTest {
     @MockBean
     private ImageRepository imageRepository;
 
-
     @Test
     void saveImageTest() {
         // Given
         byte[] bytes = "some data".getBytes();
+        Image image = new Image(IMAGE_NAME);
+        Mockito.when(imageRepository.save(image)).thenReturn(image);
 
         // When
         Image img = imageFileService.save(bytes, IMAGE_NAME);
@@ -65,6 +66,4 @@ class ImageFileServiceTest {
             resource.getInputStream().readAllBytes()
         );
     }
-
-
 }
