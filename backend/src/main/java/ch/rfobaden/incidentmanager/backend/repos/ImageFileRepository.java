@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 @Repository
-public class FileSystemRepository {
+public class ImageFileRepository {
     public static final String RESOURCES_DIR = "files/images";
 
     public String save(byte[] content, String imageName) {

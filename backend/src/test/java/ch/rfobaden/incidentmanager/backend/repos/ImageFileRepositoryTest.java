@@ -10,14 +10,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-class FileSystemRepositoryTest {
+class ImageFileRepositoryTest {
 
-    private final FileSystemRepository fileSystemRepository;
+    private final ImageFileRepository imageFileRepository;
 
     public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
 
-    public FileSystemRepositoryTest() {
-        this.fileSystemRepository = new FileSystemRepository();
+    public ImageFileRepositoryTest() {
+        this.imageFileRepository = new ImageFileRepository();
     }
 
     @Test
@@ -28,7 +28,7 @@ class FileSystemRepositoryTest {
         byte[] bytes = resourceOut.getInputStream().readAllBytes();
 
         // when
-        String location = fileSystemRepository.save(bytes, "testfile.jpeg");
+        String location = imageFileRepository.save(bytes, "testfile.jpeg");
         FileSystemResource resourceIn = new FileSystemResource(Paths.get(location));
         // then
         assertArrayEquals(
@@ -46,7 +46,7 @@ class FileSystemRepositoryTest {
             new FileSystemResource(Paths.get(PATH_TO_FILE));
 
         // when
-        FileSystemResource resourceIn = fileSystemRepository.findInFileSystem(PATH_TO_FILE);
+        FileSystemResource resourceIn = imageFileRepository.findInFileSystem(PATH_TO_FILE);
 
         // then
         assertArrayEquals(
