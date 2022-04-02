@@ -17,9 +17,6 @@ public class Image {
     private Long id;
 
     @Column(nullable = false)
-    private String location;
-
-    @Column(nullable = false)
     private String name;
 
     public Image() {
@@ -37,14 +34,6 @@ public class Image {
         this.id = id;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getName() {
         return name;
     }
@@ -58,7 +47,6 @@ public class Image {
         return "Image{"
             + "id=" + id
             + ", name='" + name + '\''
-            + ", location='" + location + '\''
             + '}';
     }
 
@@ -72,12 +60,11 @@ public class Image {
         }
         Image image = (Image) o;
         return Objects.equals(id, image.id)
-            && Objects.equals(location, image.location)
             && Objects.equals(name, image.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, location, name);
+        return Objects.hash(id, name);
     }
 }

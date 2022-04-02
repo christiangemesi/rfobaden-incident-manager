@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResource;
 
@@ -20,6 +21,10 @@ class ImageFileRepositoryTest {
         this.imageFileRepository = new ImageFileRepository();
     }
 
+    @AfterEach
+    private void cleanUp(String fileLocation){
+    }
+
     @Test
     void saveImageTest() throws IOException {
         // Given
@@ -35,8 +40,7 @@ class ImageFileRepositoryTest {
             resourceOut.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()
         );
-
-        Files.delete(Paths.get(location));
+// TODO
     }
 
     @Test
