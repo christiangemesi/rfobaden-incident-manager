@@ -1,11 +1,11 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.EmailConfig;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +24,14 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
 
     private final PasswordEncoder passwordEncoder;
 
-    private final EmailConfig emailConfig;
+    private final NotificationService notificationService;
 
     private final SecureRandom passwordRandom = new SecureRandom();
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, EmailConfig emailConfig) {
+    public UserService(PasswordEncoder passwordEncoder, NotificationService notificationService) {
         this.passwordEncoder = passwordEncoder;
-        this.emailConfig = emailConfig;
+        this.notificationService = notificationService;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -53,10 +53,9 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         newUser.setCredentials(credentials);
         var user = super.create(path, newUser);
 
-        emailConfig.sendSimpleMessage(user.getEmail(), "IM-Tool RFOBaden: Benutzer erstellt",
-            emailConfig.getPasswordTemplateMessage(user.getEmail(), plainPassword));
+        notificationService.notifyNewUser(user, plainPassword);
+        logger.debug("Password for new user {}: {}", user.getEmail(), plainPassword);
 
-        logger.info("Password for {}: {}", user.getEmail(), plainPassword);
         return user;
     }
 

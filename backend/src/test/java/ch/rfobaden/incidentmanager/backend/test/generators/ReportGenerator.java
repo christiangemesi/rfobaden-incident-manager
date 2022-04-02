@@ -24,7 +24,7 @@ public class ReportGenerator extends ModelGenerator<Report> {
         report.setLocation(doMaybe(() -> faker.country().capital()));
         report.setKeyReport(faker.bool().bool());
         report.setLocationRelevantReport(faker.bool().bool());
-        report.setPriority(faker.options().option(Report.Priority.class));
+        report.setPriority(faker.options().option(Priority.class));
 
         report.setStartsAt(doMaybe(this::randomDateTime));
         report.setEndsAt(doMaybe(this::randomDateTime));

@@ -35,6 +35,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
   useValidate(form, (validate) => ({
     title: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     description: [
       validate.notBlank({ allowNull: true }),
