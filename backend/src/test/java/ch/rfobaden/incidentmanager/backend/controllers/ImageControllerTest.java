@@ -173,6 +173,26 @@ class ImageControllerTest extends AppControllerTest {
 
     @WithMockAgent
     @Test
+    void uploadImageWithCustomFileNameTest() throws Exception {
+        // Given
+        String name = "123abcABC#";
+
+        // When
+        Mockito.when(imageFileService.save(bytes, name)).thenReturn(image);
+        Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+                .file(file)
+                .param("modelName", "report")
+                .param("id", image.getId().toString())
+                .param("fileName", name))
+            .andExpect(status().is(200))
+            .andExpect(content().string(image.getId().toString()));
+    }
+
+    @WithMockAgent
+    @Test
     void uploadImageAndFail() throws Exception {
         // Given
         String errorMessage = "Server error";

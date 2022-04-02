@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RequireAgent
 @RestController
@@ -48,7 +49,8 @@ public class ImageController extends AppController {
     public Long uploadImage(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
-        @RequestParam Long id) {
+        @RequestParam Long id,
+        @RequestParam Optional<String> fileName) {
 
         byte[] bytes;
         try {
@@ -56,7 +58,13 @@ public class ImageController extends AppController {
         } catch (IOException e) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        Image image = imageFileService.save(bytes, file.getOriginalFilename());
+
+        String name = file.getOriginalFilename();
+        if (fileName.isPresent()) {
+            name = fileName.get();
+        }
+
+        Image image = imageFileService.save(bytes, name);
 
         switch (modelName.toLowerCase()) {
             case "report":
