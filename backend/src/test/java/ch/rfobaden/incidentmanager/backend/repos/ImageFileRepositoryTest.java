@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.nio.file.Paths;
 class ImageFileRepositoryTest {
 
     public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/fish.jpeg";
-    public static final Long IMAGE_ID = -42L;
+    public static final Long IMAGE_ID = 42L;
 
     private final ImageFileRepository imageFileRepository;
     private final Image image;
@@ -38,7 +40,6 @@ class ImageFileRepositoryTest {
         FileSystemResource resourceOut =
             new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
         byte[] bytes = resourceOut.getInputStream().readAllBytes();
-        System.out.println(bytes.length);
 
         // When
         imageFileRepository.save(bytes, image.getId());
@@ -58,6 +59,9 @@ class ImageFileRepositoryTest {
         Path newFile = Paths.get(RESOURCES_DIR + image.getId() + ".jpeg");
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
+        if (!Files.exists(newFile.getParent())) {
+            Files.createDirectories(newFile.getParent());
+        }
         Files.write(newFile, resource.getInputStream().readAllBytes());
 
         // When

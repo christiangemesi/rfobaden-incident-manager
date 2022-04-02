@@ -15,12 +15,14 @@ public class ImageFileRepository {
     public static final String RESOURCES_DIR = "files/images/";
 
     public void save(byte[] content, Long id) {
-        Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
-
         try {
+            Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
+            if (!Files.exists(newFile.getParent())) {
+                Files.createDirectories(newFile.getParent());
+            }
             Files.write(newFile, content);
         } catch (IOException e) {
-            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
         }
     }
 
