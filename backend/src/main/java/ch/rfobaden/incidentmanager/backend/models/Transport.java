@@ -33,12 +33,9 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private String description;
 
     private long peopleInvolved;
-    @Size(max = 100)
     private String driver;
 
-    @Size(max = 100)
     private String vehicle;
-    @Size(max = 100)
     private String trailer;
 
     private LocalDateTime startsAt;

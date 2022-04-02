@@ -15,8 +15,10 @@ export default interface Transport extends Model {
 
   priority: Priority
 
-  peopleInvolved: number
+  peopleInvolved: string //TODO change to number
   driver: string | null
+  vehicle: string | null
+  trailer: string | null
   sourcePlace: string | null
   destinationPlace: string | null
 
