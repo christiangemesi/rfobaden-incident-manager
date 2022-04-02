@@ -1,4 +1,4 @@
-import Incident, { parseIncident } from '@/models/Incident'
+import Incident, { } from '@/models/Incident'
 import FileUpload from '@/models/FileUpload'
 import {  useForm, useSubmit } from '@/components/Ui/Form'
 import React from 'react'

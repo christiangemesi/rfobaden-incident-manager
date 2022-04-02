@@ -1,5 +1,5 @@
 import { UiInputProps } from '@/components/Ui/Input'
-import React, { ChangeEvent, ReactNode, useCallback, useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -44,7 +44,6 @@ const FileInput: React.VFC<Props> = ({
     setDropReady(false)
   }, [])
 
-
   return (
     <div>
       <StyledLabel
@@ -85,7 +84,6 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
   & > input {
     display: none;
   }
-  
   
   ${({ isDropReady }) => isDropReady && css`
     background-color: white;

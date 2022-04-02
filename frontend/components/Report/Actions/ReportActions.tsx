@@ -11,7 +11,6 @@ import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
 import ReportFileUploadForm from '@/components/Report/FileUploadForm/ReportFileUploadForm'
 
-
 interface Props {
   incident: Incident
   report: Report
