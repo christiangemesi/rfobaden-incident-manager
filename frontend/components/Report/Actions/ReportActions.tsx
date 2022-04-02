@@ -9,7 +9,8 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
-import ReportFileUploadForm from '@/components/Report/FileUploadForm/ReportFileUploadForm'
+import FileUploadForm from '@/components/FileUpload/FileUploadForm'
+import { FileId } from '@/models/FileUpload'
 
 interface Props {
   incident: Incident
@@ -54,6 +55,9 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     }
   }, [report])
 
+  const addImageId = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
+  }, [report])
 
   return (
     <UiDropDown>
@@ -93,16 +97,16 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         <UiModal isFull>
           <UiModal.Activator>{({ open }) => (
             <UiDropDown.Item onClick={open}>
-              Fileupload
+              Bild hinzufügen
             </UiDropDown.Item>
           )}</UiModal.Activator>
 
           <UiModal.Body>{({ close }) => (
             <React.Fragment>
               <UiTitle level={1} isCentered>
-                Fileuploaden
+                Bild hinzufügen
               </UiTitle>
-              <ReportFileUploadForm incident={incident} onClose={close} />
+              <FileUploadForm modelId={report.id} modelName="report" onSave={addImageId} onClose={close} />
             </React.Fragment>
           )}</UiModal.Body>
         </UiModal>

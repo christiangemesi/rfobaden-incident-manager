@@ -5,6 +5,7 @@ import User from '@/models/User'
 import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
 import Task from '@/models/Task'
+import { FileId } from '@/models/FileUpload'
 
 
 export default interface Report extends Model {
@@ -32,6 +33,8 @@ export default interface Report extends Model {
   taskIds: Id<Task>[]
   isDone: boolean
   isClosed: boolean
+
+  imageIds: FileId[]
 }
 
 export const parseReport = (data: Report): Report => ({

@@ -4,13 +4,15 @@ import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
-type Props = UiInputProps<File | null>
+interface Props extends UiInputProps<File | null> {
+  accept: string
+}
 
 const FileInput: React.VFC<Props> = ({
-  onChange: setValue,
+  accept,
   errors = [],
   value,
-
+  onChange: setValue,
 }) => {
   const [isDropReady, setDropReady] = useState(false)
 
@@ -55,9 +57,8 @@ const FileInput: React.VFC<Props> = ({
         onDragLeave={deactivateDrop}
         isDropReady={isDropReady}
       >
-        Chose a file or drag it here
         <UiIcon.Upload size={8} />
-        <input type="file" onChange={handleChange} />
+        <input type="file" accept={accept} onChange={handleChange} />
       </StyledLabel>
 
       {value?.name}
@@ -84,7 +85,7 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
   & > input {
     display: none;
   }
-  
+
   ${({ isDropReady }) => isDropReady && css`
     background-color: white;
     outline-offset: -20px;
