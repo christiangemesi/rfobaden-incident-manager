@@ -15,12 +15,14 @@ import UiLevel from '@/components/Ui/Level/UiLevel'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffectOnce } from 'react-use'
-import Transport from '@/models/Transport'
+import Transport, { parseTransport } from '@/models/Transport'
+import TransportStore from '@/stores/TransportStore'
 
 interface Props {
   data: {
     incident: Incident
     reports: Report[]
+    transports: Transport[]
     users: User[]
     organizations: Organization[]
   }
@@ -29,6 +31,7 @@ interface Props {
 const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
+    TransportStore.saveAll(data.transports.map(parseTransport))
     UserStore.saveAll(data.users.map(parseUser))
     OrganizationStore.saveAll(data.organizations.map(parseOrganization))
   })
@@ -62,15 +65,23 @@ const StyledIncidentView = styled(IncidentView)`
 export type IncidentQuery = {
   incidentId: number
   reportId: null
+  transportId: null
   taskId: null
 } | {
   incidentId: number
   reportId: number
+  transportId: null
   taskId: null
 } | {
   incidentId: number
   reportId: number
+  transportId: null
   taskId: number
+} | {
+  incidentId: number
+  reportId: null
+  transportId: number
+  taskId: null
 }
 
 type Query = {
@@ -78,11 +89,12 @@ type Query = {
 }
 
 export const parseIncidentQuery = (query: Query | ParsedUrlQuery): IncidentQuery | null => {
-  const { path: [incidentId, reportsName, reportId, taskName, taskId] } = query as Query
+  const { path: [incidentId, reportsName, reportId, transportName, transportId, taskName, taskId] } = query as Query
   if (
-    (query as Query).path.length > 5
+    (query as Query).path.length > 7
     || incidentId === undefined
     || (reportsName !== undefined && reportsName !== 'meldungen')
+    || (transportName !== undefined && transportName !== 'transporte')
     || (taskName !== undefined && taskName !== 'auftraege')
   ) {
     return null
@@ -104,6 +116,7 @@ export const parseIncidentQuery = (query: Query | ParsedUrlQuery): IncidentQuery
   return {
     incidentId: parsedIncidentId,
     reportId: tryParseId(reportId),
+    transportId: tryParseId(transportId),
     taskId: tryParseId(taskId),
   } as IncidentQuery
 }
@@ -146,6 +159,19 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     }
   }
 
+  // Check if the transport exists.
+  if (query.transportId !== null) {
+    const [_, transportsError]: BackendResponse<Transport> = await backendService.find(
+      `incidents/${incident.id}/transports/${query.transportId}`,
+    )
+    if (transportsError !== null) {
+      if (transportsError.status === 404) {
+        return { notFound: true }
+      }
+      throw transportsError
+    }
+  }
+
   // Check if the task exists.
   if (query.taskId !== null) {
     const [_, taskError]: BackendResponse<Report> = await backendService.find(
@@ -166,11 +192,11 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     throw reportsError
   }
 
-  const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
-    'organizations',
+  const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
+    `incidents/${query.incidentId}/transports`,
   )
-  if (organizationError !== null) {
-    throw organizationError
+  if (transportsError !== null) {
+    throw transportsError
   }
 
   const [users, usersError]: BackendResponse<User[]> = await backendService.list('users')
@@ -178,11 +204,19 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     throw usersError
   }
 
+  const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
+    'organizations',
+  )
+  if (organizationError !== null) {
+    throw organizationError
+  }
+
   return {
     props: {
       data: {
         incident,
         reports,
+        transports,
         users,
         organizations,
       },
