@@ -3,20 +3,27 @@ package ch.rfobaden.incidentmanager.backend.models;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Entity
 @Table(name = "transport")
-public final class Transport extends Model implements PathConvertible<TransportPath> {
+public final class Transport extends Model implements PathConvertible<TransportPath>, Trackable,
+    Serializable {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
@@ -26,9 +33,12 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private String description;
 
     private long peopleInvolved;
+    @Size(max = 100)
     private String driver;
 
+    @Size(max = 100)
     private String vehicle;
+    @Size(max = 100)
     private String trailer;
 
     private LocalDateTime startsAt;
@@ -40,6 +50,15 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @ManyToOne
     @JoinColumn
     private User assignee;
+
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private Priority priority;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean isClosed;
 
     @JsonIgnore
     public Incident getIncident() {
@@ -170,6 +189,38 @@ public final class Transport extends Model implements PathConvertible<TransportP
         assignee = new User();
         assignee.setId(id);
     }
+
+    @Override
+    public Priority getPriority() {
+        return priority;
+    }
+
+    @Override
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+
+    @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    @Override
+    public void setClosed(boolean closed) {
+        isClosed = closed;
+    }
+
+    @Override
+    public String getLink() {
+        return "/ereignisse/" + getIncident().getId() + "/transporte/" + getId();
+    }
+
+    @Override
+    public String getFullTitle() {
+        return getIncident().getTitle() + "/" + getTitle();
+    }
+
 
     @Override
     public boolean equals(Object other) {

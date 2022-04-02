@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.test.generators;
 
+import ch.rfobaden.incidentmanager.backend.models.Priority;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setDestinationPlace(faker.address().buildingNumber());
         transport.setSourcePlace(faker.address().buildingNumber());
         transport.setAssignee(doMaybe(userGenerator::generate));
+        transport.setPriority(faker.options().option(Priority.class));
         return transport;
     }
 }
