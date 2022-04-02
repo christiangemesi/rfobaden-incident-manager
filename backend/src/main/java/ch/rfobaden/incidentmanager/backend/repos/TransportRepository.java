@@ -45,8 +45,6 @@ public interface TransportRepository
             + "Transport transport"
             + " WHERE "
             + "transport.incident.id = :#{#path.incidentId}"
-            + " AND "
-            + "transport.id = :id"
     )
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
