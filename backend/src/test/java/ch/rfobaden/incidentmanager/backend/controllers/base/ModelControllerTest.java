@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAdmin;
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
@@ -16,12 +18,12 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +32,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+
+@WithMockAdmin
 public abstract class ModelControllerTest<
     TModel extends Model & PathConvertible<TPath>,
     TPath,
@@ -47,6 +51,7 @@ public abstract class ModelControllerTest<
     protected ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
 
     @RepeatedTest(5)
+    @WithMockAgent
     public void testList() throws Exception {
         // Given
         var records = generator.generateNew(10);
@@ -66,6 +71,7 @@ public abstract class ModelControllerTest<
     }
 
     @RepeatedTest(5)
+    @WithMockAgent
     public void testList_empty() throws Exception {
         // Given
         var record = generator.generate();
@@ -85,6 +91,7 @@ public abstract class ModelControllerTest<
     }
 
     @RepeatedTest(5)
+    @WithMockAgent
     public void testFind() throws Exception {
         // Given
         var record = generator.generate();
@@ -104,6 +111,7 @@ public abstract class ModelControllerTest<
     }
 
     @RepeatedTest(5)
+    @WithMockAgent
     public void testFind_notFound() throws Exception {
         // Given
         var record = generator.generate();
@@ -175,7 +183,7 @@ public abstract class ModelControllerTest<
         var record = generator.generate();
         var path = record.toPath();
         var updatedRecord = generator.copy(record);
-        updatedRecord.setUpdatedAt(LocalDateTime.now());
+        updatedRecord.setUpdatedAt(generator.randomDateTime());
         Mockito.when(service.update(path, record))
             .thenReturn(Optional.of(updatedRecord));
         mockRelations(path, record);

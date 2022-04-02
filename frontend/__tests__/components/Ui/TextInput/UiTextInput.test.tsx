@@ -15,7 +15,8 @@ describe('UiTextInput', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiTextInput value="" type="text" label={text} onChange={mockCallBack} />
-      </ThemeProvider>)
+      </ThemeProvider>
+    )
     expect(wrapper.find('input').first().props().type).toBe('text')
   })
   it('should have type password', () => {
@@ -23,7 +24,8 @@ describe('UiTextInput', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiTextInput value="" type="password" label={text} onChange={mockCallBack} />
-      </ThemeProvider>)
+      </ThemeProvider>
+    )
     expect(wrapper.find('input').first().props().type).toBe('password')
   })
   it('should display a placeholder', () => {
@@ -31,7 +33,8 @@ describe('UiTextInput', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiTextInput value="" type="text" placeholder={text} label={text} onChange={mockCallBack} />
-      </ThemeProvider>)
+      </ThemeProvider>
+    )
     expect(wrapper.find('input').first().props().placeholder).toBe(text)
   })
   it('should display a label', () => {
@@ -39,7 +42,8 @@ describe('UiTextInput', () => {
     const wrapper = mount(
       <ThemeProvider theme={defaultTheme}>
         <UiTextInput value="" label={text} onChange={mockCallBack} />
-      </ThemeProvider>)
+      </ThemeProvider>
+    )
     expect(wrapper.find('span').first().html()).toContain(text)
   })
 })

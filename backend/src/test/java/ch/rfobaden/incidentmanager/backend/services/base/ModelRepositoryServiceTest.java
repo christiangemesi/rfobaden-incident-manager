@@ -2,6 +2,8 @@ package ch.rfobaden.incidentmanager.backend.services.base;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -10,12 +12,14 @@ import static org.mockito.Mockito.verify;
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.errors.UpdateConflictException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
+import ch.rfobaden.incidentmanager.backend.models.Trackable;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
+import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
+import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,6 +44,12 @@ public abstract class ModelRepositoryServiceTest<
 
     @Autowired
     protected ModelGenerator<TModel> generator;
+
+    @Autowired
+    protected UserGenerator userGenerator;
+
+    @MockBean
+    protected NotificationService notificationService;
 
     @RepeatedTest(5)
     public void testList() {
@@ -144,6 +154,7 @@ public abstract class ModelRepositoryServiceTest<
 
         // Then
         assertThat(result)
+            .isNotNull()
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("id will be overwritten and must be null");
         verify(repository, never()).save(newRecord);
@@ -161,6 +172,7 @@ public abstract class ModelRepositoryServiceTest<
 
         // Then
         assertThat(result)
+            .isNotNull()
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("createdAt must not be set");
         verify(repository, never()).save(any());
@@ -170,7 +182,7 @@ public abstract class ModelRepositoryServiceTest<
     public void testCreate_presetUpdatedAt() {
         // Given
         var newRecord = generator.generateNew();
-        newRecord.setUpdatedAt(LocalDateTime.now());
+        newRecord.setUpdatedAt(generator.randomDateTime());
         var path = newRecord.toPath();
 
         // When
@@ -178,9 +190,49 @@ public abstract class ModelRepositoryServiceTest<
 
         // Then
         assertThat(result)
+            .isNotNull()
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("updatedAt must not be set");
         verify(repository, never()).save(any());
+    }
+
+    @RepeatedTest(5)
+    public void testCreate_wrongPath() {
+        // Given
+        var newRecord = generator.generateNew();
+        var path = generator.generateNew().toPath();
+
+        assumeFalse(path.getClass() == EmptyPath.class); // Skip test for models without a path.
+
+        // When
+        var result = catchThrowable(() -> service.create(path, newRecord));
+
+        // Then
+        assertThat(result)
+            .isNotNull()
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("record does not match path: " + path);
+        verify(repository, never()).save(any());
+    }
+
+    @RepeatedTest(5)
+    public void testCreate_notifyAssignee() {
+        // Given
+        var record = generator.generateNew();
+        assumeTrue(record instanceof Trackable); // Run only for trackable models.
+        var trackable = (Trackable) record;
+
+        var assignee = userGenerator.generate();
+        trackable.setAssignee(assignee);
+
+        Mockito.when(repository.save(record))
+            .thenReturn(record);
+
+        // When
+        service.create(record);
+
+        // Then
+        verify(notificationService, times(1)).notifyAssigneeIfChanged(null, trackable);
     }
 
     @RepeatedTest(5)
@@ -231,7 +283,7 @@ public abstract class ModelRepositoryServiceTest<
         var record = generator.generate();
         var updatedRecord = generator.copy(record);
         var path = updatedRecord.toPath();
-        record.setUpdatedAt(LocalDateTime.now());
+        record.setUpdatedAt(generator.randomDateTime());
 
         Mockito.when(repository.findByPath(path, record.getId()))
             .thenReturn(Optional.of(record));
@@ -264,6 +316,34 @@ public abstract class ModelRepositoryServiceTest<
             .hasMessage("updatedAt must be set");
         verify(repository, never()).save(any());
     }
+
+
+
+    @RepeatedTest(5)
+    public void testUpdate_notifyAssignee() {
+        // Given
+        var oldRecord = generator.generate();
+        var record = generator.copy(oldRecord);
+        assumeTrue(oldRecord instanceof Trackable); // Run only for trackable models.
+
+        var oldTrackable = (Trackable) oldRecord;
+        var trackable = (Trackable) record;
+
+        oldTrackable.setAssignee(null);
+        trackable.setAssignee(userGenerator.generate());
+
+        Mockito.when(repository.findByPath(record.toPath(), record.getId()))
+            .thenReturn(Optional.of(oldRecord));
+        Mockito.when(repository.save(record))
+            .thenReturn(record);
+
+        // When
+        service.update(record);
+
+        // Then
+        verify(notificationService, times(1)).notifyAssigneeIfChanged(oldTrackable, trackable);
+    }
+
 
     @RepeatedTest(5)
     public void testDelete() {

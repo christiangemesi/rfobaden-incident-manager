@@ -20,6 +20,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import useHeight from '@/utils/hooks/useHeight'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -29,8 +30,6 @@ interface Props extends StyledProps {
 const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, className, style }) => {
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
-
-  console.log('render!')
 
   const [selectedId, setSelectedId] = useState<Id<Report> | null>(() => (
     parseIncidentQuery(router.query)?.reportId ?? null
@@ -75,26 +74,29 @@ const IncidentView: React.VFC<Props> = ({ incident, onDelete: handleDelete, clas
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
         <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 1, md: 9, xxl: 7 }}>
             <IncidentInfo incident={incident} />
             <UiTitle level={1}>
               {incident.title}
             </UiTitle>
+            <UiDescription description={incident.description} />
           </UiGrid.Col>
-
+          <UiGrid.Col size={{ xs: 0, md: 2, xxl: 7 }}>
+            <ProgressContainer>
+              <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+            </ProgressContainer>
+          </UiGrid.Col>
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
             <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
           </UiGrid.Col>
         </UiGrid>
-
-        <UiDescription description={incident.description} />
       </UiLevel.Header>
+
       <StyledUiLevelContent $hasSelected={selectedId !== null}>
         <ListContainer ref={setReportListRef} $hasSelected={selectedId !== null}>
           {reportList}
         </ListContainer>
-
         <ReportOverlay hasSelected={selected !== null} $listHeight={prevReportListHeight}>
           {reportView}
         </ReportOverlay>
@@ -199,4 +201,7 @@ const ReportOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     
     // transform: translateY(calc(100% + 4px + 1rem)); // 4px to hide box shadow, 1rem for parent padding
   }
+`
+const ProgressContainer = styled.div`
+  margin-top: 2rem;
 `

@@ -9,6 +9,7 @@ import ch.rfobaden.incidentmanager.backend.utils.validation.ValidationUtils;
 import ch.rfobaden.incidentmanager.backend.utils.validation.Violations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,7 +60,10 @@ public abstract class ModelRepositoryService<
         if (!path.equals(entity.toPath())) {
             throw new IllegalStateException("record does not match path: " + path);
         }
-        return repository.save(entity);
+        var result = repository.save(entity);
+        afterCreate(result);
+        this.afterSave(null, result);
+        return result;
     }
 
     @Override
@@ -68,22 +72,22 @@ public abstract class ModelRepositoryService<
             throw new IllegalArgumentException("updatedAt must be set");
         }
 
-        var existingRecord = find(path, entity.getId()).orElse(null);
-        if (existingRecord == null) {
+        var existingEntity = find(path, entity.getId()).orElse(null);
+        if (existingEntity == null) {
             return Optional.empty();
         }
-        if (!isSameDateTime(existingRecord.getUpdatedAt(), entity.getUpdatedAt())) {
+        if (!isSameDateTime(existingEntity.getUpdatedAt(), entity.getUpdatedAt())) {
             throw new UpdateConflictException(
                 "record " + entity.getId() + " has already been modified"
             );
         }
         entity.setUpdatedAt(LocalDateTime.now());
-        entity.setCreatedAt(existingRecord.getCreatedAt());
+        entity.setCreatedAt(existingEntity.getCreatedAt());
         validate(entity);
-        if (!path.equals(entity.toPath())) {
-            throw new IllegalStateException("record does not match path: " + path);
-        }
-        return Optional.of(repository.save(entity));
+        var result = repository.save(entity);
+        this.afterUpdate(existingEntity, result);
+        this.afterSave(existingEntity, result);
+        return Optional.of(result);
     }
 
     @Override
@@ -96,12 +100,16 @@ public abstract class ModelRepositoryService<
     }
 
     protected final void validate(TModel entity) {
-        validationUtils.validate(entity, (r, violations) -> {
-            validate(entity, violations);
-        });
+        validationUtils.validate(entity, this::validate);
     }
 
     protected void validate(TModel entity, Violations violations) {}
+
+    protected void afterCreate(TModel entity) {}
+
+    protected void afterUpdate(TModel oldEntity, TModel newEntity) {}
+
+    protected void afterSave(@Nullable TModel oldEntity, TModel entity) {}
 
     protected static boolean isPersisted(Model entity) {
         return entity.getId() == null;
