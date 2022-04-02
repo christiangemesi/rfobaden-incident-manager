@@ -23,20 +23,19 @@ public final class Transport extends Model implements PathConvertible<TransportP
 
     @Column(nullable = false)
     private String title;
-
-    private long peopleInvolved;
-
     private String description;
 
+    private long peopleInvolved;
+    private String driver;
+
+    private String vehicle;
     private String trailer;
 
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
 
-    private String vehicle;
-
-    private String destinationPlace;
     private String sourcePlace;
+    private String destinationPlace;
 
     @ManyToOne
     @JoinColumn
@@ -68,47 +67,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         incident.setId(id);
     }
 
-
-    public String getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public String getDestinationPlace() {
-        return destinationPlace;
-    }
-
-    public void setDestinationPlace(String destinationPlace) {
-        this.destinationPlace = destinationPlace;
-    }
-
-    public String getSourcePlace() {
-        return sourcePlace;
-    }
-
-    public void setSourcePlace(String sourcePlace) {
-        this.sourcePlace = sourcePlace;
-    }
-
-    public long getPeopleInvolved() {
-        return peopleInvolved;
-    }
-
-    public void setPeopleInvolved(long peopleInvolved) {
-        this.peopleInvolved = peopleInvolved;
-    }
-
-    public String getTrailer() {
-        return trailer;
-    }
-
-    public void setTrailer(String trailer) {
-        this.trailer = trailer;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -123,6 +81,70 @@ public final class Transport extends Model implements PathConvertible<TransportP
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getPeopleInvolved() {
+        return peopleInvolved;
+    }
+
+    public void setPeopleInvolved(long peopleInvolved) {
+        this.peopleInvolved = peopleInvolved;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
+    }
+
+    public LocalDateTime getStartsAt() {
+        return startsAt;
+    }
+
+    public void setStartsAt(LocalDateTime startsAt) {
+        this.startsAt = startsAt;
+    }
+
+    public LocalDateTime getEndsAt() {
+        return endsAt;
+    }
+
+    public void setEndsAt(LocalDateTime endsAt) {
+        this.endsAt = endsAt;
+    }
+
+    public String getSourcePlace() {
+        return sourcePlace;
+    }
+
+    public void setSourcePlace(String sourcePlace) {
+        this.sourcePlace = sourcePlace;
+    }
+
+    public String getDestinationPlace() {
+        return destinationPlace;
+    }
+
+    public void setDestinationPlace(String destinationPlace) {
+        this.destinationPlace = destinationPlace;
     }
 
     public User getAssignee() {
@@ -147,22 +169,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         }
         assignee = new User();
         assignee.setId(id);
-    }
-
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     @Override
