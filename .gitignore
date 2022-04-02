@@ -164,4 +164,3 @@ Temporary Items
 # Typescript build info file.
 frontend/tsconfig.tsbuildinfo
 /files/
-/backend/src/test/resources/testImage/
