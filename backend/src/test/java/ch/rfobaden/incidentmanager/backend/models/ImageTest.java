@@ -12,7 +12,7 @@ class ImageTest {
 
     @Test
     void equalsTest() {
-        // given
+        // Given
         Long id = 42L;
         Image image1 = new Image("fish");
         image1.setLocation(PATH_TO_FILE);
@@ -21,14 +21,14 @@ class ImageTest {
         image2.setLocation(PATH_TO_FILE);
         image2.setId(id);
         
-        // then
+        // Then
         assertEquals(image1, image2);
         assertEquals(image1.hashCode(), image2.hashCode());
     }
 
     @Test
     void notEqualsTest() {
-        // given
+        // Given
         Image image1 = new Image("fish");
         image1.setLocation(PATH_TO_FILE);
         image1.setId(42L);
@@ -36,19 +36,19 @@ class ImageTest {
         image2.setLocation(PATH_TO_FILE);
         image2.setId(43L);
 
-        // then
+        // Then
         assertNotEquals(image1, image2);
     }
 
     @Test
     void notSameClassTest() {
-        // given
+        // Given
         Image image1 = new Image("fish");
         image1.setLocation(PATH_TO_FILE);
         image1.setId(42L);
         Object o = new Object();
 
-        // then
+        // Then
         assertNotEquals(image1, o);
     }
 }

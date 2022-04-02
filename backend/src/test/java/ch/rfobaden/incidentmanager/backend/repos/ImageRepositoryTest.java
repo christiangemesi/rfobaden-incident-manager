@@ -18,22 +18,22 @@ class ImageRepositoryTest {
 
     @Test
     void findByIdTest() {
-        // given
+        // Given
         Image image = new Image("fish");
         image.setLocation(PATH_TO_FILE);
 
-        // when
+        // When
         Image img = imageRepository.save(image);
         Image savedImage = imageRepository.findById(img.getId()).orElse(null);
 
-        // then
+        // Then
         assertEquals(1, imageRepository.findAll().size());
         assertEquals(img, savedImage);
     }
 
     @Test
     void findAllTest() {
-        // given
+        // Given
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");
         Image image3 = new Image("fish");
@@ -41,18 +41,18 @@ class ImageRepositoryTest {
         image2.setLocation(PATH_TO_FILE);
         image3.setLocation(PATH_TO_FILE);
 
-        // when
+        // When
         imageRepository.save(image1);
         imageRepository.save(image2);
         imageRepository.save(image3);
 
-        // then
+        // Then
         assertEquals(3, imageRepository.findAll().size());
     }
 
     @Test
     void deleteImageTest() {
-        // given
+        // Given
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");
         Image image3 = new Image("fish");
@@ -60,12 +60,12 @@ class ImageRepositoryTest {
         image2.setLocation(PATH_TO_FILE);
         image3.setLocation(PATH_TO_FILE);
 
-        // when
+        // When
         imageRepository.save(image1);
         Image toDelete = imageRepository.save(image2);
         imageRepository.save(image3);
 
-        // then
+        // Then
         assertEquals(3, imageRepository.findAll().size());
         imageRepository.delete(toDelete);
         assertEquals(2, imageRepository.findAll().size());

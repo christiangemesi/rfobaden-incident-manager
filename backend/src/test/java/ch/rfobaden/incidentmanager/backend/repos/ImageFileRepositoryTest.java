@@ -22,15 +22,15 @@ class ImageFileRepositoryTest {
 
     @Test
     void saveImageTest() throws IOException {
-        // given
+        // Given
         FileSystemResource resourceOut =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
         byte[] bytes = resourceOut.getInputStream().readAllBytes();
 
-        // when
+        // When
         String location = imageFileRepository.save(bytes, "testfile.jpeg");
         FileSystemResource resourceIn = new FileSystemResource(Paths.get(location));
-        // then
+        // Then
         assertArrayEquals(
             resourceOut.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()
@@ -41,14 +41,14 @@ class ImageFileRepositoryTest {
 
     @Test
     void loadImageTest() throws IOException {
-        // given
+        // Given
         FileSystemResource resourceOut =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
 
-        // when
+        // When
         FileSystemResource resourceIn = imageFileRepository.findInFileSystem(PATH_TO_FILE);
 
-        // then
+        // Then
         assertArrayEquals(
             resourceOut.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()

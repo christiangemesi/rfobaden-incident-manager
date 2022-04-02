@@ -35,19 +35,19 @@ class ImageFileServiceTest {
 
     @Test
     void saveImageTest() {
-        // given
+        // Given
         byte[] bytes = "some data".getBytes();
 
-        // when
+        // When
         Image img = imageFileService.save(bytes, IMAGE_NAME);
 
-        // then
+        // Then
         assertEquals(IMAGE_NAME, img.getName());
     }
 
     @Test
     void findImageTest() throws IOException {
-        // given
+        // Given
         String imageName = "name";
         Image image = new Image(imageName);
         image.setId(42L);
@@ -57,10 +57,10 @@ class ImageFileServiceTest {
         Mockito.when(imageRepository.findById(image.getId())).thenReturn(Optional.of(image));
         Mockito.when(imageFileRepository.findInFileSystem(PATH_TO_FILE)).thenReturn(resource);
 
-        // when
+        // When
         FileSystemResource fileSystemResource = imageFileService.find(image.getId());
 
-        // then
+        // Then
         assertArrayEquals(
             fileSystemResource.getInputStream().readAllBytes(),
             resource.getInputStream().readAllBytes()

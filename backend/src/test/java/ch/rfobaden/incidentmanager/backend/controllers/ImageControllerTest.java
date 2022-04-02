@@ -65,11 +65,11 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToReportTest() throws Exception {
 
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "report")
@@ -81,10 +81,10 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void uploadImageToReportAndFailTest() throws Exception {
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "report")
@@ -97,11 +97,11 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToTaskTest() throws Exception {
 
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(taskService.find(image.getId())).thenReturn(Optional.of(new Task()));
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "task")
@@ -113,10 +113,10 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void uploadImageToTaskAndFailTest() throws Exception {
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "task")
@@ -128,11 +128,11 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void uploadImageToSubtaskTest() throws Exception {
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(subtaskService.find(image.getId())).thenReturn(Optional.of(new Subtask()));
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "subtask")
@@ -144,10 +144,10 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void uploadImageToSubtaskAndFailTest() throws Exception {
-        // when
+        // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file)
                 .param("modelName", "subtask")
@@ -159,7 +159,7 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void uploadImageAndFail() throws Exception {
-        // given
+        // Given
         String errorMessage = "Server error";
         MockMultipartFile file2 = new MockMultipartFile("file", FILENAME, "multipart/form-data", bytes) {
             @Override
@@ -168,7 +168,7 @@ class ImageControllerTest extends AppControllerTest {
             }
         };
 
-        // then
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
                 .file(file2)
                 .param("modelName", "subtask")
@@ -181,18 +181,18 @@ class ImageControllerTest extends AppControllerTest {
     @WithMockAgent
     @Test
     void downloadImageTest() throws Exception {
-        // given
+        // Given
         Long id = 1L;
         var mockRequest = MockMvcRequestBuilders.get("/api/v1/file-system/image")
             .param("id", id.toString())
             .accept(MediaType.IMAGE_JPEG_VALUE);
 
-        // when
+        // When
         FileSystemResource resource =
             new FileSystemResource(Paths.get("src/test/resources/testImage/fish.jpeg"));
         Mockito.when(imageFileService.find(id)).thenReturn(resource);
 
-        // then
+        // Then
         mockMvc.perform(mockRequest)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
