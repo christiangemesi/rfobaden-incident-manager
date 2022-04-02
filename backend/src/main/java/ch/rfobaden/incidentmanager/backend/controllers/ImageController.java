@@ -69,7 +69,7 @@ public class ImageController extends AppController {
                 saveImageToSubtask(id, image);
                 break;
             default:
-                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "ModelName not found");
+                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "modelName not found");
         }
         return image.getId();
     }
@@ -81,7 +81,7 @@ public class ImageController extends AppController {
 
     private void saveImageToReport(Long id, Image image) {
         Report report = reportService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "Report not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "report not found")
         );
         report.addImage(image);
         reportService.update(report);
@@ -89,7 +89,7 @@ public class ImageController extends AppController {
 
     private void saveImageToTask(Long id, Image image) {
         Task task = taskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "Task not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "task not found")
         );
         task.addImage(image);
         taskService.update(task);
@@ -97,7 +97,7 @@ public class ImageController extends AppController {
 
     private void saveImageToSubtask(Long id, Image image) {
         Subtask subtask = subtaskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "Subtask not found")
+            () -> new ApiException(HttpStatus.NOT_FOUND, "subtask not found")
         );
         subtask.addImage(image);
         subtaskService.update(subtask);
