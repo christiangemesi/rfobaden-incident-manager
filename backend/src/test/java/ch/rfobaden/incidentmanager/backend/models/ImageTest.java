@@ -8,17 +8,13 @@ import org.junit.jupiter.api.Test;
 
 class ImageTest {
 
-    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
-
     @Test
     void equalsTest() {
         // Given
         Long id = 42L;
         Image image1 = new Image("fish");
-        image1.setLocation(PATH_TO_FILE);
         image1.setId(id);
         Image image2 = new Image("fish");
-        image2.setLocation(PATH_TO_FILE);
         image2.setId(id);
         
         // Then
@@ -30,10 +26,8 @@ class ImageTest {
     void notEqualsTest() {
         // Given
         Image image1 = new Image("fish");
-        image1.setLocation(PATH_TO_FILE);
         image1.setId(42L);
         Image image2 = new Image("fish");
-        image2.setLocation(PATH_TO_FILE);
         image2.setId(43L);
 
         // Then
@@ -44,7 +38,6 @@ class ImageTest {
     void notSameClassTest() {
         // Given
         Image image1 = new Image("fish");
-        image1.setLocation(PATH_TO_FILE);
         image1.setId(42L);
         Object o = new Object();
 

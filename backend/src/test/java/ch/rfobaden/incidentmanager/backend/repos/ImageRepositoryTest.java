@@ -10,9 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 class ImageRepositoryTest {
 
-    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
-
-
     @Autowired
     ImageRepository imageRepository;
 
@@ -20,7 +17,6 @@ class ImageRepositoryTest {
     void findByIdTest() {
         // Given
         Image image = new Image("fish");
-        image.setLocation(PATH_TO_FILE);
 
         // When
         Image img = imageRepository.save(image);
@@ -37,9 +33,6 @@ class ImageRepositoryTest {
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");
         Image image3 = new Image("fish");
-        image1.setLocation(PATH_TO_FILE);
-        image2.setLocation(PATH_TO_FILE);
-        image3.setLocation(PATH_TO_FILE);
 
         // When
         imageRepository.save(image1);
@@ -56,9 +49,6 @@ class ImageRepositoryTest {
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");
         Image image3 = new Image("fish");
-        image1.setLocation(PATH_TO_FILE);
-        image2.setLocation(PATH_TO_FILE);
-        image3.setLocation(PATH_TO_FILE);
 
         // When
         imageRepository.save(image1);
@@ -69,6 +59,5 @@ class ImageRepositoryTest {
         assertEquals(3, imageRepository.findAll().size());
         imageRepository.delete(toDelete);
         assertEquals(2, imageRepository.findAll().size());
-
     }
 }

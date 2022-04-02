@@ -51,11 +51,10 @@ class ImageFileServiceTest {
         String imageName = "name";
         Image image = new Image(imageName);
         image.setId(42L);
-        image.setLocation(PATH_TO_FILE);
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
         Mockito.when(imageRepository.findById(image.getId())).thenReturn(Optional.of(image));
-        Mockito.when(imageFileRepository.findInFileSystem(PATH_TO_FILE)).thenReturn(resource);
+        Mockito.when(imageFileRepository.findInFileSystem(image.getId())).thenReturn(resource);
 
         // When
         FileSystemResource fileSystemResource = imageFileService.find(image.getId());

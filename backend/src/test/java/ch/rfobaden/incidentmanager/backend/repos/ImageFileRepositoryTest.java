@@ -1,60 +1,72 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import static ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository.RESOURCES_DIR;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
 class ImageFileRepositoryTest {
 
-    private final ImageFileRepository imageFileRepository;
+    public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/fish.jpeg";
+    public static final Long IMAGE_ID = -42L;
 
-    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
+    private final ImageFileRepository imageFileRepository;
+    private final Image image;
 
     public ImageFileRepositoryTest() {
-        this.imageFileRepository = new ImageFileRepository();
+        imageFileRepository = new ImageFileRepository();
+        image = new Image("name");
+        image.setId(IMAGE_ID);
     }
 
     @AfterEach
-    private void cleanUp(String fileLocation){
+    private void cleanUp() throws IOException {
+        Files.delete(Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg"));
     }
 
     @Test
     void saveImageTest() throws IOException {
         // Given
         FileSystemResource resourceOut =
-            new FileSystemResource(Paths.get(PATH_TO_FILE));
+            new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
         byte[] bytes = resourceOut.getInputStream().readAllBytes();
+        System.out.println(bytes.length);
 
         // When
-        String location = imageFileRepository.save(bytes, "testfile.jpeg");
-        FileSystemResource resourceIn = new FileSystemResource(Paths.get(location));
+        imageFileRepository.save(bytes, image.getId());
+        FileSystemResource resourceIn = new FileSystemResource(
+            Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg"));
+
         // Then
         assertArrayEquals(
             resourceOut.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()
         );
-// TODO
     }
 
     @Test
     void loadImageTest() throws IOException {
         // Given
-        FileSystemResource resourceOut =
-            new FileSystemResource(Paths.get(PATH_TO_FILE));
+        Path newFile = Paths.get(RESOURCES_DIR  + image.getId() + ".jpeg");
+        FileSystemResource resource =
+            new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
+        Files.write(newFile, resource.getInputStream().readAllBytes());
 
         // When
-        FileSystemResource resourceIn = imageFileRepository.findInFileSystem(PATH_TO_FILE);
+        FileSystemResource resourceIn = imageFileRepository.findInFileSystem(image.getId());
 
         // Then
         assertArrayEquals(
-            resourceOut.getInputStream().readAllBytes(),
+            resource.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()
         );
     }

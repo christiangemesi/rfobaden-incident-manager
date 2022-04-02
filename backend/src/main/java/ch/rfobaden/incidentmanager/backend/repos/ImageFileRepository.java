@@ -12,10 +12,10 @@ import java.nio.file.Paths;
 
 @Repository
 public class ImageFileRepository {
-    public static final String RESOURCES_DIR = "files/images";
+    public static final String RESOURCES_DIR = "files/im-image-";
 
     public void save(byte[] content, Long id) {
-        Path newFile = Paths.get(buildImagePath(id));
+        Path newFile = Paths.get(RESOURCES_DIR  + id + ".jpeg");
 
         try {
             Files.write(newFile, content);
@@ -25,10 +25,6 @@ public class ImageFileRepository {
     }
 
     public FileSystemResource findInFileSystem(Long id) {
-        return new FileSystemResource(Paths.get(buildImagePath(id)));
-    }
-
-    private String buildImagePath(Long id) {
-        return RESOURCES_DIR + "im-image-" + id;
+        return new FileSystemResource(Paths.get(RESOURCES_DIR  + id + ".jpeg"));
     }
 }
