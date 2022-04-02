@@ -18,13 +18,13 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @SpringBootTest
-class FileLocationServiceTest {
+class ImageFileServiceTest {
 
     public static final String IMAGE_NAME = "name";
     public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
 
     @Autowired
-    private FileLocationService fileLocationService;
+    private ImageFileService imageFileService;
 
     @MockBean
     private ImageFileRepository imageFileRepository;
@@ -39,7 +39,7 @@ class FileLocationServiceTest {
         byte[] bytes = "some data".getBytes();
 
         // when
-        Image img = fileLocationService.save(bytes, IMAGE_NAME);
+        Image img = imageFileService.save(bytes, IMAGE_NAME);
 
         // then
         assertEquals(IMAGE_NAME, img.getName());
@@ -58,7 +58,7 @@ class FileLocationServiceTest {
         Mockito.when(imageFileRepository.findInFileSystem(PATH_TO_FILE)).thenReturn(resource);
 
         // when
-        FileSystemResource fileSystemResource = fileLocationService.find(image.getId());
+        FileSystemResource fileSystemResource = imageFileService.find(image.getId());
 
         // then
         assertArrayEquals(

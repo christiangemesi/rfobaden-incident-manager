@@ -11,7 +11,7 @@ import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.services.FileLocationService;
+import ch.rfobaden.incidentmanager.backend.services.ImageFileService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
@@ -47,7 +47,7 @@ class ImageControllerTest extends AppControllerTest {
     private SubtaskService subtaskService;
 
     @MockBean
-    private FileLocationService fileLocationService;
+    private ImageFileService imageFileService;
 
     private static final String FILENAME = "filename.jpg";
     private final Image image;
@@ -66,7 +66,7 @@ class ImageControllerTest extends AppControllerTest {
     void uploadImageToReportTest() throws Exception {
 
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
 
         // then
@@ -82,7 +82,7 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToReportAndFailTest() throws Exception {
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
@@ -98,7 +98,7 @@ class ImageControllerTest extends AppControllerTest {
     void uploadImageToTaskTest() throws Exception {
 
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(taskService.find(image.getId())).thenReturn(Optional.of(new Task()));
 
         // then
@@ -114,7 +114,7 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToTaskAndFailTest() throws Exception {
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
@@ -129,7 +129,7 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToSubtaskTest() throws Exception {
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(subtaskService.find(image.getId())).thenReturn(Optional.of(new Subtask()));
 
         // then
@@ -145,7 +145,7 @@ class ImageControllerTest extends AppControllerTest {
     @Test
     void uploadImageToSubtaskAndFailTest() throws Exception {
         // when
-        Mockito.when(fileLocationService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
@@ -190,7 +190,7 @@ class ImageControllerTest extends AppControllerTest {
         // when
         FileSystemResource resource =
             new FileSystemResource(Paths.get("src/test/resources/testImage/fish.jpeg"));
-        Mockito.when(fileLocationService.find(id)).thenReturn(resource);
+        Mockito.when(imageFileService.find(id)).thenReturn(resource);
 
         // then
         mockMvc.perform(mockRequest)

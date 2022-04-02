@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class FileLocationService {
+public class ImageFileService {
 
     private final ImageFileRepository imageFileRepository;
     private final ImageRepository imageRepository;
 
-    public FileLocationService(
+    public ImageFileService(
         ImageFileRepository imageFileRepository,
         ImageRepository imageRepository
     ) {

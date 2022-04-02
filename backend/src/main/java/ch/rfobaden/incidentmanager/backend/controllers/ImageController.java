@@ -7,7 +7,7 @@ import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.services.FileLocationService;
+import ch.rfobaden.incidentmanager.backend.services.ImageFileService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
@@ -27,18 +27,18 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "api/v1/file-system")
 public class ImageController extends AppController {
-    private final FileLocationService fileLocationService;
+    private final ImageFileService imageFileService;
     private final ReportService reportService;
     private final TaskService taskService;
     private final SubtaskService subtaskService;
 
     public ImageController(
-        FileLocationService fileLocationService,
+        ImageFileService imageFileService,
         ReportService reportService,
         TaskService taskService,
         SubtaskService subtaskService
     ) {
-        this.fileLocationService = fileLocationService;
+        this.imageFileService = imageFileService;
         this.reportService = reportService;
         this.taskService = taskService;
         this.subtaskService = subtaskService;
@@ -56,7 +56,7 @@ public class ImageController extends AppController {
         } catch (IOException e) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        Image image = fileLocationService.save(bytes, file.getOriginalFilename());
+        Image image = imageFileService.save(bytes, file.getOriginalFilename());
 
         switch (modelName.toLowerCase()) {
             case "report":
@@ -76,7 +76,7 @@ public class ImageController extends AppController {
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public FileSystemResource downloadImage(@RequestParam Long id) {
-        return fileLocationService.find(id);
+        return imageFileService.find(id);
     }
 
     private void saveImageToReport(Long id, Image image) {
