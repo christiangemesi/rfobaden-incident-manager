@@ -11,6 +11,7 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -94,4 +95,8 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  
+  ${Themed.media.lg.min} {
+    padding-right: 2rem;
+  }
 `

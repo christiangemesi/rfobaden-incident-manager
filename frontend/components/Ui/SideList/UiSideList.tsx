@@ -91,10 +91,6 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
     ${Themed.media.lg.min} {
       min-width: 35%;
       max-width: 35%;
-      
-      & > ${ReportList} {
-        padding-right: 2rem;
-      }
     }
     ${Themed.media.xxl.min} {
       min-width: 25%;

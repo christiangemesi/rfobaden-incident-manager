@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import Transport from '@/models/Transport'
 import UiList from '@/components/Ui/List/UiList'
 import TransportListItem from '@/components/Transport/List/Item/TransportListItem'
@@ -11,6 +11,7 @@ import TransportForm from '@/components/Transport/Form/TransportForm'
 import Incident from '@/models/Incident'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -69,4 +70,8 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  ${Themed.media.lg.min} {
+    padding-right: 2rem;
+  }
 `
