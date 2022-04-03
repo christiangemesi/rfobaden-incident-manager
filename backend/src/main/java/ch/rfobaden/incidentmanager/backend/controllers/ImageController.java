@@ -76,6 +76,8 @@ public class ImageController extends AppController {
             );
         }
 
+
+        System.out.println("filename is " + fileName.orElseGet(file::getOriginalFilename));
         Supplier<Image> saveImage = () -> (
             imageFileService.save(bytes, fileName.orElseGet(file::getOriginalFilename))
         );

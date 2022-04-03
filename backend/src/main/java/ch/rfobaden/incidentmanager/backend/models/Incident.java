@@ -28,8 +28,8 @@ public class Incident extends Model.Basic
 
     private static final long serialVersionUID = 1L;
 
-    @Size(max = 100)
     @NotBlank
+    @Size(max = 100)
     @Column(nullable = false)
     private String title;
 
