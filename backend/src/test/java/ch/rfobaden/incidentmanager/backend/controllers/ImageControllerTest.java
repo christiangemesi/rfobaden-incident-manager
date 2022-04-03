@@ -96,7 +96,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "report")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("report not found"));
+            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 
     @Test
@@ -127,7 +127,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "report")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("report not found"));
+            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 
     @Test
@@ -159,7 +159,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "task")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("task not found"));
+            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 
     @Test
@@ -190,7 +190,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("subtask not found"));
+            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 
     @Test
@@ -205,7 +205,7 @@ class ImageControllerTest extends AppControllerTest {
                 .param("modelName", "not valid")
                 .param("id", image.getId().toString()))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("model name not found"));
+            .andExpect(jsonPath("$.message").value("unknown model: not valid"));
     }
 
     @Test
