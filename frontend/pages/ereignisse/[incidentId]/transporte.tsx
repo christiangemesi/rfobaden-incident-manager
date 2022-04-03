@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     throw new Error('params is undefined')
   }
 
-  const [incident, incidentError]: BackendResponse<Incident> = await backendService.find(
+  const [incident, incidentError] = await backendService.find<Incident>(
     `incidents/${params.incidentId}`,
   )
   if (incidentError !== null) {
@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     throw incidentError
   }
 
-  const [transports, transportsError]: BackendResponse<Transport> = await backendService.list(
+  const [transports, transportsError] = await backendService.list<Transport>(
     `incidents/${incident.id}/transports`,
   )
   if (transportsError !== null) {

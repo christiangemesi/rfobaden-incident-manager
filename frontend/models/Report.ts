@@ -8,7 +8,6 @@ import Task from '@/models/Task'
 
 
 export default interface Report extends Model {
-  id: number
   title: string
   description: string | null
   notes: string | null

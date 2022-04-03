@@ -14,11 +14,12 @@ import Id from '@/models/base/Id'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
-import UiToggle from '@/components/Ui/Toggle/UiToggle'
 import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { useCurrentUser } from '@/stores/SessionStore'
+import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
 
 interface Props {
   incident: Incident
@@ -28,20 +29,22 @@ interface Props {
 }
 
 const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: handleSave, onClose: handleClose }) => {
+  const currentUser = useCurrentUser()
+
   const form = useForm<ModelData<Transport>>(transport, () => ({
     title: '',
     description: null,
-    priority: Priority.MEDIUM,
     incidentId: incident.id,
-    assigneeId: null,
-    peopleInvolved: null,
+    assigneeId: currentUser.id,
+    priority: Priority.MEDIUM,
+    peopleInvolved: 0,
     driver: null,
+    vehicle: '',
+    trailer: null,
     sourcePlace: null,
     destinationPlace: null,
     startsAt: null,
     endsAt: null,
-    closedTransportIds: [],
-    transportIds: [],
     isClosed: false,
   }))
 
@@ -54,22 +57,35 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      priority: [],
-      incidentId: [],
-      authorId: [],
-      assigneeId: [],
-      peopleInvolved: [
-        validate.notBlank(),
-        // TODO is number
+      sourcePlace: [
+        validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
       ],
-      driver: [],
-      sourcePlace: [],
-      destinationPlace: [],
+      destinationPlace: [
+        validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
+      ],
+      trailer: [
+        validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
+      ],
+      vehicle: [
+        validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
+      ],
+      driver: [
+        validate.notBlank({ allowNull: true }),
+        validate.maxLength(100),
+      ],
+      peopleInvolved: [
+        (value) => value >= 0 || 'muss positiv sein',
+      ],
+      priority: [],
+      isClosed: [],
       startsAt: [],
       endsAt: [],
-      closedTransportIds: [],
-      transportIds: [],
-      isClosed: [],
+      assigneeId: [],
+      incidentId: [],
     })
   })
 
@@ -120,7 +136,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
           )}</UiForm.Field>
 
           <UiForm.Field field={form.peopleInvolved}>{(props) => (
-            <UiTextInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
+            <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.vehicle}>{(props) => (
@@ -150,6 +166,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
           <UiForm.Field field={form.endsAt}>{(props) => (
             <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
           )}</UiForm.Field>
+
           <UiForm.Buttons form={form} />
         </FormContainer>
       </UiForm>

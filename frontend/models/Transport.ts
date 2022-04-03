@@ -6,16 +6,12 @@ import Priority from '@/models/Priority'
 import Id from '@/models/base/Id'
 
 export default interface Transport extends Model {
-  id: number
   title: string
   description: string | null
 
-  incidentId: Id<Incident>
-  assigneeId: Id<User> | null
-
   priority: Priority
 
-  peopleInvolved: string //TODO change to number
+  peopleInvolved: number
   driver: string | null
   vehicle: string | null
   trailer: string | null
@@ -24,12 +20,10 @@ export default interface Transport extends Model {
 
   startsAt: Date | null
   endsAt: Date | null
-
-  createdAt: Date
-  updatedAt: Date
-
-  isDone: boolean
   isClosed: boolean
+
+  incidentId: Id<Incident>
+  assigneeId: Id<User> | null
 }
 
 export const parseTransport = (data: Transport): Transport => ({
