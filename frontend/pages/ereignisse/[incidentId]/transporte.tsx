@@ -9,7 +9,7 @@ import TransportStore, { useTransports } from '@/stores/TransportStore'
 import Transport, { parseTransport } from '@/models/Transport'
 import TransportList from '@/components/Transport/List/TransportList'
 import Incident from '@/models/Incident'
-import { parseIncidentQuery } from '../[...path]'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props {
   data: {
@@ -24,6 +24,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
   })
 
   const transports = useTransports()
+  const incident = useIncident(data.incident)
 
   return (
     <UiContainer>
@@ -44,22 +45,20 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 export default EreignissePage
 
 type Query = {
-    path: string[]
-  }
+  incidentId: string
+}
 
 export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req, params }) => {
   const { user, backendService } = getSessionFromRequest(req)
   if (user === null) {
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
-
-  const query = parseIncidentQuery(params)
-  if (query === null) {
-    return { notFound: true }
+  if (params === undefined) {
+    throw new Error('params is undefined')
   }
 
   const [incident, incidentError]: BackendResponse<Incident> = await backendService.find(
-    `incidents/${query.incidentId}`,
+    `incidents/${params.incidentId}`,
   )
   if (incidentError !== null) {
     if (incidentError.status === 404) {
@@ -68,8 +67,8 @@ export const getServerSideProps: GetServerSideProps<Props, Query> = async ({ req
     throw incidentError
   }
 
-  const [transports, transportsError]: BackendResponse<Transport> = await backendService.find(
-    `incidents/${incident.id}/transports/${query.transportId}`,
+  const [transports, transportsError]: BackendResponse<Transport> = await backendService.list(
+    `incidents/${incident.id}/transports`,
   )
   if (transportsError !== null) {
     throw transportsError
