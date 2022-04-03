@@ -27,7 +27,6 @@ const TransportList: React.VFC<Props> = ({
   style,
   className,
 }) => {
-
   const canListBeSmall = useBreakpoint(() => ({
     xs: false,
     xl: true,
