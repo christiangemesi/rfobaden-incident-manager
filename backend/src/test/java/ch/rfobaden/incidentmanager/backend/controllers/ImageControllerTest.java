@@ -70,7 +70,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "report")
                 .param("id", image.getId().toString()))
@@ -85,7 +85,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "report")
                 .param("id", image.getId().toString()))
@@ -102,7 +102,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(taskService.find(image.getId())).thenReturn(Optional.of(new Task()));
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "task")
                 .param("id", image.getId().toString()))
@@ -117,7 +117,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "task")
                 .param("id", image.getId().toString()))
@@ -133,7 +133,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(subtaskService.find(image.getId())).thenReturn(Optional.of(new Subtask()));
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
@@ -148,7 +148,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
@@ -163,7 +163,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "not valid")
                 .param("id", image.getId().toString()))
@@ -182,7 +182,7 @@ class ImageControllerTest extends AppControllerTest {
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
                 .param("modelName", "report")
                 .param("id", image.getId().toString())
@@ -205,7 +205,7 @@ class ImageControllerTest extends AppControllerTest {
             };
 
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/file-system/image?")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file2)
                 .param("modelName", "subtask")
                 .param("id", image.getId().toString()))
@@ -219,7 +219,7 @@ class ImageControllerTest extends AppControllerTest {
     void downloadImageTest() throws Exception {
         // Given
         Long id = 1L;
-        var mockRequest = MockMvcRequestBuilders.get("/api/v1/file-system/image")
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/images")
             .param("id", id.toString())
             .accept(MediaType.IMAGE_JPEG_VALUE);
 

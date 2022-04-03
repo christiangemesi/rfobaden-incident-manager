@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RequireAgent
 @RestController
-@RequestMapping(path = "api/v1/file-system")
+@RequestMapping(path = "api/v1/images")
 public class ImageController extends AppController {
     private final ImageFileService imageFileService;
     private final ReportService reportService;
@@ -45,7 +45,7 @@ public class ImageController extends AppController {
         this.subtaskService = subtaskService;
     }
 
-    @PostMapping("/image")
+    @PostMapping("/")
     public Long uploadImage(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
@@ -82,7 +82,7 @@ public class ImageController extends AppController {
         return image.getId();
     }
 
-    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/", produces = MediaType.IMAGE_JPEG_VALUE)
     public FileSystemResource downloadImage(@RequestParam Long id) {
         return imageFileService.find(id);
     }
