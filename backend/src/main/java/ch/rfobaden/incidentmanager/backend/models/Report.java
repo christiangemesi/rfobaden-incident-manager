@@ -226,8 +226,6 @@ public class Report extends Model
         return isClosed;
     }
 
-
-
     @JsonIgnore
     public List<Image> getImages() {
         return images;

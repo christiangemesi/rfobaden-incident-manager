@@ -83,21 +83,52 @@ class BackendService {
     return error
   }
 
-  private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
+  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<number>> {
+    const body = new FormData()
+    body.append('file', file)
+    return this.fetchApi({
+      path: resourceName,
+      method: 'post',
+      body,
+      params,
+    })
+  }
+
+  private async fetchApi<T>(options: {
+    path: string,
+    method: string,
+    body?: unknown,
+    params?: Params,
+  }): Promise<BackendResponse<T>> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     }
     if (this.sessionToken !== null) {
       headers['Authorization'] = `Bearer ${this.sessionToken}`
     }
-    const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
+    const url = new URL(`${apiEndpoint}/api/v1/${options.path}`)
+    for (const [key, value] of Object.entries(options.params ?? {})) {
+      url.searchParams.append(key, value)
+    }
+
+    const res = await fetch(url.toString(), {
       method: options.method,
-      body: JSON.stringify(options.body),
+      body: options.body instanceof FormData ? options.body : JSON.stringify(options.body),
       mode: 'cors',
       // Required for sending cross-origin cookies.
       credentials: 'include',
       headers,
     })
+    return await this.handleResponse(res, async () => {
+      if (res.headers.get('content-type') === 'application/json') {
+        const value: T = await res.json()
+        return value
+      }
+      return null as unknown as T
+    })
+  }
+
+  private async handleResponse<T>(res: Response, map: (res: Response) => T | Promise<T>): Promise<BackendResponse<T>> {
     if (res.status < 200 || 299 < res.status) {
       if (res.status >= 400 && res.status <= 499) {
         // Error is caused by the client (us).
@@ -106,14 +137,10 @@ class BackendService {
         const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
-      // TODO error handling
+      // TODO display error to user.
       throw new Error(`backend request failed: ${await res.text()}`)
     }
-    if (res.headers.get('content-type') === 'application/json') {
-      const value: T = await res.json()
-      return [value, null]
-    }
-    return [null as unknown as T, null]
+    return [await map(res), null]
   }
 }
 export default new BackendService()
@@ -157,6 +184,8 @@ export interface ServerSideSession {
   user: User | null
   backendService: BackendService
 }
+
+type Params = Record<string, string>
 
 /**
  * Loads the current session from a request made to the nextjs server.

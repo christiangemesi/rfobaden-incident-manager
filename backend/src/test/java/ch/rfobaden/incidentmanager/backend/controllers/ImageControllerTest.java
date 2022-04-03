@@ -8,10 +8,12 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAdmin;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.models.Image;
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.services.ImageFileService;
+import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
@@ -38,6 +40,9 @@ class ImageControllerTest extends AppControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private IncidentService incidentService;
+
+    @MockBean
     private ReportService reportService;
 
     @MockBean
@@ -61,10 +66,40 @@ class ImageControllerTest extends AppControllerTest {
         image.setId(1L);
     }
 
-    @WithMockAgent
     @Test
-    void uploadImageToReportTest() throws Exception {
+    @WithMockAgent
+    void testUploadImageToIncident() throws Exception {
+        // When
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
+        Mockito.when(incidentService.find(image.getId())).thenReturn(Optional.of(new Incident()));
 
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
+                .file(file)
+                .param("modelName", "incident")
+                .param("id", image.getId().toString()))
+            .andExpect(status().is(200))
+            .andExpect(content().string(image.getId().toString()));
+    }
+
+    @Test
+    @WithMockAgent
+    void testUploadImageToIncidentAndFail() throws Exception {
+        // When
+        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
+                .file(file)
+                .param("modelName", "report")
+                .param("id", image.getId().toString()))
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.message").value("report not found"));
+    }
+
+    @Test
+    @WithMockAgent
+    void uploadImageToReportTest() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
@@ -78,8 +113,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(content().string(image.getId().toString()));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageToReportAndFailTest() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -93,8 +128,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(jsonPath("$.message").value("report not found"));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageToTaskTest() throws Exception {
 
         // When
@@ -110,8 +145,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(content().string(image.getId().toString()));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageToTaskAndFailTest() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -125,8 +160,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(jsonPath("$.message").value("task not found"));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageToSubtaskTest() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -141,8 +176,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(content().string(image.getId().toString()));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageToSubtaskAndFailTest() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -156,8 +191,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(jsonPath("$.message").value("subtask not found"));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageWithNoValidModelName() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -171,8 +206,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(jsonPath("$.message").value("model name not found"));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageWithCustomFileNameTest() throws Exception {
         // Given
         String name = "123abcABC#";
@@ -191,8 +226,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(content().string(image.getId().toString()));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void uploadImageAndFail() throws Exception {
         // Given
         String errorMessage = "Server error";
@@ -214,8 +249,8 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(jsonPath("$.message").value(errorMessage));
     }
 
-    @WithMockAgent
     @Test
+    @WithMockAgent
     void downloadImageTest() throws Exception {
         // Given
         Long id = 1L;
