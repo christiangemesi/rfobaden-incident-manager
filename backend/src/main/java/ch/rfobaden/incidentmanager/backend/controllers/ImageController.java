@@ -4,17 +4,20 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Image;
-import ch.rfobaden.incidentmanager.backend.models.Report;
-import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.models.ImageOwner;
+import ch.rfobaden.incidentmanager.backend.models.Model;
+import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.ImageFileService;
+import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,91 +26,88 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Supplier;
+import javax.websocket.server.PathParam;
 
 @RequireAgent
 @RestController
-@RequestMapping(path = "api/v1/file-system")
+@RequestMapping(path = "api/v1/images")
 public class ImageController extends AppController {
     private final ImageFileService imageFileService;
+    private final IncidentService incidentService;
     private final ReportService reportService;
     private final TaskService taskService;
     private final SubtaskService subtaskService;
 
     public ImageController(
         ImageFileService imageFileService,
-        ReportService reportService,
+        IncidentService incidentService, ReportService reportService,
         TaskService taskService,
         SubtaskService subtaskService
     ) {
         this.imageFileService = imageFileService;
+        this.incidentService = incidentService;
         this.reportService = reportService;
         this.taskService = taskService;
         this.subtaskService = subtaskService;
     }
 
-    @PostMapping("/image")
+    @GetMapping(value = "/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public FileSystemResource downloadImage(@PathVariable Long id) {
+        return imageFileService.find(id).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id)
+        ));
+    }
+
+    @PostMapping
     public Long uploadImage(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long id,
-        @RequestParam Optional<String> fileName) {
-
+        @RequestParam Optional<String> fileName
+    ) {
         byte[] bytes;
         try {
             bytes = file.getBytes();
         } catch (IOException e) {
-            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ApiException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "failed to read uploaded file: " + e.getMessage()
+            );
         }
 
-        String name = file.getOriginalFilename();
-        if (fileName.isPresent()) {
-            name = fileName.get();
-        }
-
-        Image image = imageFileService.save(bytes, name);
-
+        Supplier<Image> saveImage = () -> (
+            imageFileService.save(bytes, fileName.orElseGet(file::getOriginalFilename))
+        );
+        Image image;
         switch (modelName.toLowerCase()) {
+            case "incident":
+                image = saveImageToEntity(id, incidentService, saveImage);
+                break;
             case "report":
-                saveImageToReport(id, image);
+                image = saveImageToEntity(id, reportService, saveImage);
                 break;
             case "task":
-                saveImageToTask(id, image);
+                image = saveImageToEntity(id, taskService, saveImage);
                 break;
             case "subtask":
-                saveImageToSubtask(id, image);
+                image = saveImageToEntity(id, subtaskService, saveImage);
                 break;
             default:
-                throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "model name not found");
+                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown model: " + modelName);
         }
         return image.getId();
     }
 
-    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    public FileSystemResource downloadImage(@RequestParam Long id) {
-        return imageFileService.find(id);
-    }
-
-    private void saveImageToReport(Long id, Image image) {
-        Report report = reportService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "report not found")
-        );
-        report.addImage(image);
-        reportService.update(report);
-    }
-
-    private void saveImageToTask(Long id, Image image) {
-        Task task = taskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "task not found")
-        );
-        task.addImage(image);
-        taskService.update(task);
-    }
-
-    private void saveImageToSubtask(Long id, Image image) {
-        Subtask subtask = subtaskService.find(id).orElseThrow(
-            () -> new ApiException(HttpStatus.NOT_FOUND, "subtask not found")
-        );
-        subtask.addImage(image);
-        subtaskService.update(subtask);
+    private <M extends Model & ImageOwner & PathConvertible<?>> Image saveImageToEntity(
+        Long id, ModelService<M, ?> modelService, Supplier<Image> saveImage
+    ) {
+        var entity = modelService.find(id).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
+        )));
+        var image = saveImage.get();
+        entity.addImage(image);
+        modelService.update(entity);
+        return image;
     }
 }

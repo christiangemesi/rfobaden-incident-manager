@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,7 +34,7 @@ class ImageFileServiceTest {
     private ImageRepository imageRepository;
 
     @Test
-    void saveImageTest() {
+    void testSaveImage() {
         // Given
         byte[] bytes = "some data".getBytes();
         Image image = new Image(IMAGE_NAME);
@@ -47,7 +48,7 @@ class ImageFileServiceTest {
     }
 
     @Test
-    void findImageTest() throws IOException {
+    void testFindImage() throws IOException {
         // Given
         String imageName = "name";
         Image image = new Image(imageName);
@@ -58,9 +59,10 @@ class ImageFileServiceTest {
         Mockito.when(imageFileRepository.findInFileSystem(image.getId())).thenReturn(resource);
 
         // When
-        FileSystemResource fileSystemResource = imageFileService.find(image.getId());
+        var fileSystemResource = imageFileService.find(image.getId()).orElse(null);
 
         // Then
+        assertThat(fileSystemResource).isNotNull();
         assertArrayEquals(
             fileSystemResource.getInputStream().readAllBytes(),
             resource.getInputStream().readAllBytes()

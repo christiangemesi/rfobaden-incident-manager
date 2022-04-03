@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The landing page at `/` now contains a dashboard.
 - The incident page at `/ereignisse/{id}` now contains a progress circle.
 - Profile specific actions are now available as a dropdown via the username in the header.
+- Added image upload for incidents, reports, tasks and subtasks. Images are not displayed anywhere yet.
 
 ### Changed
 - Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.

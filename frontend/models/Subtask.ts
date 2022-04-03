@@ -6,21 +6,24 @@ import Incident from '@/models/Incident'
 import { parseDate } from '@/models/Date'
 import Priority from '@/models/Priority'
 import Task from '@/models/Task'
+import { FileId } from '@/models/FileUpload'
 
 export default interface Subtask extends Model {
-    title: string
-    description: string | null
-    priority: Priority
-    isClosed: boolean
+  title: string
+  description: string | null
+  priority: Priority
+  isClosed: boolean
 
-    assigneeId: Id<User> | null
+  assigneeId: Id<User> | null
 
-    startsAt: Date | null
-    endsAt: Date | null
+  startsAt: Date | null
+  endsAt: Date | null
 
-    taskId: Id<Task>
-    reportId: Id<Report>
-    incidentId: Id<Incident>
+  taskId: Id<Task>
+  reportId: Id<Report>
+  incidentId: Id<Incident>
+
+  imageIds: FileId[]
 }
 
 export const parseSubtask = (data: Subtask): Subtask => ({

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "image")
@@ -16,6 +18,8 @@ public class Image {
     @Column(nullable = false, unique = true)
     private Long id;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false)
     private String name;
 

@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "subtask")
 public class Subtask extends Model
-    implements PathConvertible<SubtaskPath>, Trackable, Serializable {
+    implements PathConvertible<SubtaskPath>, Trackable, ImageOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -63,21 +63,14 @@ public class Subtask extends Model
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
+    @Override
     public List<Image> getImages() {
         return images;
     }
 
-    @JsonIgnore
+    @Override
     public void setImages(List<Image> images) {
         this.images = images;
-    }
-
-    public List<Long> getImageIds() {
-        return getImages().stream().map(Image::getId).collect(Collectors.toList());
-    }
-
-    public boolean addImage(Image image) {
-        return images.add(image);
     }
 
     @JsonIgnore

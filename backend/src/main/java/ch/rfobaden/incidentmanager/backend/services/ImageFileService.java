@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class ImageFileService {
 
@@ -28,9 +30,9 @@ public class ImageFileService {
         return image;
     }
 
-    public FileSystemResource find(Long imageId) {
-        Image image = imageRepository.findById(imageId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return imageFileRepository.findInFileSystem(image.getId());
+    public Optional<FileSystemResource> find(Long imageId) {
+        return imageRepository.findById(imageId).map((image) -> (
+            imageFileRepository.findInFileSystem(image.getId())
+        ));
     }
 }

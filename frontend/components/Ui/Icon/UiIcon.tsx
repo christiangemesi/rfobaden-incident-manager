@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import {
-  mdiAccount,
   mdiAccountCircle,
   mdiAccountMultiple,
   mdiAlertCircleOutline,
@@ -36,6 +35,7 @@ import {
   mdiPrinter,
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
+  mdiUpload,
 } from '@mdi/js'
 
 
@@ -146,4 +146,5 @@ export default Object.assign(StyledUiIcon, {
   SortAsc: makeNamedIcon(mdiSortAlphabeticalAscending),
   SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
   ResetPassword: makeNamedIcon(mdiLockReset),
+  Upload: makeNamedIcon(mdiUpload),
 })

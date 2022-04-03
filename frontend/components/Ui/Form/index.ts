@@ -33,7 +33,7 @@ interface UpdatablePart {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type UiFormValue = boolean | string | number | bigint | any[] | Date
+export type UiFormValue = boolean | string | number | bigint | any[] | Date | File
 
 export function useForm<T>(values: () => T): UiFormState<T>
 export function useForm<T>(base: T | null, values: () => T): UiFormState<T>
@@ -233,7 +233,7 @@ export const isFormFieldState = <T, K extends keyof T>(field: UiFormStateField<T
 
 const isFormValue = (value: unknown): value is UiFormValue => {
   const isPrimitive = value == null || typeof value !== 'object' && typeof value !== 'function'
-  return isPrimitive || value instanceof Date || Array.isArray(value)
+  return isPrimitive || value instanceof Date || value instanceof File || Array.isArray(value)
 }
 
 
