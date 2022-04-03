@@ -251,7 +251,9 @@ class ImageControllerTest extends AppControllerTest {
         mockMvc.perform(request)
             .andExpect(status().isInternalServerError())
             .andExpect(jsonPath("$").exists())
-            .andExpect(jsonPath("$.message").value("failed to read uploaded file: " + errorMessage));
+            .andExpect(jsonPath("$.message").value(
+                "failed to read uploaded file: " + errorMessage)
+            );
     }
 
     @Test
