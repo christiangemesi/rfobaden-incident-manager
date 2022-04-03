@@ -99,7 +99,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToReportTest() throws Exception {
+    void testUploadImageToReport() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(reportService.find(image.getId())).thenReturn(Optional.of(new Report()));
@@ -115,7 +115,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToReportAndFailTest() throws Exception {
+    void testUploadImageToReportAndFail() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
@@ -130,7 +130,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToTaskTest() throws Exception {
+    void testUploadImageToTask() throws Exception {
 
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -147,7 +147,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToTaskAndFailTest() throws Exception {
+    void testUploadImageToTaskAndFail() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
@@ -162,7 +162,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToSubtaskTest() throws Exception {
+    void testUploadImageToSubtask() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
         Mockito.when(subtaskService.find(image.getId())).thenReturn(Optional.of(new Subtask()));
@@ -178,7 +178,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageToSubtaskAndFailTest() throws Exception {
+    void testUploadImageToSubtaskAndFail() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
@@ -193,7 +193,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageWithNoValidModelName() throws Exception {
+    void testUploadImageWithNoValidModelName() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
@@ -208,7 +208,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageWithCustomFileNameTest() throws Exception {
+    void testUploadImageWithCustomFileName() throws Exception {
         // Given
         String name = "123abcABC#";
 
@@ -228,7 +228,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void uploadImageAndFail() throws Exception {
+    void testUploadImageAndFail() throws Exception {
         // Given
         String errorMessage = "Server error";
         MockMultipartFile file2 =
@@ -251,7 +251,7 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void downloadImageTest() throws Exception {
+    void testDownloadImage() throws Exception {
         // Given
         Long id = 1L;
         var mockRequest = MockMvcRequestBuilders.get("/api/v1/images")

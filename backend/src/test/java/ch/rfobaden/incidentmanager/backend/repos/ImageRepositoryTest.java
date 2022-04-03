@@ -14,7 +14,7 @@ class ImageRepositoryTest {
     ImageRepository imageRepository;
 
     @Test
-    void findByIdTest() {
+    void testFindById() {
         // Given
         Image image = new Image("fish");
 
@@ -28,7 +28,7 @@ class ImageRepositoryTest {
     }
 
     @Test
-    void findAllTest() {
+    void testFindAll() {
         // Given
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");
@@ -44,7 +44,7 @@ class ImageRepositoryTest {
     }
 
     @Test
-    void deleteImageTest() {
+    void testDeleteImage() {
         // Given
         Image image1 = new Image("fish");
         Image image2 = new Image("fish");

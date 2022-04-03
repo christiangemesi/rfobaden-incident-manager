@@ -33,7 +33,7 @@ class ImageFileServiceTest {
     private ImageRepository imageRepository;
 
     @Test
-    void saveImageTest() {
+    void testSaveImage() {
         // Given
         byte[] bytes = "some data".getBytes();
         Image image = new Image(IMAGE_NAME);
@@ -47,7 +47,7 @@ class ImageFileServiceTest {
     }
 
     @Test
-    void findImageTest() throws IOException {
+    void testFindImage() throws IOException {
         // Given
         String imageName = "name";
         Image image = new Image(imageName);

@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.IOException;
@@ -35,7 +33,7 @@ class ImageFileRepositoryTest {
     }
 
     @Test
-    void saveImageTest() throws IOException {
+    void testSaveImage() throws IOException {
         // Given
         FileSystemResource resourceOut =
             new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
@@ -54,7 +52,7 @@ class ImageFileRepositoryTest {
     }
 
     @Test
-    void loadImageTest() throws IOException {
+    void testLoadImage() throws IOException {
         // Given
         Path newFile = Paths.get(RESOURCES_DIR + image.getId() + ".jpeg");
         FileSystemResource resource =
