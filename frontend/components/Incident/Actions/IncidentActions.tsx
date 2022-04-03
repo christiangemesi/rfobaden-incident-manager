@@ -10,6 +10,10 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
+import FileUploadForm from '@/components/FileUpload/FileUploadForm'
+import { FileId } from '@/models/FileUpload'
+import ReportStore from '@/stores/ReportStore'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -57,7 +61,11 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
       IncidentStore.remove(incident.id)
     }
   }, [handleDeleteCb, incident])
-  
+
+  const addImageId = useCallback((fileId: FileId) => {
+    IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
+  }, [incident])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -90,6 +98,23 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
             </UiDropDown.Item>
           )
         )}
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bild hinzufügen
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Bild hinzufügen
+              </UiTitle>
+              <FileUploadForm modelId={incident.id} modelName="incident" onSave={addImageId} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+
         {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
         )}

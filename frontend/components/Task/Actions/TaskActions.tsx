@@ -9,6 +9,9 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
+import FileUploadForm from '@/components/FileUpload/FileUploadForm'
+import { FileId } from '@/models/FileUpload'
+import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   report: Report
@@ -57,6 +60,10 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
     }
   }, [task])
 
+  const addImageId = useCallback((fileId: FileId) => {
+    TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
+  }, [task])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -91,6 +98,24 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
             </UiDropDown.Item>
           )
         )}
+
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bild hinzufügen
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Bild hinzufügen
+              </UiTitle>
+              <FileUploadForm modelId={task.id} modelName="task" onSave={addImageId} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
         </UiDropDown.Item>

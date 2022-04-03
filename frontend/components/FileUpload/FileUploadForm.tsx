@@ -11,9 +11,6 @@ import Id from '@/models/base/Id'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import { SessionResponse } from '@/models/Session'
-import SessionStore from '@/stores/SessionStore'
-import { parseUser } from '@/models/User'
 
 interface Props {
   modelId: Id<Incident | Report | Task>
