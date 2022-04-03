@@ -19,7 +19,7 @@ rfo:
     secret: ${RFO_JWT_SECRET}
   frontend:
     host: ${RFO_FRONTEND_HOST}
-  mail:
+  email:
     host: lx52.hoststar.hosting
     port: 465
     username: im@rfo-baden.ch
