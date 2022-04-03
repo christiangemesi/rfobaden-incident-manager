@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic
-    implements Describable, Closeable, DateTimeBounded, Serializable {
+    implements Describable, Closeable, DateTimeBounded, ImageOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -140,23 +140,14 @@ public class Incident extends Model.Basic
         this.endsAt = endsAt;
     }
 
-
-    @JsonIgnore
+    @Override
     public List<Image> getImages() {
         return images;
     }
 
-    @JsonIgnore
+    @Override
     public void setImages(List<Image> images) {
         this.images = images;
-    }
-
-    public List<Long> getImageIds() {
-        return getImages().stream().map(Image::getId).collect(Collectors.toList());
-    }
-
-    public boolean addImage(Image image) {
-        return images.add(image);
     }
 
     @Override

@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "report")
 public class Report extends Model
-    implements PathConvertible<ReportPath>, Trackable, Serializable {
+    implements PathConvertible<ReportPath>, Trackable, ImageOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -226,22 +226,14 @@ public class Report extends Model
         return isClosed;
     }
 
-    @JsonIgnore
+    @Override
     public List<Image> getImages() {
         return images;
     }
 
-    @JsonIgnore
+    @Override
     public void setImages(List<Image> images) {
         this.images = images;
-    }
-
-    public List<Long> getImageIds() {
-        return getImages().stream().map(Image::getId).collect(Collectors.toList());
-    }
-
-    public boolean addImage(Image image) {
-        return images.add(image);
     }
 
     @JsonIgnore
