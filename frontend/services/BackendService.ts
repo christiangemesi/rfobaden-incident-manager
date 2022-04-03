@@ -5,6 +5,8 @@ import { IncomingMessage } from 'http'
 import { SessionResponse } from '@/models/Session'
 import User, { parseUser } from '@/models/User'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
+import FormData from 'form-data'
+import { FileId } from '@/models/FileUpload'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -83,7 +85,7 @@ class BackendService {
     return error
   }
 
-  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<number>> {
+  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<FileId>> {
     const body = new FormData()
     body.append('file', file)
     return this.fetchApi({
@@ -100,12 +102,17 @@ class BackendService {
     body?: unknown,
     params?: Params,
   }): Promise<BackendResponse<T>> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    }
+    const headers: Record<string, string> = {}
     if (this.sessionToken !== null) {
       headers['Authorization'] = `Bearer ${this.sessionToken}`
     }
+
+    let body = options?.body
+    if (!(body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json'
+      body = JSON.stringify(body)
+    }
+
     const url = new URL(`${apiEndpoint}/api/v1/${options.path}`)
     for (const [key, value] of Object.entries(options.params ?? {})) {
       url.searchParams.append(key, value)
@@ -113,7 +120,7 @@ class BackendService {
 
     const res = await fetch(url.toString(), {
       method: options.method,
-      body: options.body instanceof FormData ? options.body : JSON.stringify(options.body),
+      body: body as BodyInit,
       mode: 'cors',
       // Required for sending cross-origin cookies.
       credentials: 'include',
