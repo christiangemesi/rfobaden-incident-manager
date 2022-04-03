@@ -127,14 +127,6 @@ const ImageContainer = styled.div`
     }
   }
 `
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const NavBar = styled.ul`
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  margin-left: 2rem;
-  list-style: none;
-`
 const ButtonList = styled.div<{ isNarrow?: boolean }>`
   display: flex;
   gap: ${({ isNarrow }) => isNarrow ? '0.75rem' : '2rem'};
