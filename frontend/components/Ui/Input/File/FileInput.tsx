@@ -77,6 +77,7 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
   outline: 2px dashed #92b0b3;
   outline-offset: -10px;
   transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  cursor: pointer;
 
   & > input {
     display: none;

@@ -11,7 +11,6 @@ import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
 import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
-import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   task: Task

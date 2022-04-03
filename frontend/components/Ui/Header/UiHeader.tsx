@@ -127,6 +127,7 @@ const ImageContainer = styled.div`
     }
   }
 `
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NavBar = styled.ul`
   display: flex;
   gap: 2rem;

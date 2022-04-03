@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import {
-  mdiAccount,
   mdiAccountCircle,
   mdiAccountMultiple,
   mdiAlertCircleOutline,

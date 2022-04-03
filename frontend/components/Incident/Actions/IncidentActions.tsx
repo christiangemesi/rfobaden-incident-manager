@@ -12,8 +12,6 @@ import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
 import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
-import ReportStore from '@/stores/ReportStore'
-import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident

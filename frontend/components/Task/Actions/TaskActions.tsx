@@ -11,7 +11,6 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
 import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
-import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   report: Report
