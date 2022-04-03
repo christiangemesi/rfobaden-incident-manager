@@ -20,7 +20,6 @@ const FileInput: React.VFC<Props> = ({
     const file = e.target.files?.[0]
     if (file != undefined) {
       setValue(file)
-      console.log('Uploaded :' + file.name)
     }
   }, [setValue])
 
@@ -30,7 +29,6 @@ const FileInput: React.VFC<Props> = ({
     const file = e.dataTransfer?.files?.[0]
     if (file != undefined) {
       setValue(file)
-      console.log('Uploaded :' + file.name)
     }
   }, [setValue])
 
@@ -70,7 +68,6 @@ export default FileInput
 
 const StyledLabel = styled.label<{ isDropReady: boolean }>`
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
 
   display: flex;
   align-items: center;
@@ -79,7 +76,6 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
 
   outline: 2px dashed #92b0b3;
   outline-offset: -10px;
-  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
   transition: outline-offset .15s ease-in-out, background-color .15s linear;
 
   & > input {
@@ -87,7 +83,6 @@ const StyledLabel = styled.label<{ isDropReady: boolean }>`
   }
 
   ${({ isDropReady }) => isDropReady && css`
-    background-color: white;
     outline-offset: -20px;
   `}
 `
