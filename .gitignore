@@ -163,3 +163,4 @@ Temporary Items
 
 # Typescript build info file.
 frontend/tsconfig.tsbuildinfo
+/files/

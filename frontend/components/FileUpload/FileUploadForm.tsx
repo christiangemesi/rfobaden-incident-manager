@@ -1,4 +1,4 @@
-import Incident, {} from '@/models/Incident'
+import Incident from '@/models/Incident'
 import FileUpload, { FileId } from '@/models/FileUpload'
 import { clearForm, setFormField, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import React, { useEffect } from 'react'
@@ -10,11 +10,11 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import Id from '@/models/base/Id'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService from '@/services/BackendService'
 
 interface Props {
   modelId: Id<Incident | Report | Task>
-  modelName: 'incident' | 'report' | 'task'
+  modelName: 'incident' | 'report' | 'task' | 'subtask'
   onClose?: () => void
   onSave: (fileId: FileId) => void
 }
@@ -26,23 +26,30 @@ const FileUploadForm: React.VFC<Props> = ({
   onSave: handleSave,
 }) => {
   const form = useForm<FileUpload>(() => ({
-    title: '',
-    file: null,
+    name: '',
+    file: null as unknown as File,
   }))
 
   useValidate(form, (validate) => ({
-    title: [
+    name: [
       validate.notBlank(),
       validate.match(/^[A-Za-z0-9_\-.]+$/, { message: 'ist kein gültiger Dateiname' }),
       (value) => !/^\.+$/.test(value) || 'ist kein gültiger Dateiname',
     ],
     file: [
       validate.notNull(),
+
+      // Maximum upload size is 10MB.
+      (value) => value === null || value.size < 10_000_000 || 'ist zu gross',
     ],
   }))
 
-  useSubmit(form, async (fileUpload: FileUpload) => {
-    const [fileId, error] = await BackendService.create<FileUpload, FileId>('images', fileUpload)
+  useSubmit(form, async ({ file, name }: FileUpload) => {
+    const [fileId, error] = await BackendService.upload('images', file, {
+      id: modelId.toString(),
+      modelName: modelName,
+      name,
+    })
     if (error !== null) {
       throw error
     }
@@ -52,15 +59,15 @@ const FileUploadForm: React.VFC<Props> = ({
     if (handleClose) {
       handleClose()
     }
-  })
+  }, [modelId, modelName])
   useCancel(form, handleClose)
 
   useEffect(() => {
-    if (form.file.value === null || form.title.hasChanged) {
+    if (form.file.value === null || form.name.hasChanged) {
       return
     }
-    setFormField(form.title, { value: form.file.value.name })
-  }, [form.file.value, form.title])
+    setFormField(form.name, { value: form.file.value.name })
+  }, [form.file.value, form.name])
 
   return (
     <UiForm form={form}>
@@ -68,8 +75,8 @@ const FileUploadForm: React.VFC<Props> = ({
         <UiForm.Field field={form.file}>{(props) => (
           <FileInput {...props} accept="image/*" />
         )}</UiForm.Field>
-        <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" />
+        <UiForm.Field field={form.name}>{(props) => (
+          <UiTextInput {...props} label="Name" />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </FormContainer>

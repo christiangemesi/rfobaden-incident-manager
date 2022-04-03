@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -23,12 +24,12 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic
-    implements Describable, Closeable, DateTimeBounded, Serializable {
+    implements Describable, Closeable, DateTimeBounded, ImageOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Size(max = 100)
     @NotBlank
+    @Size(max = 100)
     @Column(nullable = false)
     private String title;
 
@@ -49,6 +50,9 @@ public class Incident extends Model.Basic
 
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
 
     @Override
     public String getTitle() {
@@ -134,6 +138,16 @@ public class Incident extends Model.Basic
     @Override
     public void setEndsAt(LocalDateTime endsAt) {
         this.endsAt = endsAt;
+    }
+
+    @Override
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     @Override
