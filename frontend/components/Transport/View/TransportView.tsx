@@ -11,7 +11,6 @@ import TransportInfo from '@/components/Transport/Info/TransportInfo'
 import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import TransportActions from '@/components/Transport/Actions/TransportActions'
-import { Themed } from '@/theme'
 
 interface Props {
   incident: Incident

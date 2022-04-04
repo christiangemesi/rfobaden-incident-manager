@@ -6,13 +6,10 @@ import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiDescription from '@/components/Ui/Description/UiDescription'
 import styled from 'styled-components'
-import { Themed } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
-import UiContainer from '@/components/Ui/Container/UiContainer'
-import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 
 interface Props extends StyledProps {
   incident: Incident

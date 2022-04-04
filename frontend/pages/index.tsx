@@ -27,7 +27,7 @@ const HomePage: React.VFC<Props> = ({ data }) => {
   const dashboardPanels = useMemo(() => {
     const panels = [
       { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse' },
-      { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer', },
+      { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer' },
       { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen' },
     ]
     if (firstIncident !== null) {

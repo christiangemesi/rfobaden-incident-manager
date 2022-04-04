@@ -1,8 +1,6 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
-import UiLevel from '@/components/Ui/Level/UiLevel'
 import { Themed } from '@/theme'
-import UiContainer from '@/components/Ui/Container/UiContainer'
 import useHeight from '@/utils/hooks/useHeight'
 import { usePreviousDistinct, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
