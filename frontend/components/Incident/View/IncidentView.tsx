@@ -31,10 +31,10 @@ const IncidentView: React.VFC<Props> = ({
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
         <UiGrid justify="space-between" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <UiGrid.Col size="auto">
+          <UiGrid.Col size={{ xs: 0, md: 'auto' }}>
             <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
           </UiGrid.Col>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 10, md: true }}>
             <TitleContainer>
               <IncidentInfo incident={incident} />
               <UiTitle level={1}>
@@ -43,7 +43,7 @@ const IncidentView: React.VFC<Props> = ({
               <UiDescription description={incident.description} />
             </TitleContainer>
           </UiGrid.Col>
-          <UiGrid.Col size="auto">
+          <UiGrid.Col size={{ xs: 2, md: 'auto' }}>
             <IncidentActions incident={incident} onDelete={handleDelete} />
             <UiIcon.Empty style={{ marginLeft: '1rem' }} />
           </UiGrid.Col>

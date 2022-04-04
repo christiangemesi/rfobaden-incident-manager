@@ -27,6 +27,8 @@ const UiTitle: React.VFC<Props> = ({
 export default styled(UiTitle)``
 
 const StyledTitle = styled.div<{ isCentered: boolean }>`
+  word-wrap: break-word;
+  
   ${({ isCentered }) => isCentered && css`
     text-align: center;
   `}
