@@ -11,6 +11,7 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
+import UiContainer from '@/components/Ui/Container/UiContainer'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -47,7 +48,7 @@ const IncidentView: React.VFC<Props> = ({
           </UiGrid.Col>
         </UiGrid>
       </UiLevel.Header>
-      <StyledUiLevelContent>
+      <StyledUiLevelContent noPadding>
         {children}
       </StyledUiLevelContent>
     </UiLevel>
@@ -61,13 +62,4 @@ const ProgressContainer = styled.div`
 
 const StyledUiLevelContent = styled(UiLevel.Content)`
   overflow: hidden;
-  ${Themed.media.lg.min} {
-    display: flex;
-    padding-right: 0;
-  }
-
-  ${Themed.media.md.max} {
-    padding-left: 0;
-    padding-right: 0;
-  }
 `

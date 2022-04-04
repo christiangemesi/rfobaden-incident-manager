@@ -25,6 +25,11 @@ import TransportView from '@/components/Transport/View/TransportView'
 import Id from '@/models/base/Id'
 import Task from '@/models/Task'
 import { run } from '@/utils/control-flow'
+import UiTabs from '@/components/Ui/Tabs/UiTabs'
+import TransportSideView from '@/components/Transport/SideView/TransportSideView'
+import ReportSideView from '@/components/Report/SideView/ReportSideView'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import { Themed } from '@/theme'
 
 interface Props {
   data: {
@@ -50,99 +55,50 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }, [router])
 
   const incident = useIncident(data.incident)
-  const reports = useReportsOfIncident(incident.id)
-  const transports = useTransportsOfIncident(incident.id)
 
-  const [mode, _setMode] = useState<'reports' | 'transports'>(() => {
+  const [mode, setMode] = useState<'reports' | 'transports'>(() => {
     const query = parseIncidentQuery(router.query)
     return query === null || !(query.mode === 'transports' || query.mode === 'transport')
       ? 'reports'
       : 'transports'
   })
 
-  const reportView = useMemo(() => {
-    const query = parseIncidentQuery(router.query)
-    const rerouteToReport = (selected: Report) => {
-      if (query === null) {
-        return
-      }
-      if (query.mode !== 'report' || query.reportId !== selected.id) {
-        router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.id}`, undefined, { shallow: true }).then()
-      }
-    }
-    const rerouteToRoot = () => {
-      if (query === null) {
-        return
-      }
-      if (query.mode !== 'incident') {
-        router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true }).then()
-      }
-    }
-    const initialId = run(() => {
-      const query = parseIncidentQuery(router.query)
-      return query === null || !(query.mode === 'report' || query.mode === 'task')
-        ? null
-        : query.reportId
-    })
-    return (
-      <UiSideList
-        store={ReportStore}
-        initialId={initialId}
-        onSelect={rerouteToReport}
-        onDeselect={rerouteToRoot}
-        renderList={({ selected, select }) => (
-          <ReportList incident={incident} reports={reports} selected={selected} onSelect={select} />
-        )}
-        renderView={({ selected, close }) => (
-          <ReportView incident={incident} report={selected} onClose={close} />
-        )}
-      />
-    )
-  }, [router, incident, reports])
+  const openReports = useCallback(() => {
+    setMode('reports')
+    router.push(`/ereignisse/${incident.id}`, undefined, { shallow: true }).then()
+  }, [incident.id, router])
 
-  const transportView = useMemo(() => {
-    const query = parseIncidentQuery(router.query)
-    const rerouteToTransport = (selected: Transport) => {
-      if (query === null) {
-        return
-      }
-      if (query.mode !== 'report' || query.reportId !== selected.id) {
-        router.push(`/ereignisse/${selected.incidentId}/transporte/${selected.id}`, undefined, { shallow: true }).then()
-      }
-    }
-    const rerouteToTransports = () => {
-      if (query === null) {
-        return
-      }
-      if (query.mode !== 'transports') {
-        router.push(`/ereignisse/${incident.id}/transporte`, undefined, { shallow: true }).then()
-      }
-    }
-    const initialId = run(() => {
-      const query = parseIncidentQuery(router.query)
-      return query === null || query.mode !== 'transport'
-        ? null
-        : query.transportId
-    })
-    return (
-      <UiSideList
-        store={TransportStore}
-        initialId={initialId}
-        onSelect={rerouteToTransport}
-        onDeselect={rerouteToTransports}
-        renderList={({ selected, select }) => (
-          <TransportList incident={incident} transports={transports} selected={selected} onSelect={select} />
-        )}
-        renderView={({ selected, close }) => (
-          <TransportView incident={incident} transport={selected} onClose={close} />
-        )}
-      />
-    )
-  }, [router, incident, transports])
+  const openTransports = useCallback(() => {
+    setMode('transports')
+    router.push(`/ereignisse/${incident.id}/transporte`, undefined, { shallow: true }).then()
+  }, [incident.id, router])
 
   return (
     <StyledIncidentView incident={incident} onDelete={handleDelete}>
-      {mode === 'transports' ? transportView : reportView}
+      <UiContainer>
+        <ContentTabs>
+          <UiTabs.Tab
+            isActive={mode === 'reports'}
+            onClick={openReports}
+          >
+            Meldungen
+          </UiTabs.Tab>
+          <UiTabs.Tab
+            isActive={mode === 'transports'}
+            onClick={openTransports}
+          >
+            Transporte
+          </UiTabs.Tab>
+        </ContentTabs>
+      </UiContainer>
+      <Divider />
+      <TabContent>
+        {mode === 'transports' ? (
+          <TransportSideView incident={incident} />
+        ) : (
+          <ReportSideView incident={incident} />
+        )}
+      </TabContent>
     </StyledIncidentView>
   )
 }
@@ -158,6 +114,32 @@ const StyledIncidentView = styled(IncidentView)`
   }
   & > ${UiLevel.Content} {
     padding-bottom: 4px;
+  }
+`
+
+const ContentTabs = styled(UiTabs)`
+  padding-right: 0;
+  
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  background-color: ${({ theme }) => theme.colors.tertiary.value};
+`
+
+const Divider = styled.div`
+  position: absolute;
+  left: 0;
+  transform: translateY(-1px);
+  background-color: ${({ theme }) => theme.colors.grey.value};
+  width: 100vw;
+  height: 1px;
+  z-index: -1;
+`
+
+const TabContent = styled.div`
+  ${UiContainer.fluidCss};
+  
+  margin-top: 2rem;
+  ${Themed.media.lg.min} {
+    padding-right: 0;
   }
 `
 

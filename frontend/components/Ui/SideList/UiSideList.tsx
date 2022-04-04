@@ -56,29 +56,35 @@ const UiSideList = <T extends Model>({
   }, [selectedId])
 
   return (
-    <React.Fragment>
+    <Container>
       <ListContainer ref={setListRef} $hasSelected={selectedId !== null}>
         {renderList({ selected, select: setSelected })}
       </ListContainer>
       <ListOverlay hasSelected={selected !== null} $listHeight={prevListHeight}>
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
-    </React.Fragment>
+    </Container>
   )
 }
 export default UiSideList
 
+const Container = styled.div`
+  display: flex;
+`
 
 const ListContainer = styled.div<{ $hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
+  ${Themed.media.lg.min} {
+    min-width: 100%;
+  }
   ${Themed.media.md.min} {
     min-width: calc(100% - 4rem);
   }
   
   z-index: 0;
-  ${Themed.media.xl.min} {
+  ${Themed.media.lg.min} {
     z-index: 3;
   }
   
@@ -96,11 +102,8 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
       max-width: 25%;
     }
   `}
-
-
+  
   ${Themed.media.md.max} {
-    ${UiContainer.fluidCss};
-    
     ${({ $hasSelected }) => $hasSelected && css`
       max-height: 0;
     `}
@@ -119,17 +122,12 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform;
 
-  transform: translateX(calc(100% + 4px)); // 4px to hide box shadow
+  transform: translateX(50vw);
   transform-origin: right center;
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
   `}
-
-  ${Themed.media.lg.min} {
-    ${UiLevel.Header}, ${UiLevel.Content} {
-      padding-left: 2rem;
-    }
-  }
+  
   ${Themed.media.xl.min} {
     width: calc(65% + 4rem);
   }
@@ -138,9 +136,11 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
   }
 
   ${Themed.media.md.max} {
+    position: absolute;
+    left: 0;
     width: 100%;
     min-height: ${({ $listHeight }) => $listHeight}px;
-    transform: translateY(calc(100% + 44px));
+    transform: translateY(50vw);
     ${({ hasSelected }) => hasSelected && css`
       transform: translateY(0);
     `}

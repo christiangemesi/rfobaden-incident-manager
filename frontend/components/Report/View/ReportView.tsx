@@ -143,7 +143,7 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-
+  
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};

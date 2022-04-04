@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import Report from '@/models/Report'
 import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiModal from '@/components/Ui/Modal/UiModal'
@@ -44,7 +44,7 @@ const ReportList: React.VFC<Props> = ({
     xl: true,
   }))
   return (
-    <ListContainer style={style} className={className}>
+    <ListContainer hasSelected={selected !== null} style={style} className={className}>
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
           <UiCreateButton onClick={open} title="Meldung erfassen">
@@ -91,12 +91,17 @@ const ReportList: React.VFC<Props> = ({
 }
 export default styled(ReportList)``
 
-const ListContainer = styled.div`
+const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  
-  ${Themed.media.lg.min} {
-    padding-right: 2rem;
-  }
+
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: padding-right;
+  transition-property: padding-right;
+  ${({ hasSelected }) => hasSelected && css`
+    ${Themed.media.lg.min} {
+      padding-right: 2rem;
+    }
+  `}
 `
