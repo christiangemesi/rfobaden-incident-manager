@@ -116,7 +116,13 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
 
 
         <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+          <UiSelectInput
+            {...props}
+            label="Zuweisung"
+            options={userIds}
+            optionName={mapUserIdToName}
+            menuPlacement="top"
+          />
         )}</UiForm.Field>
 
 

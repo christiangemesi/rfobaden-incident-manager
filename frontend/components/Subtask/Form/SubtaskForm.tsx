@@ -99,7 +99,13 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
 
 
         <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+          <UiSelectInput
+            {...props}
+            label="Zuweisung"
+            options={userIds}
+            optionName={mapUserIdToName}
+            menuPlacement="top"
+          />
         )}</UiForm.Field>
 
         <UiGrid gap={0.5}>

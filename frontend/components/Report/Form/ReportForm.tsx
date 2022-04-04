@@ -142,7 +142,13 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
           )}</UiForm.Field>
 
           <UiForm.Field field={form.assigneeId}>{(props) => (
-            <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+            <UiSelectInput
+              {...props}
+              label="Zuweisung"
+              options={userIds}
+              optionName={mapUserIdToName}
+              menuPlacement="top"
+            />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.startsAt}>{(props) => (
