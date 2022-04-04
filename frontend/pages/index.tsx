@@ -7,7 +7,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiLink from '@/components/Ui/Link/UiLink'
 import { GetServerSideProps } from 'next'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
-import Incident, { parseIncident } from '@/models/Incident'
+import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import { useEffectOnce } from 'react-use'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 
@@ -22,7 +22,7 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
-  const firstIncident = useIncidents().find((it) => !it.isClosed && !it.isDone) ?? null
+  const firstIncident = useIncidents().find((it) => !isClosedIncident(it)) ?? null
 
   const dashboardPanels = useMemo(() => {
     const panels = [
