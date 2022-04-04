@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import BackendService from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import styled from 'styled-components'
@@ -44,6 +44,9 @@ const SessionForm: React.VFC = () => {
         return
       }
       throw error
+    }
+    if (data.user == null) {
+      throw new Error('session was succesfuly created, but did not receive user')
     }
     SessionStore.setCurrentUser(parseUser(data.user))
   })

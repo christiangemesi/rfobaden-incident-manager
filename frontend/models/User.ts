@@ -16,10 +16,9 @@ export enum UserRole {
   ADMIN = 'ADMIN',
 }
 
-export const parseUser = (data: unknown): User => {
-  const user = data as User
+export const parseUser = (data: User): User => {
   return {
-    ...user,
+    ...data,
     ...parseModel(data),
   }
 }

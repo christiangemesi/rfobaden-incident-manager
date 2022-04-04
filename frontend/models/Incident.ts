@@ -1,5 +1,5 @@
-import Model from '@/models/base/Model'
-import { parseDate } from '@/models/Date'
+import Model, { parseModel } from '@/models/base/Model'
+import { parseDate } from '@/models/base/Date'
 import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 import Report from '@/models/Report'
 import Transport from '@/models/Transport'
@@ -29,8 +29,7 @@ export default interface Incident extends Model {
 export const parseIncident = (data: Incident): Incident => {
   return {
     ...data,
-    createdAt: parseDate(data.createdAt),
-    updatedAt: parseDate(data.updatedAt),
+    ...parseModel(data),
     startsAt: parseDateOrNull(data.startsAt),
     endsAt: parseDateOrNull(data.endsAt),
     closeReason: data.closeReason && parseCloseReason(data.closeReason),
