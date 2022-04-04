@@ -30,6 +30,8 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     endsAt: null,
     closedReportIds: [],
     reportIds: [],
+    closedTransportIds: [],
+    transportIds: [],
     imageIds: [],
   }))
 
@@ -50,6 +52,8 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     endsAt: [],
     closedReportIds: [],
     reportIds: [],
+    closedTransportIds: [],
+    transportIds: [],
     imageIds: [],
   }))
 

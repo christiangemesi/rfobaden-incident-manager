@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react'
-import Report from '@/models/Report'
+import React from 'react'
+import Transport from '@/models/Transport'
 import UiList from '@/components/Ui/List/UiList'
-import ReportListItem from '@/components/Report/List/Item/ReportListItem'
+import TransportListItem from '@/components/Transport/List/Item/TransportListItem'
 import styled, { css } from 'styled-components'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import ReportForm from '@/components/Report/Form/ReportForm'
+import TransportForm from '@/components/Transport/Form/TransportForm'
 import Incident from '@/models/Incident'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
@@ -15,30 +15,19 @@ import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   incident: Incident
-  reports: readonly Report[]
-  selected?: Report | null,
-  onSelect?: (report: Report) => void
+  transports: readonly Transport[]
+  selected?: Transport | null,
+  onSelect?: (report: Transport) => void
 }
 
-const ReportList: React.VFC<Props> = ({
+const TransportList: React.VFC<Props> = ({
   incident,
-  reports: reports,
+  transports: transports,
   selected = null,
   onSelect: handleSelect,
   style,
   className,
 }) => {
-  const [keyReports, normalReports] = useMemo(() => (
-    reports.reduce(([key, normal], report) => {
-      if (report.isKeyReport) {
-        key.push(report)
-      } else {
-        normal.push(report)
-      }
-      return [key, normal]
-    }, [[] as Report[], [] as Report[]])
-  ), [reports])
-
   const canListBeSmall = useBreakpoint(() => ({
     xs: false,
     xl: true,
@@ -47,7 +36,7 @@ const ReportList: React.VFC<Props> = ({
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
       <UiModal isFull>
         <UiModal.Activator>{({ open }) => (
-          <UiCreateButton onClick={open} title="Meldung erfassen">
+          <UiCreateButton onClick={open} title="Transport erfassen">
             <UiIcon.CreateAction size={1.5} />
           </UiCreateButton>
         )}</UiModal.Activator>
@@ -56,31 +45,17 @@ const ReportList: React.VFC<Props> = ({
             <UiTitle level={1} isCentered>
               Meldung erfassen
             </UiTitle>
-            <ReportForm incident={incident} onSave={handleSelect} onClose={close} />
+            <TransportForm incident={incident} onSave={handleSelect} onClose={close} />
           </React.Fragment>
         )}</UiModal.Body>
       </UiModal>
 
-      {keyReports.length !== 0 && (
-        <UiList>
-          {keyReports.map((report) => (
-            <ReportListItem
-              key={report.id}
-              report={report}
-              isActive={selected?.id === report.id}
-              isSmall={canListBeSmall && selected !== null}
-              onClick={handleSelect}
-            />
-          ))}
-        </UiList>
-      )}
-
       <UiList>
-        {normalReports.map((report) => (
-          <ReportListItem
-            key={report.id}
-            report={report}
-            isActive={selected?.id === report.id}
+        {transports.map((transport) => (
+          <TransportListItem
+            key={transport.id}
+            transport={transport}
+            isActive={selected?.id === transport.id}
             isSmall={canListBeSmall && selected !== null}
             onClick={handleSelect}
           />
@@ -89,7 +64,7 @@ const ReportList: React.VFC<Props> = ({
     </ListContainer>
   )
 }
-export default styled(ReportList)``
+export default styled(TransportList)``
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;

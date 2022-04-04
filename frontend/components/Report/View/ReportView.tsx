@@ -37,9 +37,12 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
-  const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => (
-    parseIncidentQuery(router.query)?.taskId ?? null
-  ))
+  const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => {
+    const query = parseIncidentQuery(router.query)
+    return query === null || query.mode !== 'task'
+      ? null
+      : query.taskId
+  })
 
   const selected = useTask(selectedId)
   const setSelected = useCallback((task: Task | null) => {
@@ -76,12 +79,12 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
       return
     }
     if (selected === null) {
-      if (query.taskId !== null) {
+      if (query.mode !== 'report') {
         await router.push(`/ereignisse/${report.incidentId}/meldungen/${report.id}`, undefined, { shallow: true })
       }
       return
     }
-    if (query.taskId === null || query.taskId !== selected.id) {
+    if (query.mode !== 'task' || query.taskId !== selected.id) {
       await router.push(`/ereignisse/${selected.incidentId}/meldungen/${selected.reportId}/auftraege/${selected.id}`, undefined, { shallow: true })
     }
   }, [report, router, selected])
@@ -140,7 +143,7 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-
+  
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};

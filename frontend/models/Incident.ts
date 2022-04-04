@@ -2,6 +2,7 @@ import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
 import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 import Report from '@/models/Report'
+import Transport from '@/models/Transport'
 import Id from '@/models/base/Id'
 import { FileId } from '@/models/FileUpload'
 
@@ -18,6 +19,9 @@ export default interface Incident extends Model {
 
   closedReportIds: Id<Report>[]
   reportIds: Id<Report>[]
+
+  closedTransportIds: Id<Transport>[]
+  transportIds: Id<Transport>[]
 
   imageIds: FileId[]
 }
@@ -37,12 +41,10 @@ const parseDateOrNull = (date: Date | null): Date | null => {
   return date === null ? null : parseDate(date)
 }
 
-
 export interface ClosedIncident extends Incident {
   closeReason: CloseReason
   isClosed: true
 }
 
-export const isClosedIncident = (incident: Incident): incident is ClosedIncident => (
+export const isClosedIncident = (incident: Incident): incident is ClosedIncident =>
   incident.isClosed && incident.closeReason !== null
-)

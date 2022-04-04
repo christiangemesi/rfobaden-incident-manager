@@ -2,41 +2,31 @@ import Model from '@/models/base/Model'
 import { parseDate } from '@/models/Date'
 import Incident from '@/models/Incident'
 import User from '@/models/User'
-import Id from '@/models/base/Id'
 import Priority from '@/models/Priority'
-import Task from '@/models/Task'
-import { FileId } from '@/models/FileUpload'
+import Id from '@/models/base/Id'
 
-
-export default interface Report extends Model {
+export default interface Transport extends Model {
   title: string
   description: string | null
-  notes: string | null
 
-  location: string | null
   priority: Priority
 
-  incidentId: Id<Incident>
-  assigneeId: Id<User> | null
+  peopleInvolved: number
+  driver: string | null
+  vehicle: string | null
+  trailer: string | null
+  pointOfDeparture: string | null
+  pointOfArrival: string | null
 
   startsAt: Date | null
   endsAt: Date | null
-
-  createdAt: Date
-  updatedAt: Date
-
-  isKeyReport: boolean
-  isLocationRelevantReport: boolean
-
-  closedTaskIds: Id<Task>[]
-  taskIds: Id<Task>[]
-  isDone: boolean
   isClosed: boolean
 
-  imageIds: FileId[]
+  incidentId: Id<Incident>
+  assigneeId: Id<User> | null
 }
 
-export const parseReport = (data: Report): Report => ({
+export const parseTransport = (data: Transport): Transport => ({
   ...data,
   createdAt: parseDate(data.createdAt),
   updatedAt: parseDate(data.updatedAt),

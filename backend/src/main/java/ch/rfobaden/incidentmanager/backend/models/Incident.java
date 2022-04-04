@@ -51,6 +51,9 @@ public class Incident extends Model.Basic
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
+    private List<Transport> transports = new ArrayList<>();
+    
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
@@ -95,6 +98,7 @@ public class Incident extends Model.Basic
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getReports().isEmpty()
+            && getTransports().stream().allMatch(Transport::isClosed)
             && (getReports().stream().allMatch(Report::isClosed)
             || getReports().stream().allMatch(Report::isDone));
     }
@@ -117,6 +121,27 @@ public class Incident extends Model.Basic
         return getReports().stream()
             .filter(r -> r.isClosed() || r.isDone())
             .map(Report::getId)
+            .collect(Collectors.toList());
+    }
+
+    @JsonIgnore
+    public List<Transport> getTransports() {
+        return transports;
+    }
+
+    @JsonIgnore
+    public void setTransports(List<Transport> transports) {
+        this.transports = transports;
+    }
+
+    public List<Long> getTransportIds() {
+        return getTransports().stream().map(Transport::getId).collect(Collectors.toList());
+    }
+
+    public List<Long> getClosedTransportIds() {
+        return getTransports().stream()
+            .filter(Transport::isClosed)
+            .map(Transport::getId)
             .collect(Collectors.toList());
     }
 

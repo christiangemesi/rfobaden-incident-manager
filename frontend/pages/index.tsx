@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -6,9 +6,41 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiLink from '@/components/Ui/Link/UiLink'
 import { GetServerSideProps } from 'next'
-import { getSessionFromRequest } from '@/services/BackendService'
+import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
+import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
+import { useEffectOnce } from 'react-use'
+import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 
-const HomePage: React.VFC = () => {
+interface Props {
+  data: {
+    incidents: Incident[]
+  }
+}
+
+const HomePage: React.VFC<Props> = ({ data }) => {
+  useEffectOnce(() => {
+    IncidentStore.saveAll(data.incidents.map(parseIncident))
+  })
+
+  const firstIncident = useIncidents().find((it) => !isClosedIncident(it)) ?? null
+
+  const dashboardPanels = useMemo(() => {
+    const panels = [
+      { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse' },
+      { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer' },
+      { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen' },
+    ]
+    if (firstIncident !== null) {
+      // Only show transport panel if there is at least one open incident.
+      panels.splice(1, 0, {
+        icon: UiIcon.Transport,
+        label: 'Transporte',
+        link: `/ereignisse/${firstIncident.id}/transporte`,
+      })
+    }
+    return panels
+  }, [firstIncident])
+
   return (
     <UiContainer>
       <UiTitle level={1} isCentered>
@@ -18,7 +50,7 @@ const HomePage: React.VFC = () => {
         Regionales Führungsorgan Baden
       </Subtitle>
       <UiGrid gap={1.5} justify="center">
-        {data.map((card) => (
+        {dashboardPanels.map((card) => (
           <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
             <UiLink href={card.link}>
               <Card>
@@ -33,13 +65,6 @@ const HomePage: React.VFC = () => {
   )
 }
 export default HomePage
-
-const data = [
-  { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse', forAll: true }, 
-  { icon: UiIcon.Transport, label: 'Transporte', link: '/transporte', forAll: true },
-  { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer', forAll: false },
-  { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen', forAll: false },
-]
 
 const Subtitle = styled.div`
   width: 100%;
@@ -75,11 +100,21 @@ const CardTitle = styled(UiTitle)`
 `
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { user } = getSessionFromRequest(req)
+  const { user, backendService } = getSessionFromRequest(req)
   if (user === null) {
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
+
+  const [incidents, incidentsError]: BackendResponse<Incident[]> = await backendService.list('incidents')
+  if (incidentsError !== null) {
+    throw incidentsError
+  }
+
   return {
-    props: {},
+    props: {
+      data: {
+        incidents,
+      },
+    },
   }
 }

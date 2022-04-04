@@ -1,5 +1,5 @@
 import { ElementProps } from '@/utils/helpers/StyleHelper'
-import React, { forwardRef, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import UiLevelHeader from '@/components/Ui/Level/Header/UiLevelHeader'
 import UiLevelContent from '@/components/Ui/Level/Content/UiLevelContent'
@@ -23,11 +23,7 @@ interface Props extends ElementProps<HTMLDivElement> {
  *   </UiLevel.Content>
  * </UiLevel>
  */
-const UiLevel = styled(forwardRef<HTMLDivElement, Props>(function UiLevel({ ...props }, ref) {
-  return (
-    <section {...props} ref={ref} />
-  )
-}))`
+const UiLevel = styled.div<Props>`
   position: relative;
   display: flex;
   flex-direction: column;

@@ -131,7 +131,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 `
 
 const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
-  --header-height: 4rem;
+  --header-height: 5rem;
   --footer-height: 4rem;
 
   ${({ hasHeader }) => !hasHeader && css`
