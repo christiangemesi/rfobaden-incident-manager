@@ -140,7 +140,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     left: 0;
     width: 100%;
     min-height: ${({ $listHeight }) => $listHeight}px;
-    transform: translateY(50vw);
+    transform: translateY(100vw);
     ${({ hasSelected }) => hasSelected && css`
       transform: translateY(0);
     `}
