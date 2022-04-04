@@ -12,6 +12,7 @@ import Incident from '@/models/Incident'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import { Themed } from '@/theme'
+import TrackableList from '@/components/Trackable/List/TrackableList'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -22,46 +23,29 @@ interface Props extends StyledProps {
 
 const TransportList: React.VFC<Props> = ({
   incident,
-  transports: transports,
-  selected = null,
-  onSelect: handleSelect,
-  style,
-  className,
+  transports,
+  ...listProps
 }) => {
-  const canListBeSmall = useBreakpoint(() => ({
-    xs: false,
-    xl: true,
-  }))
   return (
-    <ListContainer hasSelected={selected !== null} style={style} className={className}>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiCreateButton onClick={open} title="Transport erfassen">
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreateButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung erfassen
-            </UiTitle>
-            <TransportForm incident={incident} onSave={handleSelect} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-
-      <UiList>
-        {transports.map((transport) => (
-          <TransportListItem
-            key={transport.id}
-            transport={transport}
-            isActive={selected?.id === transport.id}
-            isSmall={canListBeSmall && selected !== null}
-            onClick={handleSelect}
-          />
-        ))}
-      </UiList>
-    </ListContainer>
+    <TrackableList
+      {...listProps}
+      records={[transports]}
+      renderForm={({ save, close }) => (
+        <React.Fragment>
+          <UiTitle level={1} isCentered>
+            Transport erfassen
+          </UiTitle>
+          <TransportForm incident={incident} onSave={save} onClose={close} />
+        </React.Fragment>
+      )}
+      renderItem={({ record, ...itemProps }) => (
+        <TransportListItem
+          {...itemProps}
+          record={record}
+          isClosed={record.isClosed}
+        />
+      )}
+    />
   )
 }
 export default styled(TransportList)``

@@ -1,17 +1,12 @@
 import React, { useMemo } from 'react'
 import Report from '@/models/Report'
-import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
-import styled, { css } from 'styled-components'
-import useBreakpoint from '@/utils/hooks/useBreakpoints'
+import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
-import { Themed } from '@/theme'
+import TrackableList from '@/components/Trackable/List/TrackableList'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -22,11 +17,8 @@ interface Props extends StyledProps {
 
 const ReportList: React.VFC<Props> = ({
   incident,
-  reports: reports,
-  selected = null,
-  onSelect: handleSelect,
-  style,
-  className,
+  reports,
+  ...listProps
 }) => {
   const [keyReports, normalReports] = useMemo(() => (
     reports.reduce(([key, normal], report) => {
@@ -39,69 +31,26 @@ const ReportList: React.VFC<Props> = ({
     }, [[] as Report[], [] as Report[]])
   ), [reports])
 
-  const canListBeSmall = useBreakpoint(() => ({
-    xs: false,
-    xl: true,
-  }))
   return (
-    <ListContainer hasSelected={selected !== null} style={style} className={className}>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiCreateButton onClick={open} title="Meldung erfassen">
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreateButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung erfassen
-            </UiTitle>
-            <ReportForm incident={incident} onSave={handleSelect} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-
-      {keyReports.length !== 0 && (
-        <UiList>
-          {keyReports.map((report) => (
-            <ReportListItem
-              key={report.id}
-              report={report}
-              isActive={selected?.id === report.id}
-              isSmall={canListBeSmall && selected !== null}
-              onClick={handleSelect}
-            />
-          ))}
-        </UiList>
+    <TrackableList
+      {...listProps}
+      records={[keyReports, normalReports]}
+      renderForm={({ save, close }) => (
+        <React.Fragment>
+          <UiTitle level={1} isCentered>
+            Meldung erfassen
+          </UiTitle>
+          <ReportForm incident={incident} onSave={save} onClose={close} />
+        </React.Fragment>
       )}
-
-      <UiList>
-        {normalReports.map((report) => (
-          <ReportListItem
-            key={report.id}
-            report={report}
-            isActive={selected?.id === report.id}
-            isSmall={canListBeSmall && selected !== null}
-            onClick={handleSelect}
-          />
-        ))}
-      </UiList>
-    </ListContainer>
+      renderItem={({ record, ...itemProps }) => (
+        <ReportListItem
+          {...itemProps}
+          record={record}
+          isClosed={record.isClosed || record.isDone}
+        />
+      )}
+    />
   )
 }
 export default styled(ReportList)``
-
-const ListContainer = styled.div<{ hasSelected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: padding-right;
-  transition-property: padding-right;
-  ${({ hasSelected }) => hasSelected && css`
-    ${Themed.media.lg.min} {
-      padding-right: 2rem;
-    }
-  `}
-`

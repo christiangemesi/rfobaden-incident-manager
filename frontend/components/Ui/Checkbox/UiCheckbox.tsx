@@ -6,13 +6,13 @@ import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 interface Props extends UiInputProps<boolean> {
-  label: string
+  label?: string
   isDisabled?: boolean
   color?: ColorName
 }
 
 const UiCheckbox: React.VFC<Props> = ({
-  label = '',
+  label,
   value,
   isDisabled = false,
   errors = [],

@@ -46,7 +46,7 @@ const SessionForm: React.VFC = () => {
       throw error
     }
     if (data.user == null) {
-      throw new Error('session was succesfuly created, but did not receive user')
+      throw new Error('session was successfully created, but we did not receive user')
     }
     SessionStore.setCurrentUser(parseUser(data.user))
   })
