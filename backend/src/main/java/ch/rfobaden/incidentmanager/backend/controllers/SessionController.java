@@ -98,8 +98,6 @@ public class SessionController extends AppController {
         @NotBlank
         private String password;
 
-        private boolean isPersistent;
-
         public String getEmail() {
             return email;
         }
@@ -114,15 +112,6 @@ public class SessionController extends AppController {
 
         public void setPassword(String password) {
             this.password = password;
-        }
-
-        @JsonProperty("isPersistent")
-        public boolean isPersistent() {
-            return isPersistent;
-        }
-
-        public void setPersistent(boolean persistent) {
-            isPersistent = persistent;
         }
     }
 }

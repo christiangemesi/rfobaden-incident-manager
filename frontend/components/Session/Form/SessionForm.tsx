@@ -31,10 +31,7 @@ const SessionForm: React.VFC = () => {
   }, [router, currentUser])
 
   useSubmit(form, async (formData: LoginData) => {
-    const [data, error]: BackendResponse<SessionResponse> = await BackendService.create('session', {
-      ...formData,
-      isPersistent: true,
-    })
+    const [data, error] = await BackendService.create<LoginData, SessionResponse>('session', formData)
     if (error !== null) {
       if (error.status === 401) {
         setFormField(form.email, {
