@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.models;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,8 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,17 +31,23 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private String title;
     private String description;
 
+    @Min(0)
     private long peopleInvolved;
+    @Size(min=1, max=100)
     private String driver;
 
+    @Size(min=1, max=100)
     private String vehicle;
+    @Size(min=1, max=100)
     private String trailer;
 
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
 
-    private String sourcePlace;
-    private String destinationPlace;
+    @Size(min=1, max=100)
+    private String pointOfDeparture;
+    @Size(min=1, max=100)
+    private String pointOfArrival;
 
     @ManyToOne
     @JoinColumn
@@ -147,20 +152,20 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.endsAt = endsAt;
     }
 
-    public String getSourcePlace() {
-        return sourcePlace;
+    public String getPointOfDeparture() {
+        return pointOfDeparture;
     }
 
-    public void setSourcePlace(String sourcePlace) {
-        this.sourcePlace = sourcePlace;
+    public void setPointOfDeparture(String sourcePlace) {
+        this.pointOfDeparture = sourcePlace;
     }
 
-    public String getDestinationPlace() {
-        return destinationPlace;
+    public String getPointOfArrival() {
+        return pointOfArrival;
     }
 
-    public void setDestinationPlace(String destinationPlace) {
-        this.destinationPlace = destinationPlace;
+    public void setPointOfArrival(String destinationPlace) {
+        this.pointOfArrival = destinationPlace;
     }
 
     public User getAssignee() {
@@ -238,15 +243,15 @@ public final class Transport extends Model implements PathConvertible<TransportP
             && Objects.equals(startsAt, that.startsAt)
             && Objects.equals(endsAt, that.endsAt)
             && Objects.equals(vehicle, that.vehicle)
-            && Objects.equals(destinationPlace, that.destinationPlace)
-            && Objects.equals(sourcePlace, that.sourcePlace)
+            && Objects.equals(pointOfArrival, that.pointOfArrival)
+            && Objects.equals(pointOfDeparture, that.pointOfDeparture)
             && Objects.equals(assignee, that.assignee);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(title, incident, peopleInvolved, description, trailer,
-            startsAt, endsAt, vehicle, destinationPlace, sourcePlace, assignee);
+            startsAt, endsAt, vehicle, pointOfArrival, pointOfDeparture, assignee);
     }
 
     @Override

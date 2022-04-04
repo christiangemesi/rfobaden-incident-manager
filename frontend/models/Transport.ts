@@ -15,8 +15,8 @@ export default interface Transport extends Model {
   driver: string | null
   vehicle: string | null
   trailer: string | null
-  sourcePlace: string | null
-  destinationPlace: string | null
+  pointOfDeparture: string | null
+  pointOfArrival: string | null
 
   startsAt: Date | null
   endsAt: Date | null

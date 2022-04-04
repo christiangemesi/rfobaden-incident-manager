@@ -69,7 +69,7 @@ const TransportView: React.VFC<Props> = ({ incident, transport, onClose: handleC
                 <UiTitle level={6}>Abfahrtsort:</UiTitle>
               </th>
               <td>
-                <span>{transport.sourcePlace ?? '-'}</span>
+                <span>{transport.pointOfDeparture ?? '-'}</span>
               </td>
             </tr>
             <tr>
@@ -77,7 +77,7 @@ const TransportView: React.VFC<Props> = ({ incident, transport, onClose: handleC
                 <UiTitle level={6}>Ankunftsort:</UiTitle>
               </th>
               <td>
-                <span>{transport.destinationPlace ?? '-'}</span>
+                <span>{transport.pointOfArrival ?? '-'}</span>
               </td>
             </tr>
           </tbody>

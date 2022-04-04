@@ -41,8 +41,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     driver: null,
     vehicle: '',
     trailer: null,
-    sourcePlace: null,
-    destinationPlace: null,
+    pointOfDeparture: null,
+    pointOfArrival: null,
     startsAt: null,
     endsAt: null,
     isClosed: false,
@@ -57,11 +57,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      sourcePlace: [
+      pointOfDeparture: [
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      destinationPlace: [
+      pointOfArrival: [
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
@@ -147,11 +147,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.sourcePlace}>{(props) => (
+          <UiForm.Field field={form.pointOfDeparture}>{(props) => (
             <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.destinationPlace}>{(props) => (
+          <UiForm.Field field={form.pointOfArrival}>{(props) => (
             <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
           )}</UiForm.Field>
 

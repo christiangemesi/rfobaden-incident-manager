@@ -26,8 +26,8 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setTrailer(faker.funnyName().name());
         transport.setStartsAt(doMaybe(this::randomDateTime));
         transport.setEndsAt(doMaybe(this::randomDateTime));
-        transport.setDestinationPlace(faker.address().buildingNumber());
-        transport.setSourcePlace(faker.address().buildingNumber());
+        transport.setPointOfArrival(faker.address().buildingNumber());
+        transport.setPointOfDeparture(faker.address().buildingNumber());
         transport.setAssignee(doMaybe(userGenerator::generate));
         transport.setPriority(faker.options().option(Priority.class));
         return transport;
