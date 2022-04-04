@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b6eb2c5d-853b-41a0-9f0d-6f96757cae3c",
+		"_postman_id": "9de74b38-8d49-4426-81e9-f0692241a183",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -841,6 +841,82 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Find Session",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Session",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"agent@rfo.ch\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/session",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"session"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDkwOTUzMjksImV4cCI6MTY1MTY4NzMyOCwic3ViIjoiMyJ9.-9lAyfLfySD3TJYvrN62xFwwmXnxFguoWakvD4xBY_E",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
