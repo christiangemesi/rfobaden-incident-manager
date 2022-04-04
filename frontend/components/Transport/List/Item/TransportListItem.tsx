@@ -53,8 +53,8 @@ const TransportListItem: React.VFC<Props> = ({
         <PrefixDate>
           <UiDateLabel start={transport.startsAt ?? transport.createdAt} end={transport.endsAt} />
         </PrefixDate>
+        <UiCheckbox label="" value={transport.isClosed} onChange={handleChange} />
       </PrefixList>
-      <UiCheckbox label="" value={transport.isClosed} onChange={handleChange} />
       <BridgeClip>
         <Bridge isActive={isActive ?? false} />
       </BridgeClip>

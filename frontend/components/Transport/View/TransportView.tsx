@@ -55,8 +55,53 @@ const TransportView: React.VFC<Props> = ({ incident, transport, onClose: handleC
         </UiGrid>
 
         <UiDescription description={transport.description} />
+
+        <UiGrid align="start" gap={1} size={{ xs: 12, md: 8 }}>
+          <UiGrid>
+            <UiGrid.Col size={4}>
+              <LabeledValue>
+                <UiTitle level={6}>Fahrezeug:</UiTitle>
+                <span>{transport.vehicle}</span>
+              </LabeledValue>
+            </UiGrid.Col>
+            <UiGrid.Col size={4}>
+              <LabeledValue>
+                <UiTitle level={6}>Ahänger:</UiTitle>
+                <span>{transport.trailer}</span>
+              </LabeledValue>
+            </UiGrid.Col>
+          </UiGrid>
+          <UiGrid>
+            <UiGrid.Col size={4}>
+              <LabeledValue>
+                <UiTitle level={6}>Abfahrtsort:</UiTitle>
+                <span>{transport.sourcePlace}</span>
+              </LabeledValue>
+            </UiGrid.Col>
+            <UiGrid.Col size={4}>
+              <LabeledValue>
+                <UiTitle level={6}>Ankunftsort:</UiTitle>
+                <span>{transport.destinationPlace}</span>
+              </LabeledValue>
+            </UiGrid.Col>
+          </UiGrid>
+          <UiGrid>
+            <UiGrid.Col size={4}>
+              <LabeledValue>
+                <UiTitle level={6}>Fahrer:</UiTitle>
+                <span>{transport.driver}</span>
+              </LabeledValue>
+            </UiGrid.Col>
+          </UiGrid>
+        </UiGrid>
       </UiLevel.Header>
     </UiLevel>
   )
 }
 export default TransportView
+
+const LabeledValue = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+`
