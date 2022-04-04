@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The incident page at `/ereignisse/{id}` now contains a progress circle.
 - Profile specific actions are now available as a dropdown via the username in the header.
 - Added image upload for incidents, reports, tasks and subtasks. Images are not displayed anywhere yet.
+- Incidents can now have transports.
+- The incident page at `/ereignisse/{id}` now contains tabs to switch between report and transport management.
 
 ### Changed
 - Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
