@@ -1,14 +1,12 @@
 package ch.rfobaden.incidentmanager.backend.controllers.base.filters;
 
-import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
-import ch.rfobaden.incidentmanager.backend.controllers.SessionController;
+import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -40,20 +37,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain chain
     ) throws ServletException, IOException {
-        var user = processRequest(request);
-        if (user != null) {
-            var details = new WebSecurityConfig.DetailsWrapper(user);
+        var session = processRequest(request);
+        if (session != null) {
             var auth = new UsernamePasswordAuthenticationToken(
-                user,
+                session,
                 null,
-                details.getAuthorities()
+                List.of(new SimpleGrantedAuthority("ROLE_" + session.getUser().getRole().name()))
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);
     }
 
-    private User processRequest(HttpServletRequest request) {
+    private SessionData processRequest(HttpServletRequest request) {
         var token = getTokenFromHeader(request);
         if (token == null) {
             token = getTokenFromCookie(request);
@@ -61,9 +57,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return null;
             }
         }
-        return jwtHelper.decodeUser(token).orElseThrow(() -> (
+        var user = jwtHelper.decodeUser(token).orElseThrow(() -> (
             new ApiException(HttpStatus.UNAUTHORIZED, "token expired")
         ));
+        return new SessionData(user, token);
     }
 
     private String getTokenFromHeader(HttpServletRequest request) {

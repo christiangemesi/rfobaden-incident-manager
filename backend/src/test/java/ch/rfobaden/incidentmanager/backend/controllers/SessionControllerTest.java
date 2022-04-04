@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
+import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.JwtHelper;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
@@ -73,7 +74,7 @@ class SessionControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(user)
+                new SessionData(user, token)
             )));
         verify(userService, times(1)).find(user.getId());
     }
@@ -87,10 +88,7 @@ class SessionControllerTest extends AppControllerTest {
         // Then
         mockMvc.perform(mockRequest)
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$").exists())
-            .andExpect(content().json(mapper.writeValueAsString(
-                new SessionController.SessionData(null)
-            )));
+            .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test

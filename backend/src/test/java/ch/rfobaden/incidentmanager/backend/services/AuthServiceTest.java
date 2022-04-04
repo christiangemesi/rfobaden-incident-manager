@@ -5,8 +5,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 import ch.rfobaden.incidentmanager.backend.TestConfig;
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
-import ch.rfobaden.incidentmanager.backend.models.User;
+import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,15 @@ public class AuthServiceTest {
     @Autowired
     SecurityContextMock securityContextMock;
 
+    @Autowired
+    Faker faker;
+
     @Test
     void testGetCurrentUser() {
         // Given
         var user = userGenerator.generate();
-        securityContextMock.mockUser(user);
+        var token = faker.internet().uuid();
+        securityContextMock.mockSession(new SessionData(user, token));
 
         // Then
         var result = service.getCurrentUser().orElse(null);
@@ -82,7 +87,7 @@ public class AuthServiceTest {
     void testRequireCurrentUser() {
         // Given
         var user = userGenerator.generate();
-        securityContextMock.mockUser(user);
+        securityContextMock.mockSession(new SessionData(user, null));
 
         // Then
         var result = service.requireCurrentUser();
@@ -124,8 +129,11 @@ public class AuthServiceTest {
             return () -> securityContext;
         }
 
-        public void mockUser(User user) {
-            mockAuth(user, new WebSecurityConfig.DetailsWrapper(user).getAuthorities());
+        public void mockSession(SessionData session) {
+            mockAuth(
+                session,
+                new WebSecurityConfig.DetailsWrapper(session.getUser()).getAuthorities()
+            );
         }
 
         public void mockAuth(Object principal, Collection<? extends GrantedAuthority> authorities) {

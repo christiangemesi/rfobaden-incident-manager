@@ -211,7 +211,7 @@ export const loadSessionFromRequest = async (req: IncomingMessage & { cookies: N
   if (error !== null) {
     throw error
   }
-  if (sessionData.user === null) {
+  if (sessionData == null || sessionData.user == null) {
     return { user: null, backendService: defaultService }
   }
   const user = parseUser(sessionData.user)

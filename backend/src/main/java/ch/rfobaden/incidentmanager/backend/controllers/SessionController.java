@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
+import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
@@ -48,12 +49,11 @@ public class SessionController extends AppController {
 
     @GetMapping
     public SessionData find() {
-        var user = authService.getCurrentUser()
+        return authService.getSession()
             // Making this a 404 (or any other 4XX) would be preferable,
             // but many browsers show these errors in the console, which we do not want
             // to happen if we just want to check if the user is logged in.
             .orElse(null);
-        return new SessionData(user);
     }
 
     @PostMapping
@@ -63,8 +63,7 @@ public class SessionController extends AppController {
         HttpServletResponse response
     ) {
         var user = authenticate(data);
-        sessionHelper.addSessionToResponse(response, user);
-        return new SessionData(user);
+        return sessionHelper.addSessionToResponse(response, user);
     }
 
     @DeleteMapping
@@ -87,18 +86,6 @@ public class SessionController extends AppController {
             throw new ApiException(HttpStatus.FORBIDDEN, "user is locked");
         } catch (BadCredentialsException e) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "invalid username or password");
-        }
-    }
-
-    public static final class SessionData {
-        private final User user;
-
-        public SessionData(User user) {
-            this.user = user;
-        }
-
-        public User getUser() {
-            return user;
         }
     }
 

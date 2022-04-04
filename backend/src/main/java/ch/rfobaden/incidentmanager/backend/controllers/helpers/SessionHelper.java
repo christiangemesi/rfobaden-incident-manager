@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.controllers.helpers;
 
 import ch.rfobaden.incidentmanager.backend.RfoConfig;
+import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -21,7 +22,7 @@ public class SessionHelper {
         this.jwtHelper = jwtHelper;
     }
 
-    public void addSessionToResponse(HttpServletResponse response, User user) {
+    public SessionData addSessionToResponse(HttpServletResponse response, User user) {
         var token = jwtHelper.encodeUser(user);
         response.addHeader(
             HttpHeaders.SET_COOKIE,
@@ -30,6 +31,7 @@ public class SessionHelper {
                 .build()
                 .toString()
         );
+        return new SessionData(user, token);
     }
 
     public void deleteSessionFromResponse(HttpServletResponse response) {
@@ -40,6 +42,7 @@ public class SessionHelper {
         return ResponseCookie.from(COOKIE_NAME, value)
             .httpOnly(true)
             .path("/")
+            .sameSite("Strict")
             .secure(!rfoConfig.getStage().equals("development"));
     }
 }
