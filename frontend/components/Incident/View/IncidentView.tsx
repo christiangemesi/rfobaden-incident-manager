@@ -12,6 +12,7 @@ import IncidentActions from '@/components/Incident/Actions/IncidentActions'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 
 interface Props extends StyledProps {
   incident: Incident
@@ -29,22 +30,22 @@ const IncidentView: React.VFC<Props> = ({
   return (
     <UiLevel className={className} style={style}>
       <UiLevel.Header>
-        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <UiGrid.Col size={{ xs: 1, md: 9, xxl: 7 }}>
-            <IncidentInfo incident={incident} />
-            <UiTitle level={1}>
-              {incident.title}
-            </UiTitle>
-            <UiDescription description={incident.description} />
+        <UiGrid justify="space-between" gap={1} style={{ flexWrap: 'nowrap' }}>
+          <UiGrid.Col size="auto">
+            <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
           </UiGrid.Col>
-          <UiGrid.Col size={{ xs: 0, md: 2, xxl: 7 }}>
-            <ProgressContainer>
-              <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
-            </ProgressContainer>
+          <UiGrid.Col>
+            <TitleContainer>
+              <IncidentInfo incident={incident} />
+              <UiTitle level={1}>
+                {incident.title}
+              </UiTitle>
+              <UiDescription description={incident.description} />
+            </TitleContainer>
           </UiGrid.Col>
           <UiGrid.Col size="auto">
             <IncidentActions incident={incident} onDelete={handleDelete} />
-            <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
+            <UiIcon.Empty style={{ marginLeft: '1rem' }} />
           </UiGrid.Col>
         </UiGrid>
       </UiLevel.Header>
@@ -56,10 +57,14 @@ const IncidentView: React.VFC<Props> = ({
 }
 export default styled(IncidentView)``
 
-const ProgressContainer = styled.div`
-  margin-top: 2rem;
-`
-
 const StyledUiLevelContent = styled(UiLevel.Content)`
   overflow: hidden;
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 0.5rem;
 `
