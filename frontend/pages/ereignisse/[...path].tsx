@@ -53,7 +53,7 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   const reports = useReportsOfIncident(incident.id)
   const transports = useTransportsOfIncident(incident.id)
 
-  const [mode, setMode] = useState<'reports' | 'transports'>(() => {
+  const [mode, _setMode] = useState<'reports' | 'transports'>(() => {
     const query = parseIncidentQuery(router.query)
     return query === null || !(query.mode === 'transports' || query.mode === 'transport')
       ? 'reports'
