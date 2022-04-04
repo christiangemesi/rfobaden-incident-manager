@@ -26,6 +26,7 @@ import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 
+
 interface Props {
   incident: Incident
   report: Report
@@ -100,7 +101,6 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
           </div>
           <UiIconButtonGroup>
             <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
-
             <UiIconButton onClick={handleCloseView}>
               <UiIcon.CancelAction />
             </UiIconButton>
@@ -143,7 +143,7 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  
+
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};

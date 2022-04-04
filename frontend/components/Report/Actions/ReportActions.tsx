@@ -9,6 +9,8 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
+import FileUploadForm from '@/components/FileUpload/FileUploadForm'
+import { FileId } from '@/models/FileUpload'
 
 interface Props {
   incident: Incident
@@ -53,6 +55,10 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     }
   }, [report])
 
+  const addImageId = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
+  }, [report])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -87,6 +93,23 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
             </UiDropDown.Item>
           )
         )}
+
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bild hinzufügen
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Bild hinzufügen
+              </UiTitle>
+              <FileUploadForm modelId={report.id} modelName="report" onSave={addImageId} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

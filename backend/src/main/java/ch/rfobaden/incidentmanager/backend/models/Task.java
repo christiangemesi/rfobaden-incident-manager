@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,7 +28,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "task")
 public class Task extends Model
-    implements PathConvertible<TaskPath>, Trackable, Serializable {
+    implements PathConvertible<TaskPath>, Trackable, ImageOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -66,6 +67,20 @@ public class Task extends Model
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
+
+    @Override
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    @JsonIgnore
     @Override
     public User getAssignee() {
         return assignee;
@@ -187,7 +202,6 @@ public class Task extends Model
             && getSubtasks().stream().allMatch(Subtask::isClosed);
     }
 
-
     @Override
     public boolean isClosed() {
         return isClosed;
@@ -197,6 +211,7 @@ public class Task extends Model
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
+
 
     @Override
     public String getLink() {

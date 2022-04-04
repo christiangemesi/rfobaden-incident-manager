@@ -38,16 +38,6 @@ const UiHeader: React.VFC = () => {
             <img src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="150" height="21" />
           </UiLink>
         </ImageContainer>
-        <nav>
-          <NavBar>
-            <UiHeaderItem href="/ereignisse">
-              Ereignisse
-            </UiHeaderItem>
-            <UiHeaderItem href="/benutzer">
-              Benutzer
-            </UiHeaderItem>
-          </NavBar>
-        </nav>
       </NavContainer>
       <ButtonList>
         <UiHeaderItem href="/changelog" title="Changelog">
@@ -136,13 +126,6 @@ const ImageContainer = styled.div`
       transform: scale(1.05);
     }
   }
-`
-const NavBar = styled.ul`
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  margin-left: 2rem;
-  list-style: none;
 `
 const ButtonList = styled.div<{ isNarrow?: boolean }>`
   display: flex;

@@ -9,6 +9,8 @@ import BackendService from '@/services/BackendService'
 import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
+import FileUploadForm from '@/components/FileUpload/FileUploadForm'
+import { FileId } from '@/models/FileUpload'
 
 interface Props {
   task: Task
@@ -29,6 +31,10 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
       SubtaskStore.remove(subtask.id)
     }
   }, [subtask, handleDeleteCb])
+
+  const addImageId = useCallback((fileId: FileId) => {
+    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
+  }, [subtask])
 
   return (
     <UiDropDown>
@@ -53,6 +59,24 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
             </div>
           )}</UiModal.Body>
         </UiModal>
+
+        <UiModal isFull>
+          <UiModal.Activator>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              Bild hinzufügen
+            </UiDropDown.Item>
+          )}</UiModal.Activator>
+
+          <UiModal.Body>{({ close }) => (
+            <React.Fragment>
+              <UiTitle level={1} isCentered>
+                Bild hinzufügen
+              </UiTitle>
+              <FileUploadForm modelId={subtask.id} modelName="subtask" onSave={addImageId} onClose={close} />
+            </React.Fragment>
+          )}</UiModal.Body>
+        </UiModal>
+
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
         </UiDropDown.Item>

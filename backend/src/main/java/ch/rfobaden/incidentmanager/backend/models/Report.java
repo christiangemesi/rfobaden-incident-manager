@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,7 +28,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "report")
 public class Report extends Model
-    implements PathConvertible<ReportPath>, Trackable, Serializable {
+    implements PathConvertible<ReportPath>, Trackable, ImageOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -77,7 +78,10 @@ public class Report extends Model
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
-    @Override
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
+
+    @JsonIgnore
     public User getAssignee() {
         return assignee;
     }
@@ -223,6 +227,16 @@ public class Report extends Model
     }
 
     @Override
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    @JsonIgnore
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
