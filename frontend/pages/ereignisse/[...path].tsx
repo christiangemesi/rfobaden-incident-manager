@@ -276,7 +276,7 @@ const queryMatchers: QueryPatternMatcher[] = [
   },
   {
     pattern: [Number, 'transporte', Number],
-    build: ([incidentId, transportId]) => ({ mode: 'transports', incidentId, transportId }),
+    build: ([incidentId, transportId]) => ({ mode: 'transport', incidentId, transportId }),
   },
   {
     pattern: [Number, 'meldungen', Number],
