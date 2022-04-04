@@ -1,13 +1,14 @@
-import Transport from '@/models/Transport'
-import React, { useMemo } from 'react'
+import Transport, { parseTransport } from '@/models/Transport'
+import React, { useCallback } from 'react'
 import { useUser } from '@/stores/UserStore'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import styled, { css } from 'styled-components'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { useUsername } from '@/models/User'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { Themed } from '@/theme'
+import TransportStore from '@/stores/TransportStore'
+import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 
 interface Props {
   transport: Transport
@@ -25,16 +26,23 @@ const TransportListItem: React.VFC<Props> = ({
   const assignee = useUser(transport.assigneeId)
   const assigneeName = useUsername(assignee)
 
-  const defaultIcon = useMemo(() => isSmall ? (
-    <React.Fragment />
-  ) : (
-    <UiIcon.Empty />
-  ), [isSmall])
+  const handleChange = useCallback(async () => {
+    const newTransport = { ...transport, isClosed: !transport.isClosed }
+    const [data, error]: BackendResponse<Transport> = await BackendService.update(
+      `incidents/${transport.incidentId}/transports`,
+      transport.id,
+      newTransport
+    )
+    if (error !== null) {
+      throw error
+    }
+    TransportStore.save(parseTransport(data))
+  }, [transport])
 
   return (
     <Item
       isActive={isActive}
-      isClosed={transport.isClosed || transport.isDone}
+      isClosed={transport.isClosed}
       isSmall={isSmall}
       title={transport.title}
       priority={transport.priority}
@@ -46,6 +54,7 @@ const TransportListItem: React.VFC<Props> = ({
           <UiDateLabel start={transport.startsAt ?? transport.createdAt} end={transport.endsAt} />
         </PrefixDate>
       </PrefixList>
+      <UiCheckbox label="" value={transport.isClosed} onChange={handleChange} />
       <BridgeClip>
         <Bridge isActive={isActive ?? false} />
       </BridgeClip>
@@ -53,8 +62,6 @@ const TransportListItem: React.VFC<Props> = ({
   )
 }
 export default TransportListItem
-
-const ICON_MULTIPLIER_SMALL = 0.75
 
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
   ${({ isActive }) => isActive && css`
