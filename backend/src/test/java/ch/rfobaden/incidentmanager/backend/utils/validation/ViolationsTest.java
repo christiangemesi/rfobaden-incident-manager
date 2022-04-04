@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.validation;
+package ch.rfobaden.incidentmanager.backend.utils.validation;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;

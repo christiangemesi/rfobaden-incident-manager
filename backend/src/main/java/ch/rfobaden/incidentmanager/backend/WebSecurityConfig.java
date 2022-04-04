@@ -9,13 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.AffirmativeBased;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -31,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -48,13 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ExceptionHandlerFilter expectionHandlerFiler;
 
-    private final UserService userService;
-
     private final DetailsWrapperService detailsWrapperService;
 
-    private final ApiExceptionHandler exceptionHandler;
-
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthEntryPoint authEntryPoint;
 
     public WebSecurityConfig(
         JwtAuthFilter authFilter,
@@ -65,10 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     ) {
         this.authFilter = authFilter;
         this.expectionHandlerFiler = expectionHandlerFiler;
-        this.userService = userService;
-        this.exceptionHandler = exceptionHandler;
+        this.authEntryPoint = new AuthEntryPoint(exceptionHandler);
         this.passwordEncoder = passwordEncoder;
-        this.detailsWrapperService = new DetailsWrapperService();
+        this.detailsWrapperService = new DetailsWrapperService(userService);
     }
 
     @Autowired
@@ -97,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // all other requests need to be authenticated
             .authorizeRequests().anyRequest().permitAll()
 
-            .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPoint())
+            .and().exceptionHandling().authenticationEntryPoint(authEntryPoint)
 
 
             // make sure we use stateless session; session won't be used to
@@ -115,7 +105,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManagerBean();
     }
 
-    public class AuthEntryPoint implements AuthenticationEntryPoint {
+    public static class AuthEntryPoint implements AuthenticationEntryPoint {
+        private final ApiExceptionHandler exceptionHandler;
+
+        public AuthEntryPoint(ApiExceptionHandler exceptionHandler) {
+            this.exceptionHandler = exceptionHandler;
+        }
+
         @Override
         public void commence(
             HttpServletRequest request,
@@ -130,9 +126,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    public class DetailsWrapperService implements UserDetailsService {
+    public static class DetailsWrapperService implements UserDetailsService {
+        private final UserService userService;
+
+        public DetailsWrapperService(UserService userService) {
+            this.userService = userService;
+        }
+
         @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        public DetailsWrapper loadUserByUsername(String username) throws UsernameNotFoundException {
             var user = userService.findByEmail(username).orElseThrow(() -> (
                 new UsernameNotFoundException("No user with email " + username + " found")
             ));
