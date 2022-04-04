@@ -77,9 +77,6 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
   ${Themed.media.lg.min} {
-    min-width: 100%;
-  }
-  ${Themed.media.md.min} {
     min-width: calc(100% - 4rem);
   }
   

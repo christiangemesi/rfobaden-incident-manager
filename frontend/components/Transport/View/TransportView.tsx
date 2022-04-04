@@ -11,6 +11,7 @@ import TransportInfo from '@/components/Transport/Info/TransportInfo'
 import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import TransportActions from '@/components/Transport/Actions/TransportActions'
+import { Themed } from '@/theme'
 
 interface Props {
   incident: Incident
@@ -38,54 +39,63 @@ const TransportView: React.VFC<Props> = ({ incident, transport, onClose: handleC
           </UiIconButtonGroup>
         </UiGrid>
 
-        <UiDescription description={transport.description} />
-
-        <UiGrid align="start" gap={1}>
-          <UiGrid>
-            <UiGrid.Col size={4}>
-              <LabeledValue>
-                <UiTitle level={6}>Fahrezeug:</UiTitle>
-                <span>{transport.vehicle}</span>
-              </LabeledValue>
-            </UiGrid.Col>
-            <UiGrid.Col size={4}>
-              <LabeledValue>
-                <UiTitle level={6}>Ahänger:</UiTitle>
-                <span>{transport.trailer}</span>
-              </LabeledValue>
-            </UiGrid.Col>
-          </UiGrid>
-          <UiGrid>
-            <UiGrid.Col size={4}>
-              <LabeledValue>
-                <UiTitle level={6}>Abfahrtsort:</UiTitle>
-                <span>{transport.sourcePlace}</span>
-              </LabeledValue>
-            </UiGrid.Col>
-            <UiGrid.Col size={4}>
-              <LabeledValue>
-                <UiTitle level={6}>Ankunftsort:</UiTitle>
-                <span>{transport.destinationPlace}</span>
-              </LabeledValue>
-            </UiGrid.Col>
-          </UiGrid>
-          <UiGrid>
-            <UiGrid.Col size={4}>
-              <LabeledValue>
+        <InfoTable>
+          <tbody>
+            <tr>
+              <th>
                 <UiTitle level={6}>Fahrer:</UiTitle>
-                <span>{transport.driver}</span>
-              </LabeledValue>
-            </UiGrid.Col>
-          </UiGrid>
-        </UiGrid>
+              </th>
+              <td>
+                <span>{transport.driver ?? '-'}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Fahrzeug:</UiTitle>
+              </th>
+              <td>
+                <span>{transport.vehicle ?? '-'}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Anhänger:</UiTitle>
+              </th>
+              <td>
+                <span>{transport.trailer ?? '-'}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Abfahrtsort:</UiTitle>
+              </th>
+              <td>
+                <span>{transport.sourcePlace ?? '-'}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Ankunftsort:</UiTitle>
+              </th>
+              <td>
+                <span>{transport.destinationPlace ?? '-'}</span>
+              </td>
+            </tr>
+          </tbody>
+        </InfoTable>
+
+        <UiDescription description={transport.description} />
       </UiLevel.Header>
     </UiLevel>
   )
 }
 export default TransportView
 
-const LabeledValue = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center;
+const InfoTable = styled.table`
+  table-layout: fixed;
+  text-align: left;
+  th {
+    width: 10rem;
+  }
+  
 `
