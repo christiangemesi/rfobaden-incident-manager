@@ -19,7 +19,7 @@ rfo:
   frontend:
     # Fixed host for test environment, value does not influence tests.
     host: "localhost:300"
-  mail:
+  email:
     host: none
     port: 111
     username: test@user.com
