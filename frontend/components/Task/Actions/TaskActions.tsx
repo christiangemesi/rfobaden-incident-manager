@@ -4,13 +4,14 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
-import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
+import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
+import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 
 interface Props {
   report: Report
@@ -71,49 +72,24 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bearbeiten
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Task bearbeiten
-              </UiTitle>
-              <TaskForm report={report} task={task} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableEditAction>{({ close }) => (
+          <React.Fragment>
+            <UiTitle level={1} isCentered>
+              Auftrag bearbeiten
+            </UiTitle>
+            <TaskForm report={report} task={task} onClose={close} />
+          </React.Fragment>
+        )}</TrackableEditAction>
+
         {!task.isDone && (
-          task.isClosed ? (
-            <UiDropDown.Item onClick={handleReopen}>
-              Öffnen
-            </UiDropDown.Item>
-          ) : (
-            <UiDropDown.Item onClick={handleClose}>
-              Schliessen
-            </UiDropDown.Item>
-          )
+          <TrackableCloseAction isClosed={task.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bild hinzufügen
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Bild hinzufügen
-              </UiTitle>
-              <FileUploadForm modelId={task.id} modelName="task" onSave={addImageId} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableImageUploadAction
+          id={task.id}
+          modelName="task"
+          onAddImage={addImageId}
+        />
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

@@ -2,15 +2,15 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import BackendService from '@/services/BackendService'
 import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
-import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
+import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 
 interface Props {
   task: Task
@@ -44,38 +44,20 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bearbeiten
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <div>
-              <UiTitle level={1} isCentered>
-                Teilauftrag bearbeiten
-              </UiTitle>
-              <SubtaskForm task={task} subtask={subtask} onClose={close} />
-            </div>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableEditAction>{({ close }) => (
+          <React.Fragment>
+            <UiTitle level={1} isCentered>
+              Teilauftrag bearbeiten
+            </UiTitle>
+            <SubtaskForm task={task} subtask={subtask} onClose={close} />
+          </React.Fragment>
+        )}</TrackableEditAction>
 
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bild hinzufügen
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Bild hinzufügen
-              </UiTitle>
-              <FileUploadForm modelId={subtask.id} modelName="subtask" onSave={addImageId} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableImageUploadAction
+          id={subtask.id}
+          modelName="subtask"
+          onAddImage={addImageId}
+        />
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

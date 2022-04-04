@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import Incident, { parseIncident } from '@/models/Incident'
@@ -10,8 +9,10 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
-import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
+import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
+import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 
 interface Props {
   incident: Incident
@@ -72,46 +73,24 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Ereignis bearbeiten
-              </UiTitle>
-              <IncidentForm incident={incident} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
-        {isAdmin(currentUser) && (
-          incident.isClosed ? (
-            <UiDropDown.Item onClick={handleReopen}>
-              Öffnen
-            </UiDropDown.Item>
-          ) : (
-            <UiDropDown.Item onClick={handleClose}>
-              Schliessen
-            </UiDropDown.Item>
-          )
-        )}
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bild hinzufügen
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
+        <TrackableEditAction>{({ close }) => (
+          <React.Fragment>
+            <UiTitle level={1} isCentered>
+              Ereignis bearbeiten
+            </UiTitle>
+            <IncidentForm incident={incident} onClose={close} />
+          </React.Fragment>
+        )}</TrackableEditAction>
 
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Bild hinzufügen
-              </UiTitle>
-              <FileUploadForm modelId={incident.id} modelName="incident" onSave={addImageId} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        {isAdmin(currentUser) && (
+          <TrackableCloseAction isClosed={incident.isClosed} onClose={handleClose} onReopen={handleReopen} />
+        )}
+
+        <TrackableImageUploadAction
+          id={incident.id}
+          modelName="incident"
+          onAddImage={addImageId}
+        />
 
         {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>

@@ -1,6 +1,5 @@
-import React, { CSSProperties, ReactElement, ReactNode } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import StringHelper from '@/utils/helpers/StringHelper'
-import { PropsOf } from '@emotion/react'
 
 class StyleHelper {
   tag<P>(name: keyof JSX.IntrinsicElements): React.VFC<P & StyledProps & { children?: ReactNode }>

@@ -3,14 +3,15 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
-import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
+import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
+import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 
 interface Props {
   incident: Incident
@@ -67,49 +68,24 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bearbeiten
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Meldung bearbeiten
-              </UiTitle>
-              <ReportForm incident={incident} report={report} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableEditAction>{({ close }) => (
+          <React.Fragment>
+            <UiTitle level={1} isCentered>
+              Meldung bearbeiten
+            </UiTitle>
+            <ReportForm incident={incident} report={report} onClose={close} />
+          </React.Fragment>
+        )}</TrackableEditAction>
+
         {!report.isDone && (
-          report.isClosed ? (
-            <UiDropDown.Item onClick={handleReopen}>
-              Öffnen
-            </UiDropDown.Item>
-          ) : (
-            <UiDropDown.Item onClick={handleClose}>
-              Schliessen
-            </UiDropDown.Item>
-          )
+          <TrackableCloseAction isClosed={report.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              Bild hinzufügen
-            </UiDropDown.Item>
-          )}</UiModal.Activator>
-
-          <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Bild hinzufügen
-              </UiTitle>
-              <FileUploadForm modelId={report.id} modelName="report" onSave={addImageId} onClose={close} />
-            </React.Fragment>
-          )}</UiModal.Body>
-        </UiModal>
+        <TrackableImageUploadAction
+          id={report.id}
+          modelName="report"
+          onAddImage={addImageId}
+        />
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
