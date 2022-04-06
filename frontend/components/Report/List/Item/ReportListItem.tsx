@@ -1,64 +1,39 @@
 import Report from '@/models/Report'
-import React from 'react'
-import { useUser } from '@/stores/UserStore'
+import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled, { css } from 'styled-components'
-import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
-import { useUsername } from '@/models/User'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
+import TrackableListItem, { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
 
-interface Props {
-  report: Report
-  isActive: boolean
-  onClick?: (report: Report) => void
-}
+type Props = Omit<TrackableListItemProps<Report>, 'children'>
 
 const ReportListItem: React.VFC<Props> = ({
-  report,
-  isActive,
-  onClick: handleClick,
+  record: report,
+  isSmall,
+  ...itemProps
 }) => {
-  const assignee = useUser(report.assigneeId)
-
-  const assigneeName = useUsername(assignee)
+  const defaultIcon = useMemo(() => isSmall ? (
+    <React.Fragment />
+  ) : (
+    <UiIcon.Empty />
+  ), [isSmall])
 
   return (
-    <SelectableListItem
-      isActive={isActive}
-      isClosed={report.isClosed}
-      title={report.title}
-      priority={report.priority}
-      user={assigneeName ?? ''}
-      onClick={handleClick && (() => handleClick(report))}
-    >
-      <LeftSpacer>
+    <TrackableListItem {...itemProps} record={report} isSmall={isSmall}>
+      <UiGrid direction={isSmall ? 'column' : undefined} gapH={1}>
         {report.isKeyReport ? (
-          <UiIcon.KeyMessage />
-        ) : (
-          <UiIcon.Empty />
-        )}
-      </LeftSpacer>
-      <LeftSpacer>
+          <UiIcon.KeyMessage size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} />
+        ) : defaultIcon}
         {report.isLocationRelevantReport ? (
-          <UiIcon.LocationRelevancy />
-        ) : (
-          <UiIcon.Empty />
-        )}
-      </LeftSpacer>
-      <LeftSpacer>
+          <UiIcon.LocationRelevancy size={isSmall ? ICON_MULTIPLIER_SMALL : undefined} />
+        ) : defaultIcon}
+      </UiGrid>
+
+      <div>
         {report.closedTaskIds.length}/{report.taskIds.length}
-      </LeftSpacer>
-    </SelectableListItem>
+      </div>
+    </TrackableListItem>
   )
 }
 export default ReportListItem
 
-const LeftSpacer = styled.div`
-  margin-left: 1rem;
-`
-
-const SelectableListItem = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive, theme }) => isActive && css`
-    background: ${theme.colors.secondary.contrast};
-    color: ${theme.colors.secondary.value};
-  `}
-`
+const ICON_MULTIPLIER_SMALL = 0.75

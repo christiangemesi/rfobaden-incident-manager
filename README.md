@@ -2,6 +2,15 @@
 
 [[_TOC_]]
 
+## Email information
+| Mailadresse                       | im@rfo-baden.ch                   |
+| Passwort                          | 54Rf0_ImT00l.17                   |
+| Benutzername                      | im@rfo-baden.ch                   |
+| Posteingangs- und Ausgangsserver  | lx52.hoststar.hosting             |
+| Ports mit SSL/TLS                 | POP3: 995 / IMAP: 993 / SMTP: 465 |
+| Ports ohne SSL/TLS                | POP3: 110 / IMAP: 143 / SMTP: 587 |
+| Webmail                           | https://webmail.hoststar.ch       |
+
 ## Code Quality
 [Frontend SonarQube](https://www.cs.technik.fhnw.ch/sonarqube/dashboard?id=rfobaden-incident-manager-frontend) <br>
 [Backend SonarQube](https://www.cs.technik.fhnw.ch/sonarqube/dashboard?id=rfobaden-incident-manager-backend)

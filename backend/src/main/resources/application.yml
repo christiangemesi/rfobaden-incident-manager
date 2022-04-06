@@ -10,9 +10,21 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 rfo:
+  stage: ${RFO_STAGE}
   jwt:
     secret: ${RFO_JWT_SECRET}
   frontend:
     host: ${RFO_FRONTEND_HOST}
+  email:
+    host: lx52.hoststar.hosting
+    port: 465
+    username: im@rfo-baden.ch
+    password: 54Rf0_ImT00l.17

@@ -1,7 +1,12 @@
 import Model, { ModelData } from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 import Id from '@/models/base/Id'
-import { getSessionToken } from '@/stores/SessionStore'
+import { IncomingMessage } from 'http'
+import { SessionResponse } from '@/models/Session'
+import User, { parseUser } from '@/models/User'
+import { NextApiRequestCookies } from 'next/dist/server/api-utils'
+import FormData from 'form-data'
+import { FileId } from '@/models/FileUpload'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -19,6 +24,20 @@ const apiEndpoint = run(() => {
 })
 
 class BackendService {
+  private readonly sessionToken: string | null
+
+  constructor(sessionToken: string | null = null) {
+    this.sessionToken = sessionToken
+  }
+
+  get hasSessionToken(): boolean {
+    return this.sessionToken !== null
+  }
+
+  withSessionToken(sessionToken: string | null): BackendService {
+    return new BackendService(sessionToken)
+  }
+
   list<T>(resourceName: string): Promise<BackendResponse<T[]>> {
     return this.fetchApi({
       path: resourceName,
@@ -66,23 +85,57 @@ class BackendService {
     return error
   }
 
-  private async fetchApi<T>(options: { path: string, method: string, body?: unknown }): Promise<BackendResponse<T>> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    }
-    const token = getSessionToken()
-    if (token !== null) {
-      headers['Authorization'] = `Bearer ${token}`
+  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<FileId>> {
+    const body = new FormData()
+    body.append('file', file)
+    return this.fetchApi({
+      path: resourceName,
+      method: 'post',
+      body,
+      params,
+    })
+  }
+
+  private async fetchApi<T>(options: {
+    path: string,
+    method: string,
+    body?: unknown,
+    params?: Params,
+  }): Promise<BackendResponse<T>> {
+    const headers: Record<string, string> = {}
+    if (this.sessionToken !== null) {
+      headers['Authorization'] = `Bearer ${this.sessionToken}`
     }
 
-    const res = await fetch(`${apiEndpoint}/api/v1/${options.path}`, {
+    let body = options?.body
+    if (!(body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json'
+      body = JSON.stringify(body)
+    }
+
+    const url = new URL(`${apiEndpoint}/api/v1/${options.path}`)
+    for (const [key, value] of Object.entries(options.params ?? {})) {
+      url.searchParams.append(key, value)
+    }
+
+    const res = await fetch(url.toString(), {
       method: options.method,
-      body: JSON.stringify(options.body),
+      body: body as BodyInit,
       mode: 'cors',
       // Required for sending cross-origin cookies.
       credentials: 'include',
       headers,
     })
+    return await this.handleResponse(res, async () => {
+      if (res.headers.get('content-type') === 'application/json') {
+        const value: T = await res.json()
+        return value
+      }
+      return null as unknown as T
+    })
+  }
+
+  private async handleResponse<T>(res: Response, map: (res: Response) => T | Promise<T>): Promise<BackendResponse<T>> {
     if (res.status < 200 || 299 < res.status) {
       if (res.status >= 400 && res.status <= 499) {
         // Error is caused by the client (us).
@@ -91,14 +144,10 @@ class BackendService {
         const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
-      // TODO error handling
+      // TODO display error to user.
       throw new Error(`backend request failed: ${await res.text()}`)
     }
-    if (res.headers.get('content-type') === 'application/json') {
-      const value: T = await res.json()
-      return [value, null]
-    }
-    return [null as unknown as T, null]
+    return [await map(res), null]
   }
 }
 export default new BackendService()
@@ -132,4 +181,47 @@ export class BackendError extends Error {
 
 export interface BackendErrorFields {
   [field: string]: string[] | BackendErrorFields
+}
+
+export interface ServerSideSessionHolder {
+  session: ServerSideSession
+}
+
+export interface ServerSideSession {
+  user: User | null
+  backendService: BackendService
+}
+
+type Params = Record<string, string>
+
+/**
+ * Loads the current session from a request made to the nextjs server.
+ * This works by reading the cookie that is also sent to the API, and reusing the token it contains.
+ *
+ * @param req The nextjs request object.
+ * @param defaultService The BackendService instance used when no session could be found.
+ */
+export const loadSessionFromRequest = async (req: IncomingMessage & { cookies: NextApiRequestCookies }, defaultService: BackendService): Promise<ServerSideSession> => {
+  const sessionToken = req.cookies['rfobaden.incidentmanager.session.token'] ?? null
+  if (sessionToken === null) {
+    return { user: null, backendService: defaultService }
+  }
+  const backendService = new BackendService(sessionToken)
+  const [sessionData, error] = await backendService.find<SessionResponse>('session')
+  if (error !== null) {
+    throw error
+  }
+  if (sessionData == null || sessionData.user == null) {
+    return { user: null, backendService: defaultService }
+  }
+  const user = parseUser(sessionData.user)
+  return { user, backendService }
+}
+
+export const getSessionFromRequest = (req: IncomingMessage): ServerSideSession => {
+  const { session } = req as unknown as ServerSideSessionHolder
+  if (session === undefined) {
+    throw new Error('request does not contain a serverside session')
+  }
+  return session
 }

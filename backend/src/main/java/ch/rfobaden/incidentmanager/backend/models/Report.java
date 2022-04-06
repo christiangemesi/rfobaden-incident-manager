@@ -14,77 +14,81 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "report")
-public class Report extends Model implements PathConvertible<ReportPath>, Serializable {
+public class Report extends Model
+    implements PathConvertible<ReportPath>, Trackable, ImageOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
     @JoinColumn
     private User assignee;
 
-    @ManyToOne
+    @NotNull
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
 
+    @Size(max = 100)
     private String location;
 
+    @NotNull
+    @Column(nullable = false)
+    private boolean isClosed;
+
+    @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
+    @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
+
     @JsonIgnore
     public User getAssignee() {
         return assignee;
     }
 
-    @JsonIgnore
+    @Override
     public void setAssignee(User assignee) {
         this.assignee = assignee;
-    }
-
-    @JsonProperty
-    public Long getAssigneeId() {
-        if (assignee == null) {
-            return null;
-        }
-        return assignee.getId();
-    }
-
-    @JsonProperty
-    public void setAssigneeId(Long assigneeId) {
-        if (assigneeId == null) {
-            this.assignee = null;
-            return;
-        }
-        if (this.assignee == null) {
-            this.assignee = new User();
-        }
-        this.assignee.setId(assigneeId);
     }
 
     @JsonIgnore
@@ -105,18 +109,22 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
         this.incident = incident;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -129,18 +137,22 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
         this.notes = addendum;
     }
 
+    @Override
     public LocalDateTime getStartsAt() {
         return startsAt;
     }
 
+    @Override
     public void setStartsAt(LocalDateTime startsAt) {
         this.startsAt = startsAt;
     }
 
+    @Override
     public LocalDateTime getEndsAt() {
         return endsAt;
     }
 
+    @Override
     public void setEndsAt(LocalDateTime endsAt) {
         this.endsAt = endsAt;
     }
@@ -171,10 +183,12 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
         isLocationRelevantReport = locationRelevantReport;
     }
 
+    @Override
     public Priority getPriority() {
         return priority;
     }
 
+    @Override
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
@@ -195,14 +209,45 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     public List<Long> getClosedTaskIds() {
         return getTasks().stream()
-            .filter(Task::isClosed)
+            .filter(t -> t.isClosed() || t.isDone())
             .map(Task::getId)
             .collect(Collectors.toList());
     }
 
-    @JsonProperty("isClosed")
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getTasks().isEmpty()
+            && (getTasks().stream().allMatch(Task::isClosed)
+            || getTasks().stream().allMatch(Task::isDone));
+    }
+
+    @Override
     public boolean isClosed() {
-        return !getTasks().isEmpty() && getTasks().stream().allMatch(Task::isClosed);
+        return isClosed;
+    }
+
+    @Override
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
+    }
+
+    @Override
+    public String getLink() {
+        return "/ereignisse/" + getIncident().getId() + "/meldungen/" + getId();
+    }
+
+    @Override
+    public String getFullTitle() {
+        return getIncident().getTitle() + "/" + getTitle();
     }
 
     @Override
@@ -223,6 +268,7 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
             && Objects.equals(location, report.location)
+            && Objects.equals(isClosed, report.isClosed)
             && Objects.equals(isKeyReport, report.isKeyReport)
             && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport)
             && priority == report.priority;
@@ -230,9 +276,21 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
 
     @Override
     public int hashCode() {
-        return Objects.hash(assignee, incident, title,
-            description, notes, startsAt,
-            endsAt, location, isKeyReport, isLocationRelevantReport, priority);
+        return Objects.hash(
+            modelHashCode(),
+            assignee,
+            incident,
+            title,
+            description,
+            notes,
+            startsAt,
+            endsAt,
+            location,
+            isClosed,
+            isKeyReport,
+            isLocationRelevantReport,
+            priority
+        );
     }
 
     @Override
@@ -240,10 +298,6 @@ public class Report extends Model implements PathConvertible<ReportPath>, Serial
         ReportPath path = new ReportPath();
         path.setIncidentId(getIncidentId());
         return path;
-    }
-
-    public enum Priority {
-        LOW, MEDIUM, HIGH
     }
 }
 

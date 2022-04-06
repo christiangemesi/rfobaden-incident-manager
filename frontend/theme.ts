@@ -7,6 +7,7 @@ export type Theme = {
     error: Color
     warning: Color
     info: Color
+    grey: Color
   }
   fonts: {
     heading: string
@@ -26,6 +27,7 @@ export type Breakpoint =
   | 'md'
   | 'lg'
   | 'xl'
+  | 'xxl'
 
 export type ColorName = keyof Theme['colors']
 
@@ -44,7 +46,8 @@ export const defaultTheme: Theme = {
       contrast: contrastLight,
     },
     secondary: {
-      value: '#A3CCE7',
+      // value: '#E8F2F9',
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
     tertiary: {
@@ -52,7 +55,7 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     success: {
-      value: '#4fac54',
+      value: '#05A74E',
       contrast: contrastLight,
     },
     error: {
@@ -67,10 +70,14 @@ export const defaultTheme: Theme = {
       value: '#7465C6',
       contrast: contrastLight,
     },
+    grey: {
+      value: '#b0b0b0',
+      contrast: contrastDark,
+    },
   },
   fonts: {
-    heading: 'Montserrat, sans-serif',
-    body: 'Montserrat, sans-serif',
+    heading: 'Raleway, sans-serif',
+    body: 'Raleway, sans-serif',
   },
   breakpoints: {
     xs: {
@@ -83,14 +90,18 @@ export const defaultTheme: Theme = {
     },
     md: {
       min: 768,
-      max: 1023.99,
+      max: 1_023.99,
     },
     lg: {
-      min: 1024,
-      max: 1535.99,
+      min: 1_024,
+      max: 1_535.99,
     },
     xl: {
-      min: 1536,
+      min: 1_536,
+      max: 2_047.99,
+    },
+    xxl: {
+      min: 2_048,
       max: Number.MAX_SAFE_INTEGER,
     },
   },

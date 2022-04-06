@@ -16,10 +16,9 @@ export enum UserRole {
   ADMIN = 'ADMIN',
 }
 
-export const parseUser = (data: unknown): User => {
-  const user = data as User
+export const parseUser = (data: User): User => {
   return {
-    ...user,
+    ...data,
     ...parseModel(data),
   }
 }
@@ -29,3 +28,11 @@ export const useUsername = (user: User | null): string | null => {
     (user === null) ? null : `${user.firstName} ${user.lastName}`
   ), [user])
 }
+
+export const isAgent = (user: User): boolean => (
+  user.role === UserRole.AGENT
+)
+
+export const isAdmin = (user: User): boolean => (
+  user.role === UserRole.ADMIN
+)

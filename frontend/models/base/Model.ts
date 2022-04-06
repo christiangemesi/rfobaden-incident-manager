@@ -1,5 +1,5 @@
 import Id from '@/models/base/Id'
-import { parseDate } from '@/models/Date'
+import { parseDate } from '@/models/base/Date'
 
 export default interface Model {
   id: Id<this>
@@ -11,11 +11,10 @@ export type ModelData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>
 
 export type UpdateData<T> = Omit<T, 'id' | 'createdAt'>
 
-export const parseModel = (data: unknown): Model => {
-  const record = data as Model
+export const parseModel = (data: Model): Model => {
   return {
-    id: record.id,
-    createdAt: parseDate(record.createdAt),
-    updatedAt: parseDate(record.updatedAt),
+    id: data.id,
+    createdAt: parseDate(data.createdAt),
+    updatedAt: parseDate(data.updatedAt),
   }
 }

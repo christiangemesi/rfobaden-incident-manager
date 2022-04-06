@@ -24,16 +24,21 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     authorId: -1,
     closeReason: null,
     isClosed: false,
+    isDone: false,
     closedAt: null,
     startsAt: null,
     endsAt: null,
     closedReportIds: [],
     reportIds: [],
+    closedTransportIds: [],
+    transportIds: [],
+    imageIds: [],
   }))
 
   useValidate(form, (validate) => ({
     title: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     description: [
       validate.notBlank({ allowNull: true }),
@@ -43,9 +48,13 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closeReason: [],
     closedAt: [],
     isClosed: [],
+    isDone: [],
     endsAt: [],
     closedReportIds: [],
     reportIds: [],
+    closedTransportIds: [],
+    transportIds: [],
+    imageIds: [],
   }))
 
   useSubmit(form, async (incidentData: ModelData<Incident>) => {

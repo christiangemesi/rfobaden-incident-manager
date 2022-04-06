@@ -5,6 +5,6 @@ export default interface Session {
 }
 
 export interface SessionResponse {
-  token: string
-  user: User | null
+  user?: User | null
 }
+

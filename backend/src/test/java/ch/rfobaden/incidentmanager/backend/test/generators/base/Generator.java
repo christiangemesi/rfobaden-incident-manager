@@ -54,8 +54,10 @@ public abstract class Generator<T> {
         return null;
     }
 
-    protected LocalDateTime randomDateTime() {
-        return LocalDateTime.now().minusDays(faker.random().nextInt(0, 365 * 1000));
+    public LocalDateTime randomDateTime() {
+        return LocalDateTime.now()
+            .withNano(0)
+            .minusDays(faker.random().nextInt(0, 365 * 1000));
     }
 
     /**

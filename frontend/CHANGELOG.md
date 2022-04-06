@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Modals can now be closed by pressing the escape key.
+- Incidents, reports and tasks now support manual closing.
+- Added page footer.
+- New users and assignees now receive email notifications.
+- The landing page at `/` now contains a dashboard.
+- The incident page at `/ereignisse/{id}` now contains a progress circle.
+- Profile specific actions are now available as a dropdown via the username in the header.
+- Added image upload for incidents, reports, tasks and subtasks. Images are not displayed anywhere yet.
+- Incidents can now have transports.
+- The incident page at `/ereignisse/{id}` now contains tabs to switch between report and transport management.
+
+### Changed
+- Updated the overall theme (fonts, colors, etc.) to align more closely with our design documents.
+- Redesigned the incident page.
+- Redesigned the users page.
+- Replaced the date/time input.
+- Redesigned the login page.
+- Signing in is now mandatory.
+- Agents no longer have access to admin-only actions.
+
+### Removed
+- The profile page has been removed.
+
+### Fixed
+- Scroll is now disabled while a modal is open.
+
 ## [0.3.0] - 24.02.2022
 ### Added
 - Organizations can now be managed at `/organizations`.

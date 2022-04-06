@@ -1,49 +1,56 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Report from '@/models/Report'
-import UiList from '@/components/Ui/List/UiList'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
+import styled from 'styled-components'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
+import TrackableList from '@/components/Trackable/List/TrackableList'
 
-interface Props {
+interface Props extends StyledProps {
   incident: Incident
-  reports: Report[]
-  activeReport: Report | null
-  onClick?: (report: Report) => void
+  reports: readonly Report[]
+  selected?: Report | null,
+  onSelect?: (report: Report) => void
 }
 
-const ReportList: React.VFC<Props> = ({ incident, reports, activeReport, onClick: handleClick }) => {
+const ReportList: React.VFC<Props> = ({
+  incident,
+  reports,
+  ...listProps
+}) => {
+  const [keyReports, normalReports] = useMemo(() => (
+    reports.reduce(([key, normal], report) => {
+      if (report.isKeyReport) {
+        key.push(report)
+      } else {
+        normal.push(report)
+      }
+      return [key, normal]
+    }, [[] as Report[], [] as Report[]])
+  ), [reports])
+
   return (
-    <UiList>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
-          <UiCreatButton onClick={open}>
-            <UiIcon.CreateAction size={1.4} />
-          </UiCreatButton>
-        )}</UiModal.Activator>
-        <UiModal.Body>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung erfassen
-            </UiTitle>
-            <ReportForm incident={incident} onClose={close} />
-          </React.Fragment>
-        )}</UiModal.Body>
-      </UiModal>
-      {reports.map((report) => (
+    <TrackableList
+      {...listProps}
+      records={[keyReports, normalReports]}
+      renderForm={({ save, close }) => (
+        <React.Fragment>
+          <UiTitle level={1} isCentered>
+            Meldung erfassen
+          </UiTitle>
+          <ReportForm incident={incident} onSave={save} onClose={close} />
+        </React.Fragment>
+      )}
+      renderItem={({ record, ...itemProps }) => (
         <ReportListItem
-          key={report.id}
-          report={report}
-          onClick={handleClick}
-          isActive={activeReport !== null && activeReport.id == report.id}
+          {...itemProps}
+          record={record}
+          isClosed={record.isClosed || record.isDone}
         />
-      ))}
-    </UiList>
+      )}
+    />
   )
 }
-export default ReportList
-
+export default styled(ReportList)``

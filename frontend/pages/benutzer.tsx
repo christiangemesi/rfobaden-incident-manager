@@ -1,15 +1,15 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import UserForm from '@/components/User/Form/UserForm'
 import React from 'react'
 import User, { parseUser } from '@/models/User'
 import { GetServerSideProps } from 'next'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import UserList from '@/components/User/List/UserList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import { useEffectOnce } from 'react-use'
 import UserStore, { useUsers } from '@/stores/UserStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import OrganizationStore from '@/stores/OrganizationStore'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   data: {
@@ -28,29 +28,32 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
 
   return (
     <UiContainer>
-      <h1>
-        Benutzer verwalten
-      </h1>
-      <UiGrid style={{ justifyContent: 'center' }}>
-        <UiGrid.Col size={{ md: 8, lg: 6, xl: 4 }}>
-          <UserForm />
-        </UiGrid.Col>
-      </UiGrid>
-
-      <UiGrid style={{ justifyContent: 'center' }}>
+      <section>
+        <UiGrid>
+          <UiGrid.Col>
+            <UiTitle level={1}>
+              Benutzer verwalten
+            </UiTitle>
+          </UiGrid.Col>
+        </UiGrid>
         <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
           <UserList users={users} />
         </UiGrid.Col>
-      </UiGrid>
+      </section>
     </UiContainer>
   )
 }
 export default BenutzerPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const [users] = await BackendService.list<User>('users')
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+  const { user, backendService } = getSessionFromRequest(req)
+  if (user === null) {
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+  }
 
-  const [organizations, organizationError]: BackendResponse<Organization[]> = await BackendService.list(
+  const [users] = await backendService.list<User>('users')
+
+  const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',
   )
   if (organizationError !== null) {

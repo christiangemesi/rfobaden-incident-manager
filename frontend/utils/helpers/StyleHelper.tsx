@@ -30,3 +30,17 @@ export interface StyledProps {
   className?: string
   style?: CSSProperties
 }
+
+export type ElementProps<E extends Element> = React.DetailedHTMLProps<React.HTMLAttributes<E>, E>
+
+
+type StyledVFC<T extends React.VFC<never>> =
+  T extends React.VFC<infer P>
+    ? P extends StyledProps
+      ? T & string
+      : never
+    : never
+
+export const asStyled = <T extends React.VFC<never>>(fc: T): StyledVFC<T> => (
+  fc as StyledVFC<T>
+)

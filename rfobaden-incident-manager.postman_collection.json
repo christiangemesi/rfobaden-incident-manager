@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "841bb449-4a37-44cf-9944-2ccdc087e908",
+		"_postman_id": "9de74b38-8d49-4426-81e9-f0692241a183",
 		"name": "rfobaden-incident-manager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -114,6 +114,114 @@
 			]
 		},
 		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "Create Organization",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"info@rfobaden.ch\",\n    \"name\": \"RFO Baden\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/organizations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"organizations"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Organizations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/organizations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Organization",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/organizations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Organization",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/organizations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Incident",
 			"item": [
 				{
@@ -197,7 +305,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"closeReason\": \"Finished\"\n}",
+							"raw": "{\n    \"message\":\"Finish\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -217,6 +325,38 @@
 								"incidents",
 								"1",
 								"close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close Incident Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/1/reopen",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"1",
+								"reopen"
 							]
 						}
 					},
@@ -264,7 +404,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -274,7 +414,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports"
 							]
 						}
@@ -287,7 +427,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -297,7 +437,7 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports"
 							]
 						}
@@ -310,7 +450,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -320,9 +460,9 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -334,7 +474,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -344,9 +484,9 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -372,7 +512,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -382,9 +522,9 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks"
 							]
 						}
@@ -397,7 +537,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -407,9 +547,9 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks"
 							]
 						}
@@ -422,7 +562,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -432,11 +572,11 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10"
+								"1"
 							]
 						}
 					},
@@ -448,7 +588,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -458,11 +598,11 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10"
+								"1"
 							]
 						}
 					},
@@ -488,7 +628,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1/subtasks",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -498,11 +638,11 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10",
+								"1",
 								"subtasks"
 							]
 						}
@@ -515,7 +655,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1/subtasks",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -525,11 +665,11 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10",
+								"1",
 								"subtasks"
 							]
 						}
@@ -542,7 +682,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks/15",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1/subtasks/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -552,13 +692,13 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10",
+								"1",
 								"subtasks",
-								"15"
+								"1"
 							]
 						}
 					},
@@ -570,7 +710,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/v1/incidents/5/reports/7/tasks/10/subtasks/15",
+							"raw": "http://localhost:3001/api/v1/incidents/1/reports/1/tasks/1/subtasks/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -580,19 +720,203 @@
 								"api",
 								"v1",
 								"incidents",
-								"5",
+								"1",
 								"reports",
-								"7",
+								"1",
 								"tasks",
-								"10",
+								"1",
 								"subtasks",
-								"15"
+								"1"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Transport",
+			"item": [
+				{
+					"name": "Create Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Transport Baden - Brugg\",\n    \"peopleInvolved\": 5,\n    \"destinationPlace\": \"Brugg\",\n    \"sourcePace\": \"Baden\",\n    \"vehical\": \"Minibus\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/1/transports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"1",
+								"transports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/1/transports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"1",
+								"transports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/1/transports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"1",
+								"transports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Report",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/incidents/1/transports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"incidents",
+								"1",
+								"transports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Find Session",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Session",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"agent@rfo.ch\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/session",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"session"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDkwOTUzMjksImV4cCI6MTY1MTY4NzMyOCwic3ViIjoiMyJ9.-9lAyfLfySD3TJYvrN62xFwwmXnxFguoWakvD4xBY_E",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

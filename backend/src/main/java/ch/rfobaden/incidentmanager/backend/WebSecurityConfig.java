@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,13 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ExceptionHandlerFilter expectionHandlerFiler;
 
-    private final UserService userService;
-
     private final DetailsWrapperService detailsWrapperService;
 
-    private final ApiExceptionHandler exceptionHandler;
-
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthEntryPoint authEntryPoint;
 
     public WebSecurityConfig(
         JwtAuthFilter authFilter,
@@ -57,10 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     ) {
         this.authFilter = authFilter;
         this.expectionHandlerFiler = expectionHandlerFiler;
-        this.userService = userService;
-        this.exceptionHandler = exceptionHandler;
+        this.authEntryPoint = new AuthEntryPoint(exceptionHandler);
         this.passwordEncoder = passwordEncoder;
-        this.detailsWrapperService = new DetailsWrapperService();
+        this.detailsWrapperService = new DetailsWrapperService(userService);
     }
 
     @Autowired
@@ -89,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // all other requests need to be authenticated
             .authorizeRequests().anyRequest().permitAll()
 
-            .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPoint())
+            .and().exceptionHandling().authenticationEntryPoint(authEntryPoint)
 
 
             // make sure we use stateless session; session won't be used to
@@ -107,7 +105,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManagerBean();
     }
 
-    public class AuthEntryPoint implements AuthenticationEntryPoint {
+    public static class AuthEntryPoint implements AuthenticationEntryPoint {
+        private final ApiExceptionHandler exceptionHandler;
+
+        public AuthEntryPoint(ApiExceptionHandler exceptionHandler) {
+            this.exceptionHandler = exceptionHandler;
+        }
+
         @Override
         public void commence(
             HttpServletRequest request,
@@ -122,9 +126,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    public class DetailsWrapperService implements UserDetailsService {
+    public static class DetailsWrapperService implements UserDetailsService {
+        private final UserService userService;
+
+        public DetailsWrapperService(UserService userService) {
+            this.userService = userService;
+        }
+
         @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        public DetailsWrapper loadUserByUsername(String username) throws UsernameNotFoundException {
             var user = userService.findByEmail(username).orElseThrow(() -> (
                 new UsernameNotFoundException("No user with email " + username + " found")
             ));
@@ -145,7 +155,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return List.of();
+            return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
         }
 
         @Override

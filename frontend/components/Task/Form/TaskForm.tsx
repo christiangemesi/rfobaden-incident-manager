@@ -11,7 +11,6 @@ import User from '@/models/User'
 import Id from '@/models/base/Id'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
-import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiTextArea from '@/components/Ui/Input/Text/UiTextArea'
@@ -21,13 +20,13 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 
 interface Props {
-  incident: Incident
   report: Report
   task?: Task | null
+  onSave?: (task: Task) => void
   onClose?: () => void
 }
 
-const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: handleClose }) => {
+const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, onClose: handleClose }) => {
   const form = useForm<ModelData<Task>>(task, () => ({
     title: '',
     description: null,
@@ -42,17 +41,21 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     closedSubtaskIds: [],
     subtaskIds: [],
     isClosed: false,
+    isDone: false,
+    imageIds: [],
   }))
 
   useValidate(form, (validate) => ({
     title: [
       validate.notBlank(),
+      validate.maxLength(100),
     ],
     description: [
       validate.notBlank({ allowNull: true }),
     ],
     location: [
       validate.notBlank({ allowNull: true }),
+      validate.maxLength(100),
     ],
     priority: [],
     assigneeId: [],
@@ -64,21 +67,28 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
     closedSubtaskIds: [],
     subtaskIds: [],
     isClosed: [],
+    isDone: [],
+    imageIds: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Task>) => {
+    const apiEndpoint = `incidents/${report.incidentId}/reports/${report.id}/tasks`
     const [data, error]: BackendResponse<Task> = task === null
-      ? await BackendService.create(`incidents/${incident.id}/reports/${report.id}/tasks`, formData)
-      : await BackendService.update(`incidents/${incident.id}/reports/${report.id}/tasks`, task.id, formData)
+      ? await BackendService.create(apiEndpoint, formData)
+      : await BackendService.update(apiEndpoint, task.id, formData)
     if (error !== null) {
       throw error
     }
-    TaskStore.save(parseTask(data))
+    const newTask = parseTask(data)
+    TaskStore.save(newTask)
+    if (handleSave) {
+      handleSave(newTask)
+    }
     clearForm(form)
     if (handleClose) {
       handleClose()
     }
-  }, [task])
+  }, [report, task])
 
   useCancel(form, handleClose)
 
@@ -106,7 +116,13 @@ const TaskForm: React.VFC<Props> = ({ incident, report, task = null, onClose: ha
 
 
         <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput {...props} label="Zuweisung" options={userIds} optionName={mapUserIdToName} />
+          <UiSelectInput
+            {...props}
+            label="Zuweisung"
+            options={userIds}
+            optionName={mapUserIdToName}
+            menuPlacement="top"
+          />
         )}</UiForm.Field>
 
 

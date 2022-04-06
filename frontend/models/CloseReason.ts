@@ -1,4 +1,4 @@
-import { parseDate } from '@/models/Date'
+import { parseDate } from '@/models/base/Date'
 
 export default interface CloseReason {
   message: string

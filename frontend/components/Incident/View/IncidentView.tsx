@@ -1,99 +1,67 @@
 import Incident from '@/models/Incident'
-import React, { ReactNode, Ref } from 'react'
-import styled from 'styled-components'
+import React, { ReactNode } from 'react'
+import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import IncidentInfo from '@/components/Incident/Info/IncidentInfo'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiDescription from '@/components/Ui/Description/UiDescription'
+import styled from 'styled-components'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
+import IncidentActions from '@/components/Incident/Actions/IncidentActions'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiCircularProgress from '@/components/Ui/CircularProgress/UiCircularProgress'
 
-interface Props {
+interface Props extends StyledProps {
   incident: Incident
-  innerRef?: Ref<HTMLDivElement>
+  children: ReactNode
+  onDelete?: () => void
 }
 
-const IncidentView: React.VFC<Props> = ({ incident, innerRef }) => {
-
+const IncidentView: React.VFC<Props> = ({
+  incident,
+  className,
+  style,
+  children,
+  onDelete: handleDelete,
+}) => {
   return (
-    <Container ref={innerRef}>
-      <h1>
-        {incident.title}
-      </h1>
-      <div style={{ width: '100%' }}>
-        <UiGrid style={{ justifyContent: 'center' }}>
-          <UiGrid.Col size={{ md: 8, lg: 5 }}>
-            <Info name="Status">
-              {getStatusMessage(incident)}
-            </Info>
-            {incident.isClosed && (
-              <>
-                <Info name="Abschlussgrund">
-                  {incident.closeReason}
-                </Info>
-              </>
-            )}
-
-            <div style={{ marginTop: '1rem' }} />
-            <Info name="erstellt am">
-              {incident.createdAt.toLocaleString()}
-            </Info>
-            <Info name="zuletzt bearbeitet am">
-              {incident.updatedAt.toLocaleString()}
-            </Info>
-            <Info name="gedruckt am" className="print-only">
-              {new Date().toLocaleString()}
-            </Info>
+    <UiLevel className={className} style={style}>
+      <UiLevel.Header>
+        <UiGrid justify="space-between" gap={1} style={{ flexWrap: 'nowrap' }}>
+          <UiGrid.Col size={{ xs: 0, md: 'auto' }}>
+            <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+          </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 10, md: true }}>
+            <TitleContainer>
+              <IncidentInfo incident={incident} />
+              <UiTitle level={1}>
+                {incident.title}
+              </UiTitle>
+              <UiDescription description={incident.description} />
+            </TitleContainer>
+          </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 2, md: 'auto' }}>
+            <IncidentActions incident={incident} onDelete={handleDelete} />
+            <UiIcon.Empty style={{ marginLeft: '1rem' }} />
           </UiGrid.Col>
         </UiGrid>
-      </div>
-      <article style={{ marginTop: '1.5rem' }}>
-        <TextLines>
-          {incident.description}
-        </TextLines>
-      </article>
-    </Container>
-  )
-}
-export default IncidentView
-
-interface InfoProp {
-  name: string
-  children: ReactNode
-  className?: string
-}
-
-const Info: React.VFC<InfoProp> = ({ name, children, className }) => {
-  return (
-    <UiGrid gap={1} className={className}>
-      <UiGrid.Col size={6} style={{ textAlign: 'right' }}>
-        <span style={{ fontWeight: 600 }}>
-          {name}
-        </span>
-      </UiGrid.Col>
-      <UiGrid.Col>
+      </UiLevel.Header>
+      <StyledUiLevelContent noPadding>
         {children}
-      </UiGrid.Col>
-    </UiGrid>
+      </StyledUiLevelContent>
+    </UiLevel>
   )
 }
+export default styled(IncidentView)``
 
-const getStatusMessage = (incident: Incident): string => {
-  if (incident.isClosed) {
-    return 'geschlossen'
-  }
-  if (incident.startsAt !== null && incident.startsAt > new Date()) {
-    return 'ungeöffnet'
-  }
-  if (incident.endsAt !== null && incident.endsAt < new Date()) {
-    return 'vorbei'
-  }
-  return 'geöffnet'
-}
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+const StyledUiLevelContent = styled(UiLevel.Content)`
+  overflow: hidden;
 `
 
-const TextLines = styled.div`
-  white-space: pre-wrap;
-  line-height: 1.2;
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 0.5rem;
 `

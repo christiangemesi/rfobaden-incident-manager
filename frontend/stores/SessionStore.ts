@@ -1,7 +1,8 @@
 import User from '@/models/User'
-import { createStore, useStore } from '@/stores/Store'
+import { createStore } from '@/stores/base/Store'
 import Session from '@/models/Session'
 import UserStore from '@/stores/UserStore'
+import { useStore } from '@/stores/base/hooks'
 
 interface SessionState {
   session: Session | null
@@ -12,11 +13,6 @@ const initialState: SessionState = {
 }
 
 const SessionStore = createStore(initialState, (getState, setState) => ({
-  setSession(token: string, currentUser: User) {
-    currentToken = token
-    localStorage.setItem(storageKey, token)
-    SessionStore.setCurrentUser(currentUser)
-  },
   setCurrentUser(currentUser: User) {
     UserStore.save(currentUser)
     setState({
@@ -25,10 +21,13 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
       },
     })
   },
-  clear() {
-    currentToken = null
-    localStorage.removeItem(storageKey)
-    setState({ session: { currentUser: null }})
+  clear({ silent = false }: { silent?: boolean } = {}) {
+    if (silent) {
+      // Update the state, but don't rerender when `silent == true`.
+      getState().session = { currentUser: null }
+    } else {
+      setState({ session: { currentUser: null }})
+    }
   },
 }))
 export default SessionStore
@@ -48,14 +47,3 @@ export const useCurrentUser = (): User => {
   }
   return currentUser
 }
-
-const storageKey = 'session.token'
-
-/**
- * The current session token. This value is always in sync with both the store and localStorage,
- * except when local storage is modified by something outside this module,
- * which would require a page reload.
- */
-let currentToken = process.browser ? localStorage.getItem(storageKey) : null
-
-export const getSessionToken = (): string | null => currentToken

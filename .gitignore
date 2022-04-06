@@ -160,3 +160,7 @@ Temporary Items
 # IDEA remote targets.
 #   Almost always machine specific, so we don't want them in the git repo.
 .idea/remote-targets.xml
+
+# Typescript build info file.
+frontend/tsconfig.tsbuildinfo
+/files/

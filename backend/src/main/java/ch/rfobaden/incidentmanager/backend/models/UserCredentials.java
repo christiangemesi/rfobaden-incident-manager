@@ -9,18 +9,23 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "user_credentials")
 public final class UserCredentials extends Model implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
+    @NotBlank
     @Column(nullable = false)
     private String encryptedPassword;
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime lastPasswordChangeAt;
 

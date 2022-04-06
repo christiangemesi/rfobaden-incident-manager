@@ -33,7 +33,10 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
     if (error !== null) {
       throw error
     }
-    SessionStore.setCurrentUser(parseUser(data))
+    if (data.user == null) {
+      throw new Error('user was successfully updated, but we did not receive user')
+    }
+    SessionStore.setCurrentUser(parseUser(data.user))
     clearForm(form)
     if (handleClose) {
       handleClose()

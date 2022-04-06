@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
+import React, { MouseEvent, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
 import UiModalContext, {
   animationMillis,
@@ -9,20 +9,34 @@ import styled, { css, keyframes } from 'styled-components'
 import UiContainer from '../../Container/UiContainer'
 import UiGrid from '../../Grid/UiGrid'
 import ReactDOM from 'react-dom'
-import { useMountedState } from 'react-use'
+import { createGlobalState, useKey, useMountedState, useUpdateEffect } from 'react-use'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import ScrollHelper from '@/utils/helpers/ScrollHelper'
 
 interface Props {
   children: ReactNode | ((state: UiModalState) => ReactNode)
 }
 
 const UiModalBody: React.VFC<Props> = ({ children }) => {
+  const [globalLevel, setGlobalLevel] = useModalLevel()
+  const [level, setLevel] = useState(1)
+
   const context = useContext(UiModalContext)
   const isMounted = useMountedState()
 
+  useUpdateEffect(() => {
+    if (context.isOpen) {
+      setLevel(globalLevel + 1)
+      setGlobalLevel(globalLevel + 1)
+    } else {
+      setLevel(globalLevel - 1)
+      setGlobalLevel(globalLevel - 1)
+    }
+  }, [context.isOpen])
+
   const [isShaking, setShaking] = useState(false)
 
-  const handleOutsideClick = useCallback(() => {
+  const handleCloseAttempt = useCallback(() => {
     if (context.isPersistent) {
       setShaking(true)
       setTimeout(() => {
@@ -32,7 +46,30 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
       context.close()
     }
   }, [context])
-  
+
+  useKey('Escape', () => {
+    if (!context.isOpen || level !== globalLevel) {
+      return
+    }
+    handleCloseAttempt()
+  }, { event: 'keyup' }, [context, level, globalLevel])
+
+  const dialogRef = useRef<HTMLElement | null>(null)
+  const backgroundRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (backgroundRef.current === null || dialogRef.current === null) {
+      return
+    }
+    if (context.visibility === UiModalVisibility.OPEN) {
+      ScrollHelper.disableScroll(backgroundRef.current)
+      ScrollHelper.enableScrollCapture(dialogRef.current)
+    }
+    if (context.visibility === UiModalVisibility.CLOSING) {
+      ScrollHelper.enableScroll(backgroundRef.current)
+      ScrollHelper.disableScrollCapture(dialogRef.current)
+    }
+  }, [context.visibility])
+
   const content = useMemo(() => (
     context.visibility === UiModalVisibility.CLOSED || (
       <DialogContainer isShaking={isShaking} isFull={context.isFull}>
@@ -41,6 +78,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
           visibility={context.visibility}
           isFull={context.isFull}
           onClick={ignoreClick}
+          ref={dialogRef}
         >
           <CloseButton type="button" onClick={context.close}>
             <UiIcon.CancelAction />
@@ -62,7 +100,7 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
   }
 
   return ReactDOM.createPortal((
-    <Background visibility={context.visibility} onClick={handleOutsideClick}>
+    <Background visibility={context.visibility} ref={backgroundRef} onClick={handleCloseAttempt}>
       <UiContainer>
         {context.isFull ? (
           <UiGrid style={{ justifyContent: 'center', width: '100%' }}>
@@ -79,9 +117,12 @@ const UiModalBody: React.VFC<Props> = ({ children }) => {
 }
 export default UiModalBody
 
+const useModalLevel = createGlobalState(0)
+
 const ignoreClick = (e: MouseEvent) => {
   e.stopPropagation()
 }
+
 
 const Background = styled.div<{ visibility: UiModalVisibility }>`
   position: fixed;
@@ -181,8 +222,8 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
   position: static;
   display: block;
   border: none;
-  overflow: hidden;
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: 90vh;
   width: ${({ isFull }) => isFull && '100%'};
   
@@ -198,11 +239,12 @@ const Dialog = styled.dialog<{ visibility: UiModalVisibility, isFull: boolean }>
     0 3px 14px 2px rgba(0, 0, 0, 0.12),
     0 5px 5px -3px rgba(0, 0, 0, 0.2);
 
-  transition: ${animationMillis}ms ease-in-out;
+  transition: ${animationMillis}ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: transform;
 
   ${({ visibility }) => visibility !== UiModalVisibility.OPEN && css`
-    transform: scale(25%);
+    transition: ${animationMillis}ms cubic-bezier(1, 0.23, 1,0.32);
+    transform: scale(40%);
     
     // Hide the close button when closing, since it's clipping
     // the dialog, which makes it look strange when scaling down.

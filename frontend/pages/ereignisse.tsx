@@ -5,24 +5,20 @@ import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentList from '@/components/Incident/List/IncidentList'
-import Report, { parseReport } from '@/models/Report'
-import ReportStore from '@/stores/ReportStore'
 
 interface Props {
   data: {
     incidents: Incident[]
-    reports: Report[]
   }
 }
 
 const EreignissePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
-    ReportStore.saveAll(data.reports.map(parseReport))
   })
 
   const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
@@ -70,28 +66,21 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
 }
 export default EreignissePage
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const [incidents, incidentsError]: BackendResponse<Incident[]> = await BackendService.list('incidents')
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+  const { user, backendService } = getSessionFromRequest(req)
+  if (user === null) {
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+  }
+
+  const [incidents, incidentsError]: BackendResponse<Incident[]> = await backendService.list('incidents')
   if (incidentsError !== null) {
     throw incidentsError
   }
-
-  // TODO Add `reportCount`, `keyMessageCount` fields to `Incident` instead of loading all reports for each incident.
-  const reports = await incidents.reduce(async (all, incident) => {
-    const [reports, reportsError]: BackendResponse<Report[]> = await BackendService.list(
-      `incidents/${incident.id}/reports`,
-    )
-    if (reportsError !== null) {
-      throw reportsError
-    }
-    return [...(await all), ...reports]
-  }, Promise.resolve([] as Report[]))
 
   return {
     props: {
       data: {
         incidents,
-        reports,
       },
     },
   }

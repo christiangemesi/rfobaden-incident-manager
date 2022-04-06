@@ -27,6 +27,8 @@ const UiTitle: React.VFC<Props> = ({
 export default styled(UiTitle)``
 
 const StyledTitle = styled.div<{ isCentered: boolean }>`
+  word-wrap: break-word;
+  
   ${({ isCentered }) => isCentered && css`
     text-align: center;
   `}
@@ -35,7 +37,6 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 52px;
     line-height: 64px;
     letter-spacing: 0.2px;
-    margin-bottom: 1rem;
   }
 
   h2& {
