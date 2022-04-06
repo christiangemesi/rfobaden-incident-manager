@@ -55,11 +55,11 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiScroll>
-          {appState.hasHeader && (<UiHeader />)}
+          {appState.hasHeader && <UiHeader />}
           <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
           </Main>
-          {appState.hasFooter && (<UiFooter />)}
+          {appState.hasFooter && <UiFooter />}
         </UiScroll>
       </ThemeProvider>
     </Fragment>
@@ -132,7 +132,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
 const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
   --header-height: 5rem;
-  --footer-height: 4rem;
+  --footer-height: 5rem;
 
   ${({ hasHeader }) => !hasHeader && css`
     --header-height: 0px;
