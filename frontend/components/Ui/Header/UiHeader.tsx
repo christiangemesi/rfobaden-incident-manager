@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
@@ -13,6 +13,11 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
+import TransportStore from '@/stores/TransportStore'
+import ReportStore from '@/stores/ReportStore'
+import TaskStore from '@/stores/TaskStore'
+import SubtaskStore from '@/stores/SubtaskStore'
+import Priority from '@/models/Priority'
 
 
 const UiHeader: React.VFC = () => {
@@ -29,6 +34,29 @@ const UiHeader: React.VFC = () => {
     await router.push('/anmelden')
   }, [router])
 
+  let numberPriorityHigh = 0
+  let numberPriorityMedium = 0
+  let numberPriorityLow = 0
+  if (currentUser !== null) {
+    const userTransports = TransportStore.list().filter((e) => e.assigneeId == currentUser?.id)
+    const usersReports = ReportStore.list().filter((e) => e.assigneeId == currentUser?.id)
+    const usersTasks = TaskStore.list().filter((e) => e.assigneeId == currentUser?.id)
+    const usersSubtasks = SubtaskStore.list().filter((e) => e.assigneeId == currentUser?.id)
+    console.log(1,1,1)
+    numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
+      + usersTasks.filter((e) => e.priority == Priority.HIGH).length
+      + usersSubtasks.filter((e) => e.priority == Priority.HIGH).length
+      + userTransports.filter((e) => e.priority == Priority.HIGH).length
+    numberPriorityMedium = usersReports.filter((e) => e.priority == Priority.HIGH).length
+      + usersTasks.filter((e) => e.priority == Priority.MEDIUM).length
+      + usersSubtasks.filter((e) => e.priority == Priority.MEDIUM).length
+      + userTransports.filter((e) => e.priority == Priority.MEDIUM).length
+    numberPriorityLow = usersReports.filter((e) => e.priority == Priority.HIGH).length
+      + usersTasks.filter((e) => e.priority == Priority.LOW).length
+      + usersSubtasks.filter((e) => e.priority == Priority.LOW).length
+      + userTransports.filter((e) => e.priority == Priority.LOW).length
+  }
+
   return (
     <Header>
       <NavContainer>
@@ -43,9 +71,46 @@ const UiHeader: React.VFC = () => {
         <UiHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
         </UiHeaderItem>
-        <UiHeaderItem href="/meine-aufgaben" title="Zugewiesene Aufgaben">
-          <UiIcon.AssignedList />
-        </UiHeaderItem>
+        {currentUser !== null && (
+          <UiHeaderItem title="Zugewiesene Aufgaben">
+            <UiDropDown>
+              <UiDropDown.Trigger>{({ toggle }) => (
+                <IconButton onClick={toggle}>
+                  <AssignedListContainer
+                    numberAssignments={numberPriorityHigh + numberPriorityMedium + numberPriorityLow}>
+                    <UiIcon.AssignedList />
+                  </AssignedListContainer>
+                </IconButton>
+              )}</UiDropDown.Trigger>
+              <UiDropDown.Menu>
+                <UiDropDown.Item>
+                  <DropdownItemContainer href="/meine-aufgaben#hohe-prioritaet">
+                    <Icon priority={Priority.HIGH}>
+                      <UiIcon.PriorityHigh />
+                    </Icon>
+                    {numberPriorityHigh}
+                  </DropdownItemContainer>
+                </UiDropDown.Item>
+                <UiDropDown.Item>
+                  <DropdownItemContainer href="/meine-aufgaben#mittlere-prioritaet">
+                    <Icon priority={Priority.MEDIUM}>
+                      <UiIcon.PriorityMedium />
+                    </Icon>
+                    {numberPriorityMedium}
+                  </DropdownItemContainer>
+                </UiDropDown.Item>
+                <UiDropDown.Item>
+                  <DropdownItemContainer href="/meine-aufgaben#niedere-prioritaet">
+                    <Icon priority={Priority.LOW}>
+                      <UiIcon.PriorityLow />
+                    </Icon>
+                    {numberPriorityLow}
+                  </DropdownItemContainer>
+                </UiDropDown.Item>
+              </UiDropDown.Menu>
+            </UiDropDown>
+          </UiHeaderItem>
+        )}
         {currentUser === null ? (
           <UiHeaderItem href="/anmelden">
             <UiIcon.Login />
@@ -117,6 +182,42 @@ const Header = styled.header`
 const NavContainer = styled.div`
   display: flex;
 `
+const DropdownItemContainer = styled(UiLink)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+`
+const AssignedListContainer = styled.div<{ numberAssignments: number }>`
+  ::after {
+    content: '${({ numberAssignments }) => numberAssignments}';
+    position: absolute;
+    top: -0.2rem;
+    right: -0.2rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    font-size: 0.5rem;
+    background: ${({ theme, numberAssignments }) => numberAssignments == 0 
+            ? theme.colors.tertiary.contrast : theme.colors.error.value};
+    color: ${({ theme, numberAssignments }) => numberAssignments == 0 
+            ? theme.colors.tertiary.value : theme.colors.error.contrast};
+  }
+`
+const Icon = styled.div<{ priority: Priority }>`
+  ${({ priority }) => priority == Priority.LOW && css`
+    color: ${({ theme }) => theme.colors.success.value};
+  `}
+
+  ${({ priority }) => priority == Priority.MEDIUM && css`
+    color: ${({ theme }) => theme.colors.warning.value};
+  `}
+
+  ${({ priority }) => priority == Priority.HIGH && css`
+    color: ${({ theme }) => theme.colors.error.value};
+  `}
+`
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -139,9 +240,9 @@ const LoggedInUser = styled.div`
   display: flex;
   align-items: center
 `
-const IconButton = styled(UiIconButton)`  
-   :hover {
-      background-color: transparent;
-      transform: scale(1.05);
-   }
+const IconButton = styled(UiIconButton)`
+  :hover {
+    background-color: transparent;
+    transform: scale(1.05);
+  }
 `
