@@ -21,8 +21,13 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
       },
     })
   },
-  clear() {
-    setState({ session: { currentUser: null }})
+  clear({ silent = false }: { silent?: boolean } = {}) {
+    if (silent) {
+      // Update the state, but don't rerender when `silent == true`.
+      getState().session = { currentUser: null }
+    } else {
+      setState({ session: { currentUser: null }})
+    }
   },
 }))
 export default SessionStore
