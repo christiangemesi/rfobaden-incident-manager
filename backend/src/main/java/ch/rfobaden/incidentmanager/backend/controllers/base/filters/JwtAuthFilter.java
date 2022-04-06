@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -39,37 +40,33 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain chain
     ) throws ServletException, IOException {
-        var session = processRequest(request, response);
-        if (session != null) {
+        processRequest(request, response).ifPresent((session) -> {
             var auth = new UsernamePasswordAuthenticationToken(
                 session,
                 null,
                 List.of(new SimpleGrantedAuthority("ROLE_" + session.getUser().getRole().name()))
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
-        }
+        });
         chain.doFilter(request, response);
     }
 
-    private SessionData processRequest(HttpServletRequest request, HttpServletResponse response) {
-        var token = getTokenFromHeader(request);
-        if (token == null) {
-            token = getTokenFromCookie(request);
-            if (token == null) {
-                return null;
-            }
-        }
-        var user = jwtHelper.decodeUser(token).orElseThrow(() -> {
-            sessionHelper.deleteSessionFromResponse(response);
-            return new ApiException(HttpStatus.UNAUTHORIZED, "token expired");
-        });
-        return new SessionData(user, token);
+    private Optional<SessionData> processRequest(HttpServletRequest request, HttpServletResponse response) {
+        return getTokenFromHeader(request)
+            .or(() -> getTokenFromCookie(request))
+            .map((token) -> {
+                var user = jwtHelper.decodeUser(token).orElseThrow(() -> {
+                    sessionHelper.deleteSessionFromResponse(response);
+                    return new ApiException(HttpStatus.UNAUTHORIZED, "token expired");
+                });
+                return new SessionData(user, token);
+            });
     }
 
-    private String getTokenFromHeader(HttpServletRequest request) {
+    private Optional<String> getTokenFromHeader(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
         if (authHeader == null || authHeader.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
         if (!authHeader.startsWith(BEARER_HEADER_PREFIX)) {
             throw new ApiException(
@@ -77,18 +74,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 "Authorization header must be a bearer token"
             );
         }
-        return authHeader.substring(BEARER_HEADER_PREFIX.length());
+        return Optional.of(authHeader.substring(BEARER_HEADER_PREFIX.length()));
     }
 
-    private String getTokenFromCookie(HttpServletRequest request) {
+    private Optional<String> getTokenFromCookie(HttpServletRequest request) {
         var cookies = request.getCookies();
         if (cookies == null) {
-            return null;
+            return Optional.empty();
         }
         return Arrays.stream(cookies)
             .filter((cookie) -> Objects.equals(cookie.getName(), SessionHelper.COOKIE_NAME))
             .map(Cookie::getValue)
-            .findAny()
-            .orElse(null);
+            .findAny();
     }
 }
