@@ -123,7 +123,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     transform: translateX(0);
   `}
   
-  ${Themed.media.xl.min} {
+  ${Themed.media.lg.min} {
     width: calc(65% + 4rem);
   }
   ${Themed.media.xxl.min} {
