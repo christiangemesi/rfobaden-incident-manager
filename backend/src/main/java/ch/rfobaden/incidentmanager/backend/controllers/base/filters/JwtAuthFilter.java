@@ -26,9 +26,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private static final String BEARER_HEADER_PREFIX = "Bearer ";
 
     private final JwtHelper jwtHelper;
+    private final SessionHelper sessionHelper;
 
-    public JwtAuthFilter(JwtHelper jwtHelper) {
+    public JwtAuthFilter(JwtHelper jwtHelper, SessionHelper sessionHelper) {
         this.jwtHelper = jwtHelper;
+        this.sessionHelper = sessionHelper;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain chain
     ) throws ServletException, IOException {
-        var session = processRequest(request);
+        var session = processRequest(request, response);
         if (session != null) {
             var auth = new UsernamePasswordAuthenticationToken(
                 session,
@@ -49,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private SessionData processRequest(HttpServletRequest request) {
+    private SessionData processRequest(HttpServletRequest request, HttpServletResponse response) {
         var token = getTokenFromHeader(request);
         if (token == null) {
             token = getTokenFromCookie(request);
@@ -57,9 +59,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return null;
             }
         }
-        var user = jwtHelper.decodeUser(token).orElseThrow(() -> (
-            new ApiException(HttpStatus.UNAUTHORIZED, "token expired")
-        ));
+        var user = jwtHelper.decodeUser(token).orElseThrow(() -> {
+            sessionHelper.deleteSessionFromResponse(response);
+            return new ApiException(HttpStatus.UNAUTHORIZED, "token expired");
+        });
         return new SessionData(user, token);
     }
 
