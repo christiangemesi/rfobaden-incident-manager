@@ -236,7 +236,6 @@ public class Report extends Model
         this.images = images;
     }
 
-    @JsonIgnore
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
