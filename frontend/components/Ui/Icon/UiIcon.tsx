@@ -36,6 +36,7 @@ import {
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
   mdiUpload,
+  mdiFormatListBulleted,
 } from '@mdi/js'
 
 
@@ -147,4 +148,5 @@ export default Object.assign(StyledUiIcon, {
   SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
   ResetPassword: makeNamedIcon(mdiLockReset),
   Upload: makeNamedIcon(mdiUpload),
+  AssignedList: makeNamedIcon(mdiFormatListBulleted),
 })

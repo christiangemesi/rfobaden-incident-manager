@@ -44,7 +44,7 @@ const UiHeader: React.VFC = () => {
           <UiIcon.Changelog />
         </UiHeaderItem>
         <UiHeaderItem href="/meine-aufgaben" title="Zugewiesene Aufgaben">
-          <UiIcon.Changelog />
+          <UiIcon.AssignedList />
         </UiHeaderItem>
         {currentUser === null ? (
           <UiHeaderItem href="/anmelden">

@@ -29,6 +29,7 @@ const HomePage: React.VFC<Props> = ({ data }) => {
       { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse' },
       { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer' },
       { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen' },
+      { icon: UiIcon.AssignedList, label: 'Meine Aufgaben', link: '/meine-aufgaben' },
     ]
     if (firstIncident !== null) {
       // Only show transport panel if there is at least one open incident.
