@@ -19,11 +19,46 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 export interface Props {
+  /**
+   * Forces the modal to be either open or closed.
+   *
+   * Using this property makes the modal a _controlled component_, which means that the open state
+   * is expected to be provided entirely over this attribute. Internal changes to this value
+   * are reported using {@link onToggle}, {@link onOpen} and {@link onClose}.
+   */
   isOpen?: boolean
+
+  /**
+   * Sets the modal's persistence.
+   * The persistence determines if the modal can be closed by either the Escape key or clicking outside it.
+   *
+   * Not setting this property will cause the persistence to be automatic.
+   * Automatic persistence starts off as `false`, but may change depending on the contents of the form.
+   */
   isPersistent?: boolean
+
+  /**
+   * The body and optionally triggers of the modal.
+   *
+   * @see Trigger
+   * @see Body
+   */
   children: ReactNode | RenderWithState
+
+  /**
+   * Event caused by the modal getting opened or closed.
+   * @param value Whether the modal is getting opened or closed.
+   */
   onToggle?: (value: boolean) => void
+
+  /**
+   * Event caused by the modal getting opened.
+   */
   onOpen?: () => void
+
+  /**
+   * Event caused by the modal getting closed.
+   */
   onClose?: () => void
 }
 
@@ -31,6 +66,12 @@ interface ConfigProps {
   renderContainer: (props: ContainerProps) => ReactNode
 }
 
+/**
+ * `UiModalLike` is a base component which implements modal-like behaviour.
+ * It does not specify how the component has to look or act.
+ *
+ * Components making use of `UiModalLike` have to have an open/close transition or animation of 300ms.
+ */
 const UiModalLike: React.VFC<Props & ConfigProps> = ({
   isOpen,
   isPersistent,
@@ -222,7 +263,15 @@ interface ChildProps {
   children: ReactNode | RenderWithState
 }
 
+/**
+ * `Trigger` is a component that will render a modals trigger.
+ * The trigger is an element that can cause the modal to open, such as a button.
+ */
 const Trigger: React.VFC<ChildProps> = () => null
+
+/**
+ * `Body` is a component that contains the modals content.
+ */
 const Body: React.VFC<ChildProps> = () => null
 
 const createRenderChild = (elements: ReactElement[], componentType: JSXElementConstructor<ChildProps>): RenderWithState => {
