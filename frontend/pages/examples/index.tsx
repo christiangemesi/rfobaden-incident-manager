@@ -101,12 +101,6 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-modal">
-        <a>
-          UiModal
-        </a>
-      </Link>
-      <br />
       <Link href="examples/ui-list-item">
         <a>
           UiListItem
@@ -122,6 +116,13 @@ const UiComponentsExample: React.VFC = () => {
       <Link href="examples/ui-title">
         <a>
           UiTitle
+        </a>
+      </Link>
+      <br />
+      <UiTitle level={4}>Overlays</UiTitle>
+      <Link href="examples/ui-modal">
+        <a>
+          UiModal
         </a>
       </Link>
       <br />
