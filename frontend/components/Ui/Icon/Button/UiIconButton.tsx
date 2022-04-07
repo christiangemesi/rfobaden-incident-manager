@@ -43,6 +43,7 @@ const StyledButton = styled.button<{ color?: ColorName }>`
   background: transparent;
   cursor: pointer;
   margin: 0 0.2rem;
+  padding: 0;
   
   will-change: background-color;
   transition: 200ms ease-out;
