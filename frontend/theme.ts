@@ -1,3 +1,5 @@
+import { Keyframes, keyframes } from 'styled-components'
+
 export type Theme = {
   colors: {
     primary: Color
@@ -19,6 +21,13 @@ export type Theme = {
       max: number
     }
   }
+  transitions: {
+    slideIn: string;
+    slideOut: string;
+  }
+  animations: {
+    [K in AnimationName]: Animation
+  }
 }
 
 export type Breakpoint =
@@ -28,6 +37,15 @@ export type Breakpoint =
   | 'lg'
   | 'xl'
   | 'xxl'
+
+export type AnimationName =
+  | 'shake'
+
+export interface Animation {
+  name: Keyframes
+  duration: number
+  timing: string
+}
 
 export type ColorName = keyof Theme['colors']
 
@@ -105,6 +123,30 @@ export const defaultTheme: Theme = {
       max: Number.MAX_SAFE_INTEGER,
     },
   },
+  transitions: {
+    slideIn: 'cubic-bezier(0.23, 1, 0.32, 1) 300ms',
+    slideOut: 'cubic-bezier(calc(1 - 0.32), 0, calc(1 - 0.23), 0) 300ms',
+  },
+  animations: {
+    shake: {
+      duration: 600,
+      timing: 'ease',
+      name: keyframes`
+        10%, 90% {
+          transform: translateX(-1px);
+        }
+        20%, 80% {
+          transform: translateX(2px);
+        }
+        30%, 50%, 70% {
+          transform: translateX(-4px);
+        }
+        40%, 60% {
+          transform: translateX(4px);
+        }
+      `,
+    },
+  },
 }
 
 interface ThemedProps {
@@ -112,8 +154,8 @@ interface ThemedProps {
 }
 
 class ThemedType {
-  readonly media: ThemedMedia = Object.keys(defaultTheme.breakpoints).reduce((record, breakpoint) => {
-    record[breakpoint] = {
+  readonly media: ThemedMedia = Object.keys(defaultTheme.breakpoints).reduce((themed, breakpoint) => {
+    themed[breakpoint] = {
       min: ({ theme }) => (
         `@media (min-width: ${theme.breakpoints[breakpoint].min}px)`
       ),
@@ -124,13 +166,25 @@ class ThemedType {
         `@media (min-width: ${theme.breakpoints[breakpoint].min}px) and (max-width: ${theme.breakpoints[breakpoint].max}px)`
       ),
     }
-    return record
+    return themed
   }, {} as ThemedMedia)
+
+  readonly animations: ThemedAnimations = Object.keys(defaultTheme.animations).reduce((themed, animationName) => {
+    themed[animationName] = ({ theme }) => {
+      const animation = theme.animations[animationName]
+      return `${animation.duration}ms ${animation.timing} ${animation.name}`
+    }
+    return themed
+  }, {} as ThemedAnimations)
 }
 export const Themed = new ThemedType()
 
+type ThemedFn = (props: ThemedProps) => string
+
 type ThemedMedia = Record<Breakpoint, {
-  only: (props: ThemedProps) => string
-  min: (props: ThemedProps) => string
-  max: (props: ThemedProps) => string
+  only: ThemedFn
+  min: ThemedFn
+  max: ThemedFn
 }>
+
+type ThemedAnimations = Record<AnimationName, ThemedFn>
