@@ -1,4 +1,4 @@
-import { Keyframes, keyframes } from 'styled-components'
+import { css, FlattenSimpleInterpolation, Keyframes, keyframes } from 'styled-components'
 
 export type Theme = {
   colors: {
@@ -172,14 +172,14 @@ class ThemedType {
   readonly animations: ThemedAnimations = Object.keys(defaultTheme.animations).reduce((themed, animationName) => {
     themed[animationName] = ({ theme }) => {
       const animation = theme.animations[animationName]
-      return `${animation.duration}ms ${animation.timing} ${animation.name}`
+      return css`${animation.duration}ms ${animation.timing} ${animation.name}`
     }
     return themed
   }, {} as ThemedAnimations)
 }
 export const Themed = new ThemedType()
 
-type ThemedFn = (props: ThemedProps) => string
+type ThemedFn = (props: ThemedProps) => string | FlattenSimpleInterpolation
 
 type ThemedMedia = Record<Breakpoint, {
   only: ThemedFn
