@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiButton from '@/components/Ui/Button/UiButton'
 
 const UiModalExample: React.VFC = () => {
-
   return (
     <UiContainer>
       <Heading>
@@ -13,8 +12,7 @@ const UiModalExample: React.VFC = () => {
       </Heading>
 
       <SpacedSection>
-
-        <p>
+        <div>
           <UiModal>
             <UiModal.Trigger>{({ open }) => (
               <UiButton onClick={open}>
@@ -28,9 +26,9 @@ const UiModalExample: React.VFC = () => {
           A modal opens a window on top of the current page.
           <br />
           It can be closed by either clicking outside of it, or using the built-in close button.
-        </p>
+        </div>
 
-        <p>
+        <div>
           <UiModal size="full">
             <UiModal.Trigger>{({ open }) => (
               <UiButton onClick={open}>
@@ -50,9 +48,9 @@ const UiModalExample: React.VFC = () => {
             Using <Code>size=&quot;full&quot;</Code> will force the modal to take up the full width
             available to the current breakpoint.
           </p>
-        </p>
+        </div>
 
-        <p>
+        <div>
           <UiModal noCloseButton>
             <UiModal.Trigger>{({ open }) => (
               <UiButton onClick={open}>
@@ -70,9 +68,9 @@ const UiModalExample: React.VFC = () => {
             <br /> <br />
             The default close button can be hidden using the <Code>noCloseButton</Code> property.
           </p>
-        </p>
+        </div>
 
-        <p>
+        <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
             <UiModal isPersistent>
               <UiModal.Trigger>{({ open }) => (
@@ -133,9 +131,9 @@ const UiModalExample: React.VFC = () => {
               This behaviour is disabled when the persistence is set explicitly.
             </li>
           </ul>
-        </p>
+        </div>
 
-        <p>
+        <div>
           <UiModal>
             <UiModal.Trigger>{({ open }) => (
               <UiButton onClick={open}>
@@ -162,14 +160,48 @@ const UiModalExample: React.VFC = () => {
             <br /> <br />
             The default close button can be hidden using the <Code>noCloseButton</Code> property.
           </p>
-        </p>
+        </div>
 
+        <ControlledModal />
       </SpacedSection>
     </UiContainer>
   )
 }
 export default UiModalExample
 
+const ControlledModal: React.VFC = () => {
+  const [isOpen, setOpen] = useState(false)
+
+  return (
+    <div>
+      <UiButton onClick={() => setOpen(true)}>
+        Controlled Modal
+      </UiButton>
+      <UiModal isOpen={isOpen} onToggle={setOpen}>{({ close }) => (
+        <div>
+          I am a controlled modal!
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+            <UiButton onClick={close}>
+              Close me normally!
+            </UiButton>
+            <UiButton onClick={() => setOpen(false)}>
+              Close me directly!
+            </UiButton>
+          </div>
+        </div>
+      )}</UiModal>
+      <p>
+        A controlled modal is a modal whose open/close state is not stored and controlled by the modal component itself.
+        This is useful if you need to know if a modal is opened outside of it, or if the modals trigger can&apos;t
+        be written inside a <Code>Modal.Trigger</Code> component for some reason.
+      </p>
+      <p>
+        Controlled modals also allow multiple triggers to exist at completely different places,
+        for example <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setOpen(true)}>here!</span>
+      </p>
+    </div>
+  )
+}
 
 const Heading = styled.h1`
   font-size: 2rem;
@@ -182,7 +214,7 @@ const SpacedSection = styled.section`
   flex-direction: column;
   gap: 2rem;
   
-  & > p {
+  & > div {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -190,12 +222,12 @@ const SpacedSection = styled.section`
     em {
       font-style: italic;
     }
-  }
-  
-  & > ul {
-    list-style: disc;
-    margin-left: 1rem;
-    margin-top: 0.5rem;
+    
+    ul {
+      list-style: disc;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+    }
   }
 `
 
