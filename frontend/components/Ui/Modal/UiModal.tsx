@@ -7,27 +7,32 @@ import { Themed } from '@/theme'
 
 interface Props extends UiModalLikeProps {
   size?: 'full' | 'auto'
-
   title?: string
+  noCloseButton?: boolean
 }
 
 const UiModal: React.VFC<Props> = ({
   title = null,
   size = 'auto',
+  noCloseButton = false,
   ...modalProps
 }) => {
   return (
     <UiModalLike {...modalProps} renderContainer={({ isOpen, isShaking, nav, children }) => (
       <DialogContainer size={size}>
         <Dialog open={isOpen} isShaking={isShaking}>
-          {title === null ? nav : (
+          {title === null ? (
+            (noCloseButton || nav)
+          ) : (
             <TitleContainer>
               <UiTitle level={2}>
                 {title}
               </UiTitle>
-              <div>
-                {nav}
-              </div>
+              {noCloseButton || (
+                <div>
+                  {nav}
+                </div>
+              )}
             </TitleContainer>
           )}
           {children}
