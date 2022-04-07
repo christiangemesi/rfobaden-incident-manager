@@ -51,6 +51,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   // Current persistence state.
   // This is a ref so it doesn't trigger renders.
   const isPersistentRef = useRef(isPersistent ?? false)
+  isPersistentRef.current = isPersistent ?? isPersistentRef.current
 
   // Forces the component to update.
   const forceUpdate = useUpdate()
@@ -152,8 +153,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   }, [children])
 
   const showContent = state.isOpen || isAnimating.current
-  const content = useMemo(() => showContent && renderBody(state), [showContent, renderBody, state])
-
+  const content = showContent && renderBody(state)
   return (
     <UiPersist onPersist={state.persist}>
       {renderTrigger(state)}
