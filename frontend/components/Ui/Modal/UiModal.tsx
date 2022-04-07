@@ -6,8 +6,21 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import { Themed } from '@/theme'
 
 interface Props extends UiModalLikeProps {
+  /**
+   * Width sizing of the modal. Default is `'auto'`.
+   * - `'auto'` makes the modal take just enough space to fit its content.
+   * - `'full'` forces the modal to span the full breakpoint width.
+   */
   size?: 'full' | 'auto'
+
+  /**
+   * Text that is displayed as the modals title.
+   */
   title?: string
+
+  /**
+   * Hides the modals default close button.
+   */
   noCloseButton?: boolean
 }
 
