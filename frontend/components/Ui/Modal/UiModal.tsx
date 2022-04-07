@@ -1,82 +1,90 @@
-import React, { ReactNode, useMemo, useState } from 'react'
-import UiModalContext, {
-  animationMillis,
-  UiModalState,
-  UiModalVisibility,
-} from '@/components/Ui/Modal/Context/UiModalContext'
-import UiModalActivator from '@/components/Ui/Modal/Activator/UiModalActivator'
-import UiModalBody from '@/components/Ui/Modal/Body/UiModalBody'
-import { useUpdateEffect } from 'react-use'
+import React from 'react'
+import UiModalLike, { Props as UiModalLikeProps } from '@/components/Ui/Modal/Like/UiModalLike'
+import styled, { css } from 'styled-components'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import { Themed } from '@/theme'
 
-interface Props {
+interface Props extends UiModalLikeProps {
   /**
    * Make the modal take up a fixed, full size.
    */
   isFull?: boolean
 
-  /**
-   * Make the modal persistent, meaning it can't be closed by
-   * clicking outside the modal window.
-   */
-  isPersistent?: boolean
-
-  children: ReactNode
+  title?: string
 }
 
 const UiModal: React.VFC<Props> = ({
+  title = null,
   isFull = false,
-  isPersistent: isPersistentProp = false,
-  children,
+  ...modalProps
 }) => {
-  const [visibility, setVisibility] = useState(UiModalVisibility.CLOSED)
-  const [isPersistent, setPersistent] = useState(isPersistentProp)
-
-  const context: UiModalState = useMemo(() => {
-    const isOpen = visibility === UiModalVisibility.OPEN || visibility === UiModalVisibility.OPENING
-    const close = () => {
-      setVisibility(UiModalVisibility.CLOSING)
-      setTimeout(() => {
-        setVisibility(UiModalVisibility.CLOSED)
-      }, animationMillis)
-    }
-    const open = () => {
-      setVisibility(UiModalVisibility.OPENING)
-      setTimeout(() => {
-        setVisibility(UiModalVisibility.OPEN)
-      }, animationMillis)
-    }
-    return {
-      isFull,
-      visibility,
-      isOpen,
-      close,
-      open,
-      toggle() {
-        if (this.isOpen) {
-          close()
-        } else {
-          open()
-        }
-      },
-      isPersistent,
-      setPersistent,
-      persist: () => setPersistent(true),
-    }
-  }, [isFull, isPersistent, visibility])
-
-  useUpdateEffect(() => {
-    if (!context.isOpen) {
-      context.setPersistent(false)
-    }
-  }, [context.isOpen])
-
   return (
-    <UiModalContext.Provider value={context}>
-      {children}
-    </UiModalContext.Provider>
+    <UiModalLike {...modalProps} renderContainer={({ isOpen, isShaking, nav, children }) => (
+      <DialogContainer isFull={isFull}>
+        <Dialog open={isOpen} isShaking={isShaking}>
+          {title === null ? nav : (
+            <TitleContainer>
+              <UiTitle level={2}>
+                {title}
+              </UiTitle>
+              <div>
+                {nav}
+              </div>
+            </TitleContainer>
+          )}
+          {children}
+        </Dialog>
+      </DialogContainer>
+    )} />
   )
 }
 export default Object.assign(UiModal, {
-  Activator: UiModalActivator,
-  Body: UiModalBody,
+  Activator: UiModalLike.Trigger,
+  Body: UiModalLike.Body,
 })
+
+const DialogContainer = styled.div<{ isFull: boolean }>`
+  width: auto;
+  ${({ isFull }) => isFull && css`
+    ${UiContainer.fluidCss};
+    width: 100%;
+  `};
+`
+
+const Dialog = styled.dialog<{ isShaking: boolean }>`
+  position: static;
+  display: block;
+  border: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 90vh;
+  width: 100%;
+
+  background: ${({ theme }) => theme.colors.tertiary.value};
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow:
+    0 8px 17px 2px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12),
+    0 5px 5px -3px rgba(0, 0, 0, 0.2);
+
+  transition: ${({ theme }) => theme.transitions.slideIn};
+  transition-property: transform;
+  
+  :not([open]) {
+    transition: ${({ theme }) => theme.transitions.slideOut};
+    transform: scale(40%);
+  }
+
+  ${({ isShaking }) => isShaking && css`
+    animation: ${Themed.animations.shake};
+  `}
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  column-gap: 1rem;
+`
