@@ -46,18 +46,18 @@ export interface Props {
   children: ReactNode | RenderWithState
 
   /**
-   * Event caused by the modal getting opened or closed.
-   * @param value Whether the modal is getting opened or closed.
+   * Event caused by the modal requesting to be opened or closed.
+   * @param value Whether the modal should get opened or closed.
    */
   onToggle?: (value: boolean) => void
 
   /**
-   * Event caused by the modal getting opened.
+   * Event caused by the modal opening.
    */
   onOpen?: () => void
 
   /**
-   * Event caused by the modal getting closed.
+   * Event caused by the modal closing.
    */
   onClose?: () => void
 
@@ -124,6 +124,11 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
     const setOpen = isControlled ? handleToggle : (open: boolean) => {
       isOpenRef.current = open
       handleToggle(open)
+      if (open) {
+        handleOpen()
+      } else {
+        handleClose()
+      }
       forceUpdate()
     }
     const toggle = (value?: boolean) => {
@@ -132,11 +137,6 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
         return
       }
       setOpen(open)
-      if (open) {
-        handleOpen()
-      } else {
-        handleClose()
-      }
     }
     const persist = isPersistent ? noop : () => {
       isPersistentRef.current = true
@@ -159,6 +159,20 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       persist,
     }
   }, [isControlled, isPersistent, handleToggle, handleClose, handleOpen, forceUpdate])
+
+  // Execute the callbacks for open/close.
+  // Only needs to be done if this is a controlled component, as the callbacks are otherwise
+  // executed right after updating `state.isClosed`.
+  useUpdateEffect(function executeOpenStateCallbacks()  {
+    if (isOpen === undefined) {
+      return
+    }
+    if (isOpen) {
+      handleOpen()
+    } else {
+      handleClose()
+    }
+  }, [isOpen])
 
   // Closes the component, unless it is persisted.
   const theme = useTheme()
@@ -184,10 +198,9 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       return
     }
     const timeout = setTimeout(() => {
-      console.log('disable animation')
       isAnimating.current = false
       forceUpdate()
-    }, 600)
+    }, 300)
     return () => clearTimeout(timeout)
   }, [state.isOpen, previousOpenState, forceUpdate])
 

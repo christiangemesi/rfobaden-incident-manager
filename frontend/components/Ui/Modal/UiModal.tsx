@@ -69,11 +69,12 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
     0 5px 5px -3px rgba(0, 0, 0, 0.2);
 
   transition: ${({ theme }) => theme.transitions.slideIn};
-  transition-property: transform;
+  transition-property: transform, opacity;
   
   :not([open]) {
     transition: ${({ theme }) => theme.transitions.slideOut};
     transform: scale(40%);
+    opacity: 0;
   }
 
   ${({ isShaking }) => isShaking && css`
