@@ -36,11 +36,11 @@ const ReportList = <T extends Trackable>({
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
       <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
+        <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Meldung erfassen">
             <UiIcon.CreateAction size={1.5} />
           </UiCreateButton>
-        )}</UiModal.Activator>
+        )}</UiModal.Trigger>
         <UiModal.Body>{({ close }) => (
           renderForm({ save: handleSelect ?? noop, close })
         )}</UiModal.Body>

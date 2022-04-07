@@ -71,11 +71,11 @@ const SubtaskList: React.VFC<Props> = ({
           </UiCaption>
 
           <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
+            <UiModal.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
                 <UiIcon.CreateAction size={1.5} />
               </UiCreateButton>
-            )}</UiModal.Activator>
+            )}</UiModal.Trigger>
             <UiModal.Body>{({ close }) => (
               <div>
                 <UiTitle level={1} isCentered>

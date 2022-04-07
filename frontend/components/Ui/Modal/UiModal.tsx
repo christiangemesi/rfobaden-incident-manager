@@ -40,7 +40,7 @@ const UiModal: React.VFC<Props> = ({
   )
 }
 export default Object.assign(UiModal, {
-  Activator: UiModalLike.Trigger,
+  Trigger: UiModalLike.Trigger,
   Body: UiModalLike.Body,
 })
 

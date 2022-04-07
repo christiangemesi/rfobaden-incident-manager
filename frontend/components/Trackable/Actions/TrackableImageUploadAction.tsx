@@ -20,11 +20,11 @@ const TrackableImageUploadAction: React.VFC<Props> = ({
 }) => {
   return (
     <UiModal isFull>
-      <UiModal.Activator>{({ open }) => (
+      <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bild hinzufügen
         </UiDropDown.Item>
-      )}</UiModal.Activator>
+      )}</UiModal.Trigger>
 
       <UiModal.Body>{({ close }) => (
         <React.Fragment>

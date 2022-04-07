@@ -9,11 +9,11 @@ interface Props {
 const TrackableEditAction: React.VFC<Props> = ({ children }) => {
   return (
     <UiModal isFull>
-      <UiModal.Activator>{({ open }) => (
+      <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bearbeiten
         </UiDropDown.Item>
-      )}</UiModal.Activator>
+      )}</UiModal.Trigger>
       <UiModal.Body children={children} />
     </UiModal>
   )
