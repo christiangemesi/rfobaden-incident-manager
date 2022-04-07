@@ -206,6 +206,7 @@ const ControlledModal: React.VFC = () => {
       )}</UiModal>
       <p>
         A controlled modal is a modal whose open/close state is not stored and controlled by the modal component itself.
+        <br />
         This is useful if you need to know if a modal is opened outside of it, or if the modals trigger can&apos;t
         be written inside a <Code>Modal.Trigger</Code> component for some reason.
       </p>
@@ -227,6 +228,7 @@ const SpacedSection = styled.section`
   display: inline-flex;
   flex-direction: column;
   gap: 2rem;
+  max-width: 60rem;
   
   & > div {
     display: flex;
