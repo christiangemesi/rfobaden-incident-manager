@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ScrollHelper from '@/utils/helpers/ScrollHelper'
-import { useTimeoutFn, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { ElementProps } from '@/utils/helpers/StyleHelper'
 import { noop } from '@/utils/control-flow'
 
@@ -35,7 +35,7 @@ const UiOverlay: React.VFC<Props> = ({
 
   // Shows if the overlay is completely hidden.
   // A hidden overlay is moved to a lower z-index, so it does not block pointer events.
-  const [isHidden, setHidden] = useState(false)
+  const [isHidden, setHidden] = useState(true)
 
   // Makes the overlay visible right when it opens,
   // and hides it after its close transition has ended.
@@ -43,12 +43,18 @@ const UiOverlay: React.VFC<Props> = ({
     if (isOpen) {
       setHidden(false)
     } else {
-      setTimeout(() => setHidden(true), 300)
+      setTimeout(() => setHidden(true))
     }
   }, [isOpen])
 
   return (
-    <Background {...elementProps} ref={ref} isOpen={isOpen} isHidden={isHidden} onClick={handleClick}>
+    <Background
+      {...elementProps}
+      ref={ref}
+      isOpen={isOpen}
+      isHidden={isHidden}
+      onClick={handleClick}
+    >
       {children}
     </Background>
   )
