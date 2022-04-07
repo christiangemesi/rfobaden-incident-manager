@@ -58,30 +58,20 @@ const UiHeader: React.VFC = () => {
                 </IconButton>
               )}</UiDropDown.Trigger>
               <UiDropDown.Menu>
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
+                <UiModal title="Passwort bearbeiten">
+                  <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Activator>
+                  )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        Passwort bearbeiten
-                      </UiTitle>
-                      <UserPasswordForm user={currentUser} onClose={close} />
-                    </React.Fragment>
+                    <UserPasswordForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
+                <UiModal title="E-Mail ändern">
+                  <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Activator>
+                  )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        E-Mail Adresse ändern
-                      </UiTitle>
-                      <UserEmailForm user={currentUser} onClose={close} />
-                    </React.Fragment>
+                    <UserEmailForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
