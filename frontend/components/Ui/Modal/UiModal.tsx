@@ -6,22 +6,19 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import { Themed } from '@/theme'
 
 interface Props extends UiModalLikeProps {
-  /**
-   * Make the modal take up a fixed, full size.
-   */
-  isFull?: boolean
+  size?: 'full' | 'auto'
 
   title?: string
 }
 
 const UiModal: React.VFC<Props> = ({
   title = null,
-  isFull = false,
+  size = 'auto',
   ...modalProps
 }) => {
   return (
     <UiModalLike {...modalProps} renderContainer={({ isOpen, isShaking, nav, children }) => (
-      <DialogContainer isFull={isFull}>
+      <DialogContainer size={size}>
         <Dialog open={isOpen} isShaking={isShaking}>
           {title === null ? nav : (
             <TitleContainer>
@@ -43,14 +40,6 @@ export default Object.assign(UiModal, {
   Trigger: UiModalLike.Trigger,
   Body: UiModalLike.Body,
 })
-
-const DialogContainer = styled.div<{ isFull: boolean }>`
-  width: auto;
-  ${({ isFull }) => isFull && css`
-    ${UiContainer.fluidCss};
-    width: 100%;
-  `};
-`
 
 const Dialog = styled.dialog<{ isShaking: boolean }>`
   position: static;
@@ -84,6 +73,16 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
   `}
 `
 
+const DialogContainer = styled.div<{ size: 'full' | 'auto' }>`
+  width: auto;
+  ${({ size }) => size === 'full' && css`
+    ${UiContainer.fluidCss};
+    & > ${Dialog} {
+      ${UiContainer.fluidCss};
+    }
+  `};
+`
+
 const TitleContainer = styled.div`
   display: flex;
   width: 100%;
@@ -93,3 +92,4 @@ const TitleContainer = styled.div`
     flex: 0 1 100%;
   }
 `
+
