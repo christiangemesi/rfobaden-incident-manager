@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react'
 import { noop } from '@/utils/control-flow'
-import { usePrevious, useUpdate, useUpdateEffect } from 'react-use'
+import { createGlobalState, useKey, usePrevious, useUpdate, useUpdateEffect } from 'react-use'
 import UiPersist from '@/components/Ui/Persist/UiPersist'
 import ReactDOM from 'react-dom'
 import UiOverlay from '@/components/Ui/Overlay/UiOverlay'
@@ -63,6 +63,13 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
 
   // Shows if the component is currently running its open/close animation.
   const isAnimating = useRef(false)
+  
+  // The global level shows how many modals are open on top of each other.
+  const [globalLevel] = useLevel()
+  
+  // The level shows on which level the modal has been opened.
+  // A closed modal does have a level of `null`.
+  const level = useRef<number | null>(null)
 
   // Contains the current overall state of the component,
   // and functions to modify it.
@@ -121,12 +128,12 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   // This signals that the modal will now execute the open or close animation.
   // During the close animation, the modals content has to be rendered still,
   // but it should be removed right after turning completely invisible.
-  const previousOpenState = usePrevious(isOpenRef.current)
-  if (previousOpenState !== isOpenRef.current) {
+  const previousOpenState = usePrevious(state.isOpen)
+  if (previousOpenState !== state.isOpen) {
     isAnimating.current = true
   }
   useEffect(function resetAnimation() {
-    if (previousOpenState === isOpenRef.current || !isAnimating.current) {
+    if (previousOpenState === state.isOpen || !isAnimating.current) {
       return
     }
     const timeout = setTimeout(() => {
@@ -134,6 +141,29 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       forceUpdate()
     }, 300)
     return () => clearTimeout(timeout)
+  }, [state.isOpen, previousOpenState, forceUpdate])
+
+  // Sets or resets the level of this modal when it is opened and closed.
+  useEffect(function updateLevel() {
+    if (state.isOpen === previousOpenState) {
+      return
+    }
+    if (state.isOpen) {
+      globalLevel.current += 1
+      level.current = globalLevel.current
+    } else {
+      globalLevel.current -= 1
+      level.current = null
+    }
+  }, [state.isOpen, previousOpenState, globalLevel])
+
+  // Close the modal if the escape key is pressed.
+  // The modal will not be closed if there are other modals open on top of it.
+  useKey('Escape', () => {
+    if (!state.isOpen || globalLevel.current !== level.current) {
+      return
+    }
+    handleCloseAttempt()
   })
 
   // Reset the persistence flag after each close.
@@ -226,9 +256,12 @@ const Nav = styled.div`
   margin-bottom: 1rem;
 `
 
+const useLevel = createGlobalState({ current: 0 })
+
 export default Object.assign(UiModalLike, {
   Trigger,
   Body,
   Nav,
 })
+
 
