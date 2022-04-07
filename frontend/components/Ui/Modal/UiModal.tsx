@@ -86,5 +86,10 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
 
 const TitleContainer = styled.div`
   display: flex;
+  width: 100%;
   column-gap: 1rem;
+  
+  & > ${UiTitle} {
+    flex: 0 1 100%;
+  }
 `
