@@ -44,13 +44,8 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Teilauftrag bearbeiten
-            </UiTitle>
-            <SubtaskForm task={task} subtask={subtask} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
+          <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
 
         <TrackableImageUploadAction

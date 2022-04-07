@@ -70,19 +70,14 @@ const SubtaskList: React.VFC<Props> = ({
             offene Teilaufträge
           </UiCaption>
 
-          <UiModal isFull>
+          <UiModal title="Teilauftrag erfassen" isFull>
             <UiModal.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
                 <UiIcon.CreateAction size={1.5} />
               </UiCreateButton>
             )}</UiModal.Trigger>
             <UiModal.Body>{({ close }) => (
-              <div>
-                <UiTitle level={1} isCentered>
-                  Teilauftrag erfassen
-                </UiTitle>
-                <SubtaskForm task={task} onClose={close} />
-              </div>
+              <SubtaskForm task={task} onClose={close} />
             )}</UiModal.Body>
           </UiModal>
 

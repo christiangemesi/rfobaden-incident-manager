@@ -3,12 +3,13 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React, { ReactNode } from 'react'
 
 interface Props {
+  title: string
   children: (props: { close(): void }) => ReactNode
 }
 
-const TrackableEditAction: React.VFC<Props> = ({ children }) => {
+const TrackableEditAction: React.VFC<Props> = ({ title, children }) => {
   return (
-    <UiModal isFull>
+    <UiModal title={title} isFull>
       <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bearbeiten

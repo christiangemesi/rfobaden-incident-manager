@@ -72,13 +72,8 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Auftrag bearbeiten
-            </UiTitle>
-            <TaskForm report={report} task={task} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Auftrag bearbeiten">{({ close }) => (
+          <TaskForm report={report} task={task} onClose={close} />
         )}</TrackableEditAction>
 
         {!task.isDone && (

@@ -37,13 +37,8 @@ const ReportActions: React.VFC<Props> = ({ incident, transport, onDelete: handle
         )}
       </UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Transport bearbeiten
-            </UiTitle>
-            <TransportForm incident={incident} transport={transport} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Transport bearbeiten">{({ close }) => (
+          <TransportForm incident={incident} transport={transport} onClose={close} />
         )}</TrackableEditAction>
 
         <UiDropDown.Item onClick={handleDelete}>

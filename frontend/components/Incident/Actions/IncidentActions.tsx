@@ -73,13 +73,8 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Ereignis bearbeiten
-            </UiTitle>
-            <IncidentForm incident={incident} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Ereignis bearbeiten">{({ close }) => (
+          <IncidentForm incident={incident} onClose={close} />
         )}</TrackableEditAction>
 
         {isAdmin(currentUser) && (
