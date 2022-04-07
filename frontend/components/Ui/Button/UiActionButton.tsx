@@ -25,7 +25,7 @@ const UiActionButton: React.VFC<Props> = ({
 }
 export default UiActionButton
 
-const ActionButton = styled.button<{ color: string }>`
+const ActionButton = styled.button<{ color: ColorName }>`
   background: ${({ theme, color }) => theme.colors[color].value};
   color: ${({ theme, color }) => theme.colors[color].contrast};
   
