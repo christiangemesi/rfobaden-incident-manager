@@ -37,7 +37,7 @@ const ReportList = <T extends Trackable>({
   }))
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
-      <UiModal title={formTitle} isFull>
+      <UiModal title={formTitle}>
         <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Meldung erfassen">
             <UiIcon.CreateAction size={1.5} />

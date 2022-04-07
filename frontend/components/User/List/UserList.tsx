@@ -46,7 +46,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
   return (
     <UiList>
       {isAdmin(currentUser) && (
-        <UiModal title="Benutzer erfassen" isFull>
+        <UiModal title="Benutzer erfassen">
           <UiModal.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />

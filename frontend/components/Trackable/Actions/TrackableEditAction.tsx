@@ -9,7 +9,7 @@ interface Props {
 
 const TrackableEditAction: React.VFC<Props> = ({ title, children }) => {
   return (
-    <UiModal title={title} isFull>
+    <UiModal title={title}>
       <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bearbeiten

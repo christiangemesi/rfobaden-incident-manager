@@ -19,7 +19,7 @@ const TrackableImageUploadAction: React.VFC<Props> = ({
   onAddImage: handleAddImage,
 }) => {
   return (
-    <UiModal title="Bild hinzufügen" isFull>
+    <UiModal title="Bild hinzufügen">
       <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bild hinzufügen
