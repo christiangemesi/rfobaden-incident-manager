@@ -29,6 +29,20 @@ const UiModalExample: React.VFC = () => {
         </div>
 
         <div>
+          <UiModal title="I have a title!">
+            <UiModal.Trigger>{({ open }) => (
+              <UiButton onClick={open}>
+                Titled Modal
+              </UiButton>
+            )}</UiModal.Trigger>
+            <UiModal.Body>
+              I am a modal!
+            </UiModal.Body>
+          </UiModal>
+          Modals can have a built-in title, which will appear right before the close button.
+        </div>
+
+        <div>
           <UiModal size="full">
             <UiModal.Trigger>{({ open }) => (
               <UiButton onClick={open}>
