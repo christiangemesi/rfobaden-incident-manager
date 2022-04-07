@@ -60,6 +60,11 @@ export interface Props {
    * Event caused by the modal getting closed.
    */
   onClose?: () => void
+
+  /**
+   * Hides the modals default close button.
+   */
+  noCloseButton?: boolean
 }
 
 interface ConfigProps {
@@ -75,6 +80,7 @@ interface ConfigProps {
 const UiModalLike: React.VFC<Props & ConfigProps> = ({
   isOpen,
   isPersistent,
+  noCloseButton = false,
   onToggle: handleToggle = noop,
   onOpen: handleOpen = noop,
   onClose: handleClose = noop,
@@ -169,7 +175,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   // This signals that the modal will now execute the open or close animation.
   // During the close animation, the modals content has to be rendered still,
   // but it should be removed right after turning completely invisible.
-  const previousOpenState = usePrevious(state.isOpen)
+  const previousOpenState = usePrevious(state.isOpen) ?? false
   if (previousOpenState !== state.isOpen) {
     isAnimating.current = true
   }
@@ -178,9 +184,10 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       return
     }
     const timeout = setTimeout(() => {
+      console.log('disable animation')
       isAnimating.current = false
       forceUpdate()
-    }, 300)
+    }, 600)
     return () => clearTimeout(timeout)
   }, [state.isOpen, previousOpenState, forceUpdate])
 
@@ -234,7 +241,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
             ...state,
             isShaking,
             children: content,
-            nav: (
+            nav: noCloseButton ? null : (
               <Nav>
                 <UiIconButton title="Schliessen" onClick={state.close}>
                   <UiIcon.CancelAction />
@@ -303,9 +310,13 @@ const Nav = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
+  
+  & > ${UiIconButton} {
+    margin: 0;
+  }
 `
 
-const useLevel = createGlobalState({ current: 0 })
+export const useLevel = createGlobalState({ current: 0 })
 
 export default Object.assign(UiModalLike, {
   Trigger,
