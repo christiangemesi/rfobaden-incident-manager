@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { EventHandler, forwardRef, MouseEvent, ReactNode } from 'react'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {

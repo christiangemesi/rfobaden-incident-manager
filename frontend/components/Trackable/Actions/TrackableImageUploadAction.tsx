@@ -1,7 +1,6 @@
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React from 'react'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
 import Model from '@/models/base/Model'

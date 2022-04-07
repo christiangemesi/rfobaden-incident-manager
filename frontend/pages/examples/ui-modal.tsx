@@ -154,7 +154,7 @@ const UiModalExample: React.VFC = () => {
                 Nested Modals
               </UiButton>
             )}</UiModal.Trigger>
-            <UiModal.Body>{({ close }) => (
+            <UiModal.Body>
               <UiModal>
                 <UiModal.Trigger>{({ open }) => (
                   <UiButton onClick={open}>
@@ -165,7 +165,7 @@ const UiModalExample: React.VFC = () => {
                   Here I am!
                 </UiModal.Body>
               </UiModal>
-            )}</UiModal.Body>
+            </UiModal.Body>
           </UiModal>
           <p>
             The modal body can control the modal by passing a function instead of simple HTML to the <Code>children</Code> property.

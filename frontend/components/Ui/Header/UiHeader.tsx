@@ -10,7 +10,6 @@ import UserPasswordForm from '@/components/User/PasswordForm/UserPasswordForm'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
 
