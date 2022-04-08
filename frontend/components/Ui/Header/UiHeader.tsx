@@ -34,6 +34,7 @@ const UiHeader: React.VFC = () => {
     await router.push('/anmelden')
   }, [router])
 
+  // todo not working
   let numberPriorityHigh = 0
   let numberPriorityMedium = 0
   let numberPriorityLow = 0
