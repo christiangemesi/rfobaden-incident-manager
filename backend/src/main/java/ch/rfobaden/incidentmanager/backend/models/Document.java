@@ -48,7 +48,7 @@ public class Document {
 
     @Override
     public String toString() {
-        return "Image{"
+        return "Document{"
             + "id=" + id
             + ", name='" + name + '\''
             + '}';

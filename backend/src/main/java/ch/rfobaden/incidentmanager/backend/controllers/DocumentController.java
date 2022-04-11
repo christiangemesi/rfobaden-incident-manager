@@ -53,8 +53,8 @@ public class DocumentController extends AppController {
         this.subtaskService = subtaskService;
     }
 
-    //TODO change to smth with pdf?
-    @GetMapping(value = "/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+
+    @GetMapping(value = "/{id}")
     public FileSystemResource downloadDocument(@PathVariable Long id) {
         return documentFileService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
@@ -84,7 +84,6 @@ public class DocumentController extends AppController {
         Document document;
         switch (modelName.toLowerCase()) {
             case "incident":
-                //TODO why are all services red?
                 document = saveDocumentToEntity(id, incidentService, saveDocument);
                 break;
             case "report":
