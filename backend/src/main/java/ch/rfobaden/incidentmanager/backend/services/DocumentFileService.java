@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Document;
+import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import org.springframework.core.io.FileSystemResource;
@@ -18,6 +20,13 @@ public class DocumentFileService {
         this.documentFileRepository = documentFileRepository;
         this.documentRepository = documentRepository;
     }
+
+    public Document save(byte[] bytes, String documentName) {
+        Document document = documentRepository.save(new Document(documentName));
+        documentFileRepository.save(bytes, document.getId());
+        return document;
+    }
+
 
     public Optional<FileSystemResource> find(Long documentId) {
         return documentRepository.findById(documentId).map((document) -> (
