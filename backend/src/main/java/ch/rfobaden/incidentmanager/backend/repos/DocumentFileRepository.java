@@ -1,6 +1,32 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class DocumentFileRepository {
+    public static final String RESOURCES_DIR = "files/documents/";
 
+    public void save(byte[] content, Long id) {
+        try {
+            //TODO CHANGE THIS TO PDF OR SO
+            Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
+            if (!Files.exists(newFile.getParent())) {
+                Files.createDirectories(newFile.getParent());
+            }
+            Files.write(newFile, content);
+        } catch (IOException e) {
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
+        }
+    }
 
+    public FileSystemResource findInFileSystem(Long id) {
+        //TODO CHANGE THIS TO PDF OR SO
+        return new FileSystemResource(Paths.get(RESOURCES_DIR + id + ".jpeg"));
+    }
 }
