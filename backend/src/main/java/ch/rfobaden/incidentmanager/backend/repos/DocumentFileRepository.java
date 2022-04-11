@@ -3,12 +3,14 @@ package ch.rfobaden.incidentmanager.backend.repos;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Repository
 public class DocumentFileRepository {
     public static final String RESOURCES_DIR = "files/documents/";
 
