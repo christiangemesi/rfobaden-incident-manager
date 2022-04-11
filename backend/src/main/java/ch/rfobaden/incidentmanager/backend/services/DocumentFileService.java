@@ -5,9 +5,12 @@ import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
+@Service
 public class DocumentFileService {
 
     private final DocumentFileRepository documentFileRepository;
