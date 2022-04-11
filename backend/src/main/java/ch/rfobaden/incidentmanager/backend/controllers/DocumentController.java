@@ -1,16 +1,14 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.models.DocumentOwner;
-import ch.rfobaden.incidentmanager.backend.models.Image;
-import ch.rfobaden.incidentmanager.backend.models.ImageOwner;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
-import ch.rfobaden.incidentmanager.backend.services.ImageFileService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
@@ -34,7 +32,7 @@ import java.util.function.Supplier;
 @RequireAgent
 @RestController
 @RequestMapping(path = "api/v1/documents")
-public class DocumentController {
+public class DocumentController extends AppController {
     private final DocumentFileService documentFileService;
     private final IncidentService incidentService;
     private final ReportService reportService;
@@ -105,7 +103,9 @@ public class DocumentController {
     }
 
     private <M extends Model & DocumentOwner & PathConvertible<?>> Document saveDocumentToEntity(
-        Long id, ModelService<M, ?> modelService, Supplier<Document> saveDocument
+        Long id,
+        ModelService<M, ?> modelService,
+        Supplier<Document> saveDocument
     ) {
         var entity = modelService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
