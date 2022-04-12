@@ -65,8 +65,8 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   const usersReports = useReports()
   const usersTasks = useTasks()
   const usersSubtasks = useSubtasks()
-  if (currentUser !== null) {
 
+  if (currentUser !== null) {
     numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.HIGH).length
       + usersSubtasks.filter((e) => e.priority == Priority.HIGH).length
@@ -187,7 +187,6 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
 }
 export default UiHeader
 
-
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
 }) => {
@@ -272,16 +271,21 @@ const AssignedListContainer = styled.div<{ numberAssignments: number }>`
   ::after {
     content: '${({ numberAssignments }) => numberAssignments}';
     position: absolute;
-    top: -0.2rem;
-    right: -0.2rem;
-    width: 0.7rem;
-    height: 0.7rem;
+    top: -0.4rem;
+    right: -0.4rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     font-size: 0.5rem;
     background: ${({ theme, numberAssignments }) => numberAssignments == 0
-            ? theme.colors.tertiary.contrast : theme.colors.error.value};
+            ? theme.colors.tertiary.contrast
+            : theme.colors.error.value};
     color: ${({ theme, numberAssignments }) => numberAssignments == 0
-            ? theme.colors.tertiary.value : theme.colors.error.contrast};
+            ? theme.colors.tertiary.value
+            : theme.colors.error.contrast};
   }
 `
 const Icon = styled.div<{ priority: Priority }>`
