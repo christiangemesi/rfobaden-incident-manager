@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,6 +46,15 @@ public interface ReportRepository
             + " WHERE "
             + "report.incident.id = :#{#path.incidentId}"
     )
+    
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
+    @Query(
+        "SELECT report"
+            + " FROM "
+            + "Report report"
+            + " WHERE "
+            + "report.assignee = :user"
+    )
+    List<Report> findAllByAssignee(@Param("user") User user);
 }

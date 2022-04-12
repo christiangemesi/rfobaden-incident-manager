@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,6 +52,15 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " AND "
             + "task.report.id = :#{#path.reportId}"
     )
+
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
+    @Query(
+        "SELECT task "
+            + " FROM "
+            + "Task task"
+            + " WHERE "
+            + "task.assignee = :user"
+    )
+    List<Task> findAllByAssignee(@Param("user") User user);
 }

@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -58,6 +59,15 @@ public interface SubtaskRepository
             + " AND "
               + "subtask.task.id = :#{#path.taskId}"
     )
+
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
+    @Query(
+        "SELECT subtask "
+            + " FROM "
+            + "Subtask subtask"
+            + " WHERE "
+            + "subtask.assignee = :user"
+    )
+    List<Subtask> findAllByAssignee(@Param("user") User user);
 }
