@@ -71,11 +71,11 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
       + usersTasks.filter((e) => e.priority == Priority.HIGH).length
       + usersSubtasks.filter((e) => e.priority == Priority.HIGH).length
       + usersTransports.filter((e) => e.priority == Priority.HIGH).length
-    numberPriorityMedium = usersReports.filter((e) => e.priority == Priority.HIGH).length
+    numberPriorityMedium = usersReports.filter((e) => e.priority == Priority.MEDIUM).length
       + usersTasks.filter((e) => e.priority == Priority.MEDIUM).length
       + usersSubtasks.filter((e) => e.priority == Priority.MEDIUM).length
       + usersTransports.filter((e) => e.priority == Priority.MEDIUM).length
-    numberPriorityLow = usersReports.filter((e) => e.priority == Priority.HIGH).length
+    numberPriorityLow = usersReports.filter((e) => e.priority == Priority.LOW).length
       + usersTasks.filter((e) => e.priority == Priority.LOW).length
       + usersSubtasks.filter((e) => e.priority == Priority.LOW).length
       + usersTransports.filter((e) => e.priority == Priority.LOW).length
