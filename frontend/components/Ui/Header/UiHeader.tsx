@@ -12,16 +12,39 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
-import BackendService from '@/services/BackendService'
-import TransportStore from '@/stores/TransportStore'
-import ReportStore from '@/stores/ReportStore'
-import TaskStore from '@/stores/TaskStore'
-import SubtaskStore from '@/stores/SubtaskStore'
+import BackendService, { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
+import TransportStore, { useTransports } from '@/stores/TransportStore'
+import ReportStore, { useReports } from '@/stores/ReportStore'
+import TaskStore, { useTasks } from '@/stores/TaskStore'
+import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import Priority from '@/models/Priority'
+import { GetServerSideProps } from 'next'
+import Transport, { parseTransport } from '@/models/Transport'
+import Report, { parseReport } from '@/models/Report'
+import Task, { parseTask } from '@/models/Task'
+import Subtask, { parseSubtask } from '@/models/Subtask'
+import { useEffectOnce } from 'react-use'
 
+interface Props {
+  data: {
+    transports: Transport[]
+    reports: Report[]
+    tasks: Task[]
+    subtasks: Subtask[]
+  }
+}
 
-const UiHeader: React.VFC = () => {
+const UiHeader: React.VFC<Props> = ({ data }) => {
   const { currentUser } = useSession()
+
+  useEffectOnce(() => {
+    if (currentUser !== null) {
+      TransportStore.saveAll(data.transports.map(parseTransport))
+      ReportStore.saveAll(data.reports.map(parseReport))
+      TaskStore.saveAll(data.tasks.map(parseTask))
+      SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
+    }
+  })
 
   const router = useRouter()
 
@@ -34,28 +57,28 @@ const UiHeader: React.VFC = () => {
     await router.push('/anmelden')
   }, [router])
 
-  // todo not working
   let numberPriorityHigh = 0
   let numberPriorityMedium = 0
   let numberPriorityLow = 0
+
+  const usersTransports = useTransports()
+  const usersReports = useReports()
+  const usersTasks = useTasks()
+  const usersSubtasks = useSubtasks()
   if (currentUser !== null) {
-    const userTransports = TransportStore.list().filter((e) => e.assigneeId == currentUser?.id)
-    const usersReports = ReportStore.list().filter((e) => e.assigneeId == currentUser?.id)
-    const usersTasks = TaskStore.list().filter((e) => e.assigneeId == currentUser?.id)
-    const usersSubtasks = SubtaskStore.list().filter((e) => e.assigneeId == currentUser?.id)
-    console.log(1,1,1)
+
     numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.HIGH).length
       + usersSubtasks.filter((e) => e.priority == Priority.HIGH).length
-      + userTransports.filter((e) => e.priority == Priority.HIGH).length
+      + usersTransports.filter((e) => e.priority == Priority.HIGH).length
     numberPriorityMedium = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.MEDIUM).length
       + usersSubtasks.filter((e) => e.priority == Priority.MEDIUM).length
-      + userTransports.filter((e) => e.priority == Priority.MEDIUM).length
+      + usersTransports.filter((e) => e.priority == Priority.MEDIUM).length
     numberPriorityLow = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.LOW).length
       + usersSubtasks.filter((e) => e.priority == Priority.LOW).length
-      + userTransports.filter((e) => e.priority == Priority.LOW).length
+      + usersTransports.filter((e) => e.priority == Priority.LOW).length
   }
 
   return (
@@ -165,6 +188,61 @@ const UiHeader: React.VFC = () => {
 export default UiHeader
 
 
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  req,
+}) => {
+  const { user, backendService } = getSessionFromRequest(req)
+  if (user !== null) {
+    const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
+      `users/${user.id}/assignments/transports`,
+    )
+    if (transportsError !== null) {
+      throw transportsError
+    }
+
+    const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
+      `users/${user.id}/assignments/reports`,
+    )
+    if (reportsError !== null) {
+      throw reportsError
+    }
+
+    const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
+      `users/${user.id}/assignments/tasks`,
+    )
+    if (tasksError !== null) {
+      throw tasksError
+    }
+
+    const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
+      `users/${user.id}/assignments/subtasks`,
+    )
+    if (subtasksError !== null) {
+      throw subtasksError
+    }
+    return {
+      props: {
+        data: {
+          transports,
+          reports,
+          tasks,
+          subtasks,
+        },
+      },
+    }
+  }
+  return {
+    props: {
+      data: {
+        transports: [],
+        reports: [],
+        tasks: [],
+        subtasks: [],
+      },
+    },
+  }
+}
+
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -200,9 +278,9 @@ const AssignedListContainer = styled.div<{ numberAssignments: number }>`
     height: 0.7rem;
     border-radius: 50%;
     font-size: 0.5rem;
-    background: ${({ theme, numberAssignments }) => numberAssignments == 0 
+    background: ${({ theme, numberAssignments }) => numberAssignments == 0
             ? theme.colors.tertiary.contrast : theme.colors.error.value};
-    color: ${({ theme, numberAssignments }) => numberAssignments == 0 
+    color: ${({ theme, numberAssignments }) => numberAssignments == 0
             ? theme.colors.tertiary.value : theme.colors.error.contrast};
   }
 `
