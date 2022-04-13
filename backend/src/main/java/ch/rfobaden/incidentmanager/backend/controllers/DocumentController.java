@@ -39,7 +39,6 @@ public class DocumentController extends AppController {
     private final TaskService taskService;
     private final SubtaskService subtaskService;
 
-
     public DocumentController(
         DocumentFileService documentFileService,
         IncidentService incidentService, ReportService reportService,
@@ -53,9 +52,10 @@ public class DocumentController extends AppController {
         this.subtaskService = subtaskService;
     }
 
-
     @GetMapping(value = "/{id}")
     public FileSystemResource downloadDocument(@PathVariable Long id) {
+
+
         return documentFileService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));

@@ -23,6 +23,10 @@ public class Document {
     @Column(nullable = false)
     private String name;
 
+    @NotBlank
+    @Column(nullable = false)
+    private String mimeType;
+
     public Document() {
     }
 
@@ -46,11 +50,20 @@ public class Document {
         this.name = name;
     }
 
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
     @Override
     public String toString() {
         return "Document{"
             + "id=" + id
             + ", name='" + name + '\''
+            + ", mimeType='" + mimeType + '\''
             + '}';
     }
 
@@ -64,7 +77,8 @@ public class Document {
         }
         Document document = (Document) o;
         return Objects.equals(id, document.id)
-            && Objects.equals(name, document.name);
+            && Objects.equals(name, document.name)
+            && Objects.equals(mimeType, document.mimeType);
     }
 
     @Override
