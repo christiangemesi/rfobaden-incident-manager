@@ -2,17 +2,22 @@ package testImage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.tika.Tika;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.net.URLConnection;
+import java.io.IOException;
+
 
 public class findFileTypeTest {
 
     @Test
-    public void whenUsingGetContentType_thenSuccess(){
-        File file = new File("blank.pdf");
-        String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+    public void whenUsingTikaMimeType() {
+
+        String filepath = "blanc.pdf";
+
+        Tika tika = new Tika();
+        String mimeType = tika.detect(filepath);
 
         assertEquals(mimeType, "application/pdf");
     }
