@@ -14,12 +14,16 @@ public class ReportGenerator extends ModelGenerator<Report> {
     @Autowired
     UserGenerator userGenerator;
 
+    @Autowired
+    ReportTypeGenerator reportTypeGenerator;
+
     @Override
     public Report generateNew() {
         Report report = new Report();
 
         report.setTitle(faker.funnyName().name());
         report.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
+        report.setReportType(reportTypeGenerator.generate());
         report.setNotes(doMaybe(() -> faker.lorem().sentence(10)));
         report.setLocation(doMaybe(() -> faker.country().capital()));
         report.setKeyReport(faker.bool().bool());
@@ -33,5 +37,13 @@ public class ReportGenerator extends ModelGenerator<Report> {
         report.setAssignee(doMaybe(userGenerator::generate));
 
         return report;
+    }
+
+    @Override
+    public Report persist(Report record) {
+        Report savedReport =  super.persist(record);
+        savedReport.setReportType(reportTypeGenerator.copy(record.getReportType()));
+        savedReport.getReportType().setId(generateId());
+        return savedReport;
     }
 }
