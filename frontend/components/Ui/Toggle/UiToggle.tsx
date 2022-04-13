@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
+import { noop } from '@/utils/control-flow'
 
 interface Props extends UiInputProps<boolean | null> {
   label?: string,
@@ -16,7 +17,7 @@ const UiToggle: React.VFC<Props> = ({
   return (
     <div>
       <InputWrapper>
-        <Input type="checkbox" checked={value ?? false} onClick={() => handleChange(!value)}  />
+        <Input type="checkbox" checked={value ?? false} onClick={() => handleChange(!value)} onChange={noop} />
         <Slider />
         {label}
       </InputWrapper>

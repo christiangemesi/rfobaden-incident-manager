@@ -3,7 +3,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
@@ -68,13 +67,8 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung bearbeiten
-            </UiTitle>
-            <ReportForm incident={incident} report={report} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Meldung bearbeiten">{({ close }) => (
+          <ReportForm incident={incident} report={report} onClose={close} />
         )}</TrackableEditAction>
 
         {!report.isDone && (

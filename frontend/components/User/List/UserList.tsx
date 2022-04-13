@@ -46,19 +46,14 @@ const UserList: React.VFC<Props> = ({ users }) => {
   return (
     <UiList>
       {isAdmin(currentUser) && (
-        <UiModal isFull>
-          <UiModal.Activator>{({ open }) => (
+        <UiModal title="Benutzer erfassen">
+          <UiModal.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />
             </UiCreatButton>
-          )}</UiModal.Activator>
+          )}</UiModal.Trigger>
           <UiModal.Body>{({ close }) => (
-            <React.Fragment>
-              <UiTitle level={1} isCentered>
-                Benutzer erfassen
-              </UiTitle>
-              <UserForm onClose={close} />
-            </React.Fragment>
+            <UserForm onClose={close} />
           )}</UiModal.Body>
         </UiModal>
       )}

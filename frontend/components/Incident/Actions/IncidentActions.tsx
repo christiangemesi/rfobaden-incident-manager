@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import Incident, { parseIncident } from '@/models/Incident'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -73,13 +72,8 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Ereignis bearbeiten
-            </UiTitle>
-            <IncidentForm incident={incident} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Ereignis bearbeiten">{({ close }) => (
+          <IncidentForm incident={incident} onClose={close} />
         )}</TrackableEditAction>
 
         {isAdmin(currentUser) && (

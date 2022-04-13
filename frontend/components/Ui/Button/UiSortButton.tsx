@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { SortField } from '@/utils/hooks/useSort'
-import { contrastDark } from '@/theme'
 
 interface Props {
   field: SortField
@@ -61,8 +60,5 @@ const SortButton = styled.div`
     margin-right: 0;
   }
   
-  color: ${({
-    theme,
-    color,
-  }) => color === undefined ? contrastDark : theme.colors[color].value};
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
 `
