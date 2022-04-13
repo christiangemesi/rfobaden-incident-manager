@@ -8,7 +8,6 @@ import Report from '@/models/Report'
 import Task from '@/models/Task'
 import Subtask from '@/models/Subtask'
 import UiLink from '@/components/Ui/Link/UiLink'
-import TransportListItem from '@/components/Transport/List/Item/TransportListItem'
 import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 import TrackableListItem from '@/components/Trackable/List/Item/TrackableListItem'
@@ -44,7 +43,7 @@ const AssignedList: React.VFC<Props> = ({
               key={transport.id}
               href={'/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
             >
-              <TransportListItem record={transport} isSmall={false} isActive={false} isClosed={transport.isClosed} />
+              <TrackableListItem record={transport} isSmall={false} isActive={false} isClosed={transport.isClosed} />
             </UiLink>
           )}</AssignedListItem>
           <AssignedListItem title="Meldungen" trackable={data.reports.filter((e) => e.incidentId == incident.id)}>{(report) => (

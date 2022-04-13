@@ -65,7 +65,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask))
   const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask))
 
-  // TODO not correct updating
+  // TODO not correct updating -> do not use store & use entity, call getserver side meths direct here
   if (currentUser !== null) {
     numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.HIGH).length
