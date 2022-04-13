@@ -15,8 +15,10 @@ import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.Optional;
 import java.util.function.Supplier;
+import javax.servlet.http.HttpServletResponse;
 
 @RequireAgent
 @RestController
@@ -53,9 +57,10 @@ public class DocumentController extends AppController {
     }
 
     @GetMapping(value = "/{id}")
-    public FileSystemResource downloadDocument(@PathVariable Long id) {
-
-
+    public FileSystemResource downloadDocument(@PathVariable Long id, HttpServletResponse response) {
+        Document document = new Document();
+        String mimeType = document.getMimeType();
+        response.setContentType(mimeType);
         return documentFileService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
