@@ -55,12 +55,15 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
 
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
+
     @Query(
         "SELECT task "
             + " FROM "
             + "Task task"
             + " WHERE "
             + "task.assignee = :user"
+            + " AND "
+            + "task.report.incident.isClosed = false"
     )
     List<Task> findAllByAssignee(@Param("user") User user);
 }

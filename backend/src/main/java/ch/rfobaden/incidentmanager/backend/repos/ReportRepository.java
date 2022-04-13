@@ -49,12 +49,15 @@ public interface ReportRepository
     
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
+
     @Query(
         "SELECT report"
             + " FROM "
             + "Report report"
             + " WHERE "
             + "report.assignee = :user"
+            + " AND "
+            + "report.incident.isClosed = false"
     )
     List<Report> findAllByAssignee(@Param("user") User user);
 }

@@ -50,12 +50,15 @@ public interface TransportRepository
 
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
+
     @Query(
         "SELECT transport"
             + " FROM "
             + "Transport transport"
             + " WHERE "
             + "transport.assignee = :user"
+            + " AND "
+            + "transport.incident.isClosed = false"
     )
     List<Transport> findAllByAssignee(@Param("user") User user);
 }

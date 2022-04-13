@@ -62,12 +62,15 @@ public interface SubtaskRepository
 
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
+
     @Query(
         "SELECT subtask "
             + " FROM "
             + "Subtask subtask"
             + " WHERE "
             + "subtask.assignee = :user"
+            + " AND "
+            + "subtask.task.report.incident.isClosed = false"
     )
     List<Subtask> findAllByAssignee(@Param("user") User user);
 }
