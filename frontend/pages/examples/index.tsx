@@ -126,6 +126,12 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+      <Link href="examples/ui-drawer">
+        <a>
+          UiDrawer
+        </a>
+      </Link>
+      <br />
       <UiTitle level={4}>Responsive Design</UiTitle>
       <Link href="examples/custom-grid">
         <a>
