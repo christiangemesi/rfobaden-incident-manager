@@ -7,10 +7,10 @@ import ReportStore, { useReports } from '@/stores/ReportStore'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
-import Subtask, { parseSubtask } from '@/models/Subtask'
-import Task, { parseTask } from '@/models/Task'
-import Report, { parseReport } from '@/models/Report'
-import Transport, { parseTransport } from '@/models/Transport'
+import Subtask, { isOpenedSubtask, parseSubtask } from '@/models/Subtask'
+import Task, { isOpenedTask, parseTask } from '@/models/Task'
+import Report, { isOpenedReport, parseReport } from '@/models/Report'
+import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
 
@@ -36,19 +36,16 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
-  const usersTransports = useTransports()
-  const usersReports = useReports()
-  const usersTasks = useTasks()
-  const usersSubtasks = useSubtasks()
+  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((transport)=>transport.incidentId)
+  const usersReports = useReports((reports) => reports.filter(isOpenedReport)).sort((report)=>report.incidentId)
+  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask)).sort((task)=>task.incidentId)
+  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask)).sort((subtask)=>subtask.incidentId)
 
   return (
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <div id="hohe-prioritaet">
-        {usersTransports.length}
-        {usersReports.length}
-        {usersTasks.length}
-        {usersSubtasks.length}
+
       </div>
       <div id="mittlere-prioritaet">
 
