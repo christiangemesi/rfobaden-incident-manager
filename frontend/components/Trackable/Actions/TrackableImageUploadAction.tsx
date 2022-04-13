@@ -1,7 +1,6 @@
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React from 'react'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import FileUploadForm from '@/components/FileUpload/FileUploadForm'
 import { FileId } from '@/models/FileUpload'
 import Model from '@/models/base/Model'
@@ -19,25 +18,19 @@ const TrackableImageUploadAction: React.VFC<Props> = ({
   onAddImage: handleAddImage,
 }) => {
   return (
-    <UiModal isFull>
-      <UiModal.Activator>{({ open }) => (
+    <UiModal title="Bild hinzufügen">
+      <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bild hinzufügen
         </UiDropDown.Item>
-      )}</UiModal.Activator>
-
+      )}</UiModal.Trigger>
       <UiModal.Body>{({ close }) => (
-        <React.Fragment>
-          <UiTitle level={1} isCentered>
-            Bild hinzufügen
-          </UiTitle>
-          <FileUploadForm
-            modelId={id}
-            modelName={modelName}
-            onSave={handleAddImage}
-            onClose={close}
-          />
-        </React.Fragment>
+        <FileUploadForm
+          modelId={id}
+          modelName={modelName}
+          onSave={handleAddImage}
+          onClose={close}
+        />
       )}</UiModal.Body>
     </UiModal>
   )

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { EventHandler, forwardRef, MouseEvent, ReactNode } from 'react'
-import { ColorName, contrastDark } from '@/theme'
+import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
@@ -35,7 +35,7 @@ const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner ({
 
 export default styled(UiIconButton)``
 
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ color?: ColorName }>`
   display: inline-flex;
   align-items: center;
 
@@ -63,5 +63,5 @@ const StyledButton = styled.button`
   color: ${({
     theme,
     color,
-  }) => color === undefined ? contrastDark : theme.colors[color].value};
+  }) => color === undefined ? theme.colors.tertiary.contrast : theme.colors[color].value};
 `

@@ -4,7 +4,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
@@ -72,13 +71,8 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Auftrag bearbeiten
-            </UiTitle>
-            <TaskForm report={report} task={task} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Auftrag bearbeiten">{({ close }) => (
+          <TaskForm report={report} task={task} onClose={close} />
         )}</TrackableEditAction>
 
         {!task.isDone && (
