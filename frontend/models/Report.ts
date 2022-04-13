@@ -20,6 +20,7 @@ export default interface Report extends Model, Trackable {
   taskIds: Id<Task>[]
 
   imageIds: FileId[]
+  documentIds: FileId[]
 }
 
 export const parseReport = (data: Report): Report => ({
