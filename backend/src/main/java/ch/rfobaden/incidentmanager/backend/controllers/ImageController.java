@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import javax.websocket.server.PathParam;
 
-@RequireAgent
+
 @RestController
 @RequestMapping(path = "api/v1/images")
 public class ImageController extends AppController {
@@ -59,6 +59,7 @@ public class ImageController extends AppController {
         ));
     }
 
+    @RequireAgent
     @PostMapping
     public Long uploadImage(
         @RequestParam MultipartFile file,
