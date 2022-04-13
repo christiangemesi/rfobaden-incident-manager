@@ -27,3 +27,10 @@ export const parseReport = (data: Report): Report => ({
   ...parseTrackable(data),
 })
 
+export interface OpenedReport extends Report {
+  isClosed: false
+  isDone: false
+}
+
+export const isOpenedReport = (report: Report): report is OpenedReport =>
+  !report.isClosed && !report.isDone

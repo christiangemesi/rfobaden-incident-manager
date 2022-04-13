@@ -21,3 +21,9 @@ export const parseSubtask = (data: Subtask): Subtask => ({
   endsAt: parseDateOrNull(data.endsAt),
 })
 
+export interface OpenedSubtask extends Subtask {
+  isClosed: false
+}
+
+export const isOpenedSubtask = (subtask: Subtask): subtask is OpenedSubtask =>
+  !subtask.isClosed
