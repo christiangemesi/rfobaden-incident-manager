@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import { useSession } from '@/stores/SessionStore'
@@ -12,11 +12,7 @@ import Task, { isOpenedTask, parseTask } from '@/models/Task'
 import Report, { isOpenedReport, parseReport } from '@/models/Report'
 import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
-import { useEffectOnce } from 'react-use'
-import TransportListItem from '@/components/Transport/List/Item/TransportListItem'
 import Priority from '@/models/Priority'
-import ReportListItem from '@/components/Report/List/Item/ReportListItem'
-import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
@@ -39,13 +35,13 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     throw new Error('not signed in')
   }
 
-  useEffectOnce(() => {
+  useEffect(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
     TransportStore.saveAll(data.transports.map(parseTransport))
     ReportStore.saveAll(data.reports.map(parseReport))
     TaskStore.saveAll(data.tasks.map(parseTask))
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
-  })
+  }, [data, currentUser])
 
   const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
   const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((transport) => transport.incidentId)
@@ -57,13 +53,28 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   const usersDoneTasks = useTasks((tasks) => tasks.filter((task) => !isOpenedTask(task)))
   const usersDoneSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenedSubtask(subtask)))
 
-  const dataTrackable = {
+  const dataTrackableHigh = {
     incidents: openedIncidents,
-    transports: usersTransports,
-    reports: usersReports,
-    tasks: usersTasks,
-    subtasks: usersSubtasks,
+    transports: usersTransports.filter((e) => e.priority == Priority.HIGH),
+    reports: usersReports.filter((e) => e.priority == Priority.HIGH),
+    tasks: usersTasks.filter((e) => e.priority == Priority.HIGH),
+    subtasks: usersSubtasks.filter((e) => e.priority == Priority.HIGH),
   }
+  const dataTrackableMedium = {
+    incidents: openedIncidents,
+    transports: usersTransports.filter((e) => e.priority == Priority.MEDIUM),
+    reports: usersReports.filter((e) => e.priority == Priority.MEDIUM),
+    tasks: usersTasks.filter((e) => e.priority == Priority.MEDIUM),
+    subtasks: usersSubtasks.filter((e) => e.priority == Priority.MEDIUM),
+  }
+  const dataTrackableLow = {
+    incidents: openedIncidents,
+    transports: usersTransports.filter((e) => e.priority == Priority.LOW),
+    reports: usersReports.filter((e) => e.priority == Priority.LOW),
+    tasks: usersTasks.filter((e) => e.priority == Priority.LOW),
+    subtasks: usersSubtasks.filter((e) => e.priority == Priority.LOW),
+  }
+
   const dataTrackableDone = {
     incidents: openedIncidents,
     transports: usersDoneTransports,
@@ -76,13 +87,13 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <PriorityContainer id="hohe-prio">
-        <AssignedList title="Hoch" data={dataTrackable} />
+        <AssignedList title="Hoch" data={dataTrackableHigh} />
       </PriorityContainer>
       <PriorityContainer id="mittlere-prio">
-        <AssignedList title="Mittel" data={dataTrackable} />
+        <AssignedList title="Mittel" data={dataTrackableMedium} />
       </PriorityContainer>
       <PriorityContainer id="tiefe-prio">
-        <AssignedList title="Tief" data={dataTrackable} />
+        <AssignedList title="Tief" data={dataTrackableLow} />
       </PriorityContainer>
       <PriorityContainer id="done">
         <AssignedList title="Erledigt" data={dataTrackableDone} />

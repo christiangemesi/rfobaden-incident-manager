@@ -23,13 +23,15 @@ const AssignedList: React.VFC<Props> = ({
   title,
   data,
 }) => {
-  // const incidentIds = transports
+  const incidentIds = data.transports.map((e) => e.incidentId).concat(...data.reports.map((e) => e.incidentId)).concat(...data.tasks.map((e) => e.incidentId)).concat(...data.subtasks.map((e) => e.incidentId))
+  const diffIncidentIds = data.incidents.filter((e) => incidentIds.includes(e.id))
 
   return (
     <Fragment>
-
-      <UiTitle level={2}>{title}</UiTitle>
-      {data.incidents.map((incident) =>
+      {diffIncidentIds.length > 0 &&
+        (<UiTitle level={2}>{title}</UiTitle>)
+      }
+      {diffIncidentIds.map((incident) =>
         (<IncidentContainer key={'i' + incident.id}>
           <UiTitle level={3}>{incident.title}</UiTitle>
           <AssignedListItem title="Transporte" trackable={data.transports.filter((e) => e.incidentId == incident.id)} />
