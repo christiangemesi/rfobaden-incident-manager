@@ -13,9 +13,19 @@ import Report, { isOpenedReport, parseReport } from '@/models/Report'
 import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
 import { useEffectOnce } from 'react-use'
+import TransportListItem from '@/components/Transport/List/Item/TransportListItem'
+import Priority from '@/models/Priority'
+import ReportListItem from '@/components/Report/List/Item/ReportListItem'
+import TaskListItem from '@/components/Task/List/Item/TaskListItem'
+import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
+import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
+import styled from 'styled-components'
+import AssignedList from '@/components/AssignedList/AssignedList'
+
 
 interface Props {
   data: {
+    incidents: Incident[]
     transports: Transport[]
     reports: Report[]
     tasks: Task[]
@@ -30,29 +40,53 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   }
 
   useEffectOnce(() => {
+    IncidentStore.saveAll(data.incidents.map(parseIncident))
     TransportStore.saveAll(data.transports.map(parseTransport))
     ReportStore.saveAll(data.reports.map(parseReport))
     TaskStore.saveAll(data.tasks.map(parseTask))
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
-  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((transport)=>transport.incidentId)
-  const usersReports = useReports((reports) => reports.filter(isOpenedReport)).sort((report)=>report.incidentId)
-  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask)).sort((task)=>task.incidentId)
-  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask)).sort((subtask)=>subtask.incidentId)
+  const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
+  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((transport) => transport.incidentId)
+  const usersReports = useReports((reports) => reports.filter(isOpenedReport)).sort((report) => report.incidentId)
+  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask)).sort((task) => task.incidentId)
+  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask)).sort((subtask) => subtask.incidentId)
+  const usersDoneTransports = useTransports((transports) => transports.filter((transport) => !isOpenedTransport(transport)))
+  const usersDoneReports = useReports((reports) => reports.filter((report) => !isOpenedReport(report)))
+  const usersDoneTasks = useTasks((tasks) => tasks.filter((task) => !isOpenedTask(task)))
+  const usersDoneSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenedSubtask(subtask)))
+
+  const dataTrackable = {
+    incidents: openedIncidents,
+    transports: usersTransports,
+    reports: usersReports,
+    tasks: usersTasks,
+    subtasks: usersSubtasks,
+  }
+  const dataTrackableDone = {
+    incidents: openedIncidents,
+    transports: usersDoneTransports,
+    reports: usersDoneReports,
+    tasks: usersDoneTasks,
+    subtasks: usersDoneSubtasks,
+  }
 
   return (
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
-      <div id="hohe-prioritaet">
-
-      </div>
-      <div id="mittlere-prioritaet">
-
-      </div>
-      <div id="niedere-prioritaet">
-
-      </div>
+      <PriorityContainer id="hohe-prio">
+        <AssignedList title="Hoch" data={dataTrackable} />
+      </PriorityContainer>
+      <PriorityContainer id="mittlere-prio">
+        <AssignedList title="Mittel" data={dataTrackable} />
+      </PriorityContainer>
+      <PriorityContainer id="tiefe-prio">
+        <AssignedList title="Tief" data={dataTrackable} />
+      </PriorityContainer>
+      <PriorityContainer id="done">
+        <AssignedList title="Erledigt" data={dataTrackableDone} />
+      </PriorityContainer>
     </UiContainer>
   )
 }
@@ -63,7 +97,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 }) => {
   const { user, backendService } = getSessionFromRequest(req)
   if (user === null) {
-    return { redirect: { statusCode: 302, destination: '/anmelden' }}
+    return { redirect: { statusCode: 302, destination: '/anmelden' } }
+  }
+
+  const [incidents, incidentsError]: BackendResponse<Incident[]> = await backendService.list('incidents')
+  if (incidentsError !== null) {
+    throw incidentsError
   }
 
   const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
@@ -97,6 +136,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   return {
     props: {
       data: {
+        incidents,
         transports,
         reports,
         tasks,
@@ -105,3 +145,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     },
   }
 }
+
+const PriorityContainer = styled.div`
+  margin: 1rem 0 3rem;
+`

@@ -66,6 +66,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask))
   const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask))
 
+  // TODO not correct updating
   if (currentUser !== null) {
     numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
       + usersTasks.filter((e) => e.priority == Priority.HIGH).length
@@ -108,7 +109,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
               )}</UiDropDown.Trigger>
               <UiDropDown.Menu>
                 <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#hohe-prioritaet">
+                  <DropdownItemContainer href="/meine-aufgaben#hohe-prio">
                     <Icon priority={Priority.HIGH}>
                       <UiIcon.PriorityHigh />
                     </Icon>
@@ -116,7 +117,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
                   </DropdownItemContainer>
                 </UiDropDown.Item>
                 <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#mittlere-prioritaet">
+                  <DropdownItemContainer href="/meine-aufgaben#mittlere-prio">
                     <Icon priority={Priority.MEDIUM}>
                       <UiIcon.PriorityMedium />
                     </Icon>
@@ -124,7 +125,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
                   </DropdownItemContainer>
                 </UiDropDown.Item>
                 <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#niedere-prioritaet">
+                  <DropdownItemContainer href="/meine-aufgaben#tiefe-prio">
                     <Icon priority={Priority.LOW}>
                       <UiIcon.PriorityLow />
                     </Icon>
