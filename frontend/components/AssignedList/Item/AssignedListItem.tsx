@@ -1,40 +1,41 @@
 import Trackable from '@/models/Trackable'
-import React, { Fragment } from 'react'
+import React, { Fragment, ReactNode } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled from 'styled-components'
 
-interface Props {
+
+interface Props<T extends Trackable> {
   title: string
-  trackable: Trackable[]
+  trackable: T[]
+  children: (record: T) => ReactNode
 }
 
-const AssignedListItem: React.VFC<Props> = ({
+const AssignedListItem = <T extends Trackable>({
   title,
   trackable,
-}) => {
+  children,
+}: Props<T>): JSX.Element => {
   return (
     <Fragment>
       {trackable.length > 0 && (
-        <EntityContainer>
+        <Fragment>
           <UiTitle level={4}>{title}</UiTitle>
-          {trackable.map((e) => (
-            <div key={e.id}>
-              {e.assigneeId}
-              {e.startsAt?.toTimeString()??''}
-              {e.endsAt?.toTimeString()??''}
-              {e.title}
-              {e.priority}
-            </div>
-          ))}
-        </EntityContainer>
+          <EntityContainer>
+            {trackable.map((e) => (
+              children(e)
+            ))}
+          </EntityContainer>
+        </Fragment>
       )}
     </Fragment>
   )
 }
 
-
 export default AssignedListItem
 
 const EntityContainer = styled.div`
   margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `
