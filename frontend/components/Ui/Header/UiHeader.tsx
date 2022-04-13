@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
@@ -23,7 +23,6 @@ import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport
 import Report, { isOpenedReport, parseReport } from '@/models/Report'
 import Task, { isOpenedTask, parseTask } from '@/models/Task'
 import Subtask, { isOpenedSubtask, parseSubtask } from '@/models/Subtask'
-import { useEffectOnce } from 'react-use'
 
 interface Props {
   data: {
@@ -37,14 +36,14 @@ interface Props {
 const UiHeader: React.VFC<Props> = ({ data }) => {
   const { currentUser } = useSession()
 
-  useEffectOnce(() => {
-    if (currentUser !== null) {
+  useEffect(() => {
+    if (currentUser !== null && data) {
       TransportStore.saveAll(data.transports.map(parseTransport))
       ReportStore.saveAll(data.reports.map(parseReport))
       TaskStore.saveAll(data.tasks.map(parseTask))
       SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
     }
-  })
+  }, [data, currentUser])
 
   const router = useRouter()
 
@@ -109,7 +108,7 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
               )}</UiDropDown.Trigger>
               <UiDropDown.Menu>
                 <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#hohe-prio">
+                  <DropdownItemContainer href="/meine-aufgaben">
                     <Icon priority={Priority.HIGH}>
                       <UiIcon.PriorityHigh />
                     </Icon>
