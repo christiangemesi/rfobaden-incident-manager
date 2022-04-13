@@ -19,10 +19,10 @@ import TaskStore, { useTasks } from '@/stores/TaskStore'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import Priority from '@/models/Priority'
 import { GetServerSideProps } from 'next'
-import Transport, { parseTransport } from '@/models/Transport'
-import Report, { parseReport } from '@/models/Report'
-import Task, { parseTask } from '@/models/Task'
-import Subtask, { parseSubtask } from '@/models/Subtask'
+import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport'
+import Report, { isOpenedReport, parseReport } from '@/models/Report'
+import Task, { isOpenedTask, parseTask } from '@/models/Task'
+import Subtask, { isOpenedSubtask, parseSubtask } from '@/models/Subtask'
 import { useEffectOnce } from 'react-use'
 
 interface Props {
@@ -61,10 +61,10 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   let numberPriorityMedium = 0
   let numberPriorityLow = 0
 
-  const usersTransports = useTransports()
-  const usersReports = useReports()
-  const usersTasks = useTasks()
-  const usersSubtasks = useSubtasks()
+  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport))
+  const usersReports = useReports((reports) => reports.filter(isOpenedReport))
+  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask))
+  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask))
 
   if (currentUser !== null) {
     numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
