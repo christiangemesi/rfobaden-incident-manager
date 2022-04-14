@@ -32,7 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    reportType: { id: -1,type: ReportTypeType.TELEFON, number: '' },
+    reportType: { type: ReportTypeType.TELEFON, number: '' },
     number: null,
     notes: null,
     location: null,
@@ -59,7 +59,14 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      reportType: [],
+      reportType: {
+        id: [],
+        type: [],
+        number: [
+          validate.notBlank({ allowNull: true }),
+          validate.maxLength(100),
+        ],
+      },
       notes: [
         validate.notBlank({ allowNull: true }),
       ],
@@ -143,12 +150,12 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
               label="Meldeart"
               options={Object.values(ReportTypeType)}
               optionName={mapReportTypeToName}
-              menuPlacement="top"
+              menuPlacement="bottom"
             />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.reportType.number}>{(props) => (
-            <UiTextArea {...props} label="Nummer" placeholder="Nummer" />
+            <UiTextInput {...props} label="Nummer" placeholder="Nummer" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.notes}>{(props) => (
