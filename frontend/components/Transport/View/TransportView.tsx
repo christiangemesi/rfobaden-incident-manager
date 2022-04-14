@@ -96,5 +96,4 @@ const InfoTable = styled.table`
   th {
     width: 10rem;
   }
-  
 `

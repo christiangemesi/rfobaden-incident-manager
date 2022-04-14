@@ -25,6 +25,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
+import { mapReportTypeToName } from '../Form/ReportForm'
 
 
 interface Props {
@@ -106,8 +107,27 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
             </UiIconButton>
           </UiIconButtonGroup>
         </UiGrid>
-
         <UiDescription description={report.description} notes={report.notes} />
+        <InfoTable>
+          <tbody>
+            <tr>
+              <th>
+                <UiTitle level={6}>Meldeart:</UiTitle>
+              </th>
+              <td>
+                <span>{mapReportTypeToName(report.reportType.type)}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Nummer:</UiTitle>
+              </th>
+              <td>
+                <span>{report.reportType.number ?? '-'}</span>
+              </td>
+            </tr>
+          </tbody>
+        </InfoTable>
       </UiLevel.Header>
 
       <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
@@ -147,5 +167,13 @@ const TaskContainer = styled.div`
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};
+  }
+`
+
+const InfoTable = styled.table`
+  table-layout: fixed;
+  text-align: left;
+  th {
+    width: 10rem;
   }
 `
