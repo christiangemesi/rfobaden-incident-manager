@@ -19,6 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { ReportTypeType } from '@/models/ReportType'
 
 interface Props {
   incident: Incident
@@ -31,6 +32,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
+    reportType: null,
+    number: null,
     notes: null,
     location: null,
     priority: Priority.MEDIUM,
@@ -56,6 +59,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       description: [
         validate.notBlank({ allowNull: true }),
       ],
+      reportType: [],
       notes: [
         validate.notBlank({ allowNull: true }),
       ],
@@ -133,6 +137,20 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
+          <UiForm.Field field={form.reportType.type}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Meldeart"
+              options={Object.values(ReportTypeType)}
+              optionName={mapReportTypeToName}
+              menuPlacement="top"
+            />
+          )}</UiForm.Field>
+
+          <UiForm.Field field={form.reportType.number}>{(props) => (
+            <UiTextArea {...props} label="Nummer" placeholder="Nummer" />
+          )}</UiForm.Field>
+
           <UiForm.Field field={form.notes}>{(props) => (
             <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
           )}</UiForm.Field>
@@ -171,6 +189,28 @@ const mapUserIdToName = (id: Id<User>): string | null => {
   return user === null
     ? null
     : `${user.firstName} ${user.lastName}`
+}
+
+export const mapReportTypeToName = (type: string): string => {
+  switch (type) {
+  case ReportTypeType.EMAIL:
+    return 'E-Mail'
+  case ReportTypeType.KP_FRONT:
+    return 'KP Front'
+  case ReportTypeType.KP_RUECK:
+    return 'KP Rück'
+  case ReportTypeType.MELDELAUUFER:
+    return 'Meldeläufer'
+  default:
+    return toTitleCase(type)
+  }
+}
+  
+const toTitleCase = (str: string): string => {
+  return str
+    .split(' ')
+    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+    .join(' ')
 }
 
 const FormContainer = styled.div`

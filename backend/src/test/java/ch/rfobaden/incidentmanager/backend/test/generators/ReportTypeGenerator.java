@@ -15,6 +15,4 @@ public class ReportTypeGenerator extends Generator<ReportType> {
         reportType.setNumber(faker.phoneNumber().cellPhone());
         return reportType;
     }
-
-
 }

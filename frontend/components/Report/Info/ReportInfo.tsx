@@ -23,6 +23,8 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
           {report.location}
         </UiCaption>
       )}
+      {report.reportType.type}
+      {report.reportType.number}
       {assigneeName && (
         <UiCaption>
           {assigneeName}

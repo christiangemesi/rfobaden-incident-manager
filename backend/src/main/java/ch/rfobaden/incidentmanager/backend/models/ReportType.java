@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +19,8 @@ public class ReportType implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -74,7 +78,7 @@ public class ReportType implements Serializable {
         FUNK,
         KP_FRONT,
         KP_RUECK,
-        MELDELAUFER,
+        MELDELAUUFER,
         FAX
     }
 }
