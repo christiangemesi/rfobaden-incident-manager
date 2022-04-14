@@ -10,6 +10,8 @@ import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
 
 interface Props {
   task: Task
@@ -52,6 +54,12 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           modelName="subtask"
           onAddImage={addImageId}
         />
+
+        <UiPrinter renderContent={() => <SubtaskPrintView subtask={subtask} />}>{({ trigger }) => (
+          <UiDropDown.Item onClick={trigger}>
+            Drucken
+          </UiDropDown.Item>
+        )}</UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
