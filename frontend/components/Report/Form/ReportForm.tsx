@@ -32,7 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    reportType: null,
+    reportType: { id: -1,type: ReportTypeType.TELEFON, number: '' },
     number: null,
     notes: null,
     location: null,

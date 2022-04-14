@@ -68,7 +68,7 @@ services:
       - database:/var/lib/mysql
       - ./data-sample.sql:/data-sample.sql
       - ./data-prod.sql:/data-prod.sql
-      - ./data-prod.sql:/data-minimal.sql
+      - ./data-minimal.sql:/data-minimal.sql
     env_file:
       - .env
     deploy:
