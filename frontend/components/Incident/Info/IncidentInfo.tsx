@@ -10,6 +10,11 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import Image from 'next/image'
 import { getImageUrl } from '@/models/FileUpload'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import styled from 'styled-components'
+import { ColorName } from '@/theme'
 
 interface Props {
   incident: Incident
@@ -52,20 +57,36 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
-      <UiModal>
-        <UiModal.Activator>{({ open }) => (
+      <UiDrawer size="full">
+        <UiDrawer.Trigger>{({ open }) => (
           <UiCaption onClick={open}>
             {incident.imageIds.length}
             &nbsp;
-            {activeOrganisations.length === 1 ? 'Bild' : 'Bilder'}
+            {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
           </UiCaption>
-        )}</UiModal.Activator>
-        <UiModal.Body>
-          <h1>Bilder</h1>
-          <Image src={getImageUrl(incident.imageIds[0])} width={100} height={100} alt="Kein Bild" />
-        </UiModal.Body>
-      </UiModal>
+        )}</UiDrawer.Trigger>
+        <UiDrawer.Body>
+          <UiTitle level={1}>
+            Bilder
+          </UiTitle>
+          <ImageContainer>
+            {incident.imageIds.map((img) => (
+              <ImagePreview  key={img}>
+                <Image src={getImageUrl(img)} width={200} height={200} alt="Kein Bild" />
+              </ImagePreview>
+            ))}
+          </ImageContainer>
+        </UiDrawer.Body>
+      </UiDrawer>
     </UiCaptionList>
   )
 }
 export default IncidentInfo
+
+const ImageContainer = styled.div`
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+`
+const ImagePreview = styled.div`
+`
