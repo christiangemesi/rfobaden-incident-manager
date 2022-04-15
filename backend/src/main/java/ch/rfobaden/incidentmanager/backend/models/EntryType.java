@@ -61,7 +61,7 @@ public class EntryType implements Serializable {
             return false;
         }
         EntryType that = (EntryType) o;
-        return id.equals(that.id) && type == that.type && number.equals(that.number);
+        return Objects.equals(this.id, that.id) && type == that.type && Objects.equals(this.number, that.number);
     }
 
     @Override

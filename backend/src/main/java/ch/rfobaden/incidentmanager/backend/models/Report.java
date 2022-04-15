@@ -134,11 +134,11 @@ public class Report extends Model
         this.description = description;
     }
 
-    public EntryType getReportType() {
+    public EntryType getEntryType() {
         return entryType;
     }
 
-    public void setReportType(EntryType entryType) {
+    public void setEntryType(EntryType entryType) {
         this.entryType = entryType;
     }
 
@@ -277,7 +277,7 @@ public class Report extends Model
             && Objects.equals(incident, report.incident)
             && Objects.equals(title, report.title)
             && Objects.equals(description, report.description)
-            && Objects.equals(entryType, report.entryType)
+            && entryType.equals(report.entryType)
             && Objects.equals(notes, report.notes)
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
