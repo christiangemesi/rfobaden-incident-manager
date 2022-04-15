@@ -4,6 +4,8 @@ import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import org.apache.tika.Tika;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypes;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +27,17 @@ public class DocumentFileService {
     }
 
     public Document save(byte[] bytes, String documentName) {
-        Tika tika = new Tika();
-        String mimeType = tika.detect(bytes);
         Document newDocument = new Document(documentName);
-        newDocument.setMimeType(mimeType);
+        try {
+            MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+            Tika tika = new Tika();
+            String mimeType = tika.detect(bytes);
+            MimeType jpeg = allTypes.forName(mimeType);
+            String extension = jpeg.getExtension();
+            newDocument.setMimeType(extension);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Document document = documentRepository.save(newDocument);
         documentFileRepository.save(bytes, document.getId());

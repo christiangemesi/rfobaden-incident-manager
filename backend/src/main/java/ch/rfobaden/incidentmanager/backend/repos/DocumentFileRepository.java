@@ -18,8 +18,7 @@ public class DocumentFileRepository {
 
     public void save(byte[] content, Long id) {
         try {
-            //TODO CHANGE THIS TO PDF OR SO
-            Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
+            Path newFile = Paths.get(RESOURCES_DIR + id);
             if (!Files.exists(newFile.getParent())) {
                 Files.createDirectories(newFile.getParent());
             }
@@ -30,7 +29,6 @@ public class DocumentFileRepository {
     }
 
     public FileSystemResource findInFileSystem(Long id) {
-        //TODO CHANGE THIS TO PDF OR SO
-        return new FileSystemResource(Paths.get(RESOURCES_DIR + id + ".jpeg"));
+        return new FileSystemResource(Paths.get(RESOURCES_DIR + id));
     }
 }
