@@ -57,7 +57,8 @@ public class DocumentController extends AppController {
     }
 
     @GetMapping(value = "/{id}")
-    public FileSystemResource downloadDocument(@PathVariable Long id, HttpServletResponse response) {
+    public FileSystemResource downloadDocument(@PathVariable Long id,
+                                               HttpServletResponse response) {
         Document document = new Document();
         String mimeType = document.getMimeType();
         response.setContentType(mimeType);

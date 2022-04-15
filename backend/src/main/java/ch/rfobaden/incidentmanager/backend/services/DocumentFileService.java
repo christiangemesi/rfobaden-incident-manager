@@ -9,7 +9,6 @@ import org.apache.tika.mime.MimeTypes;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
-
 import java.util.Optional;
 
 @Service
@@ -38,7 +37,6 @@ public class DocumentFileService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         Document document = documentRepository.save(newDocument);
         documentFileRepository.save(bytes, document.getId());
         return document;
