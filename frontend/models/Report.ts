@@ -4,13 +4,13 @@ import Id from '@/models/base/Id'
 import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import Trackable, { parseTrackable } from '@/models/Trackable'
-import ReportType, { parseReportType } from './ReportType'
+import EntryType, { parseEntryType } from './EntryType'
 
 export default interface Report extends Model, Trackable {
   notes: string | null
   location: string | null
   isDone: boolean
-  reportType: ReportType
+  entryType: EntryType
   incidentId: Id<Incident>
 
   isKeyReport: boolean
@@ -25,5 +25,5 @@ export default interface Report extends Model, Trackable {
 export const parseReport = (data: Report): Report => ({
   ...data,
   ...parseTrackable(data),
-  reportType: parseReportType(data.reportType),
+  entryType: parseEntryType(data.entryType),
 })

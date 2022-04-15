@@ -25,7 +25,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
-import { mapReportTypeToName } from '../Form/ReportForm'
+import { mapEntryTypeToName } from '../Form/ReportForm'
 
 
 interface Props {
@@ -115,7 +115,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
                 <UiTitle level={6}>Meldeart:</UiTitle>
               </th>
               <td>
-                <span>{mapReportTypeToName(report.reportType.type)}</span>
+                <span>{mapEntryTypeToName(report.entryType.type)}</span>
               </td>
             </tr>
             <tr>
@@ -123,7 +123,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
                 <UiTitle level={6}>Nummer:</UiTitle>
               </th>
               <td>
-                <span>{report.reportType.number ?? '-'}</span>
+                <span>{report.entryType.number ?? '-'}</span>
               </td>
             </tr>
           </tbody>

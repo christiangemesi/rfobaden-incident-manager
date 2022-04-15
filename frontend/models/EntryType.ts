@@ -1,6 +1,6 @@
 import Id from '@/models/base/Id'
 
-export enum ReportTypeType {
+export enum EntryTypeType {
   TELEFON = 'TELEFON',
   EMAIL = 'EMAIL',
   FUNK = 'FUNK',
@@ -10,12 +10,12 @@ export enum ReportTypeType {
   FAX = 'FAX',
 }
 
-export default interface ReportType {
+export default interface EntryType {
   id: Id<this>
-  type: ReportTypeType
+  type: EntryTypeType
   number: string | null
 }
 
-export const parseReportType = (data: ReportType): ReportType => ({
+export const parseEntryType = (data: EntryType): EntryType => ({
   ...data,
 })

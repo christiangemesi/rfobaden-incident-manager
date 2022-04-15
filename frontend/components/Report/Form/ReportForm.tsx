@@ -19,7 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
-import { ReportTypeType } from '@/models/ReportType'
+import { EntryTypeType } from '@/models/EntryType'
 
 interface Props {
   incident: Incident
@@ -32,7 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    reportType: { type: ReportTypeType.TELEFON, number: '' },
+    entryType: { type: EntryTypeType.TELEFON, number: null },
     number: null,
     notes: null,
     location: null,
@@ -59,7 +59,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       description: [
         validate.notBlank({ allowNull: true }),
       ],
-      reportType: {
+      entryType: {
         id: [],
         type: [],
         number: [
@@ -144,17 +144,17 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.reportType.type}>{(props) => (
+          <UiForm.Field field={form.entryType.type}>{(props) => (
             <UiSelectInput
               {...props}
               label="Meldeart"
-              options={Object.values(ReportTypeType)}
-              optionName={mapReportTypeToName}
+              options={Object.values(EntryTypeType)}
+              optionName={mapEntryTypeToName}
               menuPlacement="bottom"
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.reportType.number}>{(props) => (
+          <UiForm.Field field={form.entryType.number}>{(props) => (
             <UiTextInput {...props} label="Nummer" placeholder="Nummer" />
           )}</UiForm.Field>
 
@@ -198,15 +198,15 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
-export const mapReportTypeToName = (type: string): string => {
+export const mapEntryTypeToName = (type: string): string => {
   switch (type) {
-  case ReportTypeType.EMAIL:
+  case EntryTypeType.EMAIL:
     return 'E-Mail'
-  case ReportTypeType.KP_FRONT:
+  case EntryTypeType.KP_FRONT:
     return 'KP Front'
-  case ReportTypeType.KP_RUECK:
+  case EntryTypeType.KP_RUECK:
     return 'KP Rück'
-  case ReportTypeType.MELDELAUUFER:
+  case EntryTypeType.MELDELAUUFER:
     return 'Meldeläufer'
   default:
     return toTitleCase(type)

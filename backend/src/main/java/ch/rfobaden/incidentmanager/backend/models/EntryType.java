@@ -8,27 +8,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "report_type")
-public class ReportType implements Serializable {
+@Table(name = "entry_type")
+public class EntryType implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
 
-    @Size(max = 100)
-    @NotBlank
+    @Size(min = 1, max = 100)
     private String number;
 
     public void setId(Long id) {
@@ -63,7 +60,7 @@ public class ReportType implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ReportType that = (ReportType) o;
+        EntryType that = (EntryType) o;
         return id.equals(that.id) && type == that.type && number.equals(that.number);
     }
 

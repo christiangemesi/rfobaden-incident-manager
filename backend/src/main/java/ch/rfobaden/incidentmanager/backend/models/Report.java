@@ -51,7 +51,7 @@ public class Report extends Model
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
-    private ReportType reportType;
+    private EntryType entryType;
 
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -134,12 +134,12 @@ public class Report extends Model
         this.description = description;
     }
 
-    public ReportType getReportType() {
-        return reportType;
+    public EntryType getReportType() {
+        return entryType;
     }
 
-    public void setReportType(ReportType reportType) {
-        this.reportType = reportType;
+    public void setReportType(EntryType entryType) {
+        this.entryType = entryType;
     }
 
     public String getNotes() {
@@ -277,7 +277,7 @@ public class Report extends Model
             && Objects.equals(incident, report.incident)
             && Objects.equals(title, report.title)
             && Objects.equals(description, report.description)
-            && Objects.equals(reportType, report.reportType)
+            && Objects.equals(entryType, report.entryType)
             && Objects.equals(notes, report.notes)
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
@@ -296,7 +296,7 @@ public class Report extends Model
             incident,
             title,
             description,
-            reportType,
+            entryType,
             notes,
             startsAt,
             endsAt,
