@@ -7,14 +7,11 @@ import { useSubtasks } from '@/stores/SubtaskStore'
 import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
-import UiModal from '@/components/Ui/Modal/UiModal'
-import Image from 'next/image'
 import { getImageUrl } from '@/models/FileUpload'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiButton from '@/components/Ui/Button/UiButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled from 'styled-components'
-import { ColorName } from '@/theme'
+import UiImage from '@/components/Ui/Image/UiImage'
 
 interface Props {
   incident: Incident
@@ -70,10 +67,8 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
             Bilder
           </UiTitle>
           <ImageContainer>
-            {incident.imageIds.map((img) => (
-              <ImagePreview  key={img}>
-                <Image src={getImageUrl(img)} width={200} height={200} alt="Kein Bild" />
-              </ImagePreview>
+            {incident.imageIds.map((imageId) => (
+              <UiImage key={imageId} src={getImageUrl(imageId)} text="Default text" />
             ))}
           </ImageContainer>
         </UiDrawer.Body>
@@ -86,7 +81,5 @@ export default IncidentInfo
 const ImageContainer = styled.div`
   display: flex;
   align-items: start;
-  gap: 0.5rem;
-`
-const ImagePreview = styled.div`
+  gap: 0.7rem;
 `
