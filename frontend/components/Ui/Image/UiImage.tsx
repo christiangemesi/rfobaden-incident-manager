@@ -25,26 +25,19 @@ const UiImage: React.VFC<Props> = ({
     <UiModal>
       <UiModal.Trigger>{({ open }) => (
         <ImageCard onClick={open}>
-
           <ImageArea>
             <div>
               <Image src={src} width={200} height={200} alt="Kein Bild" />
             </div>
             <DeleteButton onClick={deleteImage}><UiIcon.Trash /></DeleteButton>
           </ImageArea>
-
           <TextArea>
             {text}
           </TextArea>
-
         </ImageCard>
       )}</UiModal.Trigger>
       <UiModal.Body>
-
-        <ImageContainer>
-          <Image src={src} width={1280} height={720} objectFit="contain" alt="Kein Bild" />
-        </ImageContainer>
-
+        <Image src={src} width={1280} height={720} objectFit="contain" alt="Kein Bild" />
       </UiModal.Body>
     </UiModal>
   )
@@ -86,8 +79,4 @@ const TextArea = styled.div`
 `
 const ImageArea = styled.div`
 position: relative;
-`
-const ImageContainer = styled.div`
-  width: 100%;
-  height: 100%;
 `
