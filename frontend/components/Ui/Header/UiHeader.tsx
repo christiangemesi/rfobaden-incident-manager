@@ -12,38 +12,15 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
-import BackendService, { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
-import TransportStore, { useTransports } from '@/stores/TransportStore'
-import ReportStore, { useReports } from '@/stores/ReportStore'
-import TaskStore, { useTasks } from '@/stores/TaskStore'
-import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
+import BackendService from '@/services/BackendService'
+import backendService, { BackendResponse } from '@/services/BackendService'
 import Priority from '@/models/Priority'
-import { GetServerSideProps } from 'next'
-import Transport, { isOpenedTransport, parseTransport } from '@/models/Transport'
-import Report, { isOpenedReport, parseReport } from '@/models/Report'
-import Task, { isOpenedTask, parseTask } from '@/models/Task'
-import Subtask, { isOpenedSubtask, parseSubtask } from '@/models/Subtask'
+import Report from '@/models/Report'
+import Task from '@/models/Task'
+import Subtask from '@/models/Subtask'
 
-interface Props {
-  data: {
-    transports: Transport[]
-    reports: Report[]
-    tasks: Task[]
-    subtasks: Subtask[]
-  }
-}
-
-const UiHeader: React.VFC<Props> = ({ data }) => {
+const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
-
-  useEffect(() => {
-    if (currentUser !== null && data) {
-      TransportStore.saveAll(data.transports.map(parseTransport))
-      ReportStore.saveAll(data.reports.map(parseReport))
-      TaskStore.saveAll(data.tasks.map(parseTask))
-      SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
-    }
-  }, [data, currentUser])
 
   const router = useRouter()
 
@@ -59,27 +36,51 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   let numberPriorityHigh = 0
   let numberPriorityMedium = 0
   let numberPriorityLow = 0
+  // todo not working reload, correct nr on click
+  useEffect(async () => {
+    if (currentUser !== null) {
+      const [transports, transportsError]: BackendResponse<Report[]> = await backendService.list(
+        `users/${currentUser?.id}/assignments/transports`,
+      )
+      if (transportsError !== null) {
+        throw transportsError
+      }
+      console.log(100,transports)
+      const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
+        `users/${currentUser.id}/assignments/reports`,
+      )
+      if (reportsError !== null) {
+        throw reportsError
+      }
 
-  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport))
-  const usersReports = useReports((reports) => reports.filter(isOpenedReport))
-  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask))
-  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask))
+      const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
+        `users/${currentUser.id}/assignments/tasks`,
+      )
+      if (tasksError !== null) {
+        throw tasksError
+      }
 
-  // TODO not correct updating -> do not use store & use entity, call getserver side meths direct here
-  if (currentUser !== null) {
-    numberPriorityHigh = usersReports.filter((e) => e.priority == Priority.HIGH).length
-      + usersTasks.filter((e) => e.priority == Priority.HIGH).length
-      + usersSubtasks.filter((e) => e.priority == Priority.HIGH).length
-      + usersTransports.filter((e) => e.priority == Priority.HIGH).length
-    numberPriorityMedium = usersReports.filter((e) => e.priority == Priority.MEDIUM).length
-      + usersTasks.filter((e) => e.priority == Priority.MEDIUM).length
-      + usersSubtasks.filter((e) => e.priority == Priority.MEDIUM).length
-      + usersTransports.filter((e) => e.priority == Priority.MEDIUM).length
-    numberPriorityLow = usersReports.filter((e) => e.priority == Priority.LOW).length
-      + usersTasks.filter((e) => e.priority == Priority.LOW).length
-      + usersSubtasks.filter((e) => e.priority == Priority.LOW).length
-      + usersTransports.filter((e) => e.priority == Priority.LOW).length
-  }
+      const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
+        `users/${currentUser.id}/assignments/subtasks`,
+      )
+      if (subtasksError !== null) {
+        throw subtasksError
+      }
+
+      numberPriorityHigh = reports.filter((e) => e.priority == Priority.HIGH).length
+        + tasks.filter((e) => e.priority == Priority.HIGH).length
+        + subtasks.filter((e) => e.priority == Priority.HIGH).length
+        + transports.filter((e) => e.priority == Priority.HIGH).length
+      numberPriorityMedium = reports.filter((e) => e.priority == Priority.MEDIUM).length
+        + tasks.filter((e) => e.priority == Priority.MEDIUM).length
+        + subtasks.filter((e) => e.priority == Priority.MEDIUM).length
+        + transports.filter((e) => e.priority == Priority.MEDIUM).length
+      numberPriorityLow = reports.filter((e) => e.priority == Priority.LOW).length
+        + tasks.filter((e) => e.priority == Priority.LOW).length
+        + subtasks.filter((e) => e.priority == Priority.LOW).length
+        + transports.filter((e) => e.priority == Priority.LOW).length
+    }
+  }, [currentUser, numberPriorityLow, numberPriorityHigh, numberPriorityMedium])
 
   return (
     <Header>
@@ -186,61 +187,6 @@ const UiHeader: React.VFC<Props> = ({ data }) => {
   )
 }
 export default UiHeader
-
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-}) => {
-  const { user, backendService } = getSessionFromRequest(req)
-  if (user !== null) {
-    const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
-      `users/${user.id}/assignments/transports`,
-    )
-    if (transportsError !== null) {
-      throw transportsError
-    }
-
-    const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-      `users/${user.id}/assignments/reports`,
-    )
-    if (reportsError !== null) {
-      throw reportsError
-    }
-
-    const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-      `users/${user.id}/assignments/tasks`,
-    )
-    if (tasksError !== null) {
-      throw tasksError
-    }
-
-    const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-      `users/${user.id}/assignments/subtasks`,
-    )
-    if (subtasksError !== null) {
-      throw subtasksError
-    }
-    return {
-      props: {
-        data: {
-          transports,
-          reports,
-          tasks,
-          subtasks,
-        },
-      },
-    }
-  }
-  return {
-    props: {
-      data: {
-        transports: [],
-        reports: [],
-        tasks: [],
-        subtasks: [],
-      },
-    },
-  }
-}
 
 const Header = styled.header`
   display: flex;
