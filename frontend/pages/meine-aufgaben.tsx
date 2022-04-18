@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import { useSession } from '@/stores/SessionStore'
@@ -53,27 +53,29 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   const usersDoneTasks = useTasks((tasks) => tasks.filter((task) => !isOpenedTask(task)))
   const usersDoneSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenedSubtask(subtask)))
 
-  const dataTrackableHigh = {
+  const dataTrackableHigh = useMemo(() => ({
     incidents: openedIncidents,
     transports: usersTransports.filter((e) => e.priority == Priority.HIGH),
     reports: usersReports.filter((e) => e.priority == Priority.HIGH),
     tasks: usersTasks.filter((e) => e.priority == Priority.HIGH),
     subtasks: usersSubtasks.filter((e) => e.priority == Priority.HIGH),
-  }
-  const dataTrackableMedium = {
+  }), [openedIncidents, usersTransports, usersReports, usersTasks, usersSubtasks])
+
+  const dataTrackableMedium = useMemo(() => ({
     incidents: openedIncidents,
     transports: usersTransports.filter((e) => e.priority == Priority.MEDIUM),
     reports: usersReports.filter((e) => e.priority == Priority.MEDIUM),
     tasks: usersTasks.filter((e) => e.priority == Priority.MEDIUM),
     subtasks: usersSubtasks.filter((e) => e.priority == Priority.MEDIUM),
-  }
-  const dataTrackableLow = {
+  }), [openedIncidents, usersTransports, usersReports, usersTasks, usersSubtasks])
+
+  const dataTrackableLow = useMemo(() => ({
     incidents: openedIncidents,
     transports: usersTransports.filter((e) => e.priority == Priority.LOW),
     reports: usersReports.filter((e) => e.priority == Priority.LOW),
     tasks: usersTasks.filter((e) => e.priority == Priority.LOW),
     subtasks: usersSubtasks.filter((e) => e.priority == Priority.LOW),
-  }
+  }), [openedIncidents, usersTransports, usersReports, usersTasks, usersSubtasks])
 
   const dataTrackableDone = {
     incidents: openedIncidents,
@@ -108,7 +110,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 }) => {
   const { user, backendService } = getSessionFromRequest(req)
   if (user === null) {
-    return { redirect: { statusCode: 302, destination: '/anmelden' } }
+    return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
 
   const [incidents, incidentsError]: BackendResponse<Incident[]> = await backendService.list('incidents')
