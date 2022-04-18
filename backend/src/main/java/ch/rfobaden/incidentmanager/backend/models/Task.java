@@ -67,7 +67,7 @@ public class Task extends Model
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     @Override

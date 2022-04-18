@@ -2,6 +2,8 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -53,8 +55,8 @@ public class Incident extends Model.Basic
 
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Transport> transports = new ArrayList<>();
-    
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     @Override

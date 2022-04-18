@@ -4,21 +4,23 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
+import BackendService from '@/services/BackendService'
 
 interface Props {
   src: string
   text: string
+  id: number
 }
 
 const UiImage: React.VFC<Props> = ({
   src = '',
   text = '',
+  id,
 }) => {
 
   const deleteImage = (e: React.MouseEvent) => {
     e.stopPropagation()
-    // TODO
-    console.error('Operation not supported yet')
+    BackendService.delete('images', id).then( (r) => console.log('Image deleted' + r) )
   }
 
   return (

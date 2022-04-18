@@ -16,11 +16,13 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,6 +59,14 @@ public class ImageController extends AppController {
         return imageFileService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id)
         ));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteImage(@PathVariable Long id) {
+        if (!imageFileService.delete(id)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
+        }
     }
 
     @RequireAgent
@@ -105,7 +115,7 @@ public class ImageController extends AppController {
     ) {
         var entity = modelService.find(id).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
-        )));
+            )));
         var image = saveImage.get();
         entity.addImage(image);
         modelService.update(entity);

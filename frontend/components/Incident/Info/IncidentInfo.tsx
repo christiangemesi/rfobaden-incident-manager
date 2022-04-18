@@ -68,7 +68,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           </UiTitle>
           <ImageContainer>
             {incident.imageIds.map((imageId) => (
-              <UiImage key={imageId} src={getImageUrl(imageId)} text="Filename" />
+              <UiImage key={imageId} id={imageId} src={getImageUrl(imageId)} text="Filename" />
             ))}
           </ImageContainer>
         </UiDrawer.Body>
