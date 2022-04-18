@@ -2,7 +2,7 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import org.apache.tika.Tika;
+import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -17,6 +17,7 @@ public class DocumentFileRepository {
     public static final String RESOURCES_DIR = "files/documents/";
 
     public void save(byte[] content, Long id) {
+
         try {
             Path newFile = Paths.get(RESOURCES_DIR + id);
             if (!Files.exists(newFile.getParent())) {

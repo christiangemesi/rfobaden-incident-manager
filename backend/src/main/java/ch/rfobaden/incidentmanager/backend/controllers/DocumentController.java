@@ -7,6 +7,7 @@ import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.models.DocumentOwner;
 import ch.rfobaden.incidentmanager.backend.models.Model;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
@@ -29,8 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 @RequireAgent
