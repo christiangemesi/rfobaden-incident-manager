@@ -1,6 +1,6 @@
 import UiImage from '@/components/Ui/Image/UiImage'
 import { FileId, getImageUrl } from '@/models/FileUpload'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
@@ -9,14 +9,17 @@ import Report from '@/models/Report'
 import Task from '@/models/Task'
 
 interface Props {
-  imageIds: number[]
+  imageIds: FileId[]
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+  storeImageIds: (ids: FileId[]) => void
 }
 
-const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName }) => {
+const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageIds }) => {
 
-  const onDeleteImage = async ( id: FileId) => {
+  const [ids, setIds] = useState<FileId[]>(imageIds)
+
+  const handleDelete = async (id: FileId) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
 
       const error = await BackendService.delete('images', id, {
@@ -26,18 +29,21 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName }) => {
       if (error !== null) {
         throw error
       }
+      const remainingIds = ids.filter((i) => i !== id)
+      setIds(remainingIds)
+      storeImageIds(remainingIds)
     }
   }
 
   return (
     <ImageContainer>
-      {imageIds.map((imageId) => (
+      {ids.map((imageId) => (
         <UiImage
           key={imageId}
           src={getImageUrl(imageId)}
           text="Filename"
           id={imageId}
-          onDelete={onDeleteImage} />
+          onDelete={handleDelete} />
       ))}
     </ImageContainer>
   )
