@@ -10,6 +10,8 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiImageList from '@/components/Ui/Image/List/UiImageList'
+import IncidentStore from '@/stores/IncidentStore'
+import { FileId } from '@/models/FileUpload'
 
 interface Props {
   incident: Incident
@@ -26,7 +28,6 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     subtasks.filter((subtask) => subtask.incidentId === incident.id)
   ))
 
-
   const assigneeIds = useMemo(() => new Set([
     ...reports.map((report) => report.assigneeId),
     ...tasks.map((task) => task.assigneeId),
@@ -39,6 +40,9 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
+  const storeImageIds = (ids: FileId[]) => {
+    IncidentStore.save({ ...incident, imageIds: ids })
+  }
 
   return (
     <UiCaptionList>
@@ -65,7 +69,11 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           <UiTitle level={1}>
             Bilder
           </UiTitle>
-          <UiImageList imageIds={incident.imageIds} modelId={incident.id} modelName="incident" />
+          <UiImageList
+            storeImageIds={storeImageIds}
+            imageIds={incident.imageIds}
+            modelId={incident.id}
+            modelName="incident" />
         </UiDrawer.Body>
       </UiDrawer>
     </UiCaptionList>
