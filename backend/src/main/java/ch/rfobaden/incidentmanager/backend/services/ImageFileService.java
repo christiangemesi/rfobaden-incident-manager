@@ -29,7 +29,7 @@ public class ImageFileService {
     }
 
     public Optional<FileSystemResource> find(Long imageId) {
-        return imageRepository.findById(imageId).map((image) -> (
+        return imageRepository.findById(imageId).map(image -> (
             imageFileRepository.findInFileSystem(image.getId())
         ));
     }

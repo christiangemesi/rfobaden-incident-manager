@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
-import javax.websocket.server.PathParam;
 
 
 @RestController
@@ -61,11 +60,41 @@ public class ImageController extends AppController {
         ));
     }
 
+    @RequireAgent
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteImage(@PathVariable Long id) {
-        if (!imageFileService.delete(id)) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
+    public void deleteImage(
+        @RequestParam String modelName,
+        @RequestParam Long modelId,
+        @PathVariable Long id
+    ) {
+        switch (modelName.toLowerCase()) {
+            case "incident":
+                deleteImageFromEntity(id, incidentService, modelId);
+                break;
+            case "report":
+                deleteImageFromEntity(id, reportService, modelId);
+                break;
+            case "task":
+                deleteImageFromEntity(id, taskService, modelId);
+                break;
+            case "subtask":
+                deleteImageFromEntity(id, subtaskService, modelId);
+                break;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown model: " + modelName);
+        }
+    }
+
+    private <M extends Model & ImageOwner & PathConvertible<?>> void deleteImageFromEntity(
+        Long id, ModelService<M, ?> modelService, Long modelId) {
+        var entity = modelService.find(modelId).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
+            )));
+        if (entity.deleteImageById(id)) {
+            if (!imageFileService.delete(id)) {
+                throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
+            }
         }
     }
 

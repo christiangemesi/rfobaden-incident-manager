@@ -32,12 +32,9 @@ public class ImageFileRepository {
 
     public boolean delete(Long id) {
         Path file = Paths.get(RESOURCES_DIR + id + ".jpeg");
-        System.out.println("ImageFileRepository.delete");
         try {
             Files.delete(file);
-            System.out.println("ImageFileRepository.deleted");
         } catch (IOException e) {
-            System.out.println("ImageFileRepository.delete exception");
             return false;
         }
         return true;
