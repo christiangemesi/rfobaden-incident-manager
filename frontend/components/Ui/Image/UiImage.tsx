@@ -20,7 +20,7 @@ const UiImage: React.VFC<Props> = ({
   onDelete,
 }) => {
 
-  const deleteCallback = (e: React.MouseEvent) => {
+  const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
     onDelete(id)
   }
@@ -31,9 +31,9 @@ const UiImage: React.VFC<Props> = ({
         <ImageCard onClick={open}>
           <ImageArea>
             <div>
-              <Image src={src} width={200} height={200} alt="Kein Bild" />
+              <Image src={src} width={200} height={200} alt={src} />
             </div>
-            <DeleteButton onClick={deleteCallback}><UiIcon.Trash /></DeleteButton>
+            <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
           </ImageArea>
           <TextArea>
             {text}
@@ -41,7 +41,7 @@ const UiImage: React.VFC<Props> = ({
         </ImageCard>
       )}</UiModal.Trigger>
       <UiModal.Body>
-        <Image src={src} width={1280} height={720} objectFit="contain" alt="Kein Bild" />
+        <Image src={src} width={1280} height={720} objectFit="contain" alt={src} />
       </UiModal.Body>
     </UiModal>
   )
