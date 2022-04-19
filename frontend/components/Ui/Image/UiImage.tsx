@@ -4,23 +4,25 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import BackendService from '@/services/BackendService'
+import { FileId } from '@/models/FileUpload'
 
 interface Props {
   src: string
   text: string
-  id: number
+  id: FileId
+  onDelete: (id: FileId) => void
 }
 
 const UiImage: React.VFC<Props> = ({
   src = '',
   text = '',
   id,
+  onDelete,
 }) => {
 
-  const deleteImage = (e: React.MouseEvent) => {
+  const deleteCallback = (e: React.MouseEvent) => {
     e.stopPropagation()
-    BackendService.delete('images', id).then( (r) => console.log('Image deleted' + r) )
+    onDelete(id)
   }
 
   return (
@@ -31,7 +33,7 @@ const UiImage: React.VFC<Props> = ({
             <div>
               <Image src={src} width={200} height={200} alt="Kein Bild" />
             </div>
-            <DeleteButton onClick={deleteImage}><UiIcon.Trash /></DeleteButton>
+            <DeleteButton onClick={deleteCallback}><UiIcon.Trash /></DeleteButton>
           </ImageArea>
           <TextArea>
             {text}
@@ -57,6 +59,7 @@ const ImageCard = styled.div`
       & > button {
         visibility: visible;
       }
+
       & > div {
         filter: opacity(50%);
       }
@@ -80,5 +83,5 @@ const TextArea = styled.div`
   max-width: 200px;
 `
 const ImageArea = styled.div`
-position: relative;
+  position: relative;
 `

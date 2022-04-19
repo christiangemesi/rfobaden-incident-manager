@@ -7,11 +7,9 @@ import { useSubtasks } from '@/stores/SubtaskStore'
 import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
-import { getImageUrl } from '@/models/FileUpload'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import styled from 'styled-components'
-import UiImage from '@/components/Ui/Image/UiImage'
+import UiImageList from '@/components/Ui/Image/List/UiImageList'
 
 interface Props {
   incident: Incident
@@ -41,6 +39,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -66,20 +65,10 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           <UiTitle level={1}>
             Bilder
           </UiTitle>
-          <ImageContainer>
-            {incident.imageIds.map((imageId) => (
-              <UiImage key={imageId} id={imageId} src={getImageUrl(imageId)} text="Filename" />
-            ))}
-          </ImageContainer>
+          <UiImageList imageIds={incident.imageIds} modelId={incident.id} modelName="incident" />
         </UiDrawer.Body>
       </UiDrawer>
     </UiCaptionList>
   )
 }
 export default IncidentInfo
-
-const ImageContainer = styled.div`
-  display: flex;
-  align-items: start;
-  gap: 0.7rem;
-`
