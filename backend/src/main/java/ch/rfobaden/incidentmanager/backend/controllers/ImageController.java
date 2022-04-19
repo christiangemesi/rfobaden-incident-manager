@@ -91,10 +91,9 @@ public class ImageController extends AppController {
         var entity = modelService.find(modelId).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
             )));
-        if (entity.deleteImageById(id)) {
-            if (!imageFileService.delete(id)) {
-                throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
-            }
+        entity.deleteImageById(id);
+        if (!imageFileService.delete(id)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
         }
     }
 
