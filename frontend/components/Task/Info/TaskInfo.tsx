@@ -50,9 +50,6 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiTitle level={1}>
-            Bilder
-          </UiTitle>
           <UiImageList
             storeImageIds={storeImageIds}
             imageIds={task.imageIds}

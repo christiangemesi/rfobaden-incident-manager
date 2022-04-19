@@ -74,9 +74,6 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
 
           )}</UiDrawer.Trigger>
           <UiDrawer.Body>
-            <UiTitle level={1}>
-              Bilder
-            </UiTitle>
             <UiImageList
               storeImageIds={storeImageIds}
               imageIds={subtask.imageIds}

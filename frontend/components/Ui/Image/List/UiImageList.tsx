@@ -7,6 +7,7 @@ import Id from '@/models/base/Id'
 import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props {
   imageIds: FileId[]
@@ -36,16 +37,24 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImag
   }
 
   return (
-    <ImageContainer>
-      {ids.map((imageId) => (
-        <UiImage
-          key={imageId}
-          src={getImageUrl(imageId)}
-          text="Filename"
-          id={imageId}
-          onDelete={handleDelete} />
-      ))}
-    </ImageContainer>
+    <div>
+      <UiTitle level={1}>
+        Bilder
+      </UiTitle>
+      <ImageContainer>
+        {imageIds.length > 0 ?
+          ids.map((imageId) => (
+            <UiImage
+              key={imageId}
+              src={getImageUrl(imageId)}
+              text="Filename"
+              id={imageId}
+              onDelete={handleDelete} />
+          ))
+          : <p>Keine gespeicherten Bilder</p>
+        }
+      </ImageContainer>
+    </div>
   )
 }
 

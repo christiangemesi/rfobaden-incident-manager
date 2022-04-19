@@ -66,17 +66,11 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiTitle level={1}>
-            Bilder
-          </UiTitle>
-          {incident.imageIds.length > 0
-            ? <UiImageList
-              storeImageIds={storeImageIds}
-              imageIds={incident.imageIds}
-              modelId={incident.id}
-              modelName="incident" />
-            : <p>Keine gespeicherten Bilder</p>
-          }
+          <UiImageList
+            storeImageIds={storeImageIds}
+            imageIds={incident.imageIds}
+            modelId={incident.id}
+            modelName="incident" />
         </UiDrawer.Body>
       </UiDrawer>
     </UiCaptionList>

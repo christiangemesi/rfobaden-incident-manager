@@ -49,9 +49,6 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiTitle level={1}>
-            Bilder
-          </UiTitle>
           <UiImageList
             storeImageIds={storeImageIds}
             imageIds={report.imageIds}
