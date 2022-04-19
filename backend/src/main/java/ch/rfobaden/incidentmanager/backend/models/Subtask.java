@@ -60,7 +60,7 @@ public class Subtask extends Model
     @Column(nullable = false)
     private Priority priority;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     @Override

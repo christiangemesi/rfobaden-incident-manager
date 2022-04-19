@@ -78,7 +78,7 @@ public class Report extends Model
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     @JsonIgnore

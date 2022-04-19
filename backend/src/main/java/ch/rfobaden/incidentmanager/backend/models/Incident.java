@@ -56,7 +56,7 @@ public class Incident extends Model.Basic
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Transport> transports = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
     @Override
