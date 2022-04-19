@@ -10,6 +10,9 @@ import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiImageList from '@/components/Ui/Image/List/UiImageList'
 
 interface Props {
   task: Task
@@ -35,6 +38,10 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
+  const storeImageIds = (ids: FileId[]) => {
+    SubtaskStore.save({ ...subtask, imageIds: ids })
+  }
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -56,6 +63,28 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
         </UiDropDown.Item>
+
+        <UiDrawer size="full">
+          <UiDrawer.Trigger>{({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              {subtask.imageIds.length}
+              &nbsp;
+              {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+            </UiDropDown.Item>
+
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>
+            <UiTitle level={1}>
+              Bilder
+            </UiTitle>
+            <UiImageList
+              storeImageIds={storeImageIds}
+              imageIds={subtask.imageIds}
+              modelId={subtask.id}
+              modelName="subtask" />
+          </UiDrawer.Body>
+        </UiDrawer>
+
       </UiDropDown.Menu>
     </UiDropDown>
   )
