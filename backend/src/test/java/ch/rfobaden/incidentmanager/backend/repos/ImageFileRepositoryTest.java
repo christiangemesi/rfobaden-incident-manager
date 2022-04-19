@@ -2,9 +2,12 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository.RESOURCES_DIR;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResource;
 
@@ -70,5 +73,24 @@ class ImageFileRepositoryTest {
             resource.getInputStream().readAllBytes(),
             resourceIn.getInputStream().readAllBytes()
         );
+    }
+
+    @Disabled("AccessDeniedException !?")
+    @Test
+    void testDeleteImage() throws IOException {
+        // Given
+        Path newFile = Paths.get(RESOURCES_DIR + image.getId() + ".jpeg");
+        FileSystemResource resource =
+            new FileSystemResource(Paths.get(PATH_TO_TEST_FILE));
+        if (!Files.exists(newFile.getParent())) {
+            Files.createDirectories(newFile.getParent());
+        }
+        Files.write(newFile, resource.getInputStream().readAllBytes());
+
+        // When
+        imageFileRepository.delete(image.getId());
+
+        // Then
+        assertFalse(Files.exists(newFile));
     }
 }
