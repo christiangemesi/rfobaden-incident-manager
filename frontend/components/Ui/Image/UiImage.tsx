@@ -51,7 +51,7 @@ export default UiImage
 
 const ImageCard = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
+  
   :hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 
@@ -59,7 +59,6 @@ const ImageCard = styled.div`
       & > button {
         visibility: visible;
       }
-
       & > div {
         filter: opacity(50%);
       }
@@ -73,6 +72,7 @@ const DeleteButton = styled(UiIconButton)`
   top: 0;
   right: 0;
   padding: 1rem;
+  color: ${({ theme }) => theme.colors.secondary.contrast};
 `
 
 const TextArea = styled.div`
@@ -84,4 +84,6 @@ const TextArea = styled.div`
 `
 const ImageArea = styled.div`
   position: relative;
+  transition: 250ms ease;
+  transition-property: filter;
 `

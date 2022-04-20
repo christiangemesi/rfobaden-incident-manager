@@ -8,6 +8,8 @@ import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   imageIds: FileId[]
@@ -37,13 +39,13 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImag
   }
 
   return (
-    <div>
+    <UiContainer>
       <UiTitle level={1}>
         Bilder
       </UiTitle>
       <ImageContainer>
-        {imageIds.length > 0 ?
-          ids.map((imageId) => (
+        {imageIds.length > 0
+          ? ids.map((imageId) => (
             <UiImage
               key={imageId}
               src={getImageUrl(imageId)}
@@ -54,7 +56,7 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImag
           : <p>Keine gespeicherten Bilder</p>
         }
       </ImageContainer>
-    </div>
+    </UiContainer>
   )
 }
 
@@ -62,6 +64,7 @@ export default UiImageList
 
 const ImageContainer = styled.div`
   display: flex;
-  align-items: start;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.7rem;
 `
