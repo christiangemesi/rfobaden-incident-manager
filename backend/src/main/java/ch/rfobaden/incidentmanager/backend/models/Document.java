@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
-
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +25,10 @@ public class Document {
     @NotBlank
     @Column(nullable = false)
     private String mimeType;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String mimeTypeExtension;
 
     public Document() {
     }
@@ -58,12 +61,21 @@ public class Document {
         this.mimeType = mimeType;
     }
 
+    public String getMimeTypeExtension() {
+        return mimeTypeExtension;
+    }
+
+    public void setMimeTypeExtension(String mimeTypeExtension) {
+        this.mimeTypeExtension = mimeTypeExtension;
+    }
+
     @Override
     public String toString() {
         return "Document{"
             + "id=" + id
             + ", name='" + name + '\''
             + ", mimeType='" + mimeType + '\''
+            + ", mimeTypeExtension'" + mimeTypeExtension + '\''
             + '}';
     }
 
@@ -78,11 +90,12 @@ public class Document {
         Document document = (Document) o;
         return Objects.equals(id, document.id)
             && Objects.equals(name, document.name)
-            && Objects.equals(mimeType, document.mimeType);
+            && Objects.equals(mimeType, document.mimeType)
+            && Objects.equals(mimeTypeExtension, document.mimeTypeExtension);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, mimeType, mimeTypeExtension);
     }
 }

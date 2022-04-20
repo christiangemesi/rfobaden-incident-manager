@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Service
 public class DocumentService {
-
     private final DocumentRepository documentRepository;
 
     public DocumentService(
@@ -20,5 +19,4 @@ public class DocumentService {
     public Optional<Document> getDocument(Long id){
         return documentRepository.findById(id);
     }
-
 }
