@@ -44,14 +44,14 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   }, [data, currentUser])
 
   const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
-  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((transport) => transport.incidentId)
-  const usersReports = useReports((reports) => reports.filter(isOpenedReport)).sort((report) => report.incidentId)
-  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask)).sort((task) => task.incidentId)
-  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask)).sort((subtask) => subtask.incidentId)
-  const usersDoneTransports = useTransports((transports) => transports.filter((transport) => !isOpenedTransport(transport)))
-  const usersDoneReports = useReports((reports) => reports.filter((report) => !isOpenedReport(report)))
-  const usersDoneTasks = useTasks((tasks) => tasks.filter((task) => !isOpenedTask(task)))
-  const usersDoneSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenedSubtask(subtask)))
+  const usersTransports = useTransports((transports) => transports.filter(isOpenedTransport)).sort((a, b) => a.incidentId - b.incidentId)
+  const usersReports = useReports((reports) => reports.filter(isOpenedReport)).sort((a, b) => a.incidentId - b.incidentId)
+  const usersTasks = useTasks((tasks) => tasks.filter(isOpenedTask)).sort((a, b) => a.incidentId - b.incidentId)
+  const usersSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenedSubtask)).sort((a, b) => a.incidentId - b.incidentId)
+  const usersDoneTransports = useTransports((transports) => transports.filter((transport) => !isOpenedTransport(transport)).sort((a, b) => a.incidentId - b.incidentId))
+  const usersDoneReports = useReports((reports) => reports.filter((report) => !isOpenedReport(report)).sort((a, b) => a.incidentId - b.incidentId))
+  const usersDoneTasks = useTasks((tasks) => tasks.filter((task) => !isOpenedTask(task)).sort((a, b) => a.incidentId - b.incidentId))
+  const usersDoneSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenedSubtask(subtask)).sort((a, b) => a.incidentId - b.incidentId))
 
   const dataTrackableHigh = useMemo(() => ({
     incidents: openedIncidents,

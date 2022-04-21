@@ -1,16 +1,16 @@
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import React, { Fragment } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import styled from 'styled-components'
 import Incident from '@/models/Incident'
-import AssignedListItem from '@/components/AssignedList/Item/AssignedListItem'
 import Transport from '@/models/Transport'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import Subtask from '@/models/Subtask'
 import UiLink from '@/components/Ui/Link/UiLink'
-import TaskListItem from '@/components/Task/List/Item/TaskListItem'
-import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 import TrackableListItem from '@/components/Trackable/List/Item/TrackableListItem'
+import AssignedListItem from '@/components/AssignedList/Item/AssignedListItem'
+import ReportListItem from '@/components/Report/List/Item/ReportListItem'
+import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 
 interface Props {
   title: string
@@ -27,9 +27,55 @@ const AssignedList: React.VFC<Props> = ({
   title,
   data,
 }) => {
-  const incidentIds = data.transports.map((e) => e.incidentId).concat(...data.reports.map((e) => e.incidentId)).concat(...data.tasks.map((e) => e.incidentId)).concat(...data.subtasks.map((e) => e.incidentId))
-  const diffIncidentIds = data.incidents.filter((e) => incidentIds.includes(e.id))
-  // todo memoize filters
+  const diffIncidentIds: Incident[] = useMemo(() => {
+    const incidentIds = data.transports.map((e) => e.incidentId).concat(...data.reports.map((e) => e.incidentId)).concat(...data.tasks.map((e) => e.incidentId)).concat(...data.subtasks.map((e) => e.incidentId))
+    return data.incidents.filter((e) => incidentIds.includes(e.id)) ?? []
+  }, [data])
+
+  const transports: Transport[][] = useMemo(() => {
+    return data.transports.reduce((acc, val) => {
+      const i: number = val.incidentId
+      if (!acc[i]) {
+        acc[i] = []
+      }
+      acc[i].push(val)
+      return acc
+    }, {} as Transport[][])
+  }, [data])
+
+  const reports: Report[][] = useMemo(() => {
+    return data.reports.reduce((acc, val) => {
+      const i: number = val.incidentId
+      if (!acc[i]) {
+        acc[i] = []
+      }
+      acc[i].push(val)
+      return acc
+    }, {} as Report[][])
+  }, [data])
+
+  const tasks: Task[][] = useMemo(() => {
+    return data.tasks.reduce((acc, val) => {
+      const i: number = val.incidentId
+      if (!acc[i]) {
+        acc[i] = []
+      }
+      acc[i].push(val)
+      return acc
+    }, {} as Task[][])
+  }, [data])
+
+  const subtasks: Subtask[][] = useMemo(() => {
+    return data.subtasks.reduce((acc, val) => {
+      const i: number = val.incidentId
+      if (!acc[i]) {
+        acc[i] = []
+      }
+      acc[i].push(val)
+      return acc
+    }, {} as Subtask[][]) ?? [[]]
+  }, [data])
+
   return (
     <Fragment>
       {diffIncidentIds.length > 0 &&
@@ -38,7 +84,7 @@ const AssignedList: React.VFC<Props> = ({
       {diffIncidentIds.map((incident) =>
         (<IncidentContainer key={'i' + incident.id}>
           <UiTitle level={3}>{incident.title}</UiTitle>
-          <AssignedListItem title="Transporte" trackable={data.transports.filter((e) => e.incidentId == incident.id)}>{(transport) => (
+          <AssignedListItem title="Transporte" trackable={transports[incident.id] ?? []}>{(transport) => (
             <UiLink
               key={transport.id}
               href={'/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
@@ -46,7 +92,7 @@ const AssignedList: React.VFC<Props> = ({
               <TrackableListItem record={transport} isSmall={false} isActive={false} isClosed={transport.isClosed} />
             </UiLink>
           )}</AssignedListItem>
-          <AssignedListItem title="Meldungen" trackable={data.reports.filter((e) => e.incidentId == incident.id)}>{(report) => (
+          <AssignedListItem title="Meldungen" trackable={reports[incident.id] ?? []}>{(report) => (
             <UiLink
               key={report.id}
               href={'/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
@@ -54,7 +100,7 @@ const AssignedList: React.VFC<Props> = ({
               <ReportListItem record={report} isSmall={false} isActive={false} isClosed={report.isClosed} />
             </UiLink>
           )}</AssignedListItem>
-          <AssignedListItem title="Aufträge" trackable={data.tasks.filter((e) => e.incidentId == incident.id)}>{(task) => (
+          <AssignedListItem title="Aufträge" trackable={tasks[incident.id] ?? []}>{(task) => (
             <UiLink
               key={task.id}
               href={'/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
@@ -62,7 +108,7 @@ const AssignedList: React.VFC<Props> = ({
               <TaskListItem task={task} />
             </UiLink>
           )}</AssignedListItem>
-          <AssignedListItem title="Teilaufträge" trackable={data.subtasks.filter((e) => e.incidentId == incident.id)}>{(subtask) => (
+          <AssignedListItem title="Teilaufträge" trackable={subtasks[incident.id] ?? []}>{(subtask) => (
             <UiLink
               key={subtask.id}
               href={'/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.id + '/teilauftraege/' + subtask.id}
