@@ -9,7 +9,6 @@ import Report from '@/models/Report'
 import Task from '@/models/Task'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   imageIds: FileId[]

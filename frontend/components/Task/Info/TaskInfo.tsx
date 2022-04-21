@@ -8,7 +8,6 @@ import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TaskStore from '@/stores/TaskStore'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiImageList from '@/components/Ui/Image/List/UiImageList'
 
 interface Props {
