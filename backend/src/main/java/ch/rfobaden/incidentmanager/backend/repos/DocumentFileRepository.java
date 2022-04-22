@@ -12,11 +12,11 @@ import java.nio.file.Paths;
 
 @Repository
 public class DocumentFileRepository {
-    public static final String RESOURCES_DIR = "files/documents/";
+    public static final String RESOURCES_DIR_DOCUMENTS = "files/documents/";
 
     public void save(byte[] content, Long id) {
         try {
-            Path newFile = Paths.get(RESOURCES_DIR + id);
+            Path newFile = Paths.get(RESOURCES_DIR_DOCUMENTS + id);
             if (!Files.exists(newFile.getParent())) {
                 Files.createDirectories(newFile.getParent());
             }
@@ -28,6 +28,6 @@ public class DocumentFileRepository {
 
     public FileSystemResource findInFileSystem(Long id) {
 
-        return new FileSystemResource(Paths.get(RESOURCES_DIR + id));
+        return new FileSystemResource(Paths.get(RESOURCES_DIR_DOCUMENTS + id));
     }
 }
