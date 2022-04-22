@@ -38,4 +38,9 @@ public class DocumentFileService {
             documentFileRepository.findInFileSystem(document.getId())
         ));
     }
+
+    public Optional<Document> getDocument(Long id){
+        return documentRepository.findById(id);
+    }
+
 }

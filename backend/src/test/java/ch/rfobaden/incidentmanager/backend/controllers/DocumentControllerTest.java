@@ -1,12 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppControllerTest;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
@@ -25,9 +23,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
-@WebMvcTest(DocumentControllerTest.class)
-public class DocumentControllerTest extends AppControllerTest {
-
+@WebMvcTest(DocumentController.class)
+class DocumentControllerTest extends AppControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -46,11 +43,10 @@ public class DocumentControllerTest extends AppControllerTest {
     @MockBean
     private DocumentFileService documentFileService;
 
-    private static final String FILENAME = "filename.pdf";
+    private static final String FILENAME = "filename.jpg";
     private final Document document;
     private final byte[] bytes;
     private final MockMultipartFile file;
-
 
     public DocumentControllerTest() {
         bytes = "some data".getBytes();
@@ -65,7 +61,8 @@ public class DocumentControllerTest extends AppControllerTest {
         // When
         Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
         Mockito.when(incidentService.find(document.getId())).thenReturn(Optional.of(new Incident()));
-          // Then
+
+        // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "incident")

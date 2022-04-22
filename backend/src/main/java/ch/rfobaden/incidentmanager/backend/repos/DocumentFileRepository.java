@@ -1,11 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
-import ch.rfobaden.incidentmanager.backend.services.DocumentService;
-import org.apache.tika.Tika;
-import org.apache.tika.mime.MimeTypes;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;

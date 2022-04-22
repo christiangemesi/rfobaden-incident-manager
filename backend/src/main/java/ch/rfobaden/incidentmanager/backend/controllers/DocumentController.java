@@ -9,7 +9,6 @@ import ch.rfobaden.incidentmanager.backend.models.DocumentOwner;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
-import ch.rfobaden.incidentmanager.backend.services.DocumentService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
@@ -35,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(path = "api/v1/documents")
 public class DocumentController extends AppController {
     private final DocumentFileService documentFileService;
-    private final DocumentService documentService;
     private final IncidentService incidentService;
     private final ReportService reportService;
     private final TaskService taskService;
@@ -43,13 +41,12 @@ public class DocumentController extends AppController {
 
     public DocumentController(
         DocumentFileService documentFileService,
-        DocumentService documentService,
-        IncidentService incidentService, ReportService reportService,
+        IncidentService incidentService,
+        ReportService reportService,
         TaskService taskService,
         SubtaskService subtaskService
     ) {
         this.documentFileService = documentFileService;
-        this.documentService = documentService;
         this.incidentService = incidentService;
         this.reportService = reportService;
         this.taskService = taskService;
@@ -60,7 +57,7 @@ public class DocumentController extends AppController {
     public FileSystemResource downloadDocument(@PathVariable Long id,
                                                HttpServletResponse response) {
 
-        Document document = documentService.getDocument(id).orElseThrow(() -> (
+        Document document = documentFileService.getDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
 
