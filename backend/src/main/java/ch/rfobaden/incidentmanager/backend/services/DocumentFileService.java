@@ -26,8 +26,10 @@ public class DocumentFileService {
     public Document save(byte[] bytes, String documentName) {
         Tika tika = new Tika();
         String mimeType = tika.detect(bytes);
+
         Document newDocument = new Document(documentName);
         newDocument.setMimeType(mimeType);
+
         Document document = documentRepository.save(newDocument);
         documentFileRepository.save(bytes, document.getId());
         return document;
