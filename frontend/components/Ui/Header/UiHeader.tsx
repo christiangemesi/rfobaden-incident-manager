@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
@@ -33,53 +33,56 @@ const UiHeader: React.VFC = () => {
     await router.push('/anmelden')
   }, [router])
 
-  let numberPriorityHigh = 0
-  let numberPriorityMedium = 0
-  let numberPriorityLow = 0
+  const [numberPriorityHigh, setNumberPriorityHigh] = useState(0)
+  const [numberPriorityMedium, setNumberPriorityMedium] = useState(0)
+  const [numberPriorityLow, setNumberPriorityLow] = useState(0)
+
   // todo not working reload, correct nr on click
-  useEffect(async () => {
-    if (currentUser !== null) {
-      const [transports, transportsError]: BackendResponse<Report[]> = await backendService.list(
-        `users/${currentUser?.id}/assignments/transports`,
-      )
-      if (transportsError !== null) {
-        throw transportsError
-      }
-      console.log(100,transports)
-      const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-        `users/${currentUser.id}/assignments/reports`,
-      )
-      if (reportsError !== null) {
-        throw reportsError
-      }
+  useEffect(() => {
+    (async () => {
+      if (currentUser !== null) {
+        const [transports, transportsError]: BackendResponse<Report[]> = await backendService.list(
+          `users/${currentUser?.id}/assignments/transports`,
+        )
+        if (transportsError !== null) {
+          throw transportsError
+        }
 
-      const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-        `users/${currentUser.id}/assignments/tasks`,
-      )
-      if (tasksError !== null) {
-        throw tasksError
-      }
+        const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
+          `users/${currentUser.id}/assignments/reports`,
+        )
+        if (reportsError !== null) {
+          throw reportsError
+        }
 
-      const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-        `users/${currentUser.id}/assignments/subtasks`,
-      )
-      if (subtasksError !== null) {
-        throw subtasksError
-      }
+        const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
+          `users/${currentUser.id}/assignments/tasks`,
+        )
+        if (tasksError !== null) {
+          throw tasksError
+        }
 
-      numberPriorityHigh = reports.filter((e) => e.priority == Priority.HIGH).length
-        + tasks.filter((e) => e.priority == Priority.HIGH).length
-        + subtasks.filter((e) => e.priority == Priority.HIGH).length
-        + transports.filter((e) => e.priority == Priority.HIGH).length
-      numberPriorityMedium = reports.filter((e) => e.priority == Priority.MEDIUM).length
-        + tasks.filter((e) => e.priority == Priority.MEDIUM).length
-        + subtasks.filter((e) => e.priority == Priority.MEDIUM).length
-        + transports.filter((e) => e.priority == Priority.MEDIUM).length
-      numberPriorityLow = reports.filter((e) => e.priority == Priority.LOW).length
-        + tasks.filter((e) => e.priority == Priority.LOW).length
-        + subtasks.filter((e) => e.priority == Priority.LOW).length
-        + transports.filter((e) => e.priority == Priority.LOW).length
-    }
+        const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
+          `users/${currentUser.id}/assignments/subtasks`,
+        )
+        if (subtasksError !== null) {
+          throw subtasksError
+        }
+
+        setNumberPriorityHigh(reports.filter((e) => e.priority == Priority.HIGH).length
+          + tasks.filter((e) => e.priority == Priority.HIGH).length
+          + subtasks.filter((e) => e.priority == Priority.HIGH).length
+          + transports.filter((e) => e.priority == Priority.HIGH).length)
+        setNumberPriorityMedium(reports.filter((e) => e.priority == Priority.MEDIUM).length
+          + tasks.filter((e) => e.priority == Priority.MEDIUM).length
+          + subtasks.filter((e) => e.priority == Priority.MEDIUM).length
+          + transports.filter((e) => e.priority == Priority.MEDIUM).length)
+        setNumberPriorityLow(reports.filter((e) => e.priority == Priority.LOW).length
+          + tasks.filter((e) => e.priority == Priority.LOW).length
+          + subtasks.filter((e) => e.priority == Priority.LOW).length
+          + transports.filter((e) => e.priority == Priority.LOW).length)
+      }
+    })()
   }, [currentUser, numberPriorityLow, numberPriorityHigh, numberPriorityMedium])
 
   return (
@@ -226,13 +229,13 @@ const AssignedListContainer = styled.div<{ numberAssignments: number }>`
     align-items: center;
     border-radius: 50%;
     font-size: 0.5rem;
-    background: ${({ theme, numberAssignments }) => numberAssignments == 0
-            ? theme.colors.tertiary.contrast
-            : theme.colors.error.value};
-    color: ${({ theme, numberAssignments }) => numberAssignments == 0
-            ? theme.colors.tertiary.value
-            : theme.colors.error.contrast};
-  }
+    ${({ theme, numberAssignments }) => numberAssignments === 0 ? css`
+      background: ${theme.colors.tertiary.contrast};
+      color: ${theme.colors.tertiary.value};
+    ` : css`
+      background: ${theme.colors.error.value};
+      color: ${theme.colors.error.contrast};
+    `};
 `
 const Icon = styled.div<{ priority: Priority }>`
   ${({ priority }) => priority == Priority.LOW && css`
