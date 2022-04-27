@@ -4,7 +4,7 @@ import { useIncident } from '@/stores/IncidentStore'
 import Task from '@/models/Task'
 import { useSubtasksOfTask } from '@/stores/SubtaskStore'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 
 interface Props {

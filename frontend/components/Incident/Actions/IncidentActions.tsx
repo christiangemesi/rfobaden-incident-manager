@@ -13,14 +13,11 @@ import TrackableImageUploadAction from '@/components/Trackable/Actions/Trackable
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
-import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
 import IncidentPrintView from '@/components/Incident/PrintView/IncidentPrintView'
 import { loadCached } from '@/utils/hooks/useCachedEffect'
 import BackendFetchService from '@/services/BackendFetchService'
 import ReportStore from '@/stores/ReportStore'
-import Report from '@/models/Report'
 import TaskStore from '@/stores/TaskStore'
-import { sleep } from '@/utils/control-flow'
 
 interface Props {
   incident: Incident
