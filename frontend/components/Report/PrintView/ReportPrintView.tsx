@@ -33,7 +33,7 @@ const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
 
       <ContentList>
         {tasks.map((task) => (
-          <ContentItem key={task.id}>
+          <ContentItem key={task.id} isNested>
             <TaskPrintView task={task} isNested />
           </ContentItem>
         ))}
@@ -52,10 +52,13 @@ const Header = styled.div<{ isNested: boolean }>`
 const ContentList = styled.ul`
 `
 
-const ContentItem = styled.li`
+const ContentItem = styled.li<{ isNested: boolean }>`
   margin-top: 2rem;
   border-top: 1px solid grey;
-  border-left: 1px solid grey;
   padding-top: 1rem;
   padding-left: 1rem;
+  
+  ${({ isNested }) => !isNested && css`
+    border-left: 1px solid grey;
+  `}
 `
