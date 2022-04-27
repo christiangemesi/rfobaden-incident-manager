@@ -83,6 +83,7 @@ const TextArea = styled.div`
   max-width: 200px;
 `
 const ImageArea = styled.div`
+  cursor: pointer;
   position: relative;
   transition: 250ms ease;
   transition-property: filter;
