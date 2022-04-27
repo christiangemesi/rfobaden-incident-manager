@@ -93,6 +93,12 @@ export default App
 const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   * {
     box-sizing: border-box;
+
+    // Show background-color in print output.
+    // Yes, !important is required here so that it works in all browsers.
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
   }
 
   ${({ theme }) => css`
@@ -102,31 +108,9 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       color: ${theme.colors.tertiary.contrast};
     }
   `}
+  
   button {
     cursor: pointer;
-  }
-
-  @media print {
-    @page {
-      size: auto;
-      margin: 0;
-    }
-
-    #__next {
-      display: none;
-    }
-  }
-
-  @media not print {
-    html, body, #__next {
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-    }
-
-    .print-only {
-      display: none;
-    }
   }
 `
 
