@@ -4,15 +4,15 @@ import { useIncident } from '@/stores/IncidentStore'
 import Task from '@/models/Task'
 import { useSubtasksOfTask } from '@/stores/SubtaskStore'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 
 interface Props {
   task: Task
-  noPath?: boolean
+  isNested?: boolean
 }
 
-const TaskPrintView: React.VFC<Props> = ({ task, noPath = false }) => {
+const TaskPrintView: React.VFC<Props> = ({ task, isNested = false }) => {
   const subtasks = useSubtasksOfTask(task.id)
 
   const report = useReport(task.reportId)
@@ -27,7 +27,7 @@ const TaskPrintView: React.VFC<Props> = ({ task, noPath = false }) => {
 
   return (
     <div>
-      {noPath || (
+      {isNested || (
         <div style={{ marginBottom: '1rem' }}>
           {incident.title} / {report.title}
         </div>
@@ -35,7 +35,7 @@ const TaskPrintView: React.VFC<Props> = ({ task, noPath = false }) => {
 
       <TaskViewHeader report={report} task={task} />
 
-      <Content>
+      <Content isNested={isNested}>
         {subtasks.map((subtask) => (
           <SubtaskPrintView key={subtask.id} subtask={subtask} noPath />
         ))}
@@ -45,6 +45,9 @@ const TaskPrintView: React.VFC<Props> = ({ task, noPath = false }) => {
 }
 export default TaskPrintView
 
-const Content = styled.div`
+const Content = styled.div<{ isNested: boolean }>`
   margin-top: 1rem;
+  ${({ isNested }) => isNested && css`
+    margin-left: 2rem;
+  `}
 `
