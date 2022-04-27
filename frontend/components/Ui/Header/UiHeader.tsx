@@ -100,42 +100,26 @@ const UiHeader: React.VFC = () => {
         </UiHeaderItem>
         {currentUser !== null && (
           <UiHeaderItem title="Zugewiesene Aufgaben">
-            <UiDropDown>
-              <UiDropDown.Trigger>{({ toggle }) => (
-                <IconButton onClick={toggle}>
-                  <AssignedListContainer
-                    numberAssignments={numberPriorityHigh + numberPriorityMedium + numberPriorityLow}>
-                    <UiIcon.AssignedList />
-                  </AssignedListContainer>
-                </IconButton>
-              )}</UiDropDown.Trigger>
-              <UiDropDown.Menu>
-                <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben">
-                    <Icon priority={Priority.HIGH}>
-                      <UiIcon.PriorityHigh />
-                    </Icon>
-                    {numberPriorityHigh}
-                  </DropdownItemContainer>
-                </UiDropDown.Item>
-                <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#mittlere-prio">
-                    <Icon priority={Priority.MEDIUM}>
-                      <UiIcon.PriorityMedium />
-                    </Icon>
-                    {numberPriorityMedium}
-                  </DropdownItemContainer>
-                </UiDropDown.Item>
-                <UiDropDown.Item>
-                  <DropdownItemContainer href="/meine-aufgaben#tiefe-prio">
-                    <Icon priority={Priority.LOW}>
-                      <UiIcon.PriorityLow />
-                    </Icon>
-                    {numberPriorityLow}
-                  </DropdownItemContainer>
-                </UiDropDown.Item>
-              </UiDropDown.Menu>
-            </UiDropDown>
+            <AssignedListContainer>
+              <PrioContainer href="/meine-aufgaben">
+                <Icon priority={Priority.HIGH}>
+                  <UiIcon.PriorityHigh />
+                </Icon>
+                {numberPriorityHigh}
+              </PrioContainer>
+              <PrioContainer href="/meine-aufgaben">
+                <Icon priority={Priority.MEDIUM}>
+                  <UiIcon.PriorityMedium />
+                </Icon>
+                {numberPriorityMedium}
+              </PrioContainer>
+              <PrioContainer href="/meine-aufgaben">
+                <Icon priority={Priority.LOW}>
+                  <UiIcon.PriorityLow />
+                </Icon>
+                {numberPriorityLow}
+              </PrioContainer>
+            </AssignedListContainer>
           </UiHeaderItem>
         )}
         {currentUser === null ? (
@@ -208,34 +192,6 @@ const Header = styled.header`
 const NavContainer = styled.div`
   display: flex;
 `
-const DropdownItemContainer = styled(UiLink)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-`
-const AssignedListContainer = styled.div<{ numberAssignments: number }>`
-  ::after {
-    content: '${({ numberAssignments }) => numberAssignments}';
-    position: absolute;
-    top: -0.4rem;
-    right: -0.4rem;
-    width: 1.1rem;
-    height: 1.1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    font-size: 0.5rem;
-    ${({ theme, numberAssignments }) => numberAssignments === 0 ? css`
-      background: ${theme.colors.tertiary.contrast};
-      color: ${theme.colors.tertiary.value};
-    ` : css`
-      background: ${theme.colors.error.value};
-      color: ${theme.colors.error.contrast};
-    `};
-`
 const Icon = styled.div<{ priority: Priority }>`
   ${({ priority }) => priority == Priority.LOW && css`
     color: ${({ theme }) => theme.colors.success.value};
@@ -277,3 +233,16 @@ const IconButton = styled(UiIconButton)`
     transform: scale(1.05);
   }
 `
+const AssignedListContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const PrioContainer = styled(UiLink)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0.6rem;
+`
+
