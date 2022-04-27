@@ -10,7 +10,7 @@
 | Posteingangs- und Ausgangsserver  | lx52.hoststar.hosting             |
 | Ports mit SSL/TLS                 | POP3: 995 / IMAP: 993 / SMTP: 465 |
 | Ports ohne SSL/TLS                | POP3: 110 / IMAP: 143 / SMTP: 587 |
-| Webmail                           | <https://webmail.hoststar.ch>       |
+| Webmail                           | <https://webmail.hoststar.ch>     |
 
 ## Code Quality
 
