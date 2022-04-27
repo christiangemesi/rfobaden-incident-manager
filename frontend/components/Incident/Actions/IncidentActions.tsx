@@ -15,6 +15,12 @@ import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAct
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
 import IncidentPrintView from '@/components/Incident/PrintView/IncidentPrintView'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import BackendFetchService from '@/services/BackendFetchService'
+import ReportStore from '@/stores/ReportStore'
+import Report from '@/models/Report'
+import TaskStore from '@/stores/TaskStore'
+import { sleep } from '@/utils/control-flow'
 
 interface Props {
   incident: Incident
@@ -67,6 +73,23 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
     IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
   }, [incident])
 
+  const loadPrintData = useCallback(async () => {
+    for (const report of ReportStore.list()) {
+      if (report.incidentId === incident.id) {
+        await loadCached('report/tasks', report.id, async () => {
+          await BackendFetchService.loadTasksOfReport(report)
+        })
+      }
+    }
+    for (const task of TaskStore.list()) {
+      if (task.incidentId === incident.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [incident])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -89,11 +112,16 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           onAddImage={addImageId}
         />
 
-        <UiPrinter renderContent={() => <IncidentPrintView incident={incident} />}>{({ trigger }) => (
-          <UiDropDown.Item onClick={trigger}>
-            Drucken
-          </UiDropDown.Item>
-        )}</UiPrinter>
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <IncidentPrintView incident={incident} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>

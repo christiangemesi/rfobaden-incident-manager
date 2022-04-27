@@ -13,6 +13,9 @@ import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAct
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
+import BackendFetchService from '@/services/BackendFetchService'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -61,6 +64,17 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
   }, [report])
 
+
+  const loadPrintData = useCallback(async () => {
+    for (const task of TaskStore.list()) {
+      if (task.reportId === report.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [report])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -83,11 +97,16 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           onAddImage={addImageId}
         />
 
-        <UiPrinter renderContent={() => <ReportPrintView report={report} />}>{({ trigger }) => (
-          <UiDropDown.Item onClick={trigger}>
-            Drucken
-          </UiDropDown.Item>
-        )}</UiPrinter>
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <ReportPrintView report={report} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
