@@ -65,6 +65,18 @@ public class EmailNotificationServiceTest {
     }
 
     @RepeatedTest(5)
+    void testNotifyPasswordReset() {
+        // Given
+        var user = userGenerator.generate();
+
+        // When
+        service.notifyPasswordReset(user, faker.internet().password());
+
+        // Then
+        verify(sender, times(1)).send(message);
+    }
+
+    @RepeatedTest(5)
     void testNotifyAssignee() {
         // Given
         var entity = reportGenerator.generate();

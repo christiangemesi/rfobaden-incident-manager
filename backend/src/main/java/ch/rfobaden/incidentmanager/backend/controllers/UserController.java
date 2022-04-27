@@ -71,6 +71,23 @@ public class UserController extends ModelController.Basic<User, UserService> {
         return user;
     }
 
+    @PutMapping("/{id}/reset")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@auth.isCurrentUser(#id)")
+    public User resetPassword(
+        HttpServletResponse response,
+        @PathVariable("id") Long id
+    ) {
+        var user = service.resetPassword(id).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "user not found")
+        ));
+
+        // Create a new session token to send back to the client.
+        // Sessions of other clients will be invalid from here on out.
+        sessionHelper.addSessionToResponse(response, user);
+        return user;
+    }
+
     public static final class PasswordData {
         private String password;
 
