@@ -8,9 +8,9 @@ import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiImageList from '@/components/Ui/Image/List/UiImageList'
 import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
+import ImageList from '@/components/Image/List/ImageList'
 
 interface Props {
   incident: Incident
@@ -65,7 +65,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiImageList
+          <ImageList
             storeImageIds={storeImageIds}
             imageIds={incident.imageIds}
             modelId={incident.id}

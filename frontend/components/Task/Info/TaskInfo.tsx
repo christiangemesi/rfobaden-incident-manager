@@ -8,7 +8,7 @@ import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TaskStore from '@/stores/TaskStore'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiImageList from '@/components/Ui/Image/List/UiImageList'
+import ImageList from '@/components/Image/List/ImageList'
 
 interface Props {
   task: Task
@@ -49,7 +49,7 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiImageList
+          <ImageList
             storeImageIds={storeImageIds}
             imageIds={task.imageIds}
             modelId={task.id}

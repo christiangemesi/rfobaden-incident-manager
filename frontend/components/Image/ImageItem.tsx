@@ -13,7 +13,7 @@ interface Props {
   onDelete: (id: FileId) => void
 }
 
-const UiImage: React.VFC<Props> = ({
+const ImageItem: React.VFC<Props> = ({
   src = '',
   text = '',
   id,
@@ -47,7 +47,7 @@ const UiImage: React.VFC<Props> = ({
   )
 }
 
-export default UiImage
+export default ImageItem
 
 const ImageCard = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

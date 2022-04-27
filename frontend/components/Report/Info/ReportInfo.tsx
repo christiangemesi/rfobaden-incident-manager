@@ -6,9 +6,9 @@ import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiImageList from '@/components/Ui/Image/List/UiImageList'
 import { FileId } from '@/models/FileUpload'
 import ReportStore from '@/stores/ReportStore'
+import ImageList from '@/components/Image/List/ImageList'
 
 interface Props {
   report: Report
@@ -48,7 +48,7 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
           </UiCaption>
         )}</UiDrawer.Trigger>
         <UiDrawer.Body>
-          <UiImageList
+          <ImageList
             storeImageIds={storeImageIds}
             imageIds={report.imageIds}
             modelId={report.id}

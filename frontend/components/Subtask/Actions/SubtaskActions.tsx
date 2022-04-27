@@ -11,7 +11,7 @@ import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import UiImageList from '@/components/Ui/Image/List/UiImageList'
+import ImageList from '@/components/Image/List/ImageList'
 
 interface Props {
   task: Task
@@ -73,7 +73,8 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
 
           )}</UiDrawer.Trigger>
           <UiDrawer.Body>
-            <UiImageList
+            {/* eslint-disable-next-line react/jsx-no-undef */}
+            <ImageList
               storeImageIds={storeImageIds}
               imageIds={subtask.imageIds}
               modelId={subtask.id}
