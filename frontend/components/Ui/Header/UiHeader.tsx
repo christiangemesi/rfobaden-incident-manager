@@ -37,7 +37,6 @@ const UiHeader: React.VFC = () => {
   const [numberPriorityMedium, setNumberPriorityMedium] = useState(0)
   const [numberPriorityLow, setNumberPriorityLow] = useState(0)
 
-  // todo not working reload, correct nr on click
   useEffect(() => {
     (async () => {
       if (currentUser !== null) {
