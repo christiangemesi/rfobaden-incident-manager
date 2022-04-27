@@ -111,7 +111,7 @@ const AssignedList: React.VFC<Props> = ({
           <AssignedListItem title="Teilaufträge" trackable={subtasks[incident.id] ?? []}>{(subtask) => (
             <UiLink
               key={subtask.id}
-              href={'/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.id + '/teilauftraege/' + subtask.id}
+              href={'/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.taskId}
             >
               <TrackableListItem record={subtask} isActive={false} isSmall={false} isClosed={subtask.isClosed} />
             </UiLink>
