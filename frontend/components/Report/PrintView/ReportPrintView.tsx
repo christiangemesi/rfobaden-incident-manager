@@ -24,7 +24,7 @@ const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
       <Header isNested>
         {isNested || (
           <div style={{ marginBottom: '1rem' }}>
-            {incident.title} / {report.title}
+            {incident.title}
           </div>
         )}
 
