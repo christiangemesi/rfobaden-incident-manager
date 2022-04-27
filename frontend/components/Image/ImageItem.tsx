@@ -30,11 +30,9 @@ const ImageItem: React.VFC<Props> = ({
       <UiModal.Trigger>{({ open }) => (
         <ImageCard onClick={open}>
           <ImageArea>
-            <div>
-              <Image src={src} width={200} height={200} alt={src} />
-            </div>
-            <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
+            <Image src={src} width={200} height={200} alt={src} />
           </ImageArea>
+          <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
           <TextArea>
             {text}
           </TextArea>
@@ -49,23 +47,6 @@ const ImageItem: React.VFC<Props> = ({
 
 export default ImageItem
 
-const ImageCard = styled.div`
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  
-  :hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-
-    & > div {
-      & > button {
-        visibility: visible;
-      }
-      & > div {
-        filter: opacity(50%);
-      }
-    }
-  }
-`
-
 const DeleteButton = styled(UiIconButton)`
   visibility: hidden;
   position: absolute;
@@ -76,15 +57,34 @@ const DeleteButton = styled(UiIconButton)`
 `
 
 const TextArea = styled.div`
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  max-width: 12rem;
 `
-const ImageArea = styled.div`
-  cursor: pointer;
+
+const ImageArea = styled.div` 
   position: relative;
   transition: 250ms ease;
-  transition-property: filter;
+  transition-property: opacity;
 `
+
+const ImageCard = styled.div`
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+
+
+  :hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    & > ${DeleteButton} {
+      visibility: visible;
+    }
+    & > ${ImageArea} {
+      opacity: 50%;
+    }
+  }
+`
+
+
