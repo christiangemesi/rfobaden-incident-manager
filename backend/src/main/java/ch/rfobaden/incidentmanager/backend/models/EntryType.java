@@ -19,6 +19,7 @@ public class EntryType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -66,7 +67,16 @@ public class EntryType implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, number);
+        return Objects.hash(type, number);
+    }
+
+    @Override
+    public String toString() {
+        return "EntryType{" +
+            "id=" + id +
+            ", type=" + type +
+            ", number='" + number + '\'' +
+            '}';
     }
 
     public enum Type {

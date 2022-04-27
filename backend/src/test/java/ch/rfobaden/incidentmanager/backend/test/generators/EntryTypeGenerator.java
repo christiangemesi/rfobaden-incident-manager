@@ -10,7 +10,6 @@ public class EntryTypeGenerator extends Generator<EntryType> {
     @Override
     public EntryType generate() {
         EntryType entryType = new EntryType();
-        entryType.setId(faker.number().numberBetween(1, Long.MAX_VALUE));
         entryType.setType(faker.options().option(EntryType.Type.class));
         entryType.setNumber(faker.phoneNumber().cellPhone());
         return entryType;
