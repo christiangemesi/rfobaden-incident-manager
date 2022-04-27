@@ -28,4 +28,13 @@ public class ReportRepositoryTest extends
             report.setAssignee(userRepository.save(assignee));
         }
     }
+
+    @Override
+    protected void alignAfterCreate(Report record, Report result) {
+        var entryType = record.getEntryType();
+        var entryTypeResult = result.getEntryType();
+        if (entryType != null && entryTypeResult != null) {
+            entryType.setId(entryTypeResult.getId());
+        }
+    }
 }

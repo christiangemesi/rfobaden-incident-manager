@@ -1,5 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,8 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "entry_type")
@@ -62,7 +63,10 @@ public class EntryType implements Serializable {
             return false;
         }
         EntryType that = (EntryType) o;
-        return Objects.equals(this.id, that.id) && type == that.type && Objects.equals(this.number, that.number);
+        return Objects.equals(this.id, that.id)
+            && type == that.type
+            && Objects.equals(this.number, that.number
+        );
     }
 
     @Override
@@ -72,11 +76,11 @@ public class EntryType implements Serializable {
 
     @Override
     public String toString() {
-        return "EntryType{" +
-            "id=" + id +
-            ", type=" + type +
-            ", number='" + number + '\'' +
-            '}';
+        return "EntryType{"
+            + "id=" + id
+            + ", type=" + type
+            + ", number='" + number + '\''
+            + '}';
     }
 
     public enum Type {
