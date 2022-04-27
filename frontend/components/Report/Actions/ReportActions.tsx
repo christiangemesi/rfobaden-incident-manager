@@ -11,6 +11,8 @@ import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
 
 interface Props {
   incident: Incident
@@ -80,6 +82,12 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           modelName="report"
           onAddImage={addImageId}
         />
+
+        <UiPrinter renderContent={() => <ReportPrintView report={report} />}>{({ trigger }) => (
+          <UiDropDown.Item onClick={trigger}>
+            Drucken
+          </UiDropDown.Item>
+        )}</UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
