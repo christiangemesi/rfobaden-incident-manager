@@ -130,7 +130,7 @@ public class EmailNotificationService implements NotificationService {
         return msg.toString();
     }
 
-    private String buildLoginMessage(){
+    private String buildLoginMessage() {
         String frontendHost = rfoConfig.getFrontend().getHost();
         StringBuilder msg = new StringBuilder();
         msg.append("<p>");
