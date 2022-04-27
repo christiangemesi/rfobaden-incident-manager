@@ -19,8 +19,4 @@ public interface ImageOwner {
     default boolean addImage(Image image) {
         return getImages().add(image);
     }
-
-    default boolean deleteImageById(Long imageId) {
-        return getImages().removeIf(img -> img.getId().equals(imageId));
-    }
 }

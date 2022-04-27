@@ -87,11 +87,12 @@ public class ImageController extends AppController {
     }
 
     private <M extends Model & ImageOwner & PathConvertible<?>> void deleteImageFromEntity(
-        Long id, ModelService<M, ?> modelService, Long modelId) {
+        Long id, ModelService<M, ?> modelService, Long modelId
+    ) {
         var entity = modelService.find(modelId).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
             )));
-        entity.deleteImageById(id);
+        entity.getImages().removeIf(img -> img.getId().equals(id));
         if (!imageFileService.delete(id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
         }
