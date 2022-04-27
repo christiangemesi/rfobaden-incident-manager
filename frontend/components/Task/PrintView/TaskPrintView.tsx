@@ -1,12 +1,6 @@
 import React from 'react'
-import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import { useUsername } from '@/models/User'
-import { useUser } from '@/stores/UserStore'
 import { useReport } from '@/stores/ReportStore'
 import { useIncident } from '@/stores/IncidentStore'
-import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 import Task from '@/models/Task'
 import { useSubtasksOfTask } from '@/stores/SubtaskStore'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
@@ -15,11 +9,10 @@ import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 
 interface Props {
   task: Task
+  noPath?: boolean
 }
 
-const TaskPrintView: React.VFC<Props> = ({ task }) => {
-  const assigneeName = useUsername(useUser(task.assigneeId))
-
+const TaskPrintView: React.VFC<Props> = ({ task, noPath = false }) => {
   const subtasks = useSubtasksOfTask(task.id)
 
   const report = useReport(task.reportId)
@@ -34,9 +27,11 @@ const TaskPrintView: React.VFC<Props> = ({ task }) => {
 
   return (
     <div>
-      <div style={{ marginBottom: '1rem' }}>
-        {incident.title} / {report.title}
-      </div>
+      {noPath || (
+        <div style={{ marginBottom: '1rem' }}>
+          {incident.title} / {report.title}
+        </div>
+      )}
 
       <TaskViewHeader report={report} task={task} />
 
