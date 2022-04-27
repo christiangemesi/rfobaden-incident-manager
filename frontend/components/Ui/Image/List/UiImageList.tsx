@@ -19,8 +19,6 @@ interface Props {
 
 const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageIds }) => {
 
-  const [ids, setIds] = useState<FileId[]>(imageIds)
-
   const handleDelete = async (id: FileId) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
 
@@ -31,9 +29,8 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImag
       if (error !== null) {
         throw error
       }
-      const remainingIds = ids.filter((i) => i !== id)
-      setIds(remainingIds)
-      storeImageIds(remainingIds)
+      imageIds = imageIds.filter((i) => i !== id)
+      storeImageIds(imageIds)
     }
   }
 
@@ -44,12 +41,12 @@ const UiImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImag
       </UiTitle>
       <ImageContainer>
         {imageIds.length > 0
-          ? ids.map((imageId) => (
+          ? imageIds.map((id) => (
             <UiImage
-              key={imageId}
-              src={getImageUrl(imageId)}
+              key={id}
+              src={getImageUrl(id)}
               text="Filename"
-              id={imageId}
+              id={id}
               onDelete={handleDelete} />
           ))
           : <p>Keine gespeicherten Bilder</p>
