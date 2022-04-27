@@ -36,10 +36,10 @@ const IncidentPrintView: React.VFC<Props> = ({ incident }) => {
 }
 export default IncidentPrintView
 
-const ContentList = styled.ul`
+const ContentList = styled.div`
 `
 
-const ContentItem = styled.li`
+const ContentItem = styled.div`
   margin-top: 2rem;
   border-left: 1px solid grey;
   border-bottom: 1px solid grey;

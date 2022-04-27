@@ -49,10 +49,10 @@ const Header = styled.div<{ isNested: boolean }>`
   `}
 `
 
-const ContentList = styled.ul`
+const ContentList = styled.div`
 `
 
-const ContentItem = styled.li<{ isNested: boolean }>`
+const ContentItem = styled.div<{ isNested: boolean }>`
   margin-top: 2rem;
   border-top: 1px solid grey;
   padding-top: 1rem;
