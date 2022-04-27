@@ -7,13 +7,9 @@ import { useSubtasks } from '@/stores/SubtaskStore'
 import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
-import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
-import ImageList from '@/components/Image/List/ImageList'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
-import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
-import UiContainer from '@/components/Ui/Container/UiContainer'
 
 interface Props {
   incident: Incident

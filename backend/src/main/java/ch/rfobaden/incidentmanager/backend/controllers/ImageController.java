@@ -90,8 +90,8 @@ public class ImageController extends AppController {
         Long id, ModelService<M, ?> modelService, Long modelId
     ) {
         var entity = modelService.find(modelId).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
-            )));
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
         entity.getImages().removeIf(img -> img.getId().equals(id));
         if (!imageFileService.delete(id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
@@ -143,8 +143,8 @@ public class ImageController extends AppController {
         Long id, ModelService<M, ?> modelService, Supplier<Image> saveImage
     ) {
         var entity = modelService.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
-            )));
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
         var image = saveImage.get();
         entity.addImage(image);
         modelService.update(entity);

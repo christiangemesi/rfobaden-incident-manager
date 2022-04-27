@@ -11,7 +11,6 @@ import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   task: Task
@@ -34,7 +33,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
   }, [subtask, handleDeleteCb])
 
   const addImageId = useCallback((fileId: FileId) => {
-    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId] })
+    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
   const storeImageIds = (ids: FileId[]) => {

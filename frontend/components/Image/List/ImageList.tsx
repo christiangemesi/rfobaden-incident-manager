@@ -1,4 +1,4 @@
-import ImageItem from '@/components/Image/ImageItem'
+import ImageItem from '@/components/Image/Item/ImageItem'
 import { FileId, getImageUrl } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'

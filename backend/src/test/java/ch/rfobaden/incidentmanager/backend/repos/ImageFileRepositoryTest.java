@@ -32,7 +32,10 @@ class ImageFileRepositoryTest {
 
     @AfterEach
     private void cleanUp() throws IOException {
-        Files.delete(Paths.get(RESOURCES_DIR + image.getId() + ".jpeg"));
+        var path = Paths.get(RESOURCES_DIR + image.getId() + ".jpeg");
+        if (Files.exists(path)) {
+            Files.delete(path);
+        }
     }
 
     @Test
@@ -75,7 +78,6 @@ class ImageFileRepositoryTest {
         );
     }
 
-    @Disabled("AccessDeniedException !?")
     @Test
     void testDeleteImage() throws IOException {
         // Given
