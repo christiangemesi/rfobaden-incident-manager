@@ -35,7 +35,7 @@ const TaskPrintView: React.VFC<Props> = ({ task, isNested = false }) => {
 
       <TaskViewHeader report={report} task={task} />
 
-      <Content isNested={isNested}>
+      <Content>
         {subtasks.map((subtask) => (
           <SubtaskPrintView key={subtask.id} subtask={subtask} noPath />
         ))}
@@ -45,9 +45,6 @@ const TaskPrintView: React.VFC<Props> = ({ task, isNested = false }) => {
 }
 export default TaskPrintView
 
-const Content = styled.div<{ isNested: boolean }>`
+const Content = styled.div`
   margin-top: 1rem;
-  ${({ isNested }) => isNested && css`
-    margin-left: 2rem;
-  `}
 `
