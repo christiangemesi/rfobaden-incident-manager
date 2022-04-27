@@ -3,15 +3,12 @@ import React from 'react'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
-import UiDescription from '@/components/Ui/Description/UiDescription'
 import { useTask } from '@/stores/TaskStore'
 import { useReport } from '@/stores/ReportStore'
 import { useIncident } from '@/stores/IncidentStore'
 import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
-import TrackableListItem from '@/components/Trackable/List/Item/TrackableListItem'
 
 interface Props {
   subtask: Subtask
