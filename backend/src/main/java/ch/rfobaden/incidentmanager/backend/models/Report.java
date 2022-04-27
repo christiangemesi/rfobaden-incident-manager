@@ -277,7 +277,7 @@ public class Report extends Model
             && Objects.equals(incident, report.incident)
             && Objects.equals(title, report.title)
             && Objects.equals(description, report.description)
-            && entryType.equals(report.entryType)
+            && Objects.equals(entryType, report.entryType)
             && Objects.equals(notes, report.notes)
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
