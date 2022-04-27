@@ -41,7 +41,7 @@ const ImageItem: React.VFC<Props> = ({
         </ImageCard>
       )}</UiModal.Trigger>
       <UiModal.Body>
-        <Image src={src} width={1280} height={720} objectFit="contain" alt={src} />
+        <Image src={src} width={1280} height={720} alt={src} />
       </UiModal.Body>
     </UiModal>
   )
