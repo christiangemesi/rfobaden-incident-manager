@@ -11,6 +11,9 @@ import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
 import ImageList from '@/components/Image/List/ImageList'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
+import UiContainer from '@/components/Ui/Container/UiContainer'
 
 interface Props {
   incident: Incident
@@ -56,22 +59,18 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
-      <UiDrawer size="full">
-        <UiDrawer.Trigger>{({ open }) => (
-          <UiCaption onClick={open}>
-            {incident.imageIds.length}
-            &nbsp;
-            {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
-        )}</UiDrawer.Trigger>
-        <UiDrawer.Body>
-          <ImageList
-            storeImageIds={storeImageIds}
-            imageIds={incident.imageIds}
-            modelId={incident.id}
-            modelName="incident" />
-        </UiDrawer.Body>
-      </UiDrawer>
+      <ImageDrawer
+        modelId={incident.id}
+        modelName="incident"
+        storeImageIds={storeImageIds}
+        imageIds={incident.imageIds}
+      >
+        <UiCaption>
+          {incident.imageIds.length}
+          &nbsp;
+          {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+        </UiCaption>
+      </ImageDrawer>
     </UiCaptionList>
   )
 }

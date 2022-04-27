@@ -7,8 +7,7 @@ import UiCaption from '@/components/Ui/Caption/UiCaption'
 import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TaskStore from '@/stores/TaskStore'
-import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import ImageList from '@/components/Image/List/ImageList'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
 
 interface Props {
   task: Task
@@ -39,23 +38,18 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
       <UiCaption>
         <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
       </UiCaption>
-
-      <UiDrawer size="full">
-        <UiDrawer.Trigger>{({ open }) => (
-          <UiCaption onClick={open}>
-            {task.imageIds.length}
-            &nbsp;
-            {task.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
-        )}</UiDrawer.Trigger>
-        <UiDrawer.Body>
-          <ImageList
-            storeImageIds={storeImageIds}
-            imageIds={task.imageIds}
-            modelId={task.id}
-            modelName="task" />
-        </UiDrawer.Body>
-      </UiDrawer>
+      <ImageDrawer
+        modelId={task.id}
+        modelName="task"
+        storeImageIds={storeImageIds}
+        imageIds={task.imageIds}
+      >
+        <UiCaption>
+          {task.imageIds.length}
+          &nbsp;
+          {task.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+        </UiCaption>
+      </ImageDrawer>
     </UiCaptionList>
   )
 }

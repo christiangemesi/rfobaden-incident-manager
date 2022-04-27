@@ -1,6 +1,6 @@
 import ImageItem from '@/components/Image/ImageItem'
 import { FileId, getImageUrl } from '@/models/FileUpload'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'

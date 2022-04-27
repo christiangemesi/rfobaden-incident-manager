@@ -10,8 +10,8 @@ import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import ImageList from '@/components/Image/List/ImageList'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   task: Task
@@ -34,7 +34,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
   }, [subtask, handleDeleteCb])
 
   const addImageId = useCallback((fileId: FileId) => {
-    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
+    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId] })
   }, [subtask])
 
   const storeImageIds = (ids: FileId[]) => {
@@ -52,36 +52,25 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
-
         <TrackableImageUploadAction
           id={subtask.id}
           modelName="subtask"
           onAddImage={addImageId}
         />
-
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
         </UiDropDown.Item>
-
-        <UiDrawer size="full">
-          <UiDrawer.Trigger>{({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              {subtask.imageIds.length}
-              &nbsp;
-              {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-            </UiDropDown.Item>
-
-          )}</UiDrawer.Trigger>
-          <UiDrawer.Body>
-            {/* eslint-disable-next-line react/jsx-no-undef */}
-            <ImageList
-              storeImageIds={storeImageIds}
-              imageIds={subtask.imageIds}
-              modelId={subtask.id}
-              modelName="subtask" />
-          </UiDrawer.Body>
-        </UiDrawer>
-
+        <ImageDrawer
+          modelId={subtask.id}
+          modelName="subtask"
+          storeImageIds={storeImageIds}
+          imageIds={subtask.imageIds}>
+          <UiDropDown.Item>
+            {subtask.imageIds.length}
+            &nbsp;
+            {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+          </UiDropDown.Item>
+        </ImageDrawer>
       </UiDropDown.Menu>
     </UiDropDown>
   )

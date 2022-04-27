@@ -5,10 +5,9 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
-import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import { FileId } from '@/models/FileUpload'
 import ReportStore from '@/stores/ReportStore'
-import ImageList from '@/components/Image/List/ImageList'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
 
 interface Props {
   report: Report
@@ -39,22 +38,18 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
       <UiCaption>
         <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
       </UiCaption>
-      <UiDrawer size="full">
-        <UiDrawer.Trigger>{({ open }) => (
-          <UiCaption onClick={open}>
-            {report.imageIds.length}
-            &nbsp;
-            {report.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
-        )}</UiDrawer.Trigger>
-        <UiDrawer.Body>
-          <ImageList
-            storeImageIds={storeImageIds}
-            imageIds={report.imageIds}
-            modelId={report.id}
-            modelName="report" />
-        </UiDrawer.Body>
-      </UiDrawer>
+      <ImageDrawer
+        modelId={report.id}
+        modelName="report"
+        storeImageIds={storeImageIds}
+        imageIds={report.imageIds}
+      >
+        <UiCaption>
+          {report.imageIds.length}
+          &nbsp;
+          {report.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+        </UiCaption>
+      </ImageDrawer>
     </UiCaptionList>
   )
 }
