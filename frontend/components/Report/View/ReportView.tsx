@@ -3,11 +3,10 @@ import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
-import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
-import BackendService, { BackendResponse } from '@/services/BackendService'
+import { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
-import Task, { parseTask } from '@/models/Task'
+import Task from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
@@ -19,6 +18,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
+import BackendFetchService from '@/services/BackendFetchService'
 
 
 interface Props {
@@ -49,18 +49,11 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
   const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
 
   // Load tasks from the backend.
-  const isLoading = useCachedEffect(ReportView, report.id, async () => {
+  const isLoading = useCachedEffect('report/tasks', report.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
     await sleep(300)
-
-    const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
-      `incidents/${report.incidentId}/reports/${report.id}/tasks`,
-    )
-    if (error !== null) {
-      throw error
-    }
-    TaskStore.saveAll(tasks.map(parseTask))
+    await BackendFetchService.loadTasksOfReport(report)
   })
 
   // Clear the selected task if the report changes.
