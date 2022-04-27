@@ -19,7 +19,7 @@ const AssignedListItem = <T extends Trackable>({
     <Fragment>
       {trackable.length > 0 && (
         <Fragment>
-          <UiTitle level={4}>{title}</UiTitle>
+          <UiTitle level={3}>{title}</UiTitle>
           <EntityContainer>
             {trackable.map((e) => (
               children(e)
