@@ -1,6 +1,6 @@
 import React from 'react'
 import { useIncident } from '@/stores/IncidentStore'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Report from '@/models/Report'
 import { useTasksOfReport } from '@/stores/TaskStore'
 import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
@@ -8,10 +8,10 @@ import TaskPrintView from '@/components/Task/PrintView/TaskPrintView'
 
 interface Props {
   report: Report
-  noPath?: boolean
+  isNested?: boolean
 }
 
-const ReportPrintView: React.VFC<Props> = ({ report, noPath = false }) => {
+const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
   const tasks = useTasksOfReport(report.id)
 
   const incident = useIncident(report.incidentId)
@@ -21,17 +21,19 @@ const ReportPrintView: React.VFC<Props> = ({ report, noPath = false }) => {
 
   return (
     <div>
-      {noPath || (
-        <div style={{ marginBottom: '1rem' }}>
-          {incident.title} / {report.title}
-        </div>
-      )}
+      <Header isNested>
+        {isNested || (
+          <div style={{ marginBottom: '1rem' }}>
+            {incident.title}
+          </div>
+        )}
 
-      <ReportViewHeader incident={incident} report={report} />
+        <ReportViewHeader incident={incident} report={report} hasPriority />
+      </Header>
 
       <ContentList>
         {tasks.map((task) => (
-          <ContentItem key={task.id}>
+          <ContentItem key={task.id} isNested>
             <TaskPrintView task={task} isNested />
           </ContentItem>
         ))}
@@ -41,13 +43,22 @@ const ReportPrintView: React.VFC<Props> = ({ report, noPath = false }) => {
 }
 export default ReportPrintView
 
-const ContentList = styled.ul`
+const Header = styled.div<{ isNested: boolean }>`
+  ${({ isNested }) => isNested && css`
+    padding-left: 1rem;
+  `}
 `
 
-const ContentItem = styled.li`
+const ContentList = styled.div`
+`
+
+const ContentItem = styled.div<{ isNested: boolean }>`
   margin-top: 2rem;
-  border-left: 1px solid grey;
   border-top: 1px solid grey;
-  padding-left: 1rem;
   padding-top: 1rem;
+  padding-left: 1rem;
+  
+  ${({ isNested }) => !isNested && css`
+    border-left: 1px solid grey;
+  `}
 `

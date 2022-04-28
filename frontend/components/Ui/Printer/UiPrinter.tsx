@@ -2,9 +2,12 @@ import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'reac
 import { useReactToPrint } from 'react-to-print'
 import styled from 'styled-components'
 import UiContainer from '@/components/Ui/Container/UiContainer'
+import UiModal from '@/components/Ui/Modal/UiModal'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
   renderContent: () => ReactNode
+  loadData?: () => void | Promise<void>
   children: (props: ChildProps) => ReactNode
 }
 
@@ -12,14 +15,23 @@ interface ChildProps {
   trigger: () => void
 }
 
-const UiPrinter: React.VFC<Props> = ({ renderContent, children }) => {
+const UiPrinter: React.VFC<Props> = ({ renderContent, loadData, children }) => {
   const contentRef = useRef<HTMLDivElement | null>(null)
 
+  const [isLoading, setLoading] = useState(false)
   const [content, setContent] = useState<ReactNode | null>(null)
 
-  const handleTrigger = useCallback(() => {
-    setContent(renderContent())
-  }, [renderContent])
+  const handleTrigger = useCallback(async () => {
+    if (loadData) {
+      setLoading(true)
+      await loadData()
+    }
+    const content = renderContent()
+    if (loadData) {
+      setLoading(false)
+    }
+    setContent(content)
+  }, [renderContent, loadData])
 
   const triggerPrint = useReactToPrint({
     documentTitle: 'RFOBaden Incident Manager',
@@ -44,6 +56,11 @@ const UiPrinter: React.VFC<Props> = ({ renderContent, children }) => {
           {content}
         </Content>
       )}
+      <UiModal isOpen={isLoading} isPersistent noCloseButton>
+        <UiModal.Body>
+          <UiIcon.Loader isSpinner />
+        </UiModal.Body>
+      </UiModal>
     </React.Fragment>
   )
 }
@@ -56,5 +73,9 @@ const Content = styled(UiContainer)`
 
   @page {
     margin: 0.75in;
+  }
+  
+  button {
+    display: none;
   }
 `
