@@ -83,7 +83,15 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         <TrackableImageUploadAction
           id={incident.id}
           modelName="incident"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
+        />
+
+        <TrackableImageUploadAction
+          id={incident.id}
+          modelName="incident"
+          onAddFile={addImageId}
+          type="document"
         />
 
         {isAdmin(currentUser) && (

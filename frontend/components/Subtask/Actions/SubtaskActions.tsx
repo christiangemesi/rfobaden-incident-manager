@@ -51,10 +51,18 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
+
         <TrackableImageUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
+        />
+        <TrackableImageUploadAction
+          id={subtask.id}
+          modelName="subtask"
+          onAddFile={addImageId}
+          type="document"
         />
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

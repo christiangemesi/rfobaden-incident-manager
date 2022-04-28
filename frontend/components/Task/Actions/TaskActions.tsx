@@ -82,7 +82,14 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         <TrackableImageUploadAction
           id={task.id}
           modelName="task"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
+        />
+        <TrackableImageUploadAction
+          id={task.id}
+          modelName="task"
+          onAddFile={addImageId}
+          type="document"
         />
 
         <UiDropDown.Item onClick={handleDelete}>
