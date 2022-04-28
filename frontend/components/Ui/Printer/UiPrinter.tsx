@@ -74,4 +74,8 @@ const Content = styled(UiContainer)`
   @page {
     margin: 0.75in;
   }
+  
+  button {
+    display: none;
+  }
 `
