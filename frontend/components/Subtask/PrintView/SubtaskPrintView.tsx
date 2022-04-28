@@ -12,9 +12,10 @@ import SubtaskListItem from '@/components/Subtask/List/Item/SubtaskListItem'
 
 interface Props {
   subtask: Subtask
+  noPath?: boolean
 }
 
-const SubtaskPrintView: React.VFC<Props> = ({ subtask }) => {
+const SubtaskPrintView: React.VFC<Props> = ({ subtask, noPath = false }) => {
   const assigneeName = useUsername(useUser(subtask.assigneeId))
 
   const task = useTask(subtask.taskId)
@@ -34,10 +35,11 @@ const SubtaskPrintView: React.VFC<Props> = ({ subtask }) => {
 
   return (
     <div>
-      <div style={{ marginBottom: '1rem' }}>
-        {incident.title} / {report.title} / {task.title}
-      </div>
-
+      {noPath || (
+        <div style={{ marginBottom: '1rem' }}>
+          {incident.title} / {report.title} / {task.title}
+        </div>
+      )}
       <UiCaptionList>
         <UiCaption isEmphasis>
           Teilauftrag
