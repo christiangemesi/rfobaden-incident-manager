@@ -22,6 +22,10 @@ const config = {
     ],
   },
 
+  images: {
+    domains: process.env.NODE_ENV === 'development' ? ['backend-development'] : [],
+  },
+
   webpack: (config) => {
     config.module.rules.push({
       test: /\.md$/,
