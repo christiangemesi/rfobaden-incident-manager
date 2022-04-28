@@ -2,7 +2,6 @@ import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import ImageList from '@/components/Image/List/ImageList'
 import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
-import styled, { css } from 'styled-components'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
