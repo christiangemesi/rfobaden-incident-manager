@@ -10,23 +10,37 @@ import React from 'react'
 import styled from 'styled-components'
 import Incident from '@/models/Incident'
 import Transport from '@/models/Transport'
+import UiPriority from '@/components/Ui/Priority/UiPriority'
+import ReportInfo from '@/components/Report/Info/ReportInfo'
 
 interface Props {
   incident: Incident
   transport: Transport
+  hasPriority?: boolean
   onClose?: () => void
 }
 
-const TransportViewHeader: React.VFC<Props> = ({ incident, transport, onClose: handleClose }) => {
+const TransportViewHeader: React.VFC<Props> = ({
+  incident,
+  transport,
+  hasPriority = false,
+  onClose: handleClose,
+}) => {
   return (
-    <React.Fragment>
+    <Container>
       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-        <div>
-          <TransportInfo transport={transport} />
-          <UiTitle level={3}>
-            {transport.title}
-          </UiTitle>
-        </div>
+        <TitleContainer>
+          {hasPriority && (
+            <UiPriority priority={transport.priority} />
+          )}
+          <div>
+            <TransportInfo transport={transport} />
+            <UiTitle level={3}>
+              {transport.title}
+            </UiTitle>
+          </div>
+        </TitleContainer>
+
         <UiIconButtonGroup>
           <TransportActions incident={incident} transport={transport} onDelete={handleClose} />
 
@@ -82,11 +96,22 @@ const TransportViewHeader: React.VFC<Props> = ({ incident, transport, onClose: h
       </InfoTable>
 
       <UiDescription description={transport.description} />
-    </React.Fragment>
+    </Container>
   )
 }
 export default TransportViewHeader
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`
 
 const InfoTable = styled.table`
   table-layout: fixed;
