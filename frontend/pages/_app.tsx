@@ -112,6 +112,12 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   button {
     cursor: pointer;
   }
+  
+  @media print {
+    body {
+      background-color: transparent;
+    }
+  }
 `
 
 const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
