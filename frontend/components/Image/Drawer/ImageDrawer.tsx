@@ -2,14 +2,14 @@ import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import ImageList from '@/components/Image/List/ImageList'
 import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
-import styled, { css } from 'styled-components'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   storeImageIds: (ids: FileId[]) => void
   imageIds: FileId[]
-  children: ReactNode
+  children?: (props: { open: () => void }) => ReactNode
 }
 
 const ImageDrawer: React.VFC<Props> = ({
@@ -19,18 +19,17 @@ const ImageDrawer: React.VFC<Props> = ({
   storeImageIds,
   children,
 }) => {
-
   const isEmptyList = imageIds.length > 0
-
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
-        <Content
-          onClick={isEmptyList ? open : undefined}
-          isClickable={isEmptyList}
-        >
-          {children}
-        </Content>
+        children ? children({ open }) : (
+          <UiCaption onClick={open}>
+            {imageIds.length}
+            &nbsp;
+            {imageIds.length === 1 ? 'Bild' : 'Bilder'}
+          </UiCaption>
+        )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <ImageList
@@ -44,11 +43,3 @@ const ImageDrawer: React.VFC<Props> = ({
 }
 
 export default ImageDrawer
-
-const Content = styled.div<{ isClickable: boolean }>`
-  ${({ isClickable }) => isClickable && css`
-    :hover {
-      cursor: pointer
-    }
-  `}
-`

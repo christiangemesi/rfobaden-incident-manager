@@ -16,16 +16,16 @@ import UiDescription from '@/components/Ui/Description/UiDescription'
 interface Props {
   task: Task
   subtask: Subtask,
-  provided: DraggableProvided
-  snapshot: DraggableStateSnapshot
+  provided?: DraggableProvided
+  snapshot?: DraggableStateSnapshot
   onClick?: (Subtask: Subtask) => void,
 }
 
 const SubtaskListItem: React.VFC<Props> = ({
   task,
   subtask,
-  provided,
-  snapshot,
+  provided = null,
+  snapshot = null,
   onClick: handleClick,
 }) => {
 
@@ -48,22 +48,25 @@ const SubtaskListItem: React.VFC<Props> = ({
   // Delay updates to `isDragging` with a timeout, so the css transitions have time to finish.
   const [isDragging, setDragging] = useState(false)
   useEffect(() => {
-    setTimeout(() => {
-      setDragging(snapshot.isDragging)
-    })
-  }, [snapshot.isDragging])
+    const isSnapshotDragging = snapshot?.isDragging ?? null
+    if (isSnapshotDragging !== null) {
+      setTimeout(() => {
+        setDragging(isSnapshotDragging)
+      })
+    }
+  }, [snapshot?.isDragging])
 
   const child = (
     <div
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps ?? {}}
+      {...provided?.dragHandleProps ?? {}}
     >
       <Item
         priority={subtask.priority}
         title={subtask.title}
         user={assigneeName ?? ''}
-        isDragging={isDragging && !snapshot.isDropAnimating}
+        isDragging={isDragging && snapshot !== null && !snapshot.isDropAnimating}
         onClick={handleClick && (() => handleClick(subtask))}
         body={subtask.description && (
           <UiDescription description={subtask.description} />
@@ -75,7 +78,7 @@ const SubtaskListItem: React.VFC<Props> = ({
     </div>
   )
 
-  return snapshot.isDragging
+  return snapshot !== null && snapshot.isDragging
     ? ReactDOM.createPortal(child, document.body)
     : child
 }
