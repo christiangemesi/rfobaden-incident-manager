@@ -4,9 +4,7 @@ import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ImageRepository;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -31,8 +29,17 @@ public class ImageFileService {
     }
 
     public Optional<FileSystemResource> find(Long imageId) {
-        return imageRepository.findById(imageId).map((image) -> (
+        return imageRepository.findById(imageId).map(image -> (
             imageFileRepository.findInFileSystem(image.getId())
         ));
+    }
+
+    public boolean delete(Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image.isPresent() && imageFileRepository.delete(image.get().getId())) {
+            imageRepository.delete(image.get());
+            return true;
+        }
+        return false;
     }
 }

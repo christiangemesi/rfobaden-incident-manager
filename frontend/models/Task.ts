@@ -15,6 +15,7 @@ export default interface Task extends Model, Trackable {
   subtaskIds: Id<Subtask>[]
   closedSubtaskIds: Id<Subtask>[]
   imageIds: FileId[]
+  //documentIds: FileId[]
 }
 
 export const parseTask = (data: Task): Task => ({

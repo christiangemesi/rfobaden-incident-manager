@@ -7,6 +7,9 @@ import { useSubtasks } from '@/stores/SubtaskStore'
 import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
+import IncidentStore from '@/stores/IncidentStore'
+import { FileId } from '@/models/FileUpload'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
 
 interface Props {
   incident: Incident
@@ -35,6 +38,10 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
+  const storeImageIds = (ids: FileId[]) => {
+    IncidentStore.save({ ...incident, imageIds: ids })
+  }
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -48,6 +55,18 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
+      <ImageDrawer
+        modelId={incident.id}
+        modelName="incident"
+        storeImageIds={storeImageIds}
+        imageIds={incident.imageIds}
+      >
+        <UiCaption>
+          {incident.imageIds.length}
+          &nbsp;
+          {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+        </UiCaption>
+      </ImageDrawer>
     </UiCaptionList>
   )
 }
