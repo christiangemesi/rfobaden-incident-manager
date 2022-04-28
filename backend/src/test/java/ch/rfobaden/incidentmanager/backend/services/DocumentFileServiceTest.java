@@ -31,7 +31,7 @@ public class DocumentFileServiceTest {
     private DocumentFileService documentFileService;
 
     @MockBean
-    private DocumentFileRepository documentFileRepository;
+    private ImageFileRepository documentFileRepository;
 
     @MockBean
     private DocumentRepository documentRepository;

@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 public class DocumentFileRepository {
     public static final String RESOURCES_DIR_DOCUMENTS = "files/documents/";
 
+
     public void save(byte[] content, Long id) {
         try {
             Path newFile = Paths.get(RESOURCES_DIR_DOCUMENTS + id);
@@ -27,7 +28,6 @@ public class DocumentFileRepository {
     }
 
     public FileSystemResource findInFileSystem(Long id) {
-
         return new FileSystemResource(Paths.get(RESOURCES_DIR_DOCUMENTS + id));
     }
 }

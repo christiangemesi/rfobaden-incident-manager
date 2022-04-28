@@ -1,11 +1,15 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,10 +17,12 @@ import java.nio.file.Paths;
 @Repository
 public class ImageFileRepository {
     public static final String RESOURCES_DIR = "files/images/";
+    public static final String RESOURCES_DIR_DOCUMENTS = "files/documents/";
 
     public void save(byte[] content, Long id) {
         try {
-            Path newFile = Paths.get(RESOURCES_DIR + id + ".jpeg");
+            String fileExtension = findMimeType(content);
+            Path newFile = Paths.get(RESOURCES_DIR_DOCUMENTS + id + "." + fileExtension);
             if (!Files.exists(newFile.getParent())) {
                 Files.createDirectories(newFile.getParent());
             }
@@ -26,7 +32,17 @@ public class ImageFileRepository {
         }
     }
 
+    public String findMimeType(byte[] content) {
+        try {
+            InputStream is = new ByteArrayInputStream(content);
+            String mimeType = URLConnection.guessContentTypeFromStream(is);
+            return FilenameUtils.getExtension(mimeType);
+        } catch (IOException e) {
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
+        }
+    }
+
     public FileSystemResource findInFileSystem(Long id) {
-        return new FileSystemResource(Paths.get(RESOURCES_DIR + id + ".jpeg"));
+        return new FileSystemResource(Paths.get(RESOURCES_DIR + id));
     }
 }

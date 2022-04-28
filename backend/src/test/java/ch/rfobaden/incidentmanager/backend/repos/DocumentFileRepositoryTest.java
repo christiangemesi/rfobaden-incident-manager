@@ -21,11 +21,11 @@ public class DocumentFileRepositoryTest {
     public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/blank.pdf";
     public static final Long DOCUMNT_ID = 42L;
 
-    private final DocumentFileRepository documentFileRepository;
+    private final ImageFileRepository documentFileRepository;
     private final Document document;
 
     public DocumentFileRepositoryTest() {
-        documentFileRepository = new DocumentFileRepository();
+        documentFileRepository = new ImageFileRepository();
         document = new Document("name");
         document.setId(DOCUMNT_ID);
     }
