@@ -26,7 +26,7 @@ const TaskViewHeader: React.VFC<Props> = ({
   onClose: handleClose,
 }) => {
   return (
-    <React.Fragment>
+    <Container>
       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
         <TitleContainer>
           {hasPriority && (
@@ -50,10 +50,16 @@ const TaskViewHeader: React.VFC<Props> = ({
       </UiGrid>
 
       <UiDescription description={task.description} />
-    </React.Fragment>
+    </Container>
   )
 }
 export default TaskViewHeader
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
 
 const TitleContainer = styled.div`
   display: flex;

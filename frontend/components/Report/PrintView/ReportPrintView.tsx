@@ -28,7 +28,7 @@ const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
           </div>
         )}
 
-        <ReportViewHeader incident={incident} report={report} />
+        <ReportViewHeader incident={incident} report={report} hasPriority />
       </Header>
 
       <ContentList>
