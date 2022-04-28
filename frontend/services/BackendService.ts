@@ -77,10 +77,11 @@ class BackendService {
     })
   }
 
-  async delete(resourceName: string, id?: Id<never>): Promise<BackendError | null> {
+  async delete(resourceName: string, id?: Id<never>, params?: Params): Promise<BackendError | null> {
     const [_data, error] = await this.fetchApi({
       path: `${resourceName}/${id ?? ''}`,
       method: 'delete',
+      params,
     })
     return error
   }

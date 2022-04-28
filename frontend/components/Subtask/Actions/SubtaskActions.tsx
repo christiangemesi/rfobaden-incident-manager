@@ -12,6 +12,7 @@ import TrackableImageUploadAction from '@/components/Trackable/Actions/Trackable
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
 
 interface Props {
   task: Task
@@ -37,6 +38,10 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
+  const storeImageIds = (ids: FileId[]) => {
+    SubtaskStore.save({ ...subtask, imageIds: ids })
+  }
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -48,12 +53,26 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
-
         <TrackableImageUploadAction
           id={subtask.id}
           modelName="subtask"
           onAddImage={addImageId}
         />
+
+        <ImageDrawer
+          modelId={subtask.id}
+          modelName="subtask"
+          storeImageIds={storeImageIds}
+          imageIds={subtask.imageIds}
+        >
+          {({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              {subtask.imageIds.length}
+              &nbsp;
+              {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+            </UiDropDown.Item>
+          )}
+        </ImageDrawer>
 
         <UiPrinter renderContent={() => <SubtaskPrintView subtask={subtask} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>
