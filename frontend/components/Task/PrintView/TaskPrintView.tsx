@@ -1,6 +1,4 @@
 import React from 'react'
-import { useUsername } from '@/models/User'
-import { useUser } from '@/stores/UserStore'
 import { useReport } from '@/stores/ReportStore'
 import { useIncident } from '@/stores/IncidentStore'
 import Task from '@/models/Task'
@@ -14,8 +12,6 @@ interface Props {
 }
 
 const TaskPrintView: React.VFC<Props> = ({ task }) => {
-  const assigneeName = useUsername(useUser(task.assigneeId))
-
   const subtasks = useSubtasksOfTask(task.id)
 
   const report = useReport(task.reportId)
