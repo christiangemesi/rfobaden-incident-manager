@@ -34,6 +34,7 @@ const UiPrinter: React.VFC<Props> = ({ renderContent, loadData, children }) => {
   }, [renderContent, loadData])
 
   const triggerPrint = useReactToPrint({
+    documentTitle: 'RFOBaden Incident Manager',
     content: () => contentRef.current,
     onAfterPrint() {
       setContent(null)
@@ -66,9 +67,11 @@ const UiPrinter: React.VFC<Props> = ({ renderContent, loadData, children }) => {
 export default UiPrinter
 
 const Content = styled(UiContainer)`
-  margin: 4rem;
-  
   @media not print {
     display: none;
+  }
+
+  @page {
+    margin: 0.75in;
   }
 `
