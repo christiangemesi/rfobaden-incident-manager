@@ -9,27 +9,33 @@ import Id from '@/models/base/Id'
 interface Props {
   id: Id<Model>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  onAddImage: (fileId: FileId) => void
+  type: 'image' | 'document'
+  onAddFile: (fileId: FileId) => void
 }
 
 const TrackableImageUploadAction: React.VFC<Props> = ({
   id,
   modelName,
-  onAddImage: handleAddImage,
+  type,
+  onAddFile: handleAddFile,
 }) => {
+
+  const title = type === 'image' ? 'Bild' : 'Dokument'
+
   return (
-    <UiModal title="Bild hinzufügen">
+    <UiModal title={title + ' hinzufügen'}>
       <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
-          Bild hinzufügen
+          {title + ' hinzufügen'}
         </UiDropDown.Item>
       )}</UiModal.Trigger>
       <UiModal.Body>{({ close }) => (
         <FileUploadForm
           modelId={id}
           modelName={modelName}
-          onSave={handleAddImage}
+          onSave={handleAddFile}
           onClose={close}
+          fileType={type}
         />
       )}</UiModal.Body>
     </UiModal>
