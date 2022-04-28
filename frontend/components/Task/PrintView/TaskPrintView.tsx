@@ -33,7 +33,7 @@ const TaskPrintView: React.VFC<Props> = ({ task, isNested = false }) => {
         </div>
       )}
 
-      <TaskViewHeader report={report} task={task} />
+      <TaskViewHeader report={report} task={task} hasPriority />
 
       <Content>
         {subtasks.map((subtask) => (

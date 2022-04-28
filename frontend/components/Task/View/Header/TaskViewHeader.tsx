@@ -9,23 +9,36 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiDescription from '@/components/Ui/Description/UiDescription'
 import React from 'react'
 import Report from '@/models/Report'
+import UiPriority from '@/components/Ui/Priority/UiPriority'
+import styled from 'styled-components'
 
 interface Props {
   report: Report
   task: Task
+  hasPriority?: boolean
   onClose?: () => void
 }
 
-const TaskViewHeader: React.VFC<Props> = ({ report, task, onClose: handleClose }) => {
+const TaskViewHeader: React.VFC<Props> = ({
+  report,
+  task,
+  hasPriority = false,
+  onClose: handleClose,
+}) => {
   return (
     <React.Fragment>
       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-        <div>
-          <TaskInfo task={task} />
-          <UiTitle level={4}>
-            {task.title}
-          </UiTitle>
-        </div>
+        <TitleContainer>
+          {hasPriority && (
+            <UiPriority priority={report.priority} />
+          )}
+          <div>
+            <TaskInfo task={task} />
+            <UiTitle level={4}>
+              {task.title}
+            </UiTitle>
+          </div>
+        </TitleContainer>
 
         <UiIconButtonGroup>
           <TaskActions report={report} task={task} />
@@ -41,3 +54,9 @@ const TaskViewHeader: React.VFC<Props> = ({ report, task, onClose: handleClose }
   )
 }
 export default TaskViewHeader
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`
