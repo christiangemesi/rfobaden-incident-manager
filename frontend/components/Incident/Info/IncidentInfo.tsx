@@ -10,6 +10,7 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   incident: Incident
@@ -67,6 +68,19 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
         </UiCaption>
       </ImageDrawer>
+
+      <DocumentDrawer
+        modelId={incident.id}
+        modelName="incident"
+        storeFileIds={storeImageIds}
+        documentIds={[1,2,3,4,5]}
+      >
+        <UiCaption>
+          {incident.imageIds.length}
+          &nbsp;
+          {incident.imageIds.length === 1 ? 'Dokument' : 'Dokumente'}
+        </UiCaption>
+      </DocumentDrawer>
     </UiCaptionList>
   )
 }
