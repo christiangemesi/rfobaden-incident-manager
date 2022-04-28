@@ -29,4 +29,14 @@ public class ImageFileRepository {
     public FileSystemResource findInFileSystem(Long id) {
         return new FileSystemResource(Paths.get(RESOURCES_DIR + id + ".jpeg"));
     }
+
+    public boolean delete(Long id) {
+        Path file = Paths.get(RESOURCES_DIR + id + ".jpeg");
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -35,6 +35,7 @@ import {
   mdiPrinter,
   mdiSortAlphabeticalAscending,
   mdiSortAlphabeticalDescending,
+  mdiTrashCanOutline,
   mdiUpload,
 } from '@mdi/js'
 
@@ -147,4 +148,5 @@ export default Object.assign(StyledUiIcon, {
   SortDesc: makeNamedIcon(mdiSortAlphabeticalDescending),
   ResetPassword: makeNamedIcon(mdiLockReset),
   Upload: makeNamedIcon(mdiUpload),
+  Trash: makeNamedIcon(mdiTrashCanOutline),
 })

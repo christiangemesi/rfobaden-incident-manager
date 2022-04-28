@@ -3,6 +3,8 @@ package ch.rfobaden.incidentmanager.backend.services;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
@@ -67,5 +69,37 @@ class ImageFileServiceTest {
             fileSystemResource.getInputStream().readAllBytes(),
             resource.getInputStream().readAllBytes()
         );
+    }
+
+    @Test
+    void testDeleteImage() throws IOException {
+        // Given
+        String imageName = "name";
+        Image image = new Image(imageName);
+        image.setId(42L);
+
+        Mockito.when(imageRepository.findById(image.getId())).thenReturn(Optional.of(image));
+        Mockito.when(imageFileRepository.delete(image.getId())).thenReturn(true);
+        // When
+        boolean result = imageFileService.delete(image.getId());
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
+    void testDeleteImage_failsToDeleteImageOnFilesystem() throws IOException {
+        // Given
+        String imageName = "name";
+        Image image = new Image(imageName);
+        image.setId(42L);
+
+        Mockito.when(imageRepository.findById(image.getId())).thenReturn(Optional.of(image));
+        Mockito.when(imageFileRepository.delete(image.getId())).thenReturn(false);
+        // When
+        boolean result = imageFileService.delete(image.getId());
+
+        // Then
+        assertFalse(result);
     }
 }
