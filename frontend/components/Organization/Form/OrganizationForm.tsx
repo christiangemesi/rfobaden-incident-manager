@@ -44,18 +44,16 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
   useCancel(form, handleClose)
 
   return (
-    <div>
-      <UiForm form={form}>
-        <UiGrid gap={1}>
-          <UiGrid.Col size={{ xs: 12, md: 6 }}>
-            <UiForm.Field field={form.name}>{(props) => (
-              <UiTextInput {...props} label="Organisation" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
-        </UiGrid>
-        <UiForm.Buttons form={form} />
-      </UiForm>
-    </div>
+    <UiForm form={form}>
+      <UiGrid gap={1}>
+        <UiGrid.Col size={{ xs: 12, md: 6 }}>
+          <UiForm.Field field={form.name}>{(props) => (
+            <UiTextInput {...props} label="Organisation" />
+          )}</UiForm.Field>
+        </UiGrid.Col>
+      </UiGrid>
+      <UiForm.Buttons form={form} />
+    </UiForm>
   )
 }
 export default OrganizationForm
