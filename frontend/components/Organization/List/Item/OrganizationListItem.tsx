@@ -28,7 +28,7 @@ const OrganizationListItem: React.VFC<Props> = ({
 }) => {
   const currentUser = useCurrentUser()
 
-  const userList = useUsers(organization.userIds)
+  const orgUsers = useUsers(organization.userIds)
 
   const handleDelete = async (organizationId: Id<Organization>) => {
     if (confirm(`Sind sie sicher, dass sie die Organisation "${organization.name}" löschen wollen?`)) {
@@ -89,7 +89,7 @@ const OrganizationListItem: React.VFC<Props> = ({
           </UiTitle>
         ) : (
           <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <UserList users={userList} />
+            <UserList users={orgUsers} />
           </UiGrid.Col>
         )}
       </UiDrawer.Body>
