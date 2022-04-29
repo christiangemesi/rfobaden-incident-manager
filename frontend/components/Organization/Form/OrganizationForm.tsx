@@ -15,7 +15,7 @@ interface Props {
 }
 
 const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: handleClose }) => {
-  const form = useForm<ModelData<Organization>>(organization,() => ({
+  const form = useForm<ModelData<Organization>>(organization, () => ({
     name: '',
     userIds: [],
   }))
