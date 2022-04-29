@@ -50,12 +50,12 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
       )}
 
       <UiGrid style={{ padding: '0.5rem 0.5rem' }} gapH={0.5}>
-        <UiGrid.Col size={5}>
+        <UiGrid.Col size={7}>
           <UiSortButton field={sort.name}>
             <UiTitle level={6}>Organistion</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
-        <UiGrid.Col size={4}>
+        <UiGrid.Col size={5}>
           <UiSortButton field={sort.userNumber}>
             <UiTitle level={6}>Anzahl erfasste Benutzer</UiTitle>
           </UiSortButton>
