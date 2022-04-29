@@ -1,5 +1,5 @@
 import React from 'react'
-import { useOrganization } from '@/stores/OrganizationStore'
+import { useOrganization, useOrganizations } from '@/stores/OrganizationStore'
 import User, { isAdmin } from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
@@ -14,28 +14,22 @@ import BackendService from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
+import Organization from '@/models/Organization'
+import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 
 interface Props extends StyledProps {
-  user: User
+  organization: Organization
 }
 
 const OrganizationListItem: React.VFC<Props> = ({
-  user,
+  organization,
 }) => {
   const currentUser = useCurrentUser()
 
-  const organization = useOrganization(user.organizationId)
-
-  const handleDelete = async (userId: Id<User>) => {
-    if (confirm(`Sind sie sicher, dass sie den Benutzer "${user.firstName} ${user.lastName}" löschen wollen?`)) {
-      await BackendService.delete('users', userId)
-      UserStore.remove(userId)
-    }
-  }
-
-  const resendPassword = async (_userId: Id<User>) => {
-    if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-      alert('not yet implemented')
+  const handleDelete = async (organizationId: Id<Organization>) => {
+    if (confirm(`Sind sie sicher, dass sie die Organisation "${organization.name}" löschen wollen?`)) {
+      await BackendService.delete('organizations', organizationId)
+      UserStore.remove(organizationId)
     }
   }
 
@@ -44,22 +38,16 @@ const OrganizationListItem: React.VFC<Props> = ({
       <UiGrid align="center" gapH={1.5}>
         <UiGrid.Col size={5}>
           <UiTitle level={5}>
-            {user.firstName} {user.lastName}
+            {organization.name}
           </UiTitle>
-          {user.email}
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            {user.role}
-          </UiTitle>
-        </UiGrid.Col>
-        <UiGrid.Col size={4}>
-          <UiTitle level={6}>
-            {organization?.name ?? '-'}
+            {organization.userIds.length}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={1}>
-          {(isAdmin(currentUser) || currentUser.id === user.id) && (
+          {(isAdmin(currentUser)) && (
             <UiDropDown>
               <UiDropDown.Trigger>{({ toggle }) => (
                 <UiIconButton onClick={toggle}>
@@ -67,19 +55,16 @@ const OrganizationListItem: React.VFC<Props> = ({
                 </UiIconButton>
               )}</UiDropDown.Trigger>
               <UiDropDown.Menu>
-                {isAdmin(currentUser) && (
-                  <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
-                )}
-                <UiModal title="Benutzer bearbeiten">
+                <UiModal title="Organisation bearbeiten">
                   <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserForm user={user} onClose={close} />
+                    <OrganizationForm organization={organization} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 {isAdmin(currentUser) && (
-                  <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
+                  <UiDropDown.Item onClick={() => handleDelete(organization.id)}>Löschen</UiDropDown.Item>
                 )}
               </UiDropDown.Menu>
             </UiDropDown>
