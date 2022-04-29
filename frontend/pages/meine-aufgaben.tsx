@@ -15,7 +15,7 @@ import Priority from '@/models/Priority'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
-import AssignedList from '@/components/AssignedList/AssignedList'
+import Assignment from '@/components/Assignment/Assignment'
 import Assignments from '@/models/Assignments'
 import { useEffectOnce } from 'react-use'
 import Id from '@/models/base/Id'
@@ -88,7 +88,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <PriorityContainer>
-        <AssignedList
+        <Assignment
           transports={dataTrackableHigh.transports}
           reports={dataTrackableHigh.reports}
           tasks={dataTrackableHigh.tasks}
@@ -96,7 +96,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList
+        <Assignment
           transports={dataTrackableMedium.transports}
           reports={dataTrackableMedium.reports}
           tasks={dataTrackableMedium.tasks}
@@ -104,7 +104,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList
+        <Assignment
           transports={dataTrackableLow.transports}
           reports={dataTrackableLow.reports}
           tasks={dataTrackableLow.tasks}
@@ -112,7 +112,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList
+        <Assignment
           transports={dataTrackableClosed.transports}
           reports={dataTrackableClosed.reports}
           tasks={dataTrackableClosed.tasks}

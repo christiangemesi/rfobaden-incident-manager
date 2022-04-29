@@ -6,6 +6,7 @@ import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import IncidentStore from '@/stores/IncidentStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import { Themed } from '@/theme'
+import UiLink from '@/components/Ui/Link/UiLink'
 
 
 interface Props<T extends Trackable> {
@@ -14,7 +15,7 @@ interface Props<T extends Trackable> {
   children: (record: T) => ReactNode
 }
 
-const AssignedListItem = <T extends Trackable>({
+const AssignmentItem = <T extends Trackable>({
   title,
   trackable,
   children,
@@ -26,22 +27,26 @@ const AssignedListItem = <T extends Trackable>({
           <UiTitle level={3}>{title}</UiTitle>
           <EntityContainer>
             {trackable.map((e) => (
-              <Item
+              <UiLink
+                href={''}// todo link
                 key={e.id}
-                isActive={false}
-                isClosed={e.isClosed}
-                title={e.title}
-                priority={e.priority}
-                user={IncidentStore.find(e.incidentId)?.title ?? ''}
-                titleSwitched={true}
               >
-                <SuffixList>
-                  <SuffixDate hasEnd={e.endsAt != null}>
-                    <UiDateLabel start={e.startsAt ?? e.createdAt} end={e.endsAt} />
-                  </SuffixDate>
-                  {children(e)}
-                </SuffixList>
-              </Item>
+                <Item
+                  isActive={false}
+                  isClosed={e.isClosed}
+                  title={e.title}
+                  priority={e.priority}
+                  user={IncidentStore.find(e.incidentId)?.title ?? ''}
+                  titleSwitched={true}
+                >
+                  <SuffixList>
+                    <SuffixDate hasEnd={e.endsAt != null}>
+                      <UiDateLabel start={e.startsAt ?? e.createdAt} end={e.endsAt} />
+                    </SuffixDate>
+                    {children(e)}
+                  </SuffixList>
+                </Item>
+              </UiLink>
             ))}
           </EntityContainer>
         </Fragment>
@@ -50,7 +55,7 @@ const AssignedListItem = <T extends Trackable>({
   )
 }
 
-export default AssignedListItem
+export default AssignmentItem
 
 const EntityContainer = styled.div`
   margin: 1rem 0;
