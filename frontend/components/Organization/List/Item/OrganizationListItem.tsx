@@ -1,5 +1,5 @@
 import React, { EventHandler, MouseEvent } from 'react'
-import User, { isAdmin } from '@/models/User'
+import { isAdmin } from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
