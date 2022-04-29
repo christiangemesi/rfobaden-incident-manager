@@ -9,13 +9,14 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import BackendService from '@/services/BackendService'
-import UserStore, { useUsers } from '@/stores/UserStore'
+import { useUsers } from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
 import Organization from '@/models/Organization'
 import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UserList from '@/components/User/List/UserList'
+import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props extends StyledProps {
   organization: Organization
@@ -32,7 +33,7 @@ const OrganizationListItem: React.VFC<Props> = ({
   const handleDelete = async (organizationId: Id<Organization>) => {
     if (confirm(`Sind sie sicher, dass sie die Organisation "${organization.name}" löschen wollen?`)) {
       await BackendService.delete('organizations', organizationId)
-      UserStore.remove(organizationId)
+      OrganizationStore.remove(organizationId)
     }
   }
 
