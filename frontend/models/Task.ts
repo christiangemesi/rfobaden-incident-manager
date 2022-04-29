@@ -25,10 +25,10 @@ export const parseTask = (data: Task): Task => ({
   endsAt: parseDateOrNull(data.endsAt),
 })
 
-export interface OpenedTask extends Task {
+export interface OpenTask extends Task {
   isClosed: false
   isDone: false
 }
 
-export const isOpenedTask = (task: Task): task is OpenedTask =>
+export const isOpenTask = (task: Task): task is OpenTask =>
   !task.isClosed && !task.isDone

@@ -18,9 +18,9 @@ export const parseTransport = (data: Transport): Transport => ({
   ...parseTrackable(data),
 })
 
-export interface OpenedTransport extends Transport {
+export interface OpenTransport extends Transport {
   isClosed: false
 }
 
-export const isOpenedTransport = (transport: Transport): transport is OpenedTransport =>
+export const isOpenTransport = (transport: Transport): transport is OpenTransport =>
   !transport.isClosed
