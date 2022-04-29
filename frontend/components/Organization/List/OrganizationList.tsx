@@ -22,6 +22,16 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
 
   const [sortedOrganizations, sort] = useSort(organizations, () => ({
     name: String,
+    userNumber: ({ userIds: a },  { userIds: b }) => {
+      if (a.length === b.length) {
+        return 0
+      }
+      if (a.length < b.length) {
+        return -1
+      } else {
+        return 1
+      }
+    },
   }))
 
   return (
@@ -45,7 +55,9 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
           </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={4}>
-          <UiTitle level={6}>Anzahl erfasste Benutzer</UiTitle>
+          <UiSortButton field={sort.userNumber}>
+            <UiTitle level={6}>Anzahl erfasste Benutzer</UiTitle>
+          </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
       {sortedOrganizations.map((organization) => (
