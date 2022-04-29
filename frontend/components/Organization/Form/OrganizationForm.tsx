@@ -65,12 +65,3 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
   )
 }
 export default OrganizationForm
-
-//TODO: adapt for users for ousers overview
-// const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
-// const mapOrganizationIdToName = (id: Id<Organization>): string | null => {
-//   const organization = OrganizationStore.find(id)
-//   return organization === null
-//     ? null
-//     : `${organization.name}`
-// }
