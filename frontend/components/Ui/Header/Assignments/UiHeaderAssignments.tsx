@@ -1,12 +1,12 @@
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import Priority from '@/models/Priority'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import React, { useEffect, useState } from 'react'
 import { useSession } from '@/stores/SessionStore'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import backendService, { BackendResponse } from '@/services/BackendService'
 import Assignments from '@/models/Assignments'
+import UiPriority from '@/components/Ui/Priority/UiPriority'
 
 const UiHeaderAssignments: React.VFC = () => {
   const { currentUser } = useSession()
@@ -50,21 +50,15 @@ const UiHeaderAssignments: React.VFC = () => {
     <UiHeaderItem title="Zugewiesene Aufgaben">
       <AssignmentCounter>
         <PriorityContainer href="/meine-aufgaben">
-          <Icon priority={Priority.HIGH}>
-            <UiIcon.PriorityHigh />
-          </Icon>
+          <PriorityIcon priority={Priority.HIGH} />
           {assignmentCount.high}
         </PriorityContainer>
         <PriorityContainer href="/meine-aufgaben">
-          <Icon priority={Priority.MEDIUM}>
-            <UiIcon.PriorityMedium />
-          </Icon>
+          <PriorityIcon priority={Priority.MEDIUM} />
           {assignmentCount.medium}
         </PriorityContainer>
         <PriorityContainer href="/meine-aufgaben">
-          <Icon priority={Priority.LOW}>
-            <UiIcon.PriorityLow />
-          </Icon>
+          <PriorityIcon priority={Priority.LOW} />
           {assignmentCount.low}
         </PriorityContainer>
       </AssignmentCounter>
@@ -86,16 +80,9 @@ const PriorityContainer = styled(UiLink)`
   gap: 0.3rem;
   margin: 0 0.6rem;
 `
-const Icon = styled.div<{ priority: Priority }>`
-  ${({ priority }) => priority == Priority.LOW && css`
-    color: ${({ theme }) => theme.colors.success.value};
-  `}
-
-  ${({ priority }) => priority == Priority.MEDIUM && css`
-    color: ${({ theme }) => theme.colors.warning.value};
-  `}
-
-  ${({ priority }) => priority == Priority.HIGH && css`
-    color: ${({ theme }) => theme.colors.error.value};
-  `}
+const PriorityIcon = styled(UiPriority)`
+  :hover {
+    background-color: transparent;
+    transform: scale(1.05);
+  }
 `

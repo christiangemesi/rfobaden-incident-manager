@@ -76,7 +76,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     subtasks: assignedSubtasks.filter((e) => e.priority == Priority.LOW),
   }), [openedIncidents, assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
 
-  const dataTrackableDone = {
+  const dataTrackableClosed = {
     incidents: openedIncidents,
     transports: closedTransports,
     reports: closedReports,
@@ -88,16 +88,40 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <PriorityContainer>
-        <AssignedList data={dataTrackableHigh} />
+        <AssignedList
+          incidents={dataTrackableHigh.incidents}
+          transports={dataTrackableHigh.transports}
+          reports={dataTrackableHigh.reports}
+          tasks={dataTrackableHigh.tasks}
+          subtasks={dataTrackableHigh.subtasks}
+        />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList data={dataTrackableMedium} />
+        <AssignedList
+          incidents={dataTrackableMedium.incidents}
+          transports={dataTrackableMedium.transports}
+          reports={dataTrackableMedium.reports}
+          tasks={dataTrackableMedium.tasks}
+          subtasks={dataTrackableMedium.subtasks}
+        />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList data={dataTrackableLow} />
+        <AssignedList
+          incidents={dataTrackableLow.incidents}
+          transports={dataTrackableLow.transports}
+          reports={dataTrackableLow.reports}
+          tasks={dataTrackableLow.tasks}
+          subtasks={dataTrackableLow.subtasks}
+        />
       </PriorityContainer>
       <PriorityContainer>
-        <AssignedList data={dataTrackableDone} />
+        <AssignedList
+          incidents={dataTrackableClosed.incidents}
+          transports={dataTrackableClosed.transports}
+          reports={dataTrackableClosed.reports}
+          tasks={dataTrackableClosed.tasks}
+          subtasks={dataTrackableClosed.subtasks}
+        />
       </PriorityContainer>
     </UiContainer>
   )
