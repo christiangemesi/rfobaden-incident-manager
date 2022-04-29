@@ -1,5 +1,5 @@
 import React, { EventHandler, MouseEvent } from 'react'
-import { isAdmin } from '@/models/User'
+import User, { isAdmin } from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -9,12 +9,13 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import BackendService from '@/services/BackendService'
-import UserStore from '@/stores/UserStore'
+import UserStore, { useUsers } from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
 import Organization from '@/models/Organization'
 import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
+import UserList from '@/components/User/List/UserList'
 
 interface Props extends StyledProps {
   organization: Organization
@@ -26,6 +27,8 @@ const OrganizationListItem: React.VFC<Props> = ({
 }) => {
   const currentUser = useCurrentUser()
 
+  const userList = useUsers(organization.userIds)
+
   const handleDelete = async (organizationId: Id<Organization>) => {
     if (confirm(`Sind sie sicher, dass sie die Organisation "${organization.name}" löschen wollen?`)) {
       await BackendService.delete('organizations', organizationId)
@@ -34,7 +37,7 @@ const OrganizationListItem: React.VFC<Props> = ({
   }
 
   return (
-    <UiDrawer position="right" size="full">
+    <UiDrawer position="right">
       <UiDrawer.Trigger>{({ open }) => (
         <UiListItem onClick={open}>
           <UiGrid align="center" gapH={1.5}>
@@ -76,8 +79,19 @@ const OrganizationListItem: React.VFC<Props> = ({
         </UiListItem>
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
-        I appear from the right!
-      </UiDrawer.Body>
+        <UiTitle level={3}>
+          {organization.name}
+        </UiTitle>
+        {organization.userIds.length === 0 ? (
+          <UiTitle level={5}>
+            {`Der Organisation "${organization.name}" sind keine Benutzer zugeteilt.`}
+          </UiTitle>
+        ) : (
+          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+            <UserList users={userList} />
+          </UiGrid.Col>
+        )
+        }</UiDrawer.Body>
     </UiDrawer>
   )
 }
