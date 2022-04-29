@@ -1,30 +1,24 @@
 import React from 'react'
-import User, { parseUser, UserRole } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import UserStore from '@/stores/UserStore'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { ModelData } from '@/models/base/Model'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
 import { useValidate } from '@/components/Ui/Form/validate'
-import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
-import Id from '@/models/base/Id'
-import Organization from '@/models/Organization'
+import OrganizationStore from '@/stores/OrganizationStore'
+import Organization, { parseOrganization } from '@/models/Organization'
 
 interface Props {
-  user?: User | null
+  organization?: Organization | null
   onClose?: () => void
 }
 
-const OrganizationForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
-  const form = useForm<ModelData<User>>(user,() => ({
+const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: handleClose }) => {
+  const form = useForm<ModelData<Organization>>(organization,() => ({
     email: '',
-    firstName: '',
-    lastName: '',
-    role: UserRole.ADMIN,
-    organizationId: null,
+    name: '',
+    userIds: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -33,23 +27,18 @@ const OrganizationForm: React.VFC<Props> = ({ user = null, onClose: handleClose 
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
       validate.maxLength(100),
     ],
-    firstName: [
+    name: [
       validate.notBlank(),
       validate.maxLength(100),
     ],
-    lastName: [
-      validate.notBlank(),
-      validate.maxLength(100),
-    ],
-    role: [],
-    organizationId: [],
+    userIds: [],
   }))
 
-  useSubmit(form, async (formData: ModelData<User>) => {
-    const [data]: BackendResponse<User> = user === null
-      ? await BackendService.create('users', formData)
-      : await BackendService.update('users', user.id, formData)
-    UserStore.save(parseUser(data))
+  useSubmit(form, async (formData: ModelData<Organization>) => {
+    const [data]: BackendResponse<Organization> = organization === null
+      ? await BackendService.create('organizations', formData)
+      : await BackendService.update('organizations', organization.id, formData)
+    OrganizationStore.save(parseOrganization(data))
     clearForm(form)
     if (handleClose) {
       handleClose()
@@ -57,30 +46,18 @@ const OrganizationForm: React.VFC<Props> = ({ user = null, onClose: handleClose 
   })
   useCancel(form, handleClose)
 
-  const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
   return (
     <div>
       <UiForm form={form}>
         <UiGrid gap={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
-            <UiForm.Field field={form.firstName}>{(props) => (
-              <UiTextInput {...props} label="Vorname" />
-            )}</UiForm.Field>
-          </UiGrid.Col>
-          <UiGrid.Col>
-            <UiForm.Field field={form.lastName}>{(props) => (
-              <UiTextInput {...props} label="Nachname" />
+            <UiForm.Field field={form.name}>{(props) => (
+              <UiTextInput {...props} label="Organisation" />
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.role}>{(props) => (
-          <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
-        )}</UiForm.Field>
-        <UiForm.Field field={form.organizationId}>{(props) => (
-          <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </UiForm>
@@ -89,9 +66,11 @@ const OrganizationForm: React.VFC<Props> = ({ user = null, onClose: handleClose 
 }
 export default OrganizationForm
 
-const mapOrganizationIdToName = (id: Id<Organization>): string | null => {
-  const organization = OrganizationStore.find(id)
-  return organization === null
-    ? null
-    : `${organization.name}`
-}
+//TODO: adapt for users for ousers overview
+// const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
+// const mapOrganizationIdToName = (id: Id<Organization>): string | null => {
+//   const organization = OrganizationStore.find(id)
+//   return organization === null
+//     ? null
+//     : `${organization.name}`
+// }
