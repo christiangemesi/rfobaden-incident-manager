@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,47 +29,57 @@ public class AssignmentController extends AppController {
         this.authService = authService;
     }
 
-    @GetMapping("/transports")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
-    public List<Transport> findAssignedTransports() {
+    public Assignments findAssignedTransports() {
         var user = authService.getCurrentUser().orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "user not found")
         ));
 
-        return new ArrayList<>(userService.findAllAssignedTransports(user));
+        return new Assignments(
+            userService.findAllAssignedTransports(user),
+            userService.findAllAssignedReports(user),
+            userService.findAllAssignedTasks(user),
+            userService.findAllAssignedSubtasks(user)
+        );
     }
 
-    @GetMapping("/reports")
-    @ResponseStatus(HttpStatus.OK)
-    @RequireAgent
-    public List<Report> findAssignedReports() {
-        var user = authService.getCurrentUser().orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
+    public static final class Assignments {
+        private List<Transport> transports;
+        private List<Report> reports;
+        private List<Task> tasks;
+        private List<Subtask> subtasks;
 
-        return new ArrayList<>(userService.findAllAssignedReports(user));
-    }
+        public Assignments() {
+        }
 
-    @GetMapping("/tasks")
-    @ResponseStatus(HttpStatus.OK)
-    @RequireAgent
-    public List<Task> findAssignedTasks() {
-        var user = authService.getCurrentUser().orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
+        public Assignments(
+            List<Transport> transports,
+            List<Report> reports,
+            List<Task> tasks,
+            List<Subtask> subtasks
+        ) {
+            this.transports = transports;
+            this.reports = reports;
+            this.tasks = tasks;
+            this.subtasks = subtasks;
+        }
 
-        return new ArrayList<>(userService.findAllAssignedTasks(user));
-    }
+        public List<Transport> getTransports() {
+            return transports;
+        }
 
-    @GetMapping("/subtasks")
-    @ResponseStatus(HttpStatus.OK)
-    @RequireAgent
-    public List<Subtask> findAssignedSubtasks() {
-        var user = authService.getCurrentUser().orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
+        public List<Report> getReports() {
+            return reports;
+        }
 
-        return new ArrayList<>(userService.findAllAssignedSubtasks(user));
+        public List<Task> getTasks() {
+            return tasks;
+        }
+
+        public List<Subtask> getSubtasks() {
+            return subtasks;
+        }
     }
 }

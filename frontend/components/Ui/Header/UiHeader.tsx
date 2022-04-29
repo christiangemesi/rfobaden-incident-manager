@@ -14,9 +14,7 @@ import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
 import backendService, { BackendResponse } from '@/services/BackendService'
 import Priority from '@/models/Priority'
-import Report from '@/models/Report'
-import Task from '@/models/Task'
-import Subtask from '@/models/Subtask'
+import Assignments from '@/models/Assignments'
 
 const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
@@ -39,46 +37,25 @@ const UiHeader: React.VFC = () => {
   useEffect(() => {
     (async () => {
       if (currentUser !== null) {
-        const [transports, transportsError]: BackendResponse<Report[]> = await backendService.list(
-          'assignments/transports',
+        const [assignments, assignmentsError]: BackendResponse<Assignments> = await backendService.find(
+          'assignments',
         )
-        if (transportsError !== null) {
-          throw transportsError
+        if (assignmentsError !== null) {
+          throw assignmentsError
         }
 
-        const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-          'assignments/reports',
-        )
-        if (reportsError !== null) {
-          throw reportsError
-        }
-
-        const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-          'assignments/tasks',
-        )
-        if (tasksError !== null) {
-          throw tasksError
-        }
-
-        const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-          'assignments/subtasks',
-        )
-        if (subtasksError !== null) {
-          throw subtasksError
-        }
-
-        setNumberPriorityHigh(reports.filter((e) => e.priority == Priority.HIGH).length
-          + tasks.filter((e) => e.priority == Priority.HIGH).length
-          + subtasks.filter((e) => e.priority == Priority.HIGH).length
-          + transports.filter((e) => e.priority == Priority.HIGH).length)
-        setNumberPriorityMedium(reports.filter((e) => e.priority == Priority.MEDIUM).length
-          + tasks.filter((e) => e.priority == Priority.MEDIUM).length
-          + subtasks.filter((e) => e.priority == Priority.MEDIUM).length
-          + transports.filter((e) => e.priority == Priority.MEDIUM).length)
-        setNumberPriorityLow(reports.filter((e) => e.priority == Priority.LOW).length
-          + tasks.filter((e) => e.priority == Priority.LOW).length
-          + subtasks.filter((e) => e.priority == Priority.LOW).length
-          + transports.filter((e) => e.priority == Priority.LOW).length)
+        setNumberPriorityHigh(assignments.transports.filter((e) => e.priority == Priority.HIGH).length
+          + assignments.reports.filter((e) => e.priority == Priority.HIGH).length
+          + assignments.tasks.filter((e) => e.priority == Priority.HIGH).length
+          + assignments.subtasks.filter((e) => e.priority == Priority.HIGH).length)
+        setNumberPriorityMedium(assignments.transports.filter((e) => e.priority == Priority.MEDIUM).length
+          + assignments.reports.filter((e) => e.priority == Priority.MEDIUM).length
+          + assignments.tasks.filter((e) => e.priority == Priority.MEDIUM).length
+          + assignments.subtasks.filter((e) => e.priority == Priority.MEDIUM).length)
+        setNumberPriorityLow(assignments.transports.filter((e) => e.priority == Priority.LOW).length
+          + assignments.reports.filter((e) => e.priority == Priority.LOW).length
+          + assignments.tasks.filter((e) => e.priority == Priority.LOW).length
+          + assignments.subtasks.filter((e) => e.priority == Priority.LOW).length)
       }
     })()
   }, [currentUser, numberPriorityLow, numberPriorityHigh, numberPriorityMedium])

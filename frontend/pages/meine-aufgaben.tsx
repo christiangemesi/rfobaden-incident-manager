@@ -17,6 +17,7 @@ import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
 import AssignedList from '@/components/AssignedList/AssignedList'
+import Assignments from '@/models/Assignments'
 
 
 interface Props {
@@ -118,42 +119,21 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     throw incidentsError
   }
 
-  const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
-    'assignments/transports',
+  const [assignments, assignmentsError]: BackendResponse<Assignments> = await backendService.find(
+    'assignments',
   )
-  if (transportsError !== null) {
-    throw transportsError
-  }
-
-  const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-    'assignments/reports',
-  )
-  if (reportsError !== null) {
-    throw reportsError
-  }
-
-  const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-    'assignments/tasks',
-  )
-  if (tasksError !== null) {
-    throw tasksError
-  }
-
-  const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-    'assignments/subtasks',
-  )
-  if (subtasksError !== null) {
-    throw subtasksError
+  if (assignmentsError !== null) {
+    throw assignmentsError
   }
 
   return {
     props: {
       data: {
         incidents,
-        transports,
-        reports,
-        tasks,
-        subtasks,
+        transports: assignments.transports,
+        reports: assignments.reports,
+        tasks: assignments.tasks,
+        subtasks: assignments.subtasks,
       },
     },
   }
