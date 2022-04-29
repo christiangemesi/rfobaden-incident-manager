@@ -29,7 +29,7 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
   return (
     <UiContainer>
       <section>
-        <UiGrid>
+        <UiGrid style={{ padding: '0 0 1rem 0' }}>
           <UiGrid.Col>
             <UiTitle level={1}>
               Benutzer verwalten
