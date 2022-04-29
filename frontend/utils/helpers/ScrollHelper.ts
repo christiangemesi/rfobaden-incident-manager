@@ -2,31 +2,17 @@ import { noop, run } from '@/utils/control-flow'
 
 class ScrollHelper {
   disableScroll(target: HTMLElement | Window) {
-    target.addEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
-    target.addEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // modern desktop
-    target.addEventListener('touchmove', handleWithPreventDefault, WHEEL_EVENT_OPTIONS) // mobile
-    target.addEventListener('keydown', handleWithPreventDefaultForScrollKeys as never, false)
+    target.addEventListener('DOMMouseScroll', stopEvent, false) // older FF
+    target.addEventListener(WHEEL_EVENT_NAME, stopEvent, WHEEL_EVENT_OPTIONS) // modern desktop
+    target.addEventListener('touchmove', stopEvent, WHEEL_EVENT_OPTIONS) // mobile
+    target.addEventListener('keydown', stopEventForScrollKeys as never, false)
   }
 
   enableScroll(target: HTMLElement | Window) {
-    target.removeEventListener('DOMMouseScroll', handleWithPreventDefault, false) // older FF
-    target.removeEventListener(WHEEL_EVENT_NAME, handleWithPreventDefault) // modern desktop
-    target.removeEventListener('touchmove', handleWithPreventDefault) // mobile
-    target.removeEventListener('keydown', handleWithPreventDefaultForScrollKeys as never, false)
-  }
-
-  enableScrollCapture(target: HTMLElement) {
-    target.addEventListener('DOMMouseScroll', handleWithStopPropagation, false) // older FF
-    target.addEventListener(WHEEL_EVENT_NAME, handleWithStopPropagation, WHEEL_EVENT_OPTIONS) // modern desktop
-    target.addEventListener('touchmove', handleWithStopPropagation, WHEEL_EVENT_OPTIONS) // mobile
-    target.addEventListener('keydown', handleWithStopPropagation, false)
-  }
-
-  disableScrollCapture(target: HTMLElement) {
-    target.removeEventListener('DOMMouseScroll', handleWithStopPropagation, false) // older FF
-    target.removeEventListener(WHEEL_EVENT_NAME, handleWithStopPropagation) // modern desktop
-    target.removeEventListener('touchmove', handleWithStopPropagation) // mobile
-    target.removeEventListener('keydown', handleWithStopPropagation, false)
+    target.removeEventListener('DOMMouseScroll', stopEvent, false) // older FF
+    target.removeEventListener(WHEEL_EVENT_NAME, stopEvent) // modern desktop
+    target.removeEventListener('touchmove', stopEvent) // mobile
+    target.removeEventListener('keydown', stopEventForScrollKeys as never, false)
   }
 
   get isPassiveSupported() {
@@ -56,22 +42,18 @@ const IS_PASSIVE_SUPPORTED = run(() => {
   return isSupported
 })
 
-// Event handler which simply calls `preventDefault`.
-const handleWithPreventDefault = (e: Event) => {
-  e.preventDefault()
+// Event handler which calls `stopPropagation`.
+const stopEvent = (e: Event) => {
+  e.stopPropagation()
 }
+
 
 // Keyboard event handler which calls `preventDefault` if the key can scroll the page.
-const handleWithPreventDefaultForScrollKeys = (e: KeyboardEvent) => {
+const stopEventForScrollKeys = (e: KeyboardEvent) => {
   if (SCROLL_KEYS.has(e.key)) {
-    handleWithPreventDefault(e)
+    stopEvent(e)
     return false
   }
-}
-
-// Event handler which stops event propagation.
-const handleWithStopPropagation = (e: Event) => {
-  e.stopPropagation()
 }
 
 // The name of the mouse wheel event.

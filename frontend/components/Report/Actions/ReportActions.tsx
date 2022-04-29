@@ -3,7 +3,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
@@ -12,6 +11,11 @@ import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
+import BackendFetchService from '@/services/BackendFetchService'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -60,6 +64,17 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
   }, [report])
 
+
+  const loadPrintData = useCallback(async () => {
+    for (const task of TaskStore.list()) {
+      if (task.reportId === report.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [report])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -68,13 +83,8 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Meldung bearbeiten
-            </UiTitle>
-            <ReportForm incident={incident} report={report} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Meldung bearbeiten">{({ close }) => (
+          <ReportForm incident={incident} report={report} onClose={close} />
         )}</TrackableEditAction>
 
         {!report.isDone && (
@@ -86,6 +96,17 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           modelName="report"
           onAddImage={addImageId}
         />
+
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <ReportPrintView report={report} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

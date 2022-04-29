@@ -9,7 +9,6 @@ import UiCaption from '@/components/Ui/Caption/UiCaption'
 import BackendService from '@/services/BackendService'
 import Task from '@/models/Task'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -70,19 +69,14 @@ const SubtaskList: React.VFC<Props> = ({
             offene Teilaufträge
           </UiCaption>
 
-          <UiModal isFull>
-            <UiModal.Activator>{({ open }) => (
+          <UiModal title="Teilauftrag erfassen">
+            <UiModal.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
                 <UiIcon.CreateAction size={1.5} />
               </UiCreateButton>
-            )}</UiModal.Activator>
+            )}</UiModal.Trigger>
             <UiModal.Body>{({ close }) => (
-              <div>
-                <UiTitle level={1} isCentered>
-                  Teilauftrag erfassen
-                </UiTitle>
-                <SubtaskForm task={task} onClose={close} />
-              </div>
+              <SubtaskForm task={task} onClose={close} />
             )}</UiModal.Body>
           </UiModal>
 

@@ -12,6 +12,7 @@ export default interface Subtask extends Model, Trackable {
   reportId: Id<Report>
   incidentId: Id<Incident>
   imageIds: FileId[]
+  //documentIds: FileId[]
 }
 
 export const parseSubtask = (data: Subtask): Subtask => ({

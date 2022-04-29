@@ -70,17 +70,12 @@ const UserListItem: React.VFC<Props> = ({
                 {isAdmin(currentUser) && (
                   <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
                 )}
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
+                <UiModal title="Benutzer bearbeiten">
+                  <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Activator>
+                  )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        Benutzer bearbeiten
-                      </UiTitle>
-                      <UserForm user={user} onClose={close} />
-                    </React.Fragment>
+                    <UserForm user={user} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 {isAdmin(currentUser) && (
