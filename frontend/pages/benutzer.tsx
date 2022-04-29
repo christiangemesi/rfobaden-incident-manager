@@ -51,7 +51,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
 
-  const [users] = await backendService.list<User>('users')
+  const [users, usersError]:  BackendResponse<User[]> = await backendService.list<User>(
+    'users',
+  )
+  if (usersError !== null) {
+    throw usersError
+  }
 
   const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',
