@@ -3,15 +3,15 @@ import styled, { css } from 'styled-components'
 import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 
 interface Props {
-  onClick?: (e: React.MouseEvent) => void
+  onClick?: () => void
   children: ReactNode
 }
 
 const UiDropDownItem: React.VFC<Props> = ({ onClick: handleClick, children }) => {
   const context = useContext(UiDropDownContext)
-  const click = useCallback((e: React.MouseEvent) => {
+  const click = useCallback(() => {
     if (handleClick) {
-      handleClick(e)
+      handleClick()
     }
     context.setOpen(false)
   }, [context, handleClick])

@@ -51,7 +51,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                 {organization.userIds.length}
               </UiTitle>
             </UiGrid.Col>
-            <UiGrid.Col size={1}>
+            <UiGrid.Col size={1} onClick={(e) => e.stopPropagation()}>
               {(isAdmin(currentUser)) && (
                 <UiDropDown>
                   <UiDropDown.Trigger>{({ toggle }) => (
@@ -69,10 +69,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                       )}</UiModal.Body>
                     </UiModal>
                     {isAdmin(currentUser) && (
-                      <UiDropDown.Item onClick={(e) => {
-                        e.stopPropagation()
-                        handleDelete(organization.id)
-                      }}>Löschen</UiDropDown.Item>
+                      <UiDropDown.Item onClick={() => handleDelete(organization.id)}>Löschen</UiDropDown.Item>
                     )}
                   </UiDropDown.Menu>
                 </UiDropDown>
