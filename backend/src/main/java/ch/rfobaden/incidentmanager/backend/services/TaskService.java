@@ -9,7 +9,6 @@ import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationSe
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepository> {
@@ -24,7 +23,7 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
         notificationService.notifyAssigneeIfChanged(oldTask, task);
     }
 
-    public List<Task> findAllAssignedTasks(User user) {
-        return repository.findAllByAssignee(user);
+    public List<Task> listWhereAssigneeId(Long id) {
+        return repository.listWhereAssigneeId(id);
     }
 }

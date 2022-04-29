@@ -61,9 +61,9 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " FROM "
             + "Task task"
             + " WHERE "
-            + "task.assignee = :user"
+            + "task.assignee.id = :id"
             + " AND "
             + "task.report.incident.isClosed = false"
     )
-    List<Task> findAllByAssignee(@Param("user") User user);
+    List<Task> listWhereAssigneeId(@Param("id") Long id);
 }

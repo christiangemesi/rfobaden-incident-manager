@@ -9,7 +9,6 @@ import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationSe
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubtaskService
@@ -26,7 +25,7 @@ public class SubtaskService
         notificationService.notifyAssigneeIfChanged(oldSubtask, subtask);
     }
 
-    public List<Subtask> findAllAssignedSubtasks(User user) {
-        return repository.findAllByAssignee(user);
+    public List<Subtask> listWhereAssigneeId(Long id) {
+        return repository.listWhereAssigneeId(id);
     }
 }

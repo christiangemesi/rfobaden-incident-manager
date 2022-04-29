@@ -2,7 +2,7 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
@@ -44,7 +44,8 @@ public class TaskRepositoryTest extends
     }
 
     @Test
-    void testAllByFindAssignee() {
+    @WithMockAgent
+    void testListWhereAssigneeId() {
         // Given
         var amount = 10;
         var records = generator.generate(amount);
@@ -61,7 +62,8 @@ public class TaskRepositoryTest extends
             .collect(Collectors.toList());
 
         // When
-        var result = repository.findAllByAssignee(user);
+        assert user != null;
+        var result = repository.listWhereAssigneeId(user.getId());
 
         // Then
         assertThat(result.size()).isEqualTo(assignedRecords.size());

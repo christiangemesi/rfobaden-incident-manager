@@ -40,7 +40,7 @@ public class ReportRepositoryTest extends
     }
 
     @Test
-    void testAllByFindAssignee() {
+    void testListWhereAssigneeId() {
         // Given
         var amount = 10;
         var records = generator.generate(amount);
@@ -57,7 +57,8 @@ public class ReportRepositoryTest extends
             .collect(Collectors.toList());
 
         // When
-        var result = repository.findAllByAssignee(user);
+        assert assignee != null;
+        var result = repository.listWhereAssigneeId(assignee.getId());
 
         // Then
         assertThat(result.size()).isEqualTo(assignedRecords.size());

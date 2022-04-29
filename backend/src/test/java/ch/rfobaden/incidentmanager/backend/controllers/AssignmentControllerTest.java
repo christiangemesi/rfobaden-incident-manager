@@ -26,7 +26,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -107,13 +106,13 @@ public class AssignmentControllerTest extends AppControllerTest {
             .filter(e -> e.getAssignee() == user)
             .collect(Collectors.toList());
 
-        Mockito.when(transportService.findAllAssignedTransports(user))
+        Mockito.when(transportService.listWhereAssigneeId(user.getId()))
             .thenReturn(assignedTransports);
-        Mockito.when(reportService.findAllAssignedReports(user))
+        Mockito.when(reportService.listWhereAssigneeId(user.getId()))
             .thenReturn(assignedReports);
-        Mockito.when(taskService.findAllAssignedTasks(user))
+        Mockito.when(taskService.listWhereAssigneeId(user.getId()))
             .thenReturn(assignedTasks);
-        Mockito.when(subtaskService.findAllAssignedSubtasks(user))
+        Mockito.when(subtaskService.listWhereAssigneeId(user.getId()))
             .thenReturn(assignedSubtasks);
 
         Mockito.when(authService.getCurrentUser())
@@ -139,8 +138,9 @@ public class AssignmentControllerTest extends AppControllerTest {
         mockMvc.perform(mockRequest)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists());
-        verify(transportService, times(1)).findAllAssignedTransports(user);
-        verify(reportService, times(1)).findAllAssignedReports(user);
-        verify(subtaskService, times(1)).findAllAssignedSubtasks(user);
+        verify(transportService, times(1)).listWhereAssigneeId(user.getId());
+        verify(reportService, times(1)).listWhereAssigneeId(user.getId());
+        verify(taskService, times(1)).listWhereAssigneeId(user.getId());
+        verify(subtaskService, times(1)).listWhereAssigneeId(user.getId());
     }
 }

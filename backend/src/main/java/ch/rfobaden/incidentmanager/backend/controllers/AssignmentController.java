@@ -50,16 +50,16 @@ public class AssignmentController extends AppController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
-    public Assignments findAssignedAllAssignments() {
-        var user = authService.getCurrentUser().orElseThrow(() -> (
+    public Assignments findAllAssignments() {
+        var userId = authService.getCurrentUser().orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
+        )).getId();
 
         return new Assignments(
-            transportService.findAllAssignedTransports(user),
-            reportService.findAllAssignedReports(user),
-            taskService.findAllAssignedTasks(user),
-            subtaskService.findAllAssignedSubtasks(user)
+            transportService.listWhereAssigneeId(userId),
+            reportService.listWhereAssigneeId(userId),
+            taskService.listWhereAssigneeId(userId),
+            subtaskService.listWhereAssigneeId(userId)
         );
     }
 

@@ -56,9 +56,9 @@ public interface TransportRepository
             + " FROM "
             + "Transport transport"
             + " WHERE "
-            + "transport.assignee = :user"
+            + "transport.assignee.id = :id"
             + " AND "
             + "transport.incident.isClosed = false"
     )
-    List<Transport> findAllByAssignee(@Param("user") User user);
+    List<Transport> listWhereAssigneeId(@Param("id") Long id);
 }

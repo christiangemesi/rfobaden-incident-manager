@@ -55,9 +55,9 @@ public interface ReportRepository
             + " FROM "
             + "Report report"
             + " WHERE "
-            + "report.assignee = :user"
+            + "report.assignee.id = :id"
             + " AND "
             + "report.incident.isClosed = false"
     )
-    List<Report> findAllByAssignee(@Param("user") User user);
+    List<Report> listWhereAssigneeId(@Param("id") Long id);
 }

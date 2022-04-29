@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Transport;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -24,8 +23,8 @@ public class TransportService
         notificationService.notifyAssigneeIfChanged(oldRecord, record);
     }
 
-    public List<Transport> findAllAssignedTransports(User user) {
-        return repository.findAllByAssignee(user);
+    public List<Transport> listWhereAssigneeId(Long id) {
+        return repository.listWhereAssigneeId(id);
     }
 
 }

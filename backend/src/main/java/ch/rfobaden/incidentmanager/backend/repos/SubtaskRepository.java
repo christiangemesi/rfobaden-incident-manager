@@ -68,9 +68,9 @@ public interface SubtaskRepository
             + " FROM "
             + "Subtask subtask"
             + " WHERE "
-            + "subtask.assignee = :user"
+            + "subtask.assignee.id = :id"
             + " AND "
             + "subtask.task.report.incident.isClosed = false"
     )
-    List<Subtask> findAllByAssignee(@Param("user") User user);
+    List<Subtask> listWhereAssigneeId(@Param("id") Long id);
 }
