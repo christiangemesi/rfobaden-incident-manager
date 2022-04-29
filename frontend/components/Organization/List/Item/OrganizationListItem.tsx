@@ -69,7 +69,10 @@ const OrganizationListItem: React.VFC<Props> = ({
                       )}</UiModal.Body>
                     </UiModal>
                     {isAdmin(currentUser) && (
-                      <UiDropDown.Item onClick={() => handleDelete(organization.id)}>Löschen</UiDropDown.Item>
+                      <UiDropDown.Item onClick={(e) => {
+                        e.stopPropagation()
+                        handleDelete(organization.id)
+                      }}>Löschen</UiDropDown.Item>
                     )}
                   </UiDropDown.Menu>
                 </UiDropDown>
