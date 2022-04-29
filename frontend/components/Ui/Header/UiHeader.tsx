@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import React, { useCallback } from 'react'
+import styled from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
@@ -12,9 +12,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
-import backendService, { BackendResponse } from '@/services/BackendService'
-import Priority from '@/models/Priority'
-import Assignments from '@/models/Assignments'
+import UiHeaderAssignments from '@/components/Ui/Header/Assignments/UiHeaderAssignments'
 
 const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
@@ -29,36 +27,6 @@ const UiHeader: React.VFC = () => {
     SessionStore.clear({ silent: true })
     await router.push('/anmelden')
   }, [router])
-
-  const [numberPriorityHigh, setNumberPriorityHigh] = useState(0)
-  const [numberPriorityMedium, setNumberPriorityMedium] = useState(0)
-  const [numberPriorityLow, setNumberPriorityLow] = useState(0)
-
-  useEffect(() => {
-    (async () => {
-      if (currentUser !== null) {
-        const [assignments, assignmentsError]: BackendResponse<Assignments> = await backendService.find(
-          'assignments',
-        )
-        if (assignmentsError !== null) {
-          throw assignmentsError
-        }
-
-        setNumberPriorityHigh(assignments.transports.filter((e) => e.priority == Priority.HIGH).length
-          + assignments.reports.filter((e) => e.priority == Priority.HIGH).length
-          + assignments.tasks.filter((e) => e.priority == Priority.HIGH).length
-          + assignments.subtasks.filter((e) => e.priority == Priority.HIGH).length)
-        setNumberPriorityMedium(assignments.transports.filter((e) => e.priority == Priority.MEDIUM).length
-          + assignments.reports.filter((e) => e.priority == Priority.MEDIUM).length
-          + assignments.tasks.filter((e) => e.priority == Priority.MEDIUM).length
-          + assignments.subtasks.filter((e) => e.priority == Priority.MEDIUM).length)
-        setNumberPriorityLow(assignments.transports.filter((e) => e.priority == Priority.LOW).length
-          + assignments.reports.filter((e) => e.priority == Priority.LOW).length
-          + assignments.tasks.filter((e) => e.priority == Priority.LOW).length
-          + assignments.subtasks.filter((e) => e.priority == Priority.LOW).length)
-      }
-    })()
-  }, [currentUser, numberPriorityLow, numberPriorityHigh, numberPriorityMedium])
 
   return (
     <Header>
@@ -75,28 +43,7 @@ const UiHeader: React.VFC = () => {
           <UiIcon.Changelog />
         </UiHeaderItem>
         {currentUser !== null && (
-          <UiHeaderItem title="Zugewiesene Aufgaben">
-            <AssignedListContainer>
-              <PrioContainer href="/meine-aufgaben">
-                <Icon priority={Priority.HIGH}>
-                  <UiIcon.PriorityHigh />
-                </Icon>
-                {numberPriorityHigh}
-              </PrioContainer>
-              <PrioContainer href="/meine-aufgaben">
-                <Icon priority={Priority.MEDIUM}>
-                  <UiIcon.PriorityMedium />
-                </Icon>
-                {numberPriorityMedium}
-              </PrioContainer>
-              <PrioContainer href="/meine-aufgaben">
-                <Icon priority={Priority.LOW}>
-                  <UiIcon.PriorityLow />
-                </Icon>
-                {numberPriorityLow}
-              </PrioContainer>
-            </AssignedListContainer>
-          </UiHeaderItem>
+          <UiHeaderAssignments />
         )}
         {currentUser === null ? (
           <UiHeaderItem href="/anmelden">
@@ -158,19 +105,6 @@ const Header = styled.header`
 const NavContainer = styled.div`
   display: flex;
 `
-const Icon = styled.div<{ priority: Priority }>`
-  ${({ priority }) => priority == Priority.LOW && css`
-    color: ${({ theme }) => theme.colors.success.value};
-  `}
-
-  ${({ priority }) => priority == Priority.MEDIUM && css`
-    color: ${({ theme }) => theme.colors.warning.value};
-  `}
-
-  ${({ priority }) => priority == Priority.HIGH && css`
-    color: ${({ theme }) => theme.colors.error.value};
-  `}
-`
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -198,17 +132,5 @@ const IconButton = styled(UiIconButton)`
     background-color: transparent;
     transform: scale(1.05);
   }
-`
-const AssignedListContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-const PrioContainer = styled(UiLink)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.3rem;
-  margin: 0 0.6rem;
 `
 

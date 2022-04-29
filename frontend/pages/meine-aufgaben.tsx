@@ -87,16 +87,16 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   return (
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
-      <PriorityContainer id="hohe-prio">
+      <PriorityContainer>
         <AssignedList data={dataTrackableHigh} />
       </PriorityContainer>
-      <PriorityContainer id="mittlere-prio">
+      <PriorityContainer>
         <AssignedList data={dataTrackableMedium} />
       </PriorityContainer>
-      <PriorityContainer id="tiefe-prio">
+      <PriorityContainer>
         <AssignedList data={dataTrackableLow} />
       </PriorityContainer>
-      <PriorityContainer id="done">
+      <PriorityContainer>
         <AssignedList data={dataTrackableDone} />
       </PriorityContainer>
     </UiContainer>
