@@ -46,9 +46,12 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   }))
 
   useSubmit(form, async (formData: ModelData<User>) => {
-    const [data]: BackendResponse<User> = user === null
+    const [data, error]: BackendResponse<User> = user === null
       ? await BackendService.create('users', formData)
       : await BackendService.update('users', user.id, formData)
+    if (error !== null) {
+      throw error
+    }
     UserStore.save(parseUser(data))
     clearForm(form)
     if (handleClose) {
