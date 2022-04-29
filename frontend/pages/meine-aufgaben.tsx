@@ -42,6 +42,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
+  // todo split closed / open in memo, get all once
   const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
   const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort(sortByIncident)
   const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort(sortByIncident)
