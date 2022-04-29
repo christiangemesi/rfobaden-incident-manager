@@ -21,11 +21,6 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
   }))
 
   useValidate(form, (validate) => ({
-    email: [
-      validate.notBlank(),
-      validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
-      validate.maxLength(100),
-    ],
     name: [
       validate.notBlank(),
       validate.maxLength(100),
@@ -34,9 +29,12 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
   }))
 
   useSubmit(form, async (formData: ModelData<Organization>) => {
-    const [data]: BackendResponse<Organization> = organization === null
+    const [data, error]: BackendResponse<Organization> = organization === null
       ? await BackendService.create('organizations', formData)
       : await BackendService.update('organizations', organization.id, formData)
+    if (error !== null) {
+      throw error
+    }
     OrganizationStore.save(parseOrganization(data))
     clearForm(form)
     if (handleClose) {
