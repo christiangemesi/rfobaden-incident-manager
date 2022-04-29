@@ -1,10 +1,9 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { ColorName } from '@/theme'
+import UiPriority from '@/components/Ui/Priority/UiPriority'
 
 interface Props extends UiListItemProps {
   priority: Priority
@@ -25,23 +24,12 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   children,
   ...props
 }: Props) => {
-  const [PriorityIcon, priorityColor] = useMemo(() => {
-    switch (priority) {
-    case Priority.HIGH:
-      return [UiIcon.PriorityHigh, 'error' as const]
-    case Priority.MEDIUM:
-      return [UiIcon.PriorityMedium, 'warning' as const]
-    case Priority.LOW:
-      return [UiIcon.PriorityLow, 'success' as const]
-    }
-  }, [priority])
+
 
   return (
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
-        <PriorityContainer $color={priorityColor} $isSmall={isSmall}>
-          <PriorityIcon size={1.5} />
-        </PriorityContainer>
+        <LeftPriority priority={priority} isSmall={isSmall} />
         <TextContent>
           <ItemTitle level={5}>
             {title}
@@ -119,11 +107,8 @@ const ItemTitle = styled(UiTitle)`
   overflow: hidden;
 `
 
-const PriorityContainer = styled.div<{ $color: ColorName, $isSmall: boolean }>`
-  display: inline-flex;
-  margin: ${({ $isSmall }) => $isSmall ? '0 0.5rem' : '0 1rem'};
-  color: ${({ theme, $color }) => theme.colors[$color].value};
-
+const LeftPriority = styled(UiPriority)`
+  margin: ${({ isSmall }) => isSmall ? '0 0.5rem' : '0 1rem'};
   transition: 150ms ease-out;
   transition-property: margin;
 `
