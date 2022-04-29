@@ -3,17 +3,12 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Report;
-import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -73,50 +66,6 @@ public class UserController extends ModelController.Basic<User, UserService> {
         // Sessions of other clients will be invalid from here on out.
         sessionHelper.addSessionToResponse(response, user);
         return user;
-    }
-
-    @GetMapping("/{id}/assignments/transports")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@auth.isCurrentUser(#id)")
-    public List<Transport> findAssignedTransports(@PathVariable("id") Long id) {
-        var user = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
-
-        return new ArrayList<>(service.findAllAssignedTransports(user));
-    }
-
-    @GetMapping("/{id}/assignments/reports")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@auth.isCurrentUser(#id)")
-    public List<Report> findAssignedReports(@PathVariable("id") Long id) {
-        var user = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
-
-        return new ArrayList<>(service.findAllAssignedReports(user));
-    }
-
-    @GetMapping("/{id}/assignments/tasks")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@auth.isCurrentUser(#id)")
-    public List<Task> findAssignedTasks(@PathVariable("id") Long id) {
-        var user = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
-
-        return new ArrayList<>(service.findAllAssignedTasks(user));
-    }
-
-    @GetMapping("/{id}/assignments/subtasks")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@auth.isCurrentUser(#id)")
-    public List<Subtask> findAssignedSubtasks(@PathVariable("id") Long id) {
-        var user = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "user not found")
-        ));
-
-        return new ArrayList<>(service.findAllAssignedSubtasks(user));
     }
 
     public static final class PasswordData {
