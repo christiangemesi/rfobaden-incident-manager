@@ -90,8 +90,8 @@ const OrganizationListItem: React.VFC<Props> = ({
           <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
             <UserList users={userList} />
           </UiGrid.Col>
-        )
-        }</UiDrawer.Body>
+        )}
+      </UiDrawer.Body>
     </UiDrawer>
   )
 }
