@@ -1,86 +1,57 @@
 import React from 'react'
-import User, { isAdmin } from '@/models/User'
+import { isAdmin } from '@/models/User'
 import UiList from '@/components/Ui/List/UiList'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UserForm from '@/components/User/Form/UserForm'
-import UserListItem from '@/components/User/List/Item/UserListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSortButton from '@/components/Ui/Button/UiSortButton'
 import useSort from '@/utils/hooks/useSort'
-import OrganizationStore from '@/stores/OrganizationStore'
 import { useCurrentUser } from '@/stores/SessionStore'
+import Organization from '@/models/Organization'
+import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
+import OrganizationListItem from '@/components/Organization/List/Item/OrganizationListItem'
 
 interface Props {
-  users: readonly User[]
+  organizations: readonly Organization[]
 }
 
-const OrganizationList: React.VFC<Props> = ({ users }) => {
+const OrganizationList: React.VFC<Props> = ({ organizations }) => {
   const currentUser = useCurrentUser()
 
-  const [sortedUsers, sort] = useSort(users, () => ({
-    firstName: String,
-    lastName: String,
-    role: String,
-    organization: ({ organizationId: a },  { organizationId: b }) => {
-      if (a === b){
-        return 0
-      }
-      if (a === null) {
-        return -1
-      }
-      if (b === null) {
-        return 1
-      }
-      const aOrg = OrganizationStore.find(a)
-      const bOrg = OrganizationStore.find(b)
-      if (aOrg === null || bOrg === null) {
-        throw new Error('organization not found')
-      }
-      return aOrg.name.localeCompare(bOrg.name)
-    },
+  const [sortedOrganizations, sort] = useSort(organizations, () => ({
+    name: String,
   }))
 
   return (
     <UiList>
       {isAdmin(currentUser) && (
-        <UiModal title="Benutzer erfassen">
+        <UiModal title="Organisation erfassen">
           <UiModal.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />
             </UiCreatButton>
           )}</UiModal.Trigger>
           <UiModal.Body>{({ close }) => (
-            <UserForm onClose={close} />
+            <OrganizationForm onClose={close} />
           )}</UiModal.Body>
         </UiModal>
       )}
       <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
         <UiGrid.Col size={5}>
-          <UiSortButton field={sort.firstName}>
-            <UiTitle level={6}>Vorname</UiTitle>
-          </UiSortButton>
-          <UiSortButton field={sort.lastName}>
-            <UiTitle level={6}>Nachname</UiTitle>
-          </UiSortButton>
-        </UiGrid.Col>
-        <UiGrid.Col size={2}>
-          <UiSortButton field={sort.role}>
-            <UiTitle level={6}>Rolle</UiTitle>
+          <UiSortButton field={sort.name}>
+            <UiTitle level={6}>Organistion</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col size={4}>
-          <UiSortButton field={sort.organization}>
-            <UiTitle level={6}>Organisation</UiTitle>
-          </UiSortButton>
+          <UiTitle level={6}>Anzahl erfasste Benutzer</UiTitle>
         </UiGrid.Col>
       </UiGrid>
-      {sortedUsers.map((user) => (
+      {sortedOrganizations.map((organization) => (
         <OrganizationListItem
-          key={user.id}
-          user={user}
+          key={organization.id}
+          organization={organization}
         />
       ))}
     </UiList>
