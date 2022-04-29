@@ -38,7 +38,7 @@ const OrganizationListItem: React.VFC<Props> = ({
   }
 
   return (
-    <UiDrawer position="right">
+    <UiDrawer position="right" size="full">
       <UiDrawer.Trigger>{({ open }) => (
         <UiListItem onClick={open}>
           <UiGrid align="center" gapH={1.5}>
