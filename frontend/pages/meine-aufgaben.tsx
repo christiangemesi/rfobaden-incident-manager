@@ -89,7 +89,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <PriorityContainer>
         <AssignedList
-          incidents={dataTrackableHigh.incidents}
           transports={dataTrackableHigh.transports}
           reports={dataTrackableHigh.reports}
           tasks={dataTrackableHigh.tasks}
@@ -98,7 +97,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
       </PriorityContainer>
       <PriorityContainer>
         <AssignedList
-          incidents={dataTrackableMedium.incidents}
           transports={dataTrackableMedium.transports}
           reports={dataTrackableMedium.reports}
           tasks={dataTrackableMedium.tasks}
@@ -107,7 +105,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
       </PriorityContainer>
       <PriorityContainer>
         <AssignedList
-          incidents={dataTrackableLow.incidents}
           transports={dataTrackableLow.transports}
           reports={dataTrackableLow.reports}
           tasks={dataTrackableLow.tasks}
@@ -116,7 +113,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
       </PriorityContainer>
       <PriorityContainer>
         <AssignedList
-          incidents={dataTrackableClosed.incidents}
           transports={dataTrackableClosed.transports}
           reports={dataTrackableClosed.reports}
           tasks={dataTrackableClosed.tasks}
