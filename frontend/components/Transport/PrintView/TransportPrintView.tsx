@@ -23,7 +23,7 @@ const TransportPrintView: React.VFC<Props> = ({ transport, isNested = false }) =
         </div>
       )}
 
-      <TransportViewHeader incident={incident} transport={transport} />
+      <TransportViewHeader incident={incident} transport={transport} hasPriority />
     </Container>
   )
 }
