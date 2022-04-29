@@ -40,28 +40,28 @@ const UiHeader: React.VFC = () => {
     (async () => {
       if (currentUser !== null) {
         const [transports, transportsError]: BackendResponse<Report[]> = await backendService.list(
-          `assignments/transports/${currentUser?.id}`,
+          'assignments/transports',
         )
         if (transportsError !== null) {
           throw transportsError
         }
 
         const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-          `assignments/reports/${currentUser.id}`,
+          'assignments/reports',
         )
         if (reportsError !== null) {
           throw reportsError
         }
 
         const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-          `assignments/tasks/${currentUser.id}`,
+          'assignments/tasks',
         )
         if (tasksError !== null) {
           throw tasksError
         }
 
         const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-          `assignments/subtasks/${currentUser.id}`,
+          'assignments/subtasks',
         )
         if (subtasksError !== null) {
           throw subtasksError

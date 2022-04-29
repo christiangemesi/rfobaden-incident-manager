@@ -119,28 +119,28 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   }
 
   const [transports, transportsError]: BackendResponse<Transport[]> = await backendService.list(
-    `assignments/transports/${user.id}`,
+    'assignments/transports',
   )
   if (transportsError !== null) {
     throw transportsError
   }
 
   const [reports, reportsError]: BackendResponse<Report[]> = await backendService.list(
-    `assignments/reports/${user.id}`,
+    'assignments/reports',
   )
   if (reportsError !== null) {
     throw reportsError
   }
 
   const [tasks, tasksError]: BackendResponse<Task[]> = await backendService.list(
-    `assignments/tasks/${user.id}`,
+    'assignments/tasks',
   )
   if (tasksError !== null) {
     throw tasksError
   }
 
   const [subtasks, subtasksError]: BackendResponse<Subtask[]> = await backendService.list(
-    `assignments/subtasks/${user.id}`,
+    'assignments/subtasks',
   )
   if (subtasksError !== null) {
     throw subtasksError
