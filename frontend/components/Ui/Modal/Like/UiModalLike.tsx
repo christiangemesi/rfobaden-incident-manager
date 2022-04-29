@@ -131,8 +131,12 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       }
       forceUpdate()
     }
-    const toggle = (value?: boolean) => {
-      const open = value ?? !isOpenRef.current
+    const toggle = (value?: React.SyntheticEvent | boolean) => {
+      if (value !== undefined && typeof value !== 'boolean') {
+        value.preventDefault()
+        value.stopPropagation()
+      }
+      const open = typeof value === 'boolean' ? value : !isOpenRef.current
       if (open === isOpenRef.current) {
         return
       }
@@ -147,10 +151,18 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
         return isOpenRef.current
       },
       toggle,
-      open() {
+      open(e?: React.SyntheticEvent) {
+        if (e !== undefined) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
         toggle(true)
       },
-      close() {
+      close(e?: React.SyntheticEvent) {
+        if (e !== undefined) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
         toggle(false)
       },
       get isPersistent() {
