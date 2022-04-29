@@ -18,6 +18,7 @@ import styled from 'styled-components'
 import AssignedList from '@/components/AssignedList/AssignedList'
 import Assignments from '@/models/Assignments'
 import { useEffectOnce } from 'react-use'
+import Id from '@/models/base/Id'
 
 
 interface Props {
@@ -30,6 +31,8 @@ interface Props {
   }
 }
 
+type IncidentOwner = { incidentId: Id<Incident> }
+
 const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
@@ -40,14 +43,14 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   })
 
   const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
-  const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort((a, b) => a.incidentId - b.incidentId)
-  const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort((a, b) => a.incidentId - b.incidentId)
-  const assignedTasks = useTasks((tasks) => tasks.filter(isOpenTask)).sort((a, b) => a.incidentId - b.incidentId)
-  const assignedSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenSubtask)).sort((a, b) => a.incidentId - b.incidentId)
-  const closedTransports = useTransports((transports) => transports.filter((transport) => !isOpenTransport(transport)).sort((a, b) => a.incidentId - b.incidentId))
-  const closedReports = useReports((reports) => reports.filter((report) => !isOpenReport(report)).sort((a, b) => a.incidentId - b.incidentId))
-  const closedTasks = useTasks((tasks) => tasks.filter((task) => !isOpenTask(task)).sort((a, b) => a.incidentId - b.incidentId))
-  const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort((a, b) => a.incidentId - b.incidentId))
+  const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort(sortByIncident)
+  const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort(sortByIncident)
+  const assignedTasks = useTasks((tasks) => tasks.filter(isOpenTask)).sort(sortByIncident)
+  const assignedSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenSubtask)).sort(sortByIncident)
+  const closedTransports = useTransports((transports) => transports.filter((transport) => !isOpenTransport(transport)).sort(sortByIncident))
+  const closedReports = useReports((reports) => reports.filter((report) => !isOpenReport(report)).sort(sortByIncident))
+  const closedTasks = useTasks((tasks) => tasks.filter((task) => !isOpenTask(task)).sort(sortByIncident))
+  const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort(sortByIncident))
 
   const dataTrackableHigh = useMemo(() => ({
     incidents: openedIncidents,
@@ -101,6 +104,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
 }
 export default MeineAufgabenPage
 
+const sortByIncident = (a: IncidentOwner, b: IncidentOwner) => a.incidentId - b.incidentId
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
