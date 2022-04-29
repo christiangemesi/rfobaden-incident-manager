@@ -56,6 +56,7 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
+        {/*todo: remove as soon as backend isdone*/}
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
         )}</UiForm.Field>
