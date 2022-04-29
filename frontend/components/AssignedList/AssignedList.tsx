@@ -151,6 +151,7 @@ const AssignedListChild: React.VFC<ItemData> = ({
       title={title}
       priority={priority}
       user={incidentTitle}
+      titleSwitched={true}
     >
       <SuffixList>
         <SuffixDate hasEnd={endsAt != null}>
