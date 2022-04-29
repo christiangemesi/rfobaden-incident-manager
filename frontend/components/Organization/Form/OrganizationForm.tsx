@@ -4,7 +4,6 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { ModelData } from '@/models/base/Model'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import { useValidate } from '@/components/Ui/Form/validate'
 import OrganizationStore from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
@@ -45,13 +44,9 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
 
   return (
     <UiForm form={form}>
-      <UiGrid gap={1}>
-        <UiGrid.Col size={{ xs: 12, md: 6 }}>
-          <UiForm.Field field={form.name}>{(props) => (
-            <UiTextInput {...props} label="Organisation" />
-          )}</UiForm.Field>
-        </UiGrid.Col>
-      </UiGrid>
+      <UiForm.Field field={form.name}>{(props) => (
+        <UiTextInput {...props} label="Organisation" />
+      )}</UiForm.Field>
       <UiForm.Buttons form={form} />
     </UiForm>
   )
