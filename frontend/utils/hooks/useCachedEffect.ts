@@ -39,4 +39,29 @@ const useCachedEffect = <T>(cacheId: unknown, key: T, load: (key: T) => Promise<
 }
 export default useCachedEffect
 
+/**
+ * `loadCached` provides the same functionality as the `useCachedEffect` hook,
+ * but allows it to be used outside a React component.
+ */
+export const loadCached = async <T>(cacheId: unknown, key: T, load: (key: T) => Promise<void>): Promise<void> => {
+  const cache = resolveCache(cacheId)
+  if (cache.has(key)) {
+    return Promise.resolve()
+  }
+  cache.add(key)
+  await load(key)
+}
+
 const caches = new Map<unknown, unknown>()
+
+const resolveCache = <T>(cacheId: unknown): Set<T> => {
+  if (cacheId === null) {
+    return new Set()
+  }
+  if (caches.has(cacheId)) {
+    return caches.get(cacheId) as Set<T>
+  }
+  const newCache = new Set<T>()
+  caches.set(cacheId, newCache)
+  return newCache
+}

@@ -8,6 +8,8 @@ import BackendService from '@/services/BackendService'
 import TransportStore from '@/stores/TransportStore'
 import Incident from '@/models/Incident'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import TransportPrintView from '@/components/Transport/PrintView/TransportPrintView'
 
 interface Props {
   incident: Incident
@@ -39,6 +41,12 @@ const ReportActions: React.VFC<Props> = ({ incident, transport, onDelete: handle
         <TrackableEditAction title="Transport bearbeiten">{({ close }) => (
           <TransportForm incident={incident} transport={transport} onClose={close} />
         )}</TrackableEditAction>
+
+        <UiPrinter renderContent={() => <TransportPrintView transport={transport} />}>{({ trigger }) => (
+          <UiDropDown.Item onClick={trigger}>
+            Drucken
+          </UiDropDown.Item>
+        )}</UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
