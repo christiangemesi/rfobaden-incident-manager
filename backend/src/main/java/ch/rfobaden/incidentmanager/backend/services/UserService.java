@@ -96,22 +96,6 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         return Optional.of(repository.save(user));
     }
 
-    public List<Transport> findAllAssignedTransports(User user) {
-        return transportRepository.findAllByAssignee(user);
-    }
-
-    public List<Report> findAllAssignedReports(User user) {
-        return reportRepository.findAllByAssignee(user);
-    }
-
-    public List<Task> findAllAssignedTasks(User user) {
-        return taskRepository.findAllByAssignee(user);
-    }
-
-    public List<Subtask> findAllAssignedSubtasks(User user) {
-        return subtaskRepository.findAllByAssignee(user);
-    }
-
     @Override
     protected void validate(User user, Violations violations) {
         // Validate that the email is unique.

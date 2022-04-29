@@ -1,11 +1,14 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Transport;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TransportService
@@ -20,4 +23,9 @@ public class TransportService
     protected void afterSave(Transport oldRecord, Transport record) {
         notificationService.notifyAssigneeIfChanged(oldRecord, record);
     }
+
+    public List<Transport> findAllAssignedTransports(User user) {
+        return repository.findAllByAssignee(user);
+    }
+
 }

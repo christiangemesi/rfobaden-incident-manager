@@ -8,7 +8,10 @@ import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
-import ch.rfobaden.incidentmanager.backend.services.UserService;
+import ch.rfobaden.incidentmanager.backend.services.ReportService;
+import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
+import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,28 +23,43 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/v1/assignments")
 public class AssignmentController extends AppController {
-    private final UserService userService;
+    private final TransportService transportService;
+
+    private final ReportService reportService;
+
+    private final TaskService taskService;
+
+    private final SubtaskService subtaskService;
 
     private final AuthService authService;
 
-    public AssignmentController(UserService userService, AuthService authService) {
-        this.userService = userService;
+    public AssignmentController(
+        TransportService transportService,
+        ReportService reportService,
+        TaskService taskService,
+        SubtaskService subtaskService,
+        AuthService authService
+    ) {
+        this.transportService = transportService;
+        this.reportService = reportService;
+        this.taskService = taskService;
+        this.subtaskService = subtaskService;
         this.authService = authService;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
-    public Assignments findAssignedTransports() {
+    public Assignments findAssignedAllAssignments() {
         var user = authService.getCurrentUser().orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "user not found")
         ));
 
         return new Assignments(
-            userService.findAllAssignedTransports(user),
-            userService.findAllAssignedReports(user),
-            userService.findAllAssignedTasks(user),
-            userService.findAllAssignedSubtasks(user)
+            transportService.findAllAssignedTransports(user),
+            reportService.findAllAssignedReports(user),
+            taskService.findAllAssignedTasks(user),
+            subtaskService.findAllAssignedSubtasks(user)
         );
     }
 
