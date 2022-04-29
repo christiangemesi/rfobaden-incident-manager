@@ -35,7 +35,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
   }))
 
   return (
-    <UiList>
+    <div>
       {isAdmin(currentUser) && (
         <UiModal title="Organisation erfassen">
           <UiModal.Trigger>{({ open }) => (
@@ -48,7 +48,8 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
           )}</UiModal.Body>
         </UiModal>
       )}
-      <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
+
+      <UiGrid style={{ padding: '0.5rem 0.5rem' }} gapH={0.5}>
         <UiGrid.Col size={5}>
           <UiSortButton field={sort.name}>
             <UiTitle level={6}>Organistion</UiTitle>
@@ -60,13 +61,16 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
           </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
-      {sortedOrganizations.map((organization) => (
-        <OrganizationListItem
-          key={organization.id}
-          organization={organization}
-        />
-      ))}
-    </UiList>
+ 
+      <UiList>
+        {sortedOrganizations.map((organization) => (
+          <OrganizationListItem
+            key={organization.id}
+            organization={organization}
+          />
+        ))}
+      </UiList>
+    </div>
   )
 }
 export default OrganizationList
