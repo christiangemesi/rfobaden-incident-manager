@@ -65,6 +65,10 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
     TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
   }, [task])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    TaskStore.save({ ...task, documentIds: [...task.documentIds, fileId]})
+  }, [task])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -90,7 +94,7 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         <TrackableFileUploadAction
           id={task.id}
           modelName="task"
-          onAddFile={addImageId}
+          onAddFile={addDocumentId}
           type="document"
         />
 
