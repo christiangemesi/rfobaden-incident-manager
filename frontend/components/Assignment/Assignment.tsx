@@ -44,13 +44,13 @@ const Assignment: React.VFC<Props> = ({
             key={report.id}
             href={'/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
           >
-            <UiGrid direction={'column'} gapH={1}>
-              {report.isKeyReport ? (
+            <UiGrid direction="column" gapH={1}>
+              {report.isKeyReport && (
                 <UiIcon.KeyMessage size={ICON_MULTIPLIER_SMALL} />
-              ) : <React.Fragment />}
-              {report.isLocationRelevantReport ? (
+              )}
+              {report.isLocationRelevantReport && (
                 <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
-              ) : <React.Fragment />}
+              )}
             </UiGrid>
             {report.closedTaskIds.length + '/' + report.taskIds.length}
           </UiLink>
