@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@RequireAgent
 @RestController
 @RequestMapping(path = "api/v1/documents")
 public class DocumentController extends AppController {
@@ -73,7 +72,8 @@ public class DocumentController extends AppController {
         FileSystemResource file = documentFileService.findFileByDocument(document);
         return ResponseEntity.ok().headers(headers).body(file);
     }
-
+    
+    @RequireAgent
     @PostMapping
     public Long uploadDocument(
         @RequestParam MultipartFile file,
