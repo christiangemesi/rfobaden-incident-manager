@@ -55,18 +55,4 @@ const StyledListItem = styled.li<{ isActive: boolean }>`
       filter: brightness(0.9);
     }
   `}
-
-  :first-child {
-    &, :after {
-      border-top-left-radius: 0.5rem;
-      border-top-right-radius: 0.5rem;
-    }
-  }
-
-  :last-child {
-    &, :after {
-      border-bottom-left-radius: 0.5rem;
-      border-bottom-right-radius: 0.5rem;
-    }
-  }
 `
