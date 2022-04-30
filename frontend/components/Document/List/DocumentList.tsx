@@ -1,4 +1,4 @@
-import { FileId, getImageUrl } from '@/models/FileUpload'
+import { FileId, getDocumentUrl } from '@/models/FileUpload'
 import React from 'react'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
@@ -25,9 +25,9 @@ const DocumentList: React.VFC<Props> = ({
 }) => {
 
   const handleDelete = async (id: FileId) => {
-    if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
+    if (confirm('Sind sie sicher, dass sie das Dokument löschen wollen?')) {
 
-      const error = await BackendService.delete('images', id, {
+      const error = await BackendService.delete('documents', id, {
         modelName: modelName,
         modelId: modelId.toString(),
       })
@@ -38,7 +38,6 @@ const DocumentList: React.VFC<Props> = ({
       storeFileIds(fileIds)
     }
   }
-
 
   return (
     <UiList>
@@ -58,7 +57,7 @@ const DocumentList: React.VFC<Props> = ({
         fileIds.map((id) => (
           <DocumentItem
             key={id}
-            src={getImageUrl(id)}
+            src={getDocumentUrl(id)}
             text="Filename"
             id={id}
             onDelete={handleDelete} />

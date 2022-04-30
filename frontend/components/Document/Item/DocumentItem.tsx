@@ -28,7 +28,7 @@ const DocumentItem: React.VFC<Props> = ({
     <DocumentListItem>
       <UiGrid style={{ padding: '0 0.5rem' }} align="center" gapH={0.5}>
         <UiGrid.Col size={8}>
-          <FileText href="1.pdf" download>File mit ID: {id}</FileText>
+          <FileText href={src} download>{'File with ID: ' + id}</FileText>
         </UiGrid.Col>
         <UiGrid.Col size={3}>
           <p>PDF</p>

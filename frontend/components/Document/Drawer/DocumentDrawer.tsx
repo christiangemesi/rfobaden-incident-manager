@@ -25,7 +25,7 @@ const DocumentDrawer: React.VFC<Props> = ({
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption>
+          <UiCaption onClick={open}>
             {documentIds.length}
             &nbsp;
             {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}

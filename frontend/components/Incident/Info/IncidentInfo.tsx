@@ -66,7 +66,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
         modelId={incident.id}
         modelName="incident"
         storeFileIds={storeImageIds}
-        documentIds={[1,2,3,4,5]}
+        documentIds={incident.documentIds}
       />
     </UiCaptionList>
   )
