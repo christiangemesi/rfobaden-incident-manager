@@ -3,13 +3,11 @@ package ch.rfobaden.incidentmanager.backend.services;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.models.Image;
-import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
-import ch.rfobaden.incidentmanager.backend.repos.ImageRepository;
+import ch.rfobaden.incidentmanager.backend.repos.FileRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ public class DocumentFileServiceTest {
     private DocumentFileService documentFileService;
 
     @MockBean
-    private ImageFileRepository documentFileRepository;
+    private FileRepository fileRepository;
 
     @MockBean
     private DocumentRepository documentRepository;
@@ -41,10 +39,8 @@ public class DocumentFileServiceTest {
         // Given
         byte[] bytes = "some data".getBytes();
         Document document = new Document(DOCUMENT_NAME);
-        Mockito.when(documentRepository.save(document)).thenReturn(document);
+        Mockito.when(documentRepository.save(any())).thenReturn(document);
 
-        //TODO why is Document null?`documentFileService.save creates a new Document and sets all overhead
-        // When
         Document doc = documentFileService.save(bytes, DOCUMENT_NAME);
 
         // Then
@@ -60,10 +56,10 @@ public class DocumentFileServiceTest {
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
         Mockito.when(documentRepository.findById(document.getId())).thenReturn(Optional.of(document));
-        Mockito.when(documentFileRepository.findInFileSystem(document.getId())).thenReturn(resource);
+        Mockito.when(fileRepository.findInFileSystem(document.getId())).thenReturn(resource);
 
         // When
-        var fileSystemResource = documentFileService.find(document.getId()).orElse(null);
+        var fileSystemResource = documentFileService.findFile(document.getId()).orElse(null);
 
         // Then
         assertThat(fileSystemResource).isNotNull();

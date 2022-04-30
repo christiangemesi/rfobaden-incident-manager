@@ -15,6 +15,8 @@ import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,16 +59,14 @@ public class DocumentController extends AppController {
     public FileSystemResource downloadDocument(@PathVariable Long id,
                                                HttpServletResponse response) {
 
-        Document document = documentFileService.getDocument(id).orElseThrow(() -> (
+        Document document = documentFileService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
 
         String mimeType = document.getMimeType();
-        response.setHeader("MimeType",mimeType);
+        response.setHeader("Content-Type", mimeType);
 
-        return documentFileService.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
-        ));
+        return documentFileService.findFileByDocument(document);
     }
 
     @PostMapping
@@ -115,8 +115,8 @@ public class DocumentController extends AppController {
         Supplier<Document> saveDocument
     ) {
         var entity = modelService.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
-            )));
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+            ));
         var document = saveDocument.get();
         entity.addDocument(document);
         modelService.update(entity);

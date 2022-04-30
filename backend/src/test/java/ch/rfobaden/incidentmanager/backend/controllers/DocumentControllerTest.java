@@ -11,6 +11,7 @@ import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
@@ -265,7 +266,8 @@ class DocumentControllerTest extends AppControllerTest {
         // When
         FileSystemResource resource =
             new FileSystemResource(Paths.get("src/test/resources/testImage/blank.pdf"));
-        Mockito.when(documentFileService.find(id)).thenReturn(Optional.of(resource));
+        Mockito.when(documentFileService.findDocument(id)).thenReturn(Optional.of(document));
+        Mockito.when(documentFileService.findFile(id)).thenReturn(Optional.of(resource));
 
         // Then
         mockMvc.perform(mockRequest)

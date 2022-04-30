@@ -1,9 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
+import ch.rfobaden.incidentmanager.backend.repos.FileRepository;
 import org.apache.tika.Tika;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,14 @@ import java.util.Optional;
 @Service
 public class DocumentFileService {
 
-    private final ImageFileRepository documentFileRepository;
+    private final FileRepository fileRepository;
     private final DocumentRepository documentRepository;
 
     public DocumentFileService(
-        ImageFileRepository documentFileRepository,
+        FileRepository fileRepository,
         DocumentRepository documentRepository
     ) {
-        this.documentFileRepository = documentFileRepository;
+        this.fileRepository = fileRepository;
         this.documentRepository = documentRepository;
     }
 
@@ -32,17 +31,21 @@ public class DocumentFileService {
         newDocument.setMimeType(mimeType);
 
         Document document = documentRepository.save(newDocument);
-        documentFileRepository.save(bytes, document.getId());
+        fileRepository.save(bytes, document.getId());
         return document;
     }
 
-    public Optional<FileSystemResource> find(Long documentId) {
+    public Optional<FileSystemResource> findFile(Long documentId) {
         return documentRepository.findById(documentId).map((document) -> (
-            documentFileRepository.findInFileSystem(document.getId())
+            fileRepository.findInFileSystem(document.getId())
         ));
     }
 
-    public Optional<Document> getDocument(Long id){
+    public FileSystemResource findFileByDocument(Document document) {
+        return fileRepository.findInFileSystem(document.getId());
+    }
+
+    public Optional<Document> findDocument(Long id){
         return documentRepository.findById(id);
     }
 

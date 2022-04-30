@@ -1,12 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
-import static ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository.RESOURCES_DIR_DOCUMENTS;
-import static ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository.RESOURCES_DIR;
+import static ch.rfobaden.incidentmanager.backend.repos.FileRepository.RESOURCES_DIR_DOCUMENTS;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResource;
@@ -19,15 +17,15 @@ import java.nio.file.Paths;
 public class DocumentFileRepositoryTest {
 
     public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/blank.pdf";
-    public static final Long DOCUMNT_ID = 42L;
+    public static final Long DOCUMENT_ID = 42L;
 
-    private final ImageFileRepository documentFileRepository;
+    private final FileRepository fileRepository;
     private final Document document;
 
     public DocumentFileRepositoryTest() {
-        documentFileRepository = new ImageFileRepository();
+        fileRepository = new FileRepository();
         document = new Document("name");
-        document.setId(DOCUMNT_ID);
+        document.setId(DOCUMENT_ID);
     }
 
     //TODO change document.getID() + "mimetype"
@@ -45,7 +43,7 @@ public class DocumentFileRepositoryTest {
         byte[] bytes = resourceOut.getInputStream().readAllBytes();
 
         // When
-        documentFileRepository.save(bytes, document.getId());
+        fileRepository.save(bytes, document.getId());
         FileSystemResource resourceIn = new FileSystemResource(
             Paths.get(RESOURCES_DIR_DOCUMENTS + document.getId() ));
 
@@ -69,7 +67,7 @@ public class DocumentFileRepositoryTest {
         Files.write(newFile, resource.getInputStream().readAllBytes());
 
         // When
-        FileSystemResource resourceIn = documentFileRepository.findInFileSystem(document.getId());
+        FileSystemResource resourceIn = fileRepository.findInFileSystem(document.getId());
 
         // Then
         assertArrayEquals(

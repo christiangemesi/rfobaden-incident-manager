@@ -15,13 +15,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Repository
-public class ImageFileRepository {
-    public static final String RESOURCES_DIR = "files/images/";
+public class FileRepository {
+    public static final String RESOURCES_DIR_IMAGES = "files/images/";
     public static final String RESOURCES_DIR_DOCUMENTS = "files/documents/";
 
     public void save(byte[] content, Long id) {
         try {
-            String fileExtension = findMimeType(content);
+            String fileExtension = findExtensionOfFile(content);
             Path newFile = Paths.get(RESOURCES_DIR_DOCUMENTS + id + "." + fileExtension);
             if (!Files.exists(newFile.getParent())) {
                 Files.createDirectories(newFile.getParent());
@@ -32,7 +32,7 @@ public class ImageFileRepository {
         }
     }
 
-    public String findMimeType(byte[] content) {
+    public String findExtensionOfFile(byte[] content) {
         try {
             InputStream is = new ByteArrayInputStream(content);
             String mimeType = URLConnection.guessContentTypeFromStream(is);
@@ -42,7 +42,8 @@ public class ImageFileRepository {
         }
     }
 
+    //TODO how do i get extension here? only with id?
     public FileSystemResource findInFileSystem(Long id) {
-        return new FileSystemResource(Paths.get(RESOURCES_DIR + id));
+        return new FileSystemResource(Paths.get(RESOURCES_DIR_IMAGES + id));
     }
 }
