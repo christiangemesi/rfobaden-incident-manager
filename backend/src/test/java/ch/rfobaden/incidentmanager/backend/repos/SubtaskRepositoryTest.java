@@ -2,16 +2,15 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMockAgent;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepositoryTest;
+import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @DataJpaTest
 public class SubtaskRepositoryTest extends
@@ -28,6 +27,9 @@ public class SubtaskRepositoryTest extends
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserGenerator userGenerator;
 
     @Override
     protected void saveRelations(Subtask subtask) {
@@ -53,36 +55,31 @@ public class SubtaskRepositoryTest extends
         subtask.setTask(taskRepository.save(task));
     }
 
+
     @Test
-    @WithMockAgent
     void testListWhereAssigneeId() {
         // Given
-        var amount = 10;
-        var records = generator.generate(amount);
-        User user = null;
-        records.forEach(this::saveRelations);
-        for (int i = 0; user == null && i < Math.random() * (amount - 1) + 1; i++) {
-            user = records.get(i).getAssignee();
-        }
-        var assignee = user;
+        var records = generator.generate(10);
+        var assignedRecords = new ArrayList<Subtask>();
+        var assignee = userRepository.save(userGenerator.generate());
 
-        records = repository.saveAll(records);
-        var assignedRecords = records.stream()
-            .filter(e -> e.getAssignee() == assignee
-                && !e.getTask().getReport().getIncident().isClosed()
-            ).collect(Collectors.toList());
+        for (var record : records) {
+            record.setAssignee(null);
+            if (generator.randomBoolean()) {
+                record.setAssignee(assignee);
+            }
+            this.saveRelations(record);
+            record = repository.save(record);
+            if (record.getAssignee() != null) {
+                assignedRecords.add(record);
+            }
+        }
 
         // When
-        assert user != null;
-        var result = repository.listWhereAssigneeId(user.getId());
+        var result = repository.listWhereAssigneeId(assignee.getId());
 
         // Then
         assertThat(result.size()).isEqualTo(assignedRecords.size());
-        for (Subtask subtask : result) {
-            assertThat(subtask).isIn(assignedRecords);
-        }
-        for (Subtask subtask : assignedRecords) {
-            assertThat(subtask).isIn(result);
-        }
+        assertThat(result).asList().containsExactlyInAnyOrderElementsOf(assignedRecords);
     }
 }
