@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -65,5 +64,5 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " AND "
             + "task.report.incident.isClosed = false"
     )
-    List<Task> listWhereAssigneeId(@Param("id") Long id);
+    List<Task> findAllByAssigneeId(@Param("id") Long id);
 }

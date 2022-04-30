@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,5 +71,5 @@ public interface SubtaskRepository
             + " AND "
             + "subtask.task.report.incident.isClosed = false"
     )
-    List<Subtask> listWhereAssigneeId(@Param("id") Long id);
+    List<Subtask> findAllByAssigneeId(@Param("id") Long id);
 }

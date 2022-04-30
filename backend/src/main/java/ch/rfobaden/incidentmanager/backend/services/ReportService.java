@@ -23,6 +23,6 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
     }
 
     public List<Report> listWhereAssigneeId(Long id) {
-        return repository.listWhereAssigneeId(id);
+        return repository.findAllByAssigneeId(id);
     }
 }

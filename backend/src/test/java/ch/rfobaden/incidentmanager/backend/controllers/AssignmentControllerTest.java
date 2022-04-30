@@ -126,7 +126,7 @@ public class AssignmentControllerTest extends AppControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(
-                new AssignmentController.Assignments(
+                new AssignmentController.AssignmentsData(
                     assignedTransports,
                     assignedReports,
                     assignedTasks,

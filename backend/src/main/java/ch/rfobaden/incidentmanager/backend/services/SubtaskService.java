@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -26,6 +25,6 @@ public class SubtaskService
     }
 
     public List<Subtask> listWhereAssigneeId(Long id) {
-        return repository.listWhereAssigneeId(id);
+        return repository.findAllByAssigneeId(id);
     }
 }

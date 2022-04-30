@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.TaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -24,6 +23,6 @@ public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepo
     }
 
     public List<Task> listWhereAssigneeId(Long id) {
-        return repository.listWhereAssigneeId(id);
+        return repository.findAllByAssigneeId(id);
     }
 }

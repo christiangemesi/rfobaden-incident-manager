@@ -24,7 +24,7 @@ public class TransportService
     }
 
     public List<Transport> listWhereAssigneeId(Long id) {
-        return repository.listWhereAssigneeId(id);
+        return repository.findAllByAssigneeId(id);
     }
 
 }

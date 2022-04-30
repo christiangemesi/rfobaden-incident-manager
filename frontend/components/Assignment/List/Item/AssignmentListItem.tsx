@@ -15,7 +15,7 @@ interface Props<T extends Trackable> {
   children: (record: T) => ReactNode
 }
 
-const AssignmentItem = <T extends Trackable>({
+const AssignmentListItem = <T extends Trackable>({
   title,
   trackable,
   children,
@@ -55,7 +55,7 @@ const AssignmentItem = <T extends Trackable>({
   )
 }
 
-export default AssignmentItem
+export default AssignmentListItem
 
 const EntityContainer = styled.div`
   margin: 1rem 0;

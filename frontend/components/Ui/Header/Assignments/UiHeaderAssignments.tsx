@@ -5,7 +5,7 @@ import { useSession } from '@/stores/SessionStore'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Assignments from '@/models/Assignments'
+import Assignment from '@/models/Assignment'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 
 const UiHeaderAssignments: React.VFC = () => {
@@ -22,7 +22,7 @@ const UiHeaderAssignments: React.VFC = () => {
       if (currentUser === null) {
         return
       }
-      const [assignments, assignmentsError]: BackendResponse<Assignments> = await BackendService.find(
+      const [assignments, assignmentsError]: BackendResponse<Assignment> = await BackendService.find(
         'assignments',
       )
       if (assignmentsError !== null) {
@@ -44,25 +44,27 @@ const UiHeaderAssignments: React.VFC = () => {
 
       setAssignmentCount({ high, medium, low })
     })()
-  }, [currentUser, assignmentCount])
+  }, [currentUser])
 
   return (
-    <UiHeaderItem title="Zugewiesene Aufgaben">
-      <AssignmentCounter>
-        <PriorityContainer href="/meine-aufgaben">
-          <PriorityIcon priority={Priority.HIGH} />
-          {assignmentCount.high}
-        </PriorityContainer>
-        <PriorityContainer href="/meine-aufgaben">
-          <PriorityIcon priority={Priority.MEDIUM} />
-          {assignmentCount.medium}
-        </PriorityContainer>
-        <PriorityContainer href="/meine-aufgaben">
-          <PriorityIcon priority={Priority.LOW} />
-          {assignmentCount.low}
-        </PriorityContainer>
-      </AssignmentCounter>
-    </UiHeaderItem>
+    <UiLink href="/meine-aufgaben">
+      <UiHeaderItem title="Zugewiesene Aufgaben">
+        <AssignmentCounter>
+          <PriorityContainer>
+            <PriorityIcon priority={Priority.HIGH} />
+            {assignmentCount.high}
+          </PriorityContainer>
+          <PriorityContainer>
+            <PriorityIcon priority={Priority.MEDIUM} />
+            {assignmentCount.medium}
+          </PriorityContainer>
+          <PriorityContainer>
+            <PriorityIcon priority={Priority.LOW} />
+            {assignmentCount.low}
+          </PriorityContainer>
+        </AssignmentCounter>
+      </UiHeaderItem>
+    </UiLink>
   )
 }
 
@@ -73,12 +75,12 @@ const AssignmentCounter = styled.div`
   justify-content: center;
   align-items: center;
 `
-const PriorityContainer = styled(UiLink)`
+const PriorityContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.3rem;
-  margin: 0 0.6rem;
+  gap: 0.2rem;
+  margin: 0 0.4rem;
 `
 const PriorityIcon = styled(UiPriority)`
   transform: scale(0.75);

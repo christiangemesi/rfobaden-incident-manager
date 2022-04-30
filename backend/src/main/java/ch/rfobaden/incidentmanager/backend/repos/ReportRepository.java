@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Report;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,5 +58,5 @@ public interface ReportRepository
             + " AND "
             + "report.incident.isClosed = false"
     )
-    List<Report> listWhereAssigneeId(@Param("id") Long id);
+    List<Report> findAllByAssigneeId(@Param("id") Long id);
 }

@@ -58,7 +58,7 @@ public class TransportRepositoryTest
         }
 
         // When
-        var result = repository.listWhereAssigneeId(assignee.getId());
+        var result = repository.findAllByAssigneeId(assignee.getId());
 
         // Then
         assertThat(result.size()).isEqualTo(assignedRecords.size());

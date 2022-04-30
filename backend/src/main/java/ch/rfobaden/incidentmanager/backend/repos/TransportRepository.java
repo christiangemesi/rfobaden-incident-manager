@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
 import ch.rfobaden.incidentmanager.backend.models.Transport;
-import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -60,5 +59,5 @@ public interface TransportRepository
             + " AND "
             + "transport.incident.isClosed = false"
     )
-    List<Transport> listWhereAssigneeId(@Param("id") Long id);
+    List<Transport> findAllByAssigneeId(@Param("id") Long id);
 }

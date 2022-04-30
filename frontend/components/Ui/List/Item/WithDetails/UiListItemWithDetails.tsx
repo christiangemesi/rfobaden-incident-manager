@@ -12,7 +12,7 @@ interface Props extends UiListItemProps {
   body?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
-  titleSwitched?: boolean
+  isTitleSwitched?: boolean
 }
 
 const UiListItemWithDetails: React.VFC<Props> = ({
@@ -22,7 +22,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   body = null,
   isClosed = false,
   isSmall = false,
-  titleSwitched = false,
+  isTitleSwitched = false,
   children,
   ...props
 }: Props) => {
@@ -32,7 +32,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
         <LeftPriority priority={priority} isSmall={isSmall} />
-        <TextContent titleSwitched={titleSwitched}>
+        <TextContent isTitleSwitched={isTitleSwitched}>
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
@@ -97,11 +97,11 @@ const BottomSide = styled.div<{ $isSmall: boolean }>`
   padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 
-const TextContent = styled.div<{ titleSwitched: boolean }>`
+const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  ${({ titleSwitched }) => titleSwitched && css`
+  ${({ isTitleSwitched }) => isTitleSwitched && css`
     display: flex;
     flex-direction: column-reverse;
   `}

@@ -6,7 +6,7 @@ import Report from '@/models/Report'
 import Task from '@/models/Task'
 import Subtask from '@/models/Subtask'
 import UiLink from '@/components/Ui/Link/UiLink'
-import AssignmentItem from '@/components/Assignment/Item/AssignmentItem'
+import AssignmentListItem from '@/components/Assignment/List/Item/AssignmentListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
@@ -18,7 +18,7 @@ interface Props {
   subtasks: Subtask[]
 }
 
-const Assignment: React.VFC<Props> = ({
+const AssignmentList: React.VFC<Props> = ({
   title = '',
   transports,
   reports,
@@ -32,14 +32,14 @@ const Assignment: React.VFC<Props> = ({
         (<UiTitle level={2}>{title}</UiTitle>)
       }
       <Content>
-        <AssignmentItem title="Transporte" trackable={transports}>{(transport) => (
+        <AssignmentListItem title="Transporte" trackable={transports}>{(transport) => (
           <UiLink
             key={transport.id}
             href={'/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
           >
           </UiLink>
-        )}</AssignmentItem>
-        <AssignmentItem title="Meldungen" trackable={reports}>{(report) => (
+        )}</AssignmentListItem>
+        <AssignmentListItem title="Meldungen" trackable={reports}>{(report) => (
           <UiLink
             key={report.id}
             href={'/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
@@ -52,30 +52,30 @@ const Assignment: React.VFC<Props> = ({
                 <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
               )}
             </UiGrid>
-            {report.closedTaskIds.length + '/' + report.taskIds.length}
+            {report.closedTaskIds.length + '/' + report.taskIds.length} {/* todo style flex row*/}
           </UiLink>
-        )}</AssignmentItem>
-        <AssignmentItem title="Aufträge" trackable={tasks}>{(task) => (
+        )}</AssignmentListItem>
+        <AssignmentListItem title="Aufträge" trackable={tasks}>{(task) => (
           <UiLink
             key={task.id}
             href={'/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
           >
             {task.closedSubtaskIds.length + '/' + task.subtaskIds.length}
           </UiLink>
-        )}</AssignmentItem>
-        <AssignmentItem title="Teilaufträge" trackable={subtasks}>{(subtask) => (
+        )}</AssignmentListItem>
+        <AssignmentListItem title="Teilaufträge" trackable={subtasks}>{(subtask) => (
           <UiLink
             key={subtask.id}
             href={'/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.taskId}
           >
           </UiLink>
-        )}</AssignmentItem>
+        )}</AssignmentListItem>
       </Content>
     </Fragment>
   )
 }
 
-export default Assignment
+export default AssignmentList
 
 const ICON_MULTIPLIER_SMALL = 0.75
 

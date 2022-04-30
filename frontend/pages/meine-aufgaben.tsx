@@ -15,8 +15,8 @@ import Priority from '@/models/Priority'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
-import Assignment from '@/components/Assignment/Assignment'
-import Assignments from '@/models/Assignments'
+import AssignmentList from '@/components/Assignment/List/AssignmentList'
+import Assignment from '@/models/Assignment'
 import { useEffectOnce } from 'react-use'
 import Id from '@/models/base/Id'
 
@@ -30,8 +30,6 @@ interface Props {
     subtasks: Subtask[]
   }
 }
-
-type IncidentOwner = { incidentId: Id<Incident> }
 
 const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
@@ -89,7 +87,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
       <PriorityContainer>
-        <Assignment
+        <AssignmentList
           transports={dataTrackableHigh.transports}
           reports={dataTrackableHigh.reports}
           tasks={dataTrackableHigh.tasks}
@@ -97,7 +95,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <Assignment
+        <AssignmentList
           transports={dataTrackableMedium.transports}
           reports={dataTrackableMedium.reports}
           tasks={dataTrackableMedium.tasks}
@@ -105,7 +103,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <Assignment
+        <AssignmentList
           transports={dataTrackableLow.transports}
           reports={dataTrackableLow.reports}
           tasks={dataTrackableLow.tasks}
@@ -113,7 +111,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
         />
       </PriorityContainer>
       <PriorityContainer>
-        <Assignment
+        <AssignmentList
           transports={dataTrackableClosed.transports}
           reports={dataTrackableClosed.reports}
           tasks={dataTrackableClosed.tasks}
@@ -126,6 +124,8 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
 export default MeineAufgabenPage
 
 const sortByIncident = (a: IncidentOwner, b: IncidentOwner) => a.incidentId - b.incidentId
+
+type IncidentOwner = { incidentId: Id<Incident> }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
@@ -140,7 +140,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     throw incidentsError
   }
 
-  const [assignments, assignmentsError]: BackendResponse<Assignments> = await backendService.find(
+  const [assignments, assignmentsError]: BackendResponse<Assignment> = await backendService.find(
     'assignments',
   )
   if (assignmentsError !== null) {
