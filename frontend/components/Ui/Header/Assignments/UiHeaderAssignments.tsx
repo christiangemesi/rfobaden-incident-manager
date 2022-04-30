@@ -81,6 +81,7 @@ const PriorityContainer = styled.div`
   align-items: center;
   gap: 0.2rem;
   margin: 0 0.4rem;
+  color: ${({ theme }) => theme.colors.secondary.contrast};
 `
 const PriorityIcon = styled(UiPriority)`
   transform: scale(0.75);

@@ -6,19 +6,18 @@ import ReportStore, { useReports } from '@/stores/ReportStore'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
-import Subtask, { isOpenSubtask, parseSubtask } from '@/models/Subtask'
-import Task, { isOpenTask, parseTask } from '@/models/Task'
-import Report, { isOpenReport, parseReport } from '@/models/Report'
-import Transport, { isOpenTransport, parseTransport } from '@/models/Transport'
+import Subtask, { parseSubtask } from '@/models/Subtask'
+import Task, { parseTask } from '@/models/Task'
+import Report, { parseReport } from '@/models/Report'
+import Transport, { parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
 import Priority from '@/models/Priority'
-import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
-import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
+import IncidentStore from '@/stores/IncidentStore'
+import Incident, { parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
 import AssignmentList from '@/components/Assignment/List/AssignmentList'
 import Assignment from '@/models/Assignment'
 import { useEffectOnce } from 'react-use'
-import Id from '@/models/base/Id'
 
 
 interface Props {
@@ -41,47 +40,81 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   })
 
   // todo split closed / open in memo, get all once
-  const openedIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
-  const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort(sortByIncident)
-  const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort(sortByIncident)
-  const assignedTasks = useTasks((tasks) => tasks.filter(isOpenTask)).sort(sortByIncident)
-  const assignedSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenSubtask)).sort(sortByIncident)
-  const closedTransports = useTransports((transports) => transports.filter((transport) => !isOpenTransport(transport)).sort(sortByIncident))
-  const closedReports = useReports((reports) => reports.filter((report) => !isOpenReport(report)).sort(sortByIncident))
-  const closedTasks = useTasks((tasks) => tasks.filter((task) => !isOpenTask(task)).sort(sortByIncident))
-  const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort(sortByIncident))
+  const assignedTransports = useTransports()
+  const assignedReports = useReports()
+  const assignedTasks = useTasks()
+  const assignedSubtasks = useSubtasks()
+  // const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort(sortByIncident)
+  // const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort(sortByIncident)
+  // const assignedTasks = useTasks((tasks) => tasks.filter(isOpenTask)).sort(sortByIncident)
+  // const assignedSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenSubtask)).sort(sortByIncident)
+  // const closedTransports = useTransports((transports) => transports.filter((transport) => !isOpenTransport(transport)).sort(sortByIncident))
+  // const closedReports = useReports((reports) => reports.filter((report) => !isOpenReport(report)).sort(sortByIncident))
+  // const closedTasks = useTasks((tasks) => tasks.filter((task) => !isOpenTask(task)).sort(sortByIncident))
+  // const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort(sortByIncident))
 
-  const dataTrackableHigh = useMemo(() => ({
-    incidents: openedIncidents,
-    transports: assignedTransports.filter((e) => e.priority == Priority.HIGH),
-    reports: assignedReports.filter((e) => e.priority == Priority.HIGH),
-    tasks: assignedTasks.filter((e) => e.priority == Priority.HIGH),
-    subtasks: assignedSubtasks.filter((e) => e.priority == Priority.HIGH),
-  }), [openedIncidents, assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
+  const [dataTrackableHigh, dataTrackableMedium, dataTrackableLow, dataTrackableClosed] = useMemo(() => {
+    const openAssignments: Assignment[] = [
+      { transports: [], reports: [], tasks: [], subtasks: []},
+      { transports: [], reports: [], tasks: [], subtasks: []},
+      { transports: [], reports: [], tasks: [], subtasks: []},
+    ]
+    const closedAssignments: Assignment = { transports: [], reports: [], tasks: [], subtasks: []}
+    let counter = 0
+    for (const priorityKey in Priority) {
+      const transports: Transport[] = []
+      assignedTransports.map((e) => {
+        if (priorityKey == e.priority) {
+          if (e.isClosed) {
+            closedAssignments.transports.push(e)
+          } else {
+            transports.push(e)
+          }
+        }
+      })
+      openAssignments[counter].transports.push(...transports)
 
-  const dataTrackableMedium = useMemo(() => ({
-    incidents: openedIncidents,
-    transports: assignedTransports.filter((e) => e.priority == Priority.MEDIUM),
-    reports: assignedReports.filter((e) => e.priority == Priority.MEDIUM),
-    tasks: assignedTasks.filter((e) => e.priority == Priority.MEDIUM),
-    subtasks: assignedSubtasks.filter((e) => e.priority == Priority.MEDIUM),
-  }), [openedIncidents, assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
+      const reports: Report[] = []
+      assignedReports.map((e) => {
+        if (priorityKey == e.priority) {
+          if (e.isClosed || e.isDone) {
+            closedAssignments.reports.push(e)
+          } else {
+            reports.push(e)
+          }
+        }
+      })
+      openAssignments[counter].reports.push(...reports)
 
-  const dataTrackableLow = useMemo(() => ({
-    incidents: openedIncidents,
-    transports: assignedTransports.filter((e) => e.priority == Priority.LOW),
-    reports: assignedReports.filter((e) => e.priority == Priority.LOW),
-    tasks: assignedTasks.filter((e) => e.priority == Priority.LOW),
-    subtasks: assignedSubtasks.filter((e) => e.priority == Priority.LOW),
-  }), [openedIncidents, assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
+      const tasks: Task[] = []
+      assignedTasks.map((e) => {
+        if (priorityKey == e.priority) {
+          if (e.isClosed || e.isDone) {
+            closedAssignments.tasks.push(e)
+          } else {
+            tasks.push(e)
+          }
+        }
+      })
+      openAssignments[counter].tasks.push(...tasks)
 
-  const dataTrackableClosed = {
-    incidents: openedIncidents,
-    transports: closedTransports,
-    reports: closedReports,
-    tasks: closedTasks,
-    subtasks: closedSubtasks,
-  }
+      const subtasks: Subtask[] = []
+      assignedSubtasks.map((e) => {
+        if (priorityKey == e.priority) {
+          if (e.isClosed) {
+            closedAssignments.subtasks.push(e)
+          } else {
+            subtasks.push(e)
+          }
+        }
+      })
+      openAssignments[counter].subtasks.push(...subtasks)
+
+      counter++
+    }
+
+    return [...openAssignments, closedAssignments]
+  }, [assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
 
   return (
     <UiContainer>
@@ -122,10 +155,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   )
 }
 export default MeineAufgabenPage
-
-const sortByIncident = (a: IncidentOwner, b: IncidentOwner) => a.incidentId - b.incidentId
-
-type IncidentOwner = { incidentId: Id<Incident> }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
