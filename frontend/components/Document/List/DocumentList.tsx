@@ -40,7 +40,7 @@ const DocumentList: React.VFC<Props> = ({
   }
 
   return (
-    <UiList>
+    <div>
       <UiTitle level={1}>
         Dokumente
       </UiTitle>
@@ -53,17 +53,17 @@ const DocumentList: React.VFC<Props> = ({
           <UiTitle level={6}>Typ</UiTitle>
         </UiGrid.Col>
       </UiGrid>
-      {
-        fileIds.map((id) => (
+      <UiList>
+        {fileIds.map((id) => (
           <DocumentItem
             key={id}
             src={getDocumentUrl(id)}
-            text="Filename"
             id={id}
-            onDelete={handleDelete} />
-        ))
-      }
-    </UiList>
+            onDelete={handleDelete}
+          />
+        ))}
+      </UiList>
+    </div>
   )
 }
 
