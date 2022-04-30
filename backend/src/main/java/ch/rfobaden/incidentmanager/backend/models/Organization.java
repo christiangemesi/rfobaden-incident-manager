@@ -25,7 +25,8 @@ public final class Organization extends Model.Basic implements Serializable {
         cascade = {
             CascadeType.REFRESH,
             CascadeType.DETACH,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE,
         }
     )
     private List<User> users = new ArrayList<>();
