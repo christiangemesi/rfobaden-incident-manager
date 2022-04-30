@@ -7,6 +7,10 @@ import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Assignment from '@/models/Assignment'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import { isOpenTransport } from '@/models/Transport'
+import { isOpenReport } from '@/models/Report'
+import { isOpenTask } from '@/models/Task'
+import { isOpenSubtask } from '@/models/Subtask'
 
 const UiHeaderAssignments: React.VFC = () => {
   const { currentUser } = useSession()
@@ -28,6 +32,10 @@ const UiHeaderAssignments: React.VFC = () => {
       if (assignmentsError !== null) {
         throw assignmentsError
       }
+      assignments.transports = assignments.transports.filter(isOpenTransport)
+      assignments.reports = assignments.reports.filter(isOpenReport)
+      assignments.tasks = assignments.tasks.filter(isOpenTask)
+      assignments.subtasks = assignments.subtasks.filter(isOpenSubtask)
 
       const high = assignments.transports.filter((e) => e.priority == Priority.HIGH).length
         + assignments.reports.filter((e) => e.priority == Priority.HIGH).length
