@@ -36,7 +36,8 @@ const DocumentDrawer: React.VFC<Props> = ({
           storeFileIds={storeDocumentIds}
           fileIds={documentIds}
           modelId={modelId}
-          modelName={modelName} />
+          modelName={modelName}
+        />
       </UiDrawer.Body>
     </UiDrawer>
   )
