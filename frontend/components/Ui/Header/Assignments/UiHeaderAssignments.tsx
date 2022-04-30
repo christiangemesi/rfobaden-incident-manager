@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from '@/stores/SessionStore'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
-import backendService, { BackendResponse } from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import Assignments from '@/models/Assignments'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 
@@ -22,7 +22,7 @@ const UiHeaderAssignments: React.VFC = () => {
       if (currentUser === null) {
         return
       }
-      const [assignments, assignmentsError]: BackendResponse<Assignments> = await backendService.find(
+      const [assignments, assignmentsError]: BackendResponse<Assignments> = await BackendService.find(
         'assignments',
       )
       if (assignmentsError !== null) {
@@ -81,8 +81,5 @@ const PriorityContainer = styled(UiLink)`
   margin: 0 0.6rem;
 `
 const PriorityIcon = styled(UiPriority)`
-  :hover {
-    background-color: transparent;
-    transform: scale(1.05);
-  }
+  transform: scale(0.75);
 `
