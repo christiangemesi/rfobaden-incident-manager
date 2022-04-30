@@ -43,13 +43,7 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
         modelName="task"
         storeImageIds={storeImageIds}
         imageIds={task.imageIds}
-      >
-        <UiCaption>
-          {task.imageIds.length}
-          &nbsp;
-          {task.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-        </UiCaption>
-      </ImageDrawer>
+      />
     </UiCaptionList>
   )
 }

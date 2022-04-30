@@ -43,13 +43,7 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         modelName="report"
         storeImageIds={storeImageIds}
         imageIds={report.imageIds}
-      >
-        <UiCaption>
-          {report.imageIds.length}
-          &nbsp;
-          {report.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-        </UiCaption>
-      </ImageDrawer>
+      />
     </UiCaptionList>
   )
 }
