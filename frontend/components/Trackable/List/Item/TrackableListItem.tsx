@@ -5,7 +5,7 @@ import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListI
 import { useUsername } from '@/models/User'
 import { Themed } from '@/theme'
 import Trackable from '@/models/Trackable'
-import Suffix from '@/components/Suffix/Suffix'
+import Suffix from '@/components/Suffix/TrackableSuffix'
 
 export interface Props<T> {
   record: T

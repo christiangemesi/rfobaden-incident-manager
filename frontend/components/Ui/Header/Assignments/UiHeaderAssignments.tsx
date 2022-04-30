@@ -5,7 +5,7 @@ import { useSession } from '@/stores/SessionStore'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import Assignment from '@/models/Assignment'
+import AssignmentData from '@/models/AssignmentData'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 import { isOpenTransport } from '@/models/Transport'
 import { isOpenReport } from '@/models/Report'
@@ -26,7 +26,7 @@ const UiHeaderAssignments: React.VFC = () => {
       if (currentUser === null) {
         return
       }
-      const [assignments, assignmentsError]: BackendResponse<Assignment> = await BackendService.find(
+      const [assignments, assignmentsError]: BackendResponse<AssignmentData> = await BackendService.find(
         'assignments',
       )
       if (assignmentsError !== null) {

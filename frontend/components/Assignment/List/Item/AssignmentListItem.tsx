@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 import IncidentStore from '@/stores/IncidentStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import UiLink from '@/components/Ui/Link/UiLink'
-import Suffix from '@/components/Suffix/Suffix'
+import Suffix from '@/components/Suffix/TrackableSuffix'
 
 
 interface Props<T extends Trackable> {

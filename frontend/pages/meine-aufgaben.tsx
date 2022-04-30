@@ -16,7 +16,7 @@ import IncidentStore from '@/stores/IncidentStore'
 import Incident, { parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
 import AssignmentList from '@/components/Assignment/List/AssignmentList'
-import Assignment from '@/models/Assignment'
+import AssignmentData from '@/models/AssignmentData'
 import { useEffectOnce } from 'react-use'
 
 
@@ -54,12 +54,12 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   // const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort(sortByIncident))
 
   const [dataTrackableHigh, dataTrackableMedium, dataTrackableLow, dataTrackableClosed] = useMemo(() => {
-    const openAssignments: Assignment[] = [
+    const openAssignments: AssignmentData[] = [
       { transports: [], reports: [], tasks: [], subtasks: []},
       { transports: [], reports: [], tasks: [], subtasks: []},
       { transports: [], reports: [], tasks: [], subtasks: []},
     ]
-    const closedAssignments: Assignment = { transports: [], reports: [], tasks: [], subtasks: []}
+    const closedAssignments: AssignmentData = { transports: [], reports: [], tasks: [], subtasks: []}
     let counter = 0
     for (const priorityKey in Priority) {
       const transports: Transport[] = []
@@ -169,7 +169,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     throw incidentsError
   }
 
-  const [assignments, assignmentsError]: BackendResponse<Assignment> = await backendService.find(
+  const [assignments, assignmentsError]: BackendResponse<AssignmentData> = await backendService.find(
     'assignments',
   )
   if (assignmentsError !== null) {
