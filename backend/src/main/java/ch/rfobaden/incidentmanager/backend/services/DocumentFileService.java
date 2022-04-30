@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
+import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.apache.tika.Tika;
@@ -12,14 +13,14 @@ import java.util.Optional;
 @Service
 public class DocumentFileService {
 
-    private final FileRepository fileRepository;
+    private final DocumentFileRepository documentFileRepository;
     private final DocumentRepository documentRepository;
 
     public DocumentFileService(
-        FileRepository fileRepository,
+        DocumentFileRepository documentFileRepository,
         DocumentRepository documentRepository
     ) {
-        this.fileRepository = fileRepository;
+        this.documentFileRepository = documentFileRepository;
         this.documentRepository = documentRepository;
     }
 
@@ -31,18 +32,18 @@ public class DocumentFileService {
         newDocument.setMimeType(mimeType);
 
         Document document = documentRepository.save(newDocument);
-        fileRepository.save(bytes, document.getId());
+        documentFileRepository.save(bytes, document.getId());
         return document;
     }
 
     public Optional<FileSystemResource> findFile(Long documentId) {
         return documentRepository.findById(documentId).map((document) -> (
-            fileRepository.findInFileSystem(document.getId())
+            documentFileRepository.findInFileSystem(document.getId())
         ));
     }
 
     public FileSystemResource findFileByDocument(Document document) {
-        return fileRepository.findInFileSystem(document.getId());
+        return documentFileRepository.findInFileSystem(document.getId());
     }
 
     public Optional<Document> findDocument(Long id){

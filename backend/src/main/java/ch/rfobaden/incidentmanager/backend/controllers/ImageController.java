@@ -16,20 +16,21 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
-import javax.websocket.server.PathParam;
 
-@RequireAgent
+
 @RestController
 @RequestMapping(path = "api/v1/images")
 public class ImageController extends AppController {
@@ -59,6 +60,45 @@ public class ImageController extends AppController {
         ));
     }
 
+    @RequireAgent
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteImage(
+        @RequestParam String modelName,
+        @RequestParam Long modelId,
+        @PathVariable Long id
+    ) {
+        switch (modelName.toLowerCase()) {
+            case "incident":
+                deleteImageFromEntity(id, incidentService, modelId);
+                break;
+            case "report":
+                deleteImageFromEntity(id, reportService, modelId);
+                break;
+            case "task":
+                deleteImageFromEntity(id, taskService, modelId);
+                break;
+            case "subtask":
+                deleteImageFromEntity(id, subtaskService, modelId);
+                break;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown model: " + modelName);
+        }
+    }
+
+    private <M extends Model & ImageOwner & PathConvertible<?>> void deleteImageFromEntity(
+        Long id, ModelService<M, ?> modelService, Long modelId
+    ) {
+        var entity = modelService.find(modelId).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
+        entity.getImages().removeIf(img -> img.getId().equals(id));
+        if (!imageFileService.delete(id)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "image not found: " + id);
+        }
+    }
+
+    @RequireAgent
     @PostMapping
     public Long uploadImage(
         @RequestParam MultipartFile file,
@@ -103,8 +143,8 @@ public class ImageController extends AppController {
         Long id, ModelService<M, ?> modelService, Supplier<Image> saveImage
     ) {
         var entity = modelService.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id
-        )));
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
         var image = saveImage.get();
         entity.addImage(image);
         modelService.update(entity);

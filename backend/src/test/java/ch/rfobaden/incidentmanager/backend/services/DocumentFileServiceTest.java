@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
+import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class DocumentFileServiceTest {
     private DocumentFileService documentFileService;
 
     @MockBean
-    private FileRepository fileRepository;
+    private DocumentFileRepository documentFileRepository;
 
     @MockBean
     private DocumentRepository documentRepository;
@@ -56,17 +57,14 @@ public class DocumentFileServiceTest {
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
         Mockito.when(documentRepository.findById(document.getId())).thenReturn(Optional.of(document));
-        Mockito.when(fileRepository.findInFileSystem(document.getId())).thenReturn(resource);
+        Mockito.when(documentFileRepository.findInFileSystem(document.getId())).thenReturn(resource);
 
         // When
         var fileSystemResource = documentFileService.findFile(document.getId()).orElse(null);
 
         // Then
         assertThat(fileSystemResource).isNotNull();
-        assertArrayEquals(
-            fileSystemResource.getInputStream().readAllBytes(),
-            resource.getInputStream().readAllBytes()
-        );
+        assertThat(fileSystemResource).isEqualTo(resource);
     }
 
 

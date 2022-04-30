@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
+import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ImageRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class ImageFileServiceTest {
     private ImageFileService imageFileService;
 
     @MockBean
-    private FileRepository fileRepository;
+    private ImageFileRepository imageFileRepository;
 
     @MockBean
     private ImageRepository imageRepository;
@@ -56,7 +57,7 @@ class ImageFileServiceTest {
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
         Mockito.when(imageRepository.findById(image.getId())).thenReturn(Optional.of(image));
-        Mockito.when(fileRepository.findInFileSystem(image.getId())).thenReturn(resource);
+        Mockito.when(imageFileRepository.findInFileSystem(image.getId())).thenReturn(resource);
 
         // When
         var fileSystemResource = imageFileService.find(image.getId()).orElse(null);

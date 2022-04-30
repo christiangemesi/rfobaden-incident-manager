@@ -14,10 +14,6 @@ public class DocumentRepositoryTest {
     @Autowired
     DocumentRepository documentRepository;
 
-
-
-
-
     @Test
     void testFindById() {
         // Given
