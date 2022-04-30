@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -26,29 +25,16 @@ public final class Organization extends Model.Basic implements Serializable {
         cascade = {
             CascadeType.REFRESH,
             CascadeType.DETACH,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE,
         }
     )
     private List<User> users = new ArrayList<>();
 
     @Size(max = 100)
-    @Email
-    @NotBlank
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String name;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getName() {
         return name;
@@ -96,13 +82,12 @@ public final class Organization extends Model.Basic implements Serializable {
         }
         var that = (Organization) other;
         return equalsModel(that)
-            && Objects.equals(name, that.name)
-            && Objects.equals(email, that.email);
+            && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), name, email);
+        return Objects.hash(modelHashCode(), name);
     }
 
 }

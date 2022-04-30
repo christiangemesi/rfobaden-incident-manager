@@ -15,11 +15,7 @@ const UiDropDown: React.VFC<Props> = ({ children }) => {
     containerRef: { current: null },
     isOpen: false,
     setOpen: (isOpen: boolean) => setState((state) => ({ ...state, isOpen })),
-    toggle: (e?: React.SyntheticEvent) => {
-      if (e) {
-        e.preventDefault()
-        e.stopPropagation()
-      }
+    toggle: () => {
       setState((state) => ({ ...state, isOpen: !state.isOpen }))
     },
   }))
