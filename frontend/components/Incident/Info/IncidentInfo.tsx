@@ -43,6 +43,10 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, imageIds: ids })
   }
 
+  const storeDocumentIds = (ids: FileId[]) => {
+    IncidentStore.save({ ...incident, documentIds: ids })
+  }
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -65,7 +69,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <DocumentDrawer
         modelId={incident.id}
         modelName="incident"
-        storeFileIds={storeImageIds}
+        storeDocumentIds={storeDocumentIds}
         documentIds={incident.documentIds}
       />
     </UiCaptionList>
