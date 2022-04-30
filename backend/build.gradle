@@ -30,8 +30,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
-    // https://mvnrepository.com/artifact/pl.pojo/pojo-tester
-    testImplementation group: 'pl.pojo', name: 'pojo-tester', version: '0.7.6'
     // https://mvnrepository.com/artifact/org.apache.tika/tika-core
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
 
