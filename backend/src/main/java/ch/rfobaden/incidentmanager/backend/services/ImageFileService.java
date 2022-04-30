@@ -1,7 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
-import ch.rfobaden.incidentmanager.backend.repos.FileRepository;
+import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ImageRepository;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;

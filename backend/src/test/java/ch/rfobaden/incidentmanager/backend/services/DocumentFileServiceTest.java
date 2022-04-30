@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.FileRepository;
+import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

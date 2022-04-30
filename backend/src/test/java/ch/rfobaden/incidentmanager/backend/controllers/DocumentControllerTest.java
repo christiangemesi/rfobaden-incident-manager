@@ -254,7 +254,6 @@ class DocumentControllerTest extends AppControllerTest {
             );
     }
 
-    //TODO This throws status 500 exception, idk why tho
     @Test
     @WithMockAgent
     void testDownloadDocument() throws Exception {

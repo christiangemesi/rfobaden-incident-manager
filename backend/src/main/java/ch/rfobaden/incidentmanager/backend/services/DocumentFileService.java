@@ -2,7 +2,7 @@ package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.FileRepository;
+import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.apache.tika.Tika;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;

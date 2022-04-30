@@ -1,4 +1,4 @@
-package ch.rfobaden.incidentmanager.backend.repos;
+package ch.rfobaden.incidentmanager.backend.repos.base;
 
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import org.apache.commons.io.FilenameUtils;

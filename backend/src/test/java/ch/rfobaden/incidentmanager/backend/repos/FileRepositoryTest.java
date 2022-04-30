@@ -1,9 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
-import static ch.rfobaden.incidentmanager.backend.repos.FileRepository.RESOURCES_DIR_IMAGES;
+import static ch.rfobaden.incidentmanager.backend.repos.base.FileRepository.RESOURCES_DIR_IMAGES;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
+import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResource;
