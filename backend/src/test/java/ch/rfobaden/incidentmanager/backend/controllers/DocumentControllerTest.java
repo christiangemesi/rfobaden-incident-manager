@@ -12,7 +12,6 @@ import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
@@ -70,8 +69,10 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToIncident() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
-        Mockito.when(incidentService.find(document.getId())).thenReturn(Optional.of(new Incident()));
+        Mockito.when(documentFileService.save(bytes, FILENAME))
+            .thenReturn(document);
+        Mockito.when(incidentService.find(document.getId()))
+            .thenReturn(Optional.of(new Incident()));
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")

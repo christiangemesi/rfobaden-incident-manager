@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.ImageFileRepository;
-import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.ImageRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

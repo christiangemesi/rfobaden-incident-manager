@@ -1,11 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import ch.rfobaden.incidentmanager.backend.models.Incident;
-import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryServiceTest;
 import ch.rfobaden.incidentmanager.backend.test.generators.CloseReasonGenerator;

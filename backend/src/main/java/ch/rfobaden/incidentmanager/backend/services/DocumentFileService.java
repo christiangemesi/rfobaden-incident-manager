@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.services;
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.apache.tika.Tika;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class DocumentFileService {
         return documentFileRepository.findInFileSystem(document.getId());
     }
 
-    public Optional<Document> findDocument(Long id){
+    public Optional<Document> findDocument(Long id) {
         return documentRepository.findById(id);
     }
 

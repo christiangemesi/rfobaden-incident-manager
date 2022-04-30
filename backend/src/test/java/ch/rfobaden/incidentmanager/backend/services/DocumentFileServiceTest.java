@@ -1,14 +1,12 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
-import ch.rfobaden.incidentmanager.backend.repos.base.FileRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +54,10 @@ public class DocumentFileServiceTest {
         document.setId(42L);
         FileSystemResource resource =
             new FileSystemResource(Paths.get(PATH_TO_FILE));
-        Mockito.when(documentRepository.findById(document.getId())).thenReturn(Optional.of(document));
-        Mockito.when(documentFileRepository.findInFileSystem(document.getId())).thenReturn(resource);
+        Mockito.when(documentRepository.findById(document.getId()))
+            .thenReturn(Optional.of(document));
+        Mockito.when(documentFileRepository.findInFileSystem(document.getId()))
+            .thenReturn(resource);
 
         // When
         var fileSystemResource = documentFileService.findFile(document.getId()).orElse(null);
