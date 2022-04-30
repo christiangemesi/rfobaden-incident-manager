@@ -7,7 +7,7 @@ import UiCaption from '@/components/Ui/Caption/UiCaption'
 interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeFileIds: (ids: FileId[]) => void
+  storeDocumentIds: (ids: FileId[]) => void
   documentIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
 }
@@ -16,7 +16,7 @@ const DocumentDrawer: React.VFC<Props> = ({
   documentIds,
   modelId,
   modelName,
-  storeFileIds,
+  storeDocumentIds,
   children,
 }) => {
 
@@ -24,7 +24,7 @@ const DocumentDrawer: React.VFC<Props> = ({
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={open}>
+          <UiCaption onClick={documentIds.length > 0 ? open : undefined}>
             {documentIds.length}
             &nbsp;
             {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
@@ -33,7 +33,7 @@ const DocumentDrawer: React.VFC<Props> = ({
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentList
-          storeFileIds={storeFileIds}
+          storeFileIds={storeDocumentIds}
           fileIds={documentIds}
           modelId={modelId}
           modelName={modelName} />
