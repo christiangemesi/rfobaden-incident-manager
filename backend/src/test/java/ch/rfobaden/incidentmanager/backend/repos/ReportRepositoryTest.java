@@ -39,7 +39,7 @@ public class ReportRepositoryTest extends
     }
 
     @Test
-    void testListWhereAssigneeId() {
+    void testFinByAssigneeId() {
         // Given
         var records = generator.generate(10);
         var assignedRecords = new ArrayList<Report>();

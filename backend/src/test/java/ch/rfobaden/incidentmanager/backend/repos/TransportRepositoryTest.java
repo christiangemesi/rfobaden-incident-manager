@@ -39,7 +39,7 @@ public class TransportRepositoryTest
     }
 
     @Test
-    void testListWhereAssigneeId() {
+    void testFindByAssigneeId() {
         // Given
         var records = generator.generate(10);
         var assignedRecords = new ArrayList<Transport>();

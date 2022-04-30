@@ -57,7 +57,7 @@ public class SubtaskRepositoryTest extends
 
 
     @Test
-    void testListWhereAssigneeId() {
+    void testFindByAssigneeId() {
         // Given
         var records = generator.generate(10);
         var assignedRecords = new ArrayList<Subtask>();

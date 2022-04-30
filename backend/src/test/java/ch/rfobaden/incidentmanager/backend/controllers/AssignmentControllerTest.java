@@ -72,7 +72,7 @@ public class AssignmentControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testFindAllAssignments() throws Exception {
+    void testListAllAssignments() throws Exception {
         // Given
         var user = userGenerator.generate();
         var amount = 10;
