@@ -48,9 +48,9 @@ const Assignment: React.VFC<Props> = ({
               {report.isKeyReport ? (
                 <UiIcon.KeyMessage size={ICON_MULTIPLIER_SMALL} />
               ) : <React.Fragment />}
-              {report.isLocationRelevantReport ? (
+              {report.isLocationRelevantReport && (
                 <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
-              ) : <React.Fragment />}
+              )}
             </UiGrid>
             {report.closedTaskIds.length + '/' + report.taskIds.length}
           </UiLink>
