@@ -6,12 +6,9 @@ import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiContainer from '@/components/Ui/Container/UiContainer'
 import DocumentItem from '@/components/Document/Item/DocumentItem'
 import UiList from '@/components/Ui/List/UiList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiSortButton from '@/components/Ui/Button/UiSortButton'
-import useSort from '@/utils/hooks/useSort'
 
 interface Props {
   fileIds: FileId[]

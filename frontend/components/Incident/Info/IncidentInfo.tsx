@@ -61,26 +61,13 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
         modelName="incident"
         storeImageIds={storeImageIds}
         imageIds={incident.imageIds}
-      >
-        <UiCaption>
-          {incident.imageIds.length}
-          &nbsp;
-          {incident.imageIds.length === 1 ? 'Bild' : 'Bilder'}
-        </UiCaption>
-      </ImageDrawer>
-
+      />
       <DocumentDrawer
         modelId={incident.id}
         modelName="incident"
         storeFileIds={storeImageIds}
         documentIds={[1,2,3,4,5]}
-      >
-        <UiCaption>
-          {incident.imageIds.length}
-          &nbsp;
-          {incident.imageIds.length === 1 ? 'Dokument' : 'Dokumente'}
-        </UiCaption>
-      </DocumentDrawer>
+      />
     </UiCaptionList>
   )
 }

@@ -19,7 +19,6 @@ const ImageDrawer: React.VFC<Props> = ({
   storeImageIds,
   children,
 }) => {
-  const isEmptyList = imageIds.length > 0
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (

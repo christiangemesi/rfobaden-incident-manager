@@ -3,13 +3,14 @@ import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
 import styled, { css } from 'styled-components'
 import DocumentList from '@/components/Document/List/DocumentList'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   storeFileIds: (ids: FileId[]) => void
   documentIds: FileId[]
-  children: ReactNode
+  children?: (props: { open: () => void }) => ReactNode
 }
 
 const DocumentDrawer: React.VFC<Props> = ({
@@ -20,17 +21,16 @@ const DocumentDrawer: React.VFC<Props> = ({
   children,
 }) => {
 
-  const isEmptyList = documentIds.length > 0
-
   return (
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
-        <Content
-          onClick={isEmptyList ? open : undefined}
-          isClickable={isEmptyList}
-        >
-          {children}
-        </Content>
+        children ? children({ open }) : (
+          <UiCaption>
+            {documentIds.length}
+            &nbsp;
+            {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
+          </UiCaption>
+        )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentList
