@@ -64,7 +64,7 @@ const Container = styled.div<{ isOpen: boolean }>`
   }
   
   position: fixed;
-  z-index: 100;
+  z-index: 200;
 
   
   transition-duration: 250ms;

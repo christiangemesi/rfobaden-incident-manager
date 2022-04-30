@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Addded
+- Incidents, reports, transports, tasks and subtasks can now be printed.
+- Uploaded images can now be seen by clicking on the image counter in the header of the record they belong.
+
+## [3.0.0] - 13.04.2022
 ### Added
 - Modals can now be closed by pressing the escape key.
 - Incidents, reports and tasks now support manual closing.

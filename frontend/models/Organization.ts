@@ -6,7 +6,6 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 
 export default interface Organization extends Model {
   name: string
-  email: string
   userIds: Id<User>[]
 }
 
