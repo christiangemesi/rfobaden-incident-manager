@@ -4,13 +4,13 @@ import ch.rfobaden.incidentmanager.backend.models.base.PojoTest;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ImageTest extends PojoTest<Image> {
+public class DocumentTest extends PojoTest<Document> {
 
     @Autowired
     Faker faker;
 
     @Override
-    protected Image generate() {
-        return new Image(faker.file().fileName());
+    protected Document generate() {
+        return new Document(faker.file().fileName());
     }
 }
