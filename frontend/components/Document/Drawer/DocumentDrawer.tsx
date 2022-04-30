@@ -1,7 +1,6 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
-import styled, { css } from 'styled-components'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 
@@ -44,11 +43,3 @@ const DocumentDrawer: React.VFC<Props> = ({
 }
 
 export default DocumentDrawer
-
-const Content = styled.div<{ isClickable: boolean }>`
-  ${({ isClickable }) => isClickable && css`
-    :hover {
-      cursor: pointer
-    }
-  `}
-`
