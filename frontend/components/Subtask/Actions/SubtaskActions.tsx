@@ -8,7 +8,7 @@ import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
@@ -54,13 +54,13 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
           onAddFile={addImageId}
           type="image"
         />
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
           onAddFile={addImageId}

@@ -10,7 +10,7 @@ import TaskStore from '@/stores/TaskStore'
 import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import TaskPrintView from '../PrintView/TaskPrintView'
 
@@ -81,13 +81,13 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
           <TrackableCloseAction isClosed={task.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={task.id}
           modelName="task"
           onAddFile={addImageId}
           type="image"
         />
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={task.id}
           modelName="task"
           onAddFile={addImageId}

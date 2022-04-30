@@ -10,7 +10,7 @@ import Incident from '@/models/Incident'
 import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
 import BackendFetchService from '@/services/BackendFetchService'
@@ -91,14 +91,14 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           <TrackableCloseAction isClosed={report.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={report.id}
           modelName="report"
           onAddFile={addImageId}
           type="image"
         />
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={report.id}
           modelName="report"
           onAddFile={addImageId}

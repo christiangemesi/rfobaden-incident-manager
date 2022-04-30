@@ -13,7 +13,7 @@ interface Props {
   onAddFile: (fileId: FileId) => void
 }
 
-const TrackableImageUploadAction: React.VFC<Props> = ({
+const TrackableFileUploadAction: React.VFC<Props> = ({
   id,
   modelName,
   type,
@@ -41,4 +41,4 @@ const TrackableImageUploadAction: React.VFC<Props> = ({
     </UiModal>
   )
 }
-export default TrackableImageUploadAction
+export default TrackableFileUploadAction
