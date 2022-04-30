@@ -45,9 +45,9 @@ const Assignment: React.VFC<Props> = ({
             href={'/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
           >
             <UiGrid direction={'column'} gapH={1}>
-              {report.isKeyReport ? (
+              {report.isKeyReport && (
                 <UiIcon.KeyMessage size={ICON_MULTIPLIER_SMALL} />
-              ) : <React.Fragment />}
+              )}
               {report.isLocationRelevantReport && (
                 <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
               )}
