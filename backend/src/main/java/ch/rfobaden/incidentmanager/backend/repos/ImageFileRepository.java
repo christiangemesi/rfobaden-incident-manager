@@ -9,14 +9,4 @@ public class ImageFileRepository extends FileRepository {
     public ImageFileRepository() {
         super("files/images/");
     }
-
-    public boolean delete(Long id) {
-        Path file = Paths.get(RESOURCES_DIR + id + ".jpeg");
-        try {
-            Files.delete(file);
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
-    }
 }

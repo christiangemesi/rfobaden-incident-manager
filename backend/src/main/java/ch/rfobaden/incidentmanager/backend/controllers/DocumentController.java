@@ -27,11 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
-import javax.servlet.http.HttpServletResponse;
 
 @RequireAgent
 @RestController
@@ -81,7 +79,7 @@ public class DocumentController extends AppController {
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long id,
-        @RequestParam Optional<String> fileName
+        @RequestParam Optional<String> name
     ) {
         byte[] bytes;
         try {
@@ -94,7 +92,7 @@ public class DocumentController extends AppController {
         }
 
         Supplier<Document> saveDocument = () -> (
-            documentFileService.save(bytes, fileName.orElseGet(file::getOriginalFilename))
+            documentFileService.save(bytes, name.orElseGet(file::getOriginalFilename))
         );
         Document document;
         switch (modelName.toLowerCase()) {
