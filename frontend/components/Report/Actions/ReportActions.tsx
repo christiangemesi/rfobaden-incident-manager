@@ -64,6 +64,10 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
   }, [report])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, documentIds: [...report.documentIds, fileId]})
+  }, [report])
+
 
   const loadPrintData = useCallback(async () => {
     for (const task of TaskStore.list()) {
@@ -90,21 +94,18 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         {!report.isDone && (
           <TrackableCloseAction isClosed={report.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
         <TrackableFileUploadAction
           id={report.id}
           modelName="report"
           onAddFile={addImageId}
           type="image"
         />
-
         <TrackableFileUploadAction
           id={report.id}
           modelName="report"
-          onAddFile={addImageId}
+          onAddFile={addDocumentId}
           type="document"
         />
-
         <UiPrinter
           loadData={loadPrintData}
           renderContent={() => <ReportPrintView report={report} />}
