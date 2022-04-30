@@ -13,6 +13,7 @@ import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAct
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   task: Task
@@ -38,8 +39,16 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    SubtaskStore.save({ ...subtask, documentIds: [...subtask.documentIds, fileId]})
+  }, [subtask])
+
   const storeImageIds = (ids: FileId[]) => {
     SubtaskStore.save({ ...subtask, imageIds: ids })
+  }
+
+  const storeDocumentIds = (ids: FileId[]) => {
+    SubtaskStore.save({ ...subtask, documentIds: ids })
   }
 
   return (
@@ -63,7 +72,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddFile={addImageId}
+          onAddFile={addDocumentId}
           type="document"
         />
 
@@ -81,6 +90,21 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
             </UiDropDown.Item>
           )}
         </ImageDrawer>
+
+        <DocumentDrawer
+          modelId={subtask.id}
+          modelName="subtask"
+          storeDocumentIds={storeDocumentIds}
+          documentIds={subtask.documentIds}
+        >
+          {({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              {subtask.documentIds.length}
+              &nbsp;
+              {subtask.documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
+            </UiDropDown.Item>
+          )}
+        </DocumentDrawer>
 
         <UiPrinter renderContent={() => <SubtaskPrintView subtask={subtask} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>
