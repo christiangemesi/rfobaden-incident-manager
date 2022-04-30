@@ -46,4 +46,8 @@ public class FileRepository {
     public FileSystemResource findInFileSystem(Long id) {
         return new FileSystemResource(Paths.get(RESOURCES_DIR_IMAGES + id));
     }
+
+    public String getDirectory(){
+        return "";
+    }
 }

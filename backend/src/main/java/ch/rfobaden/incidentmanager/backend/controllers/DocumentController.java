@@ -18,6 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -56,17 +58,22 @@ public class DocumentController extends AppController {
     }
 
     @GetMapping(value = "/{id}")
-    public FileSystemResource downloadDocument(@PathVariable Long id,
-                                               HttpServletResponse response) {
+    public ResponseEntity<FileSystemResource> downloadDocument(@PathVariable Long id) {
 
         Document document = documentFileService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
 
-        String mimeType = document.getMimeType();
-        response.setHeader("Content-Type", mimeType);
+        ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+            .filename(document.getName())
+            .build();
 
-        return documentFileService.findFileByDocument(document);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(contentDisposition);
+        headers.set("Content-Type", document.getMimeType());
+
+        FileSystemResource file = documentFileService.findFileByDocument(document);
+        return ResponseEntity.ok().headers(headers).body(file);
     }
 
     @PostMapping

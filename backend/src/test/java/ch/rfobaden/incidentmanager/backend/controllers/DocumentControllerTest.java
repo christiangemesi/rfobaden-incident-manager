@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -259,14 +260,15 @@ class DocumentControllerTest extends AppControllerTest {
     void testDownloadDocument() throws Exception {
         // Given
         Long id = 1L;
-        var mockRequest = MockMvcRequestBuilders.get("/api/v1/documents/" + id)
-            .accept(MediaType.APPLICATION_PDF);
 
-        // When
         FileSystemResource resource =
             new FileSystemResource(Paths.get("src/test/resources/testImage/blank.pdf"));
         Mockito.when(documentFileService.findDocument(id)).thenReturn(Optional.of(document));
-        Mockito.when(documentFileService.findFile(id)).thenReturn(Optional.of(resource));
+        Mockito.when(documentFileService.findFileByDocument(any())).thenReturn(resource);
+
+        // When
+        var mockRequest = MockMvcRequestBuilders.get("/api/v1/documents/" + id)
+            .accept(MediaType.APPLICATION_PDF);
 
         // Then
         mockMvc.perform(mockRequest)
