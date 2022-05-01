@@ -23,7 +23,7 @@ const DocumentItem: React.VFC<Props> = ({
     onDelete(id)
   }
   return (
-    <FileText href={src} download>
+    <DownloadLink href={src} target="_blank" download>
       <DocumentListItem>
         <UiGrid style={{ padding: '0 0.5rem' }} align="center" gapH={0.5}>
           <UiGrid.Col size={8}>
@@ -37,7 +37,7 @@ const DocumentItem: React.VFC<Props> = ({
           </UiGrid.Col>
         </UiGrid>
       </DocumentListItem>
-    </FileText>
+    </DownloadLink>
   )
 }
 
@@ -48,7 +48,7 @@ const DeleteButton = styled(UiIconButton)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
 `
 
-const FileText = styled.a`
+const DownloadLink = styled.a`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
