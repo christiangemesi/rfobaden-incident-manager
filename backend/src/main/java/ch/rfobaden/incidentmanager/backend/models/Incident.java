@@ -2,6 +2,8 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

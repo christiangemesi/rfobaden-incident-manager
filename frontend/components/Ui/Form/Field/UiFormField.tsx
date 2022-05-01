@@ -1,8 +1,8 @@
 import { UiFormStateField } from '@/components/Ui/Form'
-import React, { memo, ReactNode, useContext, useMemo } from 'react'
+import React, { memo, ReactNode, useMemo } from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
-import UiModalContext from '@/components/Ui/Modal/Context/UiModalContext'
 import { useUpdateEffect } from 'react-use'
+import { usePersist } from '@/components/Ui/Persist/UiPersist'
 
 interface Props<T, K extends keyof T> {
   field: UiFormStateField<T, K>
@@ -16,12 +16,12 @@ const UiFormField = <T, K extends keyof T>({
 }: Props<T, K>): JSX.Element => {
   const { value, setValue, hasChanged, errors } = field
 
-  // If the field is in a modal,
-  // we want to persist that modal if the field has been changed.
-  const modalContext = useContext(UiModalContext)
+  // Persist the current context.
+  // This is mainly used to signal to parent modals/drawers etc. that something has changed.
+  const persist = usePersist()
   useUpdateEffect(() => {
     if (hasChanged) {
-      modalContext.persist()
+      persist()
     }
   }, [hasChanged])
 

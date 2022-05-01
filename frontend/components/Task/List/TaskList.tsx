@@ -3,7 +3,6 @@ import Task from '@/models/Task'
 import UiList from '@/components/Ui/List/UiList'
 import TaskListItem from '@/components/Task/List/Item/TaskListItem'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -19,19 +18,14 @@ interface Props {
 const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) => {
   return (
     <Container>
-      <UiModal isFull>
-        <UiModal.Activator>{({ open }) => (
+      <UiModal title="Auftrag erfassen">
+        <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Auftrag erfassen">
             <UiIcon.CreateAction size={1.5} />
           </UiCreateButton>
-        )}</UiModal.Activator>
+        )}</UiModal.Trigger>
         <UiModal.Body>{({ close }) => (
-          <div>
-            <UiTitle level={1} isCentered>
-              Auftrag erfassen
-            </UiTitle>
-            <TaskForm report={report} onSave={handleSelect} onClose={close} />
-          </div>
+          <TaskForm report={report} onSave={handleSelect} onClose={close} />
         )}</UiModal.Body>
       </UiModal>
 

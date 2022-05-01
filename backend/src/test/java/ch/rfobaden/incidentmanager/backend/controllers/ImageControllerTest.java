@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,12 +18,15 @@ import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNullApi;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -81,22 +85,6 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testUploadImageToIncident_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
-        Mockito.when(incidentService.find(image.getId())).thenReturn(Optional.empty());
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
-                .file(file)
-                .param("modelName", "report")
-                .param("id", image.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
-    }
-
-    @Test
-    @WithMockAgent
     void testUploadImageToReport() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -109,21 +97,6 @@ class ImageControllerTest extends AppControllerTest {
                 .param("id", image.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(content().string(image.getId().toString()));
-    }
-
-    @Test
-    @WithMockAgent
-    void testUploadImageToReport_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
-                .file(file)
-                .param("modelName", "report")
-                .param("id", image.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 
     @Test
@@ -145,21 +118,6 @@ class ImageControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testUploadImageToTask_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
-                .file(file)
-                .param("modelName", "task")
-                .param("id", image.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
-    }
-
-    @Test
-    @WithMockAgent
     void testUploadImageToSubtask() throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
@@ -174,16 +132,17 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(content().string(image.getId().toString()));
     }
 
-    @Test
     @WithMockAgent
-    void testUploadImageToSubtask_ownerNotFound() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"incident", "report", "task", "subtask"})
+    void testUploadImageToEntity_ownerNotFound(String entity) throws Exception {
         // When
         Mockito.when(imageFileService.save(bytes, FILENAME)).thenReturn(image);
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/images")
                 .file(file)
-                .param("modelName", "subtask")
+                .param("modelName", entity)
                 .param("id", image.getId().toString()))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
@@ -270,5 +229,142 @@ class ImageControllerTest extends AppControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(content().bytes(resource.getInputStream().readAllBytes()));
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageOfIncident_failWhenDeletingFile() throws Exception {
+        // Given
+        var incident = new Incident();
+        incident.setId(42L);
+        incident.addImage(image);
+
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(false);
+        Mockito.when(incidentService.find(incident.getId())).thenReturn(Optional.of(incident));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "incident")
+                .param("modelId", incident.getId().toString()))
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$").exists())
+            .andExpect(jsonPath("$.message").value(
+                "image not found: " + image.getId())
+            );
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageOfIncident() throws Exception {
+        // Given
+        var incident = new Incident();
+        incident.setId(42L);
+        incident.addImage(image);
+
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(true);
+        Mockito.when(incidentService.find(incident.getId())).thenReturn(Optional.of(incident));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "incident")
+                .param("modelId", incident.getId().toString()))
+            .andExpect(status().is2xxSuccessful());
+
+        assertTrue(incident.getImages().isEmpty());
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageOfReport() throws Exception {
+        // Given
+        var report = new Report();
+        report.setId(42L);
+        report.addImage(image);
+
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(true);
+        Mockito.when(reportService.find(report.getId())).thenReturn(Optional.of(report));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "report")
+                .param("modelId", report.getId().toString()))
+            .andExpect(status().is2xxSuccessful());
+
+        assertTrue(report.getImages().isEmpty());
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageOfTask() throws Exception {
+        // Given
+        var task = new Task();
+        task.setId(42L);
+        task.addImage(image);
+
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(true);
+        Mockito.when(taskService.find(task.getId())).thenReturn(Optional.of(task));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "task")
+                .param("modelId", task.getId().toString()))
+            .andExpect(status().is2xxSuccessful());
+
+        assertTrue(task.getImages().isEmpty());
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageOfSubtask() throws Exception {
+        // Given
+        var subtask = new Subtask();
+        subtask.setId(42L);
+        subtask.addImage(image);
+
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(true);
+        Mockito.when(subtaskService.find(subtask.getId())).thenReturn(Optional.of(subtask));
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "subtask")
+                .param("modelId", subtask.getId().toString()))
+            .andExpect(status().is2xxSuccessful());
+
+        assertTrue(subtask.getImages().isEmpty());
+    }
+
+    @Test
+    @WithMockAgent
+    void testDeleteImageWithNoValidModelName() throws Exception {
+        // Given
+        var incident = new Incident();
+        incident.setId(42L);
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", "abcABC123")
+                .param("modelId", incident.getId().toString()))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("unknown model: abcABC123"));
+    }
+
+    @WithMockAgent
+    @ParameterizedTest
+    @ValueSource(strings = {"incident", "report", "task", "subtask"})
+    void testDeleteImageOfIncident_ownerNotFound(String entity) throws Exception {
+        // When
+        Mockito.when(imageFileService.delete(image.getId())).thenReturn(true);
+
+        // Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/images/" + image.getId())
+                .param("modelName", entity)
+                .param("modelId", "" + -1L))
+            .andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.message").value("owner not found: " + image.getId()));
     }
 }

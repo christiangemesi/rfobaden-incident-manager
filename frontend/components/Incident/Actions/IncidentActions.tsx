@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import Incident, { parseIncident } from '@/models/Incident'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -13,6 +12,12 @@ import { FileId } from '@/models/FileUpload'
 import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import IncidentPrintView from '@/components/Incident/PrintView/IncidentPrintView'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import BackendFetchService from '@/services/BackendFetchService'
+import ReportStore from '@/stores/ReportStore'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -65,6 +70,23 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
     IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
   }, [incident])
 
+  const loadPrintData = useCallback(async () => {
+    for (const report of ReportStore.list()) {
+      if (report.incidentId === incident.id) {
+        await loadCached('report/tasks', report.id, async () => {
+          await BackendFetchService.loadTasksOfReport(report)
+        })
+      }
+    }
+    for (const task of TaskStore.list()) {
+      if (task.incidentId === incident.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [incident])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -73,13 +95,8 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         </UiIconButton>
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Ereignis bearbeiten
-            </UiTitle>
-            <IncidentForm incident={incident} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Ereignis bearbeiten">{({ close }) => (
+          <IncidentForm incident={incident} onClose={close} />
         )}</TrackableEditAction>
 
         {isAdmin(currentUser) && (
@@ -91,6 +108,17 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           modelName="incident"
           onAddImage={addImageId}
         />
+
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <IncidentPrintView incident={incident} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>
