@@ -39,19 +39,10 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
-  // todo split closed / open in memo, get all once
   const assignedTransports = useTransports()
   const assignedReports = useReports()
   const assignedTasks = useTasks()
   const assignedSubtasks = useSubtasks()
-  // const assignedTransports = useTransports((transports) => transports.filter(isOpenTransport)).sort(sortByIncident)
-  // const assignedReports = useReports((reports) => reports.filter(isOpenReport)).sort(sortByIncident)
-  // const assignedTasks = useTasks((tasks) => tasks.filter(isOpenTask)).sort(sortByIncident)
-  // const assignedSubtasks = useSubtasks((subtasks) => subtasks.filter(isOpenSubtask)).sort(sortByIncident)
-  // const closedTransports = useTransports((transports) => transports.filter((transport) => !isOpenTransport(transport)).sort(sortByIncident))
-  // const closedReports = useReports((reports) => reports.filter((report) => !isOpenReport(report)).sort(sortByIncident))
-  // const closedTasks = useTasks((tasks) => tasks.filter((task) => !isOpenTask(task)).sort(sortByIncident))
-  // const closedSubtasks = useSubtasks((subtasks) => subtasks.filter((subtask) => !isOpenSubtask(subtask)).sort(sortByIncident))
 
   const [dataTrackableHigh, dataTrackableMedium, dataTrackableLow, dataTrackableClosed] = useMemo(() => {
     const openAssignments: AssignmentData[] = [

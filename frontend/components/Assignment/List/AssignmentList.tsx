@@ -31,44 +31,46 @@ const AssignmentList: React.VFC<Props> = ({
         (<UiTitle level={2}>{title}</UiTitle>)
       }
       <Content>
-        <AssignmentListItem title="Transporte" trackable={transports}>{(transport) => (
-          <Fragment
-            key={transport.id}
-            // href={'/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
-          >
-          </Fragment>
-        )}</AssignmentListItem>
-        <AssignmentListItem title="Meldungen" trackable={reports}>{(report) => (
-          <Fragment
-            key={report.id}
-            // href={'/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
-          >
-            <UiGrid direction="column" gapH={1}>
-              {report.isKeyReport && (
-                <UiIcon.KeyMessage size={ICON_MULTIPLIER_SMALL} />
-              )}
-              {report.isLocationRelevantReport && (
-                <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
-              )}
-            </UiGrid>
-            {report.closedTaskIds.length + '/' + report.taskIds.length}
-          </Fragment>
-        )}</AssignmentListItem>
-        <AssignmentListItem title="Aufträge" trackable={tasks}>{(task) => (
-          <Fragment
-            key={task.id}
-            // href={'/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
-          >
-            {task.closedSubtaskIds.length + '/' + task.subtaskIds.length}
-          </Fragment>
-        )}</AssignmentListItem>
-        <AssignmentListItem title="Teilaufträge" trackable={subtasks}>{(subtask) => (
-          <Fragment
-            key={subtask.id}
-            // href={'/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.taskId}
-          >
-          </Fragment>
-        )}</AssignmentListItem>
+        <AssignmentListItem
+          title="Transporte"
+          trackable={transports}
+          href={(transport) => '/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
+        />
+        <AssignmentListItem
+          title="Meldungen"
+          trackable={reports}
+          href={(report) => '/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
+        >
+          {(report) => (
+            <Fragment key={report.id}>
+              <UiGrid direction="column" gapH={1}>
+                {report.isKeyReport && (
+                  <UiIcon.KeyMessage size={ICON_MULTIPLIER_SMALL} />
+                )}
+                {report.isLocationRelevantReport && (
+                  <UiIcon.LocationRelevancy size={ICON_MULTIPLIER_SMALL} />
+                )}
+              </UiGrid>
+              {report.closedTaskIds.length + '/' + report.taskIds.length}
+            </Fragment>
+          )}
+        </AssignmentListItem>
+        <AssignmentListItem
+          title="Aufträge"
+          trackable={tasks}
+          href={(task) => '/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
+        >
+          {(task) => (
+            <Fragment key={task.id}>
+              {task.closedSubtaskIds.length + '/' + task.subtaskIds.length}
+            </Fragment>
+          )}
+        </AssignmentListItem>
+        <AssignmentListItem
+          title="Teilaufträge"
+          trackable={subtasks}
+          href={(subtask) => '/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.taskId}
+        />
       </Content>
     </Fragment>
   )

@@ -5,18 +5,20 @@ import styled, { css } from 'styled-components'
 import IncidentStore from '@/stores/IncidentStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import UiLink from '@/components/Ui/Link/UiLink'
-import Suffix from '@/components/Suffix/TrackableSuffix'
+import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
 
 
 interface Props<T extends Trackable> {
   title: string
   trackable: T[]
-  children: (record: T) => ReactNode
+  href: (record: T) => string
+  children?: (record: T) => ReactNode
 }
 
 const AssignmentListItem = <T extends Trackable>({
   title,
   trackable,
+  href,
   children,
 }: Props<T>): JSX.Element => {
   return (
@@ -27,7 +29,7 @@ const AssignmentListItem = <T extends Trackable>({
           <EntityContainer>
             {trackable.map((e) => (
               <UiLink
-                href={''}// todo link
+                href={href(e)}
                 key={e.id}
               >
                 <Item
@@ -36,11 +38,11 @@ const AssignmentListItem = <T extends Trackable>({
                   title={e.title}
                   priority={e.priority}
                   user={IncidentStore.find(e.incidentId)?.title ?? ''}
-                  isTitleSwitched={true}
+                  isTitleSwitched
                 >
-                  <Suffix trackable={e} isSmall={false}>
-                    {children(e)}
-                  </Suffix>
+                  <TrackableSuffix trackable={e} isSmall={false}>
+                    {children && children(e)}
+                  </TrackableSuffix>
                 </Item>
               </UiLink>
             ))}

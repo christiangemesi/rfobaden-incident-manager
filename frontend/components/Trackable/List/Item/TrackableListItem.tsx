@@ -5,7 +5,7 @@ import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListI
 import { useUsername } from '@/models/User'
 import { Themed } from '@/theme'
 import Trackable from '@/models/Trackable'
-import Suffix from '@/components/Suffix/TrackableSuffix'
+import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
 
 export interface Props<T> {
   record: T
@@ -37,9 +37,9 @@ const TrackableListItem = <T extends Trackable>({
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(record))}
     >
-      <Suffix trackable={record} isSmall={isSmall}>
+      <TrackableSuffix trackable={record} isSmall={isSmall}>
         {children}
-      </Suffix>
+      </TrackableSuffix>
 
       <BridgeClip>
         <Bridge isActive={isActive ?? false} />
