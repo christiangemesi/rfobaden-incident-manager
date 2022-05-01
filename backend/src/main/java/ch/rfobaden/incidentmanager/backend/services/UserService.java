@@ -1,8 +1,16 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.Subtask;
+import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
+import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
+import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
+import ch.rfobaden.incidentmanager.backend.repos.TaskRepository;
+import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
@@ -15,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,6 +36,18 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
     private final NotificationService notificationService;
 
     private final SecureRandom passwordRandom = new SecureRandom();
+
+    @Autowired
+    private TransportRepository transportRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private SubtaskRepository subtaskRepository;
 
     @Autowired
     public UserService(PasswordEncoder passwordEncoder, NotificationService notificationService) {

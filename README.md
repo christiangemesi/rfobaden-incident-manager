@@ -162,6 +162,6 @@ The project is continuously deployed.
 ## Database Export
 The database can be dumped using the following command:
 ```bash
-dkc exec database sh -c 'mysqldump -u root --password=${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} --no-create-info --no-create-db'
+docker compose exec database sh -c 'mysqldump -u root --password=${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} --no-create-info --no-create-db'
 ```
 > The database service has to be running.
