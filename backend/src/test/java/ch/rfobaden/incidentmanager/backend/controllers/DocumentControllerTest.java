@@ -223,7 +223,7 @@ class DocumentControllerTest extends AppControllerTest {
                 .file(file)
                 .param("modelName", "report")
                 .param("id", document.getId().toString())
-                .param("fileName", name))
+                .param("name", name))
             .andExpect(status().is(200))
             .andExpect(content().string(document.getId().toString()));
     }
