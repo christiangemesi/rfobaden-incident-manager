@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic
-    implements Describable, Closeable, DateTimeBounded, ImageOwner, Serializable {
+    implements Describable, Closeable, DateTimeBounded, ImageOwner, DocumentOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,6 +58,9 @@ public class Incident extends Model.Basic
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<>();
 
     @Override
     public String getTitle() {
@@ -170,6 +173,16 @@ public class Incident extends Model.Basic
     @Override
     public List<Image> getImages() {
         return images;
+    }
+
+    @Override
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     @Override
