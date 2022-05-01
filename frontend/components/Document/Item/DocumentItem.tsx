@@ -27,7 +27,7 @@ const DocumentItem: React.VFC<Props> = ({
       <DocumentListItem>
         <UiGrid style={{ padding: '0 0.5rem' }} align="center" gapH={0.5}>
           <UiGrid.Col size={8}>
-            {'File with ID: ' + id}
+            File with ID: {id}
           </UiGrid.Col>
           <UiGrid.Col size={3}>
             <p>PDF</p>

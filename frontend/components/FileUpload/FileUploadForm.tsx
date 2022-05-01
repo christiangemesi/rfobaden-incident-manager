@@ -78,7 +78,7 @@ const FileUploadForm: React.VFC<Props> = ({
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.file}>{(props) => (
-          <FileInput {...props} accept={fileType +'/*'} />
+          <FileInput {...props} accept={fileType === 'image' ? fileType + '/*' : ''} />
         )}</UiForm.Field>
         <UiForm.Field field={form.name}>{(props) => (
           <UiTextInput {...props} label="Name" />
