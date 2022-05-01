@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.repos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.models.Image;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +17,7 @@ public class DocumentRepositoryTest {
     void testFindById() {
         // Given
         Document document = new Document("blank");
-        document.setMimeTypeExtension("pdf");
+        document.setExtension("pdf");
         document.setMimeType("Application/pdf");
 
         // When
@@ -34,15 +33,15 @@ public class DocumentRepositoryTest {
     void testFindAll() {
         // Given
         Document document1 = new Document("fish");
-        document1.setMimeTypeExtension("pdf");
+        document1.setExtension("pdf");
         document1.setMimeType("Application/pdf");
 
         Document document2 = new Document("fish");
-        document2.setMimeTypeExtension("pdf");
+        document2.setExtension("pdf");
         document2.setMimeType("Application/pdf");
 
         Document document3 = new Document("fish");
-        document3.setMimeTypeExtension("pdf");
+        document3.setExtension("pdf");
         document3.setMimeType("Application/pdf");
 
         // When
@@ -58,15 +57,15 @@ public class DocumentRepositoryTest {
     void testDeleteImage() {
         // Given
         Document document1 = new Document("fish");
-        document1.setMimeTypeExtension("pdf");
+        document1.setExtension("pdf");
         document1.setMimeType("Application/pdf");
 
         Document document2 = new Document("fish");
-        document2.setMimeTypeExtension("pdf");
+        document2.setExtension("pdf");
         document2.setMimeType("Application/pdf");
 
         Document document3 = new Document("fish");
-        document3.setMimeTypeExtension("pdf");
+        document3.setExtension("pdf");
         document3.setMimeType("Application/pdf");
 
         // When

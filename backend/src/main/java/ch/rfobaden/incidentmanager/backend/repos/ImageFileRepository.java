@@ -10,13 +10,12 @@ import java.nio.file.Paths;
 
 @Repository
 public class ImageFileRepository extends FileRepository {
-
     public ImageFileRepository() {
         super("files/images/");
     }
 
     public boolean delete(Long id) {
-        Path file = Paths.get(getResourceDir() + id + ".jpeg");
+        Path file = Paths.get(getResourceDir() + id);
         try {
             Files.delete(file);
         } catch (IOException e) {

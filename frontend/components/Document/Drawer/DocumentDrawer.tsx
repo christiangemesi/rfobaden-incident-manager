@@ -1,45 +1,46 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import ImageList from '@/components/Image/List/ImageList'
 import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
+import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImageIds: (ids: FileId[]) => void
-  imageIds: FileId[]
+  storeDocumentIds: (ids: FileId[]) => void
+  documentIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
 }
 
-const ImageDrawer: React.VFC<Props> = ({
-  imageIds,
+const DocumentDrawer: React.VFC<Props> = ({
+  documentIds,
   modelId,
   modelName,
-  storeImageIds,
+  storeDocumentIds,
   children,
 }) => {
 
   return (
-    <UiDrawer size="full">
+    <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={imageIds.length > 0 ? open : undefined}>
-            {imageIds.length}
+          <UiCaption onClick={documentIds.length > 0 ? open : undefined}>
+            {documentIds.length}
             &nbsp;
-            {imageIds.length === 1 ? 'Bild' : 'Bilder'}
+            {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
           </UiCaption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
-        <ImageList
-          storeImageIds={storeImageIds}
-          imageIds={imageIds}
+        <DocumentList
+          storeFileIds={storeDocumentIds}
+          fileIds={documentIds}
           modelId={modelId}
-          modelName={modelName} />
+          modelName={modelName}
+        />
       </UiDrawer.Body>
     </UiDrawer>
   )
 }
 
-export default ImageDrawer
+export default DocumentDrawer

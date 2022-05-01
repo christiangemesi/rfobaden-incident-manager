@@ -26,9 +26,7 @@ public class Document {
     @Column(nullable = false)
     private String mimeType;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String mimeTypeExtension;
+    private String extension;
 
     public Document() {
     }
@@ -61,12 +59,12 @@ public class Document {
         this.mimeType = mimeType;
     }
 
-    public String getMimeTypeExtension() {
-        return mimeTypeExtension;
+    public String getExtension() {
+        return extension;
     }
 
-    public void setMimeTypeExtension(String mimeTypeExtension) {
-        this.mimeTypeExtension = mimeTypeExtension;
+    public void setExtension(String mimeTypeExtension) {
+        this.extension = mimeTypeExtension;
     }
 
     @Override
@@ -75,27 +73,27 @@ public class Document {
             + "id=" + id
             + ", name='" + name + '\''
             + ", mimeType='" + mimeType + '\''
-            + ", mimeTypeExtension'" + mimeTypeExtension + '\''
+            + ", mimeTypeExtension'" + extension + '\''
             + '}';
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(other instanceof Document)) {
             return false;
         }
-        Document document = (Document) o;
+        Document document = (Document) other;
         return Objects.equals(id, document.id)
             && Objects.equals(name, document.name)
             && Objects.equals(mimeType, document.mimeType)
-            && Objects.equals(mimeTypeExtension, document.mimeTypeExtension);
+            && Objects.equals(extension, document.extension);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, mimeType, mimeTypeExtension);
+        return Objects.hash(id, name, mimeType, extension);
     }
 }
