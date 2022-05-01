@@ -49,7 +49,6 @@ const FileUploadForm: React.VFC<Props> = ({
   const endpoint = fileType === 'image' ? 'images' : 'documents'
 
   useSubmit(form, async ({ file, name }: FileUpload) => {
-    console.log(file)
     const [fileId, error] = await BackendService.upload(endpoint, file, {
       id: modelId.toString(),
       modelName: modelName,
