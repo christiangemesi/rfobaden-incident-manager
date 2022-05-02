@@ -60,10 +60,10 @@ const ReportViewHeader: React.VFC<Props> = ({
           </tr>
           <tr>
             <th>
-              <UiTitle level={6}>Nummer:</UiTitle>
+              <UiTitle level={6}>Melder-Info:</UiTitle>
             </th>
             <td>
-              <span>{report.entryType.number ?? '-'}</span>
+              <span>{report.entryType.descriptor ?? '-'}</span>
             </td>
           </tr>
         </tbody>
