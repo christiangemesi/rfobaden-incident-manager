@@ -11,7 +11,7 @@ public class EntryTypeGenerator extends Generator<EntryType> {
     public EntryType generate() {
         EntryType entryType = new EntryType();
         entryType.setSource(faker.options().option(EntryType.Source.class));
-        entryType.setNumber(faker.phoneNumber().cellPhone());
+        entryType.setDescriptor(faker.phoneNumber().cellPhone());
         return entryType;
     }
 }

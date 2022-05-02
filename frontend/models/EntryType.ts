@@ -13,7 +13,7 @@ export enum EntryTypeSource {
 export default interface EntryType {
   id: Id<this>
   source: EntryTypeSource
-  number: string | null
+  descriptor: string | null
 }
 
 export const parseEntryType = (data: EntryType): EntryType => ({

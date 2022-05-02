@@ -28,7 +28,7 @@ public class EntryType implements Serializable {
     private Source source;
 
     @Size(min = 1, max = 100)
-    private String number;
+    private String descriptor;
 
     public void setId(Long id) {
         this.id = id;
@@ -46,12 +46,12 @@ public class EntryType implements Serializable {
         this.source = source;
     }
 
-    public String getNumber() {
-        return number;
+    public String getDescriptor() {
+        return descriptor;
     }
 
-    public void setNumber(String nummer) {
-        this.number = nummer;
+    public void setDescriptor(String descriptor) {
+        this.descriptor = descriptor;
     }
 
     @Override
@@ -65,13 +65,13 @@ public class EntryType implements Serializable {
         EntryType that = (EntryType) o;
         return Objects.equals(this.id, that.id)
             && source == that.source
-            && Objects.equals(this.number, that.number
+            && Objects.equals(this.descriptor, that.descriptor
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(source, number);
+        return Objects.hash(source, descriptor);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class EntryType implements Serializable {
         return "EntryType{"
             + "id=" + id
             + ", source=" + source
-            + ", number='" + number + '\''
+            + ", descriptor='" + descriptor + '\''
             + '}';
     }
 

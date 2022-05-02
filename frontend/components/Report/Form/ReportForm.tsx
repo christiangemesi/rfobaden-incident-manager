@@ -32,8 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    entryType: { source: EntryTypeSource.PHONE, number: null },
-    number: null,
+    entryType: { source: EntryTypeSource.PHONE, descriptor: null },
     notes: null,
     location: null,
     priority: Priority.MEDIUM,
@@ -61,7 +60,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       ],
       entryType: {
         source: [],
-        number: [
+        descriptor: [
           validate.notBlank({ allowNull: true }),
           validate.maxLength(100),
         ],
@@ -153,8 +152,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.entryType.number}>{(props) => (
-            <UiTextInput {...props} label="Nummer" placeholder="Nummer" />
+          <UiForm.Field field={form.entryType.descriptor}>{(props) => (
+            <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.notes}>{(props) => (
