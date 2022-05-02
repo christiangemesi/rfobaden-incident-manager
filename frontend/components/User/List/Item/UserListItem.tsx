@@ -39,7 +39,6 @@ const UserListItem: React.VFC<Props> = ({
       if (error !== null) {
         throw error
       }
-      UserStore.remove(user.id)
       UserStore.save(data)
     }
   }
