@@ -44,7 +44,8 @@ const UserList: React.VFC<Props> = ({ users }) => {
   }))
 
   return (
-    <UiList>
+    <div>
+    
       {isAdmin(currentUser) && (
         <UiModal title="Benutzer erfassen">
           <UiModal.Trigger>{({ open }) => (
@@ -57,7 +58,8 @@ const UserList: React.VFC<Props> = ({ users }) => {
           )}</UiModal.Body>
         </UiModal>
       )}
-      <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
+      
+      <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
         <UiGrid.Col size={5}>
           <UiSortButton field={sort.firstName}>
             <UiTitle level={6}>Vorname</UiTitle>
@@ -77,13 +79,16 @@ const UserList: React.VFC<Props> = ({ users }) => {
           </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
-      {sortedUsers.map((user) => (
-        <UserListItem
-          key={user.id}
-          user={user}
-        />
-      ))}
-    </UiList>
+
+      <UiList>
+        {sortedUsers.map((user) => (
+          <UserListItem
+            key={user.id}
+            user={user}
+          />
+        ))}
+      </UiList>
+    </div>
   )
 }
 export default UserList

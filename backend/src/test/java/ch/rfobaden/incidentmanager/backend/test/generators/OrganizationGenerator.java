@@ -28,7 +28,6 @@ public class OrganizationGenerator extends ModelGenerator<Organization> {
     public Organization generateNewWithoutUsers() {
         var organization = new Organization();
         organization.setName(faker.name().name());
-        organization.setEmail(faker.internet().emailAddress());
         return organization;
     }
 

@@ -15,6 +15,7 @@ import BackendService from '@/services/BackendService'
 interface Props {
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+  fileType: 'image' | 'document'
   onClose?: () => void
   onSave: (fileId: FileId) => void
 }
@@ -22,6 +23,7 @@ interface Props {
 const FileUploadForm: React.VFC<Props> = ({
   modelId,
   modelName,
+  fileType,
   onClose: handleClose,
   onSave: handleSave,
 }) => {
@@ -44,8 +46,10 @@ const FileUploadForm: React.VFC<Props> = ({
     ],
   }))
 
+  const endpoint = fileType === 'image' ? 'images' : 'documents'
+
   useSubmit(form, async ({ file, name }: FileUpload) => {
-    const [fileId, error] = await BackendService.upload('images', file, {
+    const [fileId, error] = await BackendService.upload(endpoint, file, {
       id: modelId.toString(),
       modelName: modelName,
       name,
@@ -73,7 +77,7 @@ const FileUploadForm: React.VFC<Props> = ({
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.file}>{(props) => (
-          <FileInput {...props} accept="image/*" />
+          <FileInput {...props} accept={fileType === 'image' ? fileType + '/*' : ''} />
         )}</UiForm.Field>
         <UiForm.Field field={form.name}>{(props) => (
           <UiTextInput {...props} label="Name" />

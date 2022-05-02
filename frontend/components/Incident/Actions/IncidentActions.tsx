@@ -9,9 +9,15 @@ import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
 import { FileId } from '@/models/FileUpload'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import IncidentPrintView from '@/components/Incident/PrintView/IncidentPrintView'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import BackendFetchService from '@/services/BackendFetchService'
+import ReportStore from '@/stores/ReportStore'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -64,6 +70,27 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
     IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
   }, [incident])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    IncidentStore.save({ ...incident, documentIds: [...incident.documentIds, fileId]})
+  }, [incident])
+
+  const loadPrintData = useCallback(async () => {
+    for (const report of ReportStore.list()) {
+      if (report.incidentId === incident.id) {
+        await loadCached('report/tasks', report.id, async () => {
+          await BackendFetchService.loadTasksOfReport(report)
+        })
+      }
+    }
+    for (const task of TaskStore.list()) {
+      if (task.incidentId === incident.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [incident])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -80,11 +107,29 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           <TrackableCloseAction isClosed={incident.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={incident.id}
           modelName="incident"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
         />
+        <TrackableFileUploadAction
+          id={incident.id}
+          modelName="incident"
+          onAddFile={addDocumentId}
+          type="document"
+        />
+
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <IncidentPrintView incident={incident} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         {isAdmin(currentUser) && (
           <UiDropDown.Item onClick={handleDelete}>Löschen</UiDropDown.Item>

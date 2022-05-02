@@ -1,10 +1,9 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
-import { ColorName } from '@/theme'
+import UiPriority from '@/components/Ui/Priority/UiPriority'
 
 interface Props extends UiListItemProps {
   priority: Priority
@@ -13,6 +12,7 @@ interface Props extends UiListItemProps {
   body?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
+  isTitleSwitched?: boolean
 }
 
 const UiListItemWithDetails: React.VFC<Props> = ({
@@ -22,27 +22,17 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   body = null,
   isClosed = false,
   isSmall = false,
+  isTitleSwitched = false,
   children,
   ...props
 }: Props) => {
-  const [PriorityIcon, priorityColor] = useMemo(() => {
-    switch (priority) {
-    case Priority.HIGH:
-      return [UiIcon.PriorityHigh, 'error' as const]
-    case Priority.MEDIUM:
-      return [UiIcon.PriorityMedium, 'warning' as const]
-    case Priority.LOW:
-      return [UiIcon.PriorityLow, 'success' as const]
-    }
-  }, [priority])
+
 
   return (
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
-        <PriorityContainer $color={priorityColor} $isSmall={isSmall}>
-          <PriorityIcon size={1.5} />
-        </PriorityContainer>
-        <TextContent>
+        <LeftPriority priority={priority} isSmall={isSmall} />
+        <TextContent isTitleSwitched={isTitleSwitched}>
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
@@ -66,7 +56,7 @@ const StyledListItem = styled(UiListItem)<{ $isClosed: boolean }>`
   padding-left: 0;
   transition-property: inherit, padding;
   flex-wrap: wrap;
-  
+
   ${({ $isClosed }) => $isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;
@@ -85,14 +75,14 @@ const LeftSide = styled.div`
   flex-basis: 0;
   flex-grow: 1;
   max-width: 100%;
-  
+
   min-width: 0; // Causes the children of this element to not be able to overflow.
 `
 
 const RightSide = styled.div`
   display: flex;
   align-items: center;
-  
+
   flex: 0 0 auto;
   width: auto;
   max-width: 100%;
@@ -107,10 +97,14 @@ const BottomSide = styled.div<{ $isSmall: boolean }>`
   padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 
-const TextContent = styled.div`
+const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  ${({ isTitleSwitched }) => isTitleSwitched && css`
+    display: flex;
+    flex-direction: column-reverse;
+  `}
 `
 
 const ItemTitle = styled(UiTitle)`
@@ -119,11 +113,8 @@ const ItemTitle = styled(UiTitle)`
   overflow: hidden;
 `
 
-const PriorityContainer = styled.div<{ $color: ColorName, $isSmall: boolean }>`
-  display: inline-flex;
-  margin: ${({ $isSmall }) => $isSmall ? '0 0.5rem' : '0 1rem'};
-  color: ${({ theme, $color }) => theme.colors[$color].value};
-
+const LeftPriority = styled(UiPriority)`
+  margin: ${({ isSmall }) => isSmall ? '0 0.5rem' : '0 1rem'};
   transition: 150ms ease-out;
   transition-property: margin;
 `

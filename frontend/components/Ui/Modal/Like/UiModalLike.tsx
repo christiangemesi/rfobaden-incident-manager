@@ -46,20 +46,25 @@ export interface Props {
   children: ReactNode | RenderWithState
 
   /**
-   * Event caused by the modal getting opened or closed.
-   * @param value Whether the modal is getting opened or closed.
+   * Event caused by the modal requesting to be opened or closed.
+   * @param value Whether the modal should get opened or closed.
    */
   onToggle?: (value: boolean) => void
 
   /**
-   * Event caused by the modal getting opened.
+   * Event caused by the modal opening.
    */
   onOpen?: () => void
 
   /**
-   * Event caused by the modal getting closed.
+   * Event caused by the modal closing.
    */
   onClose?: () => void
+
+  /**
+   * Hides the modals default close button.
+   */
+  noCloseButton?: boolean
 }
 
 interface ConfigProps {
@@ -75,6 +80,7 @@ interface ConfigProps {
 const UiModalLike: React.VFC<Props & ConfigProps> = ({
   isOpen,
   isPersistent,
+  noCloseButton = false,
   onToggle: handleToggle = noop,
   onOpen: handleOpen = noop,
   onClose: handleClose = noop,
@@ -118,6 +124,11 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
     const setOpen = isControlled ? handleToggle : (open: boolean) => {
       isOpenRef.current = open
       handleToggle(open)
+      if (open) {
+        handleOpen()
+      } else {
+        handleClose()
+      }
       forceUpdate()
     }
     const toggle = (value?: boolean) => {
@@ -126,11 +137,6 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
         return
       }
       setOpen(open)
-      if (open) {
-        handleOpen()
-      } else {
-        handleClose()
-      }
     }
     const persist = isPersistent ? noop : () => {
       isPersistentRef.current = true
@@ -154,6 +160,20 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
     }
   }, [isControlled, isPersistent, handleToggle, handleClose, handleOpen, forceUpdate])
 
+  // Execute the callbacks for open/close.
+  // Only needs to be done if this is a controlled component, as the callbacks are otherwise
+  // executed right after updating `state.isClosed`.
+  useUpdateEffect(function executeOpenStateCallbacks()  {
+    if (isOpen === undefined) {
+      return
+    }
+    if (isOpen) {
+      handleOpen()
+    } else {
+      handleClose()
+    }
+  }, [isOpen])
+
   // Closes the component, unless it is persisted.
   const theme = useTheme()
   const handleCloseAttempt = useCallback(() => {
@@ -169,7 +189,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   // This signals that the modal will now execute the open or close animation.
   // During the close animation, the modals content has to be rendered still,
   // but it should be removed right after turning completely invisible.
-  const previousOpenState = usePrevious(state.isOpen)
+  const previousOpenState = usePrevious(state.isOpen) ?? false
   if (previousOpenState !== state.isOpen) {
     isAnimating.current = true
   }
@@ -234,7 +254,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
             ...state,
             isShaking,
             children: content,
-            nav: (
+            nav: noCloseButton ? null : (
               <Nav>
                 <UiIconButton title="Schliessen" onClick={state.close}>
                   <UiIcon.CancelAction />
@@ -303,9 +323,13 @@ const Nav = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
+  
+  & > ${UiIconButton} {
+    margin: 0;
+  }
 `
 
-const useLevel = createGlobalState({ current: 0 })
+export const useLevel = createGlobalState({ current: 0 })
 
 export default Object.assign(UiModalLike, {
   Trigger,

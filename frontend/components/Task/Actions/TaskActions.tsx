@@ -10,7 +10,9 @@ import TaskStore from '@/stores/TaskStore'
 import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import TaskPrintView from '../PrintView/TaskPrintView'
 
 interface Props {
   report: Report
@@ -63,6 +65,10 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
     TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
   }, [task])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    TaskStore.save({ ...task, documentIds: [...task.documentIds, fileId]})
+  }, [task])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -79,11 +85,24 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
           <TrackableCloseAction isClosed={task.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={task.id}
           modelName="task"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
         />
+        <TrackableFileUploadAction
+          id={task.id}
+          modelName="task"
+          onAddFile={addDocumentId}
+          type="document"
+        />
+
+        <UiPrinter renderContent={() => <TaskPrintView task={task} />}>{({ trigger }) => (
+          <UiDropDown.Item onClick={trigger}>
+            Drucken
+          </UiDropDown.Item>
+        )}</UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
