@@ -76,21 +76,22 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
     }
 
     public Optional<User> resetPassword(Long id) {
-        var user = find(id).orElse(null);
+        User user = find(id).orElse(null);
         if (user == null) {
             return Optional.empty();
         }
-        var plainPassword = generatePassword(10);
-        var credentials = user.getCredentials();
+        String plainPassword = generatePassword(10);
+        UserCredentials credentials = user.getCredentials();
         credentials.setEncryptedPassword(passwordEncoder.encode(plainPassword));
         credentials.setUpdatedAt(LocalDateTime.now());
         credentials.setLastPasswordChangeAt(credentials.getUpdatedAt());
         validate(user);
+        Optional<User> savedUser = Optional.of(repository.save(user));
 
         notificationService.notifyPasswordReset(user, plainPassword);
         logger.debug("Password for user {} was reset to {}", user.getEmail(), plainPassword);
 
-        return Optional.of(repository.save(user));
+        return savedUser;
     }
 
     @Override
