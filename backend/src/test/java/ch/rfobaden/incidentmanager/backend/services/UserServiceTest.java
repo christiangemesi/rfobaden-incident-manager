@@ -177,4 +177,44 @@ class UserServiceTest
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("password must not be empty");
     }
+
+    @RepeatedTest(5)
+    void testResetPassword() {
+        // Given
+        var user = generator.generate();
+        var newPassword = faker.internet().password();
+        Mockito.when(repository.findById(user.getId()))
+            .thenReturn(Optional.of(user));
+        Mockito.when(repository.save(user))
+            .thenReturn(user);
+        var startedAt = LocalDateTime.now();
+
+        // When
+        var result = service.resetPassword(user.getId()).orElse(null);
+
+        // Then
+        assertThat(result)
+            .isNotNull()
+            .isEqualTo(user);
+
+        var credentials = result.getCredentials();
+        assertThat(credentials.getUpdatedAt()).isAfter(startedAt);
+        assertThat(credentials.getLastPasswordChangeAt()).isEqualTo(credentials.getUpdatedAt());
+        verify(repository, times(1)).save(user);
+    }
+
+    @RepeatedTest(5)
+    void testResetPassword_unknownUser() {
+        // Given
+        var user = generator.generate();
+        var newPassword = faker.internet().password();
+        Mockito.when(repository.findById(user.getId()))
+            .thenReturn(Optional.empty());
+
+        // When
+        var result = service.resetPassword(user.getId());
+
+        // Then
+        assertThat(result).isEmpty();
+    }
 }

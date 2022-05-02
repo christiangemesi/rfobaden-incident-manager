@@ -10,7 +10,7 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UserForm from '@/components/User/Form/UserForm'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
@@ -35,7 +35,11 @@ const UserListItem: React.VFC<Props> = ({
 
   const resendPassword = async (_userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-      alert('not yet implemented')
+      const [data, error]: BackendResponse<User> = await BackendService.create(`users/${user.id}/reset`, null)
+      if (error !== null) {
+        throw error
+      }
+      UserStore.save(data)
     }
   }
 

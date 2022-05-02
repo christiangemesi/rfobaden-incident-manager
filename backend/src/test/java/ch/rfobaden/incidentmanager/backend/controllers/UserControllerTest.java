@@ -80,4 +80,30 @@ class UserControllerTest extends ModelControllerTest.Basic<User, UserService> {
             .andExpect(jsonPath("$").exists());
         verify(service, times(1)).updatePassword(user.getId(), newPassword);
     }
+
+    @Test
+    void testResetPassword() throws Exception {
+        // Given
+        var user = generator.generate();
+        var newPassword = faker.internet().password();
+
+        Mockito.when(service.find(user.getId()))
+            .thenReturn(Optional.of(user));
+        Mockito.when(service.resetPassword(user.getId()))
+            .thenReturn(Optional.of(user));
+
+        Mockito.when(authService.isCurrentUser(user.getId()))
+            .thenReturn(true);
+
+        // When
+        var mockRequest = MockMvcRequestBuilders.post("/api/v1/users/" + user.getId() + "/reset")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+        // Then
+        mockMvc.perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").exists());
+        verify(service, times(1)).resetPassword(user.getId());
+    }
 }
