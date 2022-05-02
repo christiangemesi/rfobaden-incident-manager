@@ -1,32 +1,24 @@
 import Report from '@/models/Report'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
-import TaskStore, { useTask, useTasksOfReport } from '@/stores/TaskStore'
-import BackendService, { BackendResponse } from '@/services/BackendService'
-import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
-import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
+import { useTask, useTasksOfReport } from '@/stores/TaskStore'
 import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
-import Task, { parseTask } from '@/models/Task'
+import Task from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import { Themed } from '@/theme'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { sleep } from '@/utils/control-flow'
-import UiDescription from '@/components/Ui/Description/UiDescription'
-import ReportInfo from '@/components/Report/Info/ReportInfo'
 import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import UiInlineDrawer from '@/components/Ui/InlineDrawer/UiInlineDrawer'
 import useCachedEffect from '@/utils/hooks/useCachedEffect'
-import ReportActions from '@/components/Report/Actions/ReportActions'
 import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
-import { mapEntryTypeToName } from '../Form/ReportForm'
-
+import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
+import BackendFetchService from '@/services/BackendFetchService'
 
 interface Props {
   incident: Incident
@@ -34,7 +26,7 @@ interface Props {
   onClose?: () => void
 }
 
-const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseView }) => {
+const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }) => {
   const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
@@ -56,18 +48,11 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
 
   // Load tasks from the backend.
-  const isLoading = useCachedEffect(ReportView, report.id, async () => {
+  const isLoading = useCachedEffect('report/tasks', report.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
     await sleep(300)
-
-    const [tasks, error]: BackendResponse<Task[]> = await BackendService.list(
-      `incidents/${report.incidentId}/reports/${report.id}/tasks`,
-    )
-    if (error !== null) {
-      throw error
-    }
-    TaskStore.saveAll(tasks.map(parseTask))
+    await BackendFetchService.loadTasksOfReport(report)
   })
 
   // Clear the selected task if the report changes.
@@ -93,41 +78,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
   return (
     <UiLevel>
       <UiLevel.Header>
-        <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-          <div>
-            <ReportInfo report={report} />
-            <UiTitle level={3}>
-              {report.title}
-            </UiTitle>
-          </div>
-          <UiIconButtonGroup>
-            <ReportActions incident={incident} report={report} onDelete={handleCloseView} />
-            <UiIconButton onClick={handleCloseView}>
-              <UiIcon.CancelAction />
-            </UiIconButton>
-          </UiIconButtonGroup>
-        </UiGrid>
-        <UiDescription description={report.description} notes={report.notes} />
-        <InfoTable>
-          <tbody>
-            <tr>
-              <th>
-                <UiTitle level={6}>Meldeart:</UiTitle>
-              </th>
-              <td>
-                <span>{mapEntryTypeToName(report.entryType.source)}</span>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <UiTitle level={6}>Nummer:</UiTitle>
-              </th>
-              <td>
-                <span>{report.entryType.number ?? '-'}</span>
-              </td>
-            </tr>
-          </tbody>
-        </InfoTable>
+        <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
 
       <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
@@ -167,13 +118,5 @@ const TaskContainer = styled.div`
   ${Themed.media.lg.max} {
     padding: 0;
     ${UiContainer.fluidCss};
-  }
-`
-
-const InfoTable = styled.table`
-  table-layout: fixed;
-  text-align: left;
-  th {
-    width: 10rem;
   }
 `

@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "report")
 public class Report extends Model
-    implements PathConvertible<ReportPath>, Trackable, ImageOwner, Serializable {
+    implements PathConvertible<ReportPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -85,6 +85,9 @@ public class Report extends Model
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<>();
 
     @JsonIgnore
     public User getAssignee() {
@@ -247,6 +250,16 @@ public class Report extends Model
     @Override
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    @Override
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     public void setClosed(boolean closed) {

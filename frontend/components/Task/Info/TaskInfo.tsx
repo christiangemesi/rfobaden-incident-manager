@@ -5,6 +5,10 @@ import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import Task from '@/models/Task'
+import { FileId } from '@/models/FileUpload'
+import TaskStore from '@/stores/TaskStore'
+import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   task: Task
@@ -12,6 +16,15 @@ interface Props {
 
 const TaskInfo: React.VFC<Props> = ({ task }) => {
   const assigneeName = useUsername(useUser(task.assigneeId))
+
+  const storeImageIds = (ids: FileId[]) => {
+    TaskStore.save({ ...task, imageIds: ids })
+  }
+
+  const storeDocumentIds = (ids: FileId[]) => {
+    TaskStore.save({ ...task, documentIds: ids })
+  }
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -30,6 +43,18 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
       <UiCaption>
         <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
       </UiCaption>
+      <ImageDrawer
+        modelId={task.id}
+        modelName="task"
+        storeImageIds={storeImageIds}
+        imageIds={task.imageIds}
+      />
+      <DocumentDrawer
+        modelId={task.id}
+        modelName="task"
+        storeDocumentIds={storeDocumentIds}
+        documentIds={task.documentIds}
+      />
     </UiCaptionList>
   )
 }

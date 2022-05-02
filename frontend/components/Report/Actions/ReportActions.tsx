@@ -10,7 +10,12 @@ import Incident from '@/models/Incident'
 import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
+import BackendFetchService from '@/services/BackendFetchService'
+import { loadCached } from '@/utils/hooks/useCachedEffect'
+import TaskStore from '@/stores/TaskStore'
 
 interface Props {
   incident: Incident
@@ -59,6 +64,20 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
     ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
   }, [report])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, documentIds: [...report.documentIds, fileId]})
+  }, [report])
+
+  const loadPrintData = useCallback(async () => {
+    for (const task of TaskStore.list()) {
+      if (task.reportId === report.id) {
+        await loadCached('task/subtasks', task.id, async () => {
+          await BackendFetchService.loadSubtasksOfTask(task)
+        })
+      }
+    }
+  }, [report])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -75,11 +94,29 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           <TrackableCloseAction isClosed={report.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={report.id}
           modelName="report"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
         />
+        <TrackableFileUploadAction
+          id={report.id}
+          modelName="report"
+          onAddFile={addDocumentId}
+          type="document"
+        />
+
+        <UiPrinter
+          loadData={loadPrintData}
+          renderContent={() => <ReportPrintView report={report} />}
+        >
+          {({ trigger }) => (
+            <UiDropDown.Item onClick={trigger}>
+              Drucken
+            </UiDropDown.Item>
+          )}
+        </UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

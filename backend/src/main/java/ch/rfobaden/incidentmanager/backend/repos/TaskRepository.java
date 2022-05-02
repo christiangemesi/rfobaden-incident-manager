@@ -17,13 +17,13 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
     @Query(
         "SELECT CASE WHEN COUNT(task) > 0 THEN true ELSE false END "
             + " FROM "
-                + "Task task"
+            + "Task task"
             + " WHERE "
-                + "task.report.incident.id = :#{#path.incidentId}"
+            + "task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-                + "task.report.id = :#{#path.reportId}"
+            + "task.report.id = :#{#path.reportId}"
             + " AND "
-                + "task.id = :id"
+            + "task.id = :id"
     )
     @Override
     boolean existsByPath(TaskPath path, Long id);
@@ -51,6 +51,19 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " AND "
             + "task.report.id = :#{#path.reportId}"
     )
+
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
+
+    @Query(
+        "SELECT task "
+            + " FROM "
+            + "Task task"
+            + " WHERE "
+            + "task.assignee.id = :id"
+            + " AND "
+            + "task.report.incident.isClosed = false "
+            + "ORDER BY task.report.incident.id"
+    )
+    List<Task> findAllByAssigneeId(@Param("id") Long id);
 }

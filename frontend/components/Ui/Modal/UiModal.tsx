@@ -17,35 +17,25 @@ interface Props extends UiModalLikeProps {
    * Text that is displayed as the modals title.
    */
   title?: string
-
-  /**
-   * Hides the modals default close button.
-   */
-  noCloseButton?: boolean
 }
 
 const UiModal: React.VFC<Props> = ({
   title = null,
   size = 'auto',
-  noCloseButton = false,
   ...modalProps
 }) => {
   return (
     <UiModalLike {...modalProps} renderContainer={({ isOpen, isShaking, nav, children }) => (
       <DialogContainer size={size}>
         <Dialog open={isOpen} isShaking={isShaking}>
-          {title === null ? (
-            (noCloseButton || nav)
-          ) : (
+          {title === null ? nav : (
             <TitleContainer>
               <UiTitle level={2}>
                 {title}
               </UiTitle>
-              {noCloseButton || (
-                <div>
-                  {nav}
-                </div>
-              )}
+              <div>
+                {nav}
+              </div>
             </TitleContainer>
           )}
           {children}
@@ -79,11 +69,12 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
     0 5px 5px -3px rgba(0, 0, 0, 0.2);
 
   transition: ${({ theme }) => theme.transitions.slideIn};
-  transition-property: transform;
+  transition-property: transform, opacity;
   
   :not([open]) {
     transition: ${({ theme }) => theme.transitions.slideOut};
     transform: scale(40%);
+    opacity: 0;
   }
 
   ${({ isShaking }) => isShaking && css`

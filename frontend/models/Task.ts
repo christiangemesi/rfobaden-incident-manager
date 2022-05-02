@@ -15,6 +15,7 @@ export default interface Task extends Model, Trackable {
   subtaskIds: Id<Subtask>[]
   closedSubtaskIds: Id<Subtask>[]
   imageIds: FileId[]
+  documentIds: FileId[]
 }
 
 export const parseTask = (data: Task): Task => ({
@@ -23,3 +24,11 @@ export const parseTask = (data: Task): Task => ({
   startsAt: parseDateOrNull(data.startsAt),
   endsAt: parseDateOrNull(data.endsAt),
 })
+
+export interface OpenTask extends Task {
+  isClosed: false
+  isDone: false
+}
+
+export const isOpenTask = (task: Task): task is OpenTask =>
+  !task.isClosed && !task.isDone
