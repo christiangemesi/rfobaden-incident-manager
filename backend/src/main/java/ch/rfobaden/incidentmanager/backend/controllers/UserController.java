@@ -71,7 +71,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
 
     @PostMapping("/{id}/reset")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@auth.isCurrentUser(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
     public User resetPassword(
         HttpServletResponse response,
         @PathVariable("id") Long id
