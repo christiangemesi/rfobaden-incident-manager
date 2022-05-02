@@ -107,12 +107,11 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
         credentials.setUpdatedAt(LocalDateTime.now());
         credentials.setLastPasswordChangeAt(credentials.getUpdatedAt());
         validate(user);
-        Optional<User> savedUser = Optional.of(repository.save(user));
-
-        notificationService.notifyPasswordReset(user, plainPassword);
+        User savedUser = repository.save(user);
+        notificationService.notifyPasswordReset(savedUser, plainPassword);
         logger.debug("Password for user {} was reset to {}", user.getEmail(), plainPassword);
 
-        return savedUser;
+        return Optional.of(savedUser);
     }
 
     @Override
