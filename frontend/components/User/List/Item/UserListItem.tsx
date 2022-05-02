@@ -35,7 +35,7 @@ const UserListItem: React.VFC<Props> = ({
 
   const resendPassword = async (_userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-      const [data, error]: BackendResponse<User> = await BackendService.update(`users/${user.id}/reset/`, null)
+      const [data, error]: BackendResponse<User> = await BackendService.create(`users/${user.id}/reset`, null)
       if (error !== null) {
         throw error
       }
