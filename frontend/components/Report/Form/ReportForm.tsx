@@ -197,8 +197,8 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
-export const mapEntryTypeToName = (type: string): string => {
-  switch (type) {
+export const mapEntryTypeToName = (source: string): string => {
+  switch (source) {
   case EntryTypeSource.PHONE:
     return 'Telefon'
   case EntryTypeSource.EMAIL:
@@ -212,7 +212,7 @@ export const mapEntryTypeToName = (type: string): string => {
   case EntryTypeSource.REPORTER:
     return 'Meldeläufer'
   default:
-    return toTitleCase(type)
+    return toTitleCase(source)
   }
 }
   
