@@ -1,18 +1,18 @@
 import Id from '@/models/base/Id'
 
-export enum EntryTypeType {
-  TELEFON = 'TELEFON',
+export enum EntryTypeSource {
+  PHONE = 'PHONE',
   EMAIL = 'EMAIL',
-  FUNK = 'FUNK',
+  RADIO = 'RADIO',
   KP_FRONT = 'KP_FRONT',
-  KP_RUECK = 'KP_RUECK',
-  MELDELAUUFER = 'MELDELAUUFER',
+  KP_BACK = 'KP_BACK',
+  REPORTER = 'REPORTER',
   FAX = 'FAX',
 }
 
 export default interface EntryType {
   id: Id<this>
-  type: EntryTypeType
+  type: EntryTypeSource
   number: string | null
 }
 

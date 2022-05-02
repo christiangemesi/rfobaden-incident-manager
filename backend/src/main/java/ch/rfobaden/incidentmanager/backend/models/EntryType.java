@@ -25,7 +25,7 @@ public class EntryType implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Type type;
+    private Source source;
 
     @Size(min = 1, max = 100)
     private String number;
@@ -38,12 +38,12 @@ public class EntryType implements Serializable {
         return id;
     }
 
-    public Type getType() {
-        return type;
+    public Source getSource() {
+        return source;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     public String getNumber() {
@@ -64,32 +64,32 @@ public class EntryType implements Serializable {
         }
         EntryType that = (EntryType) o;
         return Objects.equals(this.id, that.id)
-            && type == that.type
+            && source == that.source
             && Objects.equals(this.number, that.number
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, number);
+        return Objects.hash(source, number);
     }
 
     @Override
     public String toString() {
         return "EntryType{"
             + "id=" + id
-            + ", type=" + type
+            + ", source=" + source
             + ", number='" + number + '\''
             + '}';
     }
 
-    public enum Type {
-        TELEFON,
+    public enum Source {
+        PHONE,
         EMAIL,
-        FUNK,
+        RADIO,
         KP_FRONT,
-        KP_RUECK,
-        MELDELAUUFER,
+        KP_BACK,
+        REPORTER,
         FAX
     }
 }

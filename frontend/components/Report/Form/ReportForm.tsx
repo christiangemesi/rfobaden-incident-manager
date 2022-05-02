@@ -19,7 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
-import { EntryTypeType } from '@/models/EntryType'
+import { EntryTypeSource } from '@/models/EntryType'
 
 interface Props {
   incident: Incident
@@ -32,7 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    entryType: { type: EntryTypeType.TELEFON, number: null },
+    entryType: { type: EntryTypeSource.PHONE, number: null },
     number: null,
     notes: null,
     location: null,
@@ -60,7 +60,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
         validate.notBlank({ allowNull: true }),
       ],
       entryType: {
-        id: [],
         type: [],
         number: [
           validate.notBlank({ allowNull: true }),
@@ -200,13 +199,17 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 
 export const mapEntryTypeToName = (type: string): string => {
   switch (type) {
-  case EntryTypeType.EMAIL:
+  case EntryTypeSource.PHONE:
+    return 'Telefon'
+  case EntryTypeSource.EMAIL:
     return 'E-Mail'
-  case EntryTypeType.KP_FRONT:
+  case EntryTypeSource.RADIO:
+    return 'Funk'
+  case EntryTypeSource.KP_FRONT:
     return 'KP Front'
-  case EntryTypeType.KP_RUECK:
+  case EntryTypeSource.KP_BACK:
     return 'KP Rück'
-  case EntryTypeType.MELDELAUUFER:
+  case EntryTypeSource.REPORTER:
     return 'Meldeläufer'
   default:
     return toTitleCase(type)
