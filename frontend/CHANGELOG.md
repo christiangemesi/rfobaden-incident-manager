@@ -5,9 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Addded
+### Added
 - Incidents, reports, transports, tasks and subtasks can now be printed.
 - Uploaded images can now be seen by clicking on the image counter in the header of the record they belong.
+- User password reset is now implemented.
+- Documents can now be attached to incidents, reports, tasks and subtasks. Their name and type is not yet displayed correctly.
+- Organizations can now be managed at `/organisationen`.
+- Reports now require an entry type, which describes which source caused them to be created.
+
 
 ## [3.0.0] - 13.04.2022
 ### Added
