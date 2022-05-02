@@ -12,7 +12,7 @@ export enum EntryTypeSource {
 
 export default interface EntryType {
   id: Id<this>
-  type: EntryTypeSource
+  source: EntryTypeSource
   number: string | null
 }
 

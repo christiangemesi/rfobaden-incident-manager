@@ -115,7 +115,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleCloseVi
                 <UiTitle level={6}>Meldeart:</UiTitle>
               </th>
               <td>
-                <span>{mapEntryTypeToName(report.entryType.type)}</span>
+                <span>{mapEntryTypeToName(report.entryType.source)}</span>
               </td>
             </tr>
             <tr>

@@ -32,7 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
-    entryType: { type: EntryTypeSource.PHONE, number: null },
+    entryType: { source: EntryTypeSource.PHONE, number: null },
     number: null,
     notes: null,
     location: null,
@@ -60,7 +60,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
         validate.notBlank({ allowNull: true }),
       ],
       entryType: {
-        type: [],
+        source: [],
         number: [
           validate.notBlank({ allowNull: true }),
           validate.maxLength(100),
@@ -143,11 +143,11 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.entryType.type}>{(props) => (
+          <UiForm.Field field={form.entryType.source}>{(props) => (
             <UiSelectInput
               {...props}
               label="Meldeart"
-              options={Object.values(EntryTypeType)}
+              options={Object.values(EntryTypeSource)}
               optionName={mapEntryTypeToName}
               menuPlacement="bottom"
             />
