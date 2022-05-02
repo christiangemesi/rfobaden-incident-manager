@@ -19,6 +19,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { EntryTypeSource } from '@/models/EntryType'
 
 interface Props {
   incident: Incident
@@ -31,6 +32,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
+    entryType: { source: EntryTypeSource.PHONE, descriptor: null },
     notes: null,
     location: null,
     priority: Priority.MEDIUM,
@@ -57,6 +59,13 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       description: [
         validate.notBlank({ allowNull: true }),
       ],
+      entryType: {
+        source: [],
+        descriptor: [
+          validate.notBlank({ allowNull: true }),
+          validate.maxLength(100),
+        ],
+      },
       notes: [
         validate.notBlank({ allowNull: true }),
       ],
@@ -135,6 +144,20 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
+          <UiForm.Field field={form.entryType.source}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Meldeart"
+              options={Object.values(EntryTypeSource)}
+              optionName={mapEntryTypeToName}
+              menuPlacement="bottom"
+            />
+          )}</UiForm.Field>
+
+          <UiForm.Field field={form.entryType.descriptor}>{(props) => (
+            <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
+          )}</UiForm.Field>
+
           <UiForm.Field field={form.notes}>{(props) => (
             <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
           )}</UiForm.Field>
@@ -173,6 +196,32 @@ const mapUserIdToName = (id: Id<User>): string | null => {
   return user === null
     ? null
     : `${user.firstName} ${user.lastName}`
+}
+
+export const mapEntryTypeToName = (source: string): string => {
+  switch (source) {
+  case EntryTypeSource.PHONE:
+    return 'Telefon'
+  case EntryTypeSource.EMAIL:
+    return 'E-Mail'
+  case EntryTypeSource.RADIO:
+    return 'Funk'
+  case EntryTypeSource.KP_FRONT:
+    return 'KP Front'
+  case EntryTypeSource.KP_BACK:
+    return 'KP Rück'
+  case EntryTypeSource.REPORTER:
+    return 'Meldeläufer'
+  default:
+    return toTitleCase(source)
+  }
+}
+  
+const toTitleCase = (str: string): string => {
+  return str
+    .split(' ')
+    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+    .join(' ')
 }
 
 const FormContainer = styled.div`

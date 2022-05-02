@@ -51,8 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private Optional<SessionData> processRequest(HttpServletRequest request,
-                                                 HttpServletResponse response) {
+    private Optional<SessionData> processRequest(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
         return getTokenFromHeader(request)
             .or(() -> getTokenFromCookie(request))
             .map((token) -> {

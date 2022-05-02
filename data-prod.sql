@@ -26,6 +26,14 @@ LOCK TABLES `close_reason` WRITE;
     ENABLE KEYS */;
 UNLOCK TABLES;
 
+LOCK TABLES `entry_type` WRITE;
+/*!40000 ALTER TABLE `entry_type` DISABLE KEYS */;
+INSERT INTO `entry_type` VALUES (11,NULL,'PHONE'),(13,'1234','RADIO'),(106,'12','RADIO'),(108,'1','RADIO'),(110,'2','PHONE')
+,(112,'3','RADIO'),(114,'4','RADIO'),(116,'42','RADIO'),(118,NULL,'PHONE'),
+(120,'1234','PHONE'),(122,'1234','RADIO'),(124,'1234','PHONE'),(126,'1234','RADIO');
+/*!40000 ALTER TABLE `entry_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Dumping data for table `hibernate_sequence`
 --
@@ -34,7 +42,7 @@ LOCK TABLES `hibernate_sequence` WRITE;
 /*!40000 ALTER TABLE `hibernate_sequence`
     DISABLE KEYS */;
 INSERT INTO `hibernate_sequence`
-VALUES (106);
+VALUES (128);
 /*!40000 ALTER TABLE `hibernate_sequence`
     ENABLE KEYS */;
 UNLOCK TABLES;
@@ -82,45 +90,45 @@ LOCK TABLES `report` WRITE;
 INSERT INTO `report`
 VALUES (7, '2022-01-02 19:02:30.123942', '2022-01-02 19:02:30.123942', 'Beschreibung von Schlüssel',
         '2022-01-17 23:00:00.000000',FALSE, _binary '', _binary '', 'Mordor', 'Der Schlüssel ist wichtig', 2,
-        '2001-01-17 23:00:00.000000', 'Schlüssel', 3, 5),
+        '2001-01-17 23:00:00.000000', 'Schlüssel', 3, 11, 5),
        (41, '2022-01-06 21:14:50.468796', '2022-01-06 21:14:50.468796', 'Brand zwischen Schlossbergplatz und Gstühl',
         '2022-01-05 23:00:00.000000',FALSE, _binary '', _binary '', '5400 Baden', 'Feuerwehr vor Ort', 1,
-        '2022-01-05 23:00:00.000000', 'Brand bei McDonalds', 3, 5),
+        '2022-01-05 23:00:00.000000', 'Brand bei McDonalds', 3, 13, 5),
        (55, '2022-01-06 21:22:36.774615', '2022-01-06 21:33:09.209732',
         'Beim Steg / Rostbalken ist eine Person in die Limmat gefallen. Flussrettung ist aufgeboten, Rettung läuft.',
         NULL,FALSE, _binary '\0', _binary '\0', NULL, 'FW, Sani und Polizei vor Ort', 2, NULL, 'Person in Limmat gefallen ',
-        1, 5),
+        1, 106, 5),
        (56, '2022-01-06 21:26:09.149640', '2022-01-06 21:33:28.887013',
         'Bei Schichtende um 22:00h muss eine Verpflegung für 50 Einsatzkräfte bei der Turnhalle XY bereitgestellt werden.\n- Div. Sandwiches\n- Getränke',
         NULL,FALSE, _binary '\0', _binary '\0', '5400 Baden', 'ZSO anfragen', 0, '2020-01-07 13:00:00.000000',
-        'Verpflegung für 50 Einsatzkräfte organisieren', 1, 5),
+        'Verpflegung für 50 Einsatzkräfte organisieren', 1, 108, 5),
        (64, '2022-01-15 11:20:07.158494', '2022-01-15 11:20:07.158494',
         'Velo-/Fussgänger-Unfall, 2 verletzte Personen, Rettungsdienst ist aufgeboten.', NULL,FALSE, _binary '', _binary '',
-        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 5),
+        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 110, 5),
        (65, '2022-01-15 11:23:08.891079', '2022-01-15 11:23:08.891079',
         'Velo-/Fussgänger-Unfall, 2 verletzte Personen, Rettungsdienst ist aufgeboten.', NULL,FALSE, _binary '', _binary '',
-        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 5),
+        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 112, 5),
        (66, '2022-01-15 11:23:09.718219', '2022-01-15 11:23:09.718219',
         'Velo-/Fussgänger-Unfall, 2 verletzte Personen, Rettungsdienst ist aufgeboten.', NULL,FALSE, _binary '', _binary '',
-        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 5),
+        '5400 Baden', NULL, 1, NULL, 'Verkehrsunfall Corula-Passage', 1, 114, 5),
        (93, '2022-01-29 09:02:37.888113', '2022-01-29 09:02:37.888113', 'Alle NTP müssen ab sofort betrieben werden.',
-        NULL,FALSE, _binary '', _binary '\0', NULL, NULL, 2, NULL, 'NTP Baden', NULL, 61),
+        NULL,FALSE, _binary '', _binary '\0', NULL, NULL, 2, NULL, 'NTP Baden', NULL, 116, 61),
        (98, '2022-01-29 09:07:27.011724', '2022-01-29 09:08:02.130273', NULL, NULL, _binary '', _binary '\0', NULL,
-        NULL,FALSE, 2, NULL, 'NTP Ehrendingen', NULL, 61),
+        NULL,FALSE, 2, NULL, 'NTP Ehrendingen', NULL, 118, 61),
        (101, '2022-02-06 23:54:39.867284', '2022-02-06 23:54:39.867284',
         'FW Birmenstorf, Kdt Herzog meldet 23:31 per Tel, dass Birmenstorf und Mülligen ohne Strom sind. \n', NULL,FALSE,
         _binary '', _binary '\0', '5413 Birmenstorf', NULL, 1, NULL,
-        'Stromausfall in Birmenstorf und Mülligen infolge Sturm', 1, 100),
+        'Stromausfall in Birmenstorf und Mülligen infolge Sturm', 1, 120, 100),
        (102, '2022-02-06 23:58:40.589150', '2022-02-06 23:58:40.589150',
         'Info von SPOC per Tel um 23:40\n\nInfo Update ca. 23:55h betreffend Dauer könnte erste Prognose gemacht werden',
         NULL,FALSE, _binary '', _binary '\0', '5413 Birmentorf', NULL, 1, NULL, 'Stromausfall in Birmensttorf und Mülligen',
-        NULL, 100),
+        NULL, 122, 100),
        (103, '2022-02-07 00:01:08.736510', '2022-02-07 00:01:08.736510',
         'ZSO Baden liefert NTP-Material an FW Birmenstorf-Mülligen', NULL,FALSE, _binary '', _binary '\0', '5413 Birmensdorf',
-        NULL, 1, NULL, 'NTP-Material an FW', 3, 100),
+        NULL, 1, NULL, 'NTP-Material an FW', 3, 124, 100),
        (104, '2022-02-07 00:28:11.646109', '2022-02-07 00:28:11.646109',
         'Kdt ZSO, 00:24 NTP Material geliefert, Strom wieder da. ', NULL,FALSE, _binary '', _binary '', NULL, NULL, 1,
-        '2022-02-06 23:25:00.000000', 'Strom wieder vorhanden, Netz  i.O.', NULL, 100);
+        '2022-02-06 23:25:00.000000', 'Strom wieder vorhanden, Netz  i.O.', NULL, 126, 100);
 /*!40000 ALTER TABLE `report`
     ENABLE KEYS */;
 UNLOCK TABLES;

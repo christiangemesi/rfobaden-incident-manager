@@ -20,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -47,6 +48,10 @@ public class Report extends Model
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL)
+    private EntryType entryType;
 
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -130,6 +135,14 @@ public class Report extends Model
     @Override
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public EntryType getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(EntryType entryType) {
+        this.entryType = entryType;
     }
 
     public String getNotes() {
@@ -277,6 +290,7 @@ public class Report extends Model
             && Objects.equals(incident, report.incident)
             && Objects.equals(title, report.title)
             && Objects.equals(description, report.description)
+            && Objects.equals(entryType, report.entryType)
             && Objects.equals(notes, report.notes)
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
@@ -295,6 +309,7 @@ public class Report extends Model
             incident,
             title,
             description,
+            entryType,
             notes,
             startsAt,
             endsAt,
@@ -313,6 +328,3 @@ public class Report extends Model
         return path;
     }
 }
-
-
-

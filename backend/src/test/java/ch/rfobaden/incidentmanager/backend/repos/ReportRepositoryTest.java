@@ -39,7 +39,7 @@ public class ReportRepositoryTest extends
     }
 
     @Test
-    void testFinByAssigneeId() {
+    void testFindByAssigneeId() {
         // Given
         var records = generator.generate(10);
         var assignedRecords = new ArrayList<Report>();
@@ -63,5 +63,14 @@ public class ReportRepositoryTest extends
         // Then
         assertThat(result.size()).isEqualTo(assignedRecords.size());
         assertThat(result).asList().containsExactlyInAnyOrderElementsOf(assignedRecords);
+    }
+
+    @Override
+    protected void alignAfterCreate(Report record, Report result) {
+        var entryType = record.getEntryType();
+        var entryTypeResult = result.getEntryType();
+        if (entryType != null && entryTypeResult != null) {
+            entryType.setId(entryTypeResult.getId());
+        }
     }
 }

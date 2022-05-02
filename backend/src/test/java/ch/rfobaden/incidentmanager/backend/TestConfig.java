@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend;
 
 
 import ch.rfobaden.incidentmanager.backend.test.generators.CloseReasonGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.EntryTypeGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.OrganizationGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
@@ -24,6 +25,7 @@ import java.util.Locale;
     UserCredentialsGenerator.class,
     IncidentGenerator.class,
     ReportGenerator.class,
+    EntryTypeGenerator.class,
     TaskGenerator.class,
     TransportGenerator.class,
     SubtaskGenerator.class,
