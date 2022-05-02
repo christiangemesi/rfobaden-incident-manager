@@ -33,6 +33,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closedTransportIds: [],
     transportIds: [],
     imageIds: [],
+    documentIds: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -55,6 +56,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     closedTransportIds: [],
     transportIds: [],
     imageIds: [],
+    documentIds: [],
   }))
 
   useSubmit(form, async (incidentData: ModelData<Incident>) => {

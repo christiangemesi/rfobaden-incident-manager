@@ -29,7 +29,7 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
   return (
     <UiContainer>
       <section>
-        <UiGrid>
+        <UiGrid style={{ padding: '0 0 1rem 0' }}>
           <UiGrid.Col>
             <UiTitle level={1}>
               Benutzer verwalten
@@ -51,7 +51,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
 
-  const [users] = await backendService.list<User>('users')
+  const [users, usersError]:  BackendResponse<User[]> = await backendService.list<User>(
+    'users',
+  )
+  if (usersError !== null) {
+    throw usersError
+  }
 
   const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',

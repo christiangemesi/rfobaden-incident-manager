@@ -10,6 +10,7 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   incident: Incident
@@ -42,6 +43,10 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, imageIds: ids })
   }
 
+  const storeDocumentIds = (ids: FileId[]) => {
+    IncidentStore.save({ ...incident, documentIds: ids })
+  }
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -60,6 +65,12 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
         modelName="incident"
         storeImageIds={storeImageIds}
         imageIds={incident.imageIds}
+      />
+      <DocumentDrawer
+        modelId={incident.id}
+        modelName="incident"
+        storeDocumentIds={storeDocumentIds}
+        documentIds={incident.documentIds}
       />
     </UiCaptionList>
   )

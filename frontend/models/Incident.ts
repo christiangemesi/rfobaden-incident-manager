@@ -24,7 +24,7 @@ export default interface Incident extends Model {
   transportIds: Id<Transport>[]
 
   imageIds: FileId[]
-  //documentIds: FileId[]
+  documentIds: FileId[]
 }
 
 export const parseIncident = (data: Incident): Incident => {

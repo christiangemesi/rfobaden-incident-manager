@@ -39,6 +39,7 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
     incidentId: -1,
     isClosed: false,
     imageIds: [],
+    documentIds: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -59,6 +60,7 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
     incidentId: [],
     isClosed: [],
     imageIds: [],
+    documentIds: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Subtask>) => {

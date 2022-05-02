@@ -45,6 +45,19 @@ public interface ReportRepository
             + " WHERE "
             + "report.incident.id = :#{#path.incidentId}"
     )
+
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
+
+    @Query(
+        "SELECT report"
+            + " FROM "
+            + "Report report"
+            + " WHERE "
+            + "report.assignee.id = :id"
+            + " AND "
+            + "report.incident.isClosed = false "
+            + "ORDER BY report.incident.id"
+    )
+    List<Report> findAllByAssigneeId(@Param("id") Long id);
 }

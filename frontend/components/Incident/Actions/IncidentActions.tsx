@@ -9,7 +9,7 @@ import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
 import { FileId } from '@/models/FileUpload'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
@@ -70,6 +70,10 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
     IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
   }, [incident])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    IncidentStore.save({ ...incident, documentIds: [...incident.documentIds, fileId]})
+  }, [incident])
+
   const loadPrintData = useCallback(async () => {
     for (const report of ReportStore.list()) {
       if (report.incidentId === incident.id) {
@@ -103,10 +107,17 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           <TrackableCloseAction isClosed={incident.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
 
-        <TrackableImageUploadAction
+        <TrackableFileUploadAction
           id={incident.id}
           modelName="incident"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
+        />
+        <TrackableFileUploadAction
+          id={incident.id}
+          modelName="incident"
+          onAddFile={addDocumentId}
+          type="document"
         />
 
         <UiPrinter

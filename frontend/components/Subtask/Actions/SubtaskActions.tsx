@@ -8,11 +8,12 @@ import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
-import TrackableImageUploadAction from '@/components/Trackable/Actions/TrackableImageUploadAction'
+import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
 import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   task: Task
@@ -38,8 +39,16 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
+  const addDocumentId = useCallback((fileId: FileId) => {
+    SubtaskStore.save({ ...subtask, documentIds: [...subtask.documentIds, fileId]})
+  }, [subtask])
+
   const storeImageIds = (ids: FileId[]) => {
     SubtaskStore.save({ ...subtask, imageIds: ids })
+  }
+
+  const storeDocumentIds = (ids: FileId[]) => {
+    SubtaskStore.save({ ...subtask, documentIds: ids })
   }
 
   return (
@@ -53,10 +62,18 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
-        <TrackableImageUploadAction
+
+        <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddImage={addImageId}
+          onAddFile={addImageId}
+          type="image"
+        />
+        <TrackableFileUploadAction
+          id={subtask.id}
+          modelName="subtask"
+          onAddFile={addDocumentId}
+          type="document"
         />
 
         <ImageDrawer
@@ -73,6 +90,21 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
             </UiDropDown.Item>
           )}
         </ImageDrawer>
+
+        <DocumentDrawer
+          modelId={subtask.id}
+          modelName="subtask"
+          storeDocumentIds={storeDocumentIds}
+          documentIds={subtask.documentIds}
+        >
+          {({ open }) => (
+            <UiDropDown.Item onClick={open}>
+              {subtask.documentIds.length}
+              &nbsp;
+              {subtask.documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
+            </UiDropDown.Item>
+          )}
+        </DocumentDrawer>
 
         <UiPrinter renderContent={() => <SubtaskPrintView subtask={subtask} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>

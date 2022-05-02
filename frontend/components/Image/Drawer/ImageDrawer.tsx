@@ -19,12 +19,12 @@ const ImageDrawer: React.VFC<Props> = ({
   storeImageIds,
   children,
 }) => {
-  const isEmptyList = imageIds.length > 0
+
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={open}>
+          <UiCaption onClick={imageIds.length > 0 ? open : undefined}>
             {imageIds.length}
             &nbsp;
             {imageIds.length === 1 ? 'Bild' : 'Bilder'}

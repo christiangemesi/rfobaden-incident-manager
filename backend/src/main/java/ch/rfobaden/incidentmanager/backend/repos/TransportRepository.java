@@ -46,6 +46,19 @@ public interface TransportRepository
             + " WHERE "
             + "transport.incident.id = :#{#path.incidentId}"
     )
+
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
+
+    @Query(
+        "SELECT transport"
+            + " FROM "
+            + "Transport transport"
+            + " WHERE "
+            + "transport.assignee.id = :id"
+            + " AND "
+            + "transport.incident.isClosed = false "
+            + "ORDER BY transport.incident.id"
+    )
+    List<Transport> findAllByAssigneeId(@Param("id") Long id);
 }

@@ -26,10 +26,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     private final OrganizationService organizationService;
     private final SessionHelper sessionHelper;
 
-    public UserController(
-        OrganizationService organizationService,
-        SessionHelper sessionHelper
-    ) {
+    public UserController(OrganizationService organizationService, SessionHelper sessionHelper) {
         this.organizationService = organizationService;
         this.sessionHelper = sessionHelper;
     }
@@ -92,7 +89,8 @@ public class UserController extends ModelController.Basic<User, UserService> {
     public static final class PasswordData {
         private String password;
 
-        public PasswordData() {}
+        public PasswordData() {
+        }
 
         public PasswordData(String password) {
             this.password = password;

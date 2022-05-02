@@ -20,7 +20,7 @@ export default interface Report extends Model, Trackable {
   taskIds: Id<Task>[]
 
   imageIds: FileId[]
-  //documentIds: FileId[]
+  documentIds: FileId[]
 }
 
 export const parseReport = (data: Report): Report => ({
@@ -28,3 +28,10 @@ export const parseReport = (data: Report): Report => ({
   ...parseTrackable(data),
 })
 
+export interface OpenReport extends Report {
+  isClosed: false
+  isDone: false
+}
+
+export const isOpenReport = (report: Report): report is OpenReport =>
+  !report.isClosed && !report.isDone
