@@ -22,7 +22,7 @@ const DocumentListItem: React.VFC<Props> = ({
     onDelete(id)
   }
   return (
-    <DownloadLink href={getDocumentUrl(id)} target="_blank" download>
+    <DownloadLink href={getDocumentUrl(id)} target="_blank">
       <Item>
         <UiGrid style={{ padding: '0 0.5rem' }} align="center" gapH={0.5}>
           <UiGrid.Col size={8}>
