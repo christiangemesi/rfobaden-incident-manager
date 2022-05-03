@@ -165,8 +165,8 @@ Temporary Items
 frontend/tsconfig.tsbuildinfo
 
 # Uploaded files
-files/
-backend/files/
+/files/
+/backend/files/
 
 # Jest coverage reports
 frontend/coverage/
