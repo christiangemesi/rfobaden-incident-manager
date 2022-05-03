@@ -20,7 +20,7 @@ const DocumentItem: React.VFC<Props> = ({
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
-    e.preventDefault();
+    e.preventDefault()
     onDelete(id)
   }
   return (
