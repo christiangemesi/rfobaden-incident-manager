@@ -53,6 +53,16 @@ const UiModalExample: React.VFC = () => {
               I am a full-size modal!
             </UiModal.Body>
           </UiModal>
+          <UiModal size="fixed">
+            <UiModal.Trigger>{({ open }) => (
+              <UiButton onClick={open}>
+                Fixed Size Modal
+              </UiButton>
+            )}</UiModal.Trigger>
+            <UiModal.Body>
+              I am a fixed-size modal!
+            </UiModal.Body>
+          </UiModal>
           <p>
             The width of the modal can be set with the <Code>size</Code> property.
             <br />
@@ -61,6 +71,8 @@ const UiModalExample: React.VFC = () => {
             <br />
             Using <Code>size=&quot;full&quot;</Code> will force the modal to take up the full width
             available to the current breakpoint.
+            <br />
+            Using <Code>size=&quot;fixed&quot;</Code> will force the modal to take up a pre-defined width.
           </p>
         </div>
 

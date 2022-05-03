@@ -74,7 +74,7 @@ const UserListItem: React.VFC<Props> = ({
                 {isAdmin(currentUser) && (
                   <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
                 )}
-                <UiModal title="Benutzer bearbeiten">
+                <UiModal title="Benutzer bearbeiten" size="fixed">
                   <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>

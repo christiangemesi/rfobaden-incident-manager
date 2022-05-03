@@ -23,7 +23,7 @@ const TrackableFileUploadAction: React.VFC<Props> = ({
   const title = type === 'image' ? 'Bild' : 'Dokument'
 
   return (
-    <UiModal title={title + ' hinzufügen'}>
+    <UiModal title={title + ' hinzufügen'} size="fixed">
       <UiModal.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           {title + ' hinzufügen'}

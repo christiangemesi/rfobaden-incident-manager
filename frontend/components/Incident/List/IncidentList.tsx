@@ -25,7 +25,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
       ))}
       {isAdmin(currentUser) && (
         <UiGrid.Col size={{ sm: 6, lg: 4, xxl: 3 }}>
-          <UiModal title="Ereignis erstellen">
+          <UiModal title="Ereignis erstellen" size="fixed">
             <UiModal.Trigger>{({ open }) => (
               <IncidentCreateButton onClick={open}>
                 <UiIcon.CreateAction size={2} />
