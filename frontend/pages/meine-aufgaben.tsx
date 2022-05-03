@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import TransportStore, { useTransports } from '@/stores/TransportStore'
@@ -6,10 +6,10 @@ import ReportStore, { useReports } from '@/stores/ReportStore'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
-import Subtask, { parseSubtask } from '@/models/Subtask'
-import Task, { parseTask } from '@/models/Task'
-import Report, { parseReport } from '@/models/Report'
-import Transport, { parseTransport } from '@/models/Transport'
+import Subtask, { isOpenSubtask, parseSubtask } from '@/models/Subtask'
+import Task, { isOpenTask, parseTask } from '@/models/Task'
+import Report, { isOpenReport, parseReport } from '@/models/Report'
+import Transport, { isOpenTransport, parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
 import Priority from '@/models/Priority'
 import IncidentStore from '@/stores/IncidentStore'
@@ -18,6 +18,9 @@ import styled from 'styled-components'
 import AssignmentList from '@/components/Assignment/List/AssignmentList'
 import AssignmentData from '@/models/AssignmentData'
 import { useEffectOnce } from 'react-use'
+import User from '@/models/User'
+import { useCurrentUser } from '@/stores/SessionStore'
+import Trackable from '@/models/Trackable'
 
 
 interface Props {
@@ -39,113 +42,56 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
     SubtaskStore.saveAll(data.subtasks.map(parseSubtask))
   })
 
-  const assignedTransports = useTransports()
-  const assignedReports = useReports()
-  const assignedTasks = useTasks()
-  const assignedSubtasks = useSubtasks()
+  const currentUser = useCurrentUser()
 
-  const [dataTrackableHigh, dataTrackableMedium, dataTrackableLow, dataTrackableClosed] = useMemo(() => {
-    const openAssignments: AssignmentData[] = [
-      { transports: [], reports: [], tasks: [], subtasks: []},
-      { transports: [], reports: [], tasks: [], subtasks: []},
-      { transports: [], reports: [], tasks: [], subtasks: []},
-    ]
-    const closedAssignments: AssignmentData = { transports: [], reports: [], tasks: [], subtasks: []}
-    let counter = 0
-    for (const priorityKey in Priority) {
-      const transports: Transport[] = []
-      assignedTransports.map((e) => {
-        if (priorityKey == e.priority) {
-          if (e.isClosed) {
-            closedAssignments.transports.push(e)
-          } else {
-            transports.push(e)
-          }
-        }
-      })
-      openAssignments[counter].transports.push(...transports)
-
-      const reports: Report[] = []
-      assignedReports.map((e) => {
-        if (priorityKey == e.priority) {
-          if (e.isClosed || e.isDone) {
-            closedAssignments.reports.push(e)
-          } else {
-            reports.push(e)
-          }
-        }
-      })
-      openAssignments[counter].reports.push(...reports)
-
-      const tasks: Task[] = []
-      assignedTasks.map((e) => {
-        if (priorityKey == e.priority) {
-          if (e.isClosed || e.isDone) {
-            closedAssignments.tasks.push(e)
-          } else {
-            tasks.push(e)
-          }
-        }
-      })
-      openAssignments[counter].tasks.push(...tasks)
-
-      const subtasks: Subtask[] = []
-      assignedSubtasks.map((e) => {
-        if (priorityKey == e.priority) {
-          if (e.isClosed) {
-            closedAssignments.subtasks.push(e)
-          } else {
-            subtasks.push(e)
-          }
-        }
-      })
-      openAssignments[counter].subtasks.push(...subtasks)
-
-      counter++
-    }
-
-    return [...openAssignments, closedAssignments]
-  }, [assignedTransports, assignedReports, assignedTasks, assignedSubtasks])
+  const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
+  const reports = useReports(groupAssigned(currentUser, isOpenReport))
+  const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
+  const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
 
   return (
     <UiContainer>
       <UiTitle level={1}>Meine Aufgaben</UiTitle>
-      <PriorityContainer>
-        <AssignmentList
-          transports={dataTrackableHigh.transports}
-          reports={dataTrackableHigh.reports}
-          tasks={dataTrackableHigh.tasks}
-          subtasks={dataTrackableHigh.subtasks}
-        />
-      </PriorityContainer>
-      <PriorityContainer>
-        <AssignmentList
-          transports={dataTrackableMedium.transports}
-          reports={dataTrackableMedium.reports}
-          tasks={dataTrackableMedium.tasks}
-          subtasks={dataTrackableMedium.subtasks}
-        />
-      </PriorityContainer>
-      <PriorityContainer>
-        <AssignmentList
-          transports={dataTrackableLow.transports}
-          reports={dataTrackableLow.reports}
-          tasks={dataTrackableLow.tasks}
-          subtasks={dataTrackableLow.subtasks}
-        />
-      </PriorityContainer>
-      <PriorityContainer>
-        <AssignmentList
-          transports={dataTrackableClosed.transports}
-          reports={dataTrackableClosed.reports}
-          tasks={dataTrackableClosed.tasks}
-          subtasks={dataTrackableClosed.subtasks}
-        />
-      </PriorityContainer>
+      {Object.keys(transports).map((priority) => (
+        <PriorityContainer key={priority}>
+          <AssignmentList
+            transports={transports[priority]}
+            reports={reports[priority]}
+            tasks={tasks[priority]}
+            subtasks={subtasks[priority]}
+          />
+        </PriorityContainer>
+      ))}
     </UiContainer>
   )
 }
 export default MeineAufgabenPage
+
+type Prioritized<T> = {
+  [K in Priority]: T[]
+} & {
+  closed: T[]
+}
+
+const groupAssigned = <T extends Trackable>(currentUser: User, isOpen: (record: T) => boolean) => (records: readonly T[]): Prioritized<T> => {
+  const result: Prioritized<T> = {
+    [Priority.HIGH]: [],
+    [Priority.MEDIUM]: [],
+    [Priority.LOW]: [],
+    closed: [],
+  }
+  for (const record of records) {
+    if (record.assigneeId !== currentUser.id) {
+      continue
+    }
+    if (!isOpen(record)) {
+      result.closed.push(record)
+      continue
+    }
+    result[record.priority].push(record)
+  }
+  return result
+}
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
