@@ -116,6 +116,9 @@ class BackendService {
 
     const url = new URL(`${apiEndpoint}/api/v1/${options.path}`)
     for (const [key, value] of Object.entries(options.params ?? {})) {
+      if (value == null) {
+        continue
+      }
       url.searchParams.append(key, value)
     }
 

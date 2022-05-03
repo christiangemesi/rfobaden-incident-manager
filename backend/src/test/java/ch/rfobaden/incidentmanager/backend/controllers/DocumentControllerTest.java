@@ -1,6 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,11 +13,14 @@ import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
-import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
+import ch.rfobaden.incidentmanager.backend.services.DocumentService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +55,7 @@ class DocumentControllerTest extends AppControllerTest {
     private SubtaskService subtaskService;
 
     @MockBean
-    private DocumentFileService documentFileService;
+    private DocumentService documentService;
 
     private static final String FILENAME = "filename.jpg";
     private final Document document;
@@ -65,11 +69,21 @@ class DocumentControllerTest extends AppControllerTest {
         document.setId(1L);
     }
 
+    @BeforeEach
+    void setupMocks() {
+        try {
+            Mockito.when(documentService.detectMimeType(bytes))
+                .thenReturn(MimeTypes.getDefaultMimeTypes().forName("application/pdf"));
+        } catch (MimeTypeException e) {
+            throw new IllegalStateException("failed to find pdf mime type", e);
+        }
+    }
+
     @Test
     @WithMockAgent
     void testUploadDocumentToIncident() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME))
+        Mockito.when(documentService.create(any(), eq(bytes)))
             .thenReturn(document);
         Mockito.when(incidentService.find(document.getId()))
             .thenReturn(Optional.of(new Incident()));
@@ -87,7 +101,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToIncident_ownerNotFound() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
         Mockito.when(incidentService.find(document.getId())).thenReturn(Optional.empty());
 
         // Then
@@ -103,7 +117,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToReport() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
         Mockito.when(reportService.find(document.getId())).thenReturn(Optional.of(new Report()));
 
         // Then
@@ -119,7 +133,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToReport_ownerNotFound() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
@@ -133,9 +147,8 @@ class DocumentControllerTest extends AppControllerTest {
     @Test
     @WithMockAgent
     void testUploadDocumentToTask() throws Exception {
-
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
         Mockito.when(taskService.find(document.getId())).thenReturn(Optional.of(new Task()));
 
         // Then
@@ -151,7 +164,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToTask_ownerNotFound() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
@@ -166,7 +179,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToSubtask() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
         Mockito.when(subtaskService.find(document.getId())).thenReturn(Optional.of(new Subtask()));
 
         // Then
@@ -182,7 +195,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentToSubtask_ownerNotFound() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
@@ -197,7 +210,7 @@ class DocumentControllerTest extends AppControllerTest {
     @WithMockAgent
     void testUploadDocumentWithNoValidModelName() throws Exception {
         // When
-        Mockito.when(documentFileService.save(bytes, FILENAME)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 
         // Then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
@@ -213,19 +226,20 @@ class DocumentControllerTest extends AppControllerTest {
     void testUploadDocumentWithCustomFileName() throws Exception {
         // Given
         String name = "123abcABC#";
-
-        // When
-        Mockito.when(documentFileService.save(bytes, name)).thenReturn(document);
+        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
         Mockito.when(reportService.find(document.getId())).thenReturn(Optional.of(new Report()));
 
+        // When
+        var request = MockMvcRequestBuilders.multipart("/api/v1/documents")
+            .file(file)
+            .param("modelName", "report")
+            .param("id", document.getId().toString())
+            .param("name", name);
+
         // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
-                .file(file)
-                .param("modelName", "report")
-                .param("id", document.getId().toString())
-                .param("name", name))
-            .andExpect(status().is(200))
-            .andExpect(content().string(document.getId().toString()));
+        mockMvc.perform(request)
+                .andExpect(status().is(200))
+                .andExpect(content().string(document.getId().toString()));
     }
 
     @Test
@@ -263,9 +277,9 @@ class DocumentControllerTest extends AppControllerTest {
         Long id = 1L;
 
         FileSystemResource resource =
-            new FileSystemResource(Paths.get("src/test/resources/testImage/blank.pdf"));
-        Mockito.when(documentFileService.findDocument(id)).thenReturn(Optional.of(document));
-        Mockito.when(documentFileService.findFileByDocument(any())).thenReturn(resource);
+            new FileSystemResource(Paths.get("src/test/resources/files/blank.pdf"));
+        Mockito.when(documentService.findDocument(id)).thenReturn(Optional.of(document));
+        Mockito.when(documentService.loadFileByDocument(any())).thenReturn(Optional.of(resource));
 
         // When
         var mockRequest = MockMvcRequestBuilders.get("/api/v1/documents/" + id)

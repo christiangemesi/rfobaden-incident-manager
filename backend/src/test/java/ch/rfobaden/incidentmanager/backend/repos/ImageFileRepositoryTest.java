@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ImageFileRepositoryTest extends FileRepositoryTest {
 
-    public static final String PATH_TO_TEST_FILE = "src/test/resources/testImage/fish.jpeg";
+    public static final String PATH_TO_TEST_FILE = "src/test/resources/files/fish.jpeg";
 
     @Autowired
     public ImageFileRepositoryTest(ImageFileRepository imageFileRepository) {

@@ -12,6 +12,6 @@ export const getImageUrl = process.env.NODE_ENV === 'development'
   : (id: FileId) => `/api/v1/images/${id}`
 
 export const getDocumentUrl = process.env.NODE_ENV === 'development'
-  ? (id: FileId) =>  `localhost:3001/api/v1/documents/${id}`
+  ? (id: FileId) =>  `http://localhost:3001/api/v1/documents/${id}`
   : (id: FileId) => `/api/v1/documents/${id}`
 

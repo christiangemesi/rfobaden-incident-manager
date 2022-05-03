@@ -221,7 +221,7 @@ class ImageControllerTest extends AppControllerTest {
 
         // When
         FileSystemResource resource =
-            new FileSystemResource(Paths.get("src/test/resources/testImage/fish.jpeg"));
+            new FileSystemResource(Paths.get("src/test/resources/files/fish.jpeg"));
         Mockito.when(imageFileService.find(id)).thenReturn(Optional.of(resource));
 
         // Then

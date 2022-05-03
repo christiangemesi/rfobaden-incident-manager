@@ -24,7 +24,7 @@ import java.util.Optional;
 class ImageFileServiceTest {
 
     public static final String IMAGE_NAME = "name";
-    public static final String PATH_TO_FILE = "src/test/resources/testImage/fish.jpeg";
+    public static final String PATH_TO_FILE = "src/test/resources/files/fish.jpeg";
 
     @Autowired
     private ImageFileService imageFileService;

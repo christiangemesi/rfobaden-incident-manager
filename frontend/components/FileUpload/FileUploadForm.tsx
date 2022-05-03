@@ -1,7 +1,7 @@
 import Incident from '@/models/Incident'
 import FileUpload, { FileId } from '@/models/FileUpload'
-import { clearForm, setFormField, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
-import React, { useEffect } from 'react'
+import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
+import React from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiForm from '@/components/Ui/Form/UiForm'
 import styled from 'styled-components'
@@ -34,8 +34,8 @@ const FileUploadForm: React.VFC<Props> = ({
 
   useValidate(form, (validate) => ({
     name: [
-      validate.notBlank(),
-      validate.match(/^[A-Za-z0-9_\-.]+$/, { message: 'ist kein gültiger Dateiname' }),
+      validate.notBlank({ allowNull: true }),
+      validate.match(/^[ A-Za-z0-9_\-.]+$/, { message: 'ist kein gültiger Dateiname' }),
       (value) => !/^\.+$/.test(value) || 'ist kein gültiger Dateiname',
     ],
     file: [
@@ -51,7 +51,7 @@ const FileUploadForm: React.VFC<Props> = ({
   useSubmit(form, async ({ file, name }: FileUpload) => {
     const [fileId, error] = await BackendService.upload(endpoint, file, {
       id: modelId.toString(),
-      modelName: modelName,
+      modelName,
       name,
     })
     if (error !== null) {
@@ -65,13 +65,6 @@ const FileUploadForm: React.VFC<Props> = ({
     }
   }, [modelId, modelName])
   useCancel(form, handleClose)
-
-  useEffect(() => {
-    if (form.file.value === null || form.name.hasChanged) {
-      return
-    }
-    setFormField(form.name, { value: form.file.value.name })
-  }, [form.file.value, form.name])
 
   return (
     <UiForm form={form}>

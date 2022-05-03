@@ -8,7 +8,7 @@ import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.models.DocumentOwner;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
-import ch.rfobaden.incidentmanager.backend.services.DocumentFileService;
+import ch.rfobaden.incidentmanager.backend.services.DocumentService;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
@@ -19,35 +19,36 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @RestController
 @RequestMapping(path = "api/v1/documents")
 public class DocumentController extends AppController {
-    private final DocumentFileService documentFileService;
+    private final DocumentService documentService;
     private final IncidentService incidentService;
     private final ReportService reportService;
     private final TaskService taskService;
     private final SubtaskService subtaskService;
 
     public DocumentController(
-        DocumentFileService documentFileService,
+        DocumentService documentService,
         IncidentService incidentService,
         ReportService reportService,
         TaskService taskService,
         SubtaskService subtaskService
     ) {
-        this.documentFileService = documentFileService;
+        this.documentService = documentService;
         this.incidentService = incidentService;
         this.reportService = reportService;
         this.taskService = taskService;
@@ -55,76 +56,107 @@ public class DocumentController extends AppController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<FileSystemResource> downloadDocument(@PathVariable Long id) {
-
-        Document document = documentFileService.findDocument(id).orElseThrow(() -> (
+    public ResponseEntity<FileSystemResource> find(@PathVariable Long id) {
+        var document = documentService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
+        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
+            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
+        ));;
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-            .filename(document.getName())
+            .filename(document.getName() == null
+                ? document.getId() + document.getExtension()
+                : document.getName()
+            )
             .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
         headers.set("Content-Type", document.getMimeType());
-
-        FileSystemResource file = documentFileService.findFileByDocument(document);
         return ResponseEntity.ok().headers(headers).body(file);
     }
-    
+
     @RequireAgent
     @PostMapping
-    public Long uploadDocument(
+    public Long create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long id,
-        @RequestParam Optional<String> name
+        @RequestParam(required = false) Optional<String> name
     ) {
-        byte[] bytes;
+        var service = resolveService(modelName);
+        var content = readFile(file);
+        var document = buildDocument(file, name, content);
+
+        var owner = service.find(id).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
+
+        document = documentService.create(document, content);
+        owner.addDocument(document);
+        service.update(owner);
+
+        return document.getId();
+    }
+
+    @RequireAgent
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+        @RequestParam String modelName,
+        @RequestParam Long modelId,
+        @PathVariable Long id
+    ) {
+        var service = resolveService(modelName);
+        var entity = service.find(modelId).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        ));
+        entity.getDocuments().removeIf((document) -> document.getId().equals(id));
+        if (!documentService.delete(id)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id);
+        }
+    }
+
+    private Document buildDocument(MultipartFile file, Optional<String> name, byte[] content) {
+        var mimeType = documentService.detectMimeType(content);
+
+        var document = new Document();
+        document.setMimeType(mimeType.toString());
+        document.setExtension(mimeType.getExtension());
+
+        var fileName = name.orElseGet(file::getOriginalFilename);
+        if (fileName != null && !fileName.endsWith(document.getExtension())) {
+            fileName = fileName + document.getExtension();
+        }
+        document.setName(fileName);
+        return document;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <M extends Model & PathConvertible<?> & DocumentOwner> ModelService<M, ?> resolveService(String modelName) {
+        switch (modelName.toLowerCase()) {
+            case "incident":
+                return (ModelService<M, ?>) incidentService;
+            case "report":
+                return (ModelService<M, ?>) reportService;
+            case "task":
+                return (ModelService<M, ?>) taskService;
+            case "subtask":
+                return (ModelService<M, ?>) subtaskService;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown model: " + modelName);
+        }
+    }
+
+    private static byte[] readFile(MultipartFile file) {
         try {
-            bytes = file.getBytes();
+            return file.getBytes();
         } catch (IOException e) {
             throw new ApiException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "failed to read uploaded file: " + e.getMessage()
             );
         }
-
-        Supplier<Document> saveDocument = () -> (
-            documentFileService.save(bytes, name.orElseGet(file::getOriginalFilename))
-        );
-        Document document;
-        switch (modelName.toLowerCase()) {
-            case "incident":
-                document = saveDocumentToEntity(id, incidentService, saveDocument);
-                break;
-            case "report":
-                document = saveDocumentToEntity(id, reportService, saveDocument);
-                break;
-            case "task":
-                document = saveDocumentToEntity(id, taskService, saveDocument);
-                break;
-            case "subtask":
-                document = saveDocumentToEntity(id, subtaskService, saveDocument);
-                break;
-            default:
-                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown model: " + modelName);
-        }
-        return document.getId();
-    }
-
-    private <M extends Model & DocumentOwner & PathConvertible<?>> Document saveDocumentToEntity(
-        Long id,
-        ModelService<M, ?> modelService,
-        Supplier<Document> saveDocument
-    ) {
-        var entity = modelService.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
-            ));
-        var document = saveDocument.get();
-        entity.addDocument(document);
-        modelService.update(entity);
-        return document;
     }
 }
