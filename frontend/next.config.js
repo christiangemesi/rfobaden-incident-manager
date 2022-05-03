@@ -23,7 +23,7 @@ const config = {
   },
 
   images: {
-    domains: process.env.NODE_ENV === 'development' ? ['backend-development'] : [],
+    domains: [`backend-${process.env['NEXT_PUBLIC_RFO_STAGE']}`],
   },
 
   webpack: (config) => {

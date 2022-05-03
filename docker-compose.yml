@@ -7,6 +7,7 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_RFO_BACKEND_URL=${RFO_BACKEND_URL}
+      - NEXT_PUBLIC_RFO_STAGE=${RFO_STAGE}
     ports:
       - '3000:3000'
       - '3035:3035'
