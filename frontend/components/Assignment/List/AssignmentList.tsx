@@ -24,7 +24,6 @@ const AssignmentList: React.VFC<Props> = ({
   tasks,
   subtasks,
 }) => {
-
   return (
     <Fragment>
       {title.length > 0 &&
@@ -33,12 +32,12 @@ const AssignmentList: React.VFC<Props> = ({
       <Content>
         <AssignmentListItem
           title="Transporte"
-          trackable={transports}
+          records={transports}
           href={(transport) => '/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
         />
         <AssignmentListItem
           title="Meldungen"
-          trackable={reports}
+          records={reports}
           href={(report) => '/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
         >
           {(report) => (
@@ -57,7 +56,7 @@ const AssignmentList: React.VFC<Props> = ({
         </AssignmentListItem>
         <AssignmentListItem
           title="Aufträge"
-          trackable={tasks}
+          records={tasks}
           href={(task) => '/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
         >
           {(task) => (
@@ -68,7 +67,7 @@ const AssignmentList: React.VFC<Props> = ({
         </AssignmentListItem>
         <AssignmentListItem
           title="Teilaufträge"
-          trackable={subtasks}
+          records={subtasks}
           href={(subtask) => '/ereignisse/' + subtask.incidentId + '/meldungen/' + subtask.reportId + '/auftraege/' + subtask.taskId}
         />
       </Content>

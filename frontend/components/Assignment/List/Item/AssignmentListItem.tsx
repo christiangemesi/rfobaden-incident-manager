@@ -6,61 +6,63 @@ import IncidentStore from '@/stores/IncidentStore'
 import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import UiLink from '@/components/Ui/Link/UiLink'
 import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
+import UiList from '@/components/Ui/List/UiList'
 
 
 interface Props<T extends Trackable> {
   title: string
-  trackable: T[]
+  records: T[]
   href: (record: T) => string
   children?: (record: T) => ReactNode
 }
 
 const AssignmentListItem = <T extends Trackable>({
   title,
-  trackable,
+  records,
   href,
   children,
 }: Props<T>): JSX.Element => {
+  if (records.length === 0) {
+    return <React.Fragment />
+  }
+
   return (
     <Fragment>
-      {trackable.length > 0 && (
-        <Fragment>
-          <UiTitle level={3}>{title}</UiTitle>
-          <EntityContainer>
-            {trackable.map((e) => (
-              <UiLink
-                href={href(e)}
-                key={e.id}
-              >
-                <Item
-                  isActive={false}
-                  isClosed={e.isClosed}
-                  title={e.title}
-                  priority={e.priority}
-                  user={IncidentStore.find(e.incidentId)?.title ?? ''}
-                  isTitleSwitched
-                >
-                  <TrackableSuffix trackable={e} isSmall={false}>
-                    {children && children(e)}
-                  </TrackableSuffix>
-                </Item>
-              </UiLink>
-            ))}
-          </EntityContainer>
-        </Fragment>
-      )}
+      <UiTitle level={3}>{title}</UiTitle>
+      <EntityContainer>
+        {records.map((e) => (
+          <UiLink
+            href={href(e)}
+            key={e.id}
+          >
+            <Item
+              isActive={false}
+              isClosed={e.isClosed}
+              title={e.title}
+              priority={e.priority}
+              user={IncidentStore.find(e.incidentId)?.title ?? ''}
+              isTitleSwitched
+            >
+              <TrackableSuffix trackable={e} isSmall={false}>
+                {children && children(e)}
+              </TrackableSuffix>
+            </Item>
+          </UiLink>
+        ))}
+      </EntityContainer>
     </Fragment>
   )
 }
 
 export default AssignmentListItem
 
-const EntityContainer = styled.div`
-  margin: 1rem 0;
+const EntityContainer = styled(UiList)`
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `
+
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;

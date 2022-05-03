@@ -1,19 +1,20 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
+import { StyledProps } from '@/utils/helpers/StyleHelper'
 
-interface Props {
+interface Props extends StyledProps {
   children: ReactNode
 }
 
-const UiList: React.VFC<Props> = ({ children }) => {
+const UiList: React.VFC<Props> = ({ children, style, className }) => {
   return (
-    <Box>
+    <Box style={style} className={className}>
       {children}
     </Box>
   )
 }
-export default UiList
+export default styled(UiList)``
 
 const Box = styled.ul`
   width: 100%;
