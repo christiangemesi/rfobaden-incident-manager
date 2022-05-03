@@ -92,7 +92,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "incident")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(MockMvcResultMatchers.content().string(document.getId().toString()));
     }
@@ -108,7 +108,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "report")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
     }
@@ -124,7 +124,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "report")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(content().string(document.getId().toString()));
     }
@@ -139,7 +139,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "report")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
     }
@@ -155,7 +155,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "task")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(content().string(document.getId().toString()));
     }
@@ -170,7 +170,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "task")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
     }
@@ -186,7 +186,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "subtask")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(content().string(document.getId().toString()));
     }
@@ -201,7 +201,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "subtask")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
     }
@@ -216,7 +216,7 @@ class DocumentControllerTest extends AppControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
                 .file(file)
                 .param("modelName", "not valid")
-                .param("id", document.getId().toString()))
+                .param("modelId", document.getId().toString()))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("unknown model: not valid"));
     }
@@ -233,7 +233,7 @@ class DocumentControllerTest extends AppControllerTest {
         var request = MockMvcRequestBuilders.multipart("/api/v1/documents")
             .file(file)
             .param("modelName", "report")
-            .param("id", document.getId().toString())
+            .param("modelId", document.getId().toString())
             .param("name", name);
 
         // Then
@@ -259,7 +259,7 @@ class DocumentControllerTest extends AppControllerTest {
         var request = MockMvcRequestBuilders.multipart("/api/v1/documents")
             .file(file2)
             .param("modelName", "subtask")
-            .param("id", document.getId().toString());
+            .param("modelId", document.getId().toString());
 
         // Then
         mockMvc.perform(request)

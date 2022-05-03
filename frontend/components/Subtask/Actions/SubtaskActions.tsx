@@ -73,7 +73,6 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           id={subtask.id}
           modelName="subtask"
           onAddFile={addDocumentId}
-          type="document"
         />
 
         <ImageDrawer

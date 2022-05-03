@@ -33,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 @RestController
 @RequestMapping(path = "api/v1/documents")
@@ -85,7 +84,7 @@ public class DocumentController extends AppController {
     public Long create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
-        @RequestParam Long id,
+        @RequestParam Long modelId,
         @RequestParam(required = false) Optional<String> name,
         @RequestParam(required = false) Optional<String> type
     ) {
@@ -94,8 +93,8 @@ public class DocumentController extends AppController {
         var document = buildDocument(file, name, content);
 
         var saveToOwner = prepareOwner(document, type);
-        var owner = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        var owner = service.find(modelId).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + modelId)
         ));
 
         document = documentService.create(document, content);
