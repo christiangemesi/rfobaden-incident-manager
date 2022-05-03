@@ -33,7 +33,7 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     ]
     if (firstIncident !== null) {
       // Only show transport panel if there is at least one open incident.
-      panels.splice(2, 0, {
+      panels.splice(1, 0, {
         icon: UiIcon.Transport,
         label: 'Transporte',
         link: `/ereignisse/${firstIncident.id}/transporte`,
