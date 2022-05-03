@@ -1,4 +1,3 @@
-import ImageItem from '@/components/Image/Item/ImageItem'
 import { FileId, getImageUrl } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
@@ -9,6 +8,7 @@ import Report from '@/models/Report'
 import Task from '@/models/Task'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiContainer from '@/components/Ui/Container/UiContainer'
+import DocumentImageItem from '@/components/Document/Image/List/Item/DocumentImageItem'
 
 interface Props {
   imageIds: FileId[]
@@ -17,7 +17,7 @@ interface Props {
   storeImageIds: (ids: FileId[]) => void
 }
 
-const ImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageIds }) => {
+const DocumentImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageIds }) => {
 
   const handleDelete = async (id: FileId) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
@@ -42,7 +42,7 @@ const ImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageI
       <ImageContainer>
         {imageIds.length > 0
           ? imageIds.map((id) => (
-            <ImageItem
+            <DocumentImageItem
               key={id}
               src={getImageUrl(id)}
               text="Filename"
@@ -56,7 +56,7 @@ const ImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageI
   )
 }
 
-export default ImageList
+export default DocumentImageList
 
 const ImageContainer = styled.div`
   display: flex;

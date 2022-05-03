@@ -13,7 +13,7 @@ interface Props {
   onDelete: (id: FileId) => void
 }
 
-const ImageItem: React.VFC<Props> = ({
+const DocumentImageItem: React.VFC<Props> = ({
   src = '',
   text = '',
   id,
@@ -45,7 +45,7 @@ const ImageItem: React.VFC<Props> = ({
   )
 }
 
-export default ImageItem
+export default DocumentImageItem
 
 const DeleteButton = styled(UiIconButton)`
   visibility: hidden;

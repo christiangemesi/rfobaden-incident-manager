@@ -1,4 +1,4 @@
-import { FileId, getDocumentUrl } from '@/models/FileUpload'
+import { FileId } from '@/models/FileUpload'
 import React from 'react'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
