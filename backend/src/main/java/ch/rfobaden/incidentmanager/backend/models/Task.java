@@ -68,18 +68,18 @@ public class Task extends Model
     private List<Subtask> subtasks = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> images = new ArrayList<>();
+    private List<Document> images = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
     @Override
-    public List<Image> getImages() {
+    public List<Document> getImages() {
         return images;
     }
 
     @Override
-    public void setImages(List<Image> images) {
+    public void setImages(List<Document> images) {
         this.images = images;
     }
 
