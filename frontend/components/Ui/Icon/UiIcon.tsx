@@ -38,6 +38,7 @@ import {
   mdiTrashCanOutline,
   mdiUpload,
   mdiFormatListBulleted,
+  mdiArchive,
 } from '@mdi/js'
 
 
@@ -151,4 +152,5 @@ export default Object.assign(StyledUiIcon, {
   Upload: makeNamedIcon(mdiUpload),
   Trash: makeNamedIcon(mdiTrashCanOutline),
   AssignedList: makeNamedIcon(mdiFormatListBulleted),
+  Archive: makeNamedIcon(mdiArchive),
 })
