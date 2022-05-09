@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
 import ch.rfobaden.incidentmanager.backend.models.Document;
-import ch.rfobaden.incidentmanager.backend.models.Image;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentFileRepository;
 import ch.rfobaden.incidentmanager.backend.repos.DocumentRepository;
 import org.apache.tika.Tika;

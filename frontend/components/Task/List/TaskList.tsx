@@ -18,7 +18,7 @@ interface Props {
 const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) => {
   return (
     <Container>
-      <UiModal title="Auftrag erfassen">
+      <UiModal title="Auftrag erfassen" size="fixed">
         <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Auftrag erfassen">
             <UiIcon.CreateAction size={1.5} />

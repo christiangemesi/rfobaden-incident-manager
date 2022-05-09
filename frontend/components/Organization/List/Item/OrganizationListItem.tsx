@@ -61,7 +61,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                     </UiIconButton>
                   )}</UiDropDown.Trigger>
                   <UiDropDown.Menu>
-                    <UiModal title="Organisation bearbeiten">
+                    <UiModal title="Organisation bearbeiten" size="fixed">
                       <UiModal.Trigger>{({ open }) => (
                         <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                       )}</UiModal.Trigger>

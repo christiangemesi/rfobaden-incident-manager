@@ -1,4 +1,4 @@
-import { FileId, getDocumentUrl } from '@/models/FileUpload'
+import { FileId } from '@/models/FileUpload'
 import React from 'react'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
@@ -6,9 +6,9 @@ import Incident from '@/models/Incident'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import DocumentItem from '@/components/Document/Item/DocumentItem'
 import UiList from '@/components/Ui/List/UiList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
 
 interface Props {
   fileIds: FileId[]
@@ -55,9 +55,8 @@ const DocumentList: React.VFC<Props> = ({
       </UiGrid>
       <UiList>
         {fileIds.map((id) => (
-          <DocumentItem
+          <DocumentListItem
             key={id}
-            src={getDocumentUrl(id)}
             id={id}
             onDelete={handleDelete}
           />

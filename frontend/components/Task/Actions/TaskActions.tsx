@@ -95,7 +95,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
           id={task.id}
           modelName="task"
           onAddFile={addDocumentId}
-          type="document"
         />
 
         <UiPrinter renderContent={() => <TaskPrintView task={task} />}>{({ trigger }) => (

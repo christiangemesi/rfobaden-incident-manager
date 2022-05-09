@@ -10,8 +10,9 @@ interface Props extends UiModalLikeProps {
    * Width sizing of the modal. Default is `'auto'`.
    * - `'auto'` makes the modal take just enough space to fit its content.
    * - `'full'` forces the modal to span the full breakpoint width.
+   * - `'fixed'` forces the modal into a predefined width.
    */
-  size?: 'full' | 'auto'
+  size?: 'full' | 'auto' | 'fixed'
 
   /**
    * Text that is displayed as the modals title.
@@ -82,12 +83,24 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
   `}
 `
 
-const DialogContainer = styled.div<{ size: 'full' | 'auto' }>`
+const DialogContainer = styled.div<{ size: 'full' | 'auto' | 'fixed' }>`
   width: auto;
   ${({ size }) => size === 'full' && css`
     ${UiContainer.fluidCss};
     & > ${Dialog} {
       ${UiContainer.fluidCss};
+    }
+  `};
+  ${({ size }) => size === 'fixed' && css`
+    ${UiContainer.fluidCss};
+    & > ${Dialog} {
+      ${UiContainer.fluidCss};
+      ${Themed.media.lg.min} {
+        width: 60vw;
+      }
+      ${Themed.media.xl.min} {
+        width: 50vw;
+      }
     }
   `};
 `

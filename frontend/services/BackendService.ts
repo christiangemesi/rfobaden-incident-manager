@@ -119,7 +119,7 @@ class BackendService {
       if (value == null) {
         continue
       }
-      url.searchParams.append(key, value)
+      url.searchParams.append(key, value.toString())
     }
 
     const res = await fetch(url.toString(), {
@@ -196,7 +196,8 @@ export interface ServerSideSession {
   backendService: BackendService
 }
 
-type Params = Record<string, string>
+
+type Params = Record<string, { toString(): string } | null>
 
 /**
  * Loads the current session from a request made to the nextjs server.
@@ -213,6 +214,9 @@ export const loadSessionFromRequest = async (req: IncomingMessage & { cookies: N
   const backendService = new BackendService(sessionToken)
   const [sessionData, error] = await backendService.find<SessionResponse>('session')
   if (error !== null) {
+    if (isSessionExpiryError(error)) {
+      return { user: null, backendService: defaultService }
+    }
     throw error
   }
   if (sessionData == null || sessionData.user == null) {
@@ -228,4 +232,8 @@ export const getSessionFromRequest = (req: IncomingMessage): ServerSideSession =
     throw new Error('request does not contain a serverside session')
   }
   return session
+}
+
+const isSessionExpiryError = (error: BackendError): boolean => {
+  return error.status === 401 && error.error === 'token expired'
 }

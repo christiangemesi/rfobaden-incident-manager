@@ -117,7 +117,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           id={incident.id}
           modelName="incident"
           onAddFile={addDocumentId}
-          type="document"
         />
 
         <UiPrinter

@@ -37,7 +37,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
   return (
     <div>
       {isAdmin(currentUser) && (
-        <UiModal title="Organisation erfassen">
+        <UiModal title="Organisation erfassen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />

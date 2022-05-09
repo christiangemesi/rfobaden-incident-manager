@@ -12,7 +12,7 @@ import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableF
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
-import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
@@ -73,10 +73,9 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           id={subtask.id}
           modelName="subtask"
           onAddFile={addDocumentId}
-          type="document"
         />
 
-        <ImageDrawer
+        <DocumentImageDrawer
           modelId={subtask.id}
           modelName="subtask"
           storeImageIds={storeImageIds}
@@ -89,7 +88,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
               {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
             </UiDropDown.Item>
           )}
-        </ImageDrawer>
+        </DocumentImageDrawer>
 
         <DocumentDrawer
           modelId={subtask.id}

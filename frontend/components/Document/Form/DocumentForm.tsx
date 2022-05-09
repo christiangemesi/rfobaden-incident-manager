@@ -15,20 +15,20 @@ import BackendService from '@/services/BackendService'
 interface Props {
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  fileType: 'image' | 'document'
+  type?: 'image'
   onClose?: () => void
   onSave: (fileId: FileId) => void
 }
 
-const FileUploadForm: React.VFC<Props> = ({
+const DocumentForm: React.VFC<Props> = ({
   modelId,
   modelName,
-  fileType,
+  type = null,
   onClose: handleClose,
   onSave: handleSave,
 }) => {
   const form = useForm<FileUpload>(() => ({
-    name: '',
+    name: null,
     file: null as unknown as File,
   }))
 
@@ -36,7 +36,7 @@ const FileUploadForm: React.VFC<Props> = ({
     name: [
       validate.notBlank({ allowNull: true }),
       validate.match(/^[ A-Za-z0-9_\-.]+$/, { message: 'ist kein gültiger Dateiname' }),
-      (value) => !/^\.+$/.test(value) || 'ist kein gültiger Dateiname',
+      (value) => value === null || !/^\.+$/.test(value) || 'ist kein gültiger Dateiname',
     ],
     file: [
       validate.notNull(),
@@ -46,13 +46,12 @@ const FileUploadForm: React.VFC<Props> = ({
     ],
   }))
 
-  const endpoint = fileType === 'image' ? 'images' : 'documents'
-
   useSubmit(form, async ({ file, name }: FileUpload) => {
-    const [fileId, error] = await BackendService.upload(endpoint, file, {
-      id: modelId.toString(),
+    const [fileId, error] = await BackendService.upload('documents', file, {
+      modelId: modelId.toString(),
       modelName,
       name,
+      type: type,
     })
     if (error !== null) {
       throw error
@@ -70,7 +69,7 @@ const FileUploadForm: React.VFC<Props> = ({
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.file}>{(props) => (
-          <FileInput {...props} accept={fileType === 'image' ? fileType + '/*' : ''} />
+          <FileInput {...props} accept={type === 'image' ? 'image/*' : ''} />
         )}</UiForm.Field>
         <UiForm.Field field={form.name}>{(props) => (
           <UiTextInput {...props} label="Name" />
@@ -81,7 +80,7 @@ const FileUploadForm: React.VFC<Props> = ({
   )
 }
 
-export default FileUploadForm
+export default DocumentForm
 
 const FormContainer = styled.div`
   display: flex;

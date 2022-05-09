@@ -6,6 +6,7 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireA
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Document;
 import ch.rfobaden.incidentmanager.backend.models.DocumentOwner;
+import ch.rfobaden.incidentmanager.backend.models.ImageOwner;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.DocumentService;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 @RestController
 @RequestMapping(path = "api/v1/documents")
@@ -82,19 +84,21 @@ public class DocumentController extends AppController {
     public Long create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
-        @RequestParam Long id,
-        @RequestParam(required = false) Optional<String> name
+        @RequestParam Long modelId,
+        @RequestParam(required = false) Optional<String> name,
+        @RequestParam(required = false) Optional<String> type
     ) {
         var service = resolveService(modelName);
         var content = readFile(file);
         var document = buildDocument(file, name, content);
 
-        var owner = service.find(id).orElseThrow(() -> (
-            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
+        var saveToOwner = prepareOwner(document, type);
+        var owner = service.find(modelId).orElseThrow(() -> (
+            new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + modelId)
         ));
 
         document = documentService.create(document, content);
-        owner.addDocument(document);
+        saveToOwner.accept(owner, document);
         service.update(owner);
 
         return document.getId();
@@ -133,8 +137,28 @@ public class DocumentController extends AppController {
         return document;
     }
 
+    private <M extends DocumentOwner & ImageOwner> BiConsumer<M, Document> prepareOwner(
+        Document document,
+        Optional<String> type
+    ) {
+        var actualType = type.orElse("");
+        switch (actualType) {
+            case "":
+                return M::addImage;
+            case "image":
+                if (!document.getMimeType().startsWith("image/")) {
+                    throw new ApiException(HttpStatus.BAD_REQUEST, "file must be an image");
+                }
+                return M::addImage;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown document type: " + actualType);
+        }
+    }
+
     @SuppressWarnings("unchecked")
-    private <M extends Model & PathConvertible<?> & DocumentOwner> ModelService<M, ?> resolveService(String modelName) {
+    private <M extends Model & PathConvertible<?> & DocumentOwner & ImageOwner>
+        ModelService<M, ?> resolveService(String modelName) {
+
         switch (modelName.toLowerCase()) {
             case "incident":
                 return (ModelService<M, ?>) incidentService;

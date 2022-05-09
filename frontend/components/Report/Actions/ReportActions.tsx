@@ -104,7 +104,6 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           id={report.id}
           modelName="report"
           onAddFile={addDocumentId}
-          type="document"
         />
 
         <UiPrinter
