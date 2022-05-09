@@ -58,7 +58,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
               <UiTitle level={6}>Begründung</UiTitle>
             </UiGrid.Col>
           </UiGrid>
-          <IncidentArchiveList incidents={closedIncidents} />
+          <IncidentArchiveList closedIncidents={closedIncidents} />
         </section>
       )}
     </UiContainer>

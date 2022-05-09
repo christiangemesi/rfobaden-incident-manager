@@ -8,7 +8,6 @@ import { useEffectOnce } from 'react-use'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import IncidentList from '@/components/Incident/List/IncidentList'
 
 interface Props {
   data: {
@@ -26,7 +25,7 @@ const ArchivPage: React.VFC<Props> = ({ data }) => {
   return (
     <UiContainer>
 
-      <UiGrid>
+      <UiGrid style={{ padding: '0 0 1rem 0' }}>
         <UiGrid.Col>
           <UiTitle level={1}>
               Archiv
@@ -35,25 +34,23 @@ const ArchivPage: React.VFC<Props> = ({ data }) => {
       </UiGrid>
       {closedIncidents.length !== 0 && (
         <section>
-          <div style={{ margin: '4rem 0 1rem 0' }}>
-            <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
-          </div>
-         
-          <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
-            <UiGrid.Col size={4}>
-              <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Title</UiTitle>
-            </UiGrid.Col>
-            <UiGrid.Col size={2}>
-              <UiTitle level={6}>Startdatum</UiTitle>
-            </UiGrid.Col>
-            <UiGrid.Col size={2}>
-              <UiTitle level={6}>Schliessdatum</UiTitle>
-            </UiGrid.Col>
-            <UiGrid.Col>
-              <UiTitle level={6}>Begründung</UiTitle>
-            </UiGrid.Col>
-          </UiGrid>
-          <IncidentArchiveList incidents={closedIncidents} />
+          {/*<UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>*/}
+          {/*  <UiGrid.Col size={4}>*/}
+          {/*    <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Ereignis</UiTitle>*/}
+          {/*  </UiGrid.Col>*/}
+          {/*  <UiGrid.Col size={2}>*/}
+          {/*    <UiTitle level={6}>Startdatum</UiTitle>*/}
+          {/*  </UiGrid.Col>*/}
+          {/*  <UiGrid.Col size={2}>*/}
+          {/*    <UiTitle level={6}>Schliessdatum</UiTitle>*/}
+          {/*  </UiGrid.Col>*/}
+          {/*  <UiGrid.Col>*/}
+          {/*    <UiTitle level={6}>Begründung</UiTitle>*/}
+          {/*  </UiGrid.Col>*/}
+          {/*</UiGrid>*/}
+          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+            <IncidentArchiveList closedIncidents={closedIncidents} />
+          </UiGrid.Col>
         </section>
       )}
     </UiContainer>
