@@ -21,3 +21,9 @@ export const getDocumentUrl =
   process.env.NODE_ENV === 'development'
     ? (id: Id<Document>) => `http://localhost:3001/api/v1/documents/${id}`
     : (id: Id<Document>) => `/api/v1/documents/${id}`
+
+export const parseDocument = (data: Document): Document => {
+  return {
+    ...data,
+  }
+}

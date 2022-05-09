@@ -2,7 +2,7 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React from 'react'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import Model from '@/models/base/Model'
 import Id from '@/models/base/Id'
 
@@ -10,7 +10,7 @@ interface Props {
   id: Id<Model>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   type?: 'image'
-  onAddFile: (fileId: FileId) => void
+  onAddFile: (document: Document) => void
 }
 
 const TrackableFileUploadAction: React.VFC<Props> = ({

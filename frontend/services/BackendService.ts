@@ -6,7 +6,7 @@ import { SessionResponse } from '@/models/Session'
 import User, { parseUser } from '@/models/User'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import FormData from 'form-data'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {

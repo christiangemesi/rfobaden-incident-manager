@@ -8,7 +8,7 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
@@ -66,12 +66,12 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
     }
   }, [handleDeleteCb, incident])
 
-  const addImageId = useCallback((fileId: FileId) => {
-    IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
+  const addImageId = useCallback((document: Document) => {
+    IncidentStore.save({ ...incident, images: [...incident.images, document]})
   }, [incident])
 
-  const addDocumentId = useCallback((fileId: FileId) => {
-    IncidentStore.save({ ...incident, documentIds: [...incident.documentIds, fileId]})
+  const addDocumentId = useCallback((document: Document) => {
+    IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
   }, [incident])
 
   const loadPrintData = useCallback(async () => {
