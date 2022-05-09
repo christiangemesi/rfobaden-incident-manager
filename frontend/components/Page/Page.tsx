@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
-import UiHeader from '@/components/Ui/Header/UiHeader'
-import UiFooter from '@/components/Ui/Footer/UiFooter'
+import PageHeader from '@/components/Page/Header/PageHeader'
+import PageFooter from '@/components/Page/Footer/PageFooter'
 
 interface Props {
   noHeader?: boolean
@@ -16,11 +16,11 @@ const Page: React.VFC<Props> = ({
 }) => {
   return (
     <React.Fragment>
-      {noHeader || <UiHeader />}
+      {noHeader || <PageHeader />}
       <Main noHeader={noHeader} noFooter={noFooter}>
         {children}
       </Main>
-      {noFooter || <UiFooter />}
+      {noFooter || <PageFooter />}
     </React.Fragment>
   )
 }

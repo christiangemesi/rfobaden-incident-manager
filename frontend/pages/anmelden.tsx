@@ -5,6 +5,8 @@ import { GetServerSideProps } from 'next'
 import { getSessionFromRequest } from '@/services/BackendService'
 import styled from 'styled-components'
 import Page from '@/components/Page/Page'
+import Image from 'next/image'
+import logo from '@/public/rfobaden-logo-text.png'
 
 interface Props {
   imageIndex: number
@@ -15,7 +17,7 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
     <Page noHeader noFooter>
       <CenterContainer>
         <LogoContainer>
-          <Logo src="/RFOBaden_Logo_RGB.svg" alt="RFO Baden Logo" width="300" height="42" />
+          <Image src={logo} alt="RFO Baden" width="300" height="42" />
         </LogoContainer>
         <SessionForm />
         <BackgroundContainer image={images[imageIndex]} />
@@ -49,9 +51,6 @@ const images = [
   // '/assets/bg4.jpeg',
 ]
 
-const Logo = styled.img`
-  display: block;
-`
 const LogoContainer = styled.div`
   margin-bottom: 4rem;
   display: flex;

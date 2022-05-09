@@ -1,4 +1,3 @@
-import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import Priority from '@/models/Priority'
 import React, { useEffect, useState } from 'react'
 import { useSession } from '@/stores/SessionStore'
@@ -11,8 +10,9 @@ import { isOpenTransport } from '@/models/Transport'
 import { isOpenReport } from '@/models/Report'
 import { isOpenTask } from '@/models/Task'
 import { isOpenSubtask } from '@/models/Subtask'
+import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 
-const UiHeaderAssignments: React.VFC = () => {
+const PageHeaderAssignments: React.VFC = () => {
   const { currentUser } = useSession()
 
   const [assignmentCount, setAssignmentCount] = useState(() => ({
@@ -56,27 +56,26 @@ const UiHeaderAssignments: React.VFC = () => {
 
   return (
     <UiLink href="/meine-aufgaben">
-      <UiHeaderItem title="Zugewiesene Aufgaben">
+      <PageHeaderItem title="Zugewiesene Aufgaben">
         <AssignmentCounter>
           <PriorityContainer>
             <PriorityIcon priority={Priority.HIGH} />
-            <Counter>{assignmentCount.high}</Counter>
+            {assignmentCount.high}
           </PriorityContainer>
           <PriorityContainer>
             <PriorityIcon priority={Priority.MEDIUM} />
-            <Counter>{assignmentCount.medium}</Counter>
+            {assignmentCount.medium}
           </PriorityContainer>
           <PriorityContainer>
             <PriorityIcon priority={Priority.LOW} />
-            <Counter>{assignmentCount.low}</Counter>
+            {assignmentCount.low}
           </PriorityContainer>
         </AssignmentCounter>
-      </UiHeaderItem>
+      </PageHeaderItem>
     </UiLink>
   )
 }
-
-export default UiHeaderAssignments
+export default PageHeaderAssignments
 
 const AssignmentCounter = styled.div`
   display: flex;
@@ -84,7 +83,6 @@ const AssignmentCounter = styled.div`
   align-items: center;
 `
 const PriorityContainer = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,13 +92,4 @@ const PriorityContainer = styled.div`
 `
 const PriorityIcon = styled(UiPriority)`
   transform: scale(0.75);
-`
-const Counter = styled.span`
-  position: absolute;
-  background-color: ${({ theme }) => theme.colors.grey.value};
-  border-radius: 50%;
-  top: -0.3rem;
-  right: -0.3rem;
-  padding: 0.25rem 0.4rem;
-  font-size: 0.75em;
 `
