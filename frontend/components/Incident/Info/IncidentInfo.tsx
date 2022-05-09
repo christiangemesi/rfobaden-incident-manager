@@ -11,6 +11,7 @@ import IncidentStore from '@/stores/IncidentStore'
 import { FileId } from '@/models/FileUpload'
 import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
+import UiLink from '@/components/Ui/Link/UiLink'
 
 interface Props {
   incident: Incident
@@ -50,7 +51,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
-        Ereignis
+        <UiLink href={"/ereignisse"} style={styledLink}> Ereignis </UiLink>
       </UiCaption>
       <UiCaption>
         {activeOrganisations.length}
@@ -76,3 +77,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
   )
 }
 export default IncidentInfo
+
+const styledLink = {
+  color: '#051A27',
+};
