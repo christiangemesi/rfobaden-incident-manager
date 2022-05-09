@@ -33,25 +33,9 @@ const ArchivPage: React.VFC<Props> = ({ data }) => {
         </UiGrid.Col>
       </UiGrid>
       {closedIncidents.length !== 0 && (
-        <section>
-          {/*<UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>*/}
-          {/*  <UiGrid.Col size={4}>*/}
-          {/*    <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Ereignis</UiTitle>*/}
-          {/*  </UiGrid.Col>*/}
-          {/*  <UiGrid.Col size={2}>*/}
-          {/*    <UiTitle level={6}>Startdatum</UiTitle>*/}
-          {/*  </UiGrid.Col>*/}
-          {/*  <UiGrid.Col size={2}>*/}
-          {/*    <UiTitle level={6}>Schliessdatum</UiTitle>*/}
-          {/*  </UiGrid.Col>*/}
-          {/*  <UiGrid.Col>*/}
-          {/*    <UiTitle level={6}>Begründung</UiTitle>*/}
-          {/*  </UiGrid.Col>*/}
-          {/*</UiGrid>*/}
-          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <IncidentArchiveList closedIncidents={closedIncidents} />
-          </UiGrid.Col>
-        </section>
+        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+          <IncidentArchiveList closedIncidents={closedIncidents} />
+        </UiGrid.Col>
       )}
     </UiContainer>
   )
