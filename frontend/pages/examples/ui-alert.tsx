@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
+import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 
 const UiAlertExample : React.VFC = () => {
-  return <UiAlert timeout={500} type="info">Test</UiAlert>
+  const [isVisible, setVisible] = useState(true)
+  return (
+    <UiAlertList>
+      {isVisible && (
+        <UiAlert type="Info"  text="Das ist die Meldung" onRemove={() => setVisible(false)} />
+      )}
+    </UiAlertList>
+  )
 }
-
 export default UiAlertExample
