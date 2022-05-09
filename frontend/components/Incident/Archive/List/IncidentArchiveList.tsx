@@ -12,7 +12,7 @@ interface Props {
 }
 
 const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
-  const [sortedIncidents, sort] = useSort(closedIncidents, () => ({
+  const [sortedClosedIncidents, sort] = useSort(closedIncidents, () => ({
     title: String,
     startDate: (incidentA, incidentB) => {
       const a = incidentA.startsAt ?? incidentA.createdAt
@@ -72,7 +72,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
       </UiGrid>
     
       <UiList>
-        {closedIncidents.map((closedIncident) => (
+        {sortedClosedIncidents.map((closedIncident) => (
           <IncidentArchiveListItem 
             key={closedIncident.id}
             closedIncident={closedIncident}
