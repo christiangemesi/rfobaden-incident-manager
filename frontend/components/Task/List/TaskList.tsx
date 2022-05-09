@@ -8,6 +8,7 @@ import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import Report from '@/models/Report'
 import styled from 'styled-components'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props {
   report: Report
@@ -16,8 +17,13 @@ interface Props {
 }
 
 const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) => {
+  const incident = useIncident(report.incidentId)
+  if(incident === null){
+    throw new Error()
+  }
   return (
     <Container>
+      {!incident.isClosed &&
       <UiModal title="Auftrag erfassen" size="fixed">
         <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Auftrag erfassen">
@@ -27,7 +33,7 @@ const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) =
         <UiModal.Body>{({ close }) => (
           <TaskForm report={report} onSave={handleSelect} onClose={close} />
         )}</UiModal.Body>
-      </UiModal>
+      </UiModal>}
 
       <UiList>
         {tasks.map((task) => (

@@ -10,8 +10,12 @@ import { Themed } from '@/theme'
 import Trackable from '@/models/Trackable'
 import { noop } from '@/utils/control-flow'
 import { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
+import Incident from '@/models/Incident'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props<T> extends StyledProps {
+  incident: Incident
+
   records: Array<readonly T[]>
   selected?: T | null,
   onSelect?: (record: T) => void
@@ -22,6 +26,7 @@ interface Props<T> extends StyledProps {
 }
 
 const ReportList = <T extends Trackable>({
+  incident,
   records,
   selected = null,
   onSelect: handleSelect,
@@ -37,6 +42,7 @@ const ReportList = <T extends Trackable>({
   }))
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
+      {!incident.isClosed &&
       <UiModal title={formTitle} size="fixed">
         <UiModal.Trigger>{({ open }) => (
           <UiCreateButton onClick={open} title="Meldung erfassen">
@@ -46,7 +52,7 @@ const ReportList = <T extends Trackable>({
         <UiModal.Body>{({ close }) => (
           renderForm({ save: handleSelect ?? noop, close })
         )}</UiModal.Body>
-      </UiModal>
+      </UiModal>}
 
       {records.map((sectionRecords, i) => (
         <UiList key={i}>
