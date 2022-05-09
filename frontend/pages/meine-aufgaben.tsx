@@ -21,6 +21,7 @@ import { useEffectOnce } from 'react-use'
 import User from '@/models/User'
 import { useCurrentUser } from '@/stores/SessionStore'
 import Trackable from '@/models/Trackable'
+import Page from '@/components/Page/Page'
 
 
 interface Props {
@@ -50,19 +51,21 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
 
   return (
-    <UiContainer>
-      <UiTitle level={1}>Meine Aufgaben</UiTitle>
-      {Object.keys(transports).map((priority) => (
-        <PriorityContainer key={priority}>
-          <AssignmentList
-            transports={transports[priority]}
-            reports={reports[priority]}
-            tasks={tasks[priority]}
-            subtasks={subtasks[priority]}
-          />
-        </PriorityContainer>
-      ))}
-    </UiContainer>
+    <Page>
+      <UiContainer>
+        <UiTitle level={1}>Meine Aufgaben</UiTitle>
+        {Object.keys(transports).map((priority) => (
+          <PriorityContainer key={priority}>
+            <AssignmentList
+              transports={transports[priority]}
+              reports={reports[priority]}
+              tasks={tasks[priority]}
+              subtasks={subtasks[priority]}
+            />
+          </PriorityContainer>
+        ))}
+      </UiContainer>
+    </Page>
   )
 }
 export default MeineAufgabenPage
