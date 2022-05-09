@@ -54,7 +54,6 @@ const UiHeaderAssignments: React.VFC = () => {
       ReportStore.saveAll(assignments.reports.map(parseReport))
       TaskStore.saveAll(assignments.tasks.map(parseTask))
       SubtaskStore.saveAll(assignments.subtasks.map(parseSubtask))
-
     })()
   }, [currentUser])
 
