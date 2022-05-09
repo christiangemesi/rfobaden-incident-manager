@@ -106,7 +106,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     if (handleClose) {
       handleClose()
     }
-  })
+  }, [incident, report])
 
   useCancel(form, handleClose)
 
@@ -216,7 +216,7 @@ export const mapEntryTypeToName = (source: string): string => {
     return toTitleCase(source)
   }
 }
-  
+
 const toTitleCase = (str: string): string => {
   return str
     .split(' ')

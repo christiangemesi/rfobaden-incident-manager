@@ -105,7 +105,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     if (handleClose) {
       handleClose()
     }
-  })
+  }, [incident, transport])
 
   useCancel(form, handleClose)
 
