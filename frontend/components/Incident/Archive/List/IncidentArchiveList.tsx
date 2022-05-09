@@ -13,7 +13,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ incidents }) => {
   return (
     <UiList>
       {incidents.map((incident) => (
-        <UiListItem key={incident.id}>
+        <UiListItem key={incident.id} href={`/ereignisse/archiv/${incident.id}`}>
           <UiGrid gapH={1.5}>
             <UiGrid.Col size={4}>
               <span>{incident.title}</span>
