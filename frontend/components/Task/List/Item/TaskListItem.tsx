@@ -13,8 +13,6 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   const assignee = useUser(task.assigneeId)
   const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
-  console.log(task.title + '::' + task.isClosed)
-
   return (
     <UiListItemWithDetails
       title={task.title}
