@@ -11,6 +11,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiDescription from '@/components/Ui/Description/UiDescription'
 import styled from 'styled-components'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import { mapEntryTypeToName } from '@/components/Report/Form/ReportForm'
 
 interface Props {
   incident: Incident
@@ -47,6 +48,26 @@ const ReportViewHeader: React.VFC<Props> = ({
         </UiIconButtonGroup>
       </UiGrid>
       <UiDescription description={report.description} notes={report.notes} />
+      <InfoTable>
+        <tbody>
+          <tr>
+            <th>
+              <UiTitle level={6}>Meldeart:</UiTitle>
+            </th>
+            <td>
+              <span>{mapEntryTypeToName(report.entryType.source)}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <UiTitle level={6}>Melder-Info:</UiTitle>
+            </th>
+            <td>
+              <span>{report.entryType.descriptor ?? '-'}</span>
+            </td>
+          </tr>
+        </tbody>
+      </InfoTable>
     </Container>
   )
 }
@@ -62,4 +83,12 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+`
+
+const InfoTable = styled.table`
+  table-layout: fixed;
+  text-align: left;
+  th {
+    width: 10rem;
+  }
 `

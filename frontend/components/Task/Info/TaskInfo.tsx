@@ -7,7 +7,8 @@ import UiCaption from '@/components/Ui/Caption/UiCaption'
 import Task from '@/models/Task'
 import { FileId } from '@/models/FileUpload'
 import TaskStore from '@/stores/TaskStore'
-import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   task: Task
@@ -18,6 +19,10 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
 
   const storeImageIds = (ids: FileId[]) => {
     TaskStore.save({ ...task, imageIds: ids })
+  }
+
+  const storeDocumentIds = (ids: FileId[]) => {
+    TaskStore.save({ ...task, documentIds: ids })
   }
 
   return (
@@ -38,11 +43,17 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
       <UiCaption>
         <UiDateLabel start={task.startsAt ?? task.createdAt} end={task.endsAt} />
       </UiCaption>
-      <ImageDrawer
+      <DocumentImageDrawer
         modelId={task.id}
         modelName="task"
         storeImageIds={storeImageIds}
         imageIds={task.imageIds}
+      />
+      <DocumentDrawer
+        modelId={task.id}
+        modelName="task"
+        storeDocumentIds={storeDocumentIds}
+        documentIds={task.documentIds}
       />
     </UiCaptionList>
   )

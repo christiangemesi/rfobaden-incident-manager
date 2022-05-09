@@ -12,7 +12,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
-
+import UiHeaderAssignments from '@/components/Ui/Header/Assignments/UiHeaderAssignments'
 
 const UiHeader: React.VFC = () => {
   const { currentUser } = useSession()
@@ -42,6 +42,9 @@ const UiHeader: React.VFC = () => {
         <UiHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
         </UiHeaderItem>
+        {currentUser !== null && (
+          <UiHeaderAssignments />
+        )}
         {currentUser === null ? (
           <UiHeaderItem href="/anmelden">
             <UiIcon.Login />
@@ -84,7 +87,6 @@ const UiHeader: React.VFC = () => {
 }
 export default UiHeader
 
-
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -125,9 +127,10 @@ const LoggedInUser = styled.div`
   display: flex;
   align-items: center
 `
-const IconButton = styled(UiIconButton)`  
-   :hover {
-      background-color: transparent;
-      transform: scale(1.05);
-   }
+const IconButton = styled(UiIconButton)`
+  :hover {
+    background-color: transparent;
+    transform: scale(1.05);
+  }
 `
+

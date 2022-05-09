@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
@@ -45,6 +46,19 @@ public interface ReportRepository
             + " WHERE "
             + "report.incident.id = :#{#path.incidentId}"
     )
+
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
+
+    @Query(
+        "SELECT report"
+            + " FROM "
+            + "Report report"
+            + " WHERE "
+            + "report.assignee.id = :id"
+            + " AND "
+            + "report.incident.isClosed = false "
+            + "ORDER BY report.incident.id"
+    )
+    List<Report> findAllByAssigneeId(@Param("id") Long id);
 }

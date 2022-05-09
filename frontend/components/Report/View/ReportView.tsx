@@ -20,7 +20,6 @@ import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
 
-
 interface Props {
   incident: Incident
   report: Report

@@ -7,7 +7,8 @@ import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import { FileId } from '@/models/FileUpload'
 import ReportStore from '@/stores/ReportStore'
-import ImageDrawer from '@/components/Image/Drawer/ImageDrawer'
+import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   report: Report
@@ -18,6 +19,10 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
 
   const storeImageIds = (ids: FileId[]) => {
     ReportStore.save({ ...report, imageIds: ids })
+  }
+
+  const storeDocumentIds = (ids: FileId[]) => {
+    ReportStore.save({ ...report, documentIds: ids })
   }
 
   return (
@@ -38,11 +43,17 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
       <UiCaption>
         <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
       </UiCaption>
-      <ImageDrawer
+      <DocumentImageDrawer
         modelId={report.id}
         modelName="report"
         storeImageIds={storeImageIds}
         imageIds={report.imageIds}
+      />
+      <DocumentDrawer
+        modelId={report.id}
+        modelName="report"
+        storeDocumentIds={storeDocumentIds}
+        documentIds={report.documentIds}
       />
     </UiCaptionList>
   )

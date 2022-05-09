@@ -1,13 +1,13 @@
 plugins {
-	id 'java'
+    id 'java'
 
-	id 'org.springframework.boot' version '2.5.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.5.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 
-	id 'checkstyle'
-	id "org.sonarqube" version "3.3"
+    id 'checkstyle'
+    id "org.sonarqube" version "3.3"
 
-	id 'jacoco'
+    id 'jacoco'
 }
 
 group = 'ch.rfobaden.incidentmanager'
@@ -17,7 +17,7 @@ sourceCompatibility = '11'
 def springVersion = '2.5.6'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 apply plugin: 'application'
@@ -25,86 +25,88 @@ apply plugin: 'application'
 mainClassName = 'ch.rfobaden.incidentmanager.backend.Application'
 
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
 
-	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
-	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
-	testImplementation 'com.h2database:h2:1.4.200'
-	testImplementation 'com.github.javafaker:javafaker:1.0.2'
-	testImplementation 'org.springframework.security:spring-security-test:5.6.2'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+    testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+    testImplementation 'org.springframework.security:spring-security-test:5.6.2'
 
-	developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter:5.8.2'
 
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
 
-	// JWT
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-	implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 }
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
 
-	checkstyleConfig
+    checkstyleConfig
 }
 
 compileJava.inputs.files(processResources)
 compileTestJava.inputs.files(processTestResources)
 
 test {
-	useJUnitPlatform()
-	testLogging {
-		events "skipped", "failed"
-	}
+    useJUnitPlatform()
+    testLogging {
+        events "skipped", "failed"
+    }
 }
 
 checkstyle {
-	toolVersion "9.0"
-	configFile file("config/checkstyle/checkstyle.xml")
-	showViolations = true
-	ignoreFailures = false
+    toolVersion "9.0"
+    configFile file("config/checkstyle/checkstyle.xml")
+    showViolations = true
+    ignoreFailures = false
 }
 
 checkstyleMain {
-	source = "src/main/java"
+    source = "src/main/java"
 }
 
 checkstyleTest {
-	source = "src/test/java"
+    source = "src/test/java"
 }
 
 tasks.withType(Checkstyle) {
-	reports {
-		xml.required.set(false)
-		html.required.set(true)
-	}
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
 }
 
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = true
-		html.required = true
-	}
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 sonarqube {
-	properties {
-		property "sonar.projectKey", "rfobaden-incident-manager_backend"
-		property "sonar.projectName", "rfobaden-incident-manager_backend"
-		property 'sonar.core.codeCoveragePlugin', 'jacoco'
-		property "sonar.qualitygate.wait", true
-	}
+    properties {
+        property "sonar.projectKey", "rfobaden-incident-manager_backend"
+        property "sonar.projectName", "rfobaden-incident-manager_backend"
+        property 'sonar.core.codeCoveragePlugin', 'jacoco'
+        property "sonar.qualitygate.wait", true
+    }
 }

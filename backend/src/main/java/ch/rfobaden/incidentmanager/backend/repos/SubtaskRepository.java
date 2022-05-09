@@ -18,15 +18,15 @@ public interface SubtaskRepository
     @Query(
         "SELECT CASE WHEN COUNT(subtask) > 0 THEN true ELSE false END "
             + " FROM "
-                + "Subtask subtask"
+            + "Subtask subtask"
             + " WHERE "
-                + "subtask.task.report.incident.id = :#{#path.incidentId}"
+            + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-                + "subtask.task.report.id = :#{#path.reportId}"
+            + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
-                +  "subtask.task.id = :#{#path.taskId}"
+            + "subtask.task.id = :#{#path.taskId}"
             + " AND "
-                + "subtask.id = :id"
+            + "subtask.id = :id"
     )
     @Override
     boolean existsByPath(SubtaskPath path, Long id);
@@ -34,15 +34,15 @@ public interface SubtaskRepository
     @Query(
         "SELECT subtask "
             + " FROM "
-                + "Subtask subtask"
+            + "Subtask subtask"
             + " WHERE "
-                + "subtask.task.report.incident.id = :#{#path.incidentId}"
+            + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-              + "subtask.task.report.id = :#{#path.reportId}"
+            + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
-               + "subtask.task.id = :#{#path.taskId}"
+            + "subtask.task.id = :#{#path.taskId}"
             + " AND "
-               + "subtask.id = :id"
+            + "subtask.id = :id"
     )
     @Override
     Optional<Subtask> findByPath(@Param("path") SubtaskPath path, @Param("id") Long id);
@@ -50,14 +50,27 @@ public interface SubtaskRepository
     @Query(
         "SELECT subtask "
             + " FROM "
-                + "Subtask subtask"
+            + "Subtask subtask"
             + " WHERE "
-                + "subtask.task.report.incident.id = :#{#path.incidentId}"
+            + "subtask.task.report.incident.id = :#{#path.incidentId}"
             + " AND "
-              + "subtask.task.report.id = :#{#path.reportId}"
+            + "subtask.task.report.id = :#{#path.reportId}"
             + " AND "
-              + "subtask.task.id = :#{#path.taskId}"
+            + "subtask.task.id = :#{#path.taskId}"
     )
+
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
+
+    @Query(
+        "SELECT subtask "
+            + " FROM "
+            + "Subtask subtask"
+            + " WHERE "
+            + "subtask.assignee.id = :id"
+            + " AND "
+            + "subtask.task.report.incident.isClosed = false "
+            + "ORDER BY subtask.task.report.incident.id"
+    )
+    List<Subtask> findAllByAssigneeId(@Param("id") Long id);
 }

@@ -24,7 +24,8 @@ const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'auto' }) => 
         </React.Fragment>
       ) : (
         <React.Fragment>
-          von <UiDate value={start} type={dateType} /> bis <UiDate value={end} type={dateType} />
+          <span>von <UiDate value={start} type={dateType} /> </span>
+          <span> bis <UiDate value={end} type={dateType} /></span>
         </React.Fragment>
       )}
 

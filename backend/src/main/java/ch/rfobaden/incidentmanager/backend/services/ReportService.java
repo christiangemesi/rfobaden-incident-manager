@@ -7,6 +7,8 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReportService extends ModelRepositoryService<Report, ReportPath, ReportRepository> {
     private final NotificationService notificationService;
@@ -18,5 +20,9 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
     @Override
     protected void afterSave(Report oldRecord, Report record) {
         notificationService.notifyAssigneeIfChanged(oldRecord, record);
+    }
+
+    public List<Report> listWhereAssigneeId(Long id) {
+        return repository.findAllByAssigneeId(id);
     }
 }
