@@ -1,7 +1,6 @@
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import Priority from '@/models/Priority'
 import React, { useEffect, useState } from 'react'
-import { useCurrentUser } from '@/stores/SessionStore'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -15,9 +14,15 @@ import TransportStore, { useTransports } from '@/stores/TransportStore'
 import ReportStore, { useReports } from '@/stores/ReportStore'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
 import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
+import User from '@/models/User'
 
-const UiHeaderAssignments: React.VFC = () => {
-  const currentUser = useCurrentUser()
+interface Props {
+  currentUser: User
+}
+
+const UiHeaderAssignments: React.VFC<Props> = ({
+  currentUser,
+}) => {
 
   const [assignmentCount, setAssignmentCount] = useState(() => ({
     high: 0,

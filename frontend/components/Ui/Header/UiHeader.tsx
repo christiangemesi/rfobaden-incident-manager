@@ -43,7 +43,7 @@ const UiHeader: React.VFC = () => {
           <UiIcon.Changelog />
         </UiHeaderItem>
         {currentUser !== null && (
-          <UiHeaderAssignments />
+          <UiHeaderAssignments currentUser={currentUser} />
         )}
         {currentUser === null ? (
           <UiHeaderItem href="/anmelden">
