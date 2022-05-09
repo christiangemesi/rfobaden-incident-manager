@@ -64,7 +64,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
             <UiTitle level={6}>Schliessdatum</UiTitle>
           </UiSortButton>
         </UiGrid.Col>
-        <UiGrid.Col>
+        <UiGrid.Col size={2}>
           <UiSortButton field={sort.closeReason}>
             <UiTitle level={6}>Begründung</UiTitle>
           </UiSortButton>
