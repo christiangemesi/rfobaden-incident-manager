@@ -1,25 +1,42 @@
 import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import Priority from '@/models/Priority'
 import React, { useEffect, useState } from 'react'
-import { useSession } from '@/stores/SessionStore'
+import { useCurrentUser } from '@/stores/SessionStore'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import AssignmentData from '@/models/AssignmentData'
+import AssignmentData, { groupAssigned } from '@/models/AssignmentData'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
-import { isOpenTransport } from '@/models/Transport'
-import { isOpenReport } from '@/models/Report'
-import { isOpenTask } from '@/models/Task'
-import { isOpenSubtask } from '@/models/Subtask'
+import { isOpenTransport, parseTransport } from '@/models/Transport'
+import { isOpenReport, parseReport } from '@/models/Report'
+import { isOpenTask, parseTask } from '@/models/Task'
+import { isOpenSubtask, parseSubtask } from '@/models/Subtask'
+import TransportStore, { useTransports } from '@/stores/TransportStore'
+import ReportStore, { useReports } from '@/stores/ReportStore'
+import TaskStore, { useTasks } from '@/stores/TaskStore'
+import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 
 const UiHeaderAssignments: React.VFC = () => {
-  const { currentUser } = useSession()
+  const currentUser = useCurrentUser()
 
   const [assignmentCount, setAssignmentCount] = useState(() => ({
     high: 0,
     medium: 0,
     low: 0,
   }))
+
+  const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
+  const reports = useReports(groupAssigned(currentUser, isOpenReport))
+  const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
+  const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
+
+  useEffect(() => {
+    setAssignmentCount({
+      low: transports.LOW.length + reports.LOW.length + tasks.LOW.length + subtasks.LOW.length,
+      medium: transports.MEDIUM.length + reports.MEDIUM.length + tasks.MEDIUM.length + subtasks.MEDIUM.length,
+      high: transports.HIGH.length + reports.HIGH.length + tasks.HIGH.length + subtasks.HIGH.length,
+    })
+  }, [transports, reports, tasks, subtasks])
 
   useEffect(() => {
     (async () => {
@@ -32,25 +49,12 @@ const UiHeaderAssignments: React.VFC = () => {
       if (assignmentsError !== null) {
         throw assignmentsError
       }
-      assignments.transports = assignments.transports.filter(isOpenTransport)
-      assignments.reports = assignments.reports.filter(isOpenReport)
-      assignments.tasks = assignments.tasks.filter(isOpenTask)
-      assignments.subtasks = assignments.subtasks.filter(isOpenSubtask)
 
-      const high = assignments.transports.filter((e) => e.priority == Priority.HIGH).length
-        + assignments.reports.filter((e) => e.priority == Priority.HIGH).length
-        + assignments.tasks.filter((e) => e.priority == Priority.HIGH).length
-        + assignments.subtasks.filter((e) => e.priority == Priority.HIGH).length
-      const medium = assignments.transports.filter((e) => e.priority == Priority.MEDIUM).length
-        + assignments.reports.filter((e) => e.priority == Priority.MEDIUM).length
-        + assignments.tasks.filter((e) => e.priority == Priority.MEDIUM).length
-        + assignments.subtasks.filter((e) => e.priority == Priority.MEDIUM).length
-      const low = assignments.transports.filter((e) => e.priority == Priority.LOW).length
-        + assignments.reports.filter((e) => e.priority == Priority.LOW).length
-        + assignments.tasks.filter((e) => e.priority == Priority.LOW).length
-        + assignments.subtasks.filter((e) => e.priority == Priority.LOW).length
+      TransportStore.saveAll(assignments.transports.map(parseTransport))
+      ReportStore.saveAll(assignments.reports.map(parseReport))
+      TaskStore.saveAll(assignments.tasks.map(parseTask))
+      SubtaskStore.saveAll(assignments.subtasks.map(parseSubtask))
 
-      setAssignmentCount({ high, medium, low })
     })()
   }, [currentUser])
 
