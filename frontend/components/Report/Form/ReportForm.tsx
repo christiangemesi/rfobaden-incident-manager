@@ -106,7 +106,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     if (handleClose) {
       handleClose()
     }
-  }, [incident, report])
+  })
 
   useCancel(form, handleClose)
 

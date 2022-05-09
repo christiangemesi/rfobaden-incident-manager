@@ -81,26 +81,16 @@ export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined
 
 export const useSubmit = <T>(
   form: UiFormState<T>,
-  callback: (value: T) => void | Promise<void>,
-  deps: unknown[] = [],
+  callback: ((value: T) => void | Promise<void>) | undefined | null,
 ): void => {
-  getFormBaseState(form).onSubmit =
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useCallback(callback, deps)
+  getFormBaseState(form).onSubmit = callback ?? null
 }
 
 export const useCancel = <T>(
   form: UiFormState<T>,
-  callback: (() => void | Promise<void>) | undefined,
-  deps: unknown[] = [],
+  callback: (() => void | Promise<void>) | undefined | null,
 ): void => {
-  getFormBaseState(form).onCancel =
-    useCallback(async () => {
-      if (callback) {
-        await callback()
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, deps)
+  getFormBaseState(form).onCancel = callback ?? null
 }
 
 export const clearForm = (form: UiFormState<unknown>): void => {

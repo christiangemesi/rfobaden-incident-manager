@@ -68,7 +68,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     if (handleClose) {
       handleClose()
     }
-  }, [incident])
+  })
 
   useCancel(form, handleClose)
 
