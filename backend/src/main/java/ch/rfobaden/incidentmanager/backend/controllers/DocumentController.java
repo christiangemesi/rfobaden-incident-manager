@@ -81,7 +81,7 @@ public class DocumentController extends AppController {
 
     @RequireAgent
     @PostMapping
-    public Long create(
+    public Document create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long modelId,
@@ -101,7 +101,7 @@ public class DocumentController extends AppController {
         saveToOwner.accept(owner, document);
         service.update(owner);
 
-        return document.getId();
+        return document;
     }
 
     @RequireAgent
