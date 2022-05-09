@@ -13,12 +13,14 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   const assignee = useUser(task.assigneeId)
   const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
+  console.log(task.title + '::' + task.isClosed)
+
   return (
     <UiListItemWithDetails
       title={task.title}
       priority={task.priority}
       user={assigneeName}
-      isClosed={task.isClosed}
+      isClosed={task.isClosed || task.isDone}
       onClick={handleClick && (() => handleClick(task))}
     >
       <LeftSpacer>
