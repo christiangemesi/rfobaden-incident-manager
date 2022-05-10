@@ -30,11 +30,25 @@ const UiAlert: React.VFC<Props> = ({
     }, timeout - 500)
   })
 
+  let icon = <UiIcon.AlertInfo />
+
+  switch (type) {
+  case 'warning' :
+    icon = <UiIcon.AlertWarning />
+    break
+  case 'error' :
+    icon = <UiIcon.AlertError />
+    break
+  case 'success' :
+    icon = <UiIcon.AlertSuccess />
+    break
+  }
+
   return (
     <Box type={type} isVisible={isVisible}>
       <TextContainer>
         <IconContainer>
-          <UiIcon.AlertCircle />
+          {icon}
         </IconContainer>
         <UiTitle level={6}>{text}</UiTitle>
       </TextContainer>
