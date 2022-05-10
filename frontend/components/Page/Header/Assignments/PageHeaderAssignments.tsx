@@ -60,21 +60,22 @@ const PageHeaderAssignments: React.VFC = () => {
         <AssignmentCounter>
           <PriorityContainer>
             <PriorityIcon priority={Priority.HIGH} />
-            {assignmentCount.high}
+            <Counter>{assignmentCount.high}</Counter>
           </PriorityContainer>
           <PriorityContainer>
             <PriorityIcon priority={Priority.MEDIUM} />
-            {assignmentCount.medium}
+            <Counter>{assignmentCount.medium}</Counter>
           </PriorityContainer>
           <PriorityContainer>
             <PriorityIcon priority={Priority.LOW} />
-            {assignmentCount.low}
+            <Counter>{assignmentCount.low}</Counter>
           </PriorityContainer>
         </AssignmentCounter>
       </PageHeaderItem>
     </UiLink>
   )
 }
+
 export default PageHeaderAssignments
 
 const AssignmentCounter = styled.div`
@@ -83,6 +84,7 @@ const AssignmentCounter = styled.div`
   align-items: center;
 `
 const PriorityContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,4 +94,13 @@ const PriorityContainer = styled.div`
 `
 const PriorityIcon = styled(UiPriority)`
   transform: scale(0.75);
+`
+const Counter = styled.span`
+  position: absolute;
+  background-color: ${({ theme }) => theme.colors.grey.value};
+  border-radius: 50%;
+  top: -0.3rem;
+  right: -0.3rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.75em;
 `
