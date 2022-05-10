@@ -3,7 +3,7 @@ import React, { Ref } from 'react'
 import SubtaskList from '@/components/Subtask/List/SubtaskList'
 import { useSubtasksOfTask } from '@/stores/SubtaskStore'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Report from '@/models/Report'
 import UiLevel from '@/components/Ui/Level/UiLevel'
 import useCachedEffect from '@/utils/hooks/useCachedEffect'
@@ -31,21 +31,31 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
 
   return (
     <UiLevel ref={innerRef}>
-      <UiLevel.Header>
-        <TaskViewHeader report={report} task={task} onClose={handleClose} />
-      </UiLevel.Header>
+      <StyledGreyedOut isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
+        <UiLevel.Header>
+          <TaskViewHeader report={report} task={task} onClose={handleClose} />
+        </UiLevel.Header>
 
-      <Content>
-        {isLoading  ? (
-          <UiIcon.Loader isSpinner />
-        ) : (
-          <SubtaskList task={task} subtasks={subtasks} />
-        )}
-      </Content>
+        <Content>
+          {isLoading ? (
+            <UiIcon.Loader isSpinner />
+          ) : (
+            <SubtaskList task={task} subtasks={subtasks} />
+          )}
+        </Content>
+      </StyledGreyedOut>
     </UiLevel>
   )
 }
 export default TaskView
+
+const StyledGreyedOut = styled.div<{ isClosed: boolean }>`
+  ${({ isClosed }) => isClosed && css`
+    //filter: grayscale(0.8) brightness(0.8);
+    //opacity: 0.6;
+    background-color: ${({ theme }) => theme.colors.grey.value};
+  `}
+`
 
 const Content = styled(UiLevel.Content)`
   display: flex;

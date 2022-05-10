@@ -8,10 +8,12 @@ import Model from '@/models/base/Model'
 import { ModelStore } from '@/stores/base/Store'
 import { createUseRecord } from '@/stores/base/hooks'
 import { noop } from '@/utils/control-flow'
+import Trackable from '@/models/Trackable'
 
 interface Props<T extends Model> {
   initialId?: Id<T> | null
   store: ModelStore<T>
+  isClosed: (record: T) => boolean
 
   renderList: (props: { selected: T | null, select: (record: T | null) => void }) => ReactNode
   renderView: (props: { selected: T, close: () => void }) => ReactNode
@@ -20,9 +22,10 @@ interface Props<T extends Model> {
   onDeselect?: () => void
 }
 
-const UiSideList = <T extends Model>({
+const UiSideList = <T extends Trackable>({
   initialId,
   store,
+  isClosed,
   renderList,
   renderView,
   onSelect: handleSelect = noop,
@@ -58,7 +61,11 @@ const UiSideList = <T extends Model>({
       <ListContainer ref={setListRef} $hasSelected={selectedId !== null}>
         {renderList({ selected, select: setSelected })}
       </ListContainer>
-      <ListOverlay hasSelected={selected !== null} $listHeight={prevListHeight}>
+      <ListOverlay
+        hasSelected={selected !== null}
+        $listHeight={prevListHeight}
+        isClosed={ selected !==null && isClosed(selected) }
+      >
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
     </Container>
@@ -74,30 +81,33 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
+
   ${Themed.media.lg.min} {
     min-width: calc(100% - 4rem);
   }
-  
+
   z-index: 0;
+
   ${Themed.media.lg.min} {
     z-index: 3;
   }
-  
+
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: min-width, max-width, width;
   transition-property: min-width, max-width, width;
-  
+
   ${({ $hasSelected }) => $hasSelected && css`
+
     ${Themed.media.lg.min} {
       min-width: 35%;
       max-width: 35%;
     }
+
     ${Themed.media.xxl.min} {
       min-width: 25%;
       max-width: 25%;
     }
   `}
-  
   ${Themed.media.md.max} {
     ${({ $hasSelected }) => $hasSelected && css`
       max-height: 0;
@@ -105,31 +115,39 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
   }
 `
 
-const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
+
+const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number, isClosed: boolean }>`
   display: flex;
   min-height: 100%;
   overflow: hidden;
   z-index: 2;
-
+  
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
 
-  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition: 300ms cubic-bezier(.23, 1, .32, 1);
   transition-property: transform;
 
   transform: translateX(50vw);
   transform-origin: right center;
+
   ${({ hasSelected }) => hasSelected && css`
     transform: translateX(0);
   `}
-  
   ${Themed.media.lg.min} {
     width: calc(65% + 4rem);
   }
+
   ${Themed.media.xxl.min} {
     width: calc(75% + 4rem);
   }
-
+  
+  ${({ isClosed }) => isClosed && css`
+    //filter: grayscale(0.8) brightness(0.8);
+    //opacity: 0.6;
+    background-color: ${({ theme }) => theme.colors.grey.value};
+  `}
+  
   ${Themed.media.md.max} {
     position: absolute;
     left: 0;
@@ -137,7 +155,9 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     min-height: ${({ $listHeight }) => $listHeight}px;
     transform: translateY(100vw);
     ${({ hasSelected }) => hasSelected && css`
+
       transform: translateY(0);
+
     `}
   }
 `

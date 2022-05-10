@@ -47,6 +47,7 @@ const ReportSideView: React.VFC<Props> = ({ incident }) => {
     <UiSideList
       store={ReportStore}
       initialId={initialId}
+      isClosed={(report) => report.isClosed || report.isDone}
       onSelect={rerouteToReport}
       onDeselect={rerouteToRoot}
       renderList={({ selected, select }) => (
