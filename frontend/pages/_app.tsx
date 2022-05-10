@@ -2,7 +2,7 @@ import NextApp, { AppProps } from 'next/app'
 import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
-import { defaultTheme, Theme } from '@/theme'
+import { defaultTheme, Theme, Themed } from '@/theme'
 import { createGlobalState, useEffectOnce } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
@@ -133,6 +133,10 @@ const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
 
   position: relative;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+
+  ${Themed.media.xs.only} {
+    margin-top: 4.5rem;
+  }
 `
 
 export const useAppState = createGlobalState({
