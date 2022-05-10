@@ -10,7 +10,6 @@ import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArch
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiButton from '@/components/Ui/Button/UiButton'
-import UiLink from '@/components/Ui/Link/UiLink'
 import styled from 'styled-components'
 
 interface Props {
@@ -30,8 +29,12 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
     .filter( (it) => data.page.data.find( (incident) => incident.id === it.id) )
     .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime() )
   )
+  
 
   const totalPages = Math.ceil( data.page.total / PAGE_LIMIT )
+
+  const currentOffset = offset
+
 
   return (
     <UiContainer>
@@ -49,22 +52,20 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
         </UiGrid.Col>
       )}
       <Pagination>
-        <UiButton style={{ margin: '0 0.1rem' }}>
+        <PaginationButton isCurrent={false}>
           <UiIcon.Previous />
-        </UiButton>
+        </PaginationButton>
 
 
         {[...Array(totalPages)].map((_element, i) => (
-          <UiButton key={i} style={{ margin: '0 0.1rem' }}>
-  
+          <PaginationButton key={i} isCurrent={currentOffset ===i}>
             {i + 1}
-            {/*<div key={i}>{i + 1}</div>*/}
-          </UiButton>
+          </PaginationButton>
         ))}
 
-        <UiButton style={{ margin: '0 0.1rem' }}>
+        <PaginationButton isCurrent={false}>
           <UiIcon.Next />
-        </UiButton>
+        </PaginationButton>
       </Pagination>
 
     </UiContainer>
@@ -110,3 +111,11 @@ const Pagination = styled.div`
   margin-top: 1rem;
 
 `
+const PaginationButton = styled(UiButton)<{ isCurrent: boolean}>`
+  margin: 0 0.1rem;
+
+  background: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.value : theme.colors.secondary.value};
+  color: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.contrast : theme.colors.secondary.contrast};
+  
+`
+
