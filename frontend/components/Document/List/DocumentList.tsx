@@ -36,6 +36,7 @@ const DocumentList: React.VFC<Props> = ({
       const error = await BackendService.delete('documents', id, {
         modelName: modelName,
         modelId: modelId.toString(),
+        type: 'document',
       })
       if (error !== null) {
         throw error
@@ -62,6 +63,7 @@ const DocumentList: React.VFC<Props> = ({
             modelName={modelName}
             onSave={onAddFile}
             onClose={close}
+            type="document"
           />
         )}</UiModal.Body>
       </UiModal>

@@ -15,7 +15,7 @@ import BackendService from '@/services/BackendService'
 interface Props {
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  type?: 'image'
+  type: 'image' | 'document'
   onClose?: () => void
   onSave: (fileId: FileId) => void
 }
@@ -23,7 +23,7 @@ interface Props {
 const DocumentForm: React.VFC<Props> = ({
   modelId,
   modelName,
-  type = null,
+  type,
   onClose: handleClose,
   onSave: handleSave,
 }) => {

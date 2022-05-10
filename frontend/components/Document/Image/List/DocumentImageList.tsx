@@ -32,9 +32,10 @@ const DocumentImageList: React.VFC<Props> = ({
 
   const handleDelete = async (id: FileId) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
-      const error = await BackendService.delete('images', id, {
+      const error = await BackendService.delete('documents', id, {
         modelName: modelName,
         modelId: modelId.toString(),
+        type: 'image',
       })
       if (error !== null) {
         throw error

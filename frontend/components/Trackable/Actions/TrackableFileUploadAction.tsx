@@ -9,7 +9,7 @@ import Id from '@/models/base/Id'
 interface Props {
   id: Id<Model>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  type?: 'image'
+  type: 'image' | 'document'
   onAddFile: (fileId: FileId) => void
 }
 
