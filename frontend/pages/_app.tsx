@@ -26,10 +26,6 @@ interface Props extends AppProps {
 
 const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   useEffectOnce(() => {
-    AlertStore.addAlert({ text: 'Scheisse passiert', type: 'error' })
-    AlertStore.addAlert({ text: 'Irgendwas passiert', type: 'info' })
-    AlertStore.addAlert({ text: 'Etwas erstellt', type: 'success' })
-
     if (user === null) {
       SessionStore.clear()
     } else {
@@ -37,12 +33,10 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     }
   })
 
+  const alerts = useAlerts()
   const remove = (alert: Alert) => {
     AlertStore.removeAlert(alert)
   }
-
-
-  const alerts = useAlerts()
 
   const { currentUser } = useSession()
   const component = useMemo(() => (
