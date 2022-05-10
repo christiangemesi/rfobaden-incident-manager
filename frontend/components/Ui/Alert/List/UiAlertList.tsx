@@ -16,6 +16,9 @@ const UiAlertList: React.VFC<Props> = ({ children }) => {
 export default UiAlertList
 
 const AlertContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   position: fixed;
   bottom: 5rem;
   left: 2rem;
