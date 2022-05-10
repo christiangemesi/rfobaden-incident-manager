@@ -171,7 +171,7 @@ public class DocumentController extends AppController {
 
     @SuppressWarnings("unchecked")
     private <M extends Model & PathConvertible<?> & DocumentOwner & ImageOwner>
-    ModelService<M, ?> resolveService(String modelName) {
+        ModelService<M, ?> resolveService(String modelName) {
 
         switch (modelName.toLowerCase()) {
             case "incident":
