@@ -52,7 +52,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
-        <StyledLink href="/ereignisse">Ereignis</StyledLink>
+        <BackButton href="/ereignisse">Ereignis</BackButton>
       </UiCaption>
       <UiCaption>
         {activeOrganisations.length}
@@ -79,6 +79,6 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
 }
 export default IncidentInfo
 
-const StyledLink = styled(UiLink)`
+const BackButton = styled(UiLink)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
 `
