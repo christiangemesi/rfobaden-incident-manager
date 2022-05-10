@@ -41,7 +41,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
       {closedIncidents.length !== 0 && (
         <section>
           <div style={{ margin: '4rem 0 1rem 0' }}>
-            <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
+            <UiTitle level={2}>Abgeschlossene Ereignisse</UiTitle>
           </div>
 
           <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
@@ -52,7 +52,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
               <UiTitle level={6}>Startdatum</UiTitle>
             </UiGrid.Col>
             <UiGrid.Col size={2}>
-              <UiTitle level={6}>Schliessdatum</UiTitle>
+              <UiTitle level={6}>Abschlussdatum</UiTitle>
             </UiGrid.Col>
             <UiGrid.Col>
               <UiTitle level={6}>Begründung</UiTitle>

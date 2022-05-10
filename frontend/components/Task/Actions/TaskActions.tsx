@@ -22,7 +22,7 @@ interface Props {
 
 const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" abschliessen wollen?`)) {
       await BackendService.delete(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id)
       TaskStore.remove(task.id)
       if (handleDeleteCb) {
@@ -33,10 +33,10 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
 
   const handleClose = useCallback(async () => {
     if (task.isDone) {
-      alert('Es sind alle Teilaufträge geschlossen.')
+      alert('Es sind alle Teilaufträge abgeschlossen.')
       return
     }
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" abschliessen wollen?`)) {
       const newTask = { ...task, isClosed: true }
       const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id, newTask)
       if (error !== null) {
@@ -48,7 +48,7 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
 
   const handleReopen = useCallback(async () => {
     if (task.isDone) {
-      alert('Es sind alle Teilaufträge geschlossen.')
+      alert('Es sind alle Teilaufträge abgeschlossen.')
       return
     }
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" öffnen wollen?`)) {

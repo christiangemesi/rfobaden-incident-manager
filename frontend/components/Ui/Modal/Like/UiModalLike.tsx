@@ -256,7 +256,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
             children: content,
             nav: noCloseButton ? null : (
               <Nav>
-                <UiIconButton title="Schliessen" onClick={state.close}>
+                <UiIconButton title="Abschliessen" onClick={state.close}>
                   <UiIcon.CancelAction />
                 </UiIconButton>
               </Nav>
