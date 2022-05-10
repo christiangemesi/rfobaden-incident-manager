@@ -8,6 +8,10 @@ import { useEffectOnce } from 'react-use'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiButton from '@/components/Ui/Button/UiButton'
+import UiLink from '@/components/Ui/Link/UiLink'
+import styled from 'styled-components'
 
 interface Props {
   offset: number
@@ -31,9 +35,7 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
 
   return (
     <UiContainer>
-      {[...Array(totalPages)].map((_element, i) => (
-        <div key={i}>{i + 1}</div>
-      ))}
+
       <UiGrid style={{ padding: '0 0 1rem 0' }}>
         <UiGrid.Col>
           <UiTitle level={1}>
@@ -46,6 +48,25 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
           <IncidentArchiveList closedIncidents={closedIncidents} />
         </UiGrid.Col>
       )}
+      <Pagination>
+        <UiButton style={{ margin: '0 0.1rem' }}>
+          <UiIcon.Previous />
+        </UiButton>
+
+
+        {[...Array(totalPages)].map((_element, i) => (
+          <UiButton key={i} style={{ margin: '0 0.1rem' }}>
+  
+            {i + 1}
+            {/*<div key={i}>{i + 1}</div>*/}
+          </UiButton>
+        ))}
+
+        <UiButton style={{ margin: '0 0.1rem' }}>
+          <UiIcon.Next />
+        </UiButton>
+      </Pagination>
+
     </UiContainer>
   )
 }
@@ -53,7 +74,6 @@ export default ArchivPage
 
 
 const PAGE_LIMIT = 10
-
 
 interface Page {
   total: number
@@ -66,7 +86,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
   const offset = typeof query.p === 'string' ? parseInt(query.p) : 0
-
 
   const [page, pageError]: BackendResponse<Page> = await backendService.get(`incidents/archive?limit=${PAGE_LIMIT}&offset=${offset}`)
   if (pageError !== null) {
@@ -82,3 +101,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
     },
   }
 }
+
+const Pagination = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  
+  margin-top: 1rem;
+
+`
