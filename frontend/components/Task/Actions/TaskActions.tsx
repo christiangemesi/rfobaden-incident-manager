@@ -7,10 +7,8 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
-import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import TaskPrintView from '../PrintView/TaskPrintView'
 
@@ -61,14 +59,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
     }
   }, [task])
 
-  const addImageId = useCallback((fileId: FileId) => {
-    TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
-  }, [task])
-
-  const addDocumentId = useCallback((fileId: FileId) => {
-    TaskStore.save({ ...task, documentIds: [...task.documentIds, fileId]})
-  }, [task])
-
   return (
     <UiDropDown>
       <UiDropDown.Trigger>{({ toggle }) => (
@@ -84,18 +74,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         {!task.isDone && (
           <TrackableCloseAction isClosed={task.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
-        <TrackableFileUploadAction
-          id={task.id}
-          modelName="task"
-          onAddFile={addImageId}
-          type="image"
-        />
-        <TrackableFileUploadAction
-          id={task.id}
-          modelName="task"
-          onAddFile={addDocumentId}
-        />
 
         <UiPrinter renderContent={() => <TaskPrintView task={task} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>
