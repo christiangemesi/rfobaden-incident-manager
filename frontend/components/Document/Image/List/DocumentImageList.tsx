@@ -1,4 +1,4 @@
-import { Document, getImageUrl } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
@@ -17,11 +17,15 @@ interface Props {
   storeImages: (images: Document[]) => void
 }
 
-const DocumentImageList: React.VFC<Props> = ({ images, modelId, modelName, storeImages }) => {
+const DocumentImageList: React.VFC<Props> = ({ 
+  images, 
+  modelId, 
+  modelName, 
+  storeImages,
+}) => {
 
   const handleDelete = async (image: Document) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
-
       const error = await BackendService.delete('images', image.id, {
         modelName: modelName,
         modelId: modelId.toString(),

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import { getImageUrl, Document } from '@/models/FileUpload'
+import { Document, getImageUrl } from '@/models/FileUpload'
 
 interface Props {
   image: Document
@@ -18,6 +18,7 @@ const DocumentImageItem: React.VFC<Props> = ({
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
+    e.preventDefault()
     onDelete(image)
   }
 
@@ -27,9 +28,9 @@ const DocumentImageItem: React.VFC<Props> = ({
     <UiModal>
       <UiModal.Trigger>{({ open }) => (
         <ImageCard onClick={open}>
-          <ImageArea>
+          <ImageThumbnail>
             <Image src={src} width={200} height={200} alt={src} />
-          </ImageArea>
+          </ImageThumbnail>
           <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
           <ImageName>
             {image.name}
@@ -62,7 +63,7 @@ const ImageName = styled.div`
   max-width: 12rem;
 `
 
-const ImageArea = styled.div` 
+const ImageThumbnail = styled.div` 
   position: relative;
   transition: 250ms ease;
   transition-property: opacity;
@@ -79,7 +80,7 @@ const ImageCard = styled.div`
     & > ${DeleteButton} {
       visibility: visible;
     }
-    & > ${ImageArea} {
+    & > ${ImageThumbnail} {
       opacity: 50%;
     }
   }
