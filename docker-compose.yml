@@ -5,7 +5,7 @@ services:
     command: ['npm', 'run', 'dev']
     working_dir: /app
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - NEXT_PUBLIC_RFO_BACKEND_URL=${RFO_BACKEND_URL}
       - NEXT_PUBLIC_RFO_STAGE=${RFO_STAGE}
     ports:
