@@ -64,7 +64,7 @@ public class DocumentController extends AppController {
         ));
         var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
             new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
-        ));;
+        ));
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
             .filename(document.getName() == null
@@ -110,13 +110,25 @@ public class DocumentController extends AppController {
     public void delete(
         @RequestParam String modelName,
         @RequestParam Long modelId,
-        @PathVariable Long id
+        @PathVariable Long id,
+        @RequestParam(required = false) Optional<String> type
     ) {
         var service = resolveService(modelName);
         var entity = service.find(modelId).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
         ));
-        entity.getDocuments().removeIf((document) -> document.getId().equals(id));
+        var actualType = type.orElse("");
+        switch (actualType) {
+            case "":
+            case "document":
+                entity.getDocuments().removeIf(document -> document.getId().equals(id));
+                break;
+            case "image":
+                entity.getImages().removeIf(image -> image.getId().equals(id));
+                break;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "type not supported: " + id);
+        }
         if (!documentService.delete(id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id);
         }
@@ -144,7 +156,8 @@ public class DocumentController extends AppController {
         var actualType = type.orElse("");
         switch (actualType) {
             case "":
-                return M::addImage;
+            case "document":
+                return M::addDocument;
             case "image":
                 if (!document.getMimeType().startsWith("image/")) {
                     throw new ApiException(HttpStatus.BAD_REQUEST, "file must be an image");
@@ -158,7 +171,7 @@ public class DocumentController extends AppController {
 
     @SuppressWarnings("unchecked")
     private <M extends Model & PathConvertible<?> & DocumentOwner & ImageOwner>
-        ModelService<M, ?> resolveService(String modelName) {
+    ModelService<M, ?> resolveService(String modelName) {
 
         switch (modelName.toLowerCase()) {
             case "incident":

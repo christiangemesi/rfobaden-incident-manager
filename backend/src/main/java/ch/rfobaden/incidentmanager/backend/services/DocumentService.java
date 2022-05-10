@@ -58,7 +58,7 @@ public class DocumentService {
 
     public boolean delete(Long id) {
         return repository.findById(id)
-            .map((document) -> {
+            .map(document -> {
                 repository.delete(document);
                 return fileRepository.delete(document);
             })
