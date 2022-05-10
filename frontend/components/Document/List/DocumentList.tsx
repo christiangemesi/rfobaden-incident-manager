@@ -50,7 +50,7 @@ const DocumentList: React.VFC<Props> = ({
       <UiTitle level={1}>
         Dokumente
       </UiTitle>
-      <UiModal title={'Dokument hinzufügen'} size="fixed">
+      <UiModal title="Dokument hinzufügen" size="fixed">
         <UiModal.Trigger>{({ open }) => (
           <Button onClick={open}>
             <UiIcon.CreateAction size={1.5} />

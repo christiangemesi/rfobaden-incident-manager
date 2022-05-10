@@ -50,7 +50,7 @@ const DocumentImageList: React.VFC<Props> = ({
         Bilder
       </UiTitle>
       <ImageContainer>
-        <UiModal title={'Bild hinzufügen'} size="fixed">
+        <UiModal title="Bild hinzufügen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
             <Button onClick={open}>
               <UiIcon.CreateAction size={2} />
