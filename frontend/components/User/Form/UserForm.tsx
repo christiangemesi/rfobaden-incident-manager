@@ -20,11 +20,7 @@ interface Props {
 
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
 
-  const userEmails = useUsers((users) => users.map(({ email }) => email))
-
-  const checkUserExists = (email: string) : true | string => {
-    return userEmails.find((e) => e === email) === undefined ? true : "E-Mail-Adresse wird schon benutzt" 
-  }
+  const userEmails = useUsers((users) => users.map(({ email }) => email.toLowerCase()))
 
   const form = useForm<ModelData<User>>(user,() => ({
     email: '',
@@ -39,7 +35,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
       validate.maxLength(100),
-      checkUserExists,
+      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt' ,
     ],
     firstName: [
       validate.notBlank(),
