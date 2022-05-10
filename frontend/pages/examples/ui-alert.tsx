@@ -7,7 +7,7 @@ const UiAlertExample : React.VFC = () => {
   return (
     <UiAlertList>
       {isVisible && (
-        <UiAlert type="Info"  text="Das ist die Meldung" onRemove={() => setVisible(false)} />
+        <UiAlert type="info"  text="Das ist die Meldung" onRemove={() => setVisible(false)} />
       )}
     </UiAlertList>
   )
