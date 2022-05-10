@@ -4,11 +4,12 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useEffectOnce } from 'react-use'
+import { ColorName } from '@/theme'
 
 interface Props {
-  type: 'Success' | 'Info' | 'Warning' | 'Error'
+  type: ColorName
   text: string
-  onRemove : () => void
+  onRemove: () => void
   timeout?: number
 }
 
@@ -26,7 +27,7 @@ const UiAlert: React.VFC<Props> = ({
     }, timeout)
     setTimeout(() => {
       setVisibility(false)
-    }, timeout-500)
+    }, timeout - 500)
   })
 
   return (
@@ -46,15 +47,9 @@ const UiAlert: React.VFC<Props> = ({
 
 export default UiAlert
 
-const Box = styled.div<{ type: string, isVisible: boolean }>`
-  background: ${({ theme, type }) => {
-    switch (type){
-    case 'Info' : return theme.colors.primary.value
-    case 'Success' : return theme.colors.success.value
-    case 'Error' : return theme.colors.error.value
-    case 'Warning' : return theme.colors.warning.value
-    }
-  }};
+const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
+  background: ${({ theme, type }) => theme.colors[type].value};
+
   border-radius: 5px;
   width: 20rem;
 
@@ -64,7 +59,7 @@ const Box = styled.div<{ type: string, isVisible: boolean }>`
   opacity: 75%;
   transition: 500ms ease-out;
   transition-property: opacity, display;
-  
+
   ${({ isVisible }) => !isVisible && css`
     opacity: 0;
   `}
