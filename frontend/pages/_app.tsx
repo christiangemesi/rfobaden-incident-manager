@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import AlertStore, { useAlerts } from '@/stores/AlertStore'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
+import Alert from '@/models/Alert'
 
 interface Props extends AppProps {
   user: User | null
@@ -25,8 +26,9 @@ interface Props extends AppProps {
 
 const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   useEffectOnce(() => {
-    AlertStore.addAlert('Wahnsinn')
-    AlertStore.addAlert('Krass')
+    AlertStore.addAlert({ text: 'Scheisse passiert', type: 'error' })
+    AlertStore.addAlert({ text: 'Irgendwas passiert', type: 'info' })
+    AlertStore.addAlert({ text: 'Etwas erstellt', type: 'success' })
 
     if (user === null) {
       SessionStore.clear()
@@ -35,7 +37,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     }
   })
 
-  const remove = (alert : string) => {
+  const remove = (alert: Alert) => {
     AlertStore.removeAlert(alert)
   }
 
@@ -72,8 +74,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
           <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
             <UiAlertList>
-              {alerts.map((alert) =>
-                <UiAlert key={alert} text={alert} type={'error'} onRemove={ () => remove(alert) }></UiAlert>
+              {alerts.map((alert, idx) =>
+                <UiAlert key={idx} text={alert.text} type={alert.type} onRemove={() => remove(alert)}></UiAlert>,
               )}
             </UiAlertList>
           </Main>
@@ -83,8 +85,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     </Fragment>
   )
 }
-export default App;
-
+export default App
+;
 (App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
   let pageUser: User | null = null
 
