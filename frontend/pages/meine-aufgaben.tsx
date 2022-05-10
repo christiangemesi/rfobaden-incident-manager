@@ -11,16 +11,13 @@ import Task, { isOpenTask, parseTask } from '@/models/Task'
 import Report, { isOpenReport, parseReport } from '@/models/Report'
 import Transport, { isOpenTransport, parseTransport } from '@/models/Transport'
 import { GetServerSideProps } from 'next'
-import Priority from '@/models/Priority'
 import IncidentStore from '@/stores/IncidentStore'
 import Incident, { parseIncident } from '@/models/Incident'
 import styled from 'styled-components'
 import AssignmentList from '@/components/Assignment/List/AssignmentList'
-import AssignmentData from '@/models/AssignmentData'
+import AssignmentData, { groupAssigned } from '@/models/AssignmentData'
 import { useEffectOnce } from 'react-use'
-import User from '@/models/User'
 import { useCurrentUser } from '@/stores/SessionStore'
-import Trackable from '@/models/Trackable'
 import Page from '@/components/Page/Page'
 
 
@@ -69,32 +66,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   )
 }
 export default MeineAufgabenPage
-
-type Prioritized<T> = {
-  [K in Priority]: T[]
-} & {
-  closed: T[]
-}
-
-const groupAssigned = <T extends Trackable>(currentUser: User, isOpen: (record: T) => boolean) => (records: readonly T[]): Prioritized<T> => {
-  const result: Prioritized<T> = {
-    [Priority.HIGH]: [],
-    [Priority.MEDIUM]: [],
-    [Priority.LOW]: [],
-    closed: [],
-  }
-  for (const record of records) {
-    if (record.assigneeId !== currentUser.id) {
-      continue
-    }
-    if (!isOpen(record)) {
-      result.closed.push(record)
-      continue
-    }
-    result[record.priority].push(record)
-  }
-  return result
-}
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,

@@ -41,7 +41,7 @@ const PageHeader: React.VFC = () => {
       </NavContainer>
       <ButtonList>
         {currentUser !== null && (
-          <PageHeaderAssignments />
+          <PageHeaderAssignments currentUser={currentUser} />
         )}
         <PageHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
