@@ -15,7 +15,6 @@ const UiAlertExample: React.VFC = () => {
     AlertStore.addAlert({ text: 'Beispiel', type: 'warning' })
   })
 
-
   const alerts = useAlerts()
 
   return (
