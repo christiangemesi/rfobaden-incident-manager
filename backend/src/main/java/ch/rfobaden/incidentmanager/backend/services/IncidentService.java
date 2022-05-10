@@ -5,6 +5,8 @@ import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.repos.IncidentRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,5 +38,7 @@ public class IncidentService extends ModelRepositoryService.Basic<Incident, Inci
         return update(EmptyPath.getInstance(), incident);
     }
 
-
+    public Page<Incident> listClosedIncident(int limit, int offset) {
+        return repository.findAllClosed(PageRequest.of(offset, limit));
+    }
 }
