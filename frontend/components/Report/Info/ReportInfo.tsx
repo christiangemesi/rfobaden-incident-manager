@@ -1,5 +1,5 @@
 import Report from '@/models/Report'
-import React from 'react'
+import React, { useCallback } from 'react'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import { useUsername } from '@/models/User'
@@ -25,6 +25,15 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
     ReportStore.save({ ...report, documentIds: ids })
   }
 
+  const addImage = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
+  }, [report])
+
+  const addDocument = useCallback((fileId: FileId) => {
+    ReportStore.save({ ...report, documentIds: [...report.documentIds, fileId]})
+  }, [report])
+
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -48,12 +57,14 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         modelName="report"
         storeImageIds={storeImageIds}
         imageIds={report.imageIds}
+        onAddFile={addImage}
       />
       <DocumentDrawer
         modelId={report.id}
         modelName="report"
         storeDocumentIds={storeDocumentIds}
         documentIds={report.documentIds}
+        onAddFile={addDocument}
       />
     </UiCaptionList>
   )
