@@ -10,6 +10,7 @@ import UserStore, { useUsers } from '@/stores/UserStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import OrganizationStore from '@/stores/OrganizationStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -27,20 +28,22 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
   const users = useUsers()
 
   return (
-    <UiContainer>
-      <section>
-        <UiGrid style={{ padding: '0 0 1rem 0' }}>
-          <UiGrid.Col>
-            <UiTitle level={1}>
-              Benutzer verwalten
-            </UiTitle>
+    <Page>
+      <UiContainer>
+        <section>
+          <UiGrid style={{ padding: '0 0 1rem 0' }}>
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                Benutzer verwalten
+              </UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
+          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+            <UserList users={users} />
           </UiGrid.Col>
-        </UiGrid>
-        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <UserList users={users} />
-        </UiGrid.Col>
-      </section>
-    </UiContainer>
+        </section>
+      </UiContainer>
+    </Page>
   )
 }
 export default BenutzerPage

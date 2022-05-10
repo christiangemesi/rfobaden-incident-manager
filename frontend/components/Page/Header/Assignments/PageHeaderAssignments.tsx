@@ -1,4 +1,3 @@
-import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import Priority from '@/models/Priority'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -10,6 +9,7 @@ import { isOpenTransport, parseTransport } from '@/models/Transport'
 import { isOpenReport, parseReport } from '@/models/Report'
 import { isOpenTask, parseTask } from '@/models/Task'
 import { isOpenSubtask, parseSubtask } from '@/models/Subtask'
+import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 import TransportStore, { useTransports } from '@/stores/TransportStore'
 import ReportStore, { useReports } from '@/stores/ReportStore'
 import TaskStore, { useTasks } from '@/stores/TaskStore'
@@ -20,10 +20,9 @@ interface Props {
   currentUser: User
 }
 
-const UiHeaderAssignments: React.VFC<Props> = ({
+const PageHeaderAssignments: React.VFC<Props> = ({
   currentUser,
 }) => {
-
   const [assignmentCount, setAssignmentCount] = useState(() => ({
     high: 0,
     medium: 0,
@@ -64,7 +63,7 @@ const UiHeaderAssignments: React.VFC<Props> = ({
 
   return (
     <UiLink href="/meine-aufgaben">
-      <UiHeaderItem title="Zugewiesene Aufgaben">
+      <PageHeaderItem title="Zugewiesene Aufgaben">
         <AssignmentCounter>
           <PriorityContainer>
             <PriorityIcon priority={Priority.HIGH} />
@@ -79,12 +78,12 @@ const UiHeaderAssignments: React.VFC<Props> = ({
             <Counter>{assignmentCount.low}</Counter>
           </PriorityContainer>
         </AssignmentCounter>
-      </UiHeaderItem>
+      </PageHeaderItem>
     </UiLink>
   )
 }
 
-export default UiHeaderAssignments
+export default PageHeaderAssignments
 
 const AssignmentCounter = styled.div`
   display: flex;

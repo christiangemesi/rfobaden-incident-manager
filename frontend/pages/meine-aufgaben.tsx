@@ -18,6 +18,7 @@ import AssignmentList from '@/components/Assignment/List/AssignmentList'
 import AssignmentData, { groupAssigned } from '@/models/AssignmentData'
 import { useEffectOnce } from 'react-use'
 import { useCurrentUser } from '@/stores/SessionStore'
+import Page from '@/components/Page/Page'
 
 
 interface Props {
@@ -47,19 +48,21 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
   const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
 
   return (
-    <UiContainer>
-      <UiTitle level={1}>Meine Aufgaben</UiTitle>
-      {Object.keys(transports).map((priority) => (
-        <PriorityContainer key={priority}>
-          <AssignmentList
-            transports={transports[priority]}
-            reports={reports[priority]}
-            tasks={tasks[priority]}
-            subtasks={subtasks[priority]}
-          />
-        </PriorityContainer>
-      ))}
-    </UiContainer>
+    <Page>
+      <UiContainer>
+        <UiTitle level={1}>Meine Aufgaben</UiTitle>
+        {Object.keys(transports).map((priority) => (
+          <PriorityContainer key={priority}>
+            <AssignmentList
+              transports={transports[priority]}
+              reports={reports[priority]}
+              tasks={tasks[priority]}
+              subtasks={subtasks[priority]}
+            />
+          </PriorityContainer>
+        ))}
+      </UiContainer>
+    </Page>
   )
 }
 export default MeineAufgabenPage

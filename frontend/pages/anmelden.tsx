@@ -4,8 +4,7 @@ import React from 'react'
 import { GetServerSideProps } from 'next'
 import { getSessionFromRequest } from '@/services/BackendService'
 import styled from 'styled-components'
-import { useAppState } from '@/pages/_app'
-import { useEffectOnce } from 'react-use'
+import Page from '@/components/Page/Page'
 import Image from 'next/image'
 import logo from '@/public/rfobaden-logo-text.png'
 
@@ -14,20 +13,16 @@ interface Props {
 }
 
 const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
-  const [_, setAppState] = useAppState()
-
-  useEffectOnce(() => {
-    setAppState({ hasHeader: false, hasFooter: false })
-  })
-
   return (
-    <CenterContainer>
-      <LogoContainer>
-        <Image src={logo} alt="RFO Baden" width="300" height="42" />
-      </LogoContainer>
-      <SessionForm />
-      <BackgroundContainer image={images[imageIndex]} />
-    </CenterContainer>
+    <Page noHeader noFooter>
+      <CenterContainer>
+        <LogoContainer>
+          <Image src={logo} alt="RFO Baden" width="300" height="42" />
+        </LogoContainer>
+        <SessionForm />
+        <BackgroundContainer image={images[imageIndex]} />
+      </CenterContainer>
+    </Page>
   )
 }
 export default AnmeldenPage
