@@ -39,7 +39,8 @@ public abstract class ModelController<
     @GetMapping
     @RequireAgent
     public List<TModel> list(@ModelAttribute TPath path) {
-        return service.list(path);
+        throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Test");
+//        return service.list(path);
     }
 
     @GetMapping(value = "{id}")

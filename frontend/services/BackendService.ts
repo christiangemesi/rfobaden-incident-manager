@@ -7,6 +7,7 @@ import User, { parseUser } from '@/models/User'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import FormData from 'form-data'
 import { FileId } from '@/models/FileUpload'
+import AlertStore from '@/stores/AlertStore'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -149,7 +150,10 @@ class BackendService {
         return [null as unknown as T, error]
       }
       // TODO display error to user.
-      throw new Error(`backend request failed: ${await res.text()}`)
+      const msg = await res.text()
+      AlertStore.addAlert({ text: `Anfrage fehlgeschlagen: [${res.status}] ${res.statusText}`, type: 'error' })
+      throw new Error(`backend request failed: [${res.status}] ${msg}`)
+
     }
     return [await map(res), null]
   }
