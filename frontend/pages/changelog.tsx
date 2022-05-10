@@ -6,14 +6,17 @@ import changelog from '../CHANGELOG.md'
 import 'github-markdown-css/github-markdown-light.css'
 import { GetServerSideProps } from 'next'
 import { getSessionFromRequest } from '@/services/BackendService'
+import Page from '@/components/Page/Page'
 
 const ChangelogPage : React.VFC = () => {
   return (
-    <UiContainer>
-      <LogContainer className="markdown-body">
-        <ReactMarkdown children={changelog} linkTarget="_blank" />
-      </LogContainer>
-    </UiContainer>
+    <Page>
+      <UiContainer>
+        <LogContainer className="markdown-body">
+          <ReactMarkdown children={changelog} linkTarget="_blank" />
+        </LogContainer>
+      </UiContainer>
+    </Page>
   )
 }
 
