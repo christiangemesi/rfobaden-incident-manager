@@ -22,7 +22,7 @@ interface Props {
 
 const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" abschliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id)
       TaskStore.remove(task.id)
       if (handleDeleteCb) {
