@@ -12,7 +12,10 @@ const UiAlertExample: React.VFC = () => {
   }
 
   useEffectOnce(() => {
-    AlertStore.addAlert({ text: 'Beispiel', type: 'warning' })
+    AlertStore.addAlert({ text: 'Scheisse passiert', type: 'error' })
+    AlertStore.addAlert({ text: 'Irgendwas passiert', type: 'info' })
+    AlertStore.addAlert({ text: 'Etwas erstellt', type: 'success' })
+    AlertStore.addAlert({ text: 'Etwas erstellt', type: 'warning' })
   })
 
   const alerts = useAlerts()
