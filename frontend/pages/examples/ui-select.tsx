@@ -4,16 +4,17 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
 
 const UiButtonExample: React.VFC = () => {
-  const options = [
+  const [options, setOptions] = useState<string[]>([
     'Option 1',
     'Option 2',
     'Option 3',
     'Option 4',
-  ]
+  ])
   const [currentValue, setCurrentValue] = useState<string | null>(null)
   const [currentValue2, setCurrentValue2] = useState<string | null>(null)
   const [currentValue3, setCurrentValue3] = useState<string | null>(null)
   const [currentValue4, setCurrentValue4] = useState<string | null>(null)
+  const [currentValue5, setCurrentValue5] = useState<string | null>(null)
 
   return (
     <UiContainer>
@@ -26,19 +27,29 @@ const UiButtonExample: React.VFC = () => {
         <UiGrid.Col>
           <UiSelectInput label="disabled" options={options} value={currentValue2} onChange={(newValue) => {
             setCurrentValue2(newValue)
-          }} isDisabled placeholder={'disable'} />
+          }} isDisabled placeholder="disable" />
         </UiGrid.Col>
         <UiGrid.Col>
           <UiSelectInput label="searchable" options={options} value={currentValue3} onChange={(newValue) => {
             setCurrentValue3(newValue)
-          }} isSearchable placeholder={'search'} />
+          }} isSearchable placeholder="search" />
         </UiGrid.Col>
       </UiGrid>
-      <UiGrid>
+      <UiGrid gap={0.5}>
         <UiGrid.Col>
           <UiSelectInput label="error" options={options} value={currentValue4} onChange={(newValue) => {
             setCurrentValue4(newValue)
-          }} errors={['Fail not selected']} menuPlacement={'top'} placeholder={'error'} />
+          }} errors={['Fail not selected']} menuPlacement="top" placeholder="error" />
+        </UiGrid.Col>
+        <UiGrid.Col>
+          <UiSelectInput isCreatable isSearchable onCreate={
+            (string) => {
+              setCurrentValue5(string)
+              setOptions([...options, string])
+            }
+          } label="creatable" options={options} value={currentValue5} onChange={(newValue) => {
+            setCurrentValue5(newValue)
+          }} menuPlacement="bottom" placeholder="creatable" />
         </UiGrid.Col>
       </UiGrid>
     </UiContainer>
