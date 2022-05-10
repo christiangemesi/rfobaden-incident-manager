@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
-import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
