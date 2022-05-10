@@ -62,7 +62,7 @@ const DocumentForm: React.VFC<Props> = ({
     if (handleClose) {
       handleClose()
     }
-  }, [modelId, modelName])
+  })
   useCancel(form, handleClose)
 
   return (

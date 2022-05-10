@@ -105,7 +105,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
 export default IncidentForm
 
 const FormContainer = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `

@@ -23,7 +23,6 @@ interface Props {
 const PageHeaderAssignments: React.VFC<Props> = ({
   currentUser,
 }) => {
-
   const [assignmentCount, setAssignmentCount] = useState(() => ({
     high: 0,
     medium: 0,
