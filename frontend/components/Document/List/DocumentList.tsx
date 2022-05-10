@@ -1,4 +1,4 @@
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import React from 'react'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
@@ -11,31 +11,30 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
 
 interface Props {
-  fileIds: FileId[]
+  documents: Document[]
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeFileIds: (ids: FileId[]) => void
+  storeDocuments: (documents: Document[]) => void
 }
 
 const DocumentList: React.VFC<Props> = ({
-  fileIds,
+  documents,
   modelId,
   modelName,
-  storeFileIds,
+  storeDocuments,
 }) => {
 
-  const handleDelete = async (id: FileId) => {
+  const handleDelete = async (document: Document) => {
     if (confirm('Sind sie sicher, dass sie das Dokument löschen wollen?')) {
-
-      const error = await BackendService.delete('documents', id, {
+      const error = await BackendService.delete('documents', document.id, {
         modelName: modelName,
         modelId: modelId.toString(),
       })
       if (error !== null) {
         throw error
       }
-      fileIds = fileIds.filter((i) => i !== id)
-      storeFileIds(fileIds)
+      documents = documents.filter((d) => d !== document)
+      storeDocuments(documents)
     }
   }
 
@@ -50,14 +49,14 @@ const DocumentList: React.VFC<Props> = ({
           <UiTitle level={6}>Name</UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={3}>
-          <UiTitle level={6}>Typ</UiTitle>
+          <UiTitle level={6}>Erweiterung</UiTitle>
         </UiGrid.Col>
       </UiGrid>
       <UiList>
-        {fileIds.map((id) => (
+        {documents.map((document) => (
           <DocumentListItem
-            key={id}
-            id={id}
+            key={document.id}
+            document={document}
             onDelete={handleDelete}
           />
         ))}

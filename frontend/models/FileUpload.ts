@@ -14,13 +14,13 @@ export interface Document {
 
 export type FileId = Id<unknown>
 
-export const getImageUrl = (id: Id<Document>): string =>
-  `http://backend-${process.env['NEXT_PUBLIC_RFO_STAGE']}:8080/api/v1/documents/${id}`
+export const getImageUrl = (document: Document): string =>
+  `http://backend-${process.env['NEXT_PUBLIC_RFO_STAGE']}:8080/api/v1/documents/${document.id}`
 
 export const getDocumentUrl =
   process.env.NODE_ENV === 'development'
-    ? (id: Id<Document>) => `http://localhost:3001/api/v1/documents/${id}`
-    : (id: Id<Document>) => `/api/v1/documents/${id}`
+    ? (document: Document) => `http://localhost:3001/api/v1/documents/${document.id}`
+    : (document: Document) => `/api/v1/documents/${document.id}`
 
 export const parseDocument = (data: Document): Document => {
   return {

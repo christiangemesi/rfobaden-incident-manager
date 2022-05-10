@@ -1,5 +1,5 @@
 import React from 'react'
-import { FileId, getDocumentUrl } from '@/models/FileUpload'
+import { Document, getDocumentUrl } from '@/models/FileUpload'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import styled from 'styled-components'
@@ -7,29 +7,29 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props {
-  id: FileId
-  onDelete: (id: FileId) => void
+  document: Document
+  onDelete: (document: Document) => void
 }
 
 const DocumentListItem: React.VFC<Props> = ({
-  id,
+  document,
   onDelete,
 }) => {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
-    onDelete(id)
+    onDelete(document)
   }
   return (
-    <DownloadLink href={getDocumentUrl(id)} target="_blank">
+    <DownloadLink href={getDocumentUrl(document)} target="_blank">
       <Item>
         <UiGrid style={{ padding: '0 0.5rem' }} align="center" gapH={0.5}>
           <UiGrid.Col size={8}>
-            File with ID: {id}
+            {document.name}
           </UiGrid.Col>
           <UiGrid.Col size={3}>
-            <p>PDF</p>
+            {document.extension}
           </UiGrid.Col>
           <UiGrid.Col size={1}>
             <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
