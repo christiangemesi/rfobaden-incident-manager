@@ -5,18 +5,18 @@ import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
+  documents: Document[]
+  storeDocuments: (documents: Document[]) => void
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeDocuments: (documents: Document[]) => void
-  documents: Document[]
   children?: (props: { open: () => void }) => ReactNode
 }
 
 const DocumentDrawer: React.VFC<Props> = ({
   documents,
+  storeDocuments,
   modelId,
   modelName,
-  storeDocuments,
   children,
 }) => {
 

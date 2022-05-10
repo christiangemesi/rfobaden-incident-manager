@@ -12,16 +12,16 @@ import DocumentImageItem from '@/components/Document/Image/List/Item/DocumentIma
 
 interface Props {
   images: Document[]
+  storeImages: (images: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImages: (images: Document[]) => void
 }
 
 const DocumentImageList: React.VFC<Props> = ({ 
   images, 
+  storeImages,
   modelId, 
   modelName, 
-  storeImages,
 }) => {
 
   const handleDelete = async (image: Document) => {

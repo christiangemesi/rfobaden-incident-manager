@@ -1,22 +1,22 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
 
 interface Props {
+  images: Document[]
+  storeImages: (images: Document[]) => void
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImageIds: (ids: FileId[]) => void
-  imageIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
 }
 
 const DocumentImageDrawer: React.VFC<Props> = ({
-  imageIds,
+  images,
+  storeImages,
   modelId,
   modelName,
-  storeImageIds,
   children,
 }) => {
 
@@ -24,17 +24,17 @@ const DocumentImageDrawer: React.VFC<Props> = ({
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={imageIds.length > 0 ? open : undefined}>
-            {imageIds.length}
+          <UiCaption onClick={images.length > 0 ? open : undefined}>
+            {images.length}
             &nbsp;
-            {imageIds.length === 1 ? 'Bild' : 'Bilder'}
+            {images.length === 1 ? 'Bild' : 'Bilder'}
           </UiCaption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentImageList
-          storeImageIds={storeImageIds}
-          imageIds={imageIds}
+          images={images}
+          storeImages={storeImages}
           modelId={modelId}
           modelName={modelName} />
       </UiDrawer.Body>

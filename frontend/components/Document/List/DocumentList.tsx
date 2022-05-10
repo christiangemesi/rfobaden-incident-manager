@@ -12,16 +12,16 @@ import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
 
 interface Props {
   documents: Document[]
+  storeDocuments: (documents: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeDocuments: (documents: Document[]) => void
 }
 
 const DocumentList: React.VFC<Props> = ({
   documents,
+  storeDocuments,
   modelId,
   modelName,
-  storeDocuments,
 }) => {
 
   const handleDelete = async (document: Document) => {

@@ -8,7 +8,7 @@ import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import IncidentStore from '@/stores/IncidentStore'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
@@ -39,12 +39,12 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
-  const storeImageIds = (ids: FileId[]) => {
-    IncidentStore.save({ ...incident, imageIds: ids })
+  const storeImages = (images: Document[]) => {
+    IncidentStore.save({ ...incident, images: images })
   }
 
-  const storeDocumentIds = (ids: FileId[]) => {
-    IncidentStore.save({ ...incident, documentIds: ids })
+  const storeDocuments = (documents: Document[]) => {
+    IncidentStore.save({ ...incident, documents: documents })
   }
 
   return (
@@ -63,14 +63,14 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <DocumentImageDrawer
         modelId={incident.id}
         modelName="incident"
-        storeImageIds={storeImageIds}
-        imageIds={incident.imageIds}
+        images={incident.images}
+        storeImages={storeDocuments}
       />
       <DocumentDrawer
         modelId={incident.id}
         modelName="incident"
-        storeDocumentIds={storeDocumentIds}
-        documentIds={incident.documentIds}
+        documents={incident.documents}
+        storeDocuments={storeDocuments}
       />
     </UiCaptionList>
   )

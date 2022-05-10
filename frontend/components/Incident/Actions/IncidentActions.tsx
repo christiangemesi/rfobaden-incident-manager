@@ -106,7 +106,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         {isAdmin(currentUser) && (
           <TrackableCloseAction isClosed={incident.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
         <TrackableFileUploadAction
           id={incident.id}
           modelName="incident"
@@ -118,7 +117,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
           modelName="incident"
           onAddFile={addDocumentId}
         />
-
         <UiPrinter
           loadData={loadPrintData}
           renderContent={() => <IncidentPrintView incident={incident} />}
