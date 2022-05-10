@@ -32,8 +32,8 @@ VALUES (1, _utf8'2021-12-02 14:51:47.581611', _utf8'2021-12-02 14:51:47.581611',
        (3, _utf8'2021-12-02 14:53:33.676581', _utf8'2021-12-02 14:53:33.676581', _utf8'a@a.a', _utf8'Agent', _utf8'C', _utf8'AGENT',1),
        (5, _utf8'2021-12-02 14:54:31.758215', _utf8'2021-12-02 14:54:31.758215', _utf8'a@b.c', _utf8'Ad', _utf8'Ad', _utf8'ADMIN',2),
        (7, _utf8'2021-12-02 14:55:59.500941', _utf8'2021-12-02 14:55:59.500941', _utf8'a@b.b', _utf8'cd', _utf8'cd', _utf8'AGENT',2),
-       (9, _utf8'2022-01-02 18:58:09.751407', _utf8'2022-01-02 18:58:09.751407', _utf8'admin@rfo.ch', 'Adam', 'Admin', 'ADMIN', 1),
-       (11, _utf8'2022-01-02 18:59:14.866300', _utf8'2022-01-02 18:59:14.866300', _utf8'agent@rfo.ch', 'Alice', 'Agent', 'AGENT', 1);
+       (9, _utf8'2022-01-02 18:58:09.751407', _utf8'2022-01-02 18:58:09.751407', _utf8'admin@rfo.ch', _utf8'Adam', _utf8'Admin', _utf8'ADMIN', 1),
+       (11, _utf8'2022-01-02 18:59:14.866300', _utf8'2022-01-02 18:59:14.866300', _utf8'agent@rfo.ch', _utf8'Alice', _utf8'Agent', _utf8'AGENT', 1);
 
 INSERT IGNORE INTO user_credentials
 VALUES (2, _utf8'2021-12-02 14:51:47.579464', _utf8'2021-12-02 14:52:31.555873', _utf8'$2a$10$jOSBFmH2aEupssLgdr.1POH.OG9FIks2HZs0ymnU8x5.QnMw2imQq', _utf8'2021-12-02 14:52:31.555873',1),
@@ -52,14 +52,14 @@ VALUES (1, _utf8'2021-12-02 15:06:18.886164', _utf8'Fertig',NULL),
        (6, _utf8'2021-12-02 15:07:11.104795', _utf8'Fertig',NULL);
 
 INSERT IGNORE INTO entry_type
-VALUES  (1,NULL,'PHONE'),
-        (2,'1234','RADIO'),
-        (3,'12','RADIO'),
-        (4,'1','RADIO'),
-        (5,'2','PHONE'),
-        (6,'3','RADIO'),
-        (7,'4','RADIO'),
-        (8,'42','RADIO');
+VALUES  (1,NULL,_utf8'PHONE'),
+        (2,_utf8'1234',_utf8'RADIO'),
+        (3,_utf8'12',_utf8'RADIO'),
+        (4,_utf8'1',_utf8'RADIO'),
+        (5,_utf8'2',_utf8'PHONE'),
+        (6,_utf8'3',_utf8'RADIO'),
+        (7,_utf8'4',_utf8'RADIO'),
+        (8,_utf8'42',_utf8'RADIO');
 
 INSERT IGNORE INTO incident
 VALUES (1, _utf8'2021-12-02 14:57:40.302645', _utf8'2021-12-02 15:30:37.272910', _utf8'Wassermassen in Turgi haben Insel zwischen Limmatkanal und Limmat teilweise abgetragen (bei Limmatkraftwerk)', _utf8'2021-12-22 15:30:40.332617',FALSE, _utf8'2021-11-02 15:30:40.332617', _utf8'Hochwasser Limmat',NULL),
@@ -111,18 +111,18 @@ VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671',
        (21, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',7,4);
 
 INSERT INTO `vehicle`
-VALUES (1,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',TRUE,'Toyota Van 8 Plätze'),
-       (2,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',TRUE,'Skoda Kombi 4 Plätze'),
-       (3,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',TRUE,'Mercedes Bus 16 Plätze'),
-       (4,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',FALSE,'Car 40 Plätze'),
-       (5,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',TRUE,'Mercedes Bus 30 Plätze');
+VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Toyota Van 8 Plätze'),
+       (2,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Skoda Kombi 4 Plätze'),
+       (3,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Mercedes Bus 16 Plätze'),
+       (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'Car 40 Plätze'),
+       (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Mercedes Bus 30 Plätze');
 
 INSERT INTO `transport`
-VALUES (1,'2022-04-13 08:35:40.294436','2022-04-13 08:35:40.294436',NULL,'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,'Fahrt 1','-',1,1,1),
-       (2,'2022-04-13 08:35:40.294436','2022-04-13 08:35:40.294436',NULL,'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,'Fahrt 2','-',1,1,1),
-       (3,'2022-04-13 08:35:40.294436','2022-04-13 08:35:40.294436',NULL,'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,'Fahrt 3','-',1,2,2),
-       (4,'2022-04-13 08:35:40.294436','2022-04-13 08:35:40.294436',NULL,'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,'Fahrt 4','-',1,4,3),
-       (5,'2022-04-13 08:35:40.294436','2022-04-13 08:35:40.294436',NULL,'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,'Fahrt 5','-',1,4,4);
+VALUES (1,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 1',_utf8'-',1,1,1),
+       (2,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 2',_utf8'-',1,1,1),
+       (3,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 3',_utf8'-',1,2,2),
+       (4,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 4',_utf8'-',1,4,3),
+       (5,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 5',_utf8'-',1,4,4);
 
 
 UPDATE hibernate_sequence
