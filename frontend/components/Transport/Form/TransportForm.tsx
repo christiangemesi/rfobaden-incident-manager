@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Transport, { parseTransport } from '@/models/Transport'
@@ -22,6 +22,7 @@ import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
 import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   incident: Incident
@@ -33,12 +34,16 @@ interface Props {
 const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: handleSave, onClose: handleClose }) => {
   const currentUser = useCurrentUser()
 
-  if (transport !== null) {
-    transport = {
-      ...transport,
-      vehicleId: null,
+  transport = useMemo(() => {
+    if (transport === null) {
+      return transport
     }
-  }
+    return {
+      ...transport,
+      vehicleId: 1,
+    }
+  }, [transport])
+
   const form = useForm<ModelData<Transport>>(transport, () => ({
     title: '',
     description: null,
@@ -118,9 +123,26 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
 
   useCancel(form, handleClose)
 
+  useEffectOnce(() => {
+    (async () => {
+
+      const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
+        'vehicles/visible',
+      )
+      if (visibleVehiclesError !== null) {
+        throw visibleVehiclesError
+      }
+      console.log(5555,visibleVehicles)
+      VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
+    })()
+  })
+  const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
+  console.log(3333,vehicles)
+  const vehicleIds = useMemo(() => {
+    return vehicles.map(({ id }) => id)
+  }, [vehicles])
+
   const userIds = useUsers((users) => users.map(({ id }) => id))
-  // todo get all with safe first, get from backend
-  const vehicleIds = useVehicles((vehicle) => vehicle.map(({ id }) => id))
 
   return (
     <div>
@@ -149,8 +171,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
           <UiForm.Field field={form.peopleInvolved}>{(props) => (
             <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
-          {/* todo undefined error field */}
-          <UiForm.Field field={form.vehicleId}>{(props) => (
+
+          <UiForm.Field field={form.vehicleId} deps={[vehicles]}>{(props) => (
             <UiSelectInput
               {...props}
               label="Fahrzeug"
@@ -158,10 +180,10 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               optionName={mapVehicleIdToName}
               menuPlacement="auto"
               placeholder="Fahrzeug"
-              onCreate={async (string) => {
-                console.log(string)
-                // todo create in backend
-                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', string)
+              onCreate={async (vehicle) => {
+                console.log('ssss', vehicle)
+
+                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', vehicle)
                 if (error !== null) {
                   throw error
                 }

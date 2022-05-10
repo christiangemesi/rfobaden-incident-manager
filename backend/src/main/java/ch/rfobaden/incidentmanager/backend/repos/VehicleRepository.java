@@ -16,7 +16,7 @@ public interface VehicleRepository
             + " FROM "
             + "Vehicle vehicle"
             + " WHERE "
-            + "vehicle.isVisible = TRUE "
+            + "vehicle.isVisible = true "
             + "ORDER BY vehicle.name"
     )
     List<Vehicle> findAllVisible();
