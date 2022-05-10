@@ -63,16 +63,14 @@ export default UiAlert
 
 const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
   background: ${({ theme, type }) => theme.colors[type].value};
-
-  border-radius: 5px;
-  width: 20rem;
-
   display: inline-flex;
   justify-content: space-between;
   padding: 1rem;
+  border-radius: 1rem;
+  width: 20rem;
   opacity: 75%;
   transition: 500ms ease-out;
-  transition-property: opacity, display;
+  transition-property: opacity;
 
   ${({ isVisible }) => !isVisible && css`
     opacity: 0;
