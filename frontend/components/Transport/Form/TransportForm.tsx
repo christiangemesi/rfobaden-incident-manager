@@ -20,6 +20,8 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
+import Vehicle, { parseVehicle } from '@/models/Vehicle'
+import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
 
 interface Props {
   incident: Incident
@@ -31,6 +33,12 @@ interface Props {
 const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: handleSave, onClose: handleClose }) => {
   const currentUser = useCurrentUser()
 
+  if (transport !== null) {
+    transport = {
+      ...transport,
+      vehicleId: null,
+    }
+  }
   const form = useForm<ModelData<Transport>>(transport, () => ({
     title: '',
     description: null,
@@ -39,7 +47,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     priority: Priority.MEDIUM,
     peopleInvolved: 0,
     driver: null,
-    vehicle: '',
+    vehicleId: null,
     trailer: null,
     pointOfDeparture: null,
     pointOfArrival: null,
@@ -69,9 +77,10 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      vehicle: [
-        validate.notBlank({ allowNull: true }),
-        validate.maxLength(100),
+      vehicleId: [
+        // validate.notBlank({ allowNull: true }),
+        // validate.maxLength(100),
+        validate.notNull(),
       ],
       driver: [
         validate.notBlank({ allowNull: true }),
@@ -110,6 +119,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
   useCancel(form, handleClose)
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
+  // todo get all with safe first, get from backend
+  const vehicleIds = useVehicles((vehicle) => vehicle.map(({ id }) => id))
 
   return (
     <div>
@@ -138,9 +149,27 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
           <UiForm.Field field={form.peopleInvolved}>{(props) => (
             <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
-
-          <UiForm.Field field={form.vehicle}>{(props) => (
-            <UiTextInput {...props} label="Fahrzeug" placeholder="Fahrzeug" />
+          {/* todo undefined error field */}
+          <UiForm.Field field={form.vehicleId}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Fahrzeug"
+              options={vehicleIds}
+              optionName={mapVehicleIdToName}
+              menuPlacement="auto"
+              placeholder="Fahrzeug"
+              onCreate={async (string) => {
+                console.log(string)
+                // todo create in backend
+                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', string)
+                if (error !== null) {
+                  throw error
+                }
+                VehicleStore.save(parseVehicle(data))
+              }}
+              isCreatable
+              isSearchable
+            />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.trailer}>{(props) => (
@@ -186,6 +215,13 @@ const mapUserIdToName = (id: Id<User>): string | null => {
   return user === null
     ? null
     : `${user.firstName} ${user.lastName}`
+}
+
+const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
+  const vehicle = VehicleStore.find(id)
+  return vehicle === null
+    ? ''
+    : vehicle.name
 }
 
 const FormContainer = styled.div`

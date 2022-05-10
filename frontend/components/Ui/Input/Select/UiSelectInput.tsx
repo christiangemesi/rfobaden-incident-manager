@@ -1,15 +1,18 @@
 import React, { useMemo } from 'react'
 import Select, { StylesConfig } from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
-import { useMountedState } from 'react-use'
+import { useEffectOnce, useMountedState, useUpdate } from 'react-use'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
   options: T[]
   optionName?: keyof T | ((option: T) => string | null)
+  onCreate?: (value: string) => void
+  isCreatable?: boolean,
   isDisabled?: boolean,
   isSearchable?: boolean,
   placeholder?: string,
@@ -23,6 +26,8 @@ const UiSelectInput = <T, >({
   label,
   options,
   optionName,
+  onCreate: handleCreate,
+  isCreatable = false,
   isDisabled = false,
   isSearchable = false,
   placeholder = '',
@@ -110,6 +115,12 @@ const UiSelectInput = <T, >({
 
   const Label = label == null ? 'div' : StyledLabel
 
+  // todo clean up ?
+  const forceUpdate = useUpdate()
+  useEffectOnce(() => {
+    forceUpdate()
+  })
+
   const isMounted = useMountedState()
   if (!isMounted()) {
     return <React.Fragment />
@@ -122,17 +133,33 @@ const UiSelectInput = <T, >({
           {label}
         </span>
       )}
-      <Select
-        options={mappedOptions}
-        value={defaultValue}
-        placeholder={placeholder}
-        onChange={handleChange}
-        isClearable
-        isDisabled={isDisabled}
-        isSearchable={isSearchable}
-        styles={customStyles}
-        menuPlacement={menuPlacement}
-      />
+      {isCreatable ? (
+        <CreatableSelect
+          options={mappedOptions}
+          value={defaultValue}
+          placeholder={placeholder}
+          onChange={handleChange}
+          onCreateOption={handleCreate}
+          isClearable
+          isDisabled={isDisabled}
+          isSearchable={isSearchable}
+          styles={customStyles}
+          menuPlacement={menuPlacement}
+        />
+      ) : (
+        <Select
+          options={mappedOptions}
+          value={defaultValue}
+          placeholder={placeholder}
+          onChange={handleChange}
+          isClearable
+          isDisabled={isDisabled}
+          isSearchable={isSearchable}
+          styles={customStyles}
+          menuPlacement={menuPlacement}
+        />
+      )
+      }
       <UiInputErrors errors={errors} />
     </Label>
   )

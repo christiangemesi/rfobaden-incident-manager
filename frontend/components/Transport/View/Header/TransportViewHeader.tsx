@@ -64,7 +64,7 @@ const TransportViewHeader: React.VFC<Props> = ({
               <UiTitle level={6}>Fahrzeug:</UiTitle>
             </th>
             <td>
-              <span>{transport.vehicle ?? '-'}</span>
+              <span>{transport.vehicleId ?? '-'}</span>
             </td>
           </tr>
           <tr>
