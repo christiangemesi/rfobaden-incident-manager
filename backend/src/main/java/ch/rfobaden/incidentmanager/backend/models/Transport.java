@@ -136,6 +136,22 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.vehicle = vehicle;
     }
 
+    public Long getVehicleId() {
+        if (vehicle == null) {
+            return null;
+        }
+        return vehicle.getId();
+    }
+
+    public void setVehicleId(Long id) {
+        if (id == null) {
+            vehicle = null;
+            return;
+        }
+        vehicle = new Vehicle();
+        vehicle.setId(id);
+    }
+
     public String getTrailer() {
         return trailer;
     }
