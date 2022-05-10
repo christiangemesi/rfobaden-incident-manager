@@ -18,7 +18,7 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
       title={task.title}
       priority={task.priority}
       user={assigneeName}
-      isClosed={task.isClosed}
+      isClosed={task.isClosed || task.isDone}
       onClick={handleClick && (() => handleClick(task))}
     >
       <LeftSpacer>
