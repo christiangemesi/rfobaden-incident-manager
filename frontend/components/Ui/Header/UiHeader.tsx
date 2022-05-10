@@ -40,13 +40,18 @@ const UiHeader: React.VFC = () => {
         </ImageContainer>
       </NavContainer>
       <ButtonList>
-        {currentUser !== null && (
-          <UiHeaderAssignments />
-        )}
         <UiHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
         </UiHeaderItem>
         {currentUser !== null && (
+          <UiHeaderAssignments currentUser={currentUser} />
+        )}
+        {currentUser === null ? (
+          <UiHeaderItem href="/anmelden">
+            <UiIcon.Login />
+            <span>anmelden</span>
+          </UiHeaderItem>
+        ) : (
           <LoggedInUser>
             <span>
               {currentUser.firstName} {currentUser.lastName}
