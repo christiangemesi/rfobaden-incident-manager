@@ -40,7 +40,6 @@ const DocumentForm: React.VFC<Props> = ({
     ],
     file: [
       validate.notNull(),
-
       // Maximum upload size is 10MB.
       (value) => value === null || value.size < 10_000_000 || 'ist zu gross',
     ],

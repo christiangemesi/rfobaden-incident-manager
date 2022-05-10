@@ -1,4 +1,4 @@
-import { FileId, getImageUrl } from '@/models/FileUpload'
+import { Document, getImageUrl } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
@@ -11,26 +11,26 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import DocumentImageItem from '@/components/Document/Image/List/Item/DocumentImageItem'
 
 interface Props {
-  imageIds: FileId[]
+  images: Document[]
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImageIds: (ids: FileId[]) => void
+  storeImages: (images: Document[]) => void
 }
 
-const DocumentImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, storeImageIds }) => {
+const DocumentImageList: React.VFC<Props> = ({ images, modelId, modelName, storeImages }) => {
 
-  const handleDelete = async (id: FileId) => {
+  const handleDelete = async (image: Document) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
 
-      const error = await BackendService.delete('images', id, {
+      const error = await BackendService.delete('images', image.id, {
         modelName: modelName,
         modelId: modelId.toString(),
       })
       if (error !== null) {
         throw error
       }
-      imageIds = imageIds.filter((i) => i !== id)
-      storeImageIds(imageIds)
+      images = images.filter((i) => i !== image)
+      storeImages(images)
     }
   }
 
@@ -40,13 +40,11 @@ const DocumentImageList: React.VFC<Props> = ({ imageIds, modelId, modelName, sto
         Bilder
       </UiTitle>
       <ImageContainer>
-        {imageIds.length > 0
-          ? imageIds.map((id) => (
+        {images.length > 0
+          ? images.map((image) => (
             <DocumentImageItem
-              key={id}
-              src={getImageUrl(id)}
-              text="Filename"
-              id={id}
+              key={image.id}
+              image={image}
               onDelete={handleDelete} />
           ))
           : <p>Keine gespeicherten Bilder</p>

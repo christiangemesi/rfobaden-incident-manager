@@ -4,26 +4,24 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import { FileId } from '@/models/FileUpload'
+import { getImageUrl, Document } from '@/models/FileUpload'
 
 interface Props {
-  src: string
-  text: string
-  id: FileId
-  onDelete: (id: FileId) => void
+  image: Document
+  onDelete: (image: Document) => void
 }
 
 const DocumentImageItem: React.VFC<Props> = ({
-  src = '',
-  text = '',
-  id,
+  image,
   onDelete,
 }) => {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onDelete(id)
+    onDelete(image)
   }
+
+  const src = getImageUrl(image)
 
   return (
     <UiModal>
@@ -33,9 +31,9 @@ const DocumentImageItem: React.VFC<Props> = ({
             <Image src={src} width={200} height={200} alt={src} />
           </ImageArea>
           <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
-          <TextArea>
-            {text}
-          </TextArea>
+          <ImageName>
+            {image.name}
+          </ImageName>
         </ImageCard>
       )}</UiModal.Trigger>
       <UiModal.Body>
@@ -56,7 +54,7 @@ const DeleteButton = styled(UiIconButton)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
 `
 
-const TextArea = styled.div`
+const ImageName = styled.div`
   padding: 0.5rem 1rem;
   white-space: nowrap;
   overflow: hidden;
