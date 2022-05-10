@@ -35,7 +35,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     }
   }, [subtask, handleDeleteCb])
 
-  const addImageId = useCallback((fileId: FileId) => {
+  const addImage = useCallback((fileId: FileId) => {
     SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
   }, [subtask])
 
@@ -66,7 +66,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddFile={addImageId}
+          onAddFile={addImage}
           type="image"
         />
         <TrackableFileUploadAction
@@ -80,6 +80,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           modelName="subtask"
           storeImageIds={storeImageIds}
           imageIds={subtask.imageIds}
+          onAddFile={addImage}
         >
           {({ open }) => (
             <UiDropDown.Item onClick={open}>
@@ -95,6 +96,7 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
           modelName="subtask"
           storeDocumentIds={storeDocumentIds}
           documentIds={subtask.documentIds}
+          onAddFile={addDocumentId}
         >
           {({ open }) => (
             <UiDropDown.Item onClick={open}>
