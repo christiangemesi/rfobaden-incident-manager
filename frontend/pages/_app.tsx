@@ -15,6 +15,9 @@ import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
 import { useRouter } from 'next/router'
+import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
+import AlertStore, { useAlerts } from '@/stores/AlertStore'
+import UiAlert from '@/components/Ui/Alert/UiAlert'
 
 interface Props extends AppProps {
   user: User | null
@@ -22,12 +25,22 @@ interface Props extends AppProps {
 
 const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   useEffectOnce(() => {
+    AlertStore.addAlert('Wahnsinn')
+    AlertStore.addAlert('Krass')
+
     if (user === null) {
       SessionStore.clear()
     } else {
       SessionStore.setCurrentUser(user)
     }
   })
+
+  const remove = (alert : string) => {
+    AlertStore.removeAlert(alert)
+  }
+
+
+  const alerts = useAlerts()
 
   const { currentUser } = useSession()
   const component = useMemo(() => (
@@ -58,6 +71,11 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
           {appState.hasHeader && <UiHeader />}
           <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
+            <UiAlertList>
+              {alerts.map((alert) =>
+                <UiAlert key={alert} text={alert} type={'error'} onRemove={ () => remove(alert) }></UiAlert>
+              )}
+            </UiAlertList>
           </Main>
           {appState.hasFooter && <UiFooter />}
         </UiScroll>
@@ -65,9 +83,9 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     </Fragment>
   )
 }
-export default App
+export default App;
 
-;(App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
+(App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
   let pageUser: User | null = null
 
   const { req } = appContext.ctx
@@ -75,7 +93,10 @@ export default App
     // Load the session from the request.
     // This requires access to the requests' cookies, which exist in the req object,
     // but are not listed in its type definition, which is why this somewhat strange cast is necessary.
-    const { user, backendService } = await loadSessionFromRequest(req as IncomingMessage & { cookies: NextApiRequestCookies }, BackendService)
+    const {
+      user,
+      backendService,
+    } = await loadSessionFromRequest(req as IncomingMessage & { cookies: NextApiRequestCookies }, BackendService)
     ;(req as unknown as ServerSideSessionHolder).session = {
       user,
       backendService,
@@ -108,11 +129,10 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       color: ${theme.colors.tertiary.contrast};
     }
   `}
-  
   button {
     cursor: pointer;
   }
-  
+
   @media print {
     body {
       background-color: transparent;
