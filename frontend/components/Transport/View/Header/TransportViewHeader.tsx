@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import Incident from '@/models/Incident'
 import Transport from '@/models/Transport'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
-import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
+import VehicleStore, { useVehicle } from '@/stores/VehicleStore'
 import { useEffectOnce } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
@@ -29,7 +29,6 @@ const TransportViewHeader: React.VFC<Props> = ({
   hasPriority = false,
   onClose: handleClose,
 }) => {
-  const vehicles = useVehicles()
   useEffectOnce(() => {
     (async () => {
 
@@ -39,16 +38,11 @@ const TransportViewHeader: React.VFC<Props> = ({
       if (visibleVehiclesError !== null) {
         throw visibleVehiclesError
       }
-      console.log(1111, visibleVehicles)
       VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
     })()
   })
-  console.log(transport)
-  const vehicle =
-    transport.vehicleId !== null ? VehicleStore.find(transport.vehicleId)?.name : '-'
-  // useVehicle(transport.vehicleId)?.name ?? '..'
-  console.log(44444, vehicle)
-  console.log(7777, vehicles)
+  const vehicle = useVehicle(transport.vehicleId)?.name ?? '-'
+
   return (
     <Container>
       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>

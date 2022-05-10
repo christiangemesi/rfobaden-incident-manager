@@ -132,12 +132,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       if (visibleVehiclesError !== null) {
         throw visibleVehiclesError
       }
-      console.log(5555,visibleVehicles)
       VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
     })()
   })
+
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
-  console.log(3333,vehicles)
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
   }, [vehicles])
@@ -182,7 +181,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               placeholder="Fahrzeug"
               onCreate={async (vehicle) => {
                 console.log('ssss', vehicle)
-
+                // todo not work wrong request method
                 const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', vehicle)
                 if (error !== null) {
                   throw error
