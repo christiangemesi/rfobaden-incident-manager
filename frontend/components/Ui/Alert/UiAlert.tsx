@@ -14,7 +14,7 @@ interface Props {
 }
 
 const UiAlert: React.VFC<Props> = ({
-  type,
+  type = 'info',
   text,
   timeout = 3000,
   onRemove,
