@@ -19,13 +19,13 @@ const UiListItem: React.VFC<Props> = ({
 }) => {
   if (href !== null) {
     return (
-      <Link href={href} passHref>
-        <StyledListItem {...props} as="a" isActive={isActive} onClick={handleClick} isClickable/>
+      <Link href={ href } passHref>
+        <StyledListItem { ...props } as="a" isActive={ isActive } onClick={ handleClick } isClickable />
       </Link>
     )
   }
   return (
-    <StyledListItem {...props} isActive={isActive} onClick={handleClick} isClickable={handleClick !== undefined} />
+    <StyledListItem { ...props } isActive={ isActive } onClick={ handleClick } isClickable={ handleClick !== undefined } />
   )
 }
 export default styled(UiListItem)``
@@ -55,5 +55,4 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean }>`
       filter: brightness(0.9);
     }
   `}
-
 `
