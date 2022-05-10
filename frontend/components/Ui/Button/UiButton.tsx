@@ -40,6 +40,11 @@ export interface Props extends StyledProps {
    * The button content.
    */
   children?: ReactNode
+
+  /**
+   * Use button as <a>.
+   */
+  href?: ReactNode
 }
 
 const UiButton: React.VFC<Props> = ({
