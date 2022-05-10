@@ -36,10 +36,10 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
 
   const handleClose = useCallback(async () => {
     if (report.isDone) {
-      alert('Es sind alle Aufträge geschlossen.')
+      alert('Es sind alle Aufträge abgeschlossen.')
       return
     }
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" abschliessen wollen?`)) {
       const newReport = { ...report, isClosed: true }
       const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
       if (error !== null) {

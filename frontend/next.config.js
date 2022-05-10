@@ -3,8 +3,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-console.log(`RFO_STAGE: ${process.env.RFO_STAGE}`)
-
 /**
  * @type {import('next').NextConfig}
  **/

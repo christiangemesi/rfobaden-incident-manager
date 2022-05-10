@@ -28,12 +28,12 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
   const currentUser = useCurrentUser()
 
   const handleClose = useCallback(async () => {
-    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" abschliessen wollen?\nGrund:`)
     if (message === null) {
       return
     }
     if (message.trim().length === 0) {
-      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
+      confirm(`Das Ereignis "${incident.title}" wurde nicht abgeschlossen.\nDie Begründung fehlt.`)
       return
     }
     const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, { message })

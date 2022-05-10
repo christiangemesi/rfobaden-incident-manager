@@ -12,7 +12,7 @@ interface Props extends StyledProps {
   children: ReactNode
 }
 
-const UiHeaderItem: React.VFC<Props> = ({ href, onClick, title, children }) => {
+const PageHeaderItem: React.VFC<Props> = ({ href, onClick, title, children }) => {
   const router = useRouter()
   return (
     <NavItem>
@@ -30,7 +30,7 @@ const UiHeaderItem: React.VFC<Props> = ({ href, onClick, title, children }) => {
     </NavItem>
   )
 }
-export default UiHeaderItem
+export default PageHeaderItem
 
 const NavItem = styled.li`
   padding: 0.75rem 0;
