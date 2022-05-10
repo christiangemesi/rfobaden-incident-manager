@@ -93,5 +93,6 @@ const Button = styled(UiCreateButton)`
   max-width: 12rem;
   border-radius: 0;
   width: 200px;
+  min-height: 235px;
   height: inherit;
 `
