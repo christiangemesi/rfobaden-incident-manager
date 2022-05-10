@@ -151,7 +151,8 @@ public class DocumentController extends AppController {
                 }
                 return M::addImage;
             default:
-                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown document type: " + actualType);
+                throw new ApiException(HttpStatus.BAD_REQUEST,
+                    "unknown document type: " + actualType);
         }
     }
 
