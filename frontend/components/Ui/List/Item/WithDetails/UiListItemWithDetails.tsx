@@ -4,11 +4,13 @@ import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import UiDescription from '@/components/Ui/Description/UiDescription'
 
 interface Props extends UiListItemProps {
   priority: Priority
   title: string
   user: string
+  description?: string
   body?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
@@ -19,6 +21,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   priority,
   title,
   user,
+  description,
   body = null,
   isClosed = false,
   isSmall = false,
@@ -31,13 +34,16 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   return (
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
-        <LeftPriority priority={priority} isSmall={isSmall} />
+        <LeftPriority priority={priority} isSmall={isSmall}/>
         <TextContent isTitleSwitched={isTitleSwitched}>
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
           {user}
         </TextContent>
+        <ItemDescription isTitleSwitched={isTitleSwitched}>
+          {description}
+        </ItemDescription>
       </LeftSide>
       <RightSide>
         {children}
@@ -91,7 +97,7 @@ const RightSide = styled.div`
 const BottomSide = styled.div<{ $isSmall: boolean }>`
   display: block;
   flex: 1 0 100%;
-  width: 100%;
+
   max-width: 100%;
   padding-top: 1rem;
   padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
@@ -107,10 +113,23 @@ const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   `}
 `
 
+const ItemDescription = styled.div<{ isTitleSwitched: boolean }>`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 75ch;
+
+  //TODO why does this still show description
+  ${({ isTitleSwitched }) => isTitleSwitched && css`
+    display: none;
+  `}
+`
+
 const ItemTitle = styled(UiTitle)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  max-width: 20ch;
 `
 
 const LeftPriority = styled(UiPriority)`
