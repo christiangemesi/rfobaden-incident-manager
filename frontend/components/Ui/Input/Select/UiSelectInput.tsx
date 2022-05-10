@@ -6,6 +6,8 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
 import { useEffectOnce, useMountedState, useUpdate } from 'react-use'
+import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
@@ -145,6 +147,7 @@ const UiSelectInput = <T, >({
           isSearchable={isSearchable}
           styles={customStyles}
           menuPlacement={menuPlacement}
+          formatCreateLabel={() => <CreateDropdownButton><UiIcon.CreateAction /></CreateDropdownButton>}
         />
       ) : (
         <Select
@@ -209,5 +212,15 @@ const StyledLabel = styled.label`
   & > span:first-child {
     font-size: 0.9rem;
     font-weight: bold;
+  }
+`
+
+const CreateDropdownButton = styled(UiCreateButton)`
+  margin: 0;
+  padding: 0.2rem;
+  min-height: auto;
+
+  :hover {
+    background: transparent;
   }
 `

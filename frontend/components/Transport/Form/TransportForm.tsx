@@ -180,9 +180,10 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               menuPlacement="auto"
               placeholder="Fahrzeug"
               onCreate={async (vehicle) => {
-                console.log('ssss', vehicle)
-                // todo not work wrong request method
-                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', vehicle)
+                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
+                  name: vehicle,
+                  isVisible: true,
+                })
                 if (error !== null) {
                   throw error
                 }

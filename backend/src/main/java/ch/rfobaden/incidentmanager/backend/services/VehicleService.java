@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 public class VehicleService
     extends ModelRepositoryService.Basic<Vehicle, VehicleRepository> {
+
     public List<Vehicle> listWhereIsVisible() {
         return repository.findAllVisible();
     }
