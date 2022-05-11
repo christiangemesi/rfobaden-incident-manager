@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.TestComponent;
 public class VehicleGenerator extends ModelGenerator<Vehicle> {
     public Vehicle generateNew() {
         var vehicle = new Vehicle();
-        vehicle.setName(faker.name().name());
+        vehicle.setName(faker.funnyName().name());
+        vehicle.setVisible(randomBoolean());
         return vehicle;
     }
 }

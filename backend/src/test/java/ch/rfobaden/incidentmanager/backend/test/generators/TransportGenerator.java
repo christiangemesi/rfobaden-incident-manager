@@ -25,7 +25,7 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
         transport.setPeopleInvolved(faker.number().numberBetween(1, 10));
         transport.setDriver(faker.funnyName().name());
-        transport.setVehicle(vehicleGenerator.generateNew());
+        transport.setVehicle(vehicleGenerator.generate());
         transport.setTrailer(faker.funnyName().name());
         transport.setStartsAt(doMaybe(this::randomDateTime));
         transport.setEndsAt(doMaybe(this::randomDateTime));
