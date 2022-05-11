@@ -18,7 +18,6 @@ import { useRouter } from 'next/router'
 import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import AlertStore, { useAlerts } from '@/stores/AlertStore'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
-import Alert from '@/models/Alert'
 
 interface Props extends AppProps {
   user: User | null
@@ -34,9 +33,6 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   })
 
   const alerts = useAlerts()
-  const remove = (alert: Alert) => {
-    AlertStore.removeAlert(alert)
-  }
 
   const { currentUser } = useSession()
   const component = useMemo(() => (
@@ -68,8 +64,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
           <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
             {component}
             <UiAlertList>
-              {alerts.map((alert, idx) =>
-                <UiAlert key={idx} text={alert.text} type={alert.type} onRemove={() => remove(alert)}></UiAlert>,
+              {alerts.map((alert) =>
+                <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
               )}
             </UiAlertList>
           </Main>
