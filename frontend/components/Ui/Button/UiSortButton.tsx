@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { SortField } from '@/utils/hooks/useSort'
 
+
 interface Props {
   field: SortField
   children: ReactNode
@@ -22,7 +23,7 @@ const UiSortButton: React.VFC<Props> = ({ children, field }) => {
       break
     }
   }
- 
+
   return (
     <SortButton onClick={handleSortClick}>
       {children}
@@ -56,9 +57,10 @@ const SortButton = styled.div`
   &:first-child {
     margin-left: 0;
   }
-  &:last-child{
+
+  &:last-child {
     margin-right: 0;
   }
-  
+
   color: ${({ theme }) => theme.colors.tertiary.contrast};
 `
