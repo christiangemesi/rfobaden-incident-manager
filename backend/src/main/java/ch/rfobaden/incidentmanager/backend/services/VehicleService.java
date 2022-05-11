@@ -1,6 +1,5 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
-import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.Vehicle;
 import ch.rfobaden.incidentmanager.backend.repos.VehicleRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -14,5 +13,9 @@ public class VehicleService
 
     public List<Vehicle> listWhereIsVisible() {
         return repository.findAllVisible();
+    }
+
+    public Vehicle findByName(String name) {
+        return repository.findFirstByName(name);
     }
 }

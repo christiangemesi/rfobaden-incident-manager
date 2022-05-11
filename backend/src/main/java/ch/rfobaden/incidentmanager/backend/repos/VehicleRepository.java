@@ -20,4 +20,13 @@ public interface VehicleRepository
             + "ORDER BY vehicle.name"
     )
     List<Vehicle> findAllVisible();
+
+    @Query(
+        "SELECT vehicle"
+            + " FROM "
+            + "Vehicle vehicle"
+            + " WHERE "
+            + "vehicle.name = :name"
+    )
+    Vehicle findFirstByName(String name);
 }

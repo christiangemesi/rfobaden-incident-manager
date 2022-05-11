@@ -124,7 +124,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     })()
   })
 
-  const handleCreate = async (vehicleName: string) => {
+  const handleCreateVehicle = async (vehicleName: string) => {
     if (vehicleName.length > 100) {
       alert('Fahrzeugname ist zu lang.')
       return
@@ -182,7 +182,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               optionName={mapVehicleIdToName}
               menuPlacement="auto"
               placeholder="Fahrzeug"
-              onCreate={handleCreate}
+              onCreate={handleCreateVehicle}
               isCreatable
               isSearchable
             />

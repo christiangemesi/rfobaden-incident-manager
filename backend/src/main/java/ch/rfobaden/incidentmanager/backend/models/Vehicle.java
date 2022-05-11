@@ -18,7 +18,7 @@ public final class Vehicle extends Model.Basic implements Serializable {
 
     @Size(max = 100)
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @NotNull
@@ -52,11 +52,11 @@ public final class Vehicle extends Model.Basic implements Serializable {
         }
         var that = (Vehicle) other;
         return equalsModel(that)
-            && Objects.equals(name, that.name);
+            && Objects.equals(name.toLowerCase(), that.name.toLowerCase());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), name);
+        return Objects.hash(modelHashCode(), name.toLowerCase());
     }
 }

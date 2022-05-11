@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
-import { useEffectOnce, useMountedState, useUpdate } from 'react-use'
+import { useMountedState } from 'react-use'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
@@ -114,12 +114,6 @@ const UiSelectInput = <T, >({
   }
 
   const Label = label == null ? 'div' : StyledLabel
-
-  // todo clean up ?
-  const forceUpdate = useUpdate()
-  useEffectOnce(() => {
-    forceUpdate()
-  })
 
   const isMounted = useMountedState()
   if (!isMounted()) {
