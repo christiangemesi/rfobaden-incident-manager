@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import { useUsername } from '@/models/User'
@@ -25,6 +25,14 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
     TaskStore.save({ ...task, documentIds: ids })
   }
 
+  const addImage = useCallback((fileId: FileId) => {
+    TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
+  }, [task])
+
+  const addDocument = useCallback((fileId: FileId) => {
+    TaskStore.save({ ...task, documentIds: [...task.documentIds, fileId]})
+  }, [task])
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -48,12 +56,14 @@ const TaskInfo: React.VFC<Props> = ({ task }) => {
         modelName="task"
         storeImageIds={storeImageIds}
         imageIds={task.imageIds}
+        onAddFile={addImage}
       />
       <DocumentDrawer
         modelId={task.id}
         modelName="task"
         storeDocumentIds={storeDocumentIds}
         documentIds={task.documentIds}
+        onAddFile={addDocument}
       />
     </UiCaptionList>
   )

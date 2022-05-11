@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react'
 import { FileId } from '@/models/FileUpload'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import styled from 'styled-components'
 
 interface Props {
   modelId: number
@@ -10,6 +11,7 @@ interface Props {
   storeDocumentIds: (ids: FileId[]) => void
   documentIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
+  onAddFile: (fileId: FileId) => void
 }
 
 const DocumentDrawer: React.VFC<Props> = ({
@@ -18,17 +20,18 @@ const DocumentDrawer: React.VFC<Props> = ({
   modelName,
   storeDocumentIds,
   children,
+  onAddFile,
 }) => {
 
   return (
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={documentIds.length > 0 ? open : undefined}>
+          <Caption onClick={ open }>
             {documentIds.length}
             &nbsp;
             {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
-          </UiCaption>
+          </Caption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
@@ -37,6 +40,7 @@ const DocumentDrawer: React.VFC<Props> = ({
           fileIds={documentIds}
           modelId={modelId}
           modelName={modelName}
+          onAddFile={onAddFile}
         />
       </UiDrawer.Body>
     </UiDrawer>
@@ -44,3 +48,11 @@ const DocumentDrawer: React.VFC<Props> = ({
 }
 
 export default DocumentDrawer
+
+const Caption = styled(UiCaption)`
+  transition: ease 100ms;
+  transition-property: transform;
+  :hover {
+    transform: scale(1.1);
+  }
+`

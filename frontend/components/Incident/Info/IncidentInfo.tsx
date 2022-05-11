@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { useOrganizations } from '@/stores/OrganizationStore'
@@ -49,6 +49,14 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, documentIds: ids })
   }
 
+  const addImage = useCallback((fileId: FileId) => {
+    IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
+  }, [incident])
+
+  const addDocument = useCallback((fileId: FileId) => {
+    IncidentStore.save({ ...incident, documentIds: [...incident.documentIds, fileId]})
+  }, [incident])
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -62,17 +70,20 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
+
       <DocumentImageDrawer
         modelId={incident.id}
         modelName="incident"
         storeImageIds={storeImageIds}
         imageIds={incident.imageIds}
+        onAddFile={addImage}
       />
       <DocumentDrawer
         modelId={incident.id}
         modelName="incident"
         storeDocumentIds={storeDocumentIds}
         documentIds={incident.documentIds}
+        onAddFile={addDocument}
       />
     </UiCaptionList>
   )
