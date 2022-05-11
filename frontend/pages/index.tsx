@@ -11,6 +11,7 @@ import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import { useEffectOnce } from 'react-use'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import { Themed } from '@/theme'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -44,28 +45,30 @@ const HomePage: React.VFC<Props> = ({ data }) => {
   }, [firstIncident])
 
   return (
-    <UiContainer>
-      <UiTitle level={1} isCentered>
-        IncidentManager
-      </UiTitle>
-      <Subtitle>
-        Regionales Führungsorgan Baden
-      </Subtitle>
-      <Panels>
-        <UiGrid gap={1.5} justify="center">
-          {dashboardPanels.map((card) => (
-            <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6 }}>
-              <UiLink href={card.link}>
-                <Card>
-                  <card.icon size={5} />
-                  <CardTitle level={4}>{card.label}</CardTitle>
-                </Card>
-              </UiLink>
-            </UiGrid.Col>
-          ))}
-        </UiGrid>
-      </Panels>
-    </UiContainer>
+    <Page>
+      <UiContainer>
+        <UiTitle level={1} isCentered>
+          IncidentManager
+        </UiTitle>
+        <Subtitle>
+          Regionales Führungsorgan Baden
+        </Subtitle>
+        <Panels>
+          <UiGrid gap={1.5} justify="center">
+            {dashboardPanels.map((card) => (
+              <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6 }}>
+                <UiLink href={card.link}>
+                  <Card>
+                    <card.icon size={5} />
+                    <CardTitle level={4}>{card.label}</CardTitle>
+                  </Card>
+                </UiLink>
+              </UiGrid.Col>
+            ))}
+          </UiGrid>
+        </Panels>
+      </UiContainer>
+    </Page>
   )
 }
 export default HomePage

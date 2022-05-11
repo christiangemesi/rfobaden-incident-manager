@@ -9,6 +9,7 @@ import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArch
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled from 'styled-components'
 import UiPagination from '@/components/Ui/Pagination/UiPagination'
+import Page from '@/components/Page/Page'
 
 interface Props {
   offset: number
@@ -36,35 +37,36 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   const lastShownClosedIncidents = currentOffset*10 + closedIncidents.length
 
   return (
-    <UiContainer>
-      <UiGrid style={{ padding: '0 0 1rem 0' }}>
-        <UiGrid.Col>
-          <UiTitle level={1}>
+    <Page>
+      <UiContainer>
+        <UiGrid style={{ padding: '0 0 1rem 0' }}>
+          <UiGrid.Col>
+            <UiTitle level={1}>
               Archiv
-          </UiTitle>
-        </UiGrid.Col>
-      </UiGrid>
-      {closedIncidents.length === 0 ? (
-        <UiTitle level={5}>
-          {'Keine Einträge vorhanden'}
-        </UiTitle>
-      ) : (
-        <React.Fragment>
-          <UiPagination currentOffset={currentOffset} totalPages={totalPages} makeHref={(p) => `/ereignisse/archiv?p=${p}`} />
-          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <IncidentArchiveList closedIncidents={closedIncidents} />
+            </UiTitle>
           </UiGrid.Col>
-
-          <PaginationSummary>
-            <ResultCounter>
-              {`Ereignis: ${firstShownClosedIncidents} - ${lastShownClosedIncidents} von ${totalClosedIncidents}`}
-            </ResultCounter>
+        </UiGrid>
+        {closedIncidents.length === 0 ? (
+          <UiTitle level={5}>
+            {'Keine Einträge vorhanden'}
+          </UiTitle>
+        ) : (
+          <React.Fragment>
             <UiPagination currentOffset={currentOffset} totalPages={totalPages} makeHref={(p) => `/ereignisse/archiv?p=${p}`} />
-          </PaginationSummary>
-        </React.Fragment>
-      )}
+            <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+              <IncidentArchiveList closedIncidents={closedIncidents} />
+            </UiGrid.Col>
 
-    </UiContainer>
+            <PaginationSummary>
+              <ResultCounter>
+                {`Ereignis: ${firstShownClosedIncidents} - ${lastShownClosedIncidents} von ${totalClosedIncidents}`}
+              </ResultCounter>
+              <UiPagination currentOffset={currentOffset} totalPages={totalPages} makeHref={(p) => `/ereignisse/archiv?p=${p}`} />
+            </PaginationSummary>
+          </React.Fragment>
+        )}
+      </UiContainer>
+    </Page>
   )
 }
 export default ArchivPage

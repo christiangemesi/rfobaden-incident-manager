@@ -7,10 +7,8 @@ import ReportForm from '@/components/Report/Form/ReportForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import ReportStore from '@/stores/ReportStore'
 import Incident from '@/models/Incident'
-import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
 import BackendFetchService from '@/services/BackendFetchService'
@@ -36,10 +34,10 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
 
   const handleClose = useCallback(async () => {
     if (report.isDone) {
-      alert('Es sind alle Aufträge geschlossen.')
+      alert('Es sind alle Aufträge abgeschlossen.')
       return
     }
-    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" abschliessen wollen?`)) {
       const newReport = { ...report, isClosed: true }
       const [data, error]: BackendResponse<Report> = await BackendService.update(`incidents/${report.incidentId}/reports`, report.id, newReport)
       if (error !== null) {
@@ -58,14 +56,6 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
       }
       ReportStore.save(parseReport(data))
     }
-  }, [report])
-
-  const addImageId = useCallback((fileId: FileId) => {
-    ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
-  }, [report])
-
-  const addDocumentId = useCallback((fileId: FileId) => {
-    ReportStore.save({ ...report, documentIds: [...report.documentIds, fileId]})
   }, [report])
 
   const loadPrintData = useCallback(async () => {
@@ -93,18 +83,6 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
         {!report.isDone && (
           <TrackableCloseAction isClosed={report.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
-        <TrackableFileUploadAction
-          id={report.id}
-          modelName="report"
-          onAddFile={addImageId}
-          type="image"
-        />
-        <TrackableFileUploadAction
-          id={report.id}
-          modelName="report"
-          onAddFile={addDocumentId}
-        />
 
         <UiPrinter
           loadData={loadPrintData}

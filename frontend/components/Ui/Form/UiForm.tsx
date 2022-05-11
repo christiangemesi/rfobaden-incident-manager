@@ -10,19 +10,12 @@ interface Props<T> {
 
 const UiForm = <T,>({ form, children }: Props<T>) => {
   const baseForm = getFormBaseState(form)
-  const {
-    isValid,
-    value,
-  } = baseForm
-
-  const pushSubmit = baseForm.onSubmit
-
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault()
-    if (isValid && pushSubmit !== null) {
-      await pushSubmit(value)
+    if (baseForm.isValid && baseForm.onSubmit !== null) {
+      await baseForm.onSubmit(baseForm.value)
     }
-  }, [isValid, value, pushSubmit])
+  }, [baseForm])
 
   return (
     <form onSubmit={handleSubmit}>

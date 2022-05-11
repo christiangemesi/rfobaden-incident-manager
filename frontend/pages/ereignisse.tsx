@@ -9,6 +9,7 @@ import { BackendResponse, getSessionFromRequest } from '@/services/BackendServic
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import IncidentList from '@/components/Incident/List/IncidentList'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -24,34 +25,37 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
   const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
   const closedIncidents = useIncidents((incidents) => incidents
     .filter(isClosedIncident)
-    .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime())
-    .slice(0,5))
+    .sort((a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime())
+    .slice(0, 5)
+  )
 
   return (
-    <UiContainer>
-      <section>
-        <UiGrid>
-          <UiGrid.Col>
-            <UiTitle level={1}>
-              Ereignisse
-            </UiTitle>
-          </UiGrid.Col>
-        </UiGrid>
-
-        <IncidentList incidents={openIncidents} />
-      </section>
-
-      {closedIncidents.length !== 0 && (
+    <Page>
+      <UiContainer>
         <section>
-          <div style={{ margin: '4rem 0 1rem 0' }}>
-            <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
-          </div>
-          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <IncidentArchiveList closedIncidents={closedIncidents} />
-          </UiGrid.Col>
+          <UiGrid>
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                Ereignisse
+              </UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
+
+          <IncidentList incidents={openIncidents} />
         </section>
-      )}
-    </UiContainer>
+
+        {closedIncidents.length !== 0 && (
+          <section>
+            <div style={{ margin: '4rem 0 1rem 0' }}>
+              <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
+            </div>
+            <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+              <IncidentArchiveList closedIncidents={closedIncidents} />
+            </UiGrid.Col>
+          </section>
+        )}
+      </UiContainer>
+    </Page>
   )
 }
 export default EreignissePage
