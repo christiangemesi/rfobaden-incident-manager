@@ -53,17 +53,17 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
       </UiCaption>
       <DocumentImageDrawer
-        modelId={report.id}
-        modelName="report"
         images={report.images}
         storeImages={storeImages}
+        modelId={report.id}
+        modelName="report"
         onAddImage={addImage}
       />
       <DocumentDrawer
-        modelId={report.id}
-        modelName="report"
         documents={report.documents}
         storeDocuments={storeDocuments}
+        modelId={report.id}
+        modelName="report"
         onAddDocument={addDocument}
       />
     </UiCaptionList>

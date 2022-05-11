@@ -40,7 +40,7 @@ const DocumentImageDrawer: React.VFC<Props> = ({
           storeImages={storeImages}
           modelId={modelId}
           modelName={modelName}
-          onAddDocument={onAddImage}
+          onAddImage={onAddImage}
         />
       </UiDrawer.Body>
     </UiDrawer>

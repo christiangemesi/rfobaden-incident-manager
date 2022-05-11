@@ -4,7 +4,7 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { parseDateOrNull } from '@/models/base/Date'
 import Subtask from '@/models/Subtask'
-import { FileId } from '@/models/FileUpload'
+import { Document } from '@/models/FileUpload'
 import Trackable, { parseTrackable } from '@/models/Trackable'
 
 export default interface Task extends Model, Trackable {
@@ -14,8 +14,8 @@ export default interface Task extends Model, Trackable {
   incidentId: Id<Incident>
   subtaskIds: Id<Subtask>[]
   closedSubtaskIds: Id<Subtask>[]
-  imageIds: FileId[]
-  documentIds: FileId[]
+  images: Document[]
+  documents: Document[]
 }
 
 export const parseTask = (data: Task): Task => ({
@@ -30,5 +30,4 @@ export interface OpenTask extends Task {
   isDone: false
 }
 
-export const isOpenTask = (task: Task): task is OpenTask =>
-  !task.isClosed && !task.isDone
+export const isOpenTask = (task: Task): task is OpenTask => !task.isClosed && !task.isDone
