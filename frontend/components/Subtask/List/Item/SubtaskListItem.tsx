@@ -12,6 +12,8 @@ import BackendService from '@/services/BackendService'
 import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
 import Task from '@/models/Task'
 import UiDescription from '@/components/Ui/Description/UiDescription'
+import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
   task: Task
@@ -56,6 +58,24 @@ const SubtaskListItem: React.VFC<Props> = ({
     }
   }, [snapshot?.isDragging])
 
+  const caption = (
+    <UiCaptionList>
+      <UiCaption isEmphasis>
+        Teilauftrag
+      </UiCaption>
+      <UiCaption>
+        {subtask.images.length}
+        &nbsp;
+        {subtask.images.length === 1 ? 'Bild' : 'Bilder'}
+      </UiCaption>
+      <UiCaption>
+        {subtask.documents.length}
+        &nbsp;
+        {subtask.documents.length === 1 ? 'Dokument' : 'Dokumente'}
+      </UiCaption>
+    </UiCaptionList>
+  )
+
   const child = (
     <div
       ref={provided?.innerRef}
@@ -68,6 +88,7 @@ const SubtaskListItem: React.VFC<Props> = ({
         user={assigneeName ?? ''}
         isDragging={isDragging && snapshot !== null && !snapshot.isDropAnimating}
         onClick={handleClick && (() => handleClick(subtask))}
+        caption={caption}
         body={subtask.description && (
           <UiDescription description={subtask.description} />
         )}

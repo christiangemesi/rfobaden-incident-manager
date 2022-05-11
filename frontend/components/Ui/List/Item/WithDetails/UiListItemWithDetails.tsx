@@ -4,11 +4,16 @@ import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
+import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
+import Model from '@/models/base/Model'
 
 interface Props extends UiListItemProps {
   priority: Priority
   title: string
   user: string
+  model?: Model
+  caption?: ReactNode
   body?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
@@ -24,6 +29,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   isSmall = false,
   isTitleSwitched = false,
   children,
+  caption,
   ...props
 }: Props) => {
 
@@ -33,6 +39,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
       <LeftSide>
         <LeftPriority priority={priority} isSmall={isSmall} />
         <TextContent isTitleSwitched={isTitleSwitched}>
+          {caption}
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
