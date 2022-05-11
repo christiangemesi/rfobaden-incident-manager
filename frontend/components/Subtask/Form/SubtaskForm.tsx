@@ -76,7 +76,7 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
     if (handleClose) {
       handleClose()
     }
-  }, [task, subtask])
+  })
 
   useCancel(form, handleClose)
 

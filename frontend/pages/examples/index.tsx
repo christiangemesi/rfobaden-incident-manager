@@ -95,12 +95,6 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-header">
-        <a>
-          UiHeader
-        </a>
-      </Link>
-      <br />
       <Link href="examples/ui-list-item">
         <a>
           UiListItem

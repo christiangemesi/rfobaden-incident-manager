@@ -2,7 +2,7 @@ import React from 'react'
 import User, { parseUser, UserRole } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
-import UserStore from '@/stores/UserStore'
+import UserStore, { useUsers } from '@/stores/UserStore'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import UiForm from '@/components/Ui/Form/UiForm'
 import { ModelData } from '@/models/base/Model'
@@ -20,6 +20,9 @@ interface Props {
 }
 
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
+
+  const userEmails = useUsers((users) => users.map(({ email }) => email.toLowerCase()))
+
   const form = useForm<ModelData<User>>(user,() => ({
     email: '',
     firstName: '',
@@ -33,6 +36,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
       validate.maxLength(100),
+      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt' ,
     ],
     firstName: [
       validate.notBlank(),

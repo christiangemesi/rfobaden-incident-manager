@@ -23,7 +23,7 @@ interface Props {
 
 const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie den Teilauftrag "${subtask.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Teilauftrag "${subtask.title}" löschen wollen?`)) {
       const error = await BackendService.delete(`incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id)
       if (error !== null) {
         throw error

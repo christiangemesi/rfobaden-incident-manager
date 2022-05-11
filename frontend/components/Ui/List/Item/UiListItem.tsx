@@ -14,44 +14,44 @@ export interface Props extends StyledProps {
 const UiListItem: React.VFC<Props> = ({
   href = null,
   isActive = false,
+  onClick: handleClick,
   ...props
 }) => {
   if (href !== null) {
     return (
-      <Link href={href} passHref>
-        <StyledListItem {...props} as="a" isActive={isActive} />
+      <Link href={ href } passHref>
+        <StyledListItem { ...props } as="a" isActive={ isActive } onClick={ handleClick } isClickable />
       </Link>
     )
   }
   return (
-    <StyledListItem {...props} isActive={isActive} />
+    <StyledListItem { ...props } isActive={ isActive } onClick={ handleClick } isClickable={ handleClick !== undefined } />
   )
 }
 export default styled(UiListItem)``
 
-const StyledListItem = styled.li<{ isActive: boolean }>`
+const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean }>`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
   width: 100%;
-  cursor: pointer;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background-color: ${({ theme }) => theme.colors.secondary.value};
   text-decoration: none;
-
   transition: 150ms ease-out;
   transition-property: filter, background-color, opacity, box-shadow;
   will-change: filter, background-color, opacity, box-shadow;
-  
+
   ${({ isActive, theme }) => isActive && css`
     background-color: ${theme.colors.tertiary.value};
     box-shadow: 0 0 4px 2px gray;
   `}
-  
-  ${({ isActive }) => !isActive && css`
+
+  ${({ isClickable }) => isClickable && css`
     :hover {
+      cursor: pointer;
       filter: brightness(0.9);
     }
   `}

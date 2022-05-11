@@ -105,7 +105,7 @@ const SubtaskList: React.VFC<Props> = ({
 
         <Side>
           <UiCaption>
-            geschlossene Teilaufträge
+            abgeschlossene Teilaufträge
           </UiCaption>
 
           <Droppable droppableId={LIST_CLOSED_ID}>{(provided) => (
