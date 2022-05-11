@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import FileUpload, { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import React from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -11,13 +11,14 @@ import Id from '@/models/base/Id'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import BackendService from '@/services/BackendService'
+import FileUpload from '@/models/FileUpload'
 
 interface Props {
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   type: 'image' | 'document'
   onClose?: () => void
-  onSave: (fileId: FileId) => void
+  onSave: (document: Document) => void
 }
 
 const DocumentForm: React.VFC<Props> = ({
@@ -40,14 +41,13 @@ const DocumentForm: React.VFC<Props> = ({
     ],
     file: [
       validate.notNull(),
-
       // Maximum upload size is 10MB.
       (value) => value === null || value.size < 10_000_000 || 'ist zu gross',
     ],
   }))
 
   useSubmit(form, async ({ file, name }: FileUpload) => {
-    const [fileId, error] = await BackendService.upload('documents', file, {
+    const [document, error] = await BackendService.upload('documents', file, {
       modelId: modelId.toString(),
       modelName,
       name,
@@ -56,7 +56,8 @@ const DocumentForm: React.VFC<Props> = ({
     if (error !== null) {
       throw error
     }
-    handleSave(fileId)
+
+    handleSave(document)
 
     clearForm(form)
     if (handleClose) {

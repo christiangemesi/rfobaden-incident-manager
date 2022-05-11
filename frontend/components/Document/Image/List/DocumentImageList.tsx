@@ -1,4 +1,3 @@
-import { FileId, getImageUrl } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
@@ -13,26 +12,27 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
+import Document from '@/models/Document'
 
 interface Props {
-  imageIds: FileId[]
+  images: Document[]
+  storeImages: (images: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImageIds: (ids: FileId[]) => void
-  onAddFile: (fileId: FileId) => void
+  onAddImage: (image: Document) => void
 }
 
 const DocumentImageList: React.VFC<Props> = ({
-  imageIds,
+  images,
+  storeImages,
   modelId,
   modelName,
-  storeImageIds,
-  onAddFile,
+  onAddImage,
 }) => {
 
-  const handleDelete = async (id: FileId) => {
+  const handleDelete = async (image: Document) => {
     if (confirm('Sind sie sicher, dass sie das Bild löschen wollen?')) {
-      const error = await BackendService.delete('documents', id, {
+      const error = await BackendService.delete('documents', image.id, {
         modelName: modelName,
         modelId: modelId.toString(),
         type: 'image',
@@ -40,8 +40,8 @@ const DocumentImageList: React.VFC<Props> = ({
       if (error !== null) {
         throw error
       }
-      imageIds = imageIds.filter((i) => i !== id)
-      storeImageIds(imageIds)
+      images = images.filter((i) => i !== image)
+      storeImages(images)
     }
   }
 
@@ -62,19 +62,16 @@ const DocumentImageList: React.VFC<Props> = ({
               modelId={modelId}
               modelName={modelName}
               type="image"
-              onSave={onAddFile}
+              onSave={onAddImage}
               onClose={close}
             />
           )}</UiModal.Body>
         </UiModal>
-        {imageIds.map((id) => (
+        {images.map((image) => (
           <DocumentImageItem
-            key={id}
-            src={getImageUrl(id)}
-            text="Filename"
-            id={id}
-            onDelete={handleDelete}
-          />
+            key={image.id}
+            image={image}
+            onDelete={handleDelete} />
         ))}
       </ImageContainer>
     </UiContainer>

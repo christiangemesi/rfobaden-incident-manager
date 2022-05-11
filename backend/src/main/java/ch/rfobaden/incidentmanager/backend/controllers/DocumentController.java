@@ -67,10 +67,7 @@ public class DocumentController extends AppController {
         ));
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-            .filename(document.getName() == null
-                ? document.getId() + document.getExtension()
-                : document.getName()
-            )
+            .filename(document.getName() + document.getExtension())
             .build();
 
         HttpHeaders headers = new HttpHeaders();
@@ -81,7 +78,7 @@ public class DocumentController extends AppController {
 
     @RequireAgent
     @PostMapping
-    public Long create(
+    public Document create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long modelId,
@@ -101,7 +98,7 @@ public class DocumentController extends AppController {
         saveToOwner.accept(owner, document);
         service.update(owner);
 
-        return document.getId();
+        return document;
     }
 
     @RequireAgent
@@ -141,10 +138,9 @@ public class DocumentController extends AppController {
         document.setMimeType(mimeType.toString());
         document.setExtension(mimeType.getExtension());
 
-        var fileName = name.orElseGet(file::getOriginalFilename);
-        if (fileName != null && !fileName.endsWith(document.getExtension())) {
-            fileName = fileName + document.getExtension();
-        }
+        String fileName = name.orElse(file.getOriginalFilename()
+            .substring(0, file.getOriginalFilename().lastIndexOf('.')));
+        
         document.setName(fileName);
         return document;
     }

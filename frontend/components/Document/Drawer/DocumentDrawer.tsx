@@ -1,26 +1,26 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import styled from 'styled-components'
 
 interface Props {
+  documents: Document[]
+  storeDocuments: (documents: Document[]) => void
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeDocumentIds: (ids: FileId[]) => void
-  documentIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
-  onAddFile: (fileId: FileId) => void
+  onAddDocument: (document: Document) => void
 }
 
 const DocumentDrawer: React.VFC<Props> = ({
-  documentIds,
+  documents,
+  storeDocuments,
   modelId,
   modelName,
-  storeDocumentIds,
   children,
-  onAddFile,
+  onAddDocument,
 }) => {
 
   return (
@@ -28,19 +28,19 @@ const DocumentDrawer: React.VFC<Props> = ({
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
           <Caption onClick={ open }>
-            {documentIds.length}
+            {documents.length}
             &nbsp;
-            {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
+            {documents.length === 1 ? 'Dokument' : 'Dokumente'}
           </Caption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentList
-          storeFileIds={storeDocumentIds}
-          fileIds={documentIds}
+          storeDocuments={storeDocuments}
+          documents={documents}
           modelId={modelId}
           modelName={modelName}
-          onAddFile={onAddFile}
+          onAddDocument={onAddDocument}
         />
       </UiDrawer.Body>
     </UiDrawer>
