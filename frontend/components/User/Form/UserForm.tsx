@@ -58,7 +58,11 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
     if (handleClose) {
       handleClose()
     }
-    AlertStore.addAlert({ text: `Benutzer erfolgreich ${user === null ? 'erstellt' : 'bearbeitet'}!`, type: 'success' })
+    AlertStore.add({
+      text: `Benutzer erfolgreich ${user === null ? 'erstellt' : 'bearbeitet'}!`,
+      type: 'success',
+      isFading: true,
+    })
   })
   useCancel(form, handleClose)
 
