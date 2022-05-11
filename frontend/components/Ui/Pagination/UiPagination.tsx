@@ -12,23 +12,21 @@ interface Props {
 const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref }) => {
   return (
     <Pagination>
-      {currentOffset === 0 ? (
-        <PaginationButton isCurrent={false} isDisabled={true}>
-          <UiIcon.Previous />
-        </PaginationButton>
-      ) : (
-        <PaginationButton isCurrent={false} href={makeHref(currentOffset-1)}>
-          <UiIcon.Previous />
-        </PaginationButton>
+      <PaginationButton
+        isCurrent={false}
+        isDisabled={currentOffset === 0}
+        href={currentOffset === 0 ? undefined : makeHref(currentOffset - 1)}
+      >
+        <UiIcon.Previous />
+      </PaginationButton>
+      
+      {totalPages < 6 &&(
+        [...Array(totalPages)].map((_element, i) => (
+          <PaginationButton key={i} isCurrent={currentOffset === i} href={makeHref(i)}>
+            {i + 1}
+          </PaginationButton>
+        ))
       )}
-
-      {totalPages < 6 &&
-                [...Array(totalPages)].map((_element, i) => (
-                  <PaginationButton key={i} isCurrent={currentOffset === i} href={makeHref(i)}>
-                    {i + 1}
-                  </PaginationButton>
-                ))
-      }
 
       {(totalPages > 5 && currentOffset < 3) && (
         <React.Fragment>
