@@ -63,7 +63,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
           <MorePlaceholder>
             <UiIcon.More size={0.8} />
           </MorePlaceholder>
-          <PaginationButton isCurrent={currentOffset === totalPages-1} href={makeHref(totalPages - 1)}>
+          <PaginationButton isCurrent={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
             {totalPages}
           </PaginationButton>
         </React.Fragment>
