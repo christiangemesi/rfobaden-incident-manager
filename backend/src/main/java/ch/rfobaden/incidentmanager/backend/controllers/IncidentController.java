@@ -43,10 +43,11 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
 
     @GetMapping("/archive")
     @ResponseStatus(HttpStatus.OK)
-    public ClosedIncidentsData listArchive(@RequestParam int limit,
-                                  @RequestParam int offset) {
+    public ClosedIncidentsData listArchive(
+        @RequestParam int limit,
+        @RequestParam int offset
+    ) {
         var page = service.listClosedIncident(limit, offset);
-
         return new ClosedIncidentsData(page.getTotalElements(), page.toList());
     }
 
