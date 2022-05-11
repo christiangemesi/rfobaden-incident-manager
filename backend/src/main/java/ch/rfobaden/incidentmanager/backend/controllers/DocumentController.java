@@ -138,7 +138,8 @@ public class DocumentController extends AppController {
         document.setMimeType(mimeType.toString());
         document.setExtension(mimeType.getExtension());
 
-        String fileName = name.orElse(file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.')));
+        String fileName = name.orElse(file.getOriginalFilename()
+            .substring(0, file.getOriginalFilename().lastIndexOf('.')));
         
         document.setName(fileName);
         return document;
