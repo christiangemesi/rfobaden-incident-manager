@@ -142,18 +142,19 @@ const LIST_CLOSED_ID = 'list-closed'
 const Container = styled.div`
   display: flex;
   flex-wrap: nowrap;
+  flex-shrink: 0;
   min-height: 100%;
   column-gap: 2rem;
   padding: 4px 4px 0 4px;
   
   width: 100%;  
   ${Themed.media.lg.max} {
-    width: 200%;
+    width: 180%;
   }
 `
 
 const Side = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100%;
   
   padding: 1rem;

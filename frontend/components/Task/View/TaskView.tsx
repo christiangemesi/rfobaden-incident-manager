@@ -10,6 +10,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import { sleep } from '@/utils/control-flow'
 import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
+import { Themed } from '@/theme'
 
 interface Props {
   report: Report
@@ -49,5 +50,12 @@ export default TaskView
 
 const Content = styled(UiLevel.Content)`
   display: flex;
-  justify-content: center;
+  ${Themed.media.sm.max} {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+  ${Themed.media.md.min} {
+    justify-content: center;
+  }
+
 `
