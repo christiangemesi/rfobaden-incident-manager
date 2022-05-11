@@ -3,6 +3,7 @@ import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { ColorName } from '@/theme'
 import { PropsOf } from '@emotion/react'
+import Link from 'next/link'
 
 export interface Props extends StyledProps {
 
@@ -44,18 +45,26 @@ export interface Props extends StyledProps {
   /**
    * Use button as <a>.
    */
-  href?: ReactNode
+  href?: string
 }
 
 const UiButton: React.VFC<Props> = ({
   color = 'primary',
   type = 'button',
+  href,
   ...otherProps
 }) => {
   const sharedProps: PropsOf<typeof StyledButton> = {
     ...otherProps,
     color,
     disabled: otherProps.isDisabled,
+  }
+  if (href !== undefined) {
+    return (
+      <Link href={href} passHref>
+        <StyledButton {...sharedProps} type={type} as="a" />
+      </Link>
+    )
   }
   return <StyledButton {...sharedProps} type={type} />
 }

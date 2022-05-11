@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React from 'react'
+import React, { useEffect } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -20,25 +20,28 @@ interface Props {
 }
 
 const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
-  useEffectOnce(() => {
+  useEffect(() => {
     IncidentStore.saveAll(data.page.data.map(parseIncident))
-  })
+  }, [data])
 
   const closedIncidents = useIncidents((incidents) => incidents
     .filter(isClosedIncident)
     .filter( (it) => data.page.data.find( (incident) => incident.id === it.id) )
     .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime() )
-  )
-  
+  , [data.page])
 
   const totalPages = Math.ceil( data.page.total / PAGE_LIMIT )
 
   const currentOffset = offset
 
+  // console.log('ci', closedIncidents)
+  // console.log()
+
+  const paginationSideCount = Math.max(totalPages / 2, 3)
+  // console.log(`+++++ ${paginationSideCount}`)
 
   return (
     <UiContainer>
-
       <UiGrid style={{ padding: '0 0 1rem 0' }}>
         <UiGrid.Col>
           <UiTitle level={1}>
@@ -52,20 +55,115 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
         </UiGrid.Col>
       )}
       <Pagination>
-        <PaginationButton isCurrent={false}>
-          <UiIcon.Previous />
-        </PaginationButton>
-
-
-        {[...Array(totalPages)].map((_element, i) => (
-          <PaginationButton key={i} isCurrent={currentOffset ===i}>
-            {i + 1}
+        {currentOffset === 0 ? (
+          <PaginationButton isCurrent={false} isDisabled={true}>
+            <UiIcon.Previous />
           </PaginationButton>
-        ))}
+        ) : (
+          <PaginationButton isCurrent={false} href={`/ereignisse/archiv?p=${currentOffset-1}`}>
+            <UiIcon.Previous />
+          </PaginationButton>
+        )}
 
-        <PaginationButton isCurrent={false}>
-          <UiIcon.Next />
-        </PaginationButton>
+        {totalPages < 6 &&
+          [...Array(totalPages)].map((_element, i) => (
+            <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>
+              {i + 1}
+            </PaginationButton>
+          ))}
+
+
+        {(totalPages > 6 && currentOffset < 3) && (
+          <React.Fragment>
+
+            {[...Array(4)].map((_element, i) => (
+              <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>
+                {i + 1}
+              </PaginationButton>
+            ))}
+            <MorePlaceholder>
+              <UiIcon.More size={0.8} />
+            </MorePlaceholder>
+            <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
+              {totalPages}
+            </PaginationButton>
+
+          </React.Fragment>
+        )}
+
+        {(totalPages > 6 && currentOffset > 2 && currentOffset < totalPages-2) && (
+          <React.Fragment>
+
+            <PaginationButton isCurrent={currentOffset === 0} href={`/ereignisse/archiv?p=${0}`}>
+              {1}
+            </PaginationButton>
+            <MorePlaceholder>
+              <UiIcon.More size={0.8} />
+            </MorePlaceholder>
+            {[...Array(3)].map((_element, i) => {
+              const iOffset = currentOffset-1 + i
+              return (
+                <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={`/ereignisse/archiv?p=${iOffset}`}>
+                  {iOffset + 1}
+                </PaginationButton>
+              )
+            })}
+            <MorePlaceholder>
+              <UiIcon.More size={0.8} />
+            </MorePlaceholder>
+            <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
+              {totalPages}
+            </PaginationButton>
+
+          </React.Fragment>
+        )}
+
+        {(totalPages > 6 && currentOffset > totalPages-2) && (
+          <React.Fragment>
+
+            <PaginationButton isCurrent={currentOffset === 0} href={`/ereignisse/archiv?p=${0}`}>
+              {1}
+            </PaginationButton>
+            <MorePlaceholder>
+              <UiIcon.More size={0.8} />
+            </MorePlaceholder>
+            {[...Array(3)].map((_element, i) => {
+              const iOffset = totalPages-2 + i
+              return (
+                <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={`/ereignisse/archiv?p=${iOffset}`}>
+                  {iOffset + 1}
+                </PaginationButton>
+              )
+            })}
+            <MorePlaceholder>
+              <UiIcon.More size={0.8} />
+            </MorePlaceholder>
+            <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
+              {totalPages}
+            </PaginationButton>
+
+          </React.Fragment>
+        )}
+
+
+        {/*{[...Array(totalPages)].map((_element, i) => (*/}
+        {/*  <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>*/}
+        {/*    {i + 1}*/}
+        {/*  </PaginationButton>*/}
+        {/*))}*/}
+        {/*<MorePlaceholder>*/}
+        {/*  <UiIcon.More size={0.8} />*/}
+        {/*</MorePlaceholder>*/}
+
+        {currentOffset === totalPages - 1 ? (
+          <PaginationButton isCurrent={false} isDisabled={true}>
+            <UiIcon.Next />
+          </PaginationButton>
+        ) : (
+          <PaginationButton isCurrent={false} href={`/ereignisse/archiv?p=${currentOffset+1}`}>
+            <UiIcon.Next />
+          </PaginationButton>
+        )}
       </Pagination>
 
     </UiContainer>
@@ -87,6 +185,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
   const offset = typeof query.p === 'string' ? parseInt(query.p) : 0
+  console.log(offset)
 
   const [page, pageError]: BackendResponse<Page> = await backendService.get(`incidents/archive?limit=${PAGE_LIMIT}&offset=${offset}`)
   if (pageError !== null) {
@@ -113,9 +212,13 @@ const Pagination = styled.div`
 `
 const PaginationButton = styled(UiButton)<{ isCurrent: boolean}>`
   margin: 0 0.1rem;
+  min-width: 2rem;
 
+  text-decoration: none;
   background: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.value : theme.colors.secondary.value};
   color: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.contrast : theme.colors.secondary.contrast};
-  
+`
+const MorePlaceholder = styled.div`
+  padding-top: 0.8rem;
 `
 
