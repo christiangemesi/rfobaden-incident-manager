@@ -10,7 +10,6 @@ import User from '@/models/User'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
-import { useRouter } from 'next/router'
 import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import AlertStore, { useAlerts } from '@/stores/AlertStore'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
@@ -50,16 +49,12 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
         <UiScroll>
-          {appState.hasHeader && <UiHeader />}
-          <Main hasHeader={appState.hasHeader} hasFooter={appState.hasFooter}>
-            {component}
-            <UiAlertList>
-              {alerts.map((alert) =>
-                <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
-              )}
-            </UiAlertList>
-          </Main>
-          {appState.hasFooter && <UiFooter />}
+          {component}
+          <UiAlertList>
+            {alerts.map((alert) =>
+              <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
+            )}
+          </UiAlertList>
         </UiScroll>
       </ThemeProvider>
     </Fragment>
