@@ -14,6 +14,8 @@ import DocumentForm from '@/components/Document/Form/DocumentForm'
 import Document from '@/models/Document'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import useSort from '@/utils/hooks/useSort'
+import UiSortButton from '@/components/Ui/Button/UiSortButton'
 
 interface Props {
   documents: Document[]
@@ -46,6 +48,11 @@ const DocumentList: React.VFC<Props> = ({
     }
   }
 
+  const [sortedDocuments, sort] = useSort(documents, () => ({
+    name: String,
+    extension: String,
+  }))
+
   return (
     <React.Fragment>
       <UiTitle level={1}>
@@ -67,16 +74,20 @@ const DocumentList: React.VFC<Props> = ({
           />
         )}</UiModal.Body>
       </UiModal>
-      <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
-        <UiGrid.Col size={7}>
-          <UiTitle level={6}>Name</UiTitle>
+      <UiGrid gapH={0.5}>
+        <UiGrid.Col>
+          <UiSortButton field={sort.name}>
+            <UiTitle level={6}>Name</UiTitle>
+          </UiSortButton>
         </UiGrid.Col>
         <UiGrid.Col>
-          <UiTitle level={6}>Erweiterung</UiTitle>
+          <UiSortButton field={sort.extension}>
+            <UiTitle level={6}>Erweiterung</UiTitle>
+          </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
       <UiList>
-        {documents.map((document) => (
+        {sortedDocuments.map((document) => (
           <DocumentListItem
             key={document.id}
             document={document}
