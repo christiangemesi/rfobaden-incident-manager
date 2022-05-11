@@ -13,8 +13,8 @@ const UiLevelHeader = styled.section<Props>`
   flex-direction: column;
   row-gap: 0.5rem;
   width: 100%;
+  padding: 1rem 2rem 0 2rem;
   
-  padding: 1rem 2rem;
   ${Themed.media.xs.only} {
     padding-left: 0.8rem;
     padding-right: 0.8rem;

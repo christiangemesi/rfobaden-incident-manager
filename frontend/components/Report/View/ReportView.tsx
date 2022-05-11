@@ -115,8 +115,7 @@ const TaskContainer = styled.div`
   justify-content: center;
   width: 100%;
   
-  
-  padding: 1rem 2rem;
+  padding: 0 2rem;
   ${Themed.media.xs.only} {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
