@@ -1,9 +1,7 @@
-import { createModelStore } from '@/stores/base/Store'
-import Transport, { parseTransport } from '@/models/Transport'
-import Incident from '@/models/Incident'
-import Id from '@/models/base/Id'
-import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
+import { parseTransport } from '@/models/Transport'
+import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
+import { createModelStore } from '@/stores/base/Store'
 
 const TransportStore = createModelStore(parseTransport, {
   sortBy: (Transport) => [
@@ -20,6 +18,3 @@ export default TransportStore
 
 export const useTransport = createUseRecord(TransportStore)
 export const useTransports = createUseRecords(TransportStore)
-
-export const useTransportsOfIncident = (incidentId: Id<Incident>): readonly Transport[] =>
-  useTransports((Transports) => Transports.filter((Transport) => Transport.incidentId === incidentId), [incidentId])

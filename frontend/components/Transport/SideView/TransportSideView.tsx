@@ -1,9 +1,10 @@
 import UiSideList from '@/components/Ui/SideList/UiSideList'
+import useWhere from '@/utils/hooks/useWhere'
 import React, { useCallback, useMemo } from 'react'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import { useRouter } from 'next/router'
 import Incident from '@/models/Incident'
-import TransportStore, { useTransportsOfIncident } from '@/stores/TransportStore'
+import TransportStore, { useTransports } from '@/stores/TransportStore'
 import TransportList from '@/components/Transport/List/TransportList'
 import TransportView from '@/components/Transport/View/TransportView'
 import Transport from '@/models/Transport'
@@ -14,7 +15,7 @@ interface Props {
 
 const TransportSideView: React.VFC<Props> = ({ incident }) => {
   const router = useRouter()
-  const transports = useTransportsOfIncident(incident.id)
+  const transports = useWhere(useTransports(), (it) => it.incidentId, incident.id)
 
   const rerouteToTransport = useCallback((selected: Transport) => {
     const query = parseIncidentQuery(router.query)

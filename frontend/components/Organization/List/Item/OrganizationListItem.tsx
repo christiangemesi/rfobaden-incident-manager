@@ -1,4 +1,4 @@
-import React, { EventHandler, MouseEvent } from 'react'
+import React, { EventHandler, MouseEvent, useMemo } from 'react'
 import { isAdmin } from '@/models/User'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
@@ -28,7 +28,10 @@ const OrganizationListItem: React.VFC<Props> = ({
 }) => {
   const currentUser = useCurrentUser()
 
-  const orgUsers = useUsers(organization.userIds)
+  const users = useUsers()
+  const orgUsers = useMemo(() => (
+    users.filter((it) => it.organizationId !== null && organization.userIds.includes(it.organizationId))
+  ), [users, organization.userIds])
 
   const handleDelete = async (organizationId: Id<Organization>) => {
     if (confirm(`Sind sie sicher, dass sie die Organisation "${organization.name}" löschen wollen?`)) {

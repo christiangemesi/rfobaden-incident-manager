@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Task, { parseTask } from '@/models/Task'
@@ -91,11 +91,10 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
       handleClose()
     }
   })
-
   useCancel(form, handleClose)
 
-  const userIds = useUsers((users) => users.map(({ id }) => id))
-
+  const users = useUsers()
+  const userIds = useMemo(() => users.map(({ id }) => id), [users])
 
   return (
     <UiForm form={form}>

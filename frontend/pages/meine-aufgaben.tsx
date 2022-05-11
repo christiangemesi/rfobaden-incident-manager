@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import TransportStore, { useTransports } from '@/stores/TransportStore'
@@ -42,10 +42,25 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
 
   const currentUser = useCurrentUser()
 
-  const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
-  const reports = useReports(groupAssigned(currentUser, isOpenReport))
-  const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
-  const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
+  const allTransports = useTransports()
+  const transports = useMemo(() => (
+    groupAssigned(currentUser, isOpenTransport)(allTransports)
+  ), [allTransports, currentUser])
+
+  const allReports = useReports()
+  const reports = useMemo(() => (
+    groupAssigned(currentUser, isOpenReport)(allReports)
+  ), [allReports, currentUser])
+
+  const allTasks = useTasks()
+  const tasks = useMemo(() => (
+    groupAssigned(currentUser, isOpenTask)(allTasks)
+  ), [allTasks, currentUser])
+
+  const allSubtasks = useSubtasks()
+  const subtasks = useMemo(() => (
+    groupAssigned(currentUser, isOpenSubtask)(allSubtasks)
+  ), [allSubtasks, currentUser])
 
   return (
     <Page>

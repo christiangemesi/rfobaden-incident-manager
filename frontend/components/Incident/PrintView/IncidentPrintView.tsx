@@ -1,11 +1,12 @@
-import React from 'react'
-import styled from 'styled-components'
+import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
+import TransportPrintView from '@/components/Transport/PrintView/TransportPrintView'
 import Incident from '@/models/Incident'
 import { useReportsOfIncident } from '@/stores/ReportStore'
+import { useTransports } from '@/stores/TransportStore'
+import useWhere from '@/utils/hooks/useWhere'
+import React from 'react'
+import styled from 'styled-components'
 import IncidentViewHeader from '../View/Header/IncidentViewHeader'
-import ReportPrintView from '@/components/Report/PrintView/ReportPrintView'
-import { useTransportsOfIncident } from '@/stores/TransportStore'
-import TransportPrintView from '@/components/Transport/PrintView/TransportPrintView'
 
 interface Props {
   incident: Incident
@@ -13,7 +14,7 @@ interface Props {
 
 const IncidentPrintView: React.VFC<Props> = ({ incident }) => {
   const reports = useReportsOfIncident(incident.id)
-  const transports = useTransportsOfIncident(incident.id)
+  const transports = useWhere(useTransports(), (it) => it.incidentId, incident.id)
 
   return (
     <div>

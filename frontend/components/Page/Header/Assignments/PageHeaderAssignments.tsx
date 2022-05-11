@@ -1,5 +1,5 @@
 import Priority from '@/models/Priority'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -29,10 +29,25 @@ const PageHeaderAssignments: React.VFC<Props> = ({
     low: 0,
   }))
 
-  const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
-  const reports = useReports(groupAssigned(currentUser, isOpenReport))
-  const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
-  const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
+  const allTransports = useTransports()
+  const transports = useMemo(() => (
+    groupAssigned(currentUser, isOpenTransport)(allTransports)
+  ), [allTransports, currentUser])
+
+  const allReports = useReports()
+  const reports = useMemo(() => (
+    groupAssigned(currentUser, isOpenReport)(allReports)
+  ), [allReports, currentUser])
+
+  const allTasks = useTasks()
+  const tasks = useMemo(() => (
+    groupAssigned(currentUser, isOpenTask)(allTasks)
+  ), [allTasks, currentUser])
+
+  const allSubtasks = useSubtasks()
+  const subtasks = useMemo(() => (
+    groupAssigned(currentUser, isOpenSubtask)(allSubtasks)
+  ), [allSubtasks, currentUser])
 
   useEffect(() => {
     setAssignmentCount({

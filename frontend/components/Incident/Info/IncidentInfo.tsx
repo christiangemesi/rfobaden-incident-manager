@@ -21,13 +21,15 @@ interface Props {
 const IncidentInfo: React.VFC<Props> = ({ incident }) => {
   const reports = useReportsOfIncident(incident.id)
 
-  const tasks = useTasks((tasks) => (
-    tasks.filter((task) => task.incidentId === incident.id)
-  ))
+  const allTasks = useTasks()
+  const tasks = useMemo(() => (
+    allTasks.filter((it) => it.incidentId === incident.id)
+  ), [allTasks, incident.id])
 
-  const subtasks = useSubtasks((subtasks) => (
-    subtasks.filter((subtask) => subtask.incidentId === incident.id)
-  ))
+  const allSubtasks = useSubtasks()
+  const subtasks = useMemo(() => (
+    allSubtasks.filter((it) => it.incidentId === incident.id)
+  ), [allSubtasks, incident.id])
 
   const assigneeIds = useMemo(() => new Set([
     ...reports.map((report) => report.assigneeId),
@@ -35,11 +37,12 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     ...subtasks.map((subtask) => subtask.assigneeId),
   ]), [reports, tasks, subtasks])
 
-  const activeOrganisations = useOrganizations((organizations) => (
-    organizations
+  const allOrganizations = useOrganizations()
+  const activeOrganisations = useMemo(() => (
+    allOrganizations
       .filter(({ userIds }) => userIds.some((id) => assigneeIds.has(id)))
       .map(({ name }) => name)
-  ), [assigneeIds])
+  ), [allOrganizations, assigneeIds])
 
   const storeImages = (images: Document[]) => {
     IncidentStore.save({ ...incident, images: images })

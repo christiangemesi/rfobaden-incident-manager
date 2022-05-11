@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import User, { parseUser, UserRole } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -20,7 +20,10 @@ interface Props {
 
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
 
-  const userEmails = useUsers((users) => users.map(({ email }) => email.toLowerCase()))
+  const users = useUsers()
+  const userEmails = useMemo(() => (
+    users.map(({ email }) => email.toLowerCase())
+  ), [users])
 
   const form = useForm<ModelData<User>>(user,() => ({
     email: '',
@@ -64,7 +67,9 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   })
   useCancel(form, handleClose)
 
-  const organizationIds = useOrganizations((organizations) => organizations.map(({ id }) => id))
+  const organizations = useOrganizations()
+  const organizationIds = useMemo(() => organizations.map(({ id }) => id), [organizations])
+
   return (
     <div>
       <UiForm form={form}>

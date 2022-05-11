@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Transport, { parseTransport } from '@/models/Transport'
@@ -106,10 +106,10 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       handleClose()
     }
   })
-
   useCancel(form, handleClose)
 
-  const userIds = useUsers((users) => users.map(({ id }) => id))
+  const users = useUsers()
+  const userIds = useMemo(() => users.map(({ id }) => id), [users])
 
   return (
     <div>

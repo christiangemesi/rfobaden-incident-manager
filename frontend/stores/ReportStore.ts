@@ -5,6 +5,7 @@ import Id from '@/models/base/Id'
 import TaskStore from '@/stores/TaskStore'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
+import useWhere from '@/utils/hooks/useWhere'
 
 const ReportStore = createModelStore(parseReport, {
   sortBy: (report) => [
@@ -26,9 +27,7 @@ export const useReport = createUseRecord(ReportStore)
 export const useReports = createUseRecords(ReportStore)
 
 export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[] => (
-  useReports((reports) => (
-    reports.filter((report) => report.incidentId === incidentId)
-  ), [incidentId])
+  useWhere(useReports(), (it) => it.incidentId, incidentId)
 )
 
 TaskStore.onCreate((task) => {

@@ -1,5 +1,7 @@
-import { parseIncident } from '@/models/Incident'
+import Id from '@/models/base/Id'
+import Incident, { parseIncident } from '@/models/Incident'
 import ReportStore from '@/stores/ReportStore'
+import { useMemo } from 'react'
 import { createModelStore } from './base/Store'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import TransportStore from './TransportStore'
@@ -12,6 +14,14 @@ export default IncidentStore
 
 export const useIncident = createUseRecord(IncidentStore)
 export const useIncidents = createUseRecords(IncidentStore)
+
+export const useOfIncident = <T extends { incidentId: Id<Incident> }>(
+  incidentId: Id<Incident>, records: T[]
+): T[] => {
+  return useMemo(() => (
+    records.filter((it) => it.incidentId === incidentId)
+  ), [incidentId, records])
+}
 
 ReportStore.onCreate((report) => {
   const incident = IncidentStore.find(report.incidentId)

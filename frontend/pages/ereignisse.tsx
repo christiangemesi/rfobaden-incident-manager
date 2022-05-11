@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -22,8 +22,9 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
-  const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
-  const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
+  const incidents = useIncidents()
+  const closedIncidents = useMemo(() => incidents.filter(isClosedIncident), [incidents])
+  const openIncidents = useMemo(() => incidents.filter((it) => !isClosedIncident(it)), [incidents])
 
   return (
     <Page>
