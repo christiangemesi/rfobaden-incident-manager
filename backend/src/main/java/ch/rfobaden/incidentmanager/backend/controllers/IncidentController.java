@@ -47,7 +47,7 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
         @RequestParam int limit,
         @RequestParam int offset
     ) {
-        var page = service.listClosedIncident(limit, offset);
+        var page = service.listClosedIncidents(limit, offset);
         return new ClosedIncidentsData(page.getTotalElements(), page.toList());
     }
 

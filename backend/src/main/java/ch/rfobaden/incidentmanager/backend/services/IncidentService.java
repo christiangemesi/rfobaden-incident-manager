@@ -38,7 +38,7 @@ public class IncidentService extends ModelRepositoryService.Basic<Incident, Inci
         return update(EmptyPath.getInstance(), incident);
     }
 
-    public Page<Incident> listClosedIncident(int limit, int offset) {
+    public Page<Incident> listClosedIncidents(int limit, int offset) {
         return repository.findAllClosed(PageRequest.of(offset, limit));
     }
 }
