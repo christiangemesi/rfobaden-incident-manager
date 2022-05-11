@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import PageHeader from '@/components/Page/Header/PageHeader'
 import PageFooter from '@/components/Page/Footer/PageFooter'
+import { Themed } from '@/theme'
 
 interface Props {
   noHeader?: boolean
@@ -39,4 +40,8 @@ const Main = styled.main<{ noHeader: boolean, noFooter: boolean }>`
 
   position: relative;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  
+  ${Themed.media.xs.only} {
+    padding-top: 5rem;
+  }
 `
