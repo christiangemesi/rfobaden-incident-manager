@@ -3,7 +3,7 @@
   <component name="CheckStyle-IDEA">
     <option name="configuration">
       <map>
-        <entry key="active-configuration-0" value="PROJECT_RELATIVE:/Users/milena/Desktop/FHNW/rfobaden-incident-manager/backend/config/checkstyle/checkstyle.xml:Project Config" />
+        <entry key="active-configuration-0" value="PROJECT_RELATIVE:$PROJECT_DIR$/backend/config/checkstyle/checkstyle.xml:Project Config;All" />
         <entry key="checkstyle-version" value="9.0.1" />
         <entry key="copy-libs" value="true" />
         <entry key="location-0" value="BUNDLED:(bundled):Sun Checks;All" />
