@@ -30,7 +30,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
   })
 
   return (
-    <GreyOutClosed ref={innerRef} isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
+    <StyledLevel ref={innerRef} isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
       <UiLevel.Header>
         <TaskViewHeader report={report} task={task} onClose={handleClose} />
       </UiLevel.Header>
@@ -42,12 +42,12 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
           <SubtaskList task={task} subtasks={subtasks} />
         )}
       </Content>
-    </GreyOutClosed>
+    </StyledLevel>
   )
 }
 export default TaskView
 
-const GreyOutClosed = styled(UiLevel)<{ isClosed: boolean }>`
+const StyledLevel = styled(UiLevel)<{ isClosed: boolean }>`
   ${({ isClosed }) => isClosed && css`
     background-color: ${({ theme }) => theme.colors.grey.value};
   `}
