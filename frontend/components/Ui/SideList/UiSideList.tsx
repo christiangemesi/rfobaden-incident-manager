@@ -64,7 +64,7 @@ const UiSideList = <T extends Trackable>({
       <ListOverlay
         hasSelected={selected !== null}
         $listHeight={prevListHeight}
-        isClosed={ selected !==null && isClosed(selected) }
+        isClosed={selected !== null && isClosed(selected)}
       >
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
@@ -115,13 +115,12 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
   }
 `
 
-
 const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number, isClosed: boolean }>`
   display: flex;
   min-height: 100%;
   overflow: hidden;
   z-index: 2;
-  
+
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   box-shadow: 0 0 4px 2px gray;
 
@@ -141,13 +140,10 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number, isCl
   ${Themed.media.xxl.min} {
     width: calc(75% + 4rem);
   }
-  
+
   ${({ isClosed }) => isClosed && css`
-    //filter: grayscale(0.8) brightness(0.8);
-    //opacity: 0.6;
     background-color: ${({ theme }) => theme.colors.grey.value};
   `}
-  
   ${Themed.media.md.max} {
     position: absolute;
     left: 0;
@@ -155,9 +151,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number, isCl
     min-height: ${({ $listHeight }) => $listHeight}px;
     transform: translateY(100vw);
     ${({ hasSelected }) => hasSelected && css`
-
       transform: translateY(0);
-
     `}
   }
 `

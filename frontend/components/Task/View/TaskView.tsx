@@ -30,29 +30,25 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
   })
 
   return (
-    <UiLevel ref={innerRef}>
-      <StyledGreyedOut isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
-        <UiLevel.Header>
-          <TaskViewHeader report={report} task={task} onClose={handleClose} />
-        </UiLevel.Header>
+    <GreyOutClosed ref={innerRef} isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
+      <UiLevel.Header>
+        <TaskViewHeader report={report} task={task} onClose={handleClose} />
+      </UiLevel.Header>
 
-        <Content>
-          {isLoading ? (
-            <UiIcon.Loader isSpinner />
-          ) : (
-            <SubtaskList task={task} subtasks={subtasks} />
-          )}
-        </Content>
-      </StyledGreyedOut>
-    </UiLevel>
+      <Content>
+        {isLoading ? (
+          <UiIcon.Loader isSpinner />
+        ) : (
+          <SubtaskList task={task} subtasks={subtasks} />
+        )}
+      </Content>
+    </GreyOutClosed>
   )
 }
 export default TaskView
 
-const StyledGreyedOut = styled.div<{ isClosed: boolean }>`
+const GreyOutClosed = styled(UiLevel)<{ isClosed: boolean }>`
   ${({ isClosed }) => isClosed && css`
-    //filter: grayscale(0.8) brightness(0.8);
-    //opacity: 0.6;
     background-color: ${({ theme }) => theme.colors.grey.value};
   `}
 `
