@@ -117,14 +117,14 @@ const ItemDescription = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 85ch;
+  max-width: 53rem;
 `
 
 const ItemTitle = styled(UiTitle)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 20ch;
+  max-width: 16rem;
 `
 
 const LeftPriority = styled(UiPriority)`
