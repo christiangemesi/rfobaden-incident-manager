@@ -2,7 +2,7 @@ import React, { ReactNode, useContext, useMemo, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 import { Themed } from '@/theme'
-import { useEffectOnce, useMountedState, useUpdate } from 'react-use'
+import { useEffectOnce, useEvent, useMountedState, useUpdate } from 'react-use'
 import ReactDOM from 'react-dom'
 import { run } from '@/utils/control-flow'
 
@@ -15,7 +15,6 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isMounted = useMountedState()
 
-
   const forceUpdate = useUpdate()
 
   // Render once more after the initial render,
@@ -23,6 +22,10 @@ const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   useEffectOnce(() => {
     forceUpdate()
   })
+
+  useEvent('scroll', () => {
+    context.setOpen(false)
+  }, undefined, [context.setOpen])
 
   const child = useMemo(() => {
     const bounds = containerRef.current?.getBoundingClientRect() ?? null

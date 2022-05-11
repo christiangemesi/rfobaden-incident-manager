@@ -44,8 +44,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
   }))
 
   return (
-    <div>
-    
+    <React.Fragment>
       {isAdmin(currentUser) && (
         <UiModal title="Benutzer erfassen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
@@ -88,7 +87,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
           />
         ))}
       </UiList>
-    </div>
+    </React.Fragment>
   )
 }
 export default UserList
