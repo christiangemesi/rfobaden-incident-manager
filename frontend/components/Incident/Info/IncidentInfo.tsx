@@ -75,7 +75,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
         modelId={incident.id}
         modelName="incident"
         images={incident.images}
-        storeImages={storeDocuments}
+        storeImages={storeImages}
         onAddDocument={addImage}
       />
       <DocumentDrawer
