@@ -1,16 +1,12 @@
 import NextApp, { AppProps } from 'next/app'
 import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
-import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { createGlobalState, useEffectOnce } from 'react-use'
+import { useEffectOnce } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
-
-import 'reset-css/reset.css'
 import User from '@/models/User'
-import UiHeader from '@/components/Ui/Header/UiHeader'
-import UiFooter from '@/components/Ui/Footer/UiFooter'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
@@ -19,6 +15,8 @@ import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import AlertStore, { useAlerts } from '@/stores/AlertStore'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
 import Alert from '@/models/Alert'
+
+import 'reset-css/reset.css'
 
 interface Props extends AppProps {
   user: User | null
@@ -45,14 +43,6 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       ? <Component {...pageProps} />
       : <React.Fragment />
   ), [Component, pageProps, currentUser, user])
-
-  const [appState, setAppState] = useAppState()
-  const router = useRouter()
-  useEffectOnce(() => {
-    router.events.on('routeChangeComplete', () => {
-      setAppState({ hasHeader: true, hasFooter: true })
-    })
-  })
 
   return (
     <Fragment>
@@ -135,23 +125,3 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     }
   }
 `
-
-const Main = styled.main<{ hasHeader: boolean, hasFooter: boolean }>`
-  --header-height: 5rem;
-  --footer-height: 5rem;
-
-  ${({ hasHeader }) => !hasHeader && css`
-    --header-height: 0px;
-  `}
-  ${({ hasFooter }) => !hasFooter && css`
-    --footer-height: 0px;
-  `}
-
-  position: relative;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-`
-
-export const useAppState = createGlobalState({
-  hasHeader: true,
-  hasFooter: true,
-})

@@ -19,7 +19,7 @@ const TrackableCloseAction: React.VFC<Props> = ({
       </UiDropDown.Item>
     ) : (
       <UiDropDown.Item onClick={handleClose}>
-        Schliessen
+        Abschliessen
       </UiDropDown.Item>
     )
   )

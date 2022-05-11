@@ -216,7 +216,7 @@ export const mapEntryTypeToName = (source: string): string => {
     return toTitleCase(source)
   }
 }
-  
+
 const toTitleCase = (str: string): string => {
   return str
     .split(' ')
