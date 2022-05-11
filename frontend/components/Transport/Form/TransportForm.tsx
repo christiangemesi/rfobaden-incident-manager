@@ -34,16 +34,6 @@ interface Props {
 const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: handleSave, onClose: handleClose }) => {
   const currentUser = useCurrentUser()
 
-  transport = useMemo(() => {
-    if (transport === null) {
-      return transport
-    }
-    return {
-      ...transport,
-      vehicleId: 1,
-    }
-  }, [transport])
-
   const form = useForm<ModelData<Transport>>(transport, () => ({
     title: '',
     description: null,
@@ -83,8 +73,6 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         validate.maxLength(100),
       ],
       vehicleId: [
-        // validate.notBlank({ allowNull: true }),
-        // validate.maxLength(100),
         validate.notNull(),
       ],
       driver: [
@@ -136,6 +124,21 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     })()
   })
 
+  const handleCreate = async (vehicleName: string) => {
+    if (vehicleName.length > 100) {
+      alert('Fahrzeugname ist zu lang.')
+      return
+    }
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
+      name: vehicleName,
+      isVisible: true,
+    })
+    if (error !== null) {
+      throw error
+    }
+    VehicleStore.save(parseVehicle(data))
+  }
+
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
@@ -179,16 +182,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               optionName={mapVehicleIdToName}
               menuPlacement="auto"
               placeholder="Fahrzeug"
-              onCreate={async (vehicle) => {
-                const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
-                  name: vehicle,
-                  isVisible: true,
-                })
-                if (error !== null) {
-                  throw error
-                }
-                VehicleStore.save(parseVehicle(data))
-              }}
+              onCreate={handleCreate}
               isCreatable
               isSearchable
             />
