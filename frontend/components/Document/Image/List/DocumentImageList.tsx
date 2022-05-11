@@ -19,7 +19,7 @@ interface Props {
   storeImages: (images: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  onAddDocument: (document: Document) => void
+  onAddImage: (image: Document) => void
 }
 
 const DocumentImageList: React.VFC<Props> = ({
@@ -27,7 +27,7 @@ const DocumentImageList: React.VFC<Props> = ({
   storeImages,
   modelId,
   modelName,
-  onAddDocument,
+  onAddImage,
 }) => {
 
   const handleDelete = async (image: Document) => {
@@ -62,16 +62,16 @@ const DocumentImageList: React.VFC<Props> = ({
               modelId={modelId}
               modelName={modelName}
               type="image"
-              onSave={onAddDocument}
+              onSave={onAddImage}
               onClose={close}
             />
           )}</UiModal.Body>
         </UiModal>
         {images.map((image) => (
-            <DocumentImageItem
-              key={image.id}
-              image={image}
-              onDelete={handleDelete} />
+          <DocumentImageItem
+            key={image.id}
+            image={image}
+            onDelete={handleDelete} />
         ))}
       </ImageContainer>
     </UiContainer>

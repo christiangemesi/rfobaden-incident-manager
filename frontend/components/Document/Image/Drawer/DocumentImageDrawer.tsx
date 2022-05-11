@@ -11,7 +11,7 @@ interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   children?: (props: { open: () => void }) => ReactNode
-  onAddDocument: (document: Document) => void
+  onAddImage: (image: Document) => void
 }
 
 const DocumentImageDrawer: React.VFC<Props> = ({
@@ -20,7 +20,7 @@ const DocumentImageDrawer: React.VFC<Props> = ({
   modelId,
   modelName,
   children,
-  onAddDocument,
+  onAddImage,
 }) => {
 
   return (
@@ -40,7 +40,7 @@ const DocumentImageDrawer: React.VFC<Props> = ({
           storeImages={storeImages}
           modelId={modelId}
           modelName={modelName}
-          onAddDocument={onAddDocument}
+          onAddDocument={onAddImage}
         />
       </UiDrawer.Body>
     </UiDrawer>

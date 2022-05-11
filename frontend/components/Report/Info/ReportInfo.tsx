@@ -57,7 +57,7 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         modelName="report"
         images={report.images}
         storeImages={storeImages}
-        onAddDocument={addImage}
+        onAddImage={addImage}
       />
       <DocumentDrawer
         modelId={report.id}
