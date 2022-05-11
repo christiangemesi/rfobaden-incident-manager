@@ -38,13 +38,13 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
           <MorePlaceholder>
             <UiIcon.More size={0.8} />
           </MorePlaceholder>
-          <PaginationButton isCurrent={currentOffset === totalPages-1} href={makeHref(totalPages-1)}>
+          <PaginationButton isCurrent={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
             {totalPages}
           </PaginationButton>
         </React.Fragment>
       )}
 
-      {(totalPages > 5 && currentOffset > 2 && currentOffset < totalPages-3) && (
+      {(totalPages > 5 && currentOffset > 2 && currentOffset < totalPages - 3) && (
         <React.Fragment>
           <PaginationButton isCurrent={currentOffset === 0} href={makeHref(0)}>
             {1}
@@ -53,7 +53,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
             <UiIcon.More size={0.8} />
           </MorePlaceholder>
           {[...Array(3)].map((_element, i) => {
-            const iOffset = currentOffset-1 + i
+            const iOffset = currentOffset - 1 + i
             return (
               <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={makeHref(iOffset)}>
                 {iOffset + 1}
@@ -63,13 +63,13 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
           <MorePlaceholder>
             <UiIcon.More size={0.8} />
           </MorePlaceholder>
-          <PaginationButton isCurrent={currentOffset === totalPages-1} href={makeHref(totalPages-1)}>
+          <PaginationButton isCurrent={currentOffset === totalPages-1} href={makeHref(totalPages - 1)}>
             {totalPages}
           </PaginationButton>
         </React.Fragment>
       )}
 
-      {(totalPages > 5 && currentOffset > totalPages-4) && (
+      {(totalPages > 5 && currentOffset > totalPages - 4) && (
         <React.Fragment>
           <PaginationButton isCurrent={currentOffset === 0} href={makeHref(0)}>
             {1}
@@ -78,7 +78,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
             <UiIcon.More size={0.8} />
           </MorePlaceholder>
           {[...Array(4)].map((_element, i) => {
-            const iOffset = totalPages-4 + i
+            const iOffset = totalPages - 4 + i
             return (
               <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={makeHref(iOffset)}>
                 {iOffset + 1}
@@ -93,7 +93,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
           <UiIcon.Next />
         </PaginationButton>
       ) : (
-        <PaginationButton isCurrent={false} href={makeHref(currentOffset+1)}>
+        <PaginationButton isCurrent={false} href={makeHref(currentOffset + 1)}>
           <UiIcon.Next />
         </PaginationButton>
       )}
