@@ -120,7 +120,7 @@ const ItemTitle = styled(UiTitle)`
 `
 
 const ItemCaption = styled.div`
-  margin-right: 0.2rem;
+  margin-right: 0.5rem;
 `
 
 const LeftPriority = styled(UiPriority)`
