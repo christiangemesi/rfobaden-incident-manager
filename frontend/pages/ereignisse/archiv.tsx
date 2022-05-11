@@ -4,7 +4,6 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
 import { GetServerSideProps } from 'next'
-import { useEffectOnce } from 'react-use'
 import { BackendResponse, getSessionFromRequest } from '@/services/BackendService'
 import IncidentArchiveList from '@/components/Incident/Archive/List/IncidentArchiveList'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -33,12 +32,6 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   const totalPages = Math.ceil( data.page.total / PAGE_LIMIT )
 
   const currentOffset = offset
-
-  // console.log('ci', closedIncidents)
-  // console.log()
-
-  const paginationSideCount = Math.max(totalPages / 2, 3)
-  // console.log(`+++++ ${paginationSideCount}`)
 
   return (
     <UiContainer>
@@ -73,9 +66,8 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
           ))}
 
 
-        {(totalPages > 6 && currentOffset < 3) && (
+        {(totalPages > 5 && currentOffset < 3) && (
           <React.Fragment>
-
             {[...Array(4)].map((_element, i) => (
               <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>
                 {i + 1}
@@ -87,13 +79,11 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
             <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
               {totalPages}
             </PaginationButton>
-
           </React.Fragment>
         )}
 
-        {(totalPages > 6 && currentOffset > 2 && currentOffset < totalPages-2) && (
+        {(totalPages > 5 && currentOffset > 2 && currentOffset < totalPages-3) && (
           <React.Fragment>
-
             <PaginationButton isCurrent={currentOffset === 0} href={`/ereignisse/archiv?p=${0}`}>
               {1}
             </PaginationButton>
@@ -114,46 +104,27 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
             <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
               {totalPages}
             </PaginationButton>
-
           </React.Fragment>
         )}
 
-        {(totalPages > 6 && currentOffset > totalPages-2) && (
+        {(totalPages > 5 && currentOffset > totalPages-4) && (
           <React.Fragment>
-
             <PaginationButton isCurrent={currentOffset === 0} href={`/ereignisse/archiv?p=${0}`}>
               {1}
             </PaginationButton>
             <MorePlaceholder>
               <UiIcon.More size={0.8} />
             </MorePlaceholder>
-            {[...Array(3)].map((_element, i) => {
-              const iOffset = totalPages-2 + i
+            {[...Array(4)].map((_element, i) => {
+              const iOffset = totalPages-4 + i
               return (
                 <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={`/ereignisse/archiv?p=${iOffset}`}>
                   {iOffset + 1}
                 </PaginationButton>
               )
             })}
-            <MorePlaceholder>
-              <UiIcon.More size={0.8} />
-            </MorePlaceholder>
-            <PaginationButton isCurrent={currentOffset === totalPages-1} href={`/ereignisse/archiv?p=${totalPages-1}`}>
-              {totalPages}
-            </PaginationButton>
-
           </React.Fragment>
         )}
-
-
-        {/*{[...Array(totalPages)].map((_element, i) => (*/}
-        {/*  <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>*/}
-        {/*    {i + 1}*/}
-        {/*  </PaginationButton>*/}
-        {/*))}*/}
-        {/*<MorePlaceholder>*/}
-        {/*  <UiIcon.More size={0.8} />*/}
-        {/*</MorePlaceholder>*/}
 
         {currentOffset === totalPages - 1 ? (
           <PaginationButton isCurrent={false} isDisabled={true}>
