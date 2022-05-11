@@ -54,7 +54,7 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
           <React.Fragment>
             <UiPagination currentOffset={currentOffset} totalPages={totalPages} makeHref={(p) => `/ereignisse/archiv?p=${p}`} />
             <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-              <IncidentArchiveList closedIncidents={closedIncidents} />
+              <IncidentArchiveList incidents={closedIncidents} />
             </UiGrid.Col>
 
             <PaginationSummary>

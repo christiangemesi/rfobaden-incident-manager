@@ -7,10 +7,10 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiListHeader from '@/components/Ui/List/UiListHeader'
 
 interface Props {
-  closedIncidents: ClosedIncident[]
+  incidents: ClosedIncident[]
 }
 
-const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
+const IncidentArchiveList: React.VFC<Props> = ({ incidents }) => {
   return (
     <div>
       <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
@@ -37,7 +37,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
       </UiGrid>
     
       <UiList>
-        {closedIncidents.map((closedIncident) => (
+        {incidents.map((closedIncident) => (
           <IncidentArchiveListItem 
             key={closedIncident.id}
             incident={closedIncident}

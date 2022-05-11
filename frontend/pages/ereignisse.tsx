@@ -50,7 +50,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
               <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
             </div>
             <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-              <IncidentArchiveList closedIncidents={closedIncidents} />
+              <IncidentArchiveList incidents={closedIncidents} />
             </UiGrid.Col>
           </section>
         )}
