@@ -4,8 +4,6 @@ import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
-import UiCaption from '@/components/Ui/Caption/UiCaption'
-import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import Model from '@/models/base/Model'
 
 interface Props extends UiListItemProps {
@@ -33,13 +31,14 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   ...props
 }: Props) => {
 
-
   return (
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
         <LeftPriority priority={priority} isSmall={isSmall} />
         <TextContent isTitleSwitched={isTitleSwitched}>
-          {caption}
+          <ItemCaption>
+            {caption}
+          </ItemCaption>
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
@@ -50,7 +49,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
         {children}
       </RightSide>
       {body && (
-        <BottomSide $isSmall={isSmall}>
+        <BottomSide isSmall={isSmall}>
           {body}
         </BottomSide>
       )}
@@ -95,13 +94,13 @@ const RightSide = styled.div`
   max-width: 100%;
 `
 
-const BottomSide = styled.div<{ $isSmall: boolean }>`
+const BottomSide = styled.div<{ isSmall: boolean }>`
   display: block;
   flex: 1 0 100%;
   width: 100%;
   max-width: 100%;
   padding-top: 1rem;
-  padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
+  padding-left: calc(${({ isSmall: isSmall }) => isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 
 const TextContent = styled.div<{ isTitleSwitched: boolean }>`
@@ -118,6 +117,10 @@ const ItemTitle = styled(UiTitle)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+`
+
+const ItemCaption = styled.div`
+  margin-right: 0.2rem;
 `
 
 const LeftPriority = styled(UiPriority)`
