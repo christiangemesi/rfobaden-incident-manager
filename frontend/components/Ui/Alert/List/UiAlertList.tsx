@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
+import { Themed } from '@/theme'
 
 interface Props {
   children: ReactNode
@@ -22,4 +23,10 @@ const AlertContainer = styled.div`
   position: fixed;
   bottom: 5rem;
   left: 2rem;
+
+  ${Themed.media.sm.max} {
+    left: 0;
+    width: 100%;
+    align-items: center;
+  }
 `
