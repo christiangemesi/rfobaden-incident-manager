@@ -2,7 +2,7 @@ import React, { ReactNode, useContext, useMemo, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 import { Themed } from '@/theme'
-import { useEffectOnce, useEvent, useMountedState, useScrolling, useUpdate } from 'react-use'
+import { useEffectOnce, useEvent, useMountedState, useUpdate } from 'react-use'
 import ReactDOM from 'react-dom'
 import { run } from '@/utils/control-flow'
 
