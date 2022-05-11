@@ -28,24 +28,28 @@ const ReportViewHeader: React.VFC<Props> = ({
 }) => {
   return (
     <Container>
-      <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-        <TitleContainer>
-          {hasPriority && (
-            <UiPriority priority={report.priority} />
-          )}
-          <div>
-            <ReportInfo report={report} />
-            <UiTitle level={3}>
-              {report.title}
-            </UiTitle>
-          </div>
-        </TitleContainer>
-        <UiIconButtonGroup>
-          <ReportActions incident={incident} report={report} onDelete={handleClose} />
-          <UiIconButton onClick={handleClose}>
-            <UiIcon.CancelAction />
-          </UiIconButton>
-        </UiIconButtonGroup>
+      <UiGrid justify="space-between" align="start" gap={1}>
+        <UiGrid.Col size={10}>
+          <TitleContainer>
+            {hasPriority && (
+              <UiPriority priority={report.priority} />
+            )}
+            <div style={{ width: '100%' }}>
+              <ReportInfo report={report} />
+              <UiTitle level={3}>
+                {report.title}
+              </UiTitle>
+            </div>
+          </TitleContainer>
+        </UiGrid.Col>
+        <UiGrid.Col size="auto" textAlign="right">
+          <UiIconButtonGroup>
+            <ReportActions incident={incident} report={report} onDelete={handleClose} />
+            <UiIconButton onClick={handleClose}>
+              <UiIcon.CancelAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </UiGrid.Col>
       </UiGrid>
       <UiDescription description={report.description} notes={report.notes} />
       <InfoTable>
@@ -83,6 +87,7 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  width: 100%;
 `
 
 const InfoTable = styled.table`

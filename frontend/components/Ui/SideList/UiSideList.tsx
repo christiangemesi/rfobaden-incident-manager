@@ -31,8 +31,6 @@ const UiSideList = <T extends Model>({
   const [setListRef, listHeight] = useHeight<HTMLDivElement>()
   const [setOverlayRef, overlayHeight] = useHeight<HTMLDivElement>()
 
-  console.log({ listHeight })
-
   const [selectedId, setSelectedId] = useState<Id<T> | null>(initialId ?? null)
   const setSelected = useCallback((report: T | null) => {
     setSelectedId(report?.id ?? null)

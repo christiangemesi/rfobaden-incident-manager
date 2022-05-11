@@ -19,7 +19,13 @@ const UiTitle: React.VFC<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const H: any = `h${level}`
   return (
-    <StyledTitle as={H} isCentered={isCentered} className={className} style={style}>
+    <StyledTitle
+      as={H}
+      isCentered={isCentered}
+      className={className}
+      style={style}
+      title={typeof children === 'string' ? children : undefined}
+    >
       {children}
     </StyledTitle>
   )
