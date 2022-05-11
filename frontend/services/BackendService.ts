@@ -149,9 +149,8 @@ class BackendService {
         const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
-      // TODO display error to user.
       const msg = await res.text()
-      AlertStore.addAlert({ text: `Anfrage fehlgeschlagen: [${res.status}] ${res.statusText}`, type: 'error' })
+      AlertStore.add({ text: `Anfrage fehlgeschlagen: [${res.status}] ${res.statusText}`, type: 'error', isFading: false })
       throw new Error(`backend request failed: [${res.status}] ${msg}`)
 
     }
