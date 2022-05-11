@@ -30,11 +30,11 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   , [data.page])
 
   const currentOffset = offset
+
   const totalPages = Math.ceil( data.page.total / PAGE_LIMIT )
   const totalClosedIncidents = data.page.total
   const firstShownClosedIncidents = currentOffset*10 + 1
   const lastShownClosedIncidents = currentOffset*10 + closedIncidents.length
-
 
   return (
     <UiContainer>
@@ -58,8 +58,8 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
           <PaginationSummary>
             <ResultCounter>
               {`Ereignis: ${firstShownClosedIncidents} - ${lastShownClosedIncidents} von ${totalClosedIncidents}`}
-
             </ResultCounter>
+
             <Pagination>
               {currentOffset === 0 ? (
                 <PaginationButton isCurrent={false} isDisabled={true}>
@@ -72,11 +72,12 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
               )}
 
               {totalPages < 6 &&
-          [...Array(totalPages)].map((_element, i) => (
-            <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>
-              {i + 1}
-            </PaginationButton>
-          ))}
+                [...Array(totalPages)].map((_element, i) => (
+                  <PaginationButton key={i} isCurrent={currentOffset === i} href={`/ereignisse/archiv?p=${i}`}>
+                    {i + 1}
+                  </PaginationButton>
+                ))
+              }
 
               {(totalPages > 5 && currentOffset < 3) && (
                 <React.Fragment>
@@ -148,6 +149,7 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
                 </PaginationButton>
               )}
             </Pagination>
+
           </PaginationSummary>
         </React.Fragment>
       )}
