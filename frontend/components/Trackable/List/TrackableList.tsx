@@ -33,7 +33,7 @@ const ReportList = <T extends Trackable>({
 }: Props<T>): JSX.Element => {
   const canListBeSmall = useBreakpoint(() => ({
     xs: false,
-    xl: true,
+    md: true,
   }))
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
@@ -65,7 +65,6 @@ const ReportList = <T extends Trackable>({
     </ListContainer>
   )
 }
-
 export default asStyled(ReportList)
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
