@@ -117,6 +117,5 @@ const TaskContainer = styled.div`
   
   ${Themed.media.lg.max} {
     padding: 0;
-    ${UiContainer.fluidCss};
   }
 `
