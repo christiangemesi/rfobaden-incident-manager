@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
+import { isClosedIncident } from '@/models/Incident'
 
 interface Props {
   done: number
   total: number
 }
 
-const UiCircularProgress: React.VFC<Props> = ({ done, total }) => {
+const UiCircularProgress: React.VFC<Props> = ({ done, total  }) => {
   return useMemo(() => {
     const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
-
     return (
       <svg width={SVG_SIZE} height={SVG_SIZE}>
         <g transform={`rotate(-90 ${RADIUS_OUTER} ${RADIUS_OUTER})`}>
@@ -34,7 +34,6 @@ const SVG_CENTER = SVG_SIZE / 2
 interface ProgressCircleProps{
   progress: number
   radius: number
-  center: number
 } 
 
 const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, center }) => {
@@ -71,7 +70,7 @@ const OuterCircle: React.VFC<OuterCircleProps> =  ({ radius, center }) => {
       r={radius}
       cx={center}
       cy={center}
-      fill={theme.colors.success.contrast}
+      fill="transparent"
     />
   )
 }
@@ -79,10 +78,14 @@ const OuterCircle: React.VFC<OuterCircleProps> =  ({ radius, center }) => {
 interface InnerCircleProps{
   radius: number
   center: number
+  isClosed: boolean
 }
 
-const InnerCircle: React.VFC<InnerCircleProps> =  ({ radius, center }) => {
+const InnerCircle: React.VFC<InnerCircleProps> =  ({ radius, center , isClosed }) => {
   const theme = useTheme()
+  isClosed = true
+  let fillColor
+  isClosed ? fillColor=theme.colors.secondary.value : fillColor= theme.colors.primary.value
 
   return(
     <circle

@@ -10,7 +10,6 @@ interface Props extends ElementProps<HTMLDivElement> {
 
 const UiLevelHeader = styled.section<Props>`
   ${({ noPadding }) => !noPadding && UiContainer.fluidCss}
-  
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
