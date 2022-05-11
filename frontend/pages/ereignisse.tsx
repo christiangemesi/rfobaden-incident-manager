@@ -21,8 +21,11 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
-  const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
   const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
+  const closedIncidents = useIncidents((incidents) => incidents
+    .filter(isClosedIncident)
+    .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime())
+    .slice(0,5))
 
   return (
     <UiContainer>

@@ -172,7 +172,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
   const offset = typeof query.p === 'string' ? parseInt(query.p) : 0
-  console.log(offset)
 
   const [page, pageError]: BackendResponse<Page> = await backendService.get(`incidents/archive?limit=${PAGE_LIMIT}&offset=${offset}`)
   if (pageError !== null) {
