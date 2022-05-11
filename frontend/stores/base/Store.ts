@@ -22,6 +22,12 @@ interface StoreInternals<T> {
    * The functions get called when the {@link state} of the store changes.
    */
   listeners: Array<() => void>
+
+  /**
+   * The id of the current iteration of this store's state.
+   * This number is changed whenever the state is updated.
+   */
+  id: number
 }
 
 /**
@@ -105,6 +111,7 @@ export const createStore = <T, S>(initialState: T, actions: CreateStoreActions<T
   const internals: StoreInternals<T> = {
     state: initialState,
     listeners: [],
+    id: 0,
   }
   const update: UpdateTrigger =  (applyUpdate: () => void) => runUpdate(applyUpdate, internals)
   return {
@@ -127,13 +134,12 @@ const runUpdate = <S>(applyUpdate: () => void | boolean, internals: StoreInterna
     storeToNotify.listeners.forEach((listen) => {
       listen()
     })
+    storeToNotify.id += 1
   }
   globalState.delayedNotifications.clear()
   globalState.isUpdating = false
   runAfterUpdateCallbacks()
 }
-
-
 
 /**
  * `afterUpdateCallbacks` contains callbacks that are executed right after `runPatch`.

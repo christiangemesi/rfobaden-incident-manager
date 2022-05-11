@@ -5,18 +5,23 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEffectOnce, useUpdate } from 'react-use'
 
 export const useStore = <T>(store: Store<T>): T => {
-  const [storeState, setStoreState] = useState(store[privateKey].state)
+  const internals = store[privateKey]
+  const forceUpdate = useUpdate()
+  const { id } = internals
   useEffect(() => {
-    const internals = store[privateKey]
     const updateStore = () => {
-      setStoreState(internals.state)
+      forceUpdate()
     }
     internals.listeners.push(updateStore)
+    if (internals.id !== id) {
+      updateStore()
+    }
     return () => {
       internals.listeners.splice(internals.listeners.indexOf(updateStore), 1)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store])
-  return storeState
+  return internals.state
 }
 
 interface UseRecords<T> {

@@ -22,6 +22,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     if (user === null) {
       SessionStore.clear()
     } else {
+      console.log('set!')
       SessionStore.setCurrentUser(user)
     }
   })

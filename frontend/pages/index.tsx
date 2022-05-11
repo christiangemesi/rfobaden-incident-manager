@@ -78,7 +78,7 @@ const Subtitle = styled.div`
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
 `
-  
+
 const Card = styled.div`
   height: 15rem;
   display: flex;
@@ -98,7 +98,7 @@ const Card = styled.div`
     filter: brightness(90%);
   }
 `
-  
+
 const CardTitle = styled(UiTitle)`
   text-overflow: ellipsis;
   white-space: nowrap;
