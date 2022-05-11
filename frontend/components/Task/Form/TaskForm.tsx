@@ -90,7 +90,7 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
     if (handleClose) {
       handleClose()
     }
-  }, [report, task])
+  })
 
   useCancel(form, handleClose)
 

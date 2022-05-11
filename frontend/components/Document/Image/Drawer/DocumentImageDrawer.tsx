@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react'
 import { Document } from '@/models/FileUpload'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
+import styled from 'styled-components'
 
 interface Props {
   images: Document[]
@@ -10,6 +11,7 @@ interface Props {
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
   children?: (props: { open: () => void }) => ReactNode
+  onAddDocument: (document: Document) => void
 }
 
 const DocumentImageDrawer: React.VFC<Props> = ({
@@ -18,17 +20,18 @@ const DocumentImageDrawer: React.VFC<Props> = ({
   modelId,
   modelName,
   children,
+  onAddDocument,
 }) => {
 
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={images.length > 0 ? open : undefined}>
+          <Caption onClick={ open }>
             {images.length}
             &nbsp;
             {images.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
+          </Caption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
@@ -36,10 +39,20 @@ const DocumentImageDrawer: React.VFC<Props> = ({
           images={images}
           storeImages={storeImages}
           modelId={modelId}
-          modelName={modelName} />
+          modelName={modelName}
+          onAddDocument={onAddDocument}
+        />
       </UiDrawer.Body>
     </UiDrawer>
   )
 }
 
 export default DocumentImageDrawer
+
+const Caption = styled(UiCaption)`
+  transition: ease 100ms;
+  transition-property: transform;
+  :hover {
+    transform: scale(1.1);
+  }
+`

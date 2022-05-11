@@ -9,15 +9,15 @@ import Id from '@/models/base/Id'
 interface Props {
   id: Id<Model>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  type?: 'image'
-  onAddFile: (document: Document) => void
+  type: 'image' | 'document'
+  onAddDocument: (document: Document) => void
 }
 
 const TrackableFileUploadAction: React.VFC<Props> = ({
   id,
   modelName,
   type,
-  onAddFile: handleAddFile,
+  onAddDocument: handleAddFile,
 }) => {
 
   const title = type === 'image' ? 'Bild' : 'Dokument'

@@ -24,6 +24,7 @@ import TransportSideView from '@/components/Transport/SideView/TransportSideView
 import ReportSideView from '@/components/Report/SideView/ReportSideView'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import { Themed } from '@/theme'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -68,32 +69,34 @@ const IncidentPage: React.VFC<Props> = ({ data }) => {
   }, [incident.id, router])
 
   return (
-    <StyledIncidentView incident={incident} onDelete={handleDelete}>
-      <UiContainer>
-        <ContentTabs>
-          <UiTabs.Tab
-            isActive={mode === 'reports'}
-            onClick={openReports}
-          >
-            Meldungen
-          </UiTabs.Tab>
-          <UiTabs.Tab
-            isActive={mode === 'transports'}
-            onClick={openTransports}
-          >
-            Transporte
-          </UiTabs.Tab>
-        </ContentTabs>
-      </UiContainer>
-      <Divider />
-      <TabContent>
-        {mode === 'transports' ? (
-          <TransportSideView incident={incident} />
-        ) : (
-          <ReportSideView incident={incident} />
-        )}
-      </TabContent>
-    </StyledIncidentView>
+    <Page>
+      <StyledIncidentView incident={incident} onDelete={handleDelete}>
+        <UiContainer>
+          <ContentTabs>
+            <UiTabs.Tab
+              isActive={mode === 'reports'}
+              onClick={openReports}
+            >
+              Meldungen
+            </UiTabs.Tab>
+            <UiTabs.Tab
+              isActive={mode === 'transports'}
+              onClick={openTransports}
+            >
+              Transporte
+            </UiTabs.Tab>
+          </ContentTabs>
+        </UiContainer>
+        <Divider />
+        <TabContent>
+          {mode === 'transports' ? (
+            <TransportSideView incident={incident} />
+          ) : (
+            <ReportSideView incident={incident} />
+          )}
+        </TabContent>
+      </StyledIncidentView>
+    </Page>
   )
 }
 export default IncidentPage

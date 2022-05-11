@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import UiLink from '@/components/Ui/Link/UiLink'
 import Image from 'next/image'
 
-const UiFooter: React.VFC = () => {
+const PageFooter: React.VFC = () => {
   return (
     <FooterContainer>
       <UiLink href="https://rfobaden.ch/" target="_blank" isText>
@@ -17,7 +17,7 @@ const UiFooter: React.VFC = () => {
   )
 }
 
-export default UiFooter
+export default PageFooter
 
 const FooterContainer = styled.footer`
   display: flex;

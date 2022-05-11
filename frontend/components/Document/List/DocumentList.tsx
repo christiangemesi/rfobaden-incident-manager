@@ -15,6 +15,7 @@ interface Props {
   storeDocuments: (documents: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+  onAddDocument: (documents: Document) => void
 }
 
 const DocumentList: React.VFC<Props> = ({
@@ -22,6 +23,7 @@ const DocumentList: React.VFC<Props> = ({
   storeDocuments,
   modelId,
   modelName,
+  onAddDocument,
 }) => {
 
   const handleDelete = async (document: Document) => {
@@ -29,6 +31,7 @@ const DocumentList: React.VFC<Props> = ({
       const error = await BackendService.delete('documents', document.id, {
         modelName: modelName,
         modelId: modelId.toString(),
+        type: 'document',
       })
       if (error !== null) {
         throw error
@@ -43,6 +46,22 @@ const DocumentList: React.VFC<Props> = ({
       <UiTitle level={1}>
         Dokumente
       </UiTitle>
+      <UiModal title="Dokument hinzufügen" size="fixed">
+        <UiModal.Trigger>{({ open }) => (
+          <Button onClick={open}>
+            <UiIcon.CreateAction size={1.5} />
+          </Button>
+        )}</UiModal.Trigger>
+        <UiModal.Body>{({ close }) => (
+          <DocumentForm
+            modelId={modelId}
+            modelName={modelName}
+            onSave={onAddDocument}
+            onClose={close}
+            type="document"
+          />
+        )}</UiModal.Body>
+      </UiModal>
       <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
 
         <UiGrid.Col size={8}>
@@ -66,3 +85,9 @@ const DocumentList: React.VFC<Props> = ({
 }
 
 export default DocumentList
+
+const Button = styled(UiCreateButton)`
+  position: relative;
+  font-size: 120%;
+  margin: 1rem 0;
+`

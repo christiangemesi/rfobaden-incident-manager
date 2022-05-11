@@ -10,6 +10,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import OrganizationList from '@/components/Organization/List/OrganizationList'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -27,21 +28,23 @@ const OrganisationenPage: React.VFC<Props> = ({ data }) => {
   const organizations = useOrganizations()
 
   return (
-    <UiContainer>
-      <section>
-        <UiGrid style={{ padding: '0 0 1rem 0' }}>
-          <UiGrid.Col>
-            <UiTitle level={1}>
-              Organisationen verwalten
-            </UiTitle>
+    <Page>
+      <UiContainer>
+        <section>
+          <UiGrid style={{ padding: '0 0 1rem 0' }}>
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                Organisationen verwalten
+              </UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
+          {/*todo: adapt respnsiveness*/}
+          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+            <OrganizationList organizations={organizations} />
           </UiGrid.Col>
-        </UiGrid>
-        {/*todo: adapt respnsiveness*/}
-        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-          <OrganizationList organizations={organizations} />
-        </UiGrid.Col>
-      </section>
-    </UiContainer>
+        </section>
+      </UiContainer>
+    </Page>
   )
 }
 export default OrganisationenPage

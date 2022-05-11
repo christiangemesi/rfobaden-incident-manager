@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { useOrganizations } from '@/stores/OrganizationStore'
@@ -11,6 +11,8 @@ import IncidentStore from '@/stores/IncidentStore'
 import { Document } from '@/models/FileUpload'
 import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
+import UiLink from '@/components/Ui/Link/UiLink'
+import styled from 'styled-components'
 
 interface Props {
   incident: Incident
@@ -47,10 +49,18 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, documents: documents })
   }
 
+  const addImage = useCallback((image: Document) => {
+    IncidentStore.save({ ...incident, images: [...incident.images, image]})
+  }, [incident])
+
+  const addDocument = useCallback((document: Document) => {
+    IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
+  }, [incident])
+
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
-        Ereignis
+        <BackButton href="/ereignisse">Ereignis</BackButton>
       </UiCaption>
       <UiCaption>
         {activeOrganisations.length}
@@ -60,19 +70,26 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
+
       <DocumentImageDrawer
         modelId={incident.id}
         modelName="incident"
         images={incident.images}
         storeImages={storeDocuments}
+        onAddDocument={addImage}
       />
       <DocumentDrawer
         modelId={incident.id}
         modelName="incident"
         documents={incident.documents}
         storeDocuments={storeDocuments}
+        onAddDocument={addDocument}
       />
     </UiCaptionList>
   )
 }
 export default IncidentInfo
+
+const BackButton = styled(UiLink)`
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+`
