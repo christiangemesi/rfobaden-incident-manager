@@ -33,7 +33,7 @@ const TrackableListItem = <T extends Trackable>({
       isClosed={isClosed}
       isSmall={isSmall}
       title={record.title}
-      description={record.description ?? undefined}
+      description={isSmall ? undefined : record.description ?? undefined}
       priority={record.priority}
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(record))}

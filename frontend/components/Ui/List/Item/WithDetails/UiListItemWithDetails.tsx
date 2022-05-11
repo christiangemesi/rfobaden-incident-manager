@@ -4,7 +4,6 @@ import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
-import UiDescription from '@/components/Ui/Description/UiDescription'
 
 interface Props extends UiListItemProps {
   priority: Priority
@@ -34,14 +33,14 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   return (
     <StyledListItem {...props} $isClosed={isClosed} title={title}>
       <LeftSide>
-        <LeftPriority priority={priority} isSmall={isSmall}/>
+        <LeftPriority priority={priority} isSmall={isSmall} />
         <TextContent isTitleSwitched={isTitleSwitched}>
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
           {user}
         </TextContent>
-        <ItemDescription isTitleSwitched={isTitleSwitched}>
+        <ItemDescription>
           {description}
         </ItemDescription>
       </LeftSide>
@@ -97,7 +96,6 @@ const RightSide = styled.div`
 const BottomSide = styled.div<{ $isSmall: boolean }>`
   display: block;
   flex: 1 0 100%;
-
   max-width: 100%;
   padding-top: 1rem;
   padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
@@ -107,22 +105,19 @@ const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  width: 18rem;
+  
   ${({ isTitleSwitched }) => isTitleSwitched && css`
     display: flex;
     flex-direction: column-reverse;
   `}
 `
 
-const ItemDescription = styled.div<{ isTitleSwitched: boolean }>`
+const ItemDescription = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 75ch;
-
-  //TODO why does this still show description
-  ${({ isTitleSwitched }) => isTitleSwitched && css`
-    display: none;
-  `}
+  max-width: 85ch;
 `
 
 const ItemTitle = styled(UiTitle)`
