@@ -7,33 +7,33 @@ import UiDate from '@/components/Ui/Date/UiDate'
 import { ClosedIncident } from '@/models/Incident'
 
 interface Props extends StyledProps {
-  closedIncident: ClosedIncident
+  incident: ClosedIncident
 }
 
 const IncidentArchiveListItem: React.VFC<Props> = ({
-  closedIncident,
+  incident,
 }) => {
   return (
-    <UiListItem href={`/ereignisse/${closedIncident.id}`}>
+    <UiListItem href={`/ereignisse/${incident.id}`}>
       <UiGrid align="center" gapH={1.5}>
         <UiGrid.Col size={4}>
           <UiTitle level={5}>
-            {closedIncident.title}
+            {incident.title}
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            <UiDate value={closedIncident.startsAt ?? closedIncident.createdAt} />
+            <UiDate value={incident.startsAt ?? incident.createdAt} />
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            <UiDate value={closedIncident.closeReason.createdAt} />
+            <UiDate value={incident.closeReason.createdAt} />
           </UiTitle>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiTitle level={6}>
-            {closedIncident.closeReason.message}
+            {incident.closeReason.message}
           </UiTitle>
         </UiGrid.Col>
       </UiGrid>

@@ -40,7 +40,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ closedIncidents }) => {
         {closedIncidents.map((closedIncident) => (
           <IncidentArchiveListItem 
             key={closedIncident.id}
-            closedIncident={closedIncident}
+            incident={closedIncident}
           />
         ))}
       </UiList>
