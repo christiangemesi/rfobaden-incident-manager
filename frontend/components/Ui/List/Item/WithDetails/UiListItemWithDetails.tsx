@@ -56,6 +56,7 @@ const StyledListItem = styled(UiListItem)<{ $isClosed: boolean }>`
   padding-left: 0;
   transition-property: inherit, padding;
   flex-wrap: wrap;
+  column-gap: 1rem;
 
   ${({ $isClosed }) => $isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
