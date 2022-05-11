@@ -29,18 +29,8 @@ const ReportViewHeader: React.VFC<Props> = ({
   return (
     <Container>
       <UiGrid justify="space-between" align="start" gap={1}>
-        <UiGrid.Col size={10}>
-          <TitleContainer>
-            {hasPriority && (
-              <UiPriority priority={report.priority} />
-            )}
-            <div style={{ width: '100%' }}>
-              <ReportInfo report={report} />
-              <UiTitle level={3}>
-                {report.title}
-              </UiTitle>
-            </div>
-          </TitleContainer>
+        <UiGrid.Col>
+          <ReportInfo report={report} />
         </UiGrid.Col>
         <UiGrid.Col size="auto" textAlign="right">
           <UiIconButtonGroup>
@@ -51,6 +41,16 @@ const ReportViewHeader: React.VFC<Props> = ({
           </UiIconButtonGroup>
         </UiGrid.Col>
       </UiGrid>
+      <TitleContainer>
+        {hasPriority && (
+          <UiPriority priority={report.priority} />
+        )}
+        <div style={{ width: '100%' }}>
+          <UiTitle level={3}>
+            {report.title}
+          </UiTitle>
+        </div>
+      </TitleContainer>
       <UiDescription description={report.description} notes={report.notes} />
       <InfoTable>
         <tbody>
