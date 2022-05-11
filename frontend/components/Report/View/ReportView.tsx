@@ -81,7 +81,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
 
-      <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
+      <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }} noPadding>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -115,7 +115,10 @@ const TaskContainer = styled.div`
   justify-content: center;
   width: 100%;
   
-  ${Themed.media.lg.max} {
-    padding: 0;
+  
+  padding: 1rem 2rem;
+  ${Themed.media.xs.only} {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
   }
 `
