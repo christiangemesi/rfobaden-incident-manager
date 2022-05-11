@@ -1,59 +1,57 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useEffectOnce } from 'react-use'
-import { ColorName } from '@/theme'
+import { ColorName, Themed } from '@/theme'
+import Alert from '@/models/Alert'
 
 interface Props {
-  type: ColorName
-  text: string
-  onRemove: () => void
-  timeout?: number
+  alert: Alert
+  onRemove: (alert: Alert) => void
 }
 
 const UiAlert: React.VFC<Props> = ({
-  type = 'info',
-  text,
-  timeout = 3000,
-  onRemove,
+  alert,
+  onRemove: handleRemove,
 }) => {
   const [isVisible, setVisibility] = useState(true)
 
   useEffectOnce(() => {
-    setTimeout(() => {
-      onRemove()
-    }, timeout)
-    setTimeout(() => {
-      setVisibility(false)
-    }, timeout - 500)
+    if (alert.isFading) {
+      setTimeout(() => {
+        setVisibility(false)
+        setTimeout(() => {
+          handleRemove(alert)
+        }, 500)
+      }, 3000)
+    }
   })
 
-  let icon = <UiIcon.AlertInfo />
-
-  switch (type) {
-  case 'warning' :
-    icon = <UiIcon.AlertWarning />
-    break
-  case 'error' :
-    icon = <UiIcon.AlertError />
-    break
-  case 'success' :
-    icon = <UiIcon.AlertSuccess />
-    break
-  }
+  const icon = useMemo(() => {
+    switch (alert.type) {
+    case 'warning' :
+      return <UiIcon.AlertWarning />
+    case 'error' :
+      return <UiIcon.AlertError />
+    case 'success' :
+      return <UiIcon.AlertSuccess />
+    default:
+      return <UiIcon.AlertInfo />
+    }
+  }, [alert.type])
 
   return (
-    <Box type={type} isVisible={isVisible}>
+    <Box type={alert.type} isVisible={isVisible}>
       <TextContainer>
         <IconContainer>
           {icon}
         </IconContainer>
-        <UiTitle level={6}>{text}</UiTitle>
+        <UiTitle level={6}>{alert.text}</UiTitle>
       </TextContainer>
       <IconContainer>
-        <UiIconButton onClick={onRemove}><DeleteIcon /></UiIconButton>
+        <UiIconButton onClick={() => handleRemove(alert)}><DeleteIcon /></UiIconButton>
       </IconContainer>
     </Box>
   )
@@ -75,6 +73,10 @@ const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
   ${({ isVisible }) => !isVisible && css`
     opacity: 0;
   `}
+
+  ${Themed.media.sm.max} {
+    width: 95%;
+  }
 `
 
 const TextContainer = styled.div`
