@@ -94,8 +94,10 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    heading: 'Raleway, sans-serif',
-    body: 'Raleway, sans-serif',
+    // heading: 'Raleway, sans-serif',
+    // body: 'Raleway, sans-serif',
+    heading: 'New Helvetica, sans-serif',
+    body: 'New Helvetica, sans-serif',
   },
   breakpoints: {
     xs: {
