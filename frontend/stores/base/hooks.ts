@@ -1,144 +1,121 @@
-import { useCallback, useRef, useState } from 'react'
-import { useIsomorphicLayoutEffect, useUpdate } from 'react-use'
-import { afterStorePatch, ModelStore, ModelStoreState, privateKey, Store } from './Store'
 import Id, { isId } from '@/models/base/Id'
 import Model from '@/models/base/Model'
+import { ModelStore, privateKey, Store } from '@/stores/base/Store'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffectOnce, useUpdate } from 'react-use'
+
+export const useStore = <T>(store: Store<T>): T => {
+  const [storeState, setStoreState] = useState(store[privateKey].state)
+  useEffect(() => {
+    const internals = store[privateKey]
+    const updateStore = () => {
+      setStoreState(internals.state)
+    }
+    internals.listeners.push(updateStore)
+    return () => {
+      internals.listeners.splice(internals.listeners.indexOf(updateStore), 1)
+    }
+  }, [store])
+  return storeState
+}
+
+interface UseRecords<T> {
+  (): readonly T[]
+}
 
 interface UseRecord<T> {
   (id: Id<T> | null): T | null
   (record: T): T
 }
 
-interface UseRecords<T> {
-  (ids?: Id<T>[]): readonly T[]
-  <O>(transform: (records: readonly T[]) => O, deps?: unknown[]): O
-}
+export const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
+  let records = store.list()
+  const updaters = new Map<() => void, boolean>()
 
-const useStore = <T>(store: Store<T>): T => {
-  const inner = store[privateKey]
-  const [storeState, setStoreState] = useState(inner.state)
-  useStoreListener(store, setStoreState)
-  return storeState
-}
-
-const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> => {
-  const computeValue = (state: ModelStoreState<T>, oldValue: T | null, idOrRecord: Id<T> | T | null): T | null => {
-    if (idOrRecord === null) {
-      return null
+  const internals = store[privateKey]
+  internals.listeners.push(() => {
+    // TODO check if this map is of any use
+    for (const updater of updaters.keys()) {
+      updaters.set(updater, false)
     }
-    if (isId(idOrRecord)) {
-      return state.mapping[idOrRecord] ?? null
-    }
-    return state.mapping[idOrRecord.id] ?? oldValue ?? null
-  }
-  return (idOrRecord: Id<T> | T | null) => {
-    const createForceUpdate = useCreateSingleUpdate()
-    const result = useRef<T | null>()
-    if (result.current === undefined) {
-      if (idOrRecord !== null && !isId(idOrRecord)) {
-        const record = store[privateKey].parse(idOrRecord)
-        store.save(record)
-        result.current = record
-      } else {
-        result.current = computeValue(store[privateKey].state, null, idOrRecord)
+    records = store.list()
+    for (const [updater, hasUpdated] of updaters.entries()) {
+      if (!hasUpdated) {
+        updater()
       }
     }
-    useStoreListener(store, (state) => {
-      const newResult = computeValue(state, result.current as T | null, idOrRecord)
-      if (newResult !== result.current) {
-        result.current = newResult
-        afterStorePatch(createForceUpdate())
+  })
+
+  return () => {
+    const forceUpdate = useUpdate()
+    updaters.set(forceUpdate, true)
+    useEffectOnce(() => {
+      return () => {
+        updaters.delete(forceUpdate)
       }
-    }, [idOrRecord])
-    return result.current as T
+    })
+    return records
   }
 }
 
-
-const createUseRecords = <T>(store: ModelStore<T>): UseRecords<T> => {
-  const computeValue = <O>(state: ModelStoreState<T>, idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O)): readonly T[] | O | null => {
-    if (idsOrTransform === undefined) {
-      return state.list
-    }
-    if (Array.isArray(idsOrTransform)) {
-      return store.list(idsOrTransform)
-    }
-    return idsOrTransform(state.list)
-  }
-  return <O>(idsOrTransform?: Id<T>[] | ((records: readonly T[]) => O), deps: unknown[] = []) => {
-    const createForceUpdate = useCreateSingleUpdate()
-    const result = useRef<readonly T[] | O | null>()
-    if (result.current === undefined) {
-      result.current = computeValue(store[privateKey].state, idsOrTransform)
-    }
-    useStoreListener(store, (state) => {
-      const newResult = computeValue(state, idsOrTransform)
-      if (newResult !== result.current) {
-        result.current = newResult
-        afterStorePatch(createForceUpdate())
-      }
-    }, typeof idsOrTransform === 'function' ? deps : [idsOrTransform, ...deps])
-    return result.current
+export const createUseRecord = <T extends Model>(store: ModelStore<T>): UseRecord<T> => {
+  return (recordOrId) => {
+    const isIdHook = recordOrId === null || isId(recordOrId)
+    const useResult = useMemo(() => (isIdHook
+      ? createUseRecordByValue(store)
+      : createUseRecordById(store)
+    ), [isIdHook])
+    return useResult(recordOrId as never) as T
   }
 }
 
-const useStoreListener = <T>(store: Store<T>, listen: (value: T) => void, deps?: unknown[]) => {
-  const inner = store[privateKey]
-  const callback = useRef(listen)
-  callback.current = listen
-  useIsomorphicLayoutEffect(() => {
-    const listener = (state: T) => {
-      callback.current(state)
-    }
-    inner.listeners.push(listener)
-    return () => {
-      const i = inner.listeners.indexOf(listener)
-      inner.listeners.splice(i, 1)
-    }
-  }, [])
+const createUseRecordByValue = <T extends Model>(store: ModelStore<T>) => {
+  const internals = store[privateKey]
+  return (data: T): T => {
+    const [record, setRecord] = useState(() => internals.parse(data))
+    useEffect(() => {
+      store.save(internals.parse(data))
+    }, [data])
+    useEffectOnce(() => {
+      const updateRecord = () => {
+        const newRecord = store.find(data.id)
+        if (newRecord !== null) {
+          setRecord(newRecord)
+        }
+      }
+      internals.listeners.push(updateRecord)
+      return () =>{
+        internals.listeners.splice(internals.listeners.indexOf(updateRecord), 1)
+      }
+    })
+    return record
+  }
+}
 
-  // Conditional hook call - this is kind of really dangerous, but the cleanest way to solve this issue by far.
-  // Keep it this way for now, and hope that no one gets the idea to swap a deps array between undefined and array.
-  if (deps !== undefined) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const isFirst = useRef(true)
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useIsomorphicLayoutEffect(() => {
-      // Skip the first call, since it always happens, and causes unnecessary rerenders.
-      // `useStoreListener` does not guarantee a callback directly after initialization.
-      if (isFirst.current) {
-        isFirst.current = false
+const createUseRecordById = <T>(store: ModelStore<T>) => {
+  const internals = store[privateKey]
+  return (id: Id<T> | null): T | null => {
+    const [record, setRecord] = useState(() => id === null ? null : store.find(id))
+    const ref = useRef(record)
+    ref.current = record
+    useEffect(() => {
+      if (id === null) {
+        if (ref.current !== null) {
+          setRecord(null)
+        }
         return
       }
-      afterStorePatch(() => callback.current(inner.state))
-    }, deps)
+      const updateRecord = () => {
+        const newRecord = store.find(id)
+        if (newRecord !== ref.current) {
+          setRecord(newRecord)
+        }
+      }
+      internals.listeners.push(updateRecord)
+      return () =>{
+        internals.listeners.splice(internals.listeners.indexOf(updateRecord), 1)
+      }
+    }, [id])
+    return record
   }
-}
-
-const useCreateSingleUpdate = (): () => () => void => {
-  const forceUpdate = useUpdate()
-
-  const renderCountRef = useRef(0)
-  renderCountRef.current += 1
-
-  const cursorRef = useRef<number | null>(null)
-
-  const forceNextUpdate = useCallback(() => {
-    if (renderCountRef.current === cursorRef.current) {
-      forceUpdate()
-      cursorRef.current = null
-    }
-  }, [forceUpdate])
-
-  return useCallback(() => {
-    cursorRef.current = renderCountRef.current
-    return forceNextUpdate
-  }, [forceNextUpdate])
-}
-
-export {
-  useStore,
-  createUseRecord,
-  createUseRecords,
 }

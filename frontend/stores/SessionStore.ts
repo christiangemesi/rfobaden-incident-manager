@@ -12,21 +12,21 @@ const initialState: SessionState = {
   session: null,
 }
 
-const SessionStore = createStore(initialState, (getState, setState) => ({
+const SessionStore = createStore(initialState, (state, update) => ({
   setCurrentUser(currentUser: User) {
     UserStore.save(currentUser)
-    setState({
-      session: {
-        currentUser,
-      },
+    update(() => {
+      state.session = { currentUser }
     })
   },
   clear({ silent = false }: { silent?: boolean } = {}) {
     if (silent) {
       // Update the state, but don't rerender when `silent == true`.
-      getState().session = { currentUser: null }
+      state.session = { currentUser: null }
     } else {
-      setState({ session: { currentUser: null }})
+      update(() => {
+        state.session = { currentUser: null }
+      })
     }
   },
 }))

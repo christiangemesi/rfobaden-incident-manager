@@ -1,5 +1,4 @@
 import Id from '@/models/base/Id'
-import { applyPatch, Patch, Patcher } from '@/utils/update'
 import Model from '@/models/base/Model'
 import { run } from '@/utils/control-flow'
 
@@ -9,6 +8,25 @@ export interface Store<T> {
   readonly [privateKey]: StoreInternals<T>
 }
 
+/**
+ * `StoreInternals` holds the private data of a {@link Store}.
+ */
+interface StoreInternals<T> {
+  /**
+   * The current state of the store.
+   */
+  state: T
+
+  /**
+   * The store listeners, consisting of an array of functions.
+   * The functions get called when the {@link state} of the store changes.
+   */
+  listeners: Array<() => void>
+}
+
+/**
+ * A `ModelStore` is a store that provides simple CRUD operations on a {@link Model}.
+ */
 export interface ModelStore<T> extends Store<ModelStoreState<T>> {
   list(ids?: Id<T>[]): readonly T[]
   find(id: Id<T>): T | null
@@ -19,9 +37,13 @@ export interface ModelStore<T> extends Store<ModelStoreState<T>> {
   onCreate(receive: RecordListener<T>): Unregister
   onUpdate(receive: ChangeListener<T>): Unregister
   onRemove(receive: RecordListener<T>): Unregister
-  onSave(receive: ChangeListener<T,  T |null>): Unregister
+  onSave(receive: ChangeListener<T,  T | null>): Unregister
 
   readonly [privateKey]: ModelStoreInternals<T>
+}
+
+interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
+  parse: (record: T) => T
 }
 
 interface ModelSaveOptions {
@@ -29,12 +51,16 @@ interface ModelSaveOptions {
 }
 
 interface CreateStoreActions<T, S> {
-  (getState: () => T, setState: Patcher<T>): S
+  (state: T, update: UpdateTrigger): S
+}
+
+interface UpdateTrigger {
+  (applyUpdate: () => void | boolean): void
 }
 
 export interface ModelStoreState<T> {
-  list: readonly T[]
-  mapping: Readonly<ModelStoreMapping<T>>
+  list: T[]
+  mapping: ModelStoreMapping<T>
 }
 
 type ModelStoreMapping<T> = Record<Id<T>, T>
@@ -59,14 +85,14 @@ interface Unregister {
   (): void
 }
 
-
-interface StoreInternals<T> {
-  state: T
-  listeners: Array<(state: T) => void>
+interface GlobalState {
+  isUpdating: boolean
+  delayedNotifications: Set<StoreInternals<unknown>>
 }
 
-interface ModelStoreInternals<T> extends StoreInternals<ModelStoreState<T>> {
-  parse: (record: T) => T
+const globalState: GlobalState = {
+  isUpdating: false,
+  delayedNotifications: new Set(),
 }
 
 /**
@@ -80,12 +106,64 @@ export const createStore = <T, S>(initialState: T, actions: CreateStoreActions<T
     state: initialState,
     listeners: [],
   }
-  const getState = () => internals.state
-  const setState: Patcher<T> = (patch) => runPatch(internals, patch)
+  const update: UpdateTrigger =  (applyUpdate: () => void) => runUpdate(applyUpdate, internals)
   return {
-    ...actions(getState, setState),
+    ...actions(internals.state, update),
     [privateKey]: internals,
   }
+}
+
+const runUpdate = <S>(applyUpdate: () => void | boolean, internals: StoreInternals<S>) => {
+  if (globalState.isUpdating) {
+    applyUpdate()
+    return
+  }
+  globalState.isUpdating = true
+  if (applyUpdate() === false) {
+    return
+  }
+  globalState.delayedNotifications.add(internals)
+  for (const storeToNotify of globalState.delayedNotifications) {
+    storeToNotify.listeners.forEach((listen) => {
+      listen()
+    })
+  }
+  globalState.delayedNotifications.clear()
+  globalState.isUpdating = false
+  runAfterUpdateCallbacks()
+}
+
+
+
+/**
+ * `afterUpdateCallbacks` contains callbacks that are executed right after `runPatch`.
+ * They are only executed once, and then removed from the array.
+ *
+ * `afterUpdateCallbacks` is `null` if no patch is currently running.
+ */
+const afterUpdateCallbacks = new Set<() => void>()
+
+/**
+ * Run a callback after the current store patch has finished.
+ * If no patch is currently running, the callback is executed immediately.
+ * @param callback The callback to execute.
+ */
+export const afterUpdate = (callback: () => void): void => {
+  if (globalState.isUpdating) {
+    afterUpdateCallbacks.add(callback)
+  } else {
+    callback()
+  }
+}
+
+/**
+ * Run all callbacks in `afterUpdateCallbacks` and reset it to its default value.
+ */
+const runAfterUpdateCallbacks = () => {
+  for (const callback of afterUpdateCallbacks) {
+    callback()
+  }
+  afterUpdateCallbacks.clear()
 }
 
 /**
@@ -172,19 +250,18 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
     state.mapping[record.id] = record
     if (oldRecord !== null) {
       state.list.splice(state.list.indexOf(oldRecord), 1)
-      afterStorePatch(() => updateListeners.forEach((listen) => listen(record, oldRecord)))
+      afterUpdate(() => updateListeners.forEach((listen) => listen(record, oldRecord)))
     } else {
-      afterStorePatch(() => createListeners.forEach((listen) => listen(record)))
+      afterUpdate(() => createListeners.forEach((listen) => listen(record)))
     }
     const i = index ?? getStoreIndexOf(state.list, record)
     state.list.splice(i, 0, record)
     return true
   }
 
-  const store = createStore(initialState, (getState, setState) => ({
+  const store = createStore(initialState, (state, update) => ({
     ...((actions === undefined ? {} : actions) as S),
     list(ids?: Id<T>[]): readonly T[] {
-      const state = getState()
       if (ids === undefined) {
         return state.list
       }
@@ -200,46 +277,26 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
       return result
     },
     find(id: Id<T>): T | null {
-      const { mapping } = getState()
-      return mapping[id] ?? null
+      return state.mapping[id] ?? null
     },
-    save: (record: T, options: ModelSaveOptions = {}): void => setState((state) => {
-      const newState = {
-        list: [...state.list],
-        mapping: { ...state.mapping },
-      }
-      if (!save(newState, record, options.index)) {
-        return state
-      }
-      return newState
-    }),
-    saveAll: (records: Iterable<T>): void => setState((state) => {
-      const newState = {
-        list: [...state.list],
-        mapping: { ...state.mapping },
-      }
+    save: (record: T, options: ModelSaveOptions = {}): void => update(() => (
+      save(state, record, options.index)
+    )),
+    saveAll: (records: Iterable<T>): void => update(() => {
       let changeCount = 0
       for (const record of records) {
-        changeCount += save(newState, record) ? 1 : 0
+        changeCount += save(state, record) ? 1 : 0
       }
-      if (changeCount === 0) {
-        return state
-      }
-      return newState
+      return changeCount > 0
     }),
-    remove: (id: Id<T>): void => setState((state) => {
+    remove: (id: Id<T>): void => update(() => {
       const record = state.mapping[id]
       if (record === undefined) {
-        return state
+        return false
       }
-      const newState = {
-        list: [...state.list],
-        mapping: { ...state.mapping },
-      }
-      newState.list.splice(newState.list.indexOf(record), 1)
-      delete newState.mapping[id]
-      afterStorePatch(() => removeListeners.forEach((listen) => listen(record)))
-      return newState
+      state.list.splice(state.list.indexOf(record), 1)
+      delete state.mapping[id]
+      afterUpdate(() => removeListeners.forEach((listen) => listen(record)))
     }),
     onCreate: (listen: RecordListener<T>): Unregister => (
       registerListener(createListeners, listen)
@@ -304,116 +361,6 @@ const createModelCompareFunction = <T>(sortBy: SortBy<T>) => (recordA: T, record
   return 0
 }
 
-/**
- * `delayedPatches` contains patches queued to `runPatch` which have been delayed because they happened while
- * another patch was being executed. This is tracked globally, over all possible stores,
- * since the state of stores might depend on other stores, causing a chain effect.
- *
- * `delayedPatches` is `null` if no other patch is currently running.
- */
-let delayedPatches: Array<[StoreInternals<unknown>, Patch<unknown>]> | null = null
-
-/**
- * Applies a patch to the state of a store.
- * The patch is not guaranteed to be applied instantly, but might instead be delayed for later.
- *
- * @param internals The internals of the store whose state is getting patched.
- * @param patch The patch being applied to the stores' state.
- */
-const runPatch = <T>(internals: StoreInternals<T>, patch: Patch<T>) => {
-  // Delay the patch if there's currently another one running.
-  if (delayedPatches !== null) {
-    delayedPatches.push([internals as StoreInternals<unknown>, patch])
-    return
-  }
-
-  // Set global buffers to empty values to signal that a patch is now being executed.
-  delayedPatches = []
-  afterPatchCallbacks = new Set()
-
-  // Backup the current state, so we can compare to it after applying the patch.
-  const oldState = internals.state
-
-  // Apply the patch to the current state and store the result.
-  internals.state = applyPatch(internals.state, patch)
-
-  // Run any delayed patches and reset the global patch state.
-  const delayedInternals = runDelayedPatches()
-
-  // Broadcast the change to the listeners, if anything has changed at all.
-  if (oldState !== internals.state) {
-    internals.listeners.forEach((listener) => listener(internals.state))
-  }
-  for (const [internals, oldState] of delayedInternals) {
-    if (internals.state !== oldState) {
-      internals.listeners.forEach((listener) => listener(internals.state))
-    }
-  }
-
-  // Run any after-patch callbacks, and reset them.
-  runAfterPatchCallbacks()
-}
-
-/**
- * Run any delayed patches and reset the global patch state.
- *
- * @returns A map of internals whose listeners haven't received the newest state update yet.
- */
-const runDelayedPatches = (): Map<StoreInternals<unknown>, unknown> => {
-  const delayedInternals = new Map()
-
-  while (delayedPatches !== null && delayedPatches.length !== 0) {
-    // Get all delayed patches and reset the global patch buffer.
-    const patches = delayedPatches
-    delayedPatches = []
-
-    // Apply the delayed patches.
-    // If these patches trigger other patches, they will get executed in the next while iteration.
-    for (const [internals, patch] of patches) {
-      if (!delayedInternals.has(internals)) {
-        delayedInternals.set(internals, internals.state)
-      }
-      internals.state = applyPatch(internals.state, patch)
-    }
-  }
-
-  delayedPatches = null
-  return delayedInternals
-}
-
-/**
- * `afterPatchCallbacks` contains callbacks that are executed right after `runPatch`.
- * They are only executed once, and then removed from the array.
- *
- * `afterPatchCallbacks` is `null` if no patch is currently running.
- */
-let afterPatchCallbacks: Set<() => void> | null = null
-
-/**
- * Run a callback after the current store patch has finished.
- * If no patch is currently running, the callback is executed immediately.
- * @param callback The callback to execute.
- */
-export const afterStorePatch = (callback: () => void): void => {
-  if (afterPatchCallbacks === null) {
-    callback()
-  } else {
-    afterPatchCallbacks.add(callback)
-  }
-}
-
-/**
- * Run all callbacks in `afterPatchCallbacks` and reset it to its default value.
- */
-const runAfterPatchCallbacks = () => {
-  if (afterPatchCallbacks !== null) {
-    const callbacks = afterPatchCallbacks
-    afterPatchCallbacks = null
-    for (const callback of callbacks) {
-      callback()
-    }
-  }
-}
 
 /**
  * Deep compare two values two each other.
