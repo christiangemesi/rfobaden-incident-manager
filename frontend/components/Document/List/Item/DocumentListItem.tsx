@@ -1,5 +1,5 @@
 import React from 'react'
-import { Document, getDocumentUrl } from '@/models/FileUpload'
+import Document, { getDocumentUrl } from '@/models/Document'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import styled from 'styled-components'

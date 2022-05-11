@@ -4,7 +4,7 @@ import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 import Report from '@/models/Report'
 import Transport from '@/models/Transport'
 import Id from '@/models/base/Id'
-import { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 
 export default interface Incident extends Model {
   title: string

@@ -4,7 +4,7 @@ import Report from '@/models/Report'
 import Incident from '@/models/Incident'
 import { parseDateOrNull } from '@/models/base/Date'
 import Subtask from '@/models/Subtask'
-import { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import Trackable, { parseTrackable } from '@/models/Trackable'
 
 export default interface Task extends Model, Trackable {

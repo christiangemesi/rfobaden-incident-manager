@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import FileUpload, { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import React from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
@@ -11,6 +11,7 @@ import Id from '@/models/base/Id'
 import Report from '@/models/Report'
 import Task from '@/models/Task'
 import BackendService from '@/services/BackendService'
+import FileUpload from '@/models/FileUpload'
 
 interface Props {
   modelId: Id<Incident | Report | Task>

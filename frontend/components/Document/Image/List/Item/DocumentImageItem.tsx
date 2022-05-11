@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import { Document, getImageUrl } from '@/models/FileUpload'
+import Document, { getImageUrl } from '@/models/Document'
 
 interface Props {
   image: Document

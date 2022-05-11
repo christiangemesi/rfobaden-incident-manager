@@ -2,7 +2,7 @@ import Model from '@/models/base/Model'
 import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import Task from '@/models/Task'
-import { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import Trackable, { parseTrackable } from '@/models/Trackable'
 import EntryType, { parseEntryType } from './EntryType'
 

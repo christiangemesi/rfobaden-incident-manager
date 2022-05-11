@@ -1,4 +1,3 @@
-import { Document } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
@@ -12,6 +11,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
+import Document from '@/models/Document'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 

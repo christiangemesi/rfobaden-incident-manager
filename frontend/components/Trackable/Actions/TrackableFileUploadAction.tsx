@@ -2,7 +2,7 @@ import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React from 'react'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
-import { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import Model from '@/models/base/Model'
 import Id from '@/models/base/Id'
 

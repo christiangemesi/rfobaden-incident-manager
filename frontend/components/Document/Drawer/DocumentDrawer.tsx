@@ -1,6 +1,6 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
-import { Document } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import styled from 'styled-components'

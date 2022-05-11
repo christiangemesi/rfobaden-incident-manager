@@ -1,4 +1,3 @@
-import { Document } from '@/models/FileUpload'
 import React from 'react'
 import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
@@ -13,6 +12,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
+import Document from '@/models/Document'
 
 interface Props {
   images: Document[]
