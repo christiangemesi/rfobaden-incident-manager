@@ -139,6 +139,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     VehicleStore.save(parseVehicle(data))
   }
 
+  const handleTrashClick = async (id: Id<Vehicle>) => {
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
+    if (error !== null) {
+      throw error
+    }
+    data.isVisible = false
+    const [updatedVehicle, updatedVehicleError]: BackendResponse<Vehicle> = await BackendService.update('vehicles', id, data)
+    if (updatedVehicleError !== null) {
+      throw updatedVehicleError
+    }
+    VehicleStore.save(parseVehicle(updatedVehicle))
+  }
+
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
@@ -185,6 +198,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               onCreate={handleCreateVehicle}
               isCreatable
               isSearchable
+              onTrashClick={handleTrashClick}
             />
           )}</UiForm.Field>
 

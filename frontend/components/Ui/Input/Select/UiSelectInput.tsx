@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react'
-import Select, { StylesConfig } from 'react-select'
+import Select, { components, StylesConfig } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
 import { useMountedState } from 'react-use'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
@@ -17,6 +19,7 @@ interface Props<T> extends UiInputProps<T | null> {
   isSearchable?: boolean,
   placeholder?: string,
   menuPlacement?: 'auto' | 'top' | 'bottom'
+  onTrashClick?: (value: T) => void
 }
 
 const UiSelectInput = <T, >({
@@ -32,6 +35,7 @@ const UiSelectInput = <T, >({
   isSearchable = false,
   placeholder = '',
   menuPlacement = 'auto',
+  onTrashClick: handleTrashClick,
 }: Props<T>): JSX.Element => {
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
@@ -82,6 +86,9 @@ const UiSelectInput = <T, >({
         color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
         cursor: isDisabled ? 'not-allowed' : 'pointer',
         backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
 
         ':disabled': {
           ...styles[':disabled'],
@@ -89,12 +96,18 @@ const UiSelectInput = <T, >({
           filter: 'brightness(120%)',
         },
 
+        'div': {
+          display: 'none',
+          ':hover': {
+            display: 'block',
+          },
+        },
+
         ':hover': {
           ...styles[':hover'],
           backgroundColor: defaultTheme.colors.secondary.value,
           color: defaultTheme.colors.secondary.contrast,
         },
-
       }
     },
     // style of input field in main select with search input
@@ -139,6 +152,21 @@ const UiSelectInput = <T, >({
           isSearchable={isSearchable}
           styles={customStyles}
           menuPlacement={menuPlacement}
+          components={{
+            Option: (props) => (
+              <components.Option {...props}>
+                {props.label}
+                {handleTrashClick !== undefined && (
+                  <TrashButton onClick={(e) => {
+                    e.stopPropagation()
+                    handleTrashClick(props.data.value)
+                  }}>
+                    <UiIcon.Trash size={0.7} />
+                  </TrashButton>
+                )}
+              </components.Option>
+            ),
+          }}
           // eslint-disable-next-line react/no-unescaped-entities
           formatCreateLabel={(inputValue) => <span>"{inputValue}" hinzufügen</span>}
         />
@@ -205,5 +233,13 @@ const StyledLabel = styled.label`
   & > span:first-child {
     font-size: 0.9rem;
     font-weight: bold;
+  }
+`
+
+const TrashButton = styled(UiIconButton)`
+
+  :hover {
+    background-color: transparent;
+    transform: scale(1.2);
   }
 `
