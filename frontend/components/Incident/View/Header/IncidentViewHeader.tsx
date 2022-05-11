@@ -29,9 +29,9 @@ const IncidentViewHeader: React.VFC<Props> = ({ incident, onDelete: handleDelete
           <UiDescription description={incident.description} />
         </TitleContainer>
       </UiGrid.Col>
-      <UiGrid.Col size={{ xs: 2, md: 'auto' }}>
+      <UiGrid.Col size={{ xs: 2, md: 'auto' }} textAlign="right">
         <IncidentActions incident={incident} onDelete={handleDelete} />
-        <UiIcon.Empty style={{ marginLeft: '1rem' }} />
+        <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
       </UiGrid.Col>
     </UiGrid>
   )
