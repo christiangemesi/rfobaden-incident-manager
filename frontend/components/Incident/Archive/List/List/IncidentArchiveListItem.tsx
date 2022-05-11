@@ -18,7 +18,6 @@ const IncidentArchiveListItem: React.VFC<Props> = ({
       <UiGrid align="center" gapH={1.5}>
         <UiGrid.Col size={4}>
           <UiTitle level={5}>
-            {closedIncident.id}
             {closedIncident.title}
           </UiTitle>
         </UiGrid.Col>
