@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   children: ReactNode
@@ -27,16 +28,24 @@ const UiTitle: React.VFC<Props> = ({
 export default styled(UiTitle)``
 
 const StyledTitle = styled.div<{ isCentered: boolean }>`
-  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
   
   ${({ isCentered }) => isCentered && css`
     text-align: center;
   `}
+
   h1& {
     font-weight: 300;
     font-size: 52px;
     line-height: 64px;
     letter-spacing: 0.2px;
+    
+    ${Themed.media.sm.max} {
+      font-size: 44px;
+    }
   }
 
   h2& {
@@ -44,6 +53,10 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 44px;
     line-height: 54px;
     letter-spacing: 0;
+
+    ${Themed.media.sm.max} {
+      font-size: 32px;
+    }
   }
 
   h3& {
@@ -51,6 +64,10 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 32px;
     line-height: 40px;
     letter-spacing: 0.1px;
+
+    ${Themed.media.sm.max} {
+      font-size: 26px;
+    }
   }
 
   h4& {
@@ -58,6 +75,10 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 26px;
     line-height: 32px;
     letter-spacing: 0.2px;
+    
+    ${Themed.media.sm.max} {
+      font-size: 20px;
+    }
   }
 
   h5& {
@@ -65,6 +86,10 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 20px;
     line-height: 26px;
     letter-spacing: 0.2px;
+    
+    ${Themed.media.sm.max} {
+      font-size: 18px;
+    }
   }
 
   h6& {
@@ -72,5 +97,9 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     font-size: 18px;
     line-height: 24px;
     letter-spacing: 0.2px;
+    
+    ${Themed.media.sm.max} {
+      font-size: 16px;
+    }
   }
 `
