@@ -11,7 +11,6 @@ import Trackable from '@/models/Trackable'
 import { noop } from '@/utils/control-flow'
 import { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
 import Incident from '@/models/Incident'
-import { useIncident } from '@/stores/IncidentStore'
 
 interface Props<T> extends StyledProps {
   incident: Incident
