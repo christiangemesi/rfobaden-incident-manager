@@ -204,8 +204,7 @@ public class Incident extends Model.Basic
                     .flatMap(Collection::stream)
                     .map(Task::getSubtasks)
                     .flatMap(Collection::stream)
-            ).map(Trackable::getAssignee)
-            .map(User::getOrganizationId)
+            ).map(trackable -> trackable.getAssignee().getOrganizationId())
             .filter(Objects::nonNull)
             .collect(Collectors.toUnmodifiableSet());
     }
