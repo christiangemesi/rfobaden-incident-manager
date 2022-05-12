@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @DataJpaTest
 public class VehicleRepositoryTest
@@ -49,6 +50,6 @@ public class VehicleRepositoryTest
         var result = repository.findByName(name);
 
         // Then
-        assertThat(result).isEqualTo(namedRecord);
+        assertThat(result).isEqualTo(Optional.of(namedRecord));
     }
 }
