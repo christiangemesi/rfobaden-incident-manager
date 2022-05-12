@@ -4,12 +4,11 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskList from '@/components/Task/List/TaskList'
 import { useTask, useTasksOfReport } from '@/stores/TaskStore'
-import { useAsync, useMeasure, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Task from '@/models/Task'
 import TaskView from '@/components/Task/View/TaskView'
 import { Themed } from '@/theme'
-import UiContainer from '@/components/Ui/Container/UiContainer'
 import { sleep } from '@/utils/control-flow'
 import Incident from '@/models/Incident'
 import UiLevel from '@/components/Ui/Level/UiLevel'
@@ -19,6 +18,8 @@ import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
+import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
+import useHeight from '@/utils/hooks/useHeight'
 
 interface Props {
   incident: Incident
@@ -45,13 +46,13 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     setSelectedId(null)
   }, [])
 
-  const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
+  const [setTaskViewRef, taskViewHeight] = useHeight<HTMLDivElement>()
 
   // Load tasks from the backend.
   const isLoading = useCachedEffect('report/tasks', report.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
-    await sleep(300)
+    await sleep(500)
     await BackendFetchService.loadTasksOfReport(report)
   })
 
@@ -59,7 +60,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
   // Two reports never contain the same task.
   useUpdateEffect(clearSelected, [report.id])
 
-  useAsync(async function updateRoute() {
+  useAsyncEffect(async function updateRoute() {
     const query = parseIncidentQuery(router.query)
     if (query === null) {
       return
@@ -81,7 +82,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
 
-      <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }}>
+      <UiLevel.Content style={{ minHeight: selected === null ? 0 : taskViewHeight }} noPadding>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -93,21 +94,16 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
             />
           )}
         </TaskContainer>
-        <UiInlineDrawer isOpen={selected !== null} onClose={clearSelected}>
+        <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
-        </UiInlineDrawer>
-      </AnimatedUiLevelContent>
+        </TaskDrawer>
+      </UiLevel.Content>
     </UiLevel>
   )
 }
 export default ReportView
-
-const AnimatedUiLevelContent = styled(UiLevel.Content)`
-  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  transition-property: min-height;
-`
 
 const TaskContainer = styled.div`
   position: relative;
@@ -115,8 +111,13 @@ const TaskContainer = styled.div`
   justify-content: center;
   width: 100%;
   
-  ${Themed.media.lg.max} {
-    padding: 0;
-    ${UiContainer.fluidCss};
+  padding: 0 2rem;
+  ${Themed.media.xs.only} {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
   }
+`
+const TaskDrawer = styled(UiInlineDrawer)`
+  left: -1px;
+  width: calc(100% + 2px);
 `

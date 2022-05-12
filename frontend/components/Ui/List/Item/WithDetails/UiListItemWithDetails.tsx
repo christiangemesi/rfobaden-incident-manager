@@ -4,6 +4,7 @@ import Priority from '@/models/Priority'
 import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/UiListItem'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import { Themed } from '@/theme'
 
 interface Props extends UiListItemProps {
   priority: Priority
@@ -46,9 +47,11 @@ const UiListItemWithDetails: React.VFC<Props> = ({
           </ItemTitle>
           {user}
         </TextContent>
-        <ItemDescription>
-          {description}
-        </ItemDescription>
+        {description !== undefined && (
+          <ItemDescription>
+            {description}
+          </ItemDescription>
+        )}
       </LeftSide>
       <RightSide>
         {children}
@@ -67,6 +70,7 @@ const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
   padding-left: 0;
   transition-property: inherit, padding;
   flex-wrap: wrap;
+  column-gap: 1rem;
 
   ${({ isClosed }) => isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
@@ -107,6 +111,23 @@ const BottomSide = styled.div<{ isSmall: boolean }>`
   padding-left: calc(${({ isSmall }) => isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 
+const ItemDescription = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: 1rem;
+  
+  ${Themed.media.lg.max} {
+    display: none;
+  }
+  ${Themed.media.xl.min} {
+    width: 40rem;
+  }
+  ${Themed.media.xxl.min} {
+    width: 50rem;
+  }
+`
+
 const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -117,13 +138,6 @@ const TextContent = styled.div<{ isTitleSwitched: boolean }>`
     display: flex;
     flex-direction: column-reverse;
   `}
-`
-
-const ItemDescription = styled.div`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 53rem;
 `
 
 const ItemTitle = styled(UiTitle)`
