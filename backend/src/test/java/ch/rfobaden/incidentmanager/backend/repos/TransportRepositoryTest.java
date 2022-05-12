@@ -23,6 +23,9 @@ public class TransportRepositoryTest
     UserRepository userRepository;
 
     @Autowired
+    VehicleRepository vehicleRepository;
+
+    @Autowired
     UserGenerator userGenerator;
 
     @Override
@@ -35,6 +38,11 @@ public class TransportRepositoryTest
         var assignee = transport.getAssignee();
         if (assignee != null) {
             transport.setAssignee(userRepository.save(assignee));
+        }
+
+        var vehicle = transport.getVehicle();
+        if (vehicle != null) {
+            transport.setVehicle(vehicleRepository.save(vehicle));
         }
     }
 

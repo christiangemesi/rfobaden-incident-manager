@@ -11,6 +11,10 @@ import styled from 'styled-components'
 import Incident from '@/models/Incident'
 import Transport from '@/models/Transport'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
+import VehicleStore, { useVehicle } from '@/stores/VehicleStore'
+import { useEffectOnce } from 'react-use'
+import BackendService, { BackendResponse } from '@/services/BackendService'
+import Vehicle, { parseVehicle } from '@/models/Vehicle'
 
 interface Props {
   incident: Incident
@@ -25,6 +29,20 @@ const TransportViewHeader: React.VFC<Props> = ({
   hasPriority = false,
   onClose: handleClose,
 }) => {
+  useEffectOnce(() => {
+    (async () => {
+
+      const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
+        'vehicles',
+      )
+      if (visibleVehiclesError !== null) {
+        throw visibleVehiclesError
+      }
+      VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
+    })()
+  })
+  const vehicle = useVehicle(transport.vehicleId)?.name ?? '-'
+
   return (
     <Container>
       <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
@@ -64,7 +82,7 @@ const TransportViewHeader: React.VFC<Props> = ({
               <UiTitle level={6}>Fahrzeug:</UiTitle>
             </th>
             <td>
-              <span>{transport.vehicle ?? '-'}</span>
+              <span>{vehicle}</span>
             </td>
           </tr>
           <tr>
@@ -115,6 +133,7 @@ const TitleContainer = styled.div`
 const InfoTable = styled.table`
   table-layout: fixed;
   text-align: left;
+
   th {
     width: 10rem;
   }
