@@ -82,7 +82,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
 
-      <AnimatedUiLevelContent style={{ minHeight: selected === null ? 0 : taskViewHeight }} noPadding>
+      <UiLevel.Content style={{ minHeight: selected === null ? 0 : taskViewHeight }} noPadding>
         <TaskContainer>
           {isLoading ? (
             <UiIcon.Loader isSpinner />
@@ -99,16 +99,12 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
         </TaskDrawer>
-      </AnimatedUiLevelContent>
+      </UiLevel.Content>
     </UiLevel>
   )
 }
 export default ReportView
 
-const AnimatedUiLevelContent = styled(UiLevel.Content)`
-  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  transition-property: min-height;
-`
 const TaskContainer = styled.div`
   position: relative;
   display: flex;
