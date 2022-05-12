@@ -41,6 +41,9 @@ import {
   mdiTrashCanOutline,
   mdiUpload,
   mdiFormatListBulleted,
+  mdiArchive,
+  mdiChevronLeft,
+  mdiChevronRight,
 } from '@mdi/js'
 
 
@@ -157,4 +160,7 @@ export default Object.assign(StyledUiIcon, {
   Upload: makeNamedIcon(mdiUpload),
   Trash: makeNamedIcon(mdiTrashCanOutline),
   AssignedList: makeNamedIcon(mdiFormatListBulleted),
+  Archive: makeNamedIcon(mdiArchive),
+  Previous: makeNamedIcon(mdiChevronLeft),
+  Next: makeNamedIcon(mdiChevronRight),
 })
