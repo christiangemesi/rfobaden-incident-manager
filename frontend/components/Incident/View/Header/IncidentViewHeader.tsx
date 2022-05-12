@@ -23,10 +23,12 @@ const IncidentViewHeader: React.VFC<Props> = ({ incident, onDelete: handleDelete
       <UiGrid.Col size={{ xs: 10, md: true }}>
         <TitleContainer>
           <IncidentInfo incident={incident} />
-          <UiTitle level={1}>
-            {incident.title}
-          </UiTitle>
-          <UiDescription description={incident.description} />
+          <div>
+            <UiTitle level={1}>
+              {incident.title}
+            </UiTitle>
+            <UiDescription description={incident.description} />
+          </div>
         </TitleContainer>
       </UiGrid.Col>
       <UiGrid.Col size={{ xs: 2, md: 'auto' }}>
@@ -41,7 +43,7 @@ export default IncidentViewHeader
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   height: 100%;
-  padding-bottom: 0.5rem;
 `
+
