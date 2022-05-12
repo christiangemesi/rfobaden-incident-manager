@@ -135,7 +135,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     if (error !== null) {
       throw error
     }
-    form.vehicleId.value = data.id
+    form.vehicleId.setValue(data.id)
     VehicleStore.save(parseVehicle(data))
   }
 
