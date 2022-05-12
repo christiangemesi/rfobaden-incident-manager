@@ -88,15 +88,13 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
         </React.Fragment>
       )}
 
-      {currentOffset === totalPages - 1 ? (
-        <PaginationButton isCurrent={false} isDisabled={true}>
-          <UiIcon.Next />
-        </PaginationButton>
-      ) : (
-        <PaginationButton isCurrent={false} href={makeHref(currentOffset + 1)}>
-          <UiIcon.Next />
-        </PaginationButton>
-      )}
+      <PaginationButton
+        isCurrent={false}
+        isDisabled={currentOffset === totalPages - 1}
+        href={currentOffset === totalPages - 1 ? undefined : makeHref(currentOffset + 1)}
+      >
+        <UiIcon.Previous />
+      </PaginationButton>
     </Pagination>
   )
 }
