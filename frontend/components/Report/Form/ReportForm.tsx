@@ -118,9 +118,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       <UiForm form={form}>
         <FormContainer>
           <UiGrid gap={0.5} align="center">
-            <UiGrid.Col  size={{ xs: 12, sm: 9 }}>
+            <UiGrid.Col size={{ xs: 12, sm: 9 }}>
               <UiGrid>
-                <UiGrid.Col size={{ xs: 12, sm:7 }}>
+                <UiGrid.Col size={{ xs: 12, sm: 7 }}>
                   <UiForm.Field field={form.isKeyReport}>{(props) => (
                     <UiToggle {...props} label="Schlüsselmeldung" />
                   )}</UiForm.Field>
@@ -159,7 +159,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
-            <UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.descriptor}>{(props) => (
                 <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
               )}</UiForm.Field>
@@ -190,12 +190,12 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
           </UiGrid>
 
           <UiGrid gap={0.5}>
-            <UiGrid.Col size={{ xs: 12, md: 6, lg: true }}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
                 <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
               )}</UiForm.Field>
             </UiGrid.Col>
-            <UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.endsAt}>{(props) => (
                 <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
               )}</UiForm.Field>
@@ -253,6 +253,7 @@ const SliderCol = styled(UiGrid.Col)`
   ${Themed.media.sm.max} {
     text-align: center;
   }
-text-align: right;
-  
+
+  text-align: right;
+
 `
