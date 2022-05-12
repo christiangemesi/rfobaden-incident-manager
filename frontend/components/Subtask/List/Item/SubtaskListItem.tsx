@@ -78,11 +78,7 @@ const SubtaskListItem: React.VFC<Props> = ({
         )}
       >
         <SubtaskActions task={task} subtask={subtask} />
-        {incident.isClosed ? (
-          <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} isDisabled={true} />
-        ) : (
-          <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
-        )}
+        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} isDisabled={incident.isClosed} />
       </Item>
     </div>
   )
