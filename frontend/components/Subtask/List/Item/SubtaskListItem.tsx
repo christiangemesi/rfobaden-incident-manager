@@ -119,7 +119,7 @@ const SubtaskListItem: React.VFC<Props> = ({
         title={subtask.title}
         user={assigneeName ?? ''}
         isDragging={isDragging && snapshot !== null && !snapshot.isDropAnimating}
-        isClosed={subtask.isClosed || subtask.isDone}
+        isClosed={subtask.isClosed}
         onClick={handleClick && (() => handleClick(subtask))}
         caption={caption}
         body={subtask.description && (

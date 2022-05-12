@@ -5,10 +5,10 @@ import styled, { css, useTheme } from 'styled-components'
 interface Props {
   done: number
   total: number
-  isClosed: boolean
+  isClosed?: boolean
 }
 
-const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed }) => {
+const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false }) => {
   return useMemo(() => {
     const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
     return (
@@ -35,6 +35,7 @@ const SVG_CENTER = SVG_SIZE / 2
 interface ProgressCircleProps {
   progress: number
   radius: number
+  center: number
   isClosed: boolean
 }
 
