@@ -10,7 +10,6 @@ import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.WithMock
 import ch.rfobaden.incidentmanager.backend.models.Vehicle;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.VehicleService;
-import ch.rfobaden.incidentmanager.backend.test.generators.base.ModelGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

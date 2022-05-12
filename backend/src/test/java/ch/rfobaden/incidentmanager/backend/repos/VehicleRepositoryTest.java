@@ -40,10 +40,10 @@ public class VehicleRepositoryTest
         // Given
         var amount = 10;
         var records = generator.generate(amount);
+        records = repository.saveAll(records);
+
         var namedRecord = records.get((int) (Math.random() * amount));
         var name = namedRecord.getName();
-
-        records = repository.saveAll(records);
 
         // When
         var result = repository.findFirstByName(name);

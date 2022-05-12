@@ -38,7 +38,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private String driver;
 
     @ManyToOne(cascade = {
-        CascadeType.ALL,
         CascadeType.REFRESH,
         CascadeType.DETACH,
         CascadeType.MERGE

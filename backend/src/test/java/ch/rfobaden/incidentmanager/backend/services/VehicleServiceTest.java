@@ -37,6 +37,7 @@ public class VehicleServiceTest
     void testFindByName() {
         // Given
         var record = generator.generate();
+
         Mockito.when(repository.findFirstByName(record.getName()))
             .thenReturn(record);
 
