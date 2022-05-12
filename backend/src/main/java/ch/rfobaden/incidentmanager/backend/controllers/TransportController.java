@@ -42,7 +42,6 @@ public class TransportController
     @Override
     @RequireAgent
     public Transport create(@ModelAttribute TransportPath path, @RequestBody Transport entity) {
-        System.out.println("------ " + entity);
         return super.create(path, entity);
     }
 
@@ -50,16 +49,15 @@ public class TransportController
     @RequireAgent
     public Transport update(
         @ModelAttribute TransportPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody Transport entity
     ) {
-        System.out.println("------ " + entity);
         return super.update(path, id, entity);
     }
 
     @Override
     @RequireAgent
-    public void delete(@ModelAttribute TransportPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute TransportPath path, @PathVariable Long id) {
         super.delete(path, id);
     }
 

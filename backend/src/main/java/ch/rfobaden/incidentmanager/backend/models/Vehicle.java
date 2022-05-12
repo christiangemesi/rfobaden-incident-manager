@@ -52,11 +52,12 @@ public final class Vehicle extends Model.Basic implements Serializable {
         }
         var that = (Vehicle) other;
         return equalsModel(that)
-            && Objects.equals(name.toLowerCase(), that.name.toLowerCase());
+            && Objects.equals(name.toLowerCase(), that.name.toLowerCase())
+            && isVisible == that.isVisible;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(modelHashCode(), name.toLowerCase());
+        return Objects.hash(modelHashCode(), name.toLowerCase(), isVisible);
     }
 }

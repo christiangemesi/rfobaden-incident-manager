@@ -14,12 +14,11 @@ interface Props<T> extends UiInputProps<T | null> {
   options: T[]
   optionName?: keyof T | ((option: T) => string | null)
   onCreate?: (value: string) => void
-  isCreatable?: boolean,
   isDisabled?: boolean,
   isSearchable?: boolean,
   placeholder?: string,
   menuPlacement?: 'auto' | 'top' | 'bottom'
-  onTrashClick?: (value: T) => void
+  onDelete?: (value: T) => void
 }
 
 const UiSelectInput = <T, >({
@@ -30,12 +29,11 @@ const UiSelectInput = <T, >({
   options,
   optionName,
   onCreate: handleCreate,
-  isCreatable = false,
   isDisabled = false,
   isSearchable = false,
   placeholder = '',
   menuPlacement = 'auto',
-  onTrashClick: handleTrashClick,
+  onDelete: handleDelete,
 }: Props<T>): JSX.Element => {
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
@@ -140,7 +138,7 @@ const UiSelectInput = <T, >({
           {label}
         </span>
       )}
-      {isCreatable ? (
+      {handleCreate !== undefined ? (
         <CreatableSelect
           options={mappedOptions}
           value={defaultValue}
@@ -156,13 +154,13 @@ const UiSelectInput = <T, >({
             Option: (props) => (
               <components.Option {...props}>
                 {props.label}
-                {handleTrashClick !== undefined && (
-                  <TrashButton onClick={(e) => {
+                {handleDelete !== undefined && (
+                  <DeleteButton onClick={(e) => {
                     e.stopPropagation()
-                    handleTrashClick(props.data.value)
+                    handleDelete(props.data.value)
                   }}>
                     <UiIcon.Trash size={0.7} />
-                  </TrashButton>
+                  </DeleteButton>
                 )}
               </components.Option>
             ),
@@ -236,8 +234,7 @@ const StyledLabel = styled.label`
   }
 `
 
-const TrashButton = styled(UiIconButton)`
-
+const DeleteButton = styled(UiIconButton)`
   :hover {
     background-color: transparent;
     transform: scale(1.2);

@@ -6,16 +6,17 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService
     extends ModelRepositoryService.Basic<Vehicle, VehicleRepository> {
 
-    public List<Vehicle> listWhereIsVisible() {
+    public List<Vehicle> listVisible() {
         return repository.findAllVisible();
     }
 
-    public Vehicle findByName(String name) {
-        return repository.findFirstByName(name);
+    public Optional<Vehicle> findByName(String name) {
+        return repository.findByName(name);
     }
 }

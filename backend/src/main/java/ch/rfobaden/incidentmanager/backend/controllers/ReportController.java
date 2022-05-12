@@ -41,7 +41,7 @@ public class ReportController extends ModelController<Report, ReportPath, Report
     @RequireAgent
     public Report update(
         @ModelAttribute ReportPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody Report entity
     ) {
         return super.update(path, id, entity);
@@ -49,7 +49,7 @@ public class ReportController extends ModelController<Report, ReportPath, Report
 
     @Override
     @RequireAgent
-    public void delete(@ModelAttribute ReportPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute ReportPath path, @PathVariable Long id) {
         super.delete(path, id);
     }
 

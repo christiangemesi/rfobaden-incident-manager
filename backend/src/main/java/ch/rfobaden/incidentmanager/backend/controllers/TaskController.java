@@ -41,7 +41,7 @@ public class TaskController extends ModelController<Task, TaskPath, TaskService>
     @RequireAgent
     public Task update(
         @ModelAttribute TaskPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody Task entity
     ) {
         return super.update(path, id, entity);
@@ -49,7 +49,7 @@ public class TaskController extends ModelController<Task, TaskPath, TaskService>
 
     @Override
     @RequireAgent
-    public void delete(@ModelAttribute TaskPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute TaskPath path, @PathVariable Long id) {
         super.delete(path, id);
     }
 

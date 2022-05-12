@@ -27,14 +27,14 @@ public class VehicleController
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
-    public List<Vehicle> listAllVisible() {
-        return service.listWhereIsVisible();
+    public List<Vehicle> listVisible() {
+        return service.listVisible();
     }
 
     @Override
     @RequireAgent
     public Vehicle create(@ModelAttribute EmptyPath path, @RequestBody Vehicle entity) {
-        var vehicle = service.findByName(entity.getName().toLowerCase());
+        var vehicle = service.findByName(entity.getName().toLowerCase()).orElse(null);
         if (vehicle != null) {
             vehicle.setVisible(true);
             return super.update(path, vehicle.getId(), vehicle);

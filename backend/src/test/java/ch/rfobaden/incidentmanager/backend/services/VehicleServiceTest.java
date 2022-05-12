@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 @SpringBootTest
 public class VehicleServiceTest
     extends ModelRepositoryServiceTest.Basic<
@@ -19,13 +21,13 @@ public class VehicleServiceTest
     VehicleRepository> {
 
     @Test
-    void testListWhereIsVisible() {
+    void testListVisible() {
         // Given
         var records = generator.generate(10);
         Mockito.when(repository.findAllVisible()).thenReturn(records);
 
         // When
-        var result = service.listWhereIsVisible();
+        var result = service.listVisible();
 
         // Then
         assertThat(result).isEqualTo(records);
@@ -38,8 +40,8 @@ public class VehicleServiceTest
         // Given
         var record = generator.generate();
 
-        Mockito.when(repository.findFirstByName(record.getName()))
-            .thenReturn(record);
+        Mockito.when(repository.findByName(record.getName()))
+            .thenReturn(Optional.of(record));
 
         // When
         var result = service.findByName(record.getName());
@@ -48,6 +50,6 @@ public class VehicleServiceTest
         assertThat(result)
             .isNotNull()
             .isEqualTo(record);
-        verify(repository, times(1)).findFirstByName(record.getName());
+        verify(repository, times(1)).findByName(record.getName());
     }
 }

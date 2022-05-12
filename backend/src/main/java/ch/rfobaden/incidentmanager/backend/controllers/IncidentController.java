@@ -22,7 +22,7 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
     @PutMapping("{incidentId}/close")
     @ResponseStatus(HttpStatus.OK)
     public Incident closeIncident(
-        @PathVariable("incidentId") Long incidentId,
+        @PathVariable Long incidentId,
         @RequestBody CloseMessageData closeMessageData
     ) {
         return service.closeIncident(incidentId, closeMessageData.getMessage())
@@ -33,7 +33,7 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
 
     @PutMapping("{incidentId}/reopen")
     @ResponseStatus(HttpStatus.OK)
-    public Incident reopenIncident(@PathVariable("incidentId") Long incidentId) {
+    public Incident reopenIncident(@PathVariable Long incidentId) {
         return service.reopenIncident(incidentId)
             .orElseThrow(() -> (
                 new ApiException(HttpStatus.NOT_FOUND, "incident not found")

@@ -42,7 +42,7 @@ const UiButtonExample: React.VFC = () => {
           }} errors={['Fail not selected']} menuPlacement="top" placeholder="error" />
         </UiGrid.Col>
         <UiGrid.Col>
-          <UiSelectInput isCreatable isSearchable onCreate={
+          <UiSelectInput isSearchable onCreate={
             (string) => {
               setCurrentValue5(string)
               setOptions([...options, string])
