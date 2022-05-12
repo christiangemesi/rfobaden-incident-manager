@@ -1,7 +1,6 @@
 import Report from '@/models/Report'
 import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
 import TrackableListItem, { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
 import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'

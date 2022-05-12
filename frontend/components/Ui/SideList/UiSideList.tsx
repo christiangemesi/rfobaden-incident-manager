@@ -2,13 +2,12 @@ import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 import useHeight from '@/utils/hooks/useHeight'
-import { usePreviousDistinct, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Model from '@/models/base/Model'
 import { ModelStore } from '@/stores/base/Store'
 import { createUseRecord } from '@/stores/base/hooks'
 import { noop } from '@/utils/control-flow'
-import useBreakpoint from '@/utils/hooks/useBreakpoints'
 
 interface Props<T extends Model> {
   initialId?: Id<T> | null
