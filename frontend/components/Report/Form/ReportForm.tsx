@@ -132,7 +132,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
                 </UiGrid.Col>
               </UiGrid>
             </UiGrid.Col>
-
             <SliderCol size={{ xs: 12, sm: 3 }}>
               <UiForm.Field field={form.priority}>{(props) => (
                 <UiPrioritySlider {...props} />
@@ -149,7 +148,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
           )}</UiForm.Field>
 
           <UiGrid gap={0.5}>
-            <UiGrid.Col size={{ xs: 12, md: 6, lg: true }}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.source}>{(props) => (
                 <UiSelectInput
                   {...props}
@@ -172,12 +171,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
           )}</UiForm.Field>
 
           <UiGrid gap={0.5}>
-            <UiGrid.Col size={{ xs: 12, md: 12, lg: true }}>
-              <UiForm.Field field={form.location}>{(props) => (
-                <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-            <UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.assigneeId}>{(props) => (
                 <UiSelectInput
                   {...props}
@@ -188,7 +182,13 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.location}>{(props) => (
+                <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
           </UiGrid>
+
           <UiGrid gap={0.5}>
             <UiGrid.Col size={{ xs: 12, md: 6, lg: true }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
@@ -201,7 +201,6 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
-
 
           <UiForm.Buttons form={form} />
         </FormContainer>
