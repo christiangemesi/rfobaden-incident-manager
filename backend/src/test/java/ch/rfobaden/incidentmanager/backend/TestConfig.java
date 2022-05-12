@@ -8,6 +8,7 @@ import ch.rfobaden.incidentmanager.backend.test.generators.OrganizationGenerator
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.SubtaskGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TaskGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.TrailerGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TransportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserCredentialsGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
@@ -32,7 +33,8 @@ import java.util.Locale;
     SubtaskGenerator.class,
     OrganizationGenerator.class,
     CloseReasonGenerator.class,
-    VehicleGenerator.class
+    VehicleGenerator.class,
+    TrailerGenerator.class
 })
 public class TestConfig {
     @Bean
