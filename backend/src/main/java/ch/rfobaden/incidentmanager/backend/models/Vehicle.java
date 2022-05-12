@@ -29,8 +29,8 @@ public final class Vehicle extends Model.Basic implements Serializable {
         return name;
     }
 
-    public void setName(String organizationName) {
-        this.name = organizationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @JsonProperty("isVisible")
