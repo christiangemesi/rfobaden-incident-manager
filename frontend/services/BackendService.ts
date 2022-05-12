@@ -6,7 +6,8 @@ import { SessionResponse } from '@/models/Session'
 import User, { parseUser } from '@/models/User'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import FormData from 'form-data'
-import { FileId } from '@/models/FileUpload'
+import AlertStore from '@/stores/AlertStore'
+import Document from '@/models/Document'
 
 const apiEndpoint = run(() => {
   if (!process.browser) {
@@ -52,6 +53,13 @@ class BackendService {
     })
   }
 
+  get<T>(path: string): Promise<BackendResponse<T>> {
+    return this.fetchApi({
+      path: path,
+      method: 'get',
+    })
+  }
+
   create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<BackendResponse<T>>
   create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
   async create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>> {
@@ -65,11 +73,7 @@ class BackendService {
   async update<T>(resourceName: string, id: Id<T>, data: ModelData<T>): Promise<BackendResponse<T>>
   async update<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
   async update<D, T>(resourceName: string, idOrData: unknown, data?: D): Promise<BackendResponse<T>> {
-    const [path, body] = data === undefined ? (
-      [resourceName, idOrData as D]
-    ) : (
-      [`${resourceName}/${idOrData}`, data]
-    )
+    const [path, body] = data === undefined ? [resourceName, idOrData as D] : [`${resourceName}/${idOrData}`, data]
     return this.fetchApi({
       path,
       body,
@@ -86,7 +90,7 @@ class BackendService {
     return error
   }
 
-  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<FileId>> {
+  async upload(resourceName: string, file: File, params?: Params): Promise<BackendResponse<Document>> {
     const body = new FormData()
     body.append('file', file)
     return this.fetchApi({
@@ -98,10 +102,10 @@ class BackendService {
   }
 
   private async fetchApi<T>(options: {
-    path: string,
-    method: string,
-    body?: unknown,
-    params?: Params,
+    path: string
+    method: string
+    body?: unknown
+    params?: Params
   }): Promise<BackendResponse<T>> {
     const headers: Record<string, string> = {}
     if (this.sessionToken !== null) {
@@ -144,12 +148,14 @@ class BackendService {
       if (res.status >= 400 && res.status <= 499) {
         // Error is caused by the client (us).
         // Let the caller handle it.
-        const data: { message: string, fields: BackendErrorFields | undefined } = await res.json()
+        const data: { message: string; fields: BackendErrorFields | undefined } = await res.json()
         const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
-      // TODO display error to user.
-      throw new Error(`backend request failed: ${await res.text()}`)
+      const msg = await res.text()
+      AlertStore.add({ text: `Anfrage fehlgeschlagen: [${res.status}] ${res.statusText}`, type: 'error', isFading: false })
+      throw new Error(`backend request failed: [${res.status}] ${msg}`)
+
     }
     return [await map(res), null]
   }
@@ -196,7 +202,6 @@ export interface ServerSideSession {
   backendService: BackendService
 }
 
-
 type Params = Record<string, { toString(): string } | null>
 
 /**
@@ -206,7 +211,10 @@ type Params = Record<string, { toString(): string } | null>
  * @param req The nextjs request object.
  * @param defaultService The BackendService instance used when no session could be found.
  */
-export const loadSessionFromRequest = async (req: IncomingMessage & { cookies: NextApiRequestCookies }, defaultService: BackendService): Promise<ServerSideSession> => {
+export const loadSessionFromRequest = async (
+  req: IncomingMessage & { cookies: NextApiRequestCookies },
+  defaultService: BackendService
+): Promise<ServerSideSession> => {
   const sessionToken = req.cookies['rfobaden.incidentmanager.session.token'] ?? null
   if (sessionToken === null) {
     return { user: null, backendService: defaultService }

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import { useRouter } from 'next/router'
 import UiLink from '@/components/Ui/Link/UiLink'
-import UiHeaderItem from '@/components/Ui/Header/Item/UiHeaderItem'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { Themed } from '@/theme'
 import UserPasswordForm from '@/components/User/PasswordForm/UserPasswordForm'
@@ -12,11 +11,12 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
-import UiHeaderAssignments from '@/components/Ui/Header/Assignments/UiHeaderAssignments'
 import Image from 'next/image'
 import rfoBadenLogo from '@/public/rfobaden-logo-text.png'
+import PageHeaderAssignments from '@/components/Page/Header/Assignments/PageHeaderAssignments'
+import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 
-const UiHeader: React.VFC = () => {
+const PageHeader: React.VFC = () => {
   const { currentUser } = useSession()
 
   const router = useRouter()
@@ -41,11 +41,11 @@ const UiHeader: React.VFC = () => {
       </NavContainer>
       <ButtonList>
         {currentUser !== null && (
-          <UiHeaderAssignments />
+          <PageHeaderAssignments currentUser={currentUser} />
         )}
-        <UiHeaderItem href="/changelog" title="Changelog">
+        <PageHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
-        </UiHeaderItem>
+        </PageHeaderItem>
         {currentUser !== null && (
           <LoggedInUser>
             <span>
@@ -86,7 +86,7 @@ const UiHeader: React.VFC = () => {
     </Header>
   )
 }
-export default UiHeader
+export default PageHeader
 
 const Header = styled.header`
   display: flex;
@@ -114,7 +114,7 @@ const ImageContainer = styled.div`
 
   transition: 150ms ease;
   transition-property: transform;
-  
+
   :hover {
     transform: scale(1.05);
   }
@@ -137,7 +137,7 @@ const LoggedInUser = styled.div`
       display: none;
     }
   }
-  
+
 `
 const IconButton = styled(UiIconButton)`
   :hover {

@@ -62,26 +62,29 @@ public class DocumentController extends AppController {
         var document = documentService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
-        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
-            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
-        ));;
+
+        var name = document.getName();
+        if (name == null) {
+            name = document.getId().toString();
+        }
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-            .filename(document.getName() == null
-                ? document.getId() + document.getExtension()
-                : document.getName()
-            )
+            .filename(name + document.getExtension())
             .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
         headers.set("Content-Type", document.getMimeType());
+
+        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
+            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
+        ));
         return ResponseEntity.ok().headers(headers).body(file);
     }
 
     @RequireAgent
     @PostMapping
-    public Long create(
+    public Document create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long modelId,
@@ -101,7 +104,7 @@ public class DocumentController extends AppController {
         saveToOwner.accept(owner, document);
         service.update(owner);
 
-        return document.getId();
+        return document;
     }
 
     @RequireAgent
@@ -110,13 +113,25 @@ public class DocumentController extends AppController {
     public void delete(
         @RequestParam String modelName,
         @RequestParam Long modelId,
-        @PathVariable Long id
+        @PathVariable Long id,
+        @RequestParam(required = false) Optional<String> type
     ) {
         var service = resolveService(modelName);
         var entity = service.find(modelId).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + id)
         ));
-        entity.getDocuments().removeIf((document) -> document.getId().equals(id));
+        var actualType = type.orElse("");
+        switch (actualType) {
+            case "":
+            case "document":
+                entity.getDocuments().removeIf(document -> document.getId().equals(id));
+                break;
+            case "image":
+                entity.getImages().removeIf(image -> image.getId().equals(id));
+                break;
+            default:
+                throw new ApiException(HttpStatus.BAD_REQUEST, "type not supported: " + id);
+        }
         if (!documentService.delete(id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id);
         }
@@ -129,11 +144,15 @@ public class DocumentController extends AppController {
         document.setMimeType(mimeType.toString());
         document.setExtension(mimeType.getExtension());
 
-        var fileName = name.orElseGet(file::getOriginalFilename);
-        if (fileName != null && !fileName.endsWith(document.getExtension())) {
-            fileName = fileName + document.getExtension();
-        }
+        String fileName = name.orElseGet(() -> {
+            var originalFileName = file.getOriginalFilename();
+            if (originalFileName != null) {
+                return originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+            }
+            return null;
+        });
         document.setName(fileName);
+
         return document;
     }
 
@@ -144,14 +163,16 @@ public class DocumentController extends AppController {
         var actualType = type.orElse("");
         switch (actualType) {
             case "":
-                return M::addImage;
+            case "document":
+                return M::addDocument;
             case "image":
                 if (!document.getMimeType().startsWith("image/")) {
                     throw new ApiException(HttpStatus.BAD_REQUEST, "file must be an image");
                 }
                 return M::addImage;
             default:
-                throw new ApiException(HttpStatus.BAD_REQUEST, "unknown document type: " + actualType);
+                throw new ApiException(HttpStatus.BAD_REQUEST,
+                    "unknown document type: " + actualType);
         }
     }
 

@@ -12,6 +12,7 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { useIncident } from '@/stores/IncidentStore'
 
 
 interface Props {
@@ -61,6 +62,11 @@ const SubtaskList: React.VFC<Props> = ({
     }
   }, [openSubtasks])
 
+  const incident = useIncident(task.incidentId)
+  if(incident === null) {
+    throw new Error('incident not found')
+  }
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Container>
@@ -69,6 +75,7 @@ const SubtaskList: React.VFC<Props> = ({
             offene Teilaufträge
           </UiCaption>
 
+          {!incident.isClosed &&
           <UiModal title="Teilauftrag erfassen" size="fixed">
             <UiModal.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
@@ -78,7 +85,7 @@ const SubtaskList: React.VFC<Props> = ({
             <UiModal.Body>{({ close }) => (
               <SubtaskForm task={task} onClose={close} />
             )}</UiModal.Body>
-          </UiModal>
+          </UiModal>}
 
           <Droppable droppableId={LIST_OPEN_ID}>{(provided) => (
             <DropTarget
@@ -105,7 +112,7 @@ const SubtaskList: React.VFC<Props> = ({
 
         <Side>
           <UiCaption>
-            geschlossene Teilaufträge
+            abgeschlossene Teilaufträge
           </UiCaption>
 
           <Droppable droppableId={LIST_CLOSED_ID}>{(provided) => (

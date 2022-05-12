@@ -8,8 +8,6 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import IncidentStore from '@/stores/IncidentStore'
 import { useCurrentUser } from '@/stores/SessionStore'
 import { isAdmin } from '@/models/User'
-import { FileId } from '@/models/FileUpload'
-import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
@@ -28,12 +26,12 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
   const currentUser = useCurrentUser()
 
   const handleClose = useCallback(async () => {
-    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" schliessen wollen?\nGrund:`)
+    const message = prompt(`Sind sie sicher, dass sie das Ereignis "${incident.title}" abschliessen wollen?\nGrund:`)
     if (message === null) {
       return
     }
     if (message.trim().length === 0) {
-      confirm(`Das Ereignis "${incident.title}" wurde nicht geschlossen.\nDie Begründung fehlt.`)
+      confirm(`Das Ereignis "${incident.title}" wurde nicht abgeschlossen.\nDie Begründung fehlt.`)
       return
     }
     const [data, error]: BackendResponse<Incident> = await BackendService.update(`incidents/${incident.id}/close`, { message })
@@ -65,14 +63,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
       IncidentStore.remove(incident.id)
     }
   }, [handleDeleteCb, incident])
-
-  const addImageId = useCallback((fileId: FileId) => {
-    IncidentStore.save({ ...incident, imageIds: [...incident.imageIds, fileId]})
-  }, [incident])
-
-  const addDocumentId = useCallback((fileId: FileId) => {
-    IncidentStore.save({ ...incident, documentIds: [...incident.documentIds, fileId]})
-  }, [incident])
 
   const loadPrintData = useCallback(async () => {
     for (const report of ReportStore.list()) {
@@ -106,19 +96,6 @@ const IncidentActions: React.VFC<Props> = ({ incident, onDelete: handleDeleteCb 
         {isAdmin(currentUser) && (
           <TrackableCloseAction isClosed={incident.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
-        <TrackableFileUploadAction
-          id={incident.id}
-          modelName="incident"
-          onAddFile={addImageId}
-          type="image"
-        />
-        <TrackableFileUploadAction
-          id={incident.id}
-          modelName="incident"
-          onAddFile={addDocumentId}
-        />
-
         <UiPrinter
           loadData={loadPrintData}
           renderContent={() => <IncidentPrintView incident={incident} />}

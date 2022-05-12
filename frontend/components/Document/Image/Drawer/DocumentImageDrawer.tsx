@@ -1,45 +1,58 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
+import styled from 'styled-components'
 
 interface Props {
+  images: Document[]
+  storeImages: (images: Document[]) => void
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeImageIds: (ids: FileId[]) => void
-  imageIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
+  onAddImage: (image: Document) => void
 }
 
 const DocumentImageDrawer: React.VFC<Props> = ({
-  imageIds,
+  images,
+  storeImages,
   modelId,
   modelName,
-  storeImageIds,
   children,
+  onAddImage,
 }) => {
 
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={imageIds.length > 0 ? open : undefined}>
-            {imageIds.length}
+          <Caption onClick={ open }>
+            {images.length}
             &nbsp;
-            {imageIds.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
+            {images.length === 1 ? 'Bild' : 'Bilder'}
+          </Caption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentImageList
-          storeImageIds={storeImageIds}
-          imageIds={imageIds}
+          images={images}
+          storeImages={storeImages}
           modelId={modelId}
-          modelName={modelName} />
+          modelName={modelName}
+          onAddImage={onAddImage}
+        />
       </UiDrawer.Body>
     </UiDrawer>
   )
 }
 
 export default DocumentImageDrawer
+
+const Caption = styled(UiCaption)`
+  transition: ease 100ms;
+  transition-property: transform;
+  :hover {
+    transform: scale(1.1);
+  }
+`

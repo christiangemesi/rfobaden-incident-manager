@@ -40,6 +40,7 @@ public abstract class Generator<T> {
 
     /**
      * Generate a boolean that is {@code true} half of the time.
+     *
      * @return the generated boolean.
      */
     public boolean randomBoolean() {

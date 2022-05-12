@@ -7,10 +7,8 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import TaskStore from '@/stores/TaskStore'
-import { FileId } from '@/models/FileUpload'
 import TrackableCloseAction from '@/components/Trackable/Actions/TrackableCloseAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
-import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import TaskPrintView from '../PrintView/TaskPrintView'
 
@@ -22,7 +20,7 @@ interface Props {
 
 const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" löschen wollen?`)) {
       await BackendService.delete(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id)
       TaskStore.remove(task.id)
       if (handleDeleteCb) {
@@ -33,10 +31,10 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
 
   const handleClose = useCallback(async () => {
     if (task.isDone) {
-      alert('Es sind alle Teilaufträge geschlossen.')
+      alert('Es sind alle Teilaufträge abgeschlossen.')
       return
     }
-    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" schliessen wollen?`)) {
+    if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" abschliessen wollen?`)) {
       const newTask = { ...task, isClosed: true }
       const [data, error]: BackendResponse<Task> = await BackendService.update(`incidents/${task.incidentId}/reports/${task.reportId}/tasks`, task.id, newTask)
       if (error !== null) {
@@ -48,7 +46,7 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
 
   const handleReopen = useCallback(async () => {
     if (task.isDone) {
-      alert('Es sind alle Teilaufträge geschlossen.')
+      alert('Es sind alle Teilaufträge abgeschlossen.')
       return
     }
     if (confirm(`Sind sie sicher, dass sie den Auftrag "${task.title}" öffnen wollen?`)) {
@@ -59,14 +57,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
       }
       TaskStore.save(parseTask(data))
     }
-  }, [task])
-
-  const addImageId = useCallback((fileId: FileId) => {
-    TaskStore.save({ ...task, imageIds: [...task.imageIds, fileId]})
-  }, [task])
-
-  const addDocumentId = useCallback((fileId: FileId) => {
-    TaskStore.save({ ...task, documentIds: [...task.documentIds, fileId]})
   }, [task])
 
   return (
@@ -84,18 +74,6 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
         {!task.isDone && (
           <TrackableCloseAction isClosed={task.isClosed} onClose={handleClose} onReopen={handleReopen} />
         )}
-
-        <TrackableFileUploadAction
-          id={task.id}
-          modelName="task"
-          onAddFile={addImageId}
-          type="image"
-        />
-        <TrackableFileUploadAction
-          id={task.id}
-          modelName="task"
-          onAddFile={addDocumentId}
-        />
 
         <UiPrinter renderContent={() => <TaskPrintView task={task} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>
