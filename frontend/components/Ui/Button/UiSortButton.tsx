@@ -11,6 +11,7 @@ interface Props extends ListHeaderProps {
 const UiSortButton: React.VFC<Props> = ({
   children,
   field,
+  ...props
 }) => {
   const handleSortClick = () => {
     switch (field.direction) {
@@ -27,7 +28,7 @@ const UiSortButton: React.VFC<Props> = ({
   }
  
   return (
-    <SortButton onClick={handleSortClick}>
+    <SortButton {...props} onClick={handleSortClick}>
       {children}
       {field.direction === null ? <UiIcon.Empty /> : (
         field.direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />
