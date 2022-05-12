@@ -45,6 +45,10 @@ services:
       - ./files:/app/files
     depends_on:
       - database
+    networks:
+      default:
+        aliases:
+          - backend-${RFO_STAGE}
     env_file:
       - .env
 #    deploy:
