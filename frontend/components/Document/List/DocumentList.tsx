@@ -1,5 +1,5 @@
-import { FileId } from '@/models/FileUpload'
 import React from 'react'
+import styled from 'styled-components'
 import BackendService from '@/services/BackendService'
 import Id from '@/models/base/Id'
 import Incident from '@/models/Incident'
@@ -10,30 +10,32 @@ import UiList from '@/components/Ui/List/UiList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiIcon from '@/components/Ui/Icon/UiIcon'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
-import styled from 'styled-components'
+import Document from '@/models/Document'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
+import useSort from '@/utils/hooks/useSort'
+import UiSortButton from '@/components/Ui/Button/UiSortButton'
 
 interface Props {
-  fileIds: FileId[]
+  documents: Document[]
+  storeDocuments: (documents: Document[]) => void
   modelId: Id<Incident | Report | Task>
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeFileIds: (ids: FileId[]) => void
-  onAddFile: (fileId: FileId) => void
+  onAddDocument: (documents: Document) => void
 }
 
 const DocumentList: React.VFC<Props> = ({
-  fileIds,
+  documents,
+  storeDocuments,
   modelId,
   modelName,
-  storeFileIds,
-  onAddFile,
+  onAddDocument,
 }) => {
 
-  const handleDelete = async (id: FileId) => {
+  const handleDelete = async (document: Document) => {
     if (confirm('Sind sie sicher, dass sie das Dokument löschen wollen?')) {
-      const error = await BackendService.delete('documents', id, {
+      const error = await BackendService.delete('documents', document.id, {
         modelName: modelName,
         modelId: modelId.toString(),
         type: 'document',
@@ -41,13 +43,18 @@ const DocumentList: React.VFC<Props> = ({
       if (error !== null) {
         throw error
       }
-      fileIds = fileIds.filter((i) => i !== id)
-      storeFileIds(fileIds)
+      documents = documents.filter((d) => d !== document)
+      storeDocuments(documents)
     }
   }
 
+  const [sortedDocuments, sort] = useSort(documents, () => ({
+    name: String,
+    extension: String,
+  }))
+
   return (
-    <div>
+    <React.Fragment>
       <UiTitle level={1}>
         Dokumente
       </UiTitle>
@@ -61,31 +68,34 @@ const DocumentList: React.VFC<Props> = ({
           <DocumentForm
             modelId={modelId}
             modelName={modelName}
-            onSave={onAddFile}
+            onSave={onAddDocument}
             onClose={close}
             type="document"
           />
         )}</UiModal.Body>
       </UiModal>
-      <UiGrid style={{ padding: '0 0.5rem' }} gapH={0.5}>
-
-        <UiGrid.Col size={8}>
-          <UiTitle level={6}>Name</UiTitle>
+      <UiGrid gapH={0.5}>
+        <UiGrid.Col>
+          <UiSortButton field={sort.name}>
+            <UiTitle level={6}>Name</UiTitle>
+          </UiSortButton>
         </UiGrid.Col>
-        <UiGrid.Col size={3}>
-          <UiTitle level={6}>Typ</UiTitle>
+        <UiGrid.Col>
+          <UiSortButton field={sort.extension}>
+            <UiTitle level={6}>Erweiterung</UiTitle>
+          </UiSortButton>
         </UiGrid.Col>
       </UiGrid>
       <UiList>
-        {fileIds.map((id) => (
+        {sortedDocuments.map((document) => (
           <DocumentListItem
-            key={id}
-            id={id}
+            key={document.id}
+            document={document}
             onDelete={handleDelete}
           />
         ))}
       </UiList>
-    </div>
+    </React.Fragment>
   )
 }
 

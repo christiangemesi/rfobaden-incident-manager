@@ -9,7 +9,6 @@ import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
 
 @RequireAdmin
 public abstract class ModelController<
@@ -44,7 +42,7 @@ public abstract class ModelController<
 
     @GetMapping(value = "{id}")
     @RequireAgent
-    public TModel find(@ModelAttribute TPath path, @PathVariable(value = "id") Long id) {
+    public TModel find(@ModelAttribute TPath path, @PathVariable Long id) {
         return service.find(path, id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
         ));
@@ -64,7 +62,7 @@ public abstract class ModelController<
     @ResponseStatus(HttpStatus.OK)
     public TModel update(
         @ModelAttribute TPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody TModel entity
     ) {
         if (!Objects.equals(entity.getId(), id)) {
@@ -80,7 +78,7 @@ public abstract class ModelController<
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@ModelAttribute TPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute TPath path, @PathVariable Long id) {
         if (!service.delete(path, id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE);
         }

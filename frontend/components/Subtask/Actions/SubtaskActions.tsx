@@ -7,7 +7,7 @@ import BackendService from '@/services/BackendService'
 import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
@@ -35,20 +35,20 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
     }
   }, [subtask, handleDeleteCb])
 
-  const addImage = useCallback((fileId: FileId) => {
-    SubtaskStore.save({ ...subtask, imageIds: [...subtask.imageIds, fileId]})
+  const addImage = useCallback((image: Document) => {
+    SubtaskStore.save({ ...subtask, images: [...subtask.images, image]})
   }, [subtask])
 
-  const addDocumentId = useCallback((fileId: FileId) => {
-    SubtaskStore.save({ ...subtask, documentIds: [...subtask.documentIds, fileId]})
+  const addDocument = useCallback((document: Document) => {
+    SubtaskStore.save({ ...subtask, documents: [...subtask.documents, document]})
   }, [subtask])
 
-  const storeImageIds = (ids: FileId[]) => {
-    SubtaskStore.save({ ...subtask, imageIds: ids })
+  const storeImages = (images: Document[]) => {
+    SubtaskStore.save({ ...subtask, images: images })
   }
 
-  const storeDocumentIds = (ids: FileId[]) => {
-    SubtaskStore.save({ ...subtask, documentIds: ids })
+  const storeDocuments = (documents: Document[]) => {
+    SubtaskStore.save({ ...subtask, documents: documents })
   }
 
   return (
@@ -66,44 +66,44 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddFile={addImage}
+          onAddDocument={addImage}
           type="image"
         />
         <TrackableFileUploadAction
           id={subtask.id}
           modelName="subtask"
-          onAddFile={addDocumentId}
+          onAddDocument={addDocument}
           type="document"
         />
 
         <DocumentImageDrawer
+          images={subtask.images}
+          storeImages={storeImages}
           modelId={subtask.id}
           modelName="subtask"
-          storeImageIds={storeImageIds}
-          imageIds={subtask.imageIds}
-          onAddFile={addImage}
+          onAddImage={addImage}
         >
           {({ open }) => (
             <UiDropDown.Item onClick={open}>
-              {subtask.imageIds.length}
+              {subtask.images.length}
               &nbsp;
-              {subtask.imageIds.length === 1 ? 'Bild' : 'Bilder'}
+              {subtask.images.length === 1 ? 'Bild' : 'Bilder'}
             </UiDropDown.Item>
           )}
         </DocumentImageDrawer>
 
         <DocumentDrawer
+          documents={subtask.documents}
+          storeDocuments={storeDocuments}
           modelId={subtask.id}
           modelName="subtask"
-          storeDocumentIds={storeDocumentIds}
-          documentIds={subtask.documentIds}
-          onAddFile={addDocumentId}
+          onAddDocument={addDocument}
         >
           {({ open }) => (
             <UiDropDown.Item onClick={open}>
-              {subtask.documentIds.length}
+              {subtask.documents.length}
               &nbsp;
-              {subtask.documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
+              {subtask.documents.length === 1 ? 'Dokument' : 'Dokumente'}
             </UiDropDown.Item>
           )}
         </DocumentDrawer>

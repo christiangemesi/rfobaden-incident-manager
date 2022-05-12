@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
 import { ModelData } from '@/models/base/Model'
 import Transport, { parseTransport } from '@/models/Transport'
@@ -21,6 +21,9 @@ import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
 import { Themed } from '@/theme'
+import Vehicle, { parseVehicle } from '@/models/Vehicle'
+import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   incident: Incident
@@ -40,7 +43,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     priority: Priority.MEDIUM,
     peopleInvolved: 0,
     driver: null,
-    vehicle: '',
+    vehicleId: null,
     trailer: null,
     pointOfDeparture: null,
     pointOfArrival: null,
@@ -70,9 +73,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      vehicle: [
-        validate.notBlank({ allowNull: true }),
-        validate.maxLength(100),
+      vehicleId: [
+        validate.notNull(),
       ],
       driver: [
         validate.notBlank({ allowNull: true }),
@@ -110,6 +112,52 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
 
   useCancel(form, handleClose)
 
+  useEffectOnce(() => {
+    (async () => {
+      const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
+        'vehicles/visible',
+      )
+      if (vehiclesError !== null) {
+        throw vehiclesError
+      }
+      VehicleStore.saveAll(vehicles.map(parseVehicle))
+    })()
+  })
+
+  const handleCreateVehicle = async (vehicleName: string) => {
+    if (vehicleName.length > 100) {
+      alert('Fahrzeugname ist zu lang.')
+      return
+    }
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
+      name: vehicleName,
+      isVisible: true,
+    })
+    if (error !== null) {
+      throw error
+    }
+    form.vehicleId.setValue(data.id)
+    VehicleStore.save(parseVehicle(data))
+  }
+
+  const handleDeleteVehicle = async (id: Id<Vehicle>) => {
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
+    if (error !== null) {
+      throw error
+    }
+    data.isVisible = false
+    const [updatedVehicle, updatedVehicleError]: BackendResponse<Vehicle> = await BackendService.update('vehicles', id, data)
+    if (updatedVehicleError !== null) {
+      throw updatedVehicleError
+    }
+    VehicleStore.save(parseVehicle(updatedVehicle))
+  }
+
+  const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
+  const vehicleIds = useMemo(() => {
+    return vehicles.map(({ id }) => id)
+  }, [vehicles])
+
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
   return (
@@ -134,18 +182,23 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiTextInput {...props} label="Fahrer" placeholder="Fahrer" />
           )}</UiForm.Field>
 
-          <UiGrid gap={0.5}>
-            <UiGrid.Col size={{ xs: 12, sm: 9 }}>
-              <UiForm.Field field={form.vehicle}>{(props) => (
-                <UiTextInput {...props} label="Fahrzeug" placeholder="Fahrzeug" />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-            <UiGrid.Col size={{ xs: 12, sm: 3 }}>
-              <UiForm.Field field={form.peopleInvolved}>{(props) => (
-                <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-          </UiGrid>
+          <UiForm.Field field={form.peopleInvolved}>{(props) => (
+            <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
+          )}</UiForm.Field>
+
+          <UiForm.Field field={form.vehicleId} deps={[vehicles]}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Fahrzeug"
+              options={vehicleIds}
+              optionName={mapVehicleIdToName}
+              menuPlacement="auto"
+              placeholder="Fahrzeug"
+              onCreate={handleCreateVehicle}
+              isSearchable
+              onDelete={handleDeleteVehicle}
+            />
+          )}</UiForm.Field>
 
           <UiForm.Field field={form.trailer}>{(props) => (
             <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
@@ -200,6 +253,13 @@ const mapUserIdToName = (id: Id<User>): string | null => {
   return user === null
     ? null
     : `${user.firstName} ${user.lastName}`
+}
+
+const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
+  const vehicle = VehicleStore.find(id)
+  return vehicle === null
+    ? ''
+    : vehicle.name
 }
 
 const FormContainer = styled.div`

@@ -26,7 +26,7 @@ export default styled(UiInlineDrawer)`
   min-height: 100%;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
-  box-shadow: 0 0 4px 2px gray;
+  border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
   will-change: transform;
   transition: 300ms cubic-bezier(.23,1,.32,1);
