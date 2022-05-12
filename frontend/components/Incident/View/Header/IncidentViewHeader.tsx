@@ -16,22 +16,26 @@ interface Props {
 
 const IncidentViewHeader: React.VFC<Props> = ({ incident, onDelete: handleDelete }) => {
   return (
-    <UiGrid justify="space-between" gap={1} style={{ flexWrap: 'nowrap' }}>
-      <UiGrid.Col size={{ xs: 0, md: 'auto' }}>
+    <UiGrid gap={1}>
+      <UiGrid.Col size={{ xs: 0, md: 3, lg: 'auto' }} textAlign="center">
         <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
       </UiGrid.Col>
-      <UiGrid.Col size={{ xs: 10, md: true }}>
+      <UiGrid.Col size={{ md: 9, lg: true }}>
+        <UiGrid justify="space-between" gap={1}>
+          <UiGrid.Col size={{ xs: 10, md: true }}>
+            <IncidentInfo incident={incident} />
+          </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 2, md: 'auto' }} textAlign="right">
+            <IncidentActions incident={incident} onDelete={handleDelete} />
+            <UiIcon.Empty style={{ marginLeft: '0.5rem' }} />
+          </UiGrid.Col>
+        </UiGrid>
         <TitleContainer>
-          <IncidentInfo incident={incident} />
           <UiTitle level={1}>
             {incident.title}
           </UiTitle>
           <UiDescription description={incident.description} />
         </TitleContainer>
-      </UiGrid.Col>
-      <UiGrid.Col size={{ xs: 2, md: 'auto' }}>
-        <IncidentActions incident={incident} onDelete={handleDelete} />
-        <UiIcon.Empty style={{ marginLeft: '1rem' }} />
       </UiGrid.Col>
     </UiGrid>
   )
@@ -44,4 +48,6 @@ const TitleContainer = styled.div`
   justify-content: center;
   height: 100%;
   padding-bottom: 0.5rem;
+  margin-top: -1.25rem;
+  width: 100%;
 `

@@ -155,13 +155,14 @@ const Container = styled.div`
   padding: 4px 4px 0 4px;
   
   width: 100%;  
-  ${Themed.media.lg.max} {
-    width: 200%;
+  ${Themed.media.sm.max} {
+    width: 180%;
+    flex-shrink: 0;
   }
 `
 
 const Side = styled.div`
-  width: 100%;
+  width: calc(50% - 1rem);
   height: 100%;
   
   padding: 1rem;
