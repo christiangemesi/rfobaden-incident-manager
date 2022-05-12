@@ -2,7 +2,7 @@ package ch.rfobaden.incidentmanager.backend.repos;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import ch.rfobaden.incidentmanager.backend.models.Vehicle;
+import ch.rfobaden.incidentmanager.backend.models.Trailer;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -10,14 +10,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.ArrayList;
 
 @DataJpaTest
-public class VehicleRepositoryTest
-    extends ModelRepositoryTest.Basic<Vehicle, VehicleRepository> {
+public class TrailerRepositoryTest
+    extends ModelRepositoryTest.Basic<Trailer, TrailerRepository> {
 
     @Test
     void testFindAllVisible() {
         // Given
         var records = generator.generate(10);
-        var visibleRecords = new ArrayList<Vehicle>();
+        var visibleRecords = new ArrayList<Trailer>();
 
         for (var record : records) {
             record.setVisible(generator.randomBoolean());

@@ -9,6 +9,7 @@ import ch.rfobaden.incidentmanager.backend.services.VehicleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,19 +45,23 @@ public class VehicleController
 
     @Override
     @RequireAgent
-    public Vehicle update(EmptyPath emptyPath, Long id, Vehicle entity) {
+    public Vehicle update(
+        @ModelAttribute EmptyPath emptyPath,
+        @PathVariable Long id,
+        @RequestBody Vehicle entity
+    ) {
         return super.update(emptyPath, id, entity);
     }
 
     @Override
     @RequireAgent
-    public Vehicle find(EmptyPath emptyPath, Long id) {
+    public Vehicle find(@ModelAttribute EmptyPath emptyPath, @PathVariable Long id) {
         return super.find(emptyPath, id);
     }
 
     @Override
     @RequireAgent
-    public List<Vehicle> list(EmptyPath emptyPath) {
+    public List<Vehicle> list(@ModelAttribute EmptyPath emptyPath) {
         return super.list(emptyPath);
     }
 }

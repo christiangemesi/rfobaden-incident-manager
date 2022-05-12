@@ -8,6 +8,7 @@ import ch.rfobaden.incidentmanager.backend.services.TrailerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,19 +44,23 @@ public class TrailerController
 
     @Override
     @RequireAgent
-    public Trailer update(EmptyPath emptyPath, Long id, Trailer entity) {
+    public Trailer update(
+        @ModelAttribute EmptyPath emptyPath,
+        @PathVariable Long id,
+        @RequestBody Trailer entity
+    ) {
         return super.update(emptyPath, id, entity);
     }
 
     @Override
     @RequireAgent
-    public Trailer find(EmptyPath emptyPath, Long id) {
+    public Trailer find(@ModelAttribute EmptyPath emptyPath, @PathVariable Long id) {
         return super.find(emptyPath, id);
     }
 
     @Override
     @RequireAgent
-    public List<Trailer> list(EmptyPath emptyPath) {
+    public List<Trailer> list(@ModelAttribute EmptyPath emptyPath) {
         return super.list(emptyPath);
     }
 }
