@@ -26,7 +26,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
   const isLoading = useCachedEffect('task/subtasks', task.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
-    await sleep(300)
+    await sleep(500)
     await BackendFetchService.loadSubtasksOfTask(task)
   })
 
