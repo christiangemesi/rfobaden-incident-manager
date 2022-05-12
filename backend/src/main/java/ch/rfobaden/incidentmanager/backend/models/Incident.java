@@ -2,15 +2,16 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -188,6 +189,25 @@ public class Incident extends Model.Basic
     @Override
     public void setImages(List<Document> images) {
         this.images = images;
+    }
+
+    public Set<Long> getOrganizationIds() {
+        return Stream.concat(
+                Stream.concat(
+                    reports.stream(),
+                    reports.stream()
+                        .map(Report::getTasks)
+                        .flatMap(Collection::stream)
+                ),
+                reports.stream()
+                    .map(Report::getTasks)
+                    .flatMap(Collection::stream)
+                    .map(Task::getSubtasks)
+                    .flatMap(Collection::stream)
+            ).map(Trackable::getAssignee)
+            .map(User::getOrganizationId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
