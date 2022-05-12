@@ -14,7 +14,7 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
   const assigneeName = assignee ? assignee.firstName + ' ' + assignee.lastName : ''
 
   return (
-    <StyledDiv
+    <StyledUiListItemWithDetails
       title={task.title}
       priority={task.priority}
       user={assigneeName}
@@ -24,7 +24,7 @@ const TaskListItem: React.VFC<Props> = ({ task, onClick: handleClick }) => {
       <LeftSpacer>
         {task.closedSubtaskIds.length}/{task.subtaskIds.length}
       </LeftSpacer>
-    </StyledDiv>
+    </StyledUiListItemWithDetails>
   )
 }
 export default TaskListItem
@@ -33,7 +33,7 @@ const LeftSpacer = styled.div`
   margin-left: 1rem;
 `
 
-const StyledDiv = styled(UiListItemWithDetails)<{isClosed: boolean}>`
+const StyledUiListItemWithDetails = styled(UiListItemWithDetails)<{isClosed: boolean}>`
   ${({ isClosed }) => isClosed && css`
     filter: grayscale(0.7) brightness(0.7);
     :hover {
