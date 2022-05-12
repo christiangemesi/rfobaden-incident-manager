@@ -94,11 +94,9 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
         )}</UiForm.Field>
 
-
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
-
 
         <UiForm.Field field={form.assigneeId}>{(props) => (
           <UiSelectInput
@@ -111,12 +109,12 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
         )}</UiForm.Field>
 
         <UiGrid gap={0.5}>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
               <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
