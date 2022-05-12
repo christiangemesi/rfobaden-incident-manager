@@ -34,20 +34,20 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   `}
   h1& {
     font-weight: 300;
-    font-size: 52px;
+    font-size: 50px;
     line-height: 64px;
     letter-spacing: 0.2px;
   }
 
   h2& {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 44px;
     line-height: 54px;
     letter-spacing: 0;
   }
 
   h3& {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 32px;
     line-height: 40px;
     letter-spacing: 0.1px;
@@ -61,7 +61,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h5& {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 20px;
     line-height: 26px;
     letter-spacing: 0.2px;

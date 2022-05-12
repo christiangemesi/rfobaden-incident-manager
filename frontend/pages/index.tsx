@@ -77,6 +77,7 @@ const Subtitle = styled.div`
   text-align: center;
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
 `
   
 const Card = styled.div`
