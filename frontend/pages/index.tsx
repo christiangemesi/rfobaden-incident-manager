@@ -101,9 +101,7 @@ const Card = styled.div`
 `
   
 const CardTitle = styled(UiTitle)`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  text-align: center;
 `
 
 const Panels = styled.div`

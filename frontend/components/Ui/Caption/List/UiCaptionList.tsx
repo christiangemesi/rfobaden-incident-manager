@@ -24,4 +24,6 @@ export default UiCaptionList
 const List = styled.ul`
   display: flex;
   align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
 `

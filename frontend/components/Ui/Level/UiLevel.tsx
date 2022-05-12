@@ -31,8 +31,7 @@ const UiLevel = styled.div<Props>`
   width: 100%; // Take full width.
   min-height: 100%;
   flex: 1; // Take full height if parent is a flex container.
-  
- 
+  gap: 1rem;
 `
 
 export default Object.assign(UiLevel, {

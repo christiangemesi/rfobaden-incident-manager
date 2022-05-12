@@ -10,6 +10,7 @@ import useCachedEffect from '@/utils/hooks/useCachedEffect'
 import { sleep } from '@/utils/control-flow'
 import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
+import { Themed } from '@/theme'
 
 interface Props {
   report: Report
@@ -25,7 +26,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
   const isLoading = useCachedEffect('task/subtasks', task.id, async () => {
     // Wait for any animations to play out before fetching data.
     // The load is a relatively expensive operation, and may interrupt some animations.
-    await sleep(300)
+    await sleep(500)
     await BackendFetchService.loadSubtasksOfTask(task)
   })
 
@@ -56,5 +57,12 @@ const StyledLevel = styled(UiLevel)<{ isClosed: boolean }>`
 
 const Content = styled(UiLevel.Content)`
   display: flex;
-  justify-content: center;
+  ${Themed.media.sm.max} {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+  ${Themed.media.md.min} {
+    justify-content: center;
+  }
+
 `
