@@ -135,26 +135,36 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiTextInput {...props} label="Fahrer" placeholder="Fahrer" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.peopleInvolved}>{(props) => (
-            <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
-          )}</UiForm.Field>
-
-          <UiForm.Field field={form.vehicle}>{(props) => (
-            <UiTextInput {...props} label="Fahrzeug" placeholder="Fahrzeug" />
-          )}</UiForm.Field>
+          <UiGrid gap={0.5}>
+            <UiGrid.Col size={{ xs: 12, sm: 9 }}>
+              <UiForm.Field field={form.vehicle}>{(props) => (
+                <UiTextInput {...props} label="Fahrzeug" placeholder="Fahrzeug" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, sm: 3 }}>
+              <UiForm.Field field={form.peopleInvolved}>{(props) => (
+                <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
 
           <UiForm.Field field={form.trailer}>{(props) => (
             <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.pointOfDeparture}>{(props) => (
-            <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
-          )}</UiForm.Field>
+          <UiGrid gap={0.5}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.pointOfDeparture}>{(props) => (
+                <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.pointOfArrival}>{(props) => (
-            <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.pointOfArrival}>{(props) => (
+                <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Field field={form.assigneeId}>{(props) => (
             <UiSelectInput
               {...props}
@@ -165,14 +175,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
+          <UiGrid gap={0.5}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.startsAt}>{(props) => (
+                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.endsAt}>{(props) => (
+                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Buttons form={form} />
         </FormContainer>
       </UiForm>
