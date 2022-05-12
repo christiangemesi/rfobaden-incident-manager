@@ -107,8 +107,8 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
 export default ReportView
 
 const AnimatedUiLevelContent = styled(UiLevel.Content)`
-  //transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  //transition-property: min-height;
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-property: min-height;
 `
 const TaskContainer = styled.div`
   position: relative;
