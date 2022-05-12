@@ -96,7 +96,6 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
-
   return (
     <UiForm form={form}>
       <FormContainer>
@@ -111,43 +110,45 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
         )}</UiForm.Field>
 
-
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
 
-
-        <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput
-            {...props}
-            label="Zuweisung"
-            options={userIds}
-            optionName={mapUserIdToName}
-            menuPlacement="top"
-          />
-        )}</UiForm.Field>
-
-
-        <UiForm.Field field={form.location}>{(props) => (
-          <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
-        )}</UiForm.Field>
+        <UiGrid gap={0.5}>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
+            <UiForm.Field field={form.assigneeId}>{(props) => (
+              <UiSelectInput
+                {...props}
+                label="Zuweisung"
+                options={userIds}
+                optionName={mapUserIdToName}
+                menuPlacement="top"
+              />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
+            <UiForm.Field field={form.location}>{(props) => (
+              <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+        </UiGrid>
 
         <UiGrid gap={0.5}>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
-
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
+          <UiGrid.Col size={{ xs: 12, sm: 6 }}>
+            <UiForm.Field field={form.endsAt}>{(props) => (
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
         </UiGrid>
 
         <UiForm.Buttons form={form} />
       </FormContainer>
     </UiForm>
-
   )
 }
 export default TaskForm
