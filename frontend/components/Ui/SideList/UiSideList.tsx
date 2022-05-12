@@ -58,7 +58,7 @@ const UiSideList = <T extends Model>({
       <ListContainer
         hasSelected={selectedId !== null}
         style={{
-          minHeight: overlayHeight - 84,
+          minHeight: selectedId === null ? 0 : overlayHeight - 84,
         }}
       >
         {renderList({ selected, select: setSelected })}
