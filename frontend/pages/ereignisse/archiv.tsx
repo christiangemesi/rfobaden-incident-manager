@@ -1,5 +1,5 @@
 import UiContainer from '@/components/Ui/Container/UiContainer'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
@@ -23,11 +23,13 @@ const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
     IncidentStore.saveAll(data.page.data.map(parseIncident))
   }, [data])
 
-  const closedIncidents = useIncidents((incidents) => incidents
-    .filter(isClosedIncident)
-    .filter( (it) => data.page.data.find( (incident) => incident.id === it.id) )
-    .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime() )
-  , [data.page])
+  const allIncidents = useIncidents()
+  const closedIncidents = useMemo(() => (
+    allIncidents
+      .filter(isClosedIncident)
+      .filter( (it) => data.page.data.find( (incident) => incident.id === it.id) )
+      .sort( (a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime() )
+  ), [allIncidents, data.page])
 
   const currentOffset = offset
 

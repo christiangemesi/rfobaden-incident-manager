@@ -12,25 +12,23 @@ const initialState: AlertState = {
 
 let nextId = 0
 
-const AlertStore = createStore(initialState, (getState, setState) => ({
-
+const AlertStore = createStore(initialState, (state, update) => ({
   add(alert: Omit<Alert, 'id'>) {
-    setState((state) => ({
-      alerts:
-        [...state.alerts, { ...alert, id: nextId++ }],
-    }))
+    update(() => {
+      state.alerts.push({ ...alert, id: nextId++ })
+    })
   },
 
   remove(alert: Alert) {
-    const index = getState().alerts.indexOf(alert)
-    if(index !== -1){
-      const newState = [...getState().alerts]
-      newState.splice(index, 1)
-      setState({
-        alerts:
-          newState,
-      })
-    }
+    update(() => {
+      const index = state.alerts.indexOf(alert)
+      if (index === -1){
+        return false
+      }
+      state.alerts.splice(index, 1)
+    })
+
+
   },
 }))
 
