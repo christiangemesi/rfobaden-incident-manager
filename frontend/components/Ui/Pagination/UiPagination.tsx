@@ -11,7 +11,6 @@ interface Props {
 
 const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref }) => {
   const more = <MorePlaceholder><UiIcon.More size={0.8} /></MorePlaceholder>
-  console.log(totalPages > 5 && currentOffset < 3)
   const prevMore = totalPages > 5 && currentOffset > 2 ? more : <React.Fragment />
   const nextMore = totalPages > 5 && currentOffset < totalPages - 3 ? more : <React.Fragment />
   const first = (
