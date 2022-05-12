@@ -47,7 +47,5 @@ const TitleContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   height: 100%;
-  padding-bottom: 0.5rem;
-  margin-top: -1.25rem;
   width: 100%;
 `
