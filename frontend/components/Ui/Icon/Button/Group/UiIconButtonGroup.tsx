@@ -9,7 +9,6 @@ interface Props {
 const UiIconButtonGroup: React.VFC<Props> = ({
   children,
 }: Props) => {
-
   return (
     <StyledGroup>
       {children}

@@ -1,7 +1,7 @@
 import { ElementProps } from '@/utils/helpers/StyleHelper'
 import { ReactNode } from 'react'
-import styled from 'styled-components'
-import UiContainer from '@/components/Ui/Container/UiContainer'
+import styled, { css } from 'styled-components'
+import { Themed } from '@/theme'
 
 interface Props extends ElementProps<HTMLDivElement> {
   children: ReactNode
@@ -9,11 +9,18 @@ interface Props extends ElementProps<HTMLDivElement> {
 }
 
 const UiLevelContent = styled.section<Props>`
-  ${({ noPadding }) => !noPadding && UiContainer.fluidCss}
-  
   position: relative;
   flex: 1;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 0 2rem 1rem 2rem;
+  
+  ${Themed.media.xs.only} {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+  
+  ${({ noPadding }) => noPadding && css`
+    padding-left: 0;
+    padding-right: 0;
+  `}
 `
 export default UiLevelContent
