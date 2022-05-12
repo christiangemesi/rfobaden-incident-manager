@@ -41,4 +41,22 @@ public class VehicleController
         }
         return super.create(path, entity);
     }
+
+    @Override
+    @RequireAgent
+    public Vehicle update(EmptyPath emptyPath, Long id, Vehicle entity) {
+        return super.update(emptyPath, id, entity);
+    }
+
+    @Override
+    @RequireAgent
+    public Vehicle find(EmptyPath emptyPath, Long id) {
+        return super.find(emptyPath, id);
+    }
+
+    @Override
+    @RequireAgent
+    public List<Vehicle> list(EmptyPath emptyPath) {
+        return super.list(emptyPath);
+    }
 }

@@ -40,4 +40,22 @@ public class TrailerController
         }
         return super.create(path, entity);
     }
+
+    @Override
+    @RequireAgent
+    public Trailer update(EmptyPath emptyPath, Long id, Trailer entity) {
+        return super.update(emptyPath, id, entity);
+    }
+
+    @Override
+    @RequireAgent
+    public Trailer find(EmptyPath emptyPath, Long id) {
+        return super.find(emptyPath, id);
+    }
+
+    @Override
+    @RequireAgent
+    public List<Trailer> list(EmptyPath emptyPath) {
+        return super.list(emptyPath);
+    }
 }

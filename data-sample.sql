@@ -117,12 +117,20 @@ VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TR
        (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'Car 40 Plätze'),
        (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Mercedes Bus 30 Plätze');
 
+INSERT INTO `trailer`
+VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Beleuchtungsanhänger'),
+       (2,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'3-Seiten-Kipper - Ring'),
+       (3,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'ZS-Anhänger - Ring'),
+       (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Wasseranhänger'),
+       (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Ring-Kupplung'),
+       (6,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Kugel-Kupplung');
+
 INSERT INTO `transport`
-VALUES (1,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 1',_utf8'-',1,1,1),
-       (2,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 2',_utf8'-',1,1,1),
-       (3,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 3',_utf8'-',1,2,2),
-       (4,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 4',_utf8'-',1,4,3),
-       (5,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 5',_utf8'-',1,4,4);
+VALUES (1,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 1',1,1,1,1),
+       (2,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 2',1,1,NULL,1),
+       (3,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\1',0,NULL,NULL,1,NULL,_utf8'Fahrt 3',1,2,3,2),
+       (4,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 4',1,4,NULL,3),
+       (5,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\1',0,NULL,NULL,1,NULL,_utf8'Fahrt 5',1,4,2,4);
 
 
 UPDATE hibernate_sequence
