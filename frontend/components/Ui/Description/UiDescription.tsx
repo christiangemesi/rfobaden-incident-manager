@@ -17,7 +17,7 @@ const UiDescription: React.VFC<Props> = ({ description, notes = null }) => {
       )}
       {notes !== null && (
         <Paragraph>
-          <UiIcon.AlertCircle />
+          <UiIcon.AlertError />
           {notes}
         </Paragraph>
       )}

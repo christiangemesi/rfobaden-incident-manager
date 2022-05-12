@@ -6,6 +6,7 @@ import { SessionResponse } from '@/models/Session'
 import User, { parseUser } from '@/models/User'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import FormData from 'form-data'
+import AlertStore from '@/stores/AlertStore'
 import Document from '@/models/Document'
 
 const apiEndpoint = run(() => {
@@ -151,8 +152,10 @@ class BackendService {
         const error = new BackendError(res.status, data.message, data.fields ?? null)
         return [null as unknown as T, error]
       }
-      // TODO display error to user.
-      throw new Error(`backend request failed: ${await res.text()}`)
+      const msg = await res.text()
+      AlertStore.add({ text: `Anfrage fehlgeschlagen: [${res.status}] ${res.statusText}`, type: 'error', isFading: false })
+      throw new Error(`backend request failed: [${res.status}] ${msg}`)
+
     }
     return [await map(res), null]
   }

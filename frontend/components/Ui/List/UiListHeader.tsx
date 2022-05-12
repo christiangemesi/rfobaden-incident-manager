@@ -7,8 +7,7 @@ export interface ListHeaderProps extends StyledProps {
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiListHeader: React.VFC<ListHeaderProps> = ({ children , onClick: handleClick, className, style }) => {
- 
+const UiListHeader: React.VFC<ListHeaderProps> = ({ children, onClick: handleClick, className, style }) => {
   return (
     <ListHeader className={className} style={style} onClick={handleClick}>
       {children}
@@ -16,8 +15,6 @@ const UiListHeader: React.VFC<ListHeaderProps> = ({ children , onClick: handleCl
   )
 }
 export default styled(UiListHeader)``
-
-
 
 const ListHeader = styled.div`
   display: inline-flex;

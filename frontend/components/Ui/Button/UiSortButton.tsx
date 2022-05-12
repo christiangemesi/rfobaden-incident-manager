@@ -4,13 +4,14 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { SortField } from '@/utils/hooks/useSort'
 import UiListHeader, { ListHeaderProps } from '@/components/Ui/List/UiListHeader'
 
-interface Props extends ListHeaderProps{
+interface Props extends ListHeaderProps {
   field: SortField
 }
 
 const UiSortButton: React.VFC<Props> = ({
   children,
   field,
+  ...props
 }) => {
   const handleSortClick = () => {
     switch (field.direction) {
@@ -25,9 +26,8 @@ const UiSortButton: React.VFC<Props> = ({
       break
     }
   }
- 
   return (
-    <SortButton onClick={handleSortClick}>
+    <SortButton {...props} onClick={handleSortClick}>
       {children}
       {field.direction === null ? <UiIcon.Empty /> : (
         field.direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />

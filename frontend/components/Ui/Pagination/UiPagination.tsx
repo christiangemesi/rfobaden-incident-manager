@@ -1,7 +1,7 @@
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiButton from '@/components/Ui/Button/UiButton'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface Props {
   currentOffset: number
@@ -14,7 +14,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
   const prevMore = totalPages > 5 && currentOffset > 2 ? more : <React.Fragment />
   const nextMore = totalPages > 5 && currentOffset < totalPages - 3 ? more : <React.Fragment />
   const first = (
-    <PaginationButton isCurrent={currentOffset === 0} href={makeHref(0)}>
+    <PaginationButton isActive={currentOffset === 0} href={makeHref(0)}>
       {1}
     </PaginationButton>
   )
@@ -29,7 +29,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
         iOffset = totalPages - 4 + i
       }
       return (
-        <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={makeHref(iOffset)}>
+        <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
           {iOffset + 1}
         </PaginationButton>
       )
@@ -38,14 +38,14 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
     center = [...Array(totalPages - 2)].map((_element, i) => {
       const iOffset = i + 1
       return (
-        <PaginationButton key={iOffset} isCurrent={currentOffset === iOffset} href={makeHref(iOffset)}>
+        <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
           {iOffset + 1}
         </PaginationButton>
       )
     })
   }
   const last = (
-    <PaginationButton isCurrent={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
+    <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
       {totalPages}
     </PaginationButton>
   )
@@ -53,7 +53,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
   return (
     <Pagination>
       <PaginationButton
-        isCurrent={false}
+        isActive={false}
         isDisabled={currentOffset === 0}
         href={currentOffset === 0 ? undefined : makeHref(currentOffset - 1)}
       >
@@ -65,7 +65,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
       {nextMore}
       {last}
       <PaginationButton
-        isCurrent={false}
+        isActive={false}
         isDisabled={currentOffset === totalPages - 1}
         href={currentOffset === totalPages - 1 ? undefined : makeHref(currentOffset + 1)}
       >
@@ -82,13 +82,19 @@ const Pagination = styled.div`
   justify-content: flex-end;
   margin-top: 1rem;
 `
-const PaginationButton = styled(UiButton)<{ isCurrent: boolean }>`
+const PaginationButton = styled(UiButton)<{ isActive?: boolean}>`
   margin: 0 0.1rem;
   min-width: 2rem;
 
   text-decoration: none;
-  background: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.value : theme.colors.secondary.value};
-  color: ${({ theme, isCurrent }) => isCurrent ? theme.colors.primary.contrast : theme.colors.secondary.contrast};
+  
+  ${({ theme, isActive }) => isActive ? css`
+    background: ${theme.colors.primary.value};
+    color: ${theme.colors.primary.contrast};
+  ` : css`
+    background: ${theme.colors.secondary.value};
+    color: ${theme.colors.secondary.contrast};
+  `}
 `
 const MorePlaceholder = styled.div`
   padding-top: 0.8rem;

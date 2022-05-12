@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
+import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
@@ -43,6 +44,7 @@ public class IncidentController extends ModelController.Basic<Incident, Incident
 
     @GetMapping("/archive")
     @ResponseStatus(HttpStatus.OK)
+    @RequireAgent
     public ClosedIncidentsData listArchive(
         @RequestParam int limit,
         @RequestParam int offset
