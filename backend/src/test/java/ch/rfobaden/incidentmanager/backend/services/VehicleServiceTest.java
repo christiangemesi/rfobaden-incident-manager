@@ -49,7 +49,7 @@ public class VehicleServiceTest
         // Then
         assertThat(result)
             .isNotNull()
-            .isEqualTo(record);
+            .isEqualTo(Optional.of(record));
         verify(repository, times(1)).findByName(record.getName());
     }
 }
