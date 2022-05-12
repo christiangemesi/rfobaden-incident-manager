@@ -26,7 +26,6 @@ const UiSortButton: React.VFC<Props> = ({
       break
     }
   }
- 
   return (
     <SortButton {...props} onClick={handleSortClick}>
       {children}
