@@ -192,28 +192,27 @@ public class Incident extends Model.Basic
     }
 
     public Set<Long> getOrganizationIds() {
-        return
+        return Stream.concat(
             Stream.concat(
-                    Stream.concat(
-                        Stream.concat(
-                            reports.stream(),
-                            transports.stream()
-                        ),
-                        reports.stream()
-                            .map(Report::getTasks)
-                            .flatMap(Collection::stream)
-                    ),
-                    reports.stream()
-                        .map(Report::getTasks)
-                        .flatMap(Collection::stream)
-                        .map(Task::getSubtasks)
-                        .flatMap(Collection::stream)
-            )
-                .map(Trackable::getAssignee)
-                .filter(Objects::nonNull)
-                .map(User::getOrganizationId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toUnmodifiableSet());
+                Stream.concat(
+                    reports.stream(),
+                    transports.stream()
+                ),
+                reports.stream()
+                    .map(Report::getTasks)
+                    .flatMap(Collection::stream)
+            ),
+            reports.stream()
+                .map(Report::getTasks)
+                .flatMap(Collection::stream)
+                .map(Task::getSubtasks)
+                .flatMap(Collection::stream)
+        )
+            .map(Trackable::getAssignee)
+            .filter(Objects::nonNull)
+            .map(User::getOrganizationId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
