@@ -163,10 +163,6 @@ const Side = styled.div`
   & > ${UiCaption}:first-child {
     margin-bottom: 0.5rem;
   }
-  
-  ${Themed.media.sm.max} {
-    width: 80%;
-  }
 `
 
 const DropTarget = styled.div`
