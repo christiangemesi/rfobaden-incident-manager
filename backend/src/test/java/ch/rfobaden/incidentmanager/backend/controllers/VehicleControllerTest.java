@@ -33,7 +33,7 @@ public class VehicleControllerTest
 
     @Test
     @WithMockAgent
-    void testListAllVisible() throws Exception {
+    void testListVisible() throws Exception {
         // Given
         var amount = 10;
         var vehicles = generator.generate(amount);
@@ -45,7 +45,7 @@ public class VehicleControllerTest
             .filter(Vehicle::isVisible)
             .collect(Collectors.toList());
 
-        Mockito.when(service.listWhereIsVisible())
+        Mockito.when(service.listVisible())
             .thenReturn(visibleVehicles);
 
         // When
@@ -59,7 +59,7 @@ public class VehicleControllerTest
         mockMvc.perform(mockRequest)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists());
-        verify(service, times(1)).listWhereIsVisible();
+        verify(service, times(1)).listVisible();
     }
 
     @Override

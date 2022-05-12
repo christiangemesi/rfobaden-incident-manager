@@ -44,7 +44,7 @@ public abstract class ModelController<
 
     @GetMapping(value = "{id}")
     @RequireAgent
-    public TModel find(@ModelAttribute TPath path, @PathVariable(value = "id") Long id) {
+    public TModel find(@ModelAttribute TPath path, @PathVariable Long id) {
         return service.find(path, id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)
         ));
@@ -64,7 +64,7 @@ public abstract class ModelController<
     @ResponseStatus(HttpStatus.OK)
     public TModel update(
         @ModelAttribute TPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody TModel entity
     ) {
         if (!Objects.equals(entity.getId(), id)) {
@@ -80,7 +80,7 @@ public abstract class ModelController<
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@ModelAttribute TPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute TPath path, @PathVariable Long id) {
         if (!service.delete(path, id)) {
             throw new ApiException(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND_MESSAGE);
         }

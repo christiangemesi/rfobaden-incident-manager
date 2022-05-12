@@ -113,14 +113,13 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
 
   useEffectOnce(() => {
     (async () => {
-
-      const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
+      const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
         'vehicles/visible',
       )
-      if (visibleVehiclesError !== null) {
-        throw visibleVehiclesError
+      if (vehiclesError !== null) {
+        throw vehiclesError
       }
-      VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
+      VehicleStore.saveAll(vehicles.map(parseVehicle))
     })()
   })
 
@@ -140,7 +139,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     VehicleStore.save(parseVehicle(data))
   }
 
-  const handleTrashClick = async (id: Id<Vehicle>) => {
+  const handleDeleteVehicle = async (id: Id<Vehicle>) => {
     const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
     if (error !== null) {
       throw error
@@ -197,9 +196,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               menuPlacement="auto"
               placeholder="Fahrzeug"
               onCreate={handleCreateVehicle}
-              isCreatable
               isSearchable
-              onTrashClick={handleTrashClick}
+              onDelete={handleDeleteVehicle}
             />
           )}</UiForm.Field>
 

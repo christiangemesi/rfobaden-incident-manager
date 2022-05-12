@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VehicleRepository
@@ -28,5 +29,5 @@ public interface VehicleRepository
             + " WHERE "
             + "vehicle.name = :name"
     )
-    Vehicle findFirstByName(String name);
+    Optional<Vehicle> findByName(String name);
 }

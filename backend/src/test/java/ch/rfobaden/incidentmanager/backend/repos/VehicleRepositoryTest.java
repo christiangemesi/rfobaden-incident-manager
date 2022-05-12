@@ -36,7 +36,7 @@ public class VehicleRepositoryTest
     }
 
     @Test
-    void testFindFirstByName() {
+    void testFindByName() {
         // Given
         var amount = 10;
         var records = generator.generate(amount);
@@ -46,7 +46,7 @@ public class VehicleRepositoryTest
         var name = namedRecord.getName();
 
         // When
-        var result = repository.findFirstByName(name);
+        var result = repository.findByName(name);
 
         // Then
         assertThat(result).isEqualTo(namedRecord);
