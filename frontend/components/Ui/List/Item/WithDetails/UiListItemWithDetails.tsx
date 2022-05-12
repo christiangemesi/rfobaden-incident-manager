@@ -111,11 +111,8 @@ const ItemDescription = styled.div`
   overflow: hidden;
   margin-left: 1rem;
   
-  ${Themed.media.md.max} {
+  ${Themed.media.lg.max} {
     display: none;
-  }
-  ${Themed.media.lg.min} {
-    width: 30rem;
   }
   ${Themed.media.xl.min} {
     width: 40rem;
