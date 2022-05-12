@@ -41,11 +41,13 @@ const SubtaskListItem: React.VFC<Props> = ({
     const isClosed = !subtask.isClosed
     SubtaskStore.save({ ...subtask, isClosed })
     const [newSubtask, error] = await BackendService.update<Subtask>(
-      `incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id,
+      `incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`
+      , subtask.id,
       {
         ...subtask,
         isClosed,
-      })
+      },
+    )
     if (error !== null) {
       throw error
     }
@@ -53,11 +55,11 @@ const SubtaskListItem: React.VFC<Props> = ({
   }, [subtask])
 
   const storeImages = (images: Document[]) => {
-    SubtaskStore.save({ ...subtask, images: images })
+    SubtaskStore.save({ ...subtask, images })
   }
 
   const storeDocuments = (documents: Document[]) => {
-    SubtaskStore.save({ ...subtask, documents: documents })
+    SubtaskStore.save({ ...subtask, documents })
   }
 
   const addImage = useCallback((image: Document) => {
