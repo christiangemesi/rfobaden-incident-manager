@@ -93,11 +93,11 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
             />
           )}
         </TaskContainer>
-        <UiInlineDrawer isOpen={selected !== null} onClose={clearSelected}>
+        <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
-        </UiInlineDrawer>
+        </TaskDrawer>
       </AnimatedUiLevelContent>
     </UiLevel>
   )
@@ -108,7 +108,6 @@ const AnimatedUiLevelContent = styled(UiLevel.Content)`
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: min-height;
 `
-
 const TaskContainer = styled.div`
   position: relative;
   display: flex;
@@ -120,4 +119,8 @@ const TaskContainer = styled.div`
     padding-left: 0.8rem;
     padding-right: 0.8rem;
   }
+`
+const TaskDrawer = styled(UiInlineDrawer)`
+  left: -1px;
+  width: calc(100% + 2px);
 `

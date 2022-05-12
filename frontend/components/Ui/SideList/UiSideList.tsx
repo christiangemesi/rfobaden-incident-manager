@@ -36,7 +36,6 @@ const UiSideList = <T extends Model>({
     setSelectedId(report?.id ?? null)
   }, [])
   const clearSelected = useCallback(() => {
-    window.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
     setSelectedId(null)
   }, [])
 
@@ -119,7 +118,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
   z-index: 2;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
-  box-shadow: 0 0 4px 2px gray;
+  border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
   transition: 300ms cubic-bezier(.23,1,.32,1);
   transition-property: transform, opacity;
@@ -132,6 +131,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
     transform: translateX(0);
   `}
   
+  width: calc(100% + 2px);
   ${Themed.media.lg.min} {
     width: calc(65% + 4rem);
   }
@@ -142,7 +142,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
   ${Themed.media.md.max} {
     position: absolute;
     left: 0;
-    width: 100%;
+    width: calc(100% + 1px);
     transform: translateY(100%);
     ${({ hasSelected }) => hasSelected && css`
       transform: translateY(0);
