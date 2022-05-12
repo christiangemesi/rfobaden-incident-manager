@@ -50,7 +50,7 @@ public class TransportController
     @RequireAgent
     public Transport update(
         @ModelAttribute TransportPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody Transport entity
     ) {
         System.out.println("------ " + entity);
