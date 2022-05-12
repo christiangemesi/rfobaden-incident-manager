@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiButton from '@/components/Ui/Button/UiButton'
 import styled, { css } from 'styled-components'
@@ -18,32 +18,34 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
       {1}
     </PaginationButton>
   )
-  let center = undefined
-  if (totalPages > 4) {
-    center = [...Array(3)].map((_element, i) => {
-      let iOffset = currentOffset - 1 + i
+  const center = useMemo(() => {
+    if (totalPages > 4) {
+      let baseOffset = currentOffset - 1
       if (currentOffset < 3) { // start
-        iOffset = i + 1
-      } else if(currentOffset > totalPages - 4) // end
-      {
-        iOffset = totalPages - 4 + i
+        baseOffset = 1
+      } else if(currentOffset > totalPages - 4) { // end
+        baseOffset = totalPages - 4
       }
-      return (
-        <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
-          {iOffset + 1}
-        </PaginationButton>
-      )
-    })
-  } else if (totalPages > 2){
-    center = [...Array(totalPages - 2)].map((_element, i) => {
-      const iOffset = i + 1
-      return (
-        <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
-          {iOffset + 1}
-        </PaginationButton>
-      )
-    })
-  }
+      return [...Array(3)].map((_element, i) => {
+        const iOffset =  baseOffset + i
+        return (
+          <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
+            {iOffset + 1}
+          </PaginationButton>
+        )
+      })
+    } else if (totalPages > 2){
+      return [...Array(totalPages - 2)].map((_element, i) => {
+        const iOffset = i + 1
+        return (
+          <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
+            {iOffset + 1}
+          </PaginationButton>
+        )
+      })
+    }
+  }, [currentOffset, makeHref, totalPages])
+
   const last = totalPages > 1 ? (
     <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
       {totalPages}
