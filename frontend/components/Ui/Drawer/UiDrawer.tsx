@@ -35,7 +35,8 @@ const UiDrawer: React.VFC<Props> = ({
           isShaking={isShaking}
           size={size}
           position={position}
-          onClick={(e) => e.stopPropagation()}>
+          onClick={(e) => e.stopPropagation()}
+        >
           {nav}
           {children}
         </Container>
@@ -65,9 +66,10 @@ const Container = styled.div<{
   padding-top: 3rem;
   padding-bottom: 5rem;
 
-  box-shadow: 0 8px 17px 2px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12),
-  0 5px 5px -3px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+          0 8px 17px 2px rgba(0, 0, 0, 0.14),
+          0 3px 14px 2px rgba(0, 0, 0, 0.12), 
+          5px 5px -3px rgba(0, 0, 0, 0.2);
 
   background: ${({ theme }) => theme.colors.tertiary.value};
   color: ${({ theme }) => theme.colors.tertiary.contrast};
