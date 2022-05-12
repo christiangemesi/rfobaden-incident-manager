@@ -18,7 +18,7 @@ const IncidentViewHeader: React.VFC<Props> = ({ incident, onDelete: handleDelete
   return (
     <UiGrid justify="space-between" gap={1} style={{ flexWrap: 'nowrap' }}>
       <UiGrid.Col size={{ xs: 0, md: 'auto' }}>
-        <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+        <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} isClosed={incident.isClosed} />
       </UiGrid.Col>
       <UiGrid.Col size={{ xs: 10, md: true }}>
         <TitleContainer>
