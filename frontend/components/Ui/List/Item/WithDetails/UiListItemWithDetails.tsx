@@ -11,6 +11,7 @@ interface Props extends UiListItemProps {
   user: string
   description?: string
   body?: ReactNode
+  caption?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
   isTitleSwitched?: boolean
@@ -22,6 +23,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   user,
   description,
   body = null,
+  caption = null,
   isClosed = false,
   isSmall = false,
   isTitleSwitched = false,
@@ -29,12 +31,16 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   ...props
 }: Props) => {
 
-
   return (
-    <StyledListItem {...props} $isClosed={isClosed} title={title}>
+    <StyledListItem {...props} isClosed={isClosed} title={title}>
       <LeftSide>
         <LeftPriority priority={priority} isSmall={isSmall} />
         <TextContent isTitleSwitched={isTitleSwitched}>
+          {caption && (
+            <ItemCaption>
+              {caption}
+            </ItemCaption>
+          )}
           <ItemTitle level={5}>
             {title}
           </ItemTitle>
@@ -48,7 +54,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
         {children}
       </RightSide>
       {body && (
-        <BottomSide $isSmall={isSmall}>
+        <BottomSide isSmall={isSmall}>
           {body}
         </BottomSide>
       )}
@@ -57,12 +63,12 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 }
 export default styled(UiListItemWithDetails)``
 
-const StyledListItem = styled(UiListItem)<{ $isClosed: boolean }>`
+const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
   padding-left: 0;
   transition-property: inherit, padding;
   flex-wrap: wrap;
 
-  ${({ $isClosed }) => $isClosed && css`
+  ${({ isClosed }) => isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;
 
@@ -93,12 +99,12 @@ const RightSide = styled.div`
   max-width: 100%;
 `
 
-const BottomSide = styled.div<{ $isSmall: boolean }>`
+const BottomSide = styled.div<{ isSmall: boolean }>`
   display: block;
   flex: 1 0 100%;
   max-width: 100%;
   padding-top: 1rem;
-  padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
+  padding-left: calc(${({ isSmall }) => isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 
 const TextContent = styled.div<{ isTitleSwitched: boolean }>`
@@ -125,6 +131,10 @@ const ItemTitle = styled(UiTitle)`
   white-space: nowrap;
   overflow: hidden;
   max-width: 16rem;
+`
+
+const ItemCaption = styled.div`
+  margin-right: 0.5rem;
 `
 
 const LeftPriority = styled(UiPriority)`
