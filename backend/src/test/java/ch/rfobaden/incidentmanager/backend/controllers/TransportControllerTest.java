@@ -9,6 +9,7 @@ import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
+import ch.rfobaden.incidentmanager.backend.services.VehicleService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,9 @@ public class TransportControllerTest
     @MockBean
     IncidentService incidentService;
 
+    @MockBean
+    VehicleService vehicleService;
+
     @Override
     protected String getEndpointFor(TransportPath path) {
         return "/api/v1/incidents/" + path.getIncidentId() + "/transports/";
@@ -42,6 +46,12 @@ public class TransportControllerTest
         if (assignee != null) {
             Mockito.when(userService.find(assignee.getId()))
                 .thenReturn(Optional.of(assignee));
+        }
+
+        var vehicle = transport.getVehicle();
+        if (vehicle != null) {
+            Mockito.when(vehicleService.find(vehicle.getId()))
+                .thenReturn(Optional.of(vehicle));
         }
     }
 }
