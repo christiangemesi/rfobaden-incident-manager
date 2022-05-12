@@ -51,27 +51,29 @@ const ReportViewHeader: React.VFC<Props> = ({
           </UiTitle>
         </div>
       </TitleContainer>
-      <UiDescription description={report.description} notes={report.notes} />
-      <InfoTable>
-        <tbody>
-          <tr>
-            <th>
-              <UiTitle level={6}>Meldeart:</UiTitle>
-            </th>
-            <td>
-              <span>{mapEntryTypeToName(report.entryType.source)}</span>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <UiTitle level={6}>Melder-Info:</UiTitle>
-            </th>
-            <td>
-              <span>{report.entryType.descriptor ?? '-'}</span>
-            </td>
-          </tr>
-        </tbody>
-      </InfoTable>
+      <InfoContainer>
+        <UiDescription description={report.description} notes={report.notes} />
+        <InfoTable>
+          <tbody>
+            <tr>
+              <th>
+                <UiTitle level={6}>Meldeart:</UiTitle>
+              </th>
+              <td>
+                <span>{mapEntryTypeToName(report.entryType.source)}</span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <UiTitle level={6}>Melder-Info:</UiTitle>
+              </th>
+              <td>
+                <span>{report.entryType.descriptor ?? '-'}</span>
+              </td>
+            </tr>
+          </tbody>
+        </InfoTable>
+      </InfoContainer>
     </Container>
   )
 }
@@ -80,12 +82,20 @@ export default ReportViewHeader
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  //gap: 1rem;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 1rem;
+  width: 100%;
+`
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
   gap: 1rem;
   width: 100%;
 `
