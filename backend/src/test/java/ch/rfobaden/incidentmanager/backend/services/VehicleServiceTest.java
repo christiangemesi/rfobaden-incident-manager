@@ -44,7 +44,7 @@ public class VehicleServiceTest
             .thenReturn(Optional.of(record));
 
         // When
-        var result = service.findByName(record.getName()).orElse(null);
+        var result = service.findByName(record.getName());
 
         // Then
         assertThat(result)
