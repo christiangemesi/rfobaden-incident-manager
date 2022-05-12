@@ -62,26 +62,29 @@ public class DocumentController extends AppController {
         var document = documentService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
-        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
-            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
-        ));
+
+        var name = document.getName();
+        if (name == null) {
+            name = document.getId().toString();
+        }
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-            .filename(document.getName() == null
-                ? document.getId() + document.getExtension()
-                : document.getName()
-            )
+            .filename(name + document.getExtension())
             .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
         headers.set("Content-Type", document.getMimeType());
+
+        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
+            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
+        ));
         return ResponseEntity.ok().headers(headers).body(file);
     }
 
     @RequireAgent
     @PostMapping
-    public Long create(
+    public Document create(
         @RequestParam MultipartFile file,
         @RequestParam String modelName,
         @RequestParam Long modelId,
@@ -101,7 +104,7 @@ public class DocumentController extends AppController {
         saveToOwner.accept(owner, document);
         service.update(owner);
 
-        return document.getId();
+        return document;
     }
 
     @RequireAgent
@@ -141,11 +144,15 @@ public class DocumentController extends AppController {
         document.setMimeType(mimeType.toString());
         document.setExtension(mimeType.getExtension());
 
-        var fileName = name.orElseGet(file::getOriginalFilename);
-        if (fileName != null && !fileName.endsWith(document.getExtension())) {
-            fileName = fileName + document.getExtension();
-        }
+        String fileName = name.orElseGet(() -> {
+            var originalFileName = file.getOriginalFilename();
+            if (originalFileName != null) {
+                return originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+            }
+            return null;
+        });
         document.setName(fileName);
+
         return document;
     }
 

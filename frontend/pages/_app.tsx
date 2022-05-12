@@ -10,6 +10,9 @@ import User from '@/models/User'
 import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
+import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
+import AlertStore, { useAlerts } from '@/stores/AlertStore'
+import UiAlert from '@/components/Ui/Alert/UiAlert'
 
 import 'reset-css/reset.css'
 
@@ -25,6 +28,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       SessionStore.setCurrentUser(user)
     }
   })
+
+  const alerts = useAlerts()
 
   const { currentUser } = useSession()
   const component = useMemo(() => (
@@ -45,14 +50,19 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
         <GlobalStyle />
         <UiScroll>
           {component}
+          <UiAlertList>
+            {alerts.map((alert) =>
+              <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
+            )}
+          </UiAlertList>
         </UiScroll>
       </ThemeProvider>
     </Fragment>
   )
 }
 export default App
-
-;(App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
+;
+(App as unknown as typeof NextApp).getInitialProps = async (appContext) => {
   let pageUser: User | null = null
 
   const { req } = appContext.ctx
@@ -60,7 +70,10 @@ export default App
     // Load the session from the request.
     // This requires access to the requests' cookies, which exist in the req object,
     // but are not listed in its type definition, which is why this somewhat strange cast is necessary.
-    const { user, backendService } = await loadSessionFromRequest(req as IncomingMessage & { cookies: NextApiRequestCookies }, BackendService)
+    const {
+      user,
+      backendService,
+    } = await loadSessionFromRequest(req as IncomingMessage & { cookies: NextApiRequestCookies }, BackendService)
     ;(req as unknown as ServerSideSessionHolder).session = {
       user,
       backendService,
@@ -88,16 +101,17 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
   ${({ theme }) => css`
     body {
+      width: 100%;
+      height: 100%;
       font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};
     }
   `}
-  
   button {
     cursor: pointer;
   }
-  
+
   @media print {
     body {
       background-color: transparent;

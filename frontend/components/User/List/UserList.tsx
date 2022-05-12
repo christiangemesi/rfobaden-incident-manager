@@ -2,7 +2,7 @@ import React from 'react'
 import User, { isAdmin } from '@/models/User'
 import UiList from '@/components/Ui/List/UiList'
 import UiModal from '@/components/Ui/Modal/UiModal'
-import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
+import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UserForm from '@/components/User/Form/UserForm'
@@ -50,9 +50,9 @@ const UserList: React.VFC<Props> = ({ users }) => {
       {isAdmin(currentUser) && (
         <UiModal title="Benutzer erfassen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
-            <UiCreatButton onClick={open}>
+            <UiCreateButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />
-            </UiCreatButton>
+            </UiCreateButton>
           )}</UiModal.Trigger>
           <UiModal.Body>{({ close }) => (
             <UserForm onClose={close} />

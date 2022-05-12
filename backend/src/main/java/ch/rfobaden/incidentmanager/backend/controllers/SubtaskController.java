@@ -41,7 +41,7 @@ public class SubtaskController extends ModelController<Subtask, SubtaskPath, Sub
     @RequireAgent
     public Subtask update(
         @ModelAttribute SubtaskPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody Subtask entity
     ) {
         return super.update(path, id, entity);
@@ -49,7 +49,7 @@ public class SubtaskController extends ModelController<Subtask, SubtaskPath, Sub
 
     @Override
     @RequireAgent
-    public void delete(@ModelAttribute SubtaskPath path, @PathVariable("id") Long id) {
+    public void delete(@ModelAttribute SubtaskPath path, @PathVariable Long id) {
         super.delete(path, id);
     }
 

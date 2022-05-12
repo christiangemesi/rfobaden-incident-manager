@@ -5,7 +5,7 @@ import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import { useUsername } from '@/models/User'
 import { useUser } from '@/stores/UserStore'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import ReportStore from '@/stores/ReportStore'
 import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
@@ -17,20 +17,20 @@ interface Props {
 const ReportInfo: React.VFC<Props> = ({ report }) => {
   const assigneeName = useUsername(useUser(report.assigneeId))
 
-  const storeImageIds = (ids: FileId[]) => {
-    ReportStore.save({ ...report, imageIds: ids })
+  const storeImages = (images: Document[]) => {
+    ReportStore.save({ ...report, images: images })
   }
 
-  const storeDocumentIds = (ids: FileId[]) => {
-    ReportStore.save({ ...report, documentIds: ids })
+  const storeDocuments = (documents: Document[]) => {
+    ReportStore.save({ ...report, documents: documents })
   }
 
-  const addImage = useCallback((fileId: FileId) => {
-    ReportStore.save({ ...report, imageIds: [...report.imageIds, fileId]})
+  const addImage = useCallback((image: Document) => {
+    ReportStore.save({ ...report, images: [...report.images, image]})
   }, [report])
 
-  const addDocument = useCallback((fileId: FileId) => {
-    ReportStore.save({ ...report, documentIds: [...report.documentIds, fileId]})
+  const addDocument = useCallback((document: Document) => {
+    ReportStore.save({ ...report, documents: [...report.documents, document]})
   }, [report])
 
 
@@ -53,18 +53,18 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
         <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
       </UiCaption>
       <DocumentImageDrawer
+        images={report.images}
+        storeImages={storeImages}
         modelId={report.id}
         modelName="report"
-        storeImageIds={storeImageIds}
-        imageIds={report.imageIds}
-        onAddFile={addImage}
+        onAddImage={addImage}
       />
       <DocumentDrawer
+        documents={report.documents}
+        storeDocuments={storeDocuments}
         modelId={report.id}
         modelName="report"
-        storeDocumentIds={storeDocumentIds}
-        documentIds={report.documentIds}
-        onAddFile={addDocument}
+        onAddDocument={addDocument}
       />
     </UiCaptionList>
   )

@@ -38,9 +38,7 @@ const UiDrawer: React.VFC<Props> = ({
           onClick={(e) => e.stopPropagation()}
         >
           {nav}
-          <Content>
-            {children}
-          </Content>
+          {children}
         </Container>
       )}
     />
@@ -52,16 +50,6 @@ export default Object.assign(UiDrawer, {
   Body: UiModalLike.Body,
 })
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  
-  // Take the full available space, but move the content up a bit.
-  // This makes the content appear to be centered a bit better.
-  height: calc(100% - 9rem);
-`
-
 const Container = styled.div<{
   isOpen: boolean
   size: 'auto' | 'full'
@@ -69,7 +57,7 @@ const Container = styled.div<{
   isShaking: boolean
 }>`
   ${UiContainer.fluidCss};
-  
+
   position: fixed;
   top: 0;
   ${({ position }) => position}: 0;
@@ -77,12 +65,12 @@ const Container = styled.div<{
   height: 100vh;
   padding-top: 3rem;
   padding-bottom: 5rem;
-  
-  box-shadow:
-    0 8px 17px 2px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12),
-    0 5px 5px -3px rgba(0, 0, 0, 0.2);
-  
+
+  box-shadow: 
+          0 8px 17px 2px rgba(0, 0, 0, 0.14),
+          0 3px 14px 2px rgba(0, 0, 0, 0.12), 
+          5px 5px -3px rgba(0, 0, 0, 0.2);
+
   background: ${({ theme }) => theme.colors.tertiary.value};
   color: ${({ theme }) => theme.colors.tertiary.contrast};
 
@@ -93,23 +81,28 @@ const Container = styled.div<{
     top: unset;
     bottom: 0;
   }
+
   ${Themed.media.sm.min} {
     --breakpoint-min: ${({ theme }) => theme.breakpoints.sm.min}px;
     max-width: calc(var(--breakpoint-min) - 2.5rem);
   }
+
   ${Themed.media.md.min} {
     --breakpoint-min: ${({ theme }) => theme.breakpoints.md.min}px;
   }
+
   ${Themed.media.lg.min} {
     --breakpoint-min: ${({ theme }) => theme.breakpoints.lg.min}px;
   }
+
   ${Themed.media.xl.min} {
     --breakpoint-min: ${({ theme }) => theme.breakpoints.xl.min}px;
   }
+
   ${Themed.media.xxl.min} {
     --breakpoint-min: ${({ theme }) => theme.breakpoints.xxl.min}px;
   }
-  
+
   transition: ${({ theme }) => theme.transitions.slideIn};
   transition-property: transform;
   ${({ isOpen, position }) => !isOpen && css`
@@ -124,10 +117,10 @@ const Container = styled.div<{
   ${({ isShaking }) => isShaking && css`
     animation: ${Themed.animations.shake};
   `}
-  
+
   ${({ position }) => position == 'left' && css`
     > ${UiModalLike.Nav} {
-      justify-content: flex-end;  
+      justify-content: flex-end;
     }
   `}
 `
