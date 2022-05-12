@@ -4,7 +4,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { SortField } from '@/utils/hooks/useSort'
 import UiListHeader, { ListHeaderProps } from '@/components/Ui/List/UiListHeader'
 
-interface Props extends ListHeaderProps{
+interface Props extends ListHeaderProps {
   field: SortField
 }
 
