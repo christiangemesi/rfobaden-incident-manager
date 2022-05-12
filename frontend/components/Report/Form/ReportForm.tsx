@@ -253,7 +253,5 @@ const SliderCol = styled(UiGrid.Col)`
   ${Themed.media.sm.max} {
     text-align: center;
   }
-
   text-align: right;
-
 `

@@ -18,6 +18,7 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import Subtask, { parseSubtask } from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
+import { Themed } from '@/theme'
 
 interface Props {
   task: Task,
@@ -144,5 +145,9 @@ const FormContainer = styled.div`
 
 const PrioritySliderPositioner = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `

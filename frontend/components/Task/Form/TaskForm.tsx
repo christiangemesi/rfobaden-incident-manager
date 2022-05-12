@@ -18,6 +18,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { Themed } from '@/theme'
 
 interface Props {
   report: Report
@@ -100,12 +101,11 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
     <UiForm form={form}>
       <FormContainer>
 
-        <UiGrid.Col style={{ textAlign: 'right' }}>
+        <PrioritySliderPositioner>
           <UiForm.Field field={form.priority}>{(props) => (
             <UiPrioritySlider {...props} />
           )}</UiForm.Field>
-        </UiGrid.Col>
-
+        </PrioritySliderPositioner>
         <UiForm.Field field={form.title}>{(props) => (
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
         )}</UiForm.Field>
@@ -164,4 +164,12 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `

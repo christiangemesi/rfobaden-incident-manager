@@ -20,6 +20,7 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
+import { Themed } from '@/theme'
 
 interface Props {
   incident: Incident
@@ -115,13 +116,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     <div>
       <UiForm form={form}>
         <FormContainer>
-          <UiGrid align="center">
-            <UiGrid.Col textAlign="right">
-              <UiForm.Field field={form.priority}>{(props) => (
-                <UiPrioritySlider {...props} />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-          </UiGrid>
+          <PrioritySliderPositioner>
+            <UiForm.Field field={form.priority}>{(props) => (
+              <UiPrioritySlider {...props} />
+            )}</UiForm.Field>
+          </PrioritySliderPositioner>
 
           <UiForm.Field field={form.title}>{(props) => (
             <UiTextInput {...props} label="Titel" placeholder="Titel" />
@@ -207,4 +206,13 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `
