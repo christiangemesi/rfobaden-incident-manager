@@ -22,8 +22,12 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
   })
 
-  const closedIncidents = useIncidents((incidents) => incidents.filter(isClosedIncident))
   const openIncidents = useIncidents((incidents) => incidents.filter((incident) => !isClosedIncident(incident)))
+  const closedIncidents = useIncidents((incidents) => incidents
+    .filter(isClosedIncident)
+    .sort((a, b) => b.closeReason.createdAt.getTime() - a.closeReason.createdAt.getTime())
+    .slice(0, 5)
+  )
 
   return (
     <Page>
@@ -43,24 +47,11 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
         {closedIncidents.length !== 0 && (
           <section>
             <div style={{ margin: '4rem 0 1rem 0' }}>
-              <UiTitle level={2}>Abgeschlossene Ereignisse</UiTitle>
+              <UiTitle level={2}>Geschlossene Ereignisse</UiTitle>
             </div>
-
-            <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
-              <UiGrid.Col size={4}>
-                <UiTitle level={6} style={{ marginLeft: '-1rem' }}>Title</UiTitle>
-              </UiGrid.Col>
-              <UiGrid.Col size={2}>
-                <UiTitle level={6}>Startdatum</UiTitle>
-              </UiGrid.Col>
-              <UiGrid.Col size={2}>
-                <UiTitle level={6}>Schliessdatum</UiTitle>
-              </UiGrid.Col>
-              <UiGrid.Col>
-                <UiTitle level={6}>Begründung</UiTitle>
-              </UiGrid.Col>
-            </UiGrid>
-            <IncidentArchiveList incidents={closedIncidents} />
+            <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+              <IncidentArchiveList incidents={closedIncidents} />
+            </UiGrid.Col>
           </section>
         )}
       </UiContainer>

@@ -18,6 +18,7 @@ import ch.rfobaden.incidentmanager.backend.services.IncidentService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
 import ch.rfobaden.incidentmanager.backend.services.TaskService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -56,6 +58,8 @@ class DocumentControllerTest extends AppControllerTest {
 
     @MockBean
     private DocumentService documentService;
+
+    protected ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
 
     private static final String FILENAME = "filename.jpg";
     private final Document document;
@@ -94,7 +98,7 @@ class DocumentControllerTest extends AppControllerTest {
                 .param("modelName", "incident")
                 .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
-            .andExpect(MockMvcResultMatchers.content().string(document.getId().toString()));
+            .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test
@@ -126,7 +130,7 @@ class DocumentControllerTest extends AppControllerTest {
                 .param("modelName", "report")
                 .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
-            .andExpect(content().string(document.getId().toString()));
+            .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test
@@ -157,7 +161,7 @@ class DocumentControllerTest extends AppControllerTest {
                 .param("modelName", "task")
                 .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
-            .andExpect(content().string(document.getId().toString()));
+            .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test
@@ -188,7 +192,7 @@ class DocumentControllerTest extends AppControllerTest {
                 .param("modelName", "subtask")
                 .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
-            .andExpect(content().string(document.getId().toString()));
+            .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test
@@ -239,7 +243,7 @@ class DocumentControllerTest extends AppControllerTest {
         // Then
         mockMvc.perform(request)
                 .andExpect(status().is(200))
-                .andExpect(content().string(document.getId().toString()));
+                .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test

@@ -22,6 +22,7 @@ const TransportList: React.VFC<Props> = ({
   return (
     <TrackableList
       {...listProps}
+      incident={incident}
       records={[transports]}
       formTitle="Transport erfassen"
       renderForm={({ save, close }) => (
