@@ -34,7 +34,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
         </PaginationButton>
       )
     })
-  } else {
+  } else if (totalPages > 2){
     center = [...Array(totalPages - 2)].map((_element, i) => {
       const iOffset = i + 1
       return (
@@ -44,11 +44,11 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
       )
     })
   }
-  const last = (
+  const last = totalPages > 1 ? (
     <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
       {totalPages}
     </PaginationButton>
-  )
+  ) : undefined
 
   return (
     <Pagination>
