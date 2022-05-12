@@ -23,17 +23,18 @@ const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) =
   }
   return (
     <Container>
-      {!incident.isClosed &&
-      <UiModal title="Auftrag erfassen" size="fixed">
-        <UiModal.Trigger>{({ open }) => (
-          <UiCreateButton onClick={open} title="Auftrag erfassen">
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreateButton>
-        )}</UiModal.Trigger>
-        <UiModal.Body>{({ close }) => (
-          <TaskForm report={report} onSave={handleSelect} onClose={close} />
-        )}</UiModal.Body>
-      </UiModal>}
+      {!incident.isClosed && (
+        <UiModal title="Auftrag erfassen" size="fixed">
+          <UiModal.Trigger>{({ open }) => (
+            <UiCreateButton onClick={open} title="Auftrag erfassen">
+              <UiIcon.CreateAction size={1.5} />
+            </UiCreateButton>
+          )}</UiModal.Trigger>
+          <UiModal.Body>{({ close }) => (
+            <TaskForm report={report} onSave={handleSelect} onClose={close} />
+          )}</UiModal.Body>
+        </UiModal>
+      )}
 
       <UiList>
         {tasks.map((task) => (
