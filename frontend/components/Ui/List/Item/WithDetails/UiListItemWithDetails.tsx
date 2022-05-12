@@ -9,6 +9,7 @@ interface Props extends UiListItemProps {
   priority: Priority
   title: string
   user: string
+  description?: string
   body?: ReactNode
   isClosed?: boolean
   isSmall?: boolean
@@ -19,6 +20,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
   priority,
   title,
   user,
+  description,
   body = null,
   isClosed = false,
   isSmall = false,
@@ -38,6 +40,9 @@ const UiListItemWithDetails: React.VFC<Props> = ({
           </ItemTitle>
           {user}
         </TextContent>
+        <ItemDescription>
+          {description}
+        </ItemDescription>
       </LeftSide>
       <RightSide>
         {children}
@@ -92,7 +97,6 @@ const RightSide = styled.div`
 const BottomSide = styled.div<{ $isSmall: boolean }>`
   display: block;
   flex: 1 0 100%;
-  width: 100%;
   max-width: 100%;
   padding-top: 1rem;
   padding-left: calc(${({ $isSmall }) => $isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
@@ -102,16 +106,26 @@ const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  width: 18rem;
+  
   ${({ isTitleSwitched }) => isTitleSwitched && css`
     display: flex;
     flex-direction: column-reverse;
   `}
 `
 
+const ItemDescription = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 53rem;
+`
+
 const ItemTitle = styled(UiTitle)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  max-width: 16rem;
 `
 
 const LeftPriority = styled(UiPriority)`

@@ -1,42 +1,46 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import React, { ReactNode } from 'react'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
+import styled from 'styled-components'
 
 interface Props {
+  documents: Document[]
+  storeDocuments: (documents: Document[]) => void
   modelId: number
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  storeDocumentIds: (ids: FileId[]) => void
-  documentIds: FileId[]
   children?: (props: { open: () => void }) => ReactNode
+  onAddDocument: (document: Document) => void
 }
 
 const DocumentDrawer: React.VFC<Props> = ({
-  documentIds,
+  documents,
+  storeDocuments,
   modelId,
   modelName,
-  storeDocumentIds,
   children,
+  onAddDocument,
 }) => {
 
   return (
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <UiCaption onClick={documentIds.length > 0 ? open : undefined}>
-            {documentIds.length}
+          <Caption onClick={ open }>
+            {documents.length}
             &nbsp;
-            {documentIds.length === 1 ? 'Dokument' : 'Dokumente'}
-          </UiCaption>
+            {documents.length === 1 ? 'Dokument' : 'Dokumente'}
+          </Caption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentList
-          storeFileIds={storeDocumentIds}
-          fileIds={documentIds}
+          storeDocuments={storeDocuments}
+          documents={documents}
           modelId={modelId}
           modelName={modelName}
+          onAddDocument={onAddDocument}
         />
       </UiDrawer.Body>
     </UiDrawer>
@@ -44,3 +48,11 @@ const DocumentDrawer: React.VFC<Props> = ({
 }
 
 export default DocumentDrawer
+
+const Caption = styled(UiCaption)`
+  transition: ease 100ms;
+  transition-property: transform;
+  :hover {
+    transform: scale(1.1);
+  }
+`

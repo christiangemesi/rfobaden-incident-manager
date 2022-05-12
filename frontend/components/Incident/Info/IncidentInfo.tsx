@@ -1,5 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { useOrganizations } from '@/stores/OrganizationStore'
@@ -8,7 +8,7 @@ import { useTasks } from '@/stores/TaskStore'
 import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import IncidentStore from '@/stores/IncidentStore'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
 import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 import UiLink from '@/components/Ui/Link/UiLink'
@@ -41,13 +41,21 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       .map(({ name }) => name)
   ), [assigneeIds])
 
-  const storeImageIds = (ids: FileId[]) => {
-    IncidentStore.save({ ...incident, imageIds: ids })
+  const storeImages = (images: Document[]) => {
+    IncidentStore.save({ ...incident, images: images })
   }
 
-  const storeDocumentIds = (ids: FileId[]) => {
-    IncidentStore.save({ ...incident, documentIds: ids })
+  const storeDocuments = (documents: Document[]) => {
+    IncidentStore.save({ ...incident, documents: documents })
   }
+
+  const addImage = useCallback((image: Document) => {
+    IncidentStore.save({ ...incident, images: [...incident.images, image]})
+  }, [incident])
+
+  const addDocument = useCallback((document: Document) => {
+    IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
+  }, [incident])
 
   return (
     <UiCaptionList>
@@ -62,17 +70,20 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
+
       <DocumentImageDrawer
+        images={incident.images}
+        storeImages={storeImages}
         modelId={incident.id}
         modelName="incident"
-        storeImageIds={storeImageIds}
-        imageIds={incident.imageIds}
+        onAddImage={addImage}
       />
       <DocumentDrawer
+        documents={incident.documents}
+        storeDocuments={storeDocuments}
         modelId={incident.id}
         modelName="incident"
-        storeDocumentIds={storeDocumentIds}
-        documentIds={incident.documentIds}
+        onAddDocument={addDocument}
       />
     </UiCaptionList>
   )
