@@ -80,5 +80,6 @@ export default AssignmentList
 const ICON_MULTIPLIER_SMALL = 0.75
 
 const Content = styled.div`
-  margin: 2rem 0;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
 `
