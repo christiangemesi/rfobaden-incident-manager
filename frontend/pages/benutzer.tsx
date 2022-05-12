@@ -38,9 +38,7 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
               </UiTitle>
             </UiGrid.Col>
           </UiGrid>
-          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <UserList users={users} />
-          </UiGrid.Col>
+          <UserList users={users} />
         </section>
       </UiContainer>
     </Page>
