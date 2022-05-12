@@ -9,7 +9,7 @@ export default interface Transport extends Model, Trackable {
   peopleInvolved: number
   driver: string | null
   vehicleId: Id<Vehicle> | null
-  trailer: Id<Trailer> | null
+  trailerId: Id<Trailer> | null
   pointOfDeparture: string | null
   pointOfArrival: string | null
   incidentId: Id<Incident>
