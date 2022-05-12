@@ -53,6 +53,13 @@ class BackendService {
     })
   }
 
+  get<T>(path: string): Promise<BackendResponse<T>> {
+    return this.fetchApi({
+      path: path,
+      method: 'get',
+    })
+  }
+
   create<T extends Model>(resourceName: string, data: ModelData<T>): Promise<BackendResponse<T>>
   create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>>
   async create<D, T>(resourceName: string, data: D): Promise<BackendResponse<T>> {
