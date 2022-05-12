@@ -154,7 +154,7 @@ const Container = styled.div`
 `
 
 const Side = styled.div`
-  width: 100%;
+  width: calc(50% - 1rem);
   height: 100%;
   
   padding: 1rem;
