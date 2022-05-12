@@ -88,6 +88,8 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
   ${({ theme }) => css`
     body {
+      width: 100%;
+      height: 100%;
       font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};

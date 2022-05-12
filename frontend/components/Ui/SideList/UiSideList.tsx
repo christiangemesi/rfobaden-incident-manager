@@ -8,6 +8,7 @@ import Model from '@/models/base/Model'
 import { ModelStore } from '@/stores/base/Store'
 import { createUseRecord } from '@/stores/base/hooks'
 import { noop } from '@/utils/control-flow'
+import useBreakpoint from '@/utils/hooks/useBreakpoints'
 
 interface Props<T extends Model> {
   initialId?: Id<T> | null
@@ -28,7 +29,6 @@ const UiSideList = <T extends Model>({
   onSelect: handleSelect = noop,
   onDeselect: handleDeselect = noop,
 }: Props<T>): JSX.Element => {
-  const [setListRef, listHeight] = useHeight<HTMLDivElement>()
   const [setOverlayRef, overlayHeight] = useHeight<HTMLDivElement>()
 
   const [selectedId, setSelectedId] = useState<Id<T> | null>(initialId ?? null)
@@ -56,10 +56,9 @@ const UiSideList = <T extends Model>({
   return (
     <Container>
       <ListContainer
-        ref={setListRef}
         hasSelected={selectedId !== null}
         style={{
-          minHeight: selectedId === null ? undefined : overlayHeight,
+          minHeight: overlayHeight - 84,
         }}
       >
         {renderList({ selected, select: setSelected })}
@@ -67,9 +66,6 @@ const UiSideList = <T extends Model>({
       <ListOverlay
         ref={setOverlayRef}
         hasSelected={selected !== null}
-        style={{
-          minHeight: listHeight,
-        }}
       >
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
@@ -141,6 +137,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
 
   ${Themed.media.md.max} {
     position: absolute;
+    top: 0;
     left: 0;
     width: calc(100% + 1px);
     transform: translateY(100%);
