@@ -44,7 +44,7 @@ const ReportList = <T extends Trackable>({
       {!incident.isClosed && (
         <UiModal title={formTitle} size="fixed">
           <UiModal.Trigger>{({ open }) => (
-            <UiCreateButton onClick={open} title="Meldung erfassen">
+            <UiCreateButton onClick={open} title={formTitle}>
               <UiIcon.CreateAction size={1.5} />
             </UiCreateButton>
           )}</UiModal.Trigger>
