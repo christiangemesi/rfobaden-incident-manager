@@ -12,6 +12,7 @@ import BackendService from '@/services/BackendService'
 import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
 import Task from '@/models/Task'
 import UiDescription from '@/components/Ui/Description/UiDescription'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props {
   task: Task
@@ -28,6 +29,10 @@ const SubtaskListItem: React.VFC<Props> = ({
   snapshot = null,
   onClick: handleClick,
 }) => {
+  const incident = useIncident(task.incidentId)
+  if(incident === null) {
+    throw new Error('incident not found')
+  }
 
   const assignee = useUser(subtask.assigneeId)
   const assigneeName = useUsername(assignee)
@@ -73,7 +78,7 @@ const SubtaskListItem: React.VFC<Props> = ({
         )}
       >
         <SubtaskActions task={task} subtask={subtask} />
-        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
+        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} isDisabled={incident.isClosed} />
       </Item>
     </div>
   )

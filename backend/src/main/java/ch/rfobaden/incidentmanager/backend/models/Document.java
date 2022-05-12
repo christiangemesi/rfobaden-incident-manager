@@ -19,7 +19,6 @@ public class Document {
 
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = true)
     private String name;
 
     @NotBlank

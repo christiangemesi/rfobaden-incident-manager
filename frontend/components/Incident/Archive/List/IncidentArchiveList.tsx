@@ -1,9 +1,10 @@
 import React from 'react'
 import { ClosedIncident } from '@/models/Incident'
 import UiList from '@/components/Ui/List/UiList'
-import UiListItem from '@/components/Ui/List/Item/UiListItem'
-import UiDate from '@/components/Ui/Date/UiDate'
+import IncidentArchiveListItem from '@/components/Incident/Archive/List/List/IncidentArchiveListItem'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiListHeader from '@/components/Ui/List/UiListHeader'
 
 interface Props {
   incidents: ClosedIncident[]
@@ -11,26 +12,39 @@ interface Props {
 
 const IncidentArchiveList: React.VFC<Props> = ({ incidents }) => {
   return (
-    <UiList>
-      {incidents.map((incident) => (
-        <UiListItem key={incident.id}>
-          <UiGrid gapH={1.5}>
-            <UiGrid.Col size={4}>
-              <span>{incident.title}</span>
-            </UiGrid.Col>
-            <UiGrid.Col size={2}>
-              <UiDate value={incident.startsAt ?? incident.createdAt} />
-            </UiGrid.Col>
-            <UiGrid.Col size={2}>
-              <UiDate value={incident.closeReason.createdAt} />
-            </UiGrid.Col>
-            <UiGrid.Col>
-              <span>{incident.closeReason.message}</span>
-            </UiGrid.Col>
-          </UiGrid>
-        </UiListItem>
-      ))}
-    </UiList>
+    <div>
+      <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
+        <UiGrid.Col size={4}>
+          <UiListHeader>
+            <UiTitle level={6}>Ereignis</UiTitle>
+          </UiListHeader>
+        </UiGrid.Col>
+        <UiGrid.Col size={2}>
+          <UiListHeader>
+            <UiTitle level={6}>Startdatum</UiTitle>
+          </UiListHeader>
+        </UiGrid.Col>
+        <UiGrid.Col size={2}>
+          <UiListHeader>
+            <UiTitle level={6}>Schliessdatum</UiTitle>
+          </UiListHeader>
+        </UiGrid.Col>
+        <UiGrid.Col size={2}>
+          <UiListHeader>
+            <UiTitle level={6}>Begründung</UiTitle>
+          </UiListHeader>
+        </UiGrid.Col>
+      </UiGrid>
+    
+      <UiList>
+        {incidents.map((closedIncident) => (
+          <IncidentArchiveListItem 
+            key={closedIncident.id}
+            incident={closedIncident}
+          />
+        ))}
+      </UiList>
+    </div>
   )
 }
 export default IncidentArchiveList
