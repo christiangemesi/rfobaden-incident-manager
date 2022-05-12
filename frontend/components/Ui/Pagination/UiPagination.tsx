@@ -27,7 +27,7 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
         baseOffset = totalPages - 4
       }
       return [...Array(3)].map((_element, i) => {
-        const iOffset =  baseOffset + i
+        const iOffset = baseOffset + i
         return (
           <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
             {iOffset + 1}
