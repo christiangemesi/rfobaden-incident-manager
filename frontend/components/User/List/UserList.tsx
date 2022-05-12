@@ -97,7 +97,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
 export default UserList
 
 const StyledTitle = styled(UiTitle)`
-  margin-left: -0.5rem;
+  margin-left: -0.6rem;
 `
 
 const InnerScroll = styled.div`
