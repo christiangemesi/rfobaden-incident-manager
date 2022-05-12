@@ -41,17 +41,18 @@ const ReportList = <T extends Trackable>({
   }))
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
-      {!incident.isClosed &&
-      <UiModal title={formTitle} size="fixed">
-        <UiModal.Trigger>{({ open }) => (
-          <UiCreateButton onClick={open} title="Meldung erfassen">
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreateButton>
-        )}</UiModal.Trigger>
-        <UiModal.Body>{({ close }) => (
-          renderForm({ save: handleSelect ?? noop, close })
-        )}</UiModal.Body>
-      </UiModal>}
+      {!incident.isClosed && (
+        <UiModal title={formTitle} size="fixed">
+          <UiModal.Trigger>{({ open }) => (
+            <UiCreateButton onClick={open} title="Meldung erfassen">
+              <UiIcon.CreateAction size={1.5} />
+            </UiCreateButton>
+          )}</UiModal.Trigger>
+          <UiModal.Body>{({ close }) => (
+            renderForm({ save: handleSelect ?? noop, close })
+          )}</UiModal.Body>
+        </UiModal>)
+      }
 
       {records.map((sectionRecords, i) => (
         <UiList key={i}>
