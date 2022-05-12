@@ -31,7 +31,7 @@ const SubtaskListItem: React.VFC<Props> = ({
 }) => {
   const incident = useIncident(task.incidentId)
   if(incident === null) {
-    throw new Error()
+    throw new Error('incident not found')
   }
 
   const assignee = useUser(subtask.assigneeId)
