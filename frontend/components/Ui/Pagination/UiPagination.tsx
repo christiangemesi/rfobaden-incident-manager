@@ -1,7 +1,7 @@
 import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiButton from '@/components/Ui/Button/UiButton'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface Props {
   currentOffset: number
@@ -109,8 +109,14 @@ const PaginationButton = styled(UiButton)<{ isActive?: boolean}>`
   min-width: 2rem;
 
   text-decoration: none;
-  background: ${({ theme, isActive }) => isActive ? theme.colors.primary.value : theme.colors.secondary.value};
-  color: ${({ theme, isActive }) => isActive ? theme.colors.primary.contrast : theme.colors.secondary.contrast};
+  
+  ${({ theme, isActive }) => isActive ? css`
+    background: ${theme.colors.primary.value};
+    color: ${theme.colors.primary.contrast};
+  ` : css`
+    background: ${theme.colors.secondary.value};
+    color: ${theme.colors.secondary.contrast};
+  `}
 `
 const MorePlaceholder = styled.div`
   padding-top: 0.8rem;
