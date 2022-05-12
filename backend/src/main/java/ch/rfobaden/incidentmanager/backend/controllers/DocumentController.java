@@ -62,17 +62,23 @@ public class DocumentController extends AppController {
         var document = documentService.findDocument(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "document not found: " + id)
         ));
-        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
-            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
-        ));
+
+        var name = document.getName();
+        if (name == null) {
+            name = document.getId().toString();
+        }
 
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
-            .filename(document.getName() + document.getExtension())
+            .filename(name + document.getExtension())
             .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
         headers.set("Content-Type", document.getMimeType());
+
+        var file = documentService.loadFileByDocument(document).orElseThrow(() -> (
+            new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "document file not found: " + id)
+        ));
         return ResponseEntity.ok().headers(headers).body(file);
     }
 
@@ -138,10 +144,15 @@ public class DocumentController extends AppController {
         document.setMimeType(mimeType.toString());
         document.setExtension(mimeType.getExtension());
 
-        String fileName = name.orElse(file.getOriginalFilename()
-            .substring(0, file.getOriginalFilename().lastIndexOf('.')));
-        
+        String fileName = name.orElseGet(() -> {
+            var originalFileName = file.getOriginalFilename();
+            if (originalFileName != null) {
+                return originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+            }
+            return null;
+        });
         document.setName(fileName);
+
         return document;
     }
 

@@ -6,6 +6,9 @@ import {
   mdiAccountCircle,
   mdiAccountMultiple,
   mdiAlertCircleOutline,
+  mdiAlertOutline,
+  mdiInformationOutline,
+  mdiCheckCircleOutline,
   mdiCalendar,
   mdiCarMultiple,
   mdiCheck,
@@ -38,6 +41,9 @@ import {
   mdiTrashCanOutline,
   mdiUpload,
   mdiFormatListBulleted,
+  mdiArchive,
+  mdiChevronLeft,
+  mdiChevronRight,
 } from '@mdi/js'
 
 
@@ -134,7 +140,10 @@ export default Object.assign(StyledUiIcon, {
   UserInCircle: makeNamedIcon(mdiAccountCircle),
   UserManagement: makeNamedIcon(mdiAccountMultiple),
   IncidentManagement: makeNamedIcon(mdiFire),
-  AlertCircle: makeNamedIcon(mdiAlertCircleOutline),
+  AlertError: makeNamedIcon(mdiAlertCircleOutline),
+  AlertWarning: makeNamedIcon(mdiAlertOutline),
+  AlertInfo: makeNamedIcon(mdiInformationOutline),
+  AlertSuccess: makeNamedIcon(mdiCheckCircleOutline),
   Calendar: makeNamedIcon(mdiCalendar),
   Changelog: makeNamedIcon(mdiClipboardTextOutline),
   Transport: makeNamedIcon(mdiCarMultiple),
@@ -151,4 +160,7 @@ export default Object.assign(StyledUiIcon, {
   Upload: makeNamedIcon(mdiUpload),
   Trash: makeNamedIcon(mdiTrashCanOutline),
   AssignedList: makeNamedIcon(mdiFormatListBulleted),
+  Archive: makeNamedIcon(mdiArchive),
+  Previous: makeNamedIcon(mdiChevronLeft),
+  Next: makeNamedIcon(mdiChevronRight),
 })

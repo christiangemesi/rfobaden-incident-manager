@@ -12,6 +12,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import Id from '@/models/base/Id'
 import Organization from '@/models/Organization'
+import AlertStore from '@/stores/AlertStore'
 
 interface Props {
   user?: User | null
@@ -64,6 +65,11 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
     if (handleClose) {
       handleClose()
     }
+    AlertStore.add({
+      text: `Benutzer erfolgreich ${user === null ? 'erstellt' : 'bearbeitet'}!`,
+      type: 'success',
+      isFading: true,
+    })
   })
   useCancel(form, handleClose)
 

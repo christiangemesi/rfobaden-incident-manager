@@ -1,11 +1,7 @@
 import Incident from '@/models/Incident'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
-import { useOrganizations } from '@/stores/OrganizationStore'
-import { useSubtasks } from '@/stores/SubtaskStore'
-import { useTasks } from '@/stores/TaskStore'
-import { useReportsOfIncident } from '@/stores/ReportStore'
 import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
 import IncidentStore from '@/stores/IncidentStore'
 import Document from '@/models/Document'
@@ -19,31 +15,6 @@ interface Props {
 }
 
 const IncidentInfo: React.VFC<Props> = ({ incident }) => {
-  const reports = useReportsOfIncident(incident.id)
-
-  const allTasks = useTasks()
-  const tasks = useMemo(() => (
-    allTasks.filter((it) => it.incidentId === incident.id)
-  ), [allTasks, incident.id])
-
-  const allSubtasks = useSubtasks()
-  const subtasks = useMemo(() => (
-    allSubtasks.filter((it) => it.incidentId === incident.id)
-  ), [allSubtasks, incident.id])
-
-  const assigneeIds = useMemo(() => new Set([
-    ...reports.map((report) => report.assigneeId),
-    ...tasks.map((task) => task.assigneeId),
-    ...subtasks.map((subtask) => subtask.assigneeId),
-  ]), [reports, tasks, subtasks])
-
-  const allOrganizations = useOrganizations()
-  const activeOrganisations = useMemo(() => (
-    allOrganizations
-      .filter(({ userIds }) => userIds.some((id) => assigneeIds.has(id)))
-      .map(({ name }) => name)
-  ), [allOrganizations, assigneeIds])
-
   const storeImages = (images: Document[]) => {
     IncidentStore.save({ ...incident, images: images })
   }
@@ -66,9 +37,9 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
         <BackButton href="/ereignisse">Ereignis</BackButton>
       </UiCaption>
       <UiCaption>
-        {activeOrganisations.length}
+        {incident.organizationIds.length}
         &nbsp;
-        {activeOrganisations.length === 1 ? 'Organisation' : 'Organisationen'}
+        {incident.organizationIds.length === 1 ? 'Organisation' : 'Organisationen'}
       </UiCaption>
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />

@@ -33,6 +33,7 @@ const ReportList: React.VFC<Props> = ({
   return (
     <TrackableList
       {...listProps}
+      incident={incident}
       records={[keyReports, normalReports]}
       formTitle="Meldung erfassen"
       renderForm={({ save, close }) => (

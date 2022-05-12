@@ -1,14 +1,18 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { SortField } from '@/utils/hooks/useSort'
+import UiListHeader, { ListHeaderProps } from '@/components/Ui/List/UiListHeader'
 
-interface Props {
+interface Props extends ListHeaderProps {
   field: SortField
-  children: ReactNode
 }
 
-const UiSortButton: React.VFC<Props> = ({ children, field }) => {
+const UiSortButton: React.VFC<Props> = ({
+  children,
+  field,
+  ...props
+}) => {
   const handleSortClick = () => {
     switch (field.direction) {
     case null:
@@ -22,9 +26,8 @@ const UiSortButton: React.VFC<Props> = ({ children, field }) => {
       break
     }
   }
- 
   return (
-    <SortButton onClick={handleSortClick}>
+    <SortButton {...props} onClick={handleSortClick}>
       {children}
       {field.direction === null ? <UiIcon.Empty /> : (
         field.direction === 'asc' ? <UiIcon.SortAsc /> : <UiIcon.SortDesc />
@@ -34,16 +37,10 @@ const UiSortButton: React.VFC<Props> = ({ children, field }) => {
 }
 export default styled(UiSortButton)``
 
-const SortButton = styled.div`
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem;
-
-  border: none;
-  border-radius: 0.5rem;
-  background: transparent;
+const SortButton = styled(UiListHeader)`
   cursor: pointer;
   margin: 0 0.2rem;
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
 
   will-change: background-color;
   transition: 200ms ease-out;
@@ -56,9 +53,8 @@ const SortButton = styled.div`
   &:first-child {
     margin-left: 0;
   }
-  &:last-child{
+
+  &:last-child {
     margin-right: 0;
   }
-  
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
 `

@@ -45,7 +45,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
     public User update(
         @ModelAttribute EmptyPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody User user
     ) {
         return super.update(path, id, user);
@@ -56,7 +56,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     @PreAuthorize("@auth.isCurrentUser(#id)")
     public User updatePassword(
         HttpServletResponse response,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody PasswordData data
     ) {
         var user = service.updatePassword(id, data.password).orElseThrow(() -> (
@@ -74,7 +74,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
     public User resetPassword(
         HttpServletResponse response,
-        @PathVariable("id") Long id
+        @PathVariable Long id
     ) {
         var user = service.resetPassword(id).orElseThrow(() -> (
             new ApiException(HttpStatus.NOT_FOUND, "user not found")

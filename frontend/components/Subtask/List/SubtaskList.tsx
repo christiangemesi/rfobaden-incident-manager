@@ -12,6 +12,8 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { useIncident } from '@/stores/IncidentStore'
+import UiListItem from '@/components/Ui/List/Item/UiListItem'
 
 
 interface Props {
@@ -61,6 +63,11 @@ const SubtaskList: React.VFC<Props> = ({
     }
   }, [openSubtasks])
 
+  const incident = useIncident(task.incidentId)
+  if(incident === null) {
+    throw new Error('incident not found')
+  }
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Container>
@@ -69,6 +76,7 @@ const SubtaskList: React.VFC<Props> = ({
             offene Teilaufträge
           </UiCaption>
 
+          {!incident.isClosed &&
           <UiModal title="Teilauftrag erfassen" size="fixed">
             <UiModal.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
@@ -78,7 +86,7 @@ const SubtaskList: React.VFC<Props> = ({
             <UiModal.Body>{({ close }) => (
               <SubtaskForm task={task} onClose={close} />
             )}</UiModal.Body>
-          </UiModal>
+          </UiModal>}
 
           <Droppable droppableId={LIST_OPEN_ID}>{(provided) => (
             <DropTarget
@@ -147,13 +155,14 @@ const Container = styled.div`
   padding: 4px 4px 0 4px;
   
   width: 100%;  
-  ${Themed.media.lg.max} {
-    width: 200%;
+  ${Themed.media.sm.max} {
+    width: 180%;
+    flex-shrink: 0;
   }
 `
 
 const Side = styled.div`
-  width: 100%;
+  width: calc(50% - 1rem);
   height: 100%;
   
   padding: 1rem;
@@ -180,4 +189,18 @@ const List = styled.ul`
   max-width: 100%;
   
   width: 100%;
+
+  div:first-child > ${UiListItem} {
+    &, :after {
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+  }
+
+  div:last-child > ${UiListItem} {
+    &, :after {
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
 `

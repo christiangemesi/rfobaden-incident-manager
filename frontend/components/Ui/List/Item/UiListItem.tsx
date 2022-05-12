@@ -41,12 +41,13 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean }>`
   background-color: ${({ theme }) => theme.colors.secondary.value};
   text-decoration: none;
   transition: 150ms ease-out;
-  transition-property: filter, background-color, opacity, box-shadow;
-  will-change: filter, background-color, opacity, box-shadow;
+  transition-property: filter, background-color, opacity, border-color;
+  will-change: filter, background-color, opacity, border-color;
+  border: 1px solid transparent;
 
   ${({ isActive, theme }) => isActive && css`
     background-color: ${theme.colors.tertiary.value};
-    box-shadow: 0 0 4px 2px gray;
+    border-color: ${({ theme }) => theme.colors.grey.value};
   `}
 
   ${({ isClickable }) => isClickable && css`

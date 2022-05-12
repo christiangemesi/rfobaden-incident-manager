@@ -20,6 +20,9 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
+import Vehicle, { parseVehicle } from '@/models/Vehicle'
+import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
+import { useEffectOnce } from 'react-use'
 
 interface Props {
   incident: Incident
@@ -39,7 +42,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     priority: Priority.MEDIUM,
     peopleInvolved: 0,
     driver: null,
-    vehicle: '',
+    vehicleId: null,
     trailer: null,
     pointOfDeparture: null,
     pointOfArrival: null,
@@ -69,9 +72,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      vehicle: [
-        validate.notBlank({ allowNull: true }),
-        validate.maxLength(100),
+      vehicleId: [
+        validate.notNull(),
       ],
       driver: [
         validate.notBlank({ allowNull: true }),
@@ -108,8 +110,54 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
   })
   useCancel(form, handleClose)
 
+  useEffectOnce(() => {
+    (async () => {
+      const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
+        'vehicles/visible',
+      )
+      if (vehiclesError !== null) {
+        throw vehiclesError
+      }
+      VehicleStore.saveAll(vehicles.map(parseVehicle))
+    })()
+  })
+
+  const handleCreateVehicle = async (vehicleName: string) => {
+    if (vehicleName.length > 100) {
+      alert('Fahrzeugname ist zu lang.')
+      return
+    }
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
+      name: vehicleName,
+      isVisible: true,
+    })
+    if (error !== null) {
+      throw error
+    }
+    form.vehicleId.setValue(data.id)
+    VehicleStore.save(parseVehicle(data))
+  }
+
+  const handleDeleteVehicle = async (id: Id<Vehicle>) => {
+    const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
+    if (error !== null) {
+      throw error
+    }
+    data.isVisible = false
+    const [updatedVehicle, updatedVehicleError]: BackendResponse<Vehicle> = await BackendService.update('vehicles', id, data)
+    if (updatedVehicleError !== null) {
+      throw updatedVehicleError
+    }
+    VehicleStore.save(parseVehicle(updatedVehicle))
+  }
+
   const users = useUsers()
   const userIds = useMemo(() => users.map(({ id }) => id), [users])
+
+  const vehicles = useVehicles()
+  const vehicleIds = useMemo(() => {
+    return vehicles.filter((e) => e.isVisible).map(({ id }) => id)
+  }, [vehicles])
 
   return (
     <div>
@@ -139,8 +187,18 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.vehicle}>{(props) => (
-            <UiTextInput {...props} label="Fahrzeug" placeholder="Fahrzeug" />
+          <UiForm.Field field={form.vehicleId} deps={[vehicleIds]}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Fahrzeug"
+              options={vehicleIds}
+              optionName={mapVehicleIdToName}
+              menuPlacement="auto"
+              placeholder="Fahrzeug"
+              onCreate={handleCreateVehicle}
+              isSearchable
+              onDelete={handleDeleteVehicle}
+            />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.trailer}>{(props) => (
@@ -186,6 +244,13 @@ const mapUserIdToName = (id: Id<User>): string | null => {
   return user === null
     ? null
     : `${user.firstName} ${user.lastName}`
+}
+
+const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
+  const vehicle = VehicleStore.find(id)
+  return vehicle === null
+    ? ''
+    : vehicle.name
 }
 
 const FormContainer = styled.div`

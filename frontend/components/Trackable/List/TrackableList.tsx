@@ -10,8 +10,11 @@ import { Themed } from '@/theme'
 import Trackable from '@/models/Trackable'
 import { noop } from '@/utils/control-flow'
 import { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
+import Incident from '@/models/Incident'
 
 interface Props<T> extends StyledProps {
+  incident: Incident
+
   records: Array<readonly T[]>
   selected?: T | null,
   onSelect?: (record: T) => void
@@ -22,6 +25,7 @@ interface Props<T> extends StyledProps {
 }
 
 const ReportList = <T extends Trackable>({
+  incident,
   records,
   selected = null,
   onSelect: handleSelect,
@@ -33,20 +37,22 @@ const ReportList = <T extends Trackable>({
 }: Props<T>): JSX.Element => {
   const canListBeSmall = useBreakpoint(() => ({
     xs: false,
-    xl: true,
+    md: true,
   }))
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
-      <UiModal title={formTitle} size="fixed">
-        <UiModal.Trigger>{({ open }) => (
-          <UiCreateButton onClick={open} title="Meldung erfassen">
-            <UiIcon.CreateAction size={1.5} />
-          </UiCreateButton>
-        )}</UiModal.Trigger>
-        <UiModal.Body>{({ close }) => (
-          renderForm({ save: handleSelect ?? noop, close })
-        )}</UiModal.Body>
-      </UiModal>
+      {!incident.isClosed && (
+        <UiModal title={formTitle} size="fixed">
+          <UiModal.Trigger>{({ open }) => (
+            <UiCreateButton onClick={open} title={formTitle}>
+              <UiIcon.CreateAction size={1.5} />
+            </UiCreateButton>
+          )}</UiModal.Trigger>
+          <UiModal.Body>{({ close }) => (
+            renderForm({ save: handleSelect ?? noop, close })
+          )}</UiModal.Body>
+        </UiModal>)
+      }
 
       {records.map((sectionRecords, i) => (
         <UiList key={i}>
@@ -65,7 +71,6 @@ const ReportList = <T extends Trackable>({
     </ListContainer>
   )
 }
-
 export default asStyled(ReportList)
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`

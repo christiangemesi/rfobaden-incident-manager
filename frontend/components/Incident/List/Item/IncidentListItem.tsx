@@ -32,7 +32,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
             </UiGrid.Col>
             <UiGrid.Col size="auto">
               <BadgeContainer>
-                <UiBadge value={10}>
+                <UiBadge value={incident.organizationIds.length}>
                   <UiIcon.Organization />
                 </UiBadge>
                 <UiBadge value={keyMessageCount}>
