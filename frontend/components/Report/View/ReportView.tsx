@@ -19,6 +19,8 @@ import { useRouter } from 'next/router'
 import { parseIncidentQuery } from '@/pages/ereignisse/[...path]'
 import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
+import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
+import useHeight from '@/utils/hooks/useHeight'
 
 interface Props {
   incident: Incident
@@ -45,7 +47,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     setSelectedId(null)
   }, [])
 
-  const [setTaskViewRef, { height: taskViewHeight }] = useMeasure<HTMLDivElement>()
+  const [setTaskViewRef, taskViewHeight] = useHeight<HTMLDivElement>()
 
   // Load tasks from the backend.
   const isLoading = useCachedEffect('report/tasks', report.id, async () => {
@@ -59,7 +61,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
   // Two reports never contain the same task.
   useUpdateEffect(clearSelected, [report.id])
 
-  useAsync(async function updateRoute() {
+  useAsyncEffect(async function updateRoute() {
     const query = parseIncidentQuery(router.query)
     if (query === null) {
       return
