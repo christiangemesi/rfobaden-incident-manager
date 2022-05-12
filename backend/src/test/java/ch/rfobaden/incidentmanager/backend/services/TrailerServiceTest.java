@@ -43,7 +43,7 @@ public class TrailerServiceTest extends ModelRepositoryServiceTest.Basic<
             .thenReturn(Optional.of(record));
 
         // When
-        var result = service.findByName(record.getName());
+        var result = service.findByName(record.getName()).orElse(null);
 
         // Then
         assertThat(result)
