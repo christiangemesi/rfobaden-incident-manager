@@ -45,9 +45,7 @@ export default IncidentViewHeader
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   height: 100%;
-  padding-bottom: 0.5rem;
-  margin-top: -1.25rem;
   width: 100%;
 `

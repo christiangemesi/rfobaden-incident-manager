@@ -94,7 +94,7 @@ const Header = styled.header`
   width: 100%;
   height: 4rem;
   padding: 0.75rem 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background: ${({ theme }) => theme.colors.secondary.value};
 

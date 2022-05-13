@@ -14,7 +14,7 @@ const UiCaption: React.VFC<Props> = (props) => {
 export default styled(UiCaption)``
 
 const Caption = styled.div<{ isEmphasis?: boolean, onClick?: () => void }>`
-  font-size: 0.9em;
+  font-size: ${({ theme }) => theme.fonts.sizes.small};
   opacity: 0.7;
 
   ${({ onClick }) => onClick !== undefined && css`
