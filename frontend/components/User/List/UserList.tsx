@@ -17,9 +17,10 @@ import { Themed } from '@/theme'
 
 interface Props {
   users: readonly User[]
+  hasCreateButton?: boolean
 }
 
-const UserList: React.VFC<Props> = ({ users }) => {
+const UserList: React.VFC<Props> = ({ users, hasCreateButton }) => {
   const currentUser = useCurrentUser()
 
   const [sortedUsers, sort] = useSort(users, () => ({
@@ -47,7 +48,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
 
   return (
     <React.Fragment>
-      {isAdmin(currentUser) && (
+      {isAdmin(currentUser) && hasCreateButton && (
         <UiModal title="Benutzer erfassen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
             <UiCreateButton onClick={open}>
