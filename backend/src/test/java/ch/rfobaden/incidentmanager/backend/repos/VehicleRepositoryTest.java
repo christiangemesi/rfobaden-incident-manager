@@ -47,7 +47,7 @@ public class VehicleRepositoryTest
         var name = namedRecord.getName();
 
         // When
-        var result = repository.findByName(name).orElse(null);
+        var result = repository.findByName(name);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(namedRecord));

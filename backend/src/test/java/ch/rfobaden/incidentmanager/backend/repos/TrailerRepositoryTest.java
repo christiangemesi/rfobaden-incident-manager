@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @DataJpaTest
 public class TrailerRepositoryTest
@@ -46,9 +47,9 @@ public class TrailerRepositoryTest
         var name = namedRecord.getName();
 
         // When
-        var result = repository.findByName(name).orElse(null);
+        var result = repository.findByName(name);
 
         // Then
-        assertThat(result).isEqualTo(namedRecord);
+        assertThat(result).isEqualTo(Optional.of(namedRecord));
     }
 }
