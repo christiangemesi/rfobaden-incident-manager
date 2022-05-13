@@ -11,7 +11,6 @@ import React from 'react'
 import Report from '@/models/Report'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 import styled from 'styled-components'
-import ReportInfo from '@/components/Report/Info/ReportInfo'
 
 interface Props {
   report: Report
@@ -28,7 +27,7 @@ const TaskViewHeader: React.VFC<Props> = ({
 }) => {
   return (
     <Container>
-      <UiGrid justify="space-between" align="start" gap={1}>
+      <UiGrid justify="space-between" align="start">
         <UiGrid.Col>
           <TaskInfo task={task} />
         </UiGrid.Col>
@@ -51,7 +50,11 @@ const TaskViewHeader: React.VFC<Props> = ({
           </UiTitle>
         </div>
       </TitleContainer>
-      <UiDescription description={task.description} />
+      {task.description !== null && (
+        <DescriptionContainer>
+          <UiDescription description={task.description} />
+        </DescriptionContainer>
+      )}
     </Container>
   )
 }
@@ -60,11 +63,14 @@ export default TaskViewHeader
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  //gap: 1rem;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  //gap: 1rem;
+`
+
+const DescriptionContainer = styled.div`
+  padding-left: 0.15rem;
+  margin-top: 1rem;
 `
