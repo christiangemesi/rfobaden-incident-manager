@@ -1,19 +1,24 @@
 import React, { useMemo } from 'react'
-import Select, { StylesConfig } from 'react-select'
+import Select, { components, StylesConfig } from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 import { contrastDark, defaultTheme } from '@/theme'
 import { useMountedState } from 'react-use'
+import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props<T> extends UiInputProps<T | null> {
   label?: string
   options: T[]
   optionName?: keyof T | ((option: T) => string | null)
+  onCreate?: (value: string) => void
   isDisabled?: boolean,
   isSearchable?: boolean,
   placeholder?: string,
   menuPlacement?: 'auto' | 'top' | 'bottom'
+  onDelete?: (value: T) => void
 }
 
 const UiSelectInput = <T, >({
@@ -23,10 +28,12 @@ const UiSelectInput = <T, >({
   label,
   options,
   optionName,
+  onCreate: handleCreate,
   isDisabled = false,
   isSearchable = false,
   placeholder = '',
   menuPlacement = 'auto',
+  onDelete: handleDelete,
 }: Props<T>): JSX.Element => {
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
@@ -77,6 +84,9 @@ const UiSelectInput = <T, >({
         color: isSelected ? defaultTheme.colors.primary.contrast : contrastDark,
         cursor: isDisabled ? 'not-allowed' : 'pointer',
         backgroundColor: isSelected ? defaultTheme.colors.primary.value : 'none',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
 
         ':disabled': {
           ...styles[':disabled'],
@@ -84,12 +94,18 @@ const UiSelectInput = <T, >({
           filter: 'brightness(120%)',
         },
 
+        'div': {
+          display: 'none',
+          ':hover': {
+            display: 'block',
+          },
+        },
+
         ':hover': {
           ...styles[':hover'],
           backgroundColor: defaultTheme.colors.secondary.value,
           color: defaultTheme.colors.secondary.contrast,
         },
-
       }
     },
     // style of input field in main select with search input
@@ -122,17 +138,50 @@ const UiSelectInput = <T, >({
           {label}
         </span>
       )}
-      <Select
-        options={mappedOptions}
-        value={defaultValue}
-        placeholder={placeholder}
-        onChange={handleChange}
-        isClearable
-        isDisabled={isDisabled}
-        isSearchable={isSearchable}
-        styles={customStyles}
-        menuPlacement={menuPlacement}
-      />
+      {handleCreate !== undefined ? (
+        <CreatableSelect
+          options={mappedOptions}
+          value={defaultValue}
+          placeholder={placeholder}
+          onChange={handleChange}
+          onCreateOption={handleCreate}
+          isClearable
+          isDisabled={isDisabled}
+          isSearchable={isSearchable}
+          styles={customStyles}
+          menuPlacement={menuPlacement}
+          components={{
+            Option: (props) => (
+              <components.Option {...props}>
+                {props.label}
+                {handleDelete !== undefined && (
+                  <DeleteButton onClick={(e) => {
+                    e.stopPropagation()
+                    handleDelete(props.data.value)
+                  }}>
+                    <UiIcon.Trash size={0.7} />
+                  </DeleteButton>
+                )}
+              </components.Option>
+            ),
+          }}
+          // eslint-disable-next-line react/no-unescaped-entities
+          formatCreateLabel={(inputValue) => <span>"{inputValue}" hinzufügen</span>}
+        />
+      ) : (
+        <Select
+          options={mappedOptions}
+          value={defaultValue}
+          placeholder={placeholder}
+          onChange={handleChange}
+          isClearable
+          isDisabled={isDisabled}
+          isSearchable={isSearchable}
+          styles={customStyles}
+          menuPlacement={menuPlacement}
+        />
+      )
+      }
       <UiInputErrors errors={errors} />
     </Label>
   )
@@ -182,5 +231,12 @@ const StyledLabel = styled.label`
   & > span:first-child {
     font-size: 0.9rem;
     font-weight: bold;
+  }
+`
+
+const DeleteButton = styled(UiIconButton)`
+  :hover {
+    background-color: transparent;
+    transform: scale(1.2);
   }
 `

@@ -27,20 +27,6 @@ const AssignmentListItem = <T extends Trackable>({
 
 export default AssignmentListItem
 
-const SuffixList = styled.div<{ isSmall: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 1.5rem;
-  white-space: nowrap;
-
-  transition: 150ms ease-out;
-  transition-property: column-gap;
-
-  ${({ isSmall }) => isSmall && css`
-    column-gap: 1rem;
-  `}
-`
 const SuffixDate = styled.div<{ hasEnd: boolean }>`
   ${Themed.media.sm.max} {
     display: none;
@@ -56,4 +42,22 @@ const SuffixDate = styled.div<{ hasEnd: boolean }>`
       `}
     }
   }
+`
+const SuffixList = styled.div<{ isSmall: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  white-space: nowrap;
+
+  transition: 150ms ease-out;
+  transition-property: column-gap;
+
+  ${({ isSmall }) => isSmall && css`
+    column-gap: 1rem;
+    
+    > ${SuffixDate} {
+      display: none;
+    }
+  `}
 `

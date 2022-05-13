@@ -11,6 +11,7 @@ import ch.rfobaden.incidentmanager.backend.test.generators.TaskGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TransportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserCredentialsGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.VehicleGenerator;
 import com.github.javafaker.Faker;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ import java.util.Locale;
     SubtaskGenerator.class,
     OrganizationGenerator.class,
     CloseReasonGenerator.class,
+    VehicleGenerator.class
 })
 public class TestConfig {
     @Bean

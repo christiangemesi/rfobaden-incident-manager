@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiButton from '@/components/Ui/Button/UiButton'
 import styled, { css } from 'styled-components'
@@ -10,6 +10,48 @@ interface Props {
 }
 
 const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref }) => {
+  const more = <MorePlaceholder><UiIcon.More size={0.8} /></MorePlaceholder>
+  const prevMore = totalPages > 5 && currentOffset > 2 ? more : <React.Fragment />
+  const nextMore = totalPages > 5 && currentOffset < totalPages - 3 ? more : <React.Fragment />
+  const first = (
+    <PaginationButton isActive={currentOffset === 0} href={makeHref(0)}>
+      {1}
+    </PaginationButton>
+  )
+  const center = useMemo(() => {
+    if (totalPages > 4) {
+      let baseOffset = currentOffset - 1
+      if (currentOffset < 3) { // start
+        baseOffset = 1
+      } else if(currentOffset > totalPages - 4) { // end
+        baseOffset = totalPages - 4
+      }
+      return [...Array(3)].map((_element, i) => {
+        const iOffset = baseOffset + i
+        return (
+          <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
+            {iOffset + 1}
+          </PaginationButton>
+        )
+      })
+    } else if (totalPages > 2){
+      return [...Array(totalPages - 2)].map((_element, i) => {
+        const iOffset = i + 1
+        return (
+          <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
+            {iOffset + 1}
+          </PaginationButton>
+        )
+      })
+    }
+  }, [currentOffset, makeHref, totalPages])
+
+  const last = totalPages > 1 ? (
+    <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
+      {totalPages}
+    </PaginationButton>
+  ) : undefined
+
   return (
     <Pagination>
       <PaginationButton
@@ -18,75 +60,11 @@ const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref })
       >
         <UiIcon.Previous />
       </PaginationButton>
-      
-      {totalPages < 6 &&(
-        [...Array(totalPages)].map((_element, i) => (
-          <PaginationButton key={i} isActive={currentOffset === i} href={makeHref(i)}>
-            {i + 1}
-          </PaginationButton>
-        ))
-      )}
-
-      {(totalPages > 5 && currentOffset < 3) && (
-        <React.Fragment>
-          {[...Array(4)].map((_element, i) => (
-            <PaginationButton key={i} isActive={currentOffset === i} href={makeHref(i)}>
-              {i + 1}
-            </PaginationButton>
-          ))}
-          <MorePlaceholder>
-            <UiIcon.More size={0.8} />
-          </MorePlaceholder>
-          <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
-            {totalPages}
-          </PaginationButton>
-        </React.Fragment>
-      )}
-
-      {(totalPages > 5 && currentOffset > 2 && currentOffset < totalPages - 3) && (
-        <React.Fragment>
-          <PaginationButton isActive={currentOffset === 0} href={makeHref(0)}>
-            {1}
-          </PaginationButton>
-          <MorePlaceholder>
-            <UiIcon.More size={0.8} />
-          </MorePlaceholder>
-          {[...Array(3)].map((_element, i) => {
-            const iOffset = currentOffset - 1 + i
-            return (
-              <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
-                {iOffset + 1}
-              </PaginationButton>
-            )
-          })}
-          <MorePlaceholder>
-            <UiIcon.More size={0.8} />
-          </MorePlaceholder>
-          <PaginationButton isActive={currentOffset === totalPages - 1} href={makeHref(totalPages - 1)}>
-            {totalPages}
-          </PaginationButton>
-        </React.Fragment>
-      )}
-
-      {(totalPages > 5 && currentOffset > totalPages - 4) && (
-        <React.Fragment>
-          <PaginationButton isActive={currentOffset === 0} href={makeHref(0)}>
-            {1}
-          </PaginationButton>
-          <MorePlaceholder>
-            <UiIcon.More size={0.8} />
-          </MorePlaceholder>
-          {[...Array(4)].map((_element, i) => {
-            const iOffset = totalPages - 4 + i
-            return (
-              <PaginationButton key={iOffset} isActive={currentOffset === iOffset} href={makeHref(iOffset)}>
-                {iOffset + 1}
-              </PaginationButton>
-            )
-          })}
-        </React.Fragment>
-      )}
-
+      {first}
+      {prevMore}
+      {center}
+      {nextMore}
+      {last}
       <PaginationButton
         isDisabled={currentOffset === totalPages - 1}
         href={currentOffset === totalPages - 1 ? undefined : makeHref(currentOffset + 1)}

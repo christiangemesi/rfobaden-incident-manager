@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,8 +37,14 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @Size(min = 1, max = 100)
     private String driver;
 
-    @Size(min = 1, max = 100)
-    private String vehicle;
+    @ManyToOne(cascade = {
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
+    @JoinColumn
+    private Vehicle vehicle;
+
     @Size(min = 1, max = 100)
     private String trailer;
 
@@ -120,12 +127,28 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.driver = driver;
     }
 
-    public String getVehicle() {
+    public Vehicle getVehicle() {
         return vehicle;
     }
 
-    public void setVehicle(String vehicle) {
+    public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public Long getVehicleId() {
+        if (vehicle == null) {
+            return null;
+        }
+        return vehicle.getId();
+    }
+
+    public void setVehicleId(Long id) {
+        if (id == null) {
+            vehicle = null;
+            return;
+        }
+        vehicle = new Vehicle();
+        vehicle.setId(id);
     }
 
     public String getTrailer() {
