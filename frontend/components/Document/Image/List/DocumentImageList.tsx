@@ -47,7 +47,7 @@ const DocumentImageList: React.VFC<Props> = ({
 
   return (
     <UiContainer>
-      <UiTitle level={1}>
+      <UiTitle level={2}>
         Bilder
       </UiTitle>
       <ImageContainer>
@@ -85,6 +85,7 @@ const ImageContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1.5rem;
+  margin-top: 1rem;
 `
 const Button = styled(UiCreateButton)`
   position: relative;
@@ -93,4 +94,5 @@ const Button = styled(UiCreateButton)`
   width: 200px;
   min-height: 235px;
   height: inherit;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `

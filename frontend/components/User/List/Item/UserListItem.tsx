@@ -53,14 +53,10 @@ const UserListItem: React.VFC<Props> = ({
           {user.email}
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiTitle level={6}>
-            {user.role}
-          </UiTitle>
+          {user.role}
         </UiGrid.Col>
         <UiGrid.Col size={4}>
-          <UiTitle level={6}>
-            {organization?.name ?? '-'}
-          </UiTitle>
+          {organization?.name ?? '-'}
         </UiGrid.Col>
         <UiGrid.Col size={1}>
           {(isAdmin(currentUser) || currentUser.id === user.id) && (

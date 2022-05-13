@@ -164,9 +164,8 @@ const Container = styled.div`
 const Side = styled.div`
   width: calc(50% - 1rem);
   height: 100%;
-  
   padding: 1rem;
-  box-shadow: 0 0 2px 1px gray;
+  border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
   & > ${UiCaption}:first-child {
     margin-bottom: 0.5rem;
