@@ -62,7 +62,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
       <OuterScroll>
         <InnerScroll>
           <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
-            <UiGrid.Col size={{ xs: 6, md: 5 }}>
+            <UiGrid.Col size={5}>
               <UiSortButton field={sort.firstName}>
                 <UiTitle level={6}>Vorname</UiTitle>
               </UiSortButton>
@@ -75,7 +75,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
                 <UiTitle level={6}>Rolle</UiTitle>
               </UiSortButton>
             </UiGrid.Col>
-            <UiGrid.Col size={{ xs: 3, md: 4 }}>
+            <UiGrid.Col size={4}>
               <UiSortButton field={sort.organization}>
                 <UiTitle level={6}>Organisation</UiTitle>
               </UiSortButton>
@@ -101,13 +101,13 @@ const StyledTitle = styled(UiTitle)`
 `
 
 const InnerScroll = styled.div`
-  ${Themed.media.sm.max} {
+  ${Themed.media.xs.only} {
     width: 155vw;
   }
 `
 
 const OuterScroll = styled.div`
-  ${Themed.media.sm.max} {
+  ${Themed.media.xs.max} {
     overflow-x: scroll;
   }
 `
