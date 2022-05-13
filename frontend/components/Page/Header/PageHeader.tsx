@@ -48,12 +48,12 @@ const PageHeader: React.VFC = () => {
         </PageHeaderItem>
         {currentUser !== null && (
           <LoggedInUser>
-            <span>
-              {currentUser.firstName} {currentUser.lastName}
-            </span>
             <UiDropDown>
               <UiDropDown.Trigger>{({ toggle }) => (
                 <IconButton onClick={toggle}>
+                  <Username>
+                    {currentUser.firstName} {currentUser.lastName}
+                  </Username>
                   <UiIcon.UserInCircle />
                 </IconButton>
               )}</UiDropDown.Trigger>
@@ -131,13 +131,14 @@ const ButtonList = styled.div`
 const LoggedInUser = styled.div`
   display: flex;
   align-items: center;
+`
+const Username = styled.span`
+  font-size: 1.5em;  
+  margin-right: 0.25rem;
 
   ${Themed.media.xs.only} {
-    > span:first-child {
-      display: none;
-    }
+    display: none;
   }
-
 `
 const IconButton = styled(UiIconButton)`
   :hover {

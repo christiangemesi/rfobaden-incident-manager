@@ -40,6 +40,7 @@ export default styled(UiSortButton)``
 const SortButton = styled(UiListHeader)`
   cursor: pointer;
   margin: 0 0.2rem;
+  color: ${({ theme }) => theme.colors.tertiary.contrast};
 
   will-change: background-color;
   transition: 200ms ease-out;
@@ -47,5 +48,13 @@ const SortButton = styled(UiListHeader)`
 
   :hover {
     background-color: ${({ theme }) => theme.colors.grey.value};
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
   }
 `

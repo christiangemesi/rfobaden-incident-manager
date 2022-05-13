@@ -31,7 +31,7 @@ const IncidentArchiveListItem: React.VFC<Props> = ({
             <UiDate value={incident.closeReason.createdAt} />
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={4}>
           <UiTitle level={6}>
             {incident.closeReason.message}
           </UiTitle>
