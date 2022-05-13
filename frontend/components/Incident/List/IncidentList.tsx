@@ -17,7 +17,7 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
   const currentUser = useCurrentUser()
 
   return (
-    <UiGrid gap={1.5} justify="center">
+    <UiGrid gap={1.5}>
       {incidents.map((incident) => (
         <UiGrid.Col key={incident.id} size={{ sm: 6, lg: 4, xxl: 3 }}>
           <IncidentListItem incident={incident} />
