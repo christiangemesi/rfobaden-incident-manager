@@ -15,6 +15,8 @@ import VehicleStore, { useVehicle } from '@/stores/VehicleStore'
 import { useEffectOnce } from 'react-use'
 import BackendService, { BackendResponse } from '@/services/BackendService'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
+import Trailer, { parseTrailer } from '@/models/Trailer'
+import TrailerStore, { useTrailer } from '@/stores/TrailerStore'
 
 interface Props {
   incident: Incident
@@ -39,9 +41,19 @@ const TransportViewHeader: React.VFC<Props> = ({
         throw visibleVehiclesError
       }
       VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
+
+      const [visibleTrailers, visibleTrailersError]: BackendResponse<Trailer[]> = await BackendService.list(
+        'trailer',
+      )
+      if (visibleTrailersError !== null) {
+        throw visibleTrailersError
+      }
+      TrailerStore.saveAll(visibleTrailers.map(parseTrailer))
+
     })()
   })
   const vehicle = useVehicle(transport.vehicleId)?.name ?? '-'
+  const trailer = useTrailer(transport.trailerId)?.name ?? '-'
 
   return (
     <Container>
@@ -90,7 +102,7 @@ const TransportViewHeader: React.VFC<Props> = ({
               <UiTitle level={6}>Anhänger:</UiTitle>
             </th>
             <td>
-              <span>{transport.trailer ?? '-'}</span>
+              <span>{trailer}</span>
             </td>
           </tr>
           <tr>

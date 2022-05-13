@@ -1,21 +1,17 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelControllerTest;
-import ch.rfobaden.incidentmanager.backend.models.Incident;
-import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
-import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
+import ch.rfobaden.incidentmanager.backend.services.TrailerService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.services.VehicleService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
@@ -31,6 +27,9 @@ public class TransportControllerTest
 
     @MockBean
     VehicleService vehicleService;
+
+    @MockBean
+    TrailerService trailerService;
 
     @Override
     protected String getEndpointFor(TransportPath path) {
@@ -52,6 +51,12 @@ public class TransportControllerTest
         if (vehicle != null) {
             Mockito.when(vehicleService.find(vehicle.getId()))
                 .thenReturn(Optional.of(vehicle));
+        }
+
+        var trailer = transport.getTrailer();
+        if (trailer != null) {
+            Mockito.when(trailerService.find(trailer.getId()))
+                .thenReturn(Optional.of(trailer));
         }
     }
 }

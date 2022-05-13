@@ -7,6 +7,7 @@ import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
+import ch.rfobaden.incidentmanager.backend.services.TrailerService;
 import ch.rfobaden.incidentmanager.backend.services.TransportService;
 import ch.rfobaden.incidentmanager.backend.services.UserService;
 import ch.rfobaden.incidentmanager.backend.services.VehicleService;
@@ -29,14 +30,18 @@ public class TransportController
 
     private final VehicleService vehicleService;
 
+    private final TrailerService trailerService;
+
     public TransportController(
         IncidentService incidentService,
         UserService userService,
-        VehicleService vehicleService
+        VehicleService vehicleService,
+        TrailerService trailerService
     ) {
         this.incidentService = incidentService;
         this.userService = userService;
         this.vehicleService = vehicleService;
+        this.trailerService = trailerService;
     }
 
     @Override
@@ -76,6 +81,11 @@ public class TransportController
             var vehicle = vehicleService.find(transport.getVehicleId())
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "vehicle not found"));
             transport.setVehicle(vehicle);
+        }
+        if (transport.getTrailer() != null) {
+            var trailer = trailerService.find(transport.getTrailerId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "trailer not found"));
+            transport.setTrailer(trailer);
         }
     }
 }

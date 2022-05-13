@@ -42,11 +42,16 @@ public final class Transport extends Model implements PathConvertible<TransportP
         CascadeType.DETACH,
         CascadeType.MERGE
     })
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Vehicle vehicle;
 
-    @Size(min = 1, max = 100)
-    private String trailer;
+    @ManyToOne(cascade = {
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
+    @JoinColumn
+    private Trailer trailer;
 
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
@@ -151,12 +156,28 @@ public final class Transport extends Model implements PathConvertible<TransportP
         vehicle.setId(id);
     }
 
-    public String getTrailer() {
+    public Trailer getTrailer() {
         return trailer;
     }
 
-    public void setTrailer(String trailer) {
+    public void setTrailer(Trailer trailer) {
         this.trailer = trailer;
+    }
+
+    public Long getTrailerId() {
+        if (trailer == null) {
+            return null;
+        }
+        return trailer.getId();
+    }
+
+    public void setTrailerId(Long id) {
+        if (id == null) {
+            trailer = null;
+            return;
+        }
+        trailer = new Trailer();
+        trailer.setId(id);
     }
 
     public LocalDateTime getStartsAt() {
