@@ -15,8 +15,8 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import backendService, { BackendResponse } from '@/services/BackendService'
 import Organization, { parseOrganization } from '@/models/Organization'
-import { useEffectOnce } from 'react-use'
 import OrganizationList from '@/components/Organization/List/OrganizationList'
+import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
 
 interface Props {
   incident: Incident
@@ -40,17 +40,15 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
   }, [incident])
 
-  useEffectOnce(() => {
-    (async () => {
-      const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
-        'organizations',
-      )
-      if (organizationError !== null) {
-        throw organizationError
-      }
-      OrganizationStore.saveAll(organizations.map(parseOrganization))
-    })()
-  })
+  useAsyncEffect(async function loadOrganizations() {
+    const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
+      'organizations',
+    )
+    if (organizationError !== null) {
+      throw organizationError
+    }
+    OrganizationStore.saveAll(organizations.map(parseOrganization))
+  },[])
 
   const organizationsOfIncident = useOrganizations(
     (organizations) => organizations.filter(({ id }) => incident.organizationIds.includes(id)),
