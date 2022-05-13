@@ -204,7 +204,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
           )}</UiForm.Field>
 
-          <UiGrid gap={0.5}>
+          <UiGrid gap={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.pointOfDeparture}>{(props) => (
                 <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
@@ -227,7 +227,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          <UiGrid gap={0.5}>
+          <UiGrid gap={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
                 <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
