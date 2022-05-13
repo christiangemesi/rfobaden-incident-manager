@@ -47,7 +47,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                 {organization.name}
               </UiTitle>
             </UiGrid.Col>
-            <UiGrid.Col size={4}>
+            <UiGrid.Col textAlign="right" size={4}>
               <UiTitle level={6}>
                 {organization.userIds.length}
               </UiTitle>

@@ -12,6 +12,8 @@ import { useCurrentUser } from '@/stores/SessionStore'
 import Organization from '@/models/Organization'
 import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 import OrganizationListItem from '@/components/Organization/List/Item/OrganizationListItem'
+import styled from 'styled-components'
+import { Themed } from '@/theme'
 
 interface Props {
   organizations: readonly Organization[]
@@ -23,7 +25,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = f
 
   const [sortedOrganizations, sort] = useSort(organizations, () => ({
     name: String,
-    userCount: ({ userIds: a },  { userIds: b }) => {
+    userCount: ({ userIds: a }, { userIds: b }) => {
       if (a.length === b.length) {
         return 0
       }
@@ -36,42 +38,55 @@ const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = f
   }))
 
   return (
-    <div>
-      {isAdmin(currentUser) && hasCreateButton && (
-        <UiModal title="Organisation erfassen" size="fixed">
-          <UiModal.Trigger>{({ open }) => (
-            <UiCreatButton onClick={open}>
-              <UiIcon.CreateAction size={1.4} />
-            </UiCreatButton>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
-            <OrganizationForm onClose={close} />
-          )}</UiModal.Body>
-        </UiModal>
-      )}
+    <OuterScroll>
+      <InnerScroll>
+        {isAdmin(currentUser) && hasCreateButton && (
+          <UiModal title="Organisation erfassen" size="fixed">
+            <UiModal.Trigger>{({ open }) => (
+              <UiCreatButton onClick={open}>
+                <UiIcon.CreateAction size={1.4} />
+              </UiCreatButton>
+            )}</UiModal.Trigger>
+            <UiModal.Body>{({ close }) => (
+              <OrganizationForm onClose={close} />
+            )}</UiModal.Body>
+          </UiModal>
+        )}
+        <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
+          <UiGrid.Col size={7}>
+            <UiSortButton field={sort.name}>
+              <UiTitle level={6}>Organisation</UiTitle>
+            </UiSortButton>
+          </UiGrid.Col>
+          <UiGrid.Col textAlign="right" size={4}>
+            <UiSortButton field={sort.userCount}>
+              <UiTitle level={6}>Anzahl Benutzer</UiTitle>
+            </UiSortButton>
+          </UiGrid.Col>
+        </UiGrid>
 
-      <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
-        <UiGrid.Col size={6}>
-          <UiSortButton field={sort.name}>
-            <UiTitle level={6}>Organisation</UiTitle>
-          </UiSortButton>
-        </UiGrid.Col>
-        <UiGrid.Col size={6}>
-          <UiSortButton field={sort.userCount}>
-            <UiTitle level={6}>Anzahl Benutzer</UiTitle>
-          </UiSortButton>
-        </UiGrid.Col>
-      </UiGrid>
- 
-      <UiList>
-        {sortedOrganizations.map((organization) => (
-          <OrganizationListItem
-            key={organization.id}
-            organization={organization}
-          />
-        ))}
-      </UiList>
-    </div>
+        <UiList>
+          {sortedOrganizations.map((organization) => (
+            <OrganizationListItem
+              key={organization.id}
+              organization={organization}
+            />
+          ))}
+        </UiList>
+      </InnerScroll>
+    </OuterScroll>
   )
 }
 export default OrganizationList
+
+const InnerScroll = styled.div`
+  ${Themed.media.sm.max} {
+    width: 155vw;
+  }
+`
+
+const OuterScroll = styled.div`
+  ${Themed.media.sm.max} {
+    overflow-x: scroll;
+  }
+`

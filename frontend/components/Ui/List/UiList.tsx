@@ -22,7 +22,7 @@ const Box = styled.ul`
   display: flex;
   flex-direction: column;
   row-gap: 0.4rem;
-
+  
   & > ${UiListItem}:first-child, & > a:first-child > ${UiListItem} {
     &, :after {
       border-top-left-radius: 0.5rem;
