@@ -13,23 +13,23 @@ interface Props {
 const IncidentArchiveList: React.VFC<Props> = ({ incidents }) => {
   return (
     <div>
-      <UiGrid style={{ padding: '0 1rem' }} gapH={1.5}>
-        <UiGrid.Col size={4}>
+      <UiGrid gapH={1.5}>
+        <UiGrid.Col size={{ xs: 6, lg: 4 }}>
           <UiListHeader>
             <UiTitle level={6}>Ereignis</UiTitle>
           </UiListHeader>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={{ xs: 0, lg: 2 }}>
           <UiListHeader>
             <UiTitle level={6}>Startdatum</UiTitle>
           </UiListHeader>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={{ xs: 0, lg: 2 }}>
           <UiListHeader>
             <UiTitle level={6}>Schliessdatum</UiTitle>
           </UiListHeader>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={{ xs: 6, lg: 4 }}>
           <UiListHeader>
             <UiTitle level={6}>Begründung</UiTitle>
           </UiListHeader>

@@ -16,22 +16,22 @@ const IncidentArchiveListItem: React.VFC<Props> = ({
   return (
     <UiListItem href={`/ereignisse/${incident.id}`}>
       <UiGrid align="center" gapH={1.5}>
-        <UiGrid.Col size={4}>
+        <UiGrid.Col size={{ xs: 6, lg: 4 }}>
           <UiTitle level={5}>
             {incident.title}
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={{ xs: 0, lg: 2 }}>
           <UiTitle level={6}>
             <UiDate value={incident.startsAt ?? incident.createdAt} />
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={2}>
+        <UiGrid.Col size={{ xs: 0, lg: 2 }}>
           <UiTitle level={6}>
             <UiDate value={incident.closeReason.createdAt} />
           </UiTitle>
         </UiGrid.Col>
-        <UiGrid.Col size={4}>
+        <UiGrid.Col size={{ xs: 6, lg: 4 }}>
           <UiTitle level={6}>
             {incident.closeReason.message}
           </UiTitle>
