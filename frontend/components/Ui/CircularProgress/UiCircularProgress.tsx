@@ -14,7 +14,7 @@ const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false })
     return (
       <svg width={SVG_SIZE} height={SVG_SIZE}>
         <g transform={`rotate(-90 ${RADIUS_OUTER} ${RADIUS_OUTER})`}>
-          <OuterCircle radius={RADIUS_OUTER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y}} />
+          <OuterCircle radius={RADIUS_OUTER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} />
           <ProgressCircle progress={progress} radius={RADIUS_PROGRESS} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} isClosed={isClosed} />
           <InnerCircle radius={RADIUS_INNER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} isClosed={isClosed} />
         </g>
