@@ -15,9 +15,10 @@ import OrganizationListItem from '@/components/Organization/List/Item/Organizati
 
 interface Props {
   organizations: readonly Organization[]
+  hasCreateButton?: boolean
 }
 
-const OrganizationList: React.VFC<Props> = ({ organizations }) => {
+const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
   const [sortedOrganizations, sort] = useSort(organizations, () => ({
@@ -36,7 +37,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
 
   return (
     <div>
-      {isAdmin(currentUser) && (
+      {isAdmin(currentUser) && hasCreateButton && (
         <UiModal title="Organisation erfassen" size="fixed">
           <UiModal.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
