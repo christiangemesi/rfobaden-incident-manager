@@ -48,7 +48,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       throw organizationError
     }
     OrganizationStore.saveAll(organizations.map(parseOrganization))
-  },[])
+  }, [])
 
   const organizationsOfIncident = useOrganizations(
     (organizations) => organizations.filter(({ id }) => incident.organizationIds.includes(id)),
