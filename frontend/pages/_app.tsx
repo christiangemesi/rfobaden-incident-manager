@@ -104,10 +104,14 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   }
 
   ${({ theme }) => css`
+    :root {
+      font-size: ${theme.fonts.sizes.root};
+      font-family: ${theme.fonts.body};
+    }
+    
     body {
       width: 100%;
       height: 100%;
-      font-family: ${theme.fonts.body};
       background: ${theme.colors.tertiary.value};
       color: ${theme.colors.tertiary.contrast};
     }

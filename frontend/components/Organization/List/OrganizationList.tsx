@@ -17,9 +17,10 @@ import { Themed } from '@/theme'
 
 interface Props {
   organizations: readonly Organization[]
+  hasCreateButton?: boolean
 }
 
-const OrganizationList: React.VFC<Props> = ({ organizations }) => {
+const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
   const [sortedOrganizations, sort] = useSort(organizations, () => ({
@@ -39,7 +40,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
   return (
     <OuterScroll>
       <InnerScroll>
-        {isAdmin(currentUser) && (
+        {isAdmin(currentUser) && hasCreateButton && (
           <UiModal title="Organisation erfassen" size="fixed">
             <UiModal.Trigger>{({ open }) => (
               <UiCreatButton onClick={open}>
@@ -51,7 +52,6 @@ const OrganizationList: React.VFC<Props> = ({ organizations }) => {
             )}</UiModal.Body>
           </UiModal>
         )}
-
         <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
           <UiGrid.Col size={7}>
             <UiSortButton field={sort.name}>

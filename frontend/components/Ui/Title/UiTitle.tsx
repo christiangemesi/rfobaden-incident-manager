@@ -45,67 +45,61 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
 
   h1& {
     font-weight: 300;
-    font-size: 52px;
-    line-height: 64px;
-    letter-spacing: 0.2px;
+    font-size: 3.125em;
+    line-height: 1.28;
     
     ${Themed.media.sm.max} {
-      font-size: 44px;
+      font-size: 2.75em;
     }
   }
 
   h2& {
-    font-weight: 500;
-    font-size: 44px;
-    line-height: 54px;
-    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 2.25em;
+    line-height: 1.22;
 
     ${Themed.media.sm.max} {
-      font-size: 32px;
+      font-size: 2em;
     }
   }
 
   h3& {
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: 0.1px;
+    font-weight: 400;
+    font-size: 1.875em;
+    line-height: 1.26;
 
     ${Themed.media.sm.max} {
-      font-size: 26px;
+      font-size: 1.625em;
     }
   }
 
   h4& {
-    font-weight: 500;
-    font-size: 26px;
-    line-height: 32px;
-    letter-spacing: 0.2px;
+    font-weight: 400;
+    font-size: 1.5em;
+    line-height: 1.25;
     
     ${Themed.media.sm.max} {
-      font-size: 20px;
+      font-size: 1.25em;
     }
   }
 
   h5& {
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 26px;
-    letter-spacing: 0.2px;
+    font-weight: 400;
+    font-size: 1.25em;
+    line-height: 1.3;
     
     ${Themed.media.sm.max} {
-      font-size: 18px;
+      font-size: 1.125em;
     }
   }
 
   h6& {
     font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: 0.2px;
+    font-size: 1em;
+    line-height: 1.4;
     
     ${Themed.media.sm.max} {
-      font-size: 16px;
+      font-size: 1em;
     }
   }
 `

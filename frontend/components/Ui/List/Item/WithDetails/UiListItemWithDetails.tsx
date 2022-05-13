@@ -42,7 +42,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
               {caption}
             </ItemCaption>
           )}
-          <ItemTitle level={5}>
+          <ItemTitle level={6}>
             {title}
           </ItemTitle>
           {user}

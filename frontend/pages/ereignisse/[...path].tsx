@@ -105,6 +105,7 @@ const StyledIncidentView = styled(IncidentView)`
   padding-top: 0;
   min-height: calc(100vh - 4rem - 4rem - 2rem);
   flex: 1;
+  gap: 2rem;
   
   & > ${UiLevel.Header} {
     padding-top: 0;
