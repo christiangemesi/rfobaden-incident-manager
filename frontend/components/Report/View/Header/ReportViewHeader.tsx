@@ -46,7 +46,7 @@ const ReportViewHeader: React.VFC<Props> = ({
           <UiPriority priority={report.priority} />
         )}
         <div style={{ width: '100%' }}>
-          <UiTitle level={3}>
+          <UiTitle level={2}>
             {report.title}
           </UiTitle>
         </div>
@@ -82,22 +82,23 @@ export default ReportViewHeader
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  //gap: 1rem;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  //gap: 1rem;
   width: 100%;
+  margin-top: 0.5rem;
 `
 
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 100%;
+  margin-top: 0.3rem;
 `
 
 const InfoTable = styled.table`

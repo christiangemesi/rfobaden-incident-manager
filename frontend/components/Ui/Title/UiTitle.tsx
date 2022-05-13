@@ -56,8 +56,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
 
   h2& {
     font-weight: 400;
-    font-size: 44px;
-    line-height: 54px;
+    font-size: 36px;
+    line-height: 44px;
     letter-spacing: 0;
 
     ${Themed.media.sm.max} {
@@ -66,9 +66,9 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h3& {
-    font-weight: 500;
-    font-size: 32px;
-    line-height: 40px;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 38px;
     letter-spacing: 0.1px;
 
     ${Themed.media.sm.max} {
@@ -78,8 +78,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
 
   h4& {
     font-weight: 500;
-    font-size: 26px;
-    line-height: 32px;
+    font-size: 24px;
+    line-height: 30px;
     letter-spacing: 0.2px;
     
     ${Themed.media.sm.max} {
@@ -99,8 +99,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h6& {
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 16px;
     line-height: 24px;
     letter-spacing: 0.2px;
     
