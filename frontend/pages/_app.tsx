@@ -1,7 +1,7 @@
 import NextApp, { AppProps } from 'next/app'
 import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
-import { createGlobalStyle, css, ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
 import { useEffectOnce } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
@@ -15,6 +15,7 @@ import AlertStore, { useAlerts } from '@/stores/AlertStore'
 import UiAlert from '@/components/Ui/Alert/UiAlert'
 
 import 'reset-css/reset.css'
+import { useBreakpointName } from '@/utils/hooks/useBreakpoints'
 
 interface Props extends AppProps {
   user: User | null
@@ -55,6 +56,9 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
               <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
             )}
           </UiAlertList>
+          {process.env.NODE_ENV === 'development' && (
+            <BreakpointOverlay />
+          )}
         </UiScroll>
       </ThemeProvider>
     </Fragment>
@@ -117,4 +121,17 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       background-color: transparent;
     }
   }
+`
+
+const BreakpointOverlay: React.VFC = () => {
+  const breakpoint = useBreakpointName()
+  return <BreakpointBox>{breakpoint}</BreakpointBox>
+}
+
+const BreakpointBox = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 1rem;
+  z-index: 1000;
 `
