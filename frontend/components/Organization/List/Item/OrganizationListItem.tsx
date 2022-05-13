@@ -17,6 +17,7 @@ import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UserList from '@/components/User/List/UserList'
 import OrganizationStore from '@/stores/OrganizationStore'
+import styled from 'styled-components'
 
 interface Props extends StyledProps {
   organization: Organization
@@ -47,7 +48,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                 {organization.name}
               </UiTitle>
             </UiGrid.Col>
-            <UiGrid.Col size={4}>
+            <UiGrid.Col textAlign="right" size={4}>
               <UiTitle level={6}>
                 {organization.userIds.length}
               </UiTitle>

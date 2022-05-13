@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   children: ReactNode
@@ -22,7 +23,7 @@ const Box = styled.ul`
   display: flex;
   flex-direction: column;
   row-gap: 0.4rem;
-
+  
   & > ${UiListItem}:first-child, & > a:first-child > ${UiListItem} {
     &, :after {
       border-top-left-radius: 0.5rem;

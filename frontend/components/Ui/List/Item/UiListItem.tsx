@@ -2,6 +2,7 @@ import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import Link from 'next/link'
+import { Themed } from '@/theme'
 
 export interface Props extends StyledProps {
   href?: string | URL
@@ -52,7 +53,7 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean, isCl
   transition-property: filter, background-color, opacity, border-color;
   will-change: filter, background-color, opacity, border-color;
   border: 1px solid transparent;
-
+  
   ${({ isClosed, isClickable }) => isClosed && css`
     filter: grayscale(0.8) brightness(0.8);
     opacity: 0.75;
