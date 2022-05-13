@@ -17,7 +17,6 @@ import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UserList from '@/components/User/List/UserList'
 import OrganizationStore from '@/stores/OrganizationStore'
-import styled from 'styled-components'
 
 interface Props extends StyledProps {
   organization: Organization
