@@ -7,13 +7,9 @@ import BackendService from '@/services/BackendService'
 import Subtask from '@/models/Subtask'
 import SubtaskStore from '@/stores/SubtaskStore'
 import Task from '@/models/Task'
-import Document from '@/models/Document'
-import TrackableFileUploadAction from '@/components/Trackable/Actions/TrackableFileUploadAction'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
 import UiPrinter from '@/components/Ui/Printer/UiPrinter'
 import SubtaskPrintView from '@/components/Subtask/PrintView/SubtaskPrintView'
-import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
-import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
   task: Task
@@ -34,22 +30,6 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
       SubtaskStore.remove(subtask.id)
     }
   }, [subtask, handleDeleteCb])
-
-  const addImage = useCallback((image: Document) => {
-    SubtaskStore.save({ ...subtask, images: [...subtask.images, image]})
-  }, [subtask])
-
-  const addDocument = useCallback((document: Document) => {
-    SubtaskStore.save({ ...subtask, documents: [...subtask.documents, document]})
-  }, [subtask])
-
-  const storeImages = (images: Document[]) => {
-    SubtaskStore.save({ ...subtask, images: images })
-  }
-
-  const storeDocuments = (documents: Document[]) => {
-    SubtaskStore.save({ ...subtask, documents: documents })
-  }
 
   return (
     <UiDropDown>
