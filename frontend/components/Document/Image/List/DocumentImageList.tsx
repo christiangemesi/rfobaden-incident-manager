@@ -93,4 +93,5 @@ const Button = styled(UiCreateButton)`
   width: 200px;
   min-height: 235px;
   height: inherit;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `
