@@ -14,7 +14,7 @@ import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import backendService, { BackendResponse } from '@/services/BackendService'
-import Organization from '@/models/Organization'
+import Organization, { parseOrganization } from '@/models/Organization'
 import { useEffectOnce } from 'react-use'
 import OrganizationList from '@/components/Organization/List/OrganizationList'
 
@@ -48,7 +48,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       if (organizationError !== null) {
         throw organizationError
       }
-      OrganizationStore.saveAll(organizations)
+      OrganizationStore.saveAll(organizations.map(parseOrganization))
     })()
   })
 
