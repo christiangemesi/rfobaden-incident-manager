@@ -87,9 +87,7 @@ const Container = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  //gap: 1rem;
   width: 100%;
-  margin-top: 0.5rem;
 `
 
 const InfoContainer = styled.div`
@@ -98,7 +96,8 @@ const InfoContainer = styled.div`
   align-items: start;
   gap: 0.5rem;
   width: 100%;
-  margin-top: 0.3rem;
+  margin-top: 1rem;
+  padding-left: 0.15rem;
 `
 
 const InfoTable = styled.table`

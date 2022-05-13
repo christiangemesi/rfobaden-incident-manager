@@ -80,7 +80,7 @@ const OrganizationListItem: React.VFC<Props> = ({
         </UiListItem>
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
-        <UiTitle level={3}>
+        <UiTitle level={2}>
           {organization.name}
         </UiTitle>
         {organization.userIds.length === 0 ? (

@@ -27,29 +27,34 @@ const TaskViewHeader: React.VFC<Props> = ({
 }) => {
   return (
     <Container>
-      <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-        <TitleContainer>
-          {hasPriority && (
-            <UiPriority priority={report.priority} />
-          )}
-          <div>
-            <TaskInfo task={task} />
-            <UiTitle level={3}>
-              {task.title}
-            </UiTitle>
-          </div>
-        </TitleContainer>
-
-        <UiIconButtonGroup>
-          <TaskActions report={report} task={task} />
-
-          <UiIconButton onClick={handleClose}>
-            <UiIcon.CancelAction />
-          </UiIconButton>
-        </UiIconButtonGroup>
+      <UiGrid justify="space-between" align="start">
+        <UiGrid.Col>
+          <TaskInfo task={task} />
+        </UiGrid.Col>
+        <UiGrid.Col size="auto" textAlign="right">
+          <UiIconButtonGroup>
+            <TaskActions report={report} task={task} />
+            <UiIconButton onClick={handleClose}>
+              <UiIcon.CancelAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </UiGrid.Col>
       </UiGrid>
-
-      <UiDescription description={task.description} />
+      <TitleContainer>
+        {hasPriority && (
+          <UiPriority priority={report.priority} />
+        )}
+        <div style={{ width: '100%' }}>
+          <UiTitle level={3}>
+            {task.title}
+          </UiTitle>
+        </div>
+      </TitleContainer>
+      {task.description !== null && (
+        <DescriptionContainer>
+          <UiDescription description={task.description} />
+        </DescriptionContainer>
+      )}
     </Container>
   )
 }
@@ -58,11 +63,14 @@ export default TaskViewHeader
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  //gap: 1rem;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  //gap: 1rem;
+`
+
+const DescriptionContainer = styled.div`
+  padding-left: 0.15rem;
+  margin-top: 1rem;
 `

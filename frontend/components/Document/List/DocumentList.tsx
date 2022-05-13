@@ -55,7 +55,7 @@ const DocumentList: React.VFC<Props> = ({
 
   return (
     <React.Fragment>
-      <UiTitle level={1}>
+      <UiTitle level={2}>
         Dokumente
       </UiTitle>
       <UiModal title="Dokument hinzufügen" size="fixed">
