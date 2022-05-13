@@ -39,7 +39,7 @@ const OrganisationenPage: React.VFC<Props> = ({ data }) => {
             </UiGrid.Col>
           </UiGrid>
           <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            <OrganizationList organizations={organizations} />
+            <OrganizationList organizations={organizations} hasCreateButton />
           </UiGrid.Col>
         </section>
       </UiContainer>

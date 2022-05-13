@@ -46,7 +46,7 @@ const UserListItem: React.VFC<Props> = ({
   return (
     <UiListItem>
       <UiGrid align="center" gapH={1.5}>
-        <UiGrid.Col size={{ xs: 6, md: 5 }}>
+        <UiGrid.Col size={5}>
           <UiTitle level={5}>
             {user.firstName} {user.lastName}
           </UiTitle>
@@ -55,7 +55,7 @@ const UserListItem: React.VFC<Props> = ({
         <UiGrid.Col size={2}>
           {user.role}
         </UiGrid.Col>
-        <UiGrid.Col size={{ xs: 3, md: 4 }}>
+        <UiGrid.Col size={4}>
           {organization?.name ?? '-'}
         </UiGrid.Col>
         <UiGrid.Col size={1}>

@@ -20,8 +20,9 @@ interface Props {
 }
 
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
-
-  const userEmails = useUsers((users) => users.map(({ email }) => email.toLowerCase()))
+  const userEmails = useUsers((users) => (
+    users.filter((it) => it.id !== user?.id).map(({ email }) => email.toLowerCase())
+  ), [user?.id])
 
   const form = useForm<ModelData<User>>(user,() => ({
     email: '',

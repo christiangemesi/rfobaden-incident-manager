@@ -40,6 +40,7 @@ export default styled(UiSortButton)``
 const SortButton = styled(UiListHeader)`
   cursor: pointer;
   margin: 0 0.2rem;
+  padding: 0.5rem;
   color: ${({ theme }) => theme.colors.tertiary.contrast};
 
   will-change: background-color;

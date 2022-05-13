@@ -191,6 +191,7 @@ public class Incident extends Model.Basic
         this.images = images;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Set<Long> getOrganizationIds() {
         return Stream.concat(
             Stream.concat(
