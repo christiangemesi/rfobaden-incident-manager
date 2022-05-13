@@ -44,8 +44,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   `}
 
   h1& {
-    font-weight: 300;
-    font-size: 3.125em;
+    font-weight: 400;
+    font-size: 3em;
     line-height: 1.28;
     
     ${Themed.media.sm.max} {
@@ -54,7 +54,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h2& {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 2.25em;
     line-height: 1.22;
 
@@ -64,7 +64,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h3& {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1.875em;
     line-height: 1.26;
 
