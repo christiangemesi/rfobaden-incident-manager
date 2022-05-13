@@ -4,11 +4,10 @@ import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import Alert from '@/models/Alert'
 
 const UiAlertExample: React.VFC = () => {
-
   const [alerts, setAlerts] = useState<Alert[]>(
     [
       { id: 1, text: 'Info Message', type: 'info', isFading: true },
-      { id: 2, text: 'Warning Message', type: 'warning', isFading: false },
+      { id: 2, text: 'Warning Message that is very very very very long', type: 'warning', isFading: false },
       { id: 3, text: 'Error Message', type: 'error', isFading: false },
       { id: 4, text: 'Success Message', type: 'success', isFading: true },
     ],

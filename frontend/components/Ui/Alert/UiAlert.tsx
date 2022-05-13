@@ -44,11 +44,11 @@ const UiAlert: React.VFC<Props> = ({
 
   return (
     <Box type={alert.type} isVisible={isVisible}>
+      <IconContainer>
+        {icon}
+      </IconContainer>
       <TextContainer>
-        <IconContainer>
-          {icon}
-        </IconContainer>
-        <UiTitle level={6}>{alert.text}</UiTitle>
+        {alert.text}
       </TextContainer>
       <IconContainer>
         <UiIconButton onClick={() => handleRemove(alert)}><DeleteIcon /></UiIconButton>
@@ -61,7 +61,8 @@ export default UiAlert
 
 const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
   background: ${({ theme, type }) => theme.colors[type].value};
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
   justify-content: space-between;
   padding: 1rem;
   border-radius: 1rem;
@@ -80,8 +81,15 @@ const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
 `
 
 const TextContainer = styled.div`
-  display: inline-flex;
+  display: flex;
+  align-items: center;
   color: white;
+  word-break: break-all;
+  white-space: normal;
+  overflow: visible;
+  width: 100%;
+
+  grid-column: auto / span 8;
 `
 
 const DeleteIcon = styled(UiIcon.CancelAction)`
@@ -89,8 +97,12 @@ const DeleteIcon = styled(UiIcon.CancelAction)`
 `
 
 const IconContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
   color: white;
 
   margin-right: 0.5rem;
   margin-left: 0.5rem;
+
+  grid-column: auto / span 2;
 `
