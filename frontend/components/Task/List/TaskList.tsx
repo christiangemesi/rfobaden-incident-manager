@@ -35,7 +35,6 @@ const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) =
           )}</UiModal.Body>
         </UiModal>
       )}
-
       <UiList>
         {tasks.map((task) => (
           <TaskListItem key={task.id} task={task} onClick={handleSelect} />
