@@ -38,7 +38,6 @@ const OrganisationenPage: React.VFC<Props> = ({ data }) => {
               </UiTitle>
             </UiGrid.Col>
           </UiGrid>
-          {/*todo: adapt respnsiveness*/}
           <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
             <OrganizationList organizations={organizations} />
           </UiGrid.Col>
