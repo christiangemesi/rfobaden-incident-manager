@@ -20,6 +20,7 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
+import { Themed } from '@/theme'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
 import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
 import { useEffectOnce } from 'react-use'
@@ -163,13 +164,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     <div>
       <UiForm form={form}>
         <FormContainer>
-          <UiGrid align="center">
-            <UiGrid.Col textAlign="right">
-              <UiForm.Field field={form.priority}>{(props) => (
-                <UiPrioritySlider {...props} />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-          </UiGrid>
+          <PrioritySliderPositioner>
+            <UiForm.Field field={form.priority}>{(props) => (
+              <UiPrioritySlider {...props} />
+            )}</UiForm.Field>
+          </PrioritySliderPositioner>
 
           <UiForm.Field field={form.title}>{(props) => (
             <UiTextInput {...props} label="Titel" placeholder="Titel" />
@@ -205,14 +204,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.pointOfDeparture}>{(props) => (
-            <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.pointOfDeparture}>{(props) => (
+                <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.pointOfArrival}>{(props) => (
-            <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.pointOfArrival}>{(props) => (
+                <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Field field={form.assigneeId}>{(props) => (
             <UiSelectInput
               {...props}
@@ -223,14 +227,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.startsAt}>{(props) => (
+                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.endsAt}>{(props) => (
+                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Buttons form={form} />
         </FormContainer>
       </UiForm>
@@ -257,4 +266,13 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `
