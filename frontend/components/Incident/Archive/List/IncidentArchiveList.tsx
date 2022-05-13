@@ -26,7 +26,7 @@ const IncidentArchiveList: React.VFC<Props> = ({ incidents }) => {
         </UiGrid.Col>
         <UiGrid.Col size={2}>
           <UiListHeader>
-            <UiTitle level={6}>Schliessdatum</UiTitle>
+            <UiTitle level={6}>Abschlussdatum</UiTitle>
           </UiListHeader>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
