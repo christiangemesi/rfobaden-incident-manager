@@ -1,11 +1,10 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
-
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
-import ch.rfobaden.incidentmanager.backend.models.Vehicle;
+import ch.rfobaden.incidentmanager.backend.models.Trailer;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
-import ch.rfobaden.incidentmanager.backend.services.VehicleService;
+import ch.rfobaden.incidentmanager.backend.services.TrailerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,50 +17,50 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/vehicles")
-public class VehicleController
-    extends ModelController.Basic<Vehicle, VehicleService> {
+@RequestMapping(path = "api/v1/trailers")
+public class TrailerController
+    extends ModelController.Basic<Trailer, TrailerService> {
 
-    public VehicleController() {
+    public TrailerController() {
     }
 
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
-    public List<Vehicle> listVisible() {
+    public List<Trailer> listVisible() {
         return service.listVisible();
     }
 
     @Override
     @RequireAgent
-    public Vehicle create(@ModelAttribute EmptyPath path, @RequestBody Vehicle entity) {
-        var vehicle = service.findByName(entity.getName().toLowerCase()).orElse(null);
-        if (vehicle != null) {
-            vehicle.setVisible(true);
-            return super.update(path, vehicle.getId(), vehicle);
+    public Trailer create(@ModelAttribute EmptyPath path, @RequestBody Trailer entity) {
+        var trailer = service.findByName(entity.getName().toLowerCase()).orElse(null);
+        if (trailer != null) {
+            trailer.setVisible(true);
+            return super.update(path, trailer.getId(), trailer);
         }
         return super.create(path, entity);
     }
 
     @Override
     @RequireAgent
-    public Vehicle update(
+    public Trailer update(
         @ModelAttribute EmptyPath emptyPath,
         @PathVariable Long id,
-        @RequestBody Vehicle entity
+        @RequestBody Trailer entity
     ) {
         return super.update(emptyPath, id, entity);
     }
 
     @Override
     @RequireAgent
-    public Vehicle find(@ModelAttribute EmptyPath emptyPath, @PathVariable Long id) {
+    public Trailer find(@ModelAttribute EmptyPath emptyPath, @PathVariable Long id) {
         return super.find(emptyPath, id);
     }
 
     @Override
     @RequireAgent
-    public List<Vehicle> list(@ModelAttribute EmptyPath emptyPath) {
+    public List<Trailer> list(@ModelAttribute EmptyPath emptyPath) {
         return super.list(emptyPath);
     }
 }

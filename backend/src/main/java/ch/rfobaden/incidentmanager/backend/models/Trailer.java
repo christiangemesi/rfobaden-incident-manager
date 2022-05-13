@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "vehicle")
-public final class Vehicle extends Model.Basic implements Serializable {
+@Table(name = "trailer")
+public class Trailer extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Size(max = 100)
@@ -47,10 +47,10 @@ public final class Vehicle extends Model.Basic implements Serializable {
         if (this == other) {
             return true;
         }
-        if (!(other instanceof Vehicle)) {
+        if (!(other instanceof Trailer)) {
             return false;
         }
-        var that = (Vehicle) other;
+        var that = (Trailer) other;
         return equalsModel(that)
             && Objects.equals(name.toLowerCase(), that.name.toLowerCase())
             && isVisible == that.isVisible;
@@ -60,4 +60,5 @@ public final class Vehicle extends Model.Basic implements Serializable {
     public int hashCode() {
         return Objects.hash(modelHashCode(), name.toLowerCase(), isVisible);
     }
+
 }

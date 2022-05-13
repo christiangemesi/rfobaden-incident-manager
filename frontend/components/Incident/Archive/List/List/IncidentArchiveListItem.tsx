@@ -14,7 +14,7 @@ const IncidentArchiveListItem: React.VFC<Props> = ({
   incident,
 }) => {
   return (
-    <UiListItem href={`/ereignisse/${incident.id}`}>
+    <UiListItem href={`/ereignisse/${incident.id}`} isClosed>
       <UiGrid align="center" gapH={1.5}>
         <UiGrid.Col size={4}>
           <UiTitle level={5}>

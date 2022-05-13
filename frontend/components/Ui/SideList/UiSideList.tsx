@@ -8,10 +8,12 @@ import Model from '@/models/base/Model'
 import { ModelStore } from '@/stores/base/Store'
 import { createUseRecord } from '@/stores/base/hooks'
 import { noop } from '@/utils/control-flow'
+import Trackable from '@/models/Trackable'
 
 interface Props<T extends Model> {
   initialId?: Id<T> | null
   store: ModelStore<T>
+  isClosed: (record: T) => boolean
 
   renderList: (props: { selected: T | null, select: (record: T | null) => void }) => ReactNode
   renderView: (props: { selected: T, close: () => void }) => ReactNode
@@ -20,9 +22,10 @@ interface Props<T extends Model> {
   onDeselect?: () => void
 }
 
-const UiSideList = <T extends Model>({
+const UiSideList = <T extends Trackable>({
   initialId,
   store,
+  isClosed,
   renderList,
   renderView,
   onSelect: handleSelect = noop,
@@ -65,6 +68,7 @@ const UiSideList = <T extends Model>({
       <ListOverlay
         ref={setOverlayRef}
         hasSelected={selected !== null}
+        isClosed={selected !== null && isClosed(selected)}
       >
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
@@ -81,6 +85,7 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
+
   ${Themed.media.lg.min} {
     min-width: calc(100% - 4rem);
   }
@@ -106,7 +111,7 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   `}
 `
 
-const ListOverlay = styled.div<{ hasSelected: boolean }>`
+const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   display: flex;
   min-height: 100%;
   overflow: hidden;
@@ -115,7 +120,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
   background-color: ${({ theme }) => theme.colors.tertiary.value};
   border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
-  transition: 300ms cubic-bezier(.23,1,.32,1);
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: transform, opacity;
 
   opacity: 0;
@@ -134,6 +139,11 @@ const ListOverlay = styled.div<{ hasSelected: boolean }>`
     width: calc(75% + 4rem);
   }
 
+  ${({ isClosed }) => isClosed && css`
+    background-color: ${({ theme }) => theme.colors.grey.value};
+    filter: brightness(1.2);
+  `}
+  
   ${Themed.media.md.max} {
     position: absolute;
     top: 0;

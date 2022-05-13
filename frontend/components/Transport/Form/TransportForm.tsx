@@ -20,9 +20,12 @@ import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
 import { useCurrentUser } from '@/stores/SessionStore'
 import UiNumberInput from '@/components/Ui/Input/Number/UiNumberInput'
+import { Themed } from '@/theme'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
 import VehicleStore, { useVehicles } from '@/stores/VehicleStore'
 import { useEffectOnce } from 'react-use'
+import Trailer, { parseTrailer } from '@/models/Trailer'
+import TrailerStore, { useTrailers } from '@/stores/TrailerStore'
 
 interface Props {
   incident: Incident
@@ -43,7 +46,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     peopleInvolved: 0,
     driver: null,
     vehicleId: null,
-    trailer: null,
+    trailerId: null,
     pointOfDeparture: null,
     pointOfArrival: null,
     startsAt: null,
@@ -68,10 +71,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      trailer: [
-        validate.notBlank({ allowNull: true }),
-        validate.maxLength(100),
-      ],
+      trailerId: [],
       vehicleId: [
         validate.notNull(),
       ],
@@ -120,6 +120,14 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
         throw vehiclesError
       }
       VehicleStore.saveAll(vehicles.map(parseVehicle))
+
+      const [trailers, trailersError]: BackendResponse<Trailer[]> = await BackendService.list(
+        'trailers/visible',
+      )
+      if (trailersError !== null) {
+        throw trailersError
+      }
+      TrailerStore.saveAll(trailers.map(parseTrailer))
     })()
   })
 
@@ -152,10 +160,45 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     VehicleStore.save(parseVehicle(updatedVehicle))
   }
 
+  const handleCreateTrailer = async (trailerName: string) => {
+    if (trailerName.length > 100) {
+      alert('Anhängername ist zu lang.')
+      return
+    }
+    const [data, error]: BackendResponse<Trailer> = await BackendService.create('trailers', {
+      name: trailerName,
+      isVisible: true,
+    })
+    if (error !== null) {
+      throw error
+    }
+    form.trailerId.setValue(data.id)
+    TrailerStore.save(parseTrailer(data))
+  }
+
+  const handleDeleteTrailer = async (id: Id<Trailer>) => {
+    const [data, error]: BackendResponse<Trailer> = await BackendService.find('trailers', id)
+    if (error !== null) {
+      throw error
+    }
+    data.isVisible = false
+    const [updatedTrailer, updatedTrailerError]: BackendResponse<Trailer> = await BackendService.update('trailers', id, data)
+    if (updatedTrailerError !== null) {
+      throw updatedTrailerError
+    }
+    TrailerStore.save(parseTrailer(updatedTrailer))
+  }
+
+
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
   }, [vehicles])
+
+  const trailers = useTrailers((records) => records.filter((e) => e.isVisible))
+  const trailerIds = useMemo(() => {
+    return trailers.map(({ id }) => id)
+  }, [trailers])
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
@@ -163,13 +206,11 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     <div>
       <UiForm form={form}>
         <FormContainer>
-          <UiGrid align="center">
-            <UiGrid.Col textAlign="right">
-              <UiForm.Field field={form.priority}>{(props) => (
-                <UiPrioritySlider {...props} />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-          </UiGrid>
+          <PrioritySliderPositioner>
+            <UiForm.Field field={form.priority}>{(props) => (
+              <UiPrioritySlider {...props} />
+            )}</UiForm.Field>
+          </PrioritySliderPositioner>
 
           <UiForm.Field field={form.title}>{(props) => (
             <UiTextInput {...props} label="Titel" placeholder="Titel" />
@@ -201,18 +242,33 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.trailer}>{(props) => (
-            <UiTextInput {...props} label="Anhänger" placeholder="Anhänger" />
+          <UiForm.Field field={form.trailerId} deps={[trailers]}>{(props) => (
+            <UiSelectInput
+              {...props}
+              label="Anhänger"
+              options={trailerIds}
+              optionName={mapTrailerIdToName}
+              menuPlacement="auto"
+              placeholder="Anhänger"
+              onCreate={handleCreateTrailer}
+              isSearchable
+              onDelete={handleDeleteTrailer}
+            />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.pointOfDeparture}>{(props) => (
-            <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.pointOfDeparture}>{(props) => (
+                <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.pointOfArrival}>{(props) => (
-            <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.pointOfArrival}>{(props) => (
+                <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Field field={form.assigneeId}>{(props) => (
             <UiSelectInput
               {...props}
@@ -223,14 +279,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.startsAt}>{(props) => (
+                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-
+              <UiForm.Field field={form.endsAt}>{(props) => (
+                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
           <UiForm.Buttons form={form} />
         </FormContainer>
       </UiForm>
@@ -253,8 +314,24 @@ const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
     : vehicle.name
 }
 
+const mapTrailerIdToName = (id: Id<Trailer>): string | null => {
+  const trailer = TrailerStore.find(id)
+  return trailer === null
+    ? ''
+    : trailer.name
+}
+
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `

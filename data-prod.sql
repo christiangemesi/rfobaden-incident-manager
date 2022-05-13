@@ -272,6 +272,25 @@ VALUES (1,'2022-05-09 19:22:15.000000','2022-05-09 19:22:18.000000',TRUE,'Toyota
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK
 TABLES;
+
+--
+-- Dumping data for table `trailer`
+--
+
+LOCK
+TABLES `trailer` WRITE;
+/*!40000 ALTER TABLE `trailer` DISABLE KEYS */;
+INSERT INTO `trailer`
+VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Beleuchtungsanhänger'),
+       (2,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'3-Seiten-Kipper - Ring'),
+       (3,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'ZS-Anhänger - Ring'),
+       (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Wasseranhänger'),
+       (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Ring-Kupplung'),
+       (6,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Kugel-Kupplung');
+/*!40000 ALTER TABLE `trailer` ENABLE KEYS */;
+UNLOCK
+    TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;

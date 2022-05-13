@@ -119,6 +119,7 @@ const SubtaskListItem: React.VFC<Props> = ({
         title={subtask.title}
         user={assigneeName ?? ''}
         isDragging={isDragging && snapshot !== null && !snapshot.isDropAnimating}
+        isClosed={subtask.isClosed}
         onClick={handleClick && (() => handleClick(subtask))}
         caption={caption}
         body={subtask.description && (
@@ -138,7 +139,7 @@ const SubtaskListItem: React.VFC<Props> = ({
 
 export default SubtaskListItem
 
-const Item = styled(UiListItemWithDetails)<{ isDragging: boolean }>`
+const Item = styled(UiListItemWithDetails)<{ isDragging: boolean, isClosed: boolean }>`
   margin-bottom: 0.5rem;
   
   transition: 150ms ease-out;
@@ -146,5 +147,12 @@ const Item = styled(UiListItemWithDetails)<{ isDragging: boolean }>`
   
   ${({ isDragging }) => isDragging && css`
       transform: rotate(3deg);
+  `}
+
+  ${({ isClosed }) => isClosed && css`
+    filter: grayscale(0.7) brightness(0.7);
+    :hover {
+      filter: brightness(0.6);
+    }
   `}
 `

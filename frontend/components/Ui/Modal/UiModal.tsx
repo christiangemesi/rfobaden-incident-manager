@@ -85,6 +85,8 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
 
 const DialogContainer = styled.div<{ size: 'full' | 'auto' | 'fixed' }>`
   width: auto;
+  max-width: calc(100vw - 0.8rem);
+  
   ${({ size }) => size === 'full' && css`
     ${UiContainer.fluidCss};
     & > ${Dialog} {

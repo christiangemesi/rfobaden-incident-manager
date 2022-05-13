@@ -92,18 +92,18 @@ VALUES (1, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671',
        (2, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Umleitung erstellen',3,2),
        (3, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,2,NULL, _utf8'Brücke sperren',3,1),
        (4, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Brücke sperren',3,4),
-       (5, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung erstellen',5,7),
+       (5, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE,0,NULL, _utf8'Umleitung erstellen',5,7),
        (6, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',5,5),
        (7, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',7,1),
-       (8, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung aufstellen',1,4),
-       (9, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Umleitung erstellen',5,3),
+       (8, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE,0,NULL, _utf8'Umleitung aufstellen',1,4),
+       (9, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE,1,NULL, _utf8'Umleitung erstellen',5,3),
        (10, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,2,NULL, _utf8'Brücke sperren',5,1),
        (11, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Brücke sperren',3,7),
        (12, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung erstellen',3,6),
        (13, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',5,6),
        (14, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Brücke sperren',7,6),
-       (15, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung aufstellen',1,4),
-       (16, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Umleitung erstellen',1,4),
+       (15, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE,0,NULL, _utf8'Umleitung aufstellen',1,4),
+       (16, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,TRUE,1,NULL, _utf8'Umleitung erstellen',1,4),
        (17, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,2,NULL, _utf8'Brücke sperren',3,4),
        (18, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,1,NULL, _utf8'Brücke sperren',3,4),
        (19, _utf8'2021-12-02 15:00:01.257671', _utf8'2021-12-02 15:00:01.257671', _utf8'Test',NULL,FALSE,0,NULL, _utf8'Umleitung erstellen',5,4),
@@ -117,12 +117,20 @@ VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TR
        (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'Car 40 Plätze'),
        (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Mercedes Bus 30 Plätze');
 
+INSERT INTO `trailer`
+VALUES (1,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Beleuchtungsanhänger'),
+       (2,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'3-Seiten-Kipper - Ring'),
+       (3,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',FALSE,_utf8'ZS-Anhänger - Ring'),
+       (4,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Wasseranhänger'),
+       (5,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Ring-Kupplung'),
+       (6,_utf8'2022-05-09 19:22:15.000000',_utf8'2022-05-09 19:22:18.000000',TRUE,_utf8'Kugel-Kupplung');
+
 INSERT INTO `transport`
-VALUES (1,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 1',_utf8'-',1,1,1),
-       (2,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 2',_utf8'-',1,1,1),
-       (3,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 3',_utf8'-',1,2,2),
-       (4,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 4',_utf8'-',1,4,3),
-       (5,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,_binary '\0',0,NULL,NULL,1,NULL,_utf8'Fahrt 5',_utf8'-',1,4,4);
+VALUES (1,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',_utf8'desc',_utf8'fahrer',NULL,FALSE,0,NULL,NULL,1,NULL,_utf8'Fahrt 1',1,1,1,1),
+       (2,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,TRUE,0,NULL,NULL,1,NULL,_utf8'Fahrt 2',1,1,NULL,1),
+       (3,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,FALSE,0,NULL,NULL,1,NULL,_utf8'Fahrt 3',1,2,3,2),
+       (4,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,TRUE,0,NULL,NULL,1,NULL,_utf8'Fahrt 4',1,4,NULL,3),
+       (5,_utf8'2022-04-13 08:35:40.294436',_utf8'2022-04-13 08:35:40.294436',NULL,_utf8'-',NULL,FALSE,0,NULL,NULL,1,NULL,_utf8'Fahrt 5',1,4,2,4);
 
 
 UPDATE hibernate_sequence
