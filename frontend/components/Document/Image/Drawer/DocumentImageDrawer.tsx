@@ -27,11 +27,11 @@ const DocumentImageDrawer: React.VFC<Props> = ({
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <Caption onClick={ open }>
+          <UiCaption onClick={ open }>
             {images.length}
             &nbsp;
             {images.length === 1 ? 'Bild' : 'Bilder'}
-          </Caption>
+          </UiCaption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
@@ -48,11 +48,3 @@ const DocumentImageDrawer: React.VFC<Props> = ({
 }
 
 export default DocumentImageDrawer
-
-const Caption = styled(UiCaption)`
-  transition: ease 100ms;
-  transition-property: transform;
-  :hover {
-    transform: scale(1.1);
-  }
-`

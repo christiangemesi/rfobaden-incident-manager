@@ -3,7 +3,6 @@ import React, { ReactNode } from 'react'
 import Document from '@/models/Document'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
-import styled from 'styled-components'
 
 interface Props {
   documents: Document[]
@@ -27,11 +26,11 @@ const DocumentDrawer: React.VFC<Props> = ({
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
-          <Caption onClick={ open }>
+          <UiCaption onClick={ open }>
             {documents.length}
             &nbsp;
             {documents.length === 1 ? 'Dokument' : 'Dokumente'}
-          </Caption>
+          </UiCaption>
         )
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
@@ -48,11 +47,3 @@ const DocumentDrawer: React.VFC<Props> = ({
 }
 
 export default DocumentDrawer
-
-const Caption = styled(UiCaption)`
-  transition: ease 100ms;
-  transition-property: transform;
-  :hover {
-    transform: scale(1.1);
-  }
-`

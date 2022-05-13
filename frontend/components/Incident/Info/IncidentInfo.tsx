@@ -9,6 +9,10 @@ import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImag
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 import UiLink from '@/components/Ui/Link/UiLink'
 import styled from 'styled-components'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
+import { useOrganizations } from '@/stores/OrganizationStore'
+import UiTitle from '@/components/Ui/Title/UiTitle'
+import UiGrid from '@/components/Ui/Grid/UiGrid'
 
 interface Props {
   incident: Incident
@@ -32,16 +36,35 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
   }, [incident])
 
+  const organizations = useOrganizations(incident.organizationIds)
+
   return (
     <UiCaptionList>
-      <UiCaption isEmphasis>
-        <BackButton href="/ereignisse">Ereignis</BackButton>
-      </UiCaption>
-      <UiCaption>
-        {incident.organizationIds.length}
-        &nbsp;
-        {incident.organizationIds.length === 1 ? 'Organisation' : 'Organisationen'}
-      </UiCaption>
+      <LinkCaption isEmphasis>
+        <BackButton  href="/ereignisse">Ereignis</BackButton>
+      </LinkCaption>
+      <UiDrawer size="full">
+        <UiDrawer.Trigger>{({ open }) => (
+          <UiCaption onClick={open}>
+            {incident.organizationIds.length}
+            &nbsp;
+            {incident.organizationIds.length === 1 ? 'Organisation' : 'Organisationen'}
+          </UiCaption>
+        )}</UiDrawer.Trigger>
+        <UiDrawer.Body>
+          <UiGrid style={{ padding: '0 0 1rem 0' }}>
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                Beteiligte Organisationen
+              </UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
+          <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+            {/*<OrganizationList organizations={organizations} />*/}
+          </UiGrid.Col>
+        </UiDrawer.Body>
+      </UiDrawer>
+
       <UiCaption>
         <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
       </UiCaption>
@@ -67,4 +90,14 @@ export default IncidentInfo
 
 const BackButton = styled(UiLink)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
+`
+
+const LinkCaption = styled(UiCaption)`
+  color: ${({ theme }) => theme.colors.secondary.contrast};
+  transition: ease 100ms;
+  transition-property: transform;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 `

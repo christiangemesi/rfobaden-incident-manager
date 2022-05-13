@@ -16,10 +16,13 @@ export default styled(UiCaption)``
 const Caption = styled.div<{ isEmphasis?: boolean, onClick?: () => void }>`
   font-size: 0.9em;
   opacity: 0.7;
-
-  ${({ onClick }) => onClick !== undefined && css`
+  transition: ease 100ms;
+  transition-property: transform;
+  
+  ${({ onClick }) => onClick !== undefined  && css`
     :hover {
       cursor: pointer;
+      transform: scale(1.1);
     }
   `}
 
