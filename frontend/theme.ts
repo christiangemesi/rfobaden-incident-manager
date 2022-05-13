@@ -14,6 +14,10 @@ export type Theme = {
   fonts: {
     heading: string
     body: string
+    sizes: {
+      root: string,
+      small: string,
+    }
   }
   breakpoints: {
     [K in Breakpoint]: {
@@ -94,10 +98,12 @@ export const defaultTheme: Theme = {
     },
   },
   fonts: {
-    // heading: 'Raleway, sans-serif',
-    // body: 'Raleway, sans-serif',
     heading: 'Inter, sans-serif',
     body: 'Inter, sans-serif',
+    sizes: {
+      root: '16px',
+      small: '0.9em',
+    },
   },
   breakpoints: {
     xs: {
