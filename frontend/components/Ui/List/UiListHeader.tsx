@@ -19,19 +19,11 @@ export default styled(UiListHeader)``
 const ListHeader = styled.div`
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0;
 
   border: none;
   border-radius: 0.5rem;
   background: transparent;
-  margin: 0 0.2rem;
 
   color: ${({ theme }) => theme.colors.tertiary.contrast};
-
-  &:first-child {
-    margin-left: 0;
-  }
-  &:last-child{
-    margin-right: 0;
-  }
 `
