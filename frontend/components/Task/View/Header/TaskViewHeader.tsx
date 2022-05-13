@@ -11,6 +11,7 @@ import React from 'react'
 import Report from '@/models/Report'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 import styled from 'styled-components'
+import ReportInfo from '@/components/Report/Info/ReportInfo'
 
 interface Props {
   report: Report
@@ -27,28 +28,29 @@ const TaskViewHeader: React.VFC<Props> = ({
 }) => {
   return (
     <Container>
-      <UiGrid justify="space-between" align="start" gap={1} style={{ flexWrap: 'nowrap' }}>
-        <TitleContainer>
-          {hasPriority && (
-            <UiPriority priority={report.priority} />
-          )}
-          <div>
-            <TaskInfo task={task} />
-            <UiTitle level={3}>
-              {task.title}
-            </UiTitle>
-          </div>
-        </TitleContainer>
-
-        <UiIconButtonGroup>
-          <TaskActions report={report} task={task} />
-
-          <UiIconButton onClick={handleClose}>
-            <UiIcon.CancelAction />
-          </UiIconButton>
-        </UiIconButtonGroup>
+      <UiGrid justify="space-between" align="start" gap={1}>
+        <UiGrid.Col>
+          <TaskInfo task={task} />
+        </UiGrid.Col>
+        <UiGrid.Col size="auto" textAlign="right">
+          <UiIconButtonGroup>
+            <TaskActions report={report} task={task} />
+            <UiIconButton onClick={handleClose}>
+              <UiIcon.CancelAction />
+            </UiIconButton>
+          </UiIconButtonGroup>
+        </UiGrid.Col>
       </UiGrid>
-
+      <TitleContainer>
+        {hasPriority && (
+          <UiPriority priority={report.priority} />
+        )}
+        <div style={{ width: '100%' }}>
+          <UiTitle level={3}>
+            {task.title}
+          </UiTitle>
+        </div>
+      </TitleContainer>
       <UiDescription description={task.description} />
     </Container>
   )
