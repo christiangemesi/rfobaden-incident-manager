@@ -67,14 +67,14 @@ interface OuterCircleProps {
 }
 
 const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, center }) => {
+  const theme = useTheme()
 
   return (
-
     <circle
       r={radius}
       cx={center}
       cy={center}
-      fill="transparent"
+      fill={theme.colors.primary.contrast}
     />
   )
 }
