@@ -12,6 +12,12 @@ import BackendService from '@/services/BackendService'
 import SubtaskActions from '@/components/Subtask/Actions/SubtaskActions'
 import Task from '@/models/Task'
 import UiDescription from '@/components/Ui/Description/UiDescription'
+import UiCaptionList from '@/components/Ui/Caption/List/UiCaptionList'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
+import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImageDrawer'
+import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
+import Document from '@/models/Document'
+import { useIncident } from '@/stores/IncidentStore'
 
 interface Props {
   task: Task
@@ -28,6 +34,10 @@ const SubtaskListItem: React.VFC<Props> = ({
   snapshot = null,
   onClick: handleClick,
 }) => {
+  const incident = useIncident(task.incidentId)
+  if(incident === null) {
+    throw new Error('incident not found')
+  }
 
   const assignee = useUser(subtask.assigneeId)
   const assigneeName = useUsername(assignee)
@@ -35,14 +45,34 @@ const SubtaskListItem: React.VFC<Props> = ({
   const handleChange = useCallback(async () => {
     const isClosed = !subtask.isClosed
     SubtaskStore.save({ ...subtask, isClosed })
-    const [newSubtask, error] = await BackendService.update<Subtask>(`incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`, subtask.id, {
-      ...subtask,
-      isClosed,
-    })
+    const [newSubtask, error] = await BackendService.update<Subtask>(
+      `incidents/${subtask.incidentId}/reports/${subtask.reportId}/tasks/${subtask.taskId}/subtasks`
+      , subtask.id,
+      {
+        ...subtask,
+        isClosed,
+      },
+    )
     if (error !== null) {
       throw error
     }
     SubtaskStore.save(parseSubtask(newSubtask))
+  }, [subtask])
+
+  const storeImages = (images: Document[]) => {
+    SubtaskStore.save({ ...subtask, images })
+  }
+
+  const storeDocuments = (documents: Document[]) => {
+    SubtaskStore.save({ ...subtask, documents })
+  }
+
+  const addImage = useCallback((image: Document) => {
+    SubtaskStore.save({ ...subtask, images: [...subtask.images, image]})
+  }, [subtask])
+
+  const addDocument = useCallback((document: Document) => {
+    SubtaskStore.save({ ...subtask, documents: [...subtask.documents, document]})
   }, [subtask])
 
   // Delay updates to `isDragging` with a timeout, so the css transitions have time to finish.
@@ -56,6 +86,28 @@ const SubtaskListItem: React.VFC<Props> = ({
     }
   }, [snapshot?.isDragging])
 
+  const caption = (
+    <UiCaptionList>
+      <UiCaption isEmphasis>
+        Teilauftrag
+      </UiCaption>
+      <DocumentImageDrawer
+        images={subtask.images}
+        storeImages={storeImages}
+        modelId={subtask.id}
+        modelName="subtask"
+        onAddImage={addImage}
+      />
+      <DocumentDrawer
+        documents={subtask.documents}
+        storeDocuments={storeDocuments}
+        modelId={subtask.id}
+        modelName="subtask"
+        onAddDocument={addDocument}
+      />
+    </UiCaptionList>
+  )
+
   const child = (
     <div
       ref={provided?.innerRef}
@@ -68,12 +120,13 @@ const SubtaskListItem: React.VFC<Props> = ({
         user={assigneeName ?? ''}
         isDragging={isDragging && snapshot !== null && !snapshot.isDropAnimating}
         onClick={handleClick && (() => handleClick(subtask))}
+        caption={caption}
         body={subtask.description && (
           <UiDescription description={subtask.description} />
         )}
       >
         <SubtaskActions task={task} subtask={subtask} />
-        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} />
+        <UiCheckbox label="" value={subtask.isClosed} onChange={handleChange} isDisabled={incident.isClosed} />
       </Item>
     </div>
   )
