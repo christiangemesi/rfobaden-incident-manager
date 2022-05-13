@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import { useEffectOnce } from 'react-use'
