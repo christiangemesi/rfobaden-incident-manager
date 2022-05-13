@@ -69,6 +69,7 @@ const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
   opacity: 75%;
   transition: 500ms ease-out;
   transition-property: opacity;
+  z-index: 150;
 
   ${({ isVisible }) => !isVisible && css`
     opacity: 0;
