@@ -28,8 +28,8 @@ const Page: React.VFC<Props> = ({
 export default Page
 
 const Main = styled.main<{ noHeader: boolean, noFooter: boolean }>`
-  --header-height: 5rem;
-  --footer-height: 5rem;
+  --header-height: 7rem;
+  --footer-height: 6rem;
 
   ${({ noHeader }) => noHeader && css`
     --header-height: 0px;

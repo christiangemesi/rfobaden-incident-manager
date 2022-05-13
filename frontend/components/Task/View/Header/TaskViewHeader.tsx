@@ -34,7 +34,7 @@ const TaskViewHeader: React.VFC<Props> = ({
           )}
           <div>
             <TaskInfo task={task} />
-            <UiTitle level={4}>
+            <UiTitle level={3}>
               {task.title}
             </UiTitle>
           </div>
@@ -58,11 +58,11 @@ export default TaskViewHeader
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  //gap: 1rem;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  //gap: 1rem;
 `

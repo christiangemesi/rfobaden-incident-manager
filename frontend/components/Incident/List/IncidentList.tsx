@@ -17,14 +17,14 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
   const currentUser = useCurrentUser()
 
   return (
-    <UiGrid gap={1.5} justify="center">
+    <UiGrid gap={1.5}>
       {incidents.map((incident) => (
-        <UiGrid.Col key={incident.id} size={{ sm: 6, lg: 4, xxl: 3 }}>
+        <UiGrid.Col key={incident.id} size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
           <IncidentListItem incident={incident} />
         </UiGrid.Col>
       ))}
       {isAdmin(currentUser) && (
-        <UiGrid.Col size={{ sm: 6, lg: 4, xxl: 3 }}>
+        <UiGrid.Col size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
           <UiModal title="Ereignis erstellen" size="fixed">
             <UiModal.Trigger>{({ open }) => (
               <IncidentCreateButton onClick={open}>

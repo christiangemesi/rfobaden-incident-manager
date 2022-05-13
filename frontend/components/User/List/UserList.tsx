@@ -67,7 +67,7 @@ const UserList: React.VFC<Props> = ({ users }) => {
                 <UiTitle level={6}>Vorname</UiTitle>
               </UiSortButton>
               <UiSortButton field={sort.lastName}>
-                <StyledTitle level={6}>Nachname</StyledTitle>
+                <UiTitle level={6}>Nachname</UiTitle>
               </UiSortButton>
             </UiGrid.Col>
             <UiGrid.Col size={2}>
@@ -95,10 +95,6 @@ const UserList: React.VFC<Props> = ({ users }) => {
   )
 }
 export default UserList
-
-const StyledTitle = styled(UiTitle)`
-  margin-left: -0.6rem;
-`
 
 const InnerScroll = styled.div`
   ${Themed.media.xs.only} {

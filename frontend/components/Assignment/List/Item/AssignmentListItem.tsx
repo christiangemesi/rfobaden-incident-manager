@@ -58,9 +58,6 @@ export default AssignmentListItem
 
 const EntityContainer = styled(UiList)`
   margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 `
 
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`

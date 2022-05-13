@@ -33,7 +33,7 @@ const EreignissePage: React.VFC<Props> = ({ data }) => {
     <Page>
       <UiContainer>
         <section>
-          <UiGrid>
+          <UiGrid style={{ padding: '0 0 1rem 0' }}>
             <UiGrid.Col>
               <UiTitle level={1}>
                 Ereignisse
