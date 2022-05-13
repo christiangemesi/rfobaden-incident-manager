@@ -3,7 +3,6 @@ import React, { ReactNode } from 'react'
 import Document from '@/models/Document'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
-import styled from 'styled-components'
 
 interface Props {
   images: Document[]

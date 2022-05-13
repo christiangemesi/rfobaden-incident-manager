@@ -10,9 +10,13 @@ import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 import UiLink from '@/components/Ui/Link/UiLink'
 import styled from 'styled-components'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import { useOrganizations } from '@/stores/OrganizationStore'
+import OrganizationStore, { useOrganizations } from '@/stores/OrganizationStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
+import backendService, { BackendResponse } from '@/services/BackendService'
+import Organization from '@/models/Organization'
+import { useEffectOnce } from 'react-use'
+import OrganizationList from '@/components/Organization/List/OrganizationList'
 
 interface Props {
   incident: Incident
@@ -36,12 +40,26 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
     IncidentStore.save({ ...incident, documents: [...incident.documents, document]})
   }, [incident])
 
-  const organizations = useOrganizations(incident.organizationIds)
+  useEffectOnce(() => {
+    (async () => {
+      const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
+        'organizations',
+      )
+      if (organizationError !== null) {
+        throw organizationError
+      }
+      OrganizationStore.saveAll(organizations)
+    })()
+  })
+
+  const organizationsOfIncident = useOrganizations(
+    (organizations) => organizations.filter(({ id }) => incident.organizationIds.includes(id)),
+  )
 
   return (
     <UiCaptionList>
       <LinkCaption isEmphasis>
-        <BackButton  href="/ereignisse">Ereignis</BackButton>
+        <BackButton href="/ereignisse">Ereignis</BackButton>
       </LinkCaption>
       <UiDrawer size="full">
         <UiDrawer.Trigger>{({ open }) => (
@@ -60,7 +78,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
             </UiGrid.Col>
           </UiGrid>
           <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
-            {/*<OrganizationList organizations={organizations} />*/}
+            <OrganizationList organizations={organizationsOfIncident} />
           </UiGrid.Col>
         </UiDrawer.Body>
       </UiDrawer>
@@ -96,6 +114,7 @@ const LinkCaption = styled(UiCaption)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
   transition: ease 100ms;
   transition-property: transform;
+
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
