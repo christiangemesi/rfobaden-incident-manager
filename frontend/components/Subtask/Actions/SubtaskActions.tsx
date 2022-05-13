@@ -62,52 +62,6 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
         <TrackableEditAction title="Teilauftrag bearbeiten">{({ close }) => (
           <SubtaskForm task={task} subtask={subtask} onClose={close} />
         )}</TrackableEditAction>
-
-        <TrackableFileUploadAction
-          id={subtask.id}
-          modelName="subtask"
-          onAddDocument={addImage}
-          type="image"
-        />
-        <TrackableFileUploadAction
-          id={subtask.id}
-          modelName="subtask"
-          onAddDocument={addDocument}
-          type="document"
-        />
-
-        <DocumentImageDrawer
-          images={subtask.images}
-          storeImages={storeImages}
-          modelId={subtask.id}
-          modelName="subtask"
-          onAddImage={addImage}
-        >
-          {({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              {subtask.images.length}
-              &nbsp;
-              {subtask.images.length === 1 ? 'Bild' : 'Bilder'}
-            </UiDropDown.Item>
-          )}
-        </DocumentImageDrawer>
-
-        <DocumentDrawer
-          documents={subtask.documents}
-          storeDocuments={storeDocuments}
-          modelId={subtask.id}
-          modelName="subtask"
-          onAddDocument={addDocument}
-        >
-          {({ open }) => (
-            <UiDropDown.Item onClick={open}>
-              {subtask.documents.length}
-              &nbsp;
-              {subtask.documents.length === 1 ? 'Dokument' : 'Dokumente'}
-            </UiDropDown.Item>
-          )}
-        </DocumentDrawer>
-
         <UiPrinter renderContent={() => <SubtaskPrintView subtask={subtask} />}>{({ trigger }) => (
           <UiDropDown.Item onClick={trigger}>
             Drucken
