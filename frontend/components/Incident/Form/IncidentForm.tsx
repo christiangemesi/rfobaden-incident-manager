@@ -85,7 +85,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
 
-        <UiGrid gap={1}>
+        <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />

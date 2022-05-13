@@ -74,7 +74,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   return (
     <div>
       <UiForm form={form}>
-        <UiGrid gap={1}>
+        <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.firstName}>{(props) => (
               <UiTextInput {...props} label="Vorname" />

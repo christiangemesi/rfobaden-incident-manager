@@ -114,7 +114,7 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
 
-        <UiGrid gap={1}>
+        <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.assigneeId}>{(props) => (
               <UiSelectInput
@@ -133,7 +133,7 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
           </UiGrid.Col>
         </UiGrid>
 
-        <UiGrid gap={1}>
+        <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
@@ -145,6 +145,8 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
+
+
 
         <UiForm.Buttons form={form} />
       </FormContainer>
