@@ -12,7 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documents can now be attached to incidents, reports, tasks and subtasks. Their name and type is not yet displayed correctly.
 - Organizations can now be managed at `/organisationen`.
 - Reports now require an entry type, which describes which source caused them to be created.
+- Errors and similar events are now displayed to the user in alert overlays.
+- Incidents now have a `Ereignis` text above their name, which links back to `/ereignisse`.
+- Closed incidents are now listed on `/ereignisse/archiv`.
 
+## Changed
+- The entire webpage is now fully responsive.
+- Adapted overall fonts and spacing
+- Vehicles and trailers on transports now support autocomplete and deletion.
+- The list of reports now shows the report's description.
+- Images and documents are now uploaded using the button in their respective drawers.
+- All closed items are now greyed out.
+- Renamed all `Schliessen` to `Abschliessen.`
+
+## Fixed
+- Header and footer are now guaranteed to not be visible immediately after a logout.
+- Attempting to create a user with an already existing email is now shown as error in the form.
+- The todo list in the header is now updating when assigning to oneself.
+- The filename and type of documents is now displayed correctly.
+- The organization count on incidents is now displayed correctly.
 
 ## [3.0.0] - 13.04.2022
 ### Added
