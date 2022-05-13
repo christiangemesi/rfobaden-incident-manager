@@ -117,15 +117,15 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     <div>
       <UiForm form={form}>
         <FormContainer>
-          <UiGrid gap={0.5} align="center">
+          <UiGrid gap={1} align="center">
             <UiGrid.Col size={{ xs: 12, sm: 9 }}>
-              <UiGrid>
-                <UiGrid.Col size={{ xs: 12, sm: 7 }}>
+              <UiGrid gap={1}>
+                <UiGrid.Col>
                   <UiForm.Field field={form.isKeyReport}>{(props) => (
                     <UiToggle {...props} label="Schlüsselmeldung" />
                   )}</UiForm.Field>
                 </UiGrid.Col>
-                <UiGrid.Col size={{ xs: 12, sm: 5 }}>
+                <UiGrid.Col>
                   <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                     <UiToggle {...props} label="Lagerelevant" />
                   )}</UiForm.Field>
@@ -147,7 +147,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
-          <UiGrid gap={0.5}>
+          <UiGrid gap={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.source}>{(props) => (
                 <UiSelectInput
@@ -170,7 +170,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
           )}</UiForm.Field>
 
-          <UiGrid gap={0.5}>
+          <UiGrid gap={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.assigneeId}>{(props) => (
                 <UiSelectInput
@@ -189,7 +189,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             </UiGrid.Col>
           </UiGrid>
 
-          <UiGrid gap={0.5}>
+          <UiGrid gap={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
                 <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
