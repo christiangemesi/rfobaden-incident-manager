@@ -38,7 +38,7 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
               </UiTitle>
             </UiGrid.Col>
           </UiGrid>
-          <UserList users={users} />
+          <UserList users={users} hasCreateButton />
         </section>
       </UiContainer>
     </Page>

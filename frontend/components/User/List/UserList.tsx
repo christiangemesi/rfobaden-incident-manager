@@ -20,7 +20,7 @@ interface Props {
   hasCreateButton?: boolean
 }
 
-const UserList: React.VFC<Props> = ({ users, hasCreateButton }) => {
+const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
   const [sortedUsers, sort] = useSort(users, () => ({
