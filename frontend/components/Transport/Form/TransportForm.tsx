@@ -143,8 +143,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     if (error !== null) {
       throw error
     }
-    form.vehicleId.setValue(data.id)
     VehicleStore.save(parseVehicle(data))
+    form.vehicleId.setValue(data.id)
   }
 
   const handleDeleteVehicle = async (id: Id<Vehicle>) => {
@@ -172,8 +172,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     if (error !== null) {
       throw error
     }
-    form.trailerId.setValue(data.id)
     TrailerStore.save(parseTrailer(data))
+    form.trailerId.setValue(data.id)
   }
 
   const handleDeleteTrailer = async (id: Id<Trailer>) => {
