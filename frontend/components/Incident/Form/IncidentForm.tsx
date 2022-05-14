@@ -82,7 +82,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
         )}</UiForm.Field>
 
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" rows={5} />
         )}</UiForm.Field>
 
         <UiGrid gapH={1}>
