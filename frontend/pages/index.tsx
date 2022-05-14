@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiTitle from '@/components/Ui/Title/UiTitle'
-import UiGrid from '@/components/Ui/Grid/UiGrid'
+import UiGrid, { ColSizeProp } from '@/components/Ui/Grid/UiGrid'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiLink from '@/components/Ui/Link/UiLink'
@@ -44,6 +44,8 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     return panels
   }, [firstIncident])
 
+  let count = 0
+
   return (
     <Page>
       <UiContainer>
@@ -56,14 +58,11 @@ const HomePage: React.VFC<Props> = ({ data }) => {
         <Panels>
           <UiGrid gap={1.5} justify="center">
             {dashboardPanels.map((card) => (
-              <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6 }}>
-                <UiLink href={card.link}>
-                  <Card>
-                    <card.icon size={5} />
-                    <CardTitle level={4}>{card.label}</CardTitle>
-                  </Card>
-                </UiLink>
-              </UiGrid.Col>
+              count++ < 2 || dashboardPanels.length % 2 === 0 ? (
+                <CardColumn size={{ xs: 12, sm: 6 }} card={card} icon={<card.icon size={5} />} />
+              ) : (
+                <CardColumn size={{ xs: 12, sm: 4, lg: 4 }} card={card} icon={<card.icon size={5} />} />
+              )
             ))}
           </UiGrid>
         </Panels>
@@ -73,6 +72,32 @@ const HomePage: React.VFC<Props> = ({ data }) => {
 }
 export default HomePage
 
+interface CardProps {
+  size: ColSizeProp
+  card: {
+    label: string
+    link: string
+  }
+  icon: ReactNode
+}
+
+const CardColumn: React.VFC<CardProps> = ({
+  size,
+  card,
+  icon,
+}) => {
+  return (
+    <UiGrid.Col key={card.label} size={size}>
+      <UiLink href={card.link}>
+        <Card>
+          {icon}
+          <CardTitle level={4}>{card.label}</CardTitle>
+        </Card>
+      </UiLink>
+    </UiGrid.Col>
+  )
+}
+
 const Subtitle = styled.div`
   width: 100%;
   text-align: center;
@@ -80,7 +105,7 @@ const Subtitle = styled.div`
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 `
-  
+
 const Card = styled.div`
   height: 15rem;
   display: flex;
@@ -89,18 +114,18 @@ const Card = styled.div`
   justify-content: center;
   color: ${({ theme }) => theme.colors.secondary.contrast};
   background-color: ${({ theme }) => theme.colors.secondary.value};
-  
+
   border-radius: 0.5rem;
-  
+
   transition: 250ms ease;
   transition-property: filter;
-  
+
   :hover:not(&[disabled]), :active:not(&[disabled]) {
     cursor: pointer;
     filter: brightness(90%);
   }
 `
-  
+
 const CardTitle = styled(UiTitle)`
   text-align: center;
 `
@@ -108,14 +133,12 @@ const CardTitle = styled(UiTitle)`
 const Panels = styled.div`
   display: flex;
   justify-content: center;
-  
+
   & > ${UiGrid} {
-    ${Themed.media.md.min} {
+    ${Themed.media.lg.min} {
       width: 80%;
     }
-    ${Themed.media.lg.min} {
-      width: 70%;
-    }
+
     ${Themed.media.xl.min} {
       width: 60%;
     }
