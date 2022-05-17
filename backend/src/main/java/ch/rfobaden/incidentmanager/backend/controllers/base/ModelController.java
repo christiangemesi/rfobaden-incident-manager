@@ -6,6 +6,8 @@ import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
+import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * {@code ModelController} implements commonly used REST-API endpoints
+ * for a {@link Model}, using a {@link ModelService}.
+ *
+ * @param <TModel> The {@link Model} whose instances are being exposed over the endpoints.
+ * @param <TPath> The type of the path under which the model instances can be found.
+ * @param <TService> The {@link ModelService} giving access to {@link TModel} instances.
+ */
 @RequireAdmin
 public abstract class ModelController<
     TModel extends Model & PathConvertible<TPath>,
@@ -28,10 +38,25 @@ public abstract class ModelController<
     TService extends ModelService<TModel, TPath>
     > extends AppController {
     private static final String RECORD_NOT_FOUND_MESSAGE = "record not found";
-
+    /**
+     * The service giving access to {@link TModel}.
+     */
     @Autowired
     protected TService service;
 
+    /**
+     * Loads the relations of an entity.
+     * <p>
+     *     This method is called whenever an entity is received by an API endpoint -
+     *     for example via {@code POST} (create) or {@code PUT} (update) request.
+     *     Such endpoints may not receive the full data of the entity.
+     *     Instead, relations may only be specified via id,
+     *     which means that the entities to which the id points has to be loaded manually.
+     * </p>
+     *
+     * @param path The entities' path.
+     * @param entity The entity.
+     */
     protected abstract void loadRelations(TPath path, TModel entity);
 
     @GetMapping
@@ -84,11 +109,27 @@ public abstract class ModelController<
         }
     }
 
+    /**
+     * {@code ModelController.Basic} represents a {@link ModelController}
+     * whose {@link TModel} is always found at an {@link EmptyPath}.
+     *
+     * @param <TModel> The {@link Model} whose instances are being exposed over the endpoints.
+     * @param <TService> The {@link ModelService} giving access to {@link TModel} instances.
+     */
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,
         TService extends ModelService<TModel, EmptyPath>
         > extends ModelController<TModel, EmptyPath, TService> {
         @Override
-        protected void loadRelations(EmptyPath emptyPath, TModel entity) {}
+        protected void loadRelations(EmptyPath emptyPath, TModel entity) {
+            // Since the entity does not have any relations in its path,
+            // we assume that it has no relations at all.
+            //
+            // This might be wrong for many models, which, however, should not be a problem,
+            // as controllers for such models may easily override this method again.
+            //
+            // For all other cases, leaving this method empty eases implementation and
+            // leaves us with cleaner controller classes.
+        }
     }
 }
