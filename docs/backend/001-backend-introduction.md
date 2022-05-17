@@ -24,4 +24,4 @@ The applications entry point is in `Application`.
 - [repositories](./003-repositories.md)
 - [services](./004-services.md)
 - [controllers](./004-controllers.md)
-- [authorization](./006-authorization.md)
+- [authentication](./006-authentication.md)
