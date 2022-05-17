@@ -25,8 +25,8 @@ import javax.validation.constraints.NotNull;
  * {@code Model} is the base class for types class representing database entities.
  * It provides basic fields, functionality and utilities for such types.
  * <p>
- *     Not <i>every</i> model type has to extend {@code Model}.
- *     If you're unsure of whether it is correct to do so, it probably is.
+ *     Not every model type has to extend {@code Model}.
+ *     However, if you're unsure of whether it is correct to do so, it probably is.
  * </p>
  */
 @MappedSuperclass
