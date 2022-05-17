@@ -188,14 +188,14 @@ export function createModelStore<T extends Model, S extends ModelStoreExtensionA
       if (ids === undefined) {
         return state.list
       }
-      const result = Array(ids.length)
+      const result = [] as T[]
       for (let i = 0; i < ids.length; i++) {
         const id = ids[i]
         const record = state.mapping[id]
         if (record === undefined) {
           throw new Error(`id not found in store: ${id}`)
         }
-        result.splice(i, 0, record)
+        result.push(record)
       }
       return result
     },

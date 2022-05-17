@@ -40,7 +40,6 @@ SubtaskStore.onCreate((subtask) => {
         : task.closedSubtaskIds
     ),
     isDone: task.isDone && subtask.isClosed,
-    isClosed: subtask.isClosed && task.isClosed,
   })
 })
 SubtaskStore.onUpdate((subtask) => {

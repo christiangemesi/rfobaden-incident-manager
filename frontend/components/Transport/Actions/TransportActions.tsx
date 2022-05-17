@@ -3,12 +3,13 @@ import React, { useCallback } from 'react'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import TransportForm from '@/components/Transport/Form/TransportForm'
 import BackendService from '@/services/BackendService'
 import TransportStore from '@/stores/TransportStore'
 import Incident from '@/models/Incident'
 import TrackableEditAction from '@/components/Trackable/Actions/TrackableEditAction'
+import UiPrinter from '@/components/Ui/Printer/UiPrinter'
+import TransportPrintView from '@/components/Transport/PrintView/TransportPrintView'
 
 interface Props {
   incident: Incident
@@ -37,14 +38,15 @@ const ReportActions: React.VFC<Props> = ({ incident, transport, onDelete: handle
         )}
       </UiDropDown.Trigger>
       <UiDropDown.Menu>
-        <TrackableEditAction>{({ close }) => (
-          <React.Fragment>
-            <UiTitle level={1} isCentered>
-              Transport bearbeiten
-            </UiTitle>
-            <TransportForm incident={incident} transport={transport} onClose={close} />
-          </React.Fragment>
+        <TrackableEditAction title="Transport bearbeiten">{({ close }) => (
+          <TransportForm incident={incident} transport={transport} onClose={close} />
         )}</TrackableEditAction>
+
+        <UiPrinter renderContent={() => <TransportPrintView transport={transport} />}>{({ trigger }) => (
+          <UiDropDown.Item onClick={trigger}>
+            Drucken
+          </UiDropDown.Item>
+        )}</UiPrinter>
 
         <UiDropDown.Item onClick={handleDelete}>
           Löschen

@@ -5,7 +5,7 @@ import UiListItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListI
 import { useUsername } from '@/models/User'
 import { Themed } from '@/theme'
 import Trackable from '@/models/Trackable'
-import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
+import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
 
 export interface Props<T> {
   record: T
@@ -33,16 +33,14 @@ const TrackableListItem = <T extends Trackable>({
       isClosed={isClosed}
       isSmall={isSmall}
       title={record.title}
+      description={isSmall ? undefined : record.description ?? undefined}
       priority={record.priority}
       user={assigneeName ?? ''}
       onClick={handleClick && (() => handleClick(record))}
     >
-      <SuffixList isSmall={isSmall}>
-        <SuffixDate>
-          <UiDateLabel start={record.startsAt ?? record.createdAt} end={record.endsAt} />
-        </SuffixDate>
+      <TrackableSuffix trackable={record} isSmall={isSmall}>
         {children}
-      </SuffixList>
+      </TrackableSuffix>
 
       <BridgeClip>
         <Bridge isActive={isActive ?? false} />
@@ -60,30 +58,10 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
   `}
 `
 
-const SuffixList = styled.div<{ isSmall: boolean }>`
-  display: flex;
-  align-items: center;
-  column-gap: 1.5rem;
-  white-space: nowrap;
-  
-  transition: 150ms ease-out;
-  transition-property: column-gap;
-  
-  ${({ isSmall }) => isSmall && css`
-    column-gap: 1rem;
-  `}
-`
-
-const SuffixDate = styled.div`
-  ${Themed.media.sm.max} {
-    display: none;
-  }
-`
-
 const Bridge = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 100%;
-  
+
   background-color: ${({ theme }) => theme.colors.secondary.value};
 
   transition: 300ms ease-in-out;
@@ -91,26 +69,25 @@ const Bridge = styled.div<{ isActive: boolean }>`
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform, background-color, box-shadow;
+  border-top: 1px solid ${({ theme }) => theme.colors.grey.value};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey.value};
   
+
   ${({ isActive, theme }) => isActive && css`
     transform: scaleX(1);
     transform-origin: right center;
-    
+
     background-color: ${theme.colors.tertiary.value};
-    box-shadow: 0 0 4px 2px gray;
   `}
 `
 
 const BridgeClip = styled.div`
   position: absolute;
-  left: calc(100% - 1px);
-  width: calc(2rem + 1px);
-  height: calc(100%);
+  left: 100%;
+  width: calc(2rem + 2px);
+  height: calc(100% + 2px);
   z-index: 3;
-  
-  overflow-x: clip;
-  overflow-y: visible;
-  
+
   ${Themed.media.md.max} {
     display: none;
   }

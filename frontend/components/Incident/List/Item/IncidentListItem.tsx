@@ -27,12 +27,12 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
           <UiGrid align="stretch">
             <UiGrid.Col>
               <ProgressContainer>
-                <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} />
+                <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} isClosed={incident.isClosed} />
               </ProgressContainer>
             </UiGrid.Col>
             <UiGrid.Col size="auto">
               <BadgeContainer>
-                <UiBadge value={10}>
+                <UiBadge value={incident.organizationIds.length}>
                   <UiIcon.Organization />
                 </UiBadge>
                 <UiBadge value={keyMessageCount}>

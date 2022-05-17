@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     private final OrganizationService organizationService;
     private final SessionHelper sessionHelper;
 
-    public UserController(
-        OrganizationService organizationService,
-        SessionHelper sessionHelper
-    ) {
+    public UserController(OrganizationService organizationService, SessionHelper sessionHelper) {
         this.organizationService = organizationService;
         this.sessionHelper = sessionHelper;
     }
@@ -47,7 +45,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
     public User update(
         @ModelAttribute EmptyPath path,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody User user
     ) {
         return super.update(path, id, user);
@@ -58,7 +56,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     @PreAuthorize("@auth.isCurrentUser(#id)")
     public User updatePassword(
         HttpServletResponse response,
-        @PathVariable("id") Long id,
+        @PathVariable Long id,
         @RequestBody PasswordData data
     ) {
         var user = service.updatePassword(id, data.password).orElseThrow(() -> (
@@ -71,10 +69,28 @@ public class UserController extends ModelController.Basic<User, UserService> {
         return user;
     }
 
+    @PostMapping("/{id}/reset")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
+    public User resetPassword(
+        HttpServletResponse response,
+        @PathVariable Long id
+    ) {
+        var user = service.resetPassword(id).orElseThrow(() -> (
+            new ApiException(HttpStatus.NOT_FOUND, "user not found")
+        ));
+
+        // Create a new session token to send back to the client.
+        // Sessions of other clients will be invalid from here on out.
+        sessionHelper.addSessionToResponse(response, user);
+        return user;
+    }
+
     public static final class PasswordData {
         private String password;
 
-        public PasswordData() {}
+        public PasswordData() {
+        }
 
         public PasswordData(String password) {
             this.password = password;

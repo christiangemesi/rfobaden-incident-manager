@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "task")
 public class Task extends Model
-    implements PathConvertible<TaskPath>, Trackable, ImageOwner, Serializable {
+    implements PathConvertible<TaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -68,16 +68,29 @@ public class Task extends Model
     private List<Subtask> subtasks = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> images = new ArrayList<>();
+    private List<Document> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<>();
 
     @Override
-    public List<Image> getImages() {
+    public List<Document> getImages() {
         return images;
     }
 
     @Override
-    public void setImages(List<Image> images) {
+    public void setImages(List<Document> images) {
         this.images = images;
+    }
+
+    @Override
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     @JsonIgnore
@@ -268,4 +281,6 @@ public class Task extends Model
         path.setReportId(getReport().getId());
         return path;
     }
+
+
 }

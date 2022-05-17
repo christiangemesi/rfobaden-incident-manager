@@ -15,6 +15,7 @@ interface Props extends StyledProps {
 }
 
 const UiGrid = styled.div<Props>`
+  
   position: relative;
   display: flex;
   flex-wrap: wrap;

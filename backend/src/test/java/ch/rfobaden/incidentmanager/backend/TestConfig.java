@@ -2,14 +2,17 @@ package ch.rfobaden.incidentmanager.backend;
 
 
 import ch.rfobaden.incidentmanager.backend.test.generators.CloseReasonGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.EntryTypeGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.IncidentGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.OrganizationGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.ReportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.SubtaskGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TaskGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.TrailerGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.TransportGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserCredentialsGenerator;
 import ch.rfobaden.incidentmanager.backend.test.generators.UserGenerator;
+import ch.rfobaden.incidentmanager.backend.test.generators.VehicleGenerator;
 import com.github.javafaker.Faker;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +27,14 @@ import java.util.Locale;
     UserCredentialsGenerator.class,
     IncidentGenerator.class,
     ReportGenerator.class,
+    EntryTypeGenerator.class,
     TaskGenerator.class,
     TransportGenerator.class,
     SubtaskGenerator.class,
     OrganizationGenerator.class,
     CloseReasonGenerator.class,
+    VehicleGenerator.class,
+    TrailerGenerator.class
 })
 public class TestConfig {
     @Bean

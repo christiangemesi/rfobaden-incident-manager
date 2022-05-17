@@ -5,6 +5,7 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 interface Props extends StyledProps {
   isEmphasis?: boolean
   children: ReactNode
+  onClick?: () => void
 }
 
 const UiCaption: React.VFC<Props> = (props) => {
@@ -12,10 +13,19 @@ const UiCaption: React.VFC<Props> = (props) => {
 }
 export default styled(UiCaption)``
 
-const Caption = styled.div<{ isEmphasis?: boolean }>`
-  font-size: 0.9em;
+const Caption = styled.div<{ isEmphasis?: boolean, onClick?: () => void }>`
+  font-size: ${({ theme }) => theme.fonts.sizes.small};
   opacity: 0.7;
+  transition: ease 100ms;
+  transition-property: transform;
   
+  ${({ onClick }) => onClick !== undefined  && css`
+    :hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  `}
+
   ${({ isEmphasis }) => isEmphasis && css`
     font-weight: bold;
   `}

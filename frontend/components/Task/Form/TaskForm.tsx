@@ -18,6 +18,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { Themed } from '@/theme'
 
 interface Props {
   report: Report
@@ -42,7 +43,8 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
     subtaskIds: [],
     isClosed: false,
     isDone: false,
-    imageIds: [],
+    images: [],
+    documents: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -68,7 +70,8 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
     subtaskIds: [],
     isClosed: [],
     isDone: [],
-    imageIds: [],
+    images: [],
+    documents: [],
   }))
 
   useSubmit(form, async (formData: ModelData<Task>) => {
@@ -88,64 +91,66 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
     if (handleClose) {
       handleClose()
     }
-  }, [report, task])
+  })
 
   useCancel(form, handleClose)
 
   const userIds = useUsers((users) => users.map(({ id }) => id))
 
-
   return (
     <UiForm form={form}>
       <FormContainer>
 
-        <UiGrid.Col style={{ textAlign: 'right' }}>
+        <PrioritySliderPositioner>
           <UiForm.Field field={form.priority}>{(props) => (
             <UiPrioritySlider {...props} />
           )}</UiForm.Field>
-        </UiGrid.Col>
-
+        </PrioritySliderPositioner>
         <UiForm.Field field={form.title}>{(props) => (
           <UiTextInput {...props} label="Titel" placeholder="Titel" />
         )}</UiForm.Field>
-
 
         <UiForm.Field field={form.description}>{(props) => (
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
 
+        <UiGrid gapH={1}>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
+            <UiForm.Field field={form.assigneeId}>{(props) => (
+              <UiSelectInput
+                {...props}
+                label="Zuweisung"
+                options={userIds}
+                optionName={mapUserIdToName}
+                menuPlacement="top"
+              />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
+            <UiForm.Field field={form.location}>{(props) => (
+              <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
+        </UiGrid>
 
-        <UiForm.Field field={form.assigneeId}>{(props) => (
-          <UiSelectInput
-            {...props}
-            label="Zuweisung"
-            options={userIds}
-            optionName={mapUserIdToName}
-            menuPlacement="top"
-          />
-        )}</UiForm.Field>
-
-
-        <UiForm.Field field={form.location}>{(props) => (
-          <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
-        )}</UiForm.Field>
-
-        <UiGrid gap={0.5}>
-          <UiGrid.Col>
+        <UiGrid gapH={1}>
+          <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
-
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
+          <UiGrid.Col size={{ xs: 12, sm: 6 }}>
+            <UiForm.Field field={form.endsAt}>{(props) => (
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+            )}</UiForm.Field>
+          </UiGrid.Col>
         </UiGrid>
+
+
 
         <UiForm.Buttons form={form} />
       </FormContainer>
     </UiForm>
-
   )
 }
 export default TaskForm
@@ -161,4 +166,12 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+const PrioritySliderPositioner = styled.div`
+  display: flex;
+  justify-content: right;
+  margin: 0.5rem;
+  ${Themed.media.sm.max} {
+    justify-content: center;
+  }
 `

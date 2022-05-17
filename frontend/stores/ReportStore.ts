@@ -45,8 +45,7 @@ TaskStore.onCreate((task) => {
         ? [...new Set([...report.closedTaskIds, task.id])]
         : report.closedTaskIds
     ),
-    isDone: report.isDone && task.isClosed,
-    isClosed: task.isClosed && report.isClosed,
+    isDone: report.isDone && (task.isClosed || task.isDone),
   })
 })
 TaskStore.onUpdate((task) => {

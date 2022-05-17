@@ -4,7 +4,8 @@ import CloseReason, { parseCloseReason } from '@/models/CloseReason'
 import Report from '@/models/Report'
 import Transport from '@/models/Transport'
 import Id from '@/models/base/Id'
-import { FileId } from '@/models/FileUpload'
+import Document from '@/models/Document'
+import Organization from '@/models/Organization'
 
 export default interface Incident extends Model {
   title: string
@@ -23,7 +24,10 @@ export default interface Incident extends Model {
   closedTransportIds: Id<Transport>[]
   transportIds: Id<Transport>[]
 
-  imageIds: FileId[]
+  organizationIds: Id<Organization>[]
+
+  images: Document[]
+  documents: Document[]
 }
 
 export const parseIncident = (data: Incident): Incident => {

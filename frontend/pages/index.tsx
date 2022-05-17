@@ -10,6 +10,8 @@ import { BackendResponse, getSessionFromRequest } from '@/services/BackendServic
 import Incident, { isClosedIncident, parseIncident } from '@/models/Incident'
 import { useEffectOnce } from 'react-use'
 import IncidentStore, { useIncidents } from '@/stores/IncidentStore'
+import { Themed } from '@/theme'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -28,7 +30,8 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     const panels = [
       { icon: UiIcon.IncidentManagement, label: 'Ereignisse', link: '/ereignisse' },
       { icon: UiIcon.UserManagement, label: 'Benutzer', link: '/benutzer' },
-      { icon: UiIcon.Organization, label: 'Organizationen', link: '/organizationen' },
+      { icon: UiIcon.Organization, label: 'Organisationen', link: '/organisationen' },
+      { icon: UiIcon.Archive, label: 'Archiv', link: '/ereignisse/archiv' },
     ]
     if (firstIncident !== null) {
       // Only show transport panel if there is at least one open incident.
@@ -42,26 +45,30 @@ const HomePage: React.VFC<Props> = ({ data }) => {
   }, [firstIncident])
 
   return (
-    <UiContainer>
-      <UiTitle level={1} isCentered>
-        IncidentManager
-      </UiTitle>
-      <Subtitle>
-        Regionales Führungsorgan Baden
-      </Subtitle>
-      <UiGrid gap={1.5} justify="center">
-        {dashboardPanels.map((card) => (
-          <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
-            <UiLink href={card.link}>
-              <Card>
-                <card.icon size={5} />
-                <CardTitle level={4}>{card.label}</CardTitle>
-              </Card>
-            </UiLink>
-          </UiGrid.Col>
-        ))}
-      </UiGrid>
-    </UiContainer>
+    <Page>
+      <UiContainer>
+        <UiTitle level={1} isCentered>
+          IncidentManager
+        </UiTitle>
+        <Subtitle>
+          Regionales Führungsorgan Baden
+        </Subtitle>
+        <Panels>
+          <UiGrid gap={1.5} justify="center">
+            {dashboardPanels.map((card) => (
+              <UiGrid.Col key={card.label} size={{ xs: 12, sm: 6 }}>
+                <UiLink href={card.link}>
+                  <Card>
+                    <card.icon size={5} />
+                    <CardTitle level={4}>{card.label}</CardTitle>
+                  </Card>
+                </UiLink>
+              </UiGrid.Col>
+            ))}
+          </UiGrid>
+        </Panels>
+      </UiContainer>
+    </Page>
   )
 }
 export default HomePage
@@ -71,6 +78,7 @@ const Subtitle = styled.div`
   text-align: center;
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
 `
   
 const Card = styled.div`
@@ -94,9 +102,24 @@ const Card = styled.div`
 `
   
 const CardTitle = styled(UiTitle)`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  text-align: center;
+`
+
+const Panels = styled.div`
+  display: flex;
+  justify-content: center;
+  
+  & > ${UiGrid} {
+    ${Themed.media.md.min} {
+      width: 80%;
+    }
+    ${Themed.media.lg.min} {
+      width: 70%;
+    }
+    ${Themed.media.xl.min} {
+      width: 60%;
+    }
+  }
 `
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

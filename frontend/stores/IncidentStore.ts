@@ -26,7 +26,7 @@ ReportStore.onCreate((report) => {
       report.isClosed || report.isDone
         ? [...new Set([...incident.closedReportIds, report.id])]
         : incident.closedReportIds,
-    isDone: incident.isDone && report.isClosed,
+    isDone: incident.isDone && (report.isClosed || report.isDone),
   })
 })
 ReportStore.onUpdate((report) => {

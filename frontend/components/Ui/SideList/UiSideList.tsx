@@ -2,16 +2,18 @@ import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 import useHeight from '@/utils/hooks/useHeight'
-import { usePreviousDistinct, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import Id from '@/models/base/Id'
 import Model from '@/models/base/Model'
 import { ModelStore } from '@/stores/base/Store'
 import { createUseRecord } from '@/stores/base/hooks'
 import { noop } from '@/utils/control-flow'
+import Trackable from '@/models/Trackable'
 
 interface Props<T extends Model> {
   initialId?: Id<T> | null
   store: ModelStore<T>
+  isClosed: (record: T) => boolean
 
   renderList: (props: { selected: T | null, select: (record: T | null) => void }) => ReactNode
   renderView: (props: { selected: T, close: () => void }) => ReactNode
@@ -20,16 +22,16 @@ interface Props<T extends Model> {
   onDeselect?: () => void
 }
 
-const UiSideList = <T extends Model>({
+const UiSideList = <T extends Trackable>({
   initialId,
   store,
+  isClosed,
   renderList,
   renderView,
   onSelect: handleSelect = noop,
   onDeselect: handleDeselect = noop,
 }: Props<T>): JSX.Element => {
-  const [setListRef, listHeight] = useHeight<HTMLDivElement>()
-  const prevListHeight = usePreviousDistinct(listHeight) ?? listHeight
+  const [setOverlayRef, overlayHeight] = useHeight<HTMLDivElement>()
 
   const [selectedId, setSelectedId] = useState<Id<T> | null>(initialId ?? null)
   const setSelected = useCallback((report: T | null) => {
@@ -55,10 +57,19 @@ const UiSideList = <T extends Model>({
 
   return (
     <Container>
-      <ListContainer ref={setListRef} $hasSelected={selectedId !== null}>
+      <ListContainer
+        hasSelected={selectedId !== null}
+        style={{
+          minHeight: selectedId === null ? 0 : overlayHeight - 84,
+        }}
+      >
         {renderList({ selected, select: setSelected })}
       </ListContainer>
-      <ListOverlay hasSelected={selected !== null} $listHeight={prevListHeight}>
+      <ListOverlay
+        ref={setOverlayRef}
+        hasSelected={selected !== null}
+        isClosed={selected !== null && isClosed(selected)}
+      >
         {selected === null ? null : renderView({ selected, close: clearSelected })}
       </ListOverlay>
     </Container>
@@ -70,10 +81,11 @@ const Container = styled.div`
   display: flex;
 `
 
-const ListContainer = styled.div<{ $hasSelected: boolean }>`
+const ListContainer = styled.div<{ hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
+
   ${Themed.media.lg.min} {
     min-width: calc(100% - 4rem);
   }
@@ -87,7 +99,7 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
   will-change: min-width, max-width, width;
   transition-property: min-width, max-width, width;
   
-  ${({ $hasSelected }) => $hasSelected && css`
+  ${({ hasSelected }) => hasSelected && css`
     ${Themed.media.lg.min} {
       min-width: 35%;
       max-width: 35%;
@@ -97,32 +109,29 @@ const ListContainer = styled.div<{ $hasSelected: boolean }>`
       max-width: 25%;
     }
   `}
-  
-  ${Themed.media.md.max} {
-    ${({ $hasSelected }) => $hasSelected && css`
-      max-height: 0;
-    `}
-  }
 `
 
-const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
+const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   display: flex;
   min-height: 100%;
   overflow: hidden;
   z-index: 2;
 
   background-color: ${({ theme }) => theme.colors.tertiary.value};
-  box-shadow: 0 0 4px 2px gray;
+  border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
-  transition: 300ms cubic-bezier(.23,1,.32,1);
-  transition-property: transform;
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-property: transform, opacity;
 
+  opacity: 0;
   transform: translateX(50vw);
   transform-origin: right center;
   ${({ hasSelected }) => hasSelected && css`
+    opacity: 1;
     transform: translateX(0);
   `}
   
+  width: calc(100% + 2px);
   ${Themed.media.lg.min} {
     width: calc(65% + 4rem);
   }
@@ -130,12 +139,17 @@ const ListOverlay = styled.div<{ hasSelected: boolean, $listHeight: number }>`
     width: calc(75% + 4rem);
   }
 
+  ${({ isClosed }) => isClosed && css`
+    background-color: ${({ theme }) => theme.colors.grey.value};
+    filter: brightness(1.2);
+  `}
+  
   ${Themed.media.md.max} {
     position: absolute;
+    top: 0;
     left: 0;
-    width: 100%;
-    min-height: ${({ $listHeight }) => $listHeight}px;
-    transform: translateY(100vw);
+    width: calc(100% + 1px);
+    transform: translateY(100%);
     ${({ hasSelected }) => hasSelected && css`
       transform: translateY(0);
     `}

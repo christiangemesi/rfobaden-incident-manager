@@ -14,6 +14,12 @@ public class TransportGenerator extends ModelGenerator<Transport> {
     @Autowired
     UserGenerator userGenerator;
 
+    @Autowired
+    VehicleGenerator vehicleGenerator;
+
+    @Autowired
+    TrailerGenerator trailerGenerator;
+
     @Override
     public Transport generateNew() {
         Transport transport = new Transport();
@@ -22,8 +28,8 @@ public class TransportGenerator extends ModelGenerator<Transport> {
         transport.setDescription(doMaybe(() -> faker.lorem().sentence(10)));
         transport.setPeopleInvolved(faker.number().numberBetween(1, 10));
         transport.setDriver(faker.funnyName().name());
-        transport.setVehicle(faker.funnyName().name());
-        transport.setTrailer(faker.funnyName().name());
+        transport.setVehicle(vehicleGenerator.generate());
+        transport.setTrailer(trailerGenerator.generate());
         transport.setStartsAt(doMaybe(this::randomDateTime));
         transport.setEndsAt(doMaybe(this::randomDateTime));
         transport.setPointOfArrival(faker.address().buildingNumber());

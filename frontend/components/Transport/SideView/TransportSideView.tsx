@@ -46,6 +46,7 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
   return (
     <UiSideList
       store={TransportStore}
+      isClosed={(transport) => transport.isClosed}
       initialId={initialId}
       onSelect={rerouteToTransport}
       onDeselect={rerouteToTransports}

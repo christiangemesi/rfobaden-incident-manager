@@ -19,6 +19,8 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 import UiDateInput from '@/components/Ui/Input/Date/UiDateInput'
 import styled from 'styled-components'
+import { EntryTypeSource } from '@/models/EntryType'
+import { Themed } from '@/theme'
 
 interface Props {
   incident: Incident
@@ -31,6 +33,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
     description: null,
+    entryType: { source: EntryTypeSource.PHONE, descriptor: null },
     notes: null,
     location: null,
     priority: Priority.MEDIUM,
@@ -44,7 +47,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     taskIds: [],
     isClosed: false,
     isDone: false,
-    imageIds: [],
+    images: [],
+    documents: [],
   }))
 
   useValidate(form, (validate) => {
@@ -56,6 +60,13 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       description: [
         validate.notBlank({ allowNull: true }),
       ],
+      entryType: {
+        source: [],
+        descriptor: [
+          validate.notBlank({ allowNull: true }),
+          validate.maxLength(100),
+        ],
+      },
       notes: [
         validate.notBlank({ allowNull: true }),
       ],
@@ -75,7 +86,8 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
       taskIds: [],
       isClosed: [],
       isDone: [],
-      imageIds: [],
+      images: [],
+      documents: [],
     })
   })
 
@@ -105,24 +117,26 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
     <div>
       <UiForm form={form}>
         <FormContainer>
-          <UiGrid align="center">
-            <UiGrid.Col textAlign="left">
-              <UiForm.Field field={form.isKeyReport}>{(props) => (
-                <UiToggle {...props} label="Schlüsselmeldung" />
-              )}</UiForm.Field>
+          <UiGrid gapH={1} gapV={0.5} align="center">
+            <UiGrid.Col size={{ xs: 12, sm: 9 }}>
+              <UiGrid gapH={1} gapV={0.5}>
+                <UiGrid.Col>
+                  <UiForm.Field field={form.isKeyReport}>{(props) => (
+                    <UiToggle {...props} label="Schlüsselmeldung" />
+                  )}</UiForm.Field>
+                </UiGrid.Col>
+                <UiGrid.Col>
+                  <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
+                    <UiToggle {...props} label="Lagerelevant" />
+                  )}</UiForm.Field>
+                </UiGrid.Col>
+              </UiGrid>
             </UiGrid.Col>
-
-            <UiGrid.Col textAlign="center">
-              <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
-                <UiToggle {...props} label="Lagerelevant" />
-              )}</UiForm.Field>
-            </UiGrid.Col>
-
-            <UiGrid.Col textAlign="right">
+            <SliderCol size={{ xs: 12, sm: 3 }}>
               <UiForm.Field field={form.priority}>{(props) => (
                 <UiPrioritySlider {...props} />
               )}</UiForm.Field>
-            </UiGrid.Col>
+            </SliderCol>
           </UiGrid>
 
           <UiForm.Field field={form.title}>{(props) => (
@@ -133,31 +147,61 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
             <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
           )}</UiForm.Field>
 
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.entryType.source}>{(props) => (
+                <UiSelectInput
+                  {...props}
+                  label="Meldeart"
+                  options={Object.values(EntryTypeSource)}
+                  optionName={mapEntryTypeToName}
+                  menuPlacement="bottom"
+                />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.entryType.descriptor}>{(props) => (
+                <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
+
           <UiForm.Field field={form.notes}>{(props) => (
             <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
           )}</UiForm.Field>
 
-          <UiForm.Field field={form.location}>{(props) => (
-            <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.assigneeId}>{(props) => (
+                <UiSelectInput
+                  {...props}
+                  label="Zuweisung"
+                  options={userIds}
+                  optionName={mapUserIdToName}
+                  menuPlacement="top"
+                />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.location}>{(props) => (
+                <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
 
-          <UiForm.Field field={form.assigneeId}>{(props) => (
-            <UiSelectInput
-              {...props}
-              label="Zuweisung"
-              options={userIds}
-              optionName={mapUserIdToName}
-              menuPlacement="top"
-            />
-          )}</UiForm.Field>
+          <UiGrid gapH={1}>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.startsAt}>{(props) => (
+                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+            <UiGrid.Col size={{ xs: 12, md: 6 }}>
+              <UiForm.Field field={form.endsAt}>{(props) => (
+                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+              )}</UiForm.Field>
+            </UiGrid.Col>
+          </UiGrid>
 
-          <UiForm.Field field={form.startsAt}>{(props) => (
-            <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
-
-          <UiForm.Field field={form.endsAt}>{(props) => (
-            <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
-          )}</UiForm.Field>
           <UiForm.Buttons form={form} />
         </FormContainer>
       </UiForm>
@@ -173,8 +217,41 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
+export const mapEntryTypeToName = (source: string): string => {
+  switch (source) {
+  case EntryTypeSource.PHONE:
+    return 'Telefon'
+  case EntryTypeSource.EMAIL:
+    return 'E-Mail'
+  case EntryTypeSource.RADIO:
+    return 'Funk'
+  case EntryTypeSource.KP_FRONT:
+    return 'KP Front'
+  case EntryTypeSource.KP_BACK:
+    return 'KP Rück'
+  case EntryTypeSource.REPORTER:
+    return 'Meldeläufer'
+  default:
+    return toTitleCase(source)
+  }
+}
+
+const toTitleCase = (str: string): string => {
+  return str
+    .split(' ')
+    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+    .join(' ')
+}
+
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+
+const SliderCol = styled(UiGrid.Col)`
+  ${Themed.media.sm.max} {
+    text-align: center;
+  }
+  text-align: right;
 `

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,10 +37,21 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @Size(min = 1, max = 100)
     private String driver;
 
-    @Size(min = 1, max = 100)
-    private String vehicle;
-    @Size(min = 1, max = 100)
-    private String trailer;
+    @ManyToOne(cascade = {
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
+    @JoinColumn(nullable = false)
+    private Vehicle vehicle;
+
+    @ManyToOne(cascade = {
+        CascadeType.REFRESH,
+        CascadeType.DETACH,
+        CascadeType.MERGE
+    })
+    @JoinColumn
+    private Trailer trailer;
 
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
@@ -120,20 +132,52 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.driver = driver;
     }
 
-    public String getVehicle() {
+    public Vehicle getVehicle() {
         return vehicle;
     }
 
-    public void setVehicle(String vehicle) {
+    public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
 
-    public String getTrailer() {
+    public Long getVehicleId() {
+        if (vehicle == null) {
+            return null;
+        }
+        return vehicle.getId();
+    }
+
+    public void setVehicleId(Long id) {
+        if (id == null) {
+            vehicle = null;
+            return;
+        }
+        vehicle = new Vehicle();
+        vehicle.setId(id);
+    }
+
+    public Trailer getTrailer() {
         return trailer;
     }
 
-    public void setTrailer(String trailer) {
+    public void setTrailer(Trailer trailer) {
         this.trailer = trailer;
+    }
+
+    public Long getTrailerId() {
+        if (trailer == null) {
+            return null;
+        }
+        return trailer.getId();
+    }
+
+    public void setTrailerId(Long id) {
+        if (id == null) {
+            trailer = null;
+            return;
+        }
+        trailer = new Trailer();
+        trailer.setId(id);
     }
 
     public LocalDateTime getStartsAt() {

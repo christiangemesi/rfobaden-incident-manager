@@ -10,7 +10,7 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UserForm from '@/components/User/Form/UserForm'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
-import BackendService from '@/services/BackendService'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 import UserStore from '@/stores/UserStore'
 import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
@@ -35,7 +35,11 @@ const UserListItem: React.VFC<Props> = ({
 
   const resendPassword = async (_userId: Id<User>) => {
     if (confirm(`Sind sie sicher, dass ein neues Passwort für den Benutzer"${user.firstName} ${user.lastName}" generiert werden soll?`)) {
-      alert('not yet implemented')
+      const [data, error]: BackendResponse<User> = await BackendService.create(`users/${user.id}/reset`, null)
+      if (error !== null) {
+        throw error
+      }
+      UserStore.save(data)
     }
   }
 
@@ -49,14 +53,10 @@ const UserListItem: React.VFC<Props> = ({
           {user.email}
         </UiGrid.Col>
         <UiGrid.Col size={2}>
-          <UiTitle level={6}>
-            {user.role}
-          </UiTitle>
+          {user.role}
         </UiGrid.Col>
         <UiGrid.Col size={4}>
-          <UiTitle level={6}>
-            {organization?.name ?? '-'}
-          </UiTitle>
+          {organization?.name ?? '-'}
         </UiGrid.Col>
         <UiGrid.Col size={1}>
           {(isAdmin(currentUser) || currentUser.id === user.id) && (
@@ -70,17 +70,12 @@ const UserListItem: React.VFC<Props> = ({
                 {isAdmin(currentUser) && (
                   <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
                 )}
-                <UiModal isFull>
-                  <UiModal.Activator>{({ open }) => (
+                <UiModal title="Benutzer bearbeiten" size="fixed">
+                  <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Activator>
+                  )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <React.Fragment>
-                      <UiTitle level={1} isCentered>
-                        Benutzer bearbeiten
-                      </UiTitle>
-                      <UserForm user={user} onClose={close} />
-                    </React.Fragment>
+                    <UserForm user={user} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 {isAdmin(currentUser) && (

@@ -22,6 +22,10 @@ const config = {
     ],
   },
 
+  images: {
+    domains: [`backend-${process.env['RFO_STAGE']}`],
+  },
+
   webpack: (config) => {
     config.module.rules.push({
       test: /\.md$/,

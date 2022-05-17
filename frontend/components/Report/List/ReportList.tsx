@@ -3,7 +3,6 @@ import Report from '@/models/Report'
 import ReportListItem from '@/components/Report/List/Item/ReportListItem'
 import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
-import UiTitle from '@/components/Ui/Title/UiTitle'
 import ReportForm from '@/components/Report/Form/ReportForm'
 import Incident from '@/models/Incident'
 import TrackableList from '@/components/Trackable/List/TrackableList'
@@ -34,14 +33,11 @@ const ReportList: React.VFC<Props> = ({
   return (
     <TrackableList
       {...listProps}
+      incident={incident}
       records={[keyReports, normalReports]}
+      formTitle="Meldung erfassen"
       renderForm={({ save, close }) => (
-        <React.Fragment>
-          <UiTitle level={1} isCentered>
-            Meldung erfassen
-          </UiTitle>
-          <ReportForm incident={incident} onSave={save} onClose={close} />
-        </React.Fragment>
+        <ReportForm incident={incident} onSave={save} onClose={close} />
       )}
       renderItem={({ record, ...itemProps }) => (
         <ReportListItem

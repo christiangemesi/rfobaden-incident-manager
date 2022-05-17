@@ -10,6 +10,7 @@ import UserStore, { useUsers } from '@/stores/UserStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 import OrganizationStore from '@/stores/OrganizationStore'
 import UiTitle from '@/components/Ui/Title/UiTitle'
+import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
@@ -27,20 +28,20 @@ const BenutzerPage: React.VFC<Props> = ({ data }) => {
   const users = useUsers()
 
   return (
-    <UiContainer>
-      <section>
-        <UiGrid>
-          <UiGrid.Col>
-            <UiTitle level={1}>
-              Benutzer verwalten
-            </UiTitle>
-          </UiGrid.Col>
-        </UiGrid>
-        <UiGrid.Col size={{ md: 10, lg: 8, xl: 6 }}>
+    <Page>
+      <UiContainer>
+        <section>
+          <UiGrid style={{ padding: '0 0 1rem 0' }}>
+            <UiGrid.Col>
+              <UiTitle level={1}>
+                Benutzer verwalten
+              </UiTitle>
+            </UiGrid.Col>
+          </UiGrid>
           <UserList users={users} />
-        </UiGrid.Col>
-      </section>
-    </UiContainer>
+        </section>
+      </UiContainer>
+    </Page>
   )
 }
 export default BenutzerPage
@@ -51,7 +52,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     return { redirect: { statusCode: 302, destination: '/anmelden' }}
   }
 
-  const [users] = await backendService.list<User>('users')
+  const [users, usersError]:  BackendResponse<User[]> = await backendService.list<User>(
+    'users',
+  )
+  if (usersError !== null) {
+    throw usersError
+  }
 
   const [organizations, organizationError]: BackendResponse<Organization[]> = await backendService.list(
     'organizations',

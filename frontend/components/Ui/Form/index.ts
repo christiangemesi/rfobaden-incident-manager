@@ -1,8 +1,6 @@
 import { makeChildPatcher, makeChildUpdater, Patcher, toUpdate } from '@/utils/update'
-import { useCallback, useContext } from 'react'
 import { useGetSet, useUpdateEffect } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
-import UiModalContext, { animationMillis as uiModalAnimationMillis } from '@/components/Ui/Modal/Context/UiModalContext'
 
 export interface UiFormBaseState<T> extends UpdatablePart {
   value: T
@@ -77,43 +75,21 @@ export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined
     }))
   }, [base])
 
-  // If the form is in a modal,
-  // we want to clear the form if that modal is closed.
-  const modalContext = useContext(UiModalContext)
-  useUpdateEffect(() => {
-    const timeout = setTimeout(() => {
-      clearForm(form.fields)
-    }, uiModalAnimationMillis)
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [modalContext.isOpen])
-
   return form.fields
 }
 
 export const useSubmit = <T>(
   form: UiFormState<T>,
-  callback: (value: T) => void | Promise<void>,
-  deps: unknown[] = [],
+  callback: ((value: T) => void | Promise<void>) | undefined | null,
 ): void => {
-  getFormBaseState(form).onSubmit =
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useCallback(callback, deps)
+  getFormBaseState(form).onSubmit = callback ?? null
 }
 
 export const useCancel = <T>(
   form: UiFormState<T>,
-  callback: (() => void | Promise<void>) | undefined,
-  deps: unknown[] = [],
+  callback: (() => void | Promise<void>) | undefined | null,
 ): void => {
-  getFormBaseState(form).onCancel =
-    useCallback(async () => {
-      if (callback) {
-        await callback()
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, deps)
+  getFormBaseState(form).onCancel = callback ?? null
 }
 
 export const clearForm = (form: UiFormState<unknown>): void => {

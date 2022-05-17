@@ -32,7 +32,9 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     reportIds: [],
     closedTransportIds: [],
     transportIds: [],
-    imageIds: [],
+    images: [],
+    documents: [],
+    organizationIds: [],
   }))
 
   useValidate(form, (validate) => ({
@@ -54,7 +56,9 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     reportIds: [],
     closedTransportIds: [],
     transportIds: [],
-    imageIds: [],
+    images: [],
+    documents: [],
+    organizationIds: [],
   }))
 
   useSubmit(form, async (incidentData: ModelData<Incident>) => {
@@ -81,13 +85,13 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
           <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
         )}</UiForm.Field>
 
-        <UiGrid gap={0.5}>
-          <UiGrid.Col>
+        <UiGrid gapH={1}>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
               <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
           </UiGrid.Col>
-          <UiGrid.Col>
+          <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
               <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
             )}</UiForm.Field>
@@ -103,7 +107,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
 export default IncidentForm
 
 const FormContainer = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
 `

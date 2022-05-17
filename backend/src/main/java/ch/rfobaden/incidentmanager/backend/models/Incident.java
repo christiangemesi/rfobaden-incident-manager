@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +27,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic
-    implements Describable, Closeable, DateTimeBounded, ImageOwner, Serializable {
+    implements Describable, Closeable, DateTimeBounded, ImageOwner, DocumentOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,9 +56,12 @@ public class Incident extends Model.Basic
 
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Transport> transports = new ArrayList<>();
-    
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> images = new ArrayList<>();
+    private List<Document> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<>();
 
     @Override
     public String getTitle() {
@@ -166,13 +172,48 @@ public class Incident extends Model.Basic
     }
 
     @Override
-    public List<Image> getImages() {
+    public List<Document> getImages() {
         return images;
     }
 
     @Override
-    public void setImages(List<Image> images) {
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+    }
+
+    @Override
+    public void setImages(List<Document> images) {
         this.images = images;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public Set<Long> getOrganizationIds() {
+        return Stream.concat(
+            Stream.concat(
+                Stream.concat(
+                    reports.stream(),
+                    transports.stream()
+                ),
+                reports.stream()
+                    .map(Report::getTasks)
+                    .flatMap(Collection::stream)
+            ),
+            reports.stream()
+                .map(Report::getTasks)
+                .flatMap(Collection::stream)
+                .map(Task::getSubtasks)
+                .flatMap(Collection::stream)
+        )
+            .map(Trackable::getAssignee)
+            .filter(Objects::nonNull)
+            .map(User::getOrganizationId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

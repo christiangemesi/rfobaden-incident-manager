@@ -20,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,7 +29,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "report")
 public class Report extends Model
-    implements PathConvertible<ReportPath>, Trackable, ImageOwner, Serializable {
+    implements PathConvertible<ReportPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -47,6 +48,10 @@ public class Report extends Model
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL)
+    private EntryType entryType;
 
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -79,7 +84,10 @@ public class Report extends Model
     private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Image> images = new ArrayList<>();
+    private List<Document> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<>();
 
     @JsonIgnore
     public User getAssignee() {
@@ -127,6 +135,14 @@ public class Report extends Model
     @Override
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public EntryType getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(EntryType entryType) {
+        this.entryType = entryType;
     }
 
     public String getNotes() {
@@ -227,13 +243,23 @@ public class Report extends Model
     }
 
     @Override
-    public List<Image> getImages() {
+    public List<Document> getImages() {
         return images;
     }
 
     @Override
-    public void setImages(List<Image> images) {
+    public void setImages(List<Document> images) {
         this.images = images;
+    }
+
+    @Override
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     public void setClosed(boolean closed) {
@@ -264,6 +290,7 @@ public class Report extends Model
             && Objects.equals(incident, report.incident)
             && Objects.equals(title, report.title)
             && Objects.equals(description, report.description)
+            && Objects.equals(entryType, report.entryType)
             && Objects.equals(notes, report.notes)
             && Objects.equals(startsAt, report.startsAt)
             && Objects.equals(endsAt, report.endsAt)
@@ -282,6 +309,7 @@ public class Report extends Model
             incident,
             title,
             description,
+            entryType,
             notes,
             startsAt,
             endsAt,
@@ -300,6 +328,3 @@ public class Report extends Model
         return path;
     }
 }
-
-
-

@@ -1,8 +1,4 @@
-import Id from '@/models/base/Id'
-
 export default interface FileUpload {
-  name: string
   file: File
+  name: string | null
 }
-
-export type FileId = Id<unknown>

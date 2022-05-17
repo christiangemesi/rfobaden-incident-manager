@@ -17,4 +17,6 @@ public interface NotificationService {
             notifyAssignee(entity, assignee);
         }
     }
+
+    void notifyPasswordReset(User user, String plainPassword);
 }
