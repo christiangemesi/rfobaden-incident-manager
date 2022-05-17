@@ -57,7 +57,7 @@ const HomePage: React.VFC<Props> = ({ data }) => {
           <UiGrid gap={1.5} justify="center">
             {dashboardPanels.map((card, i) => (
               <CardColumn
-                key={'card' + i}
+                key={i}
                 size={{ xs: 12, sm: (i < 2 || dashboardPanels.length % 2 === 0) ? 6 : 4 }}
                 card={card}
                 icon={<card.icon size={5} />}
