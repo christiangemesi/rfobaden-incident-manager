@@ -136,12 +136,12 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
         <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" />
+              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
           <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" />
+              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
