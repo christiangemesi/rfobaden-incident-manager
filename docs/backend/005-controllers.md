@@ -23,3 +23,8 @@ By default, `ModelController` allows read-only access for all `AGENT` users, and
 
 > If you override a controller method, you must also copy all the annotations of it's parameters!
 
+### Testing
+
+Test Classes for  `ModelController` subtypes may extend `ModelControllerTest`, which provides tests for all methods of that class. Note that this requires a generator for the model type.
+
+if the model has relations to other models, your test will then have to mock them. To do so, override the `mockRelations` method in your test class. See `ReportControllerTest` for an example of how this is done.
