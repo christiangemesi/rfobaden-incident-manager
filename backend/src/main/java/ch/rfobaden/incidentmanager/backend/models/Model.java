@@ -21,36 +21,17 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-/**
- * {@code Model} is the base class for types class representing database entities.
- * It provides basic fields, functionality and utilities for such types.
- * <p>
- *     Not <i>every</b> model type has to extend {@code Model}.
- *     If you're unsure of whether it is correct to do so, it probably is.
- * </p>
- */
 @MappedSuperclass
 public abstract class Model {
-    /**
-     * The entities' id, unique to it's model.
-     */
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
     private Long id;
 
-    /**
-     * The moment in time at which this entity was created.
-     * This value should not be changed after first saving the entity.
-     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * The moment in time at which this entity was last changed.
-     * This value should be changed before every save.
-     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime updatedAt;
@@ -82,17 +63,6 @@ public abstract class Model {
     @Override
     public abstract boolean equals(Object other);
 
-    /**
-     * Compares the fields of two {@link Model} instances.
-     * <p>
-     *     This is a utility method meant to be used in implementations of {@link #equals(Object)}.
-     *     It can be called after ensuring that the other object is a {@code Model},
-     *     and before comparing your own column fields.
-     * </p>
-     *
-     * @param that The other model.
-     * @return Whether the {@code Model} fields of {@code this} and {@code that} are equal.
-     */
     protected final boolean equalsModel(Model that) {
         return Objects.equals(id, that.id)
             && Objects.equals(createdAt, that.createdAt)
@@ -102,30 +72,15 @@ public abstract class Model {
     @Override
     public abstract int hashCode();
 
-    /**
-     * Computes a hashCode over the {@link Model} fields of this entity.
-     *
-     * @return The computed code.
-     */
     protected final int modelHashCode() {
         return Objects.hash(id, createdAt, updatedAt);
     }
 
-    /**
-     * Generates a string representation of this entity,
-     * containing all of its database fields and many-to-one relations.
-     *
-     * @return The string representation.
-     */
     @Override
     public final String toString() {
         return new Stringifier(this).getString();
     }
 
-    /**
-     * {@code Model.Basic} is a specialization of {@link Model}.
-     * It implements {@link PathConvertible} with {@link EmptyPath}.
-     */
     @MappedSuperclass
     public abstract static class Basic extends Model implements PathConvertible<EmptyPath> {
         @Override
