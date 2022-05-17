@@ -4,7 +4,7 @@ Controllers are defined in the `controllers` package.  They are responsible for 
 
 ## Authorization
 
-Authorization is provided by Spring Security. To authorize a user, you can use annotions provided by Spring Security, such as `@PreAuthorize`. As an alternative, the backend provides the custom `@RequireAgent` and `@RequireAdmin` annotations.
+Authorization is provided by Spring Security. To authorize a user, you can use annotations provided by Spring Security, such as `@PreAuthorize`. As an alternative, the backend provides the custom `@RequireAgent` and `@RequireAdmin` annotations.
 
 Authorization annotations can be either applied directly to controller methods, or to the entire controller at once.
 
