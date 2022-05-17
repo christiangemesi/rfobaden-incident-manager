@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code ModelRepository} defines methods with which a {@link Vehicle} is accessed in the database
- * additional to the {@link ch.rfobaden.incidentmanager.backend.models.Model} methods.
+ * {@code VehicleRepository} extends {@link ModelRepository.Basic}.
+ * It defines methods with which a {@link Vehicle} is accessed in the database
+ * additional to the {@link ModelRepository} methods.
  */
 @Repository
 public interface VehicleRepository
