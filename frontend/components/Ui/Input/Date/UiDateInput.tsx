@@ -179,6 +179,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
       border-color: ${({ theme }) => theme.colors.primary.value};
       font-family: ${({ theme }) => theme.fonts.body};
       display: flex;
+      margin: 0 0.2rem;
 
       .react-datepicker__triangle {
         left: 50% !important;
@@ -373,6 +374,12 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
           .react-datepicker__day-name {
             line-height: 1.2;
+            
+            :first-child {
+              ${Themed.media.xs.only} {
+                display: none;
+              }
+            }
           }
         }
 
@@ -385,6 +392,10 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           display: inline-flex;
           justify-content: center;
           align-items: center;
+          
+          ${Themed.media.xs.only} {
+            padding: 0.55rem 1.05rem;
+          }
         }
 
         .react-datepicker__month {
@@ -394,6 +405,10 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
             .react-datepicker__week-number {
               color: ${({ theme }) => theme.colors.grey.value};
+
+              ${Themed.media.xs.only} {
+                display: none;
+              }
             }
 
             .react-datepicker__day {
