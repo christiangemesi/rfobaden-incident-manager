@@ -4,7 +4,7 @@ Models are defined in the `models` package. They represent how data is persisted
 
 ## The `Model`
 
-Most models extend from the `Model` base class, which provides basic fields and helper methods for any normal model. It also standardizes the use of [paths](#Model Paths) for every subtype.
+Most models extend from the `Model` base class, which provides basic fields and helper methods for any normal model.
 
 ## Model Paths
 
@@ -18,7 +18,7 @@ A few examples:
 
 Paths are stored as simple classes, where every value of the path is stored in an instance variable. They can be found at `models.paths`.
 
-Every `Model` subtype has a path - `Subtask`, for example, has `SubtaskPath`. Models with an empty path can extend `Model.Basic`, which automatically make use of `EmptyPath`.
+Model which have a path should implement `PathConvertible`. Models with an empty path can extend `Model.Basic`, which automatically implements `PathConvertible<EmptyPath>`.
 
 ## Testing
 
