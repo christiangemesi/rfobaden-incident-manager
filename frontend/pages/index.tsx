@@ -44,8 +44,6 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     return panels
   }, [firstIncident])
 
-  let count = 0
-
   return (
     <Page>
       <UiContainer>
@@ -57,12 +55,13 @@ const HomePage: React.VFC<Props> = ({ data }) => {
         </Subtitle>
         <Panels>
           <UiGrid gap={1.5} justify="center">
-            {dashboardPanels.map((card) => (
-              count++ < 2 || dashboardPanels.length % 2 === 0 ? (
-                <CardColumn size={{ xs: 12, sm: 6 }} card={card} icon={<card.icon size={5} />} />
-              ) : (
-                <CardColumn size={{ xs: 12, sm: 4, lg: 4 }} card={card} icon={<card.icon size={5} />} />
-              )
+            {dashboardPanels.map((card, i) => (
+              <CardColumn
+                key={'card' + i}
+                size={{ xs: 12, sm: (i < 2 || dashboardPanels.length % 2 === 0) ? 6 : 4 }}
+                card={card}
+                icon={<card.icon size={5} />}
+              />
             ))}
           </UiGrid>
         </Panels>

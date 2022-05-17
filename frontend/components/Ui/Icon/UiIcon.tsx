@@ -47,7 +47,7 @@ import {
 } from '@mdi/js'
 
 
-export interface NamedIconProps extends StyledProps {
+interface NamedIconProps extends StyledProps {
   /**
    * Size multiplier.
    * Default is `1`.
