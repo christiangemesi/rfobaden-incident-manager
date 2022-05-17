@@ -5,7 +5,7 @@ It exposes a JSON-based REST-API, and persists it's data in an SQL database.
 
 ## Structure
 
-> Note that unless otherwhise specified, all java classes and packages mentioned here can be assumed to be in the `ch.rfobaden.incidentmanager.backend ` package.
+> Note that unless otherwhise specified, all java classes and packages mentioned here can be assumed to be in the `ch.rfobaden.incidentmanager.backend` package.
 
 The overall structure follows the standard Gradle project layout. The package structure loosely follows 3-tier archictecture and is as follows:
 
@@ -18,3 +18,10 @@ The overall structure follows the standard Gradle project layout. The package st
 
 The applications entry point is in `Application`.
 
+## Further Reading
+
+- [models](./002-models.md)
+- [repositories](./003-repositories.md)
+- [services](./004-services.md)
+- [controllers](./004-controllers.md)
+- [authorization](./006-authorization.md)
