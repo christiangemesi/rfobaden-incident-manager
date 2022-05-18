@@ -1,17 +1,17 @@
 
 export interface UiInputProps<T> {
   /**
-   * Generic Parameter
+   * The current value.
    */
   value: T
 
   /**
-   * Generic Parameter that switches from one state to another state
+   * Event caused by when the input value is changed.
    */
   onChange: (value: T) => void
 
   /**
-   * Array of Strings displaying errors
+   * Errors caused by validating {@link value}.
    */
   errors?: string[]
 }
