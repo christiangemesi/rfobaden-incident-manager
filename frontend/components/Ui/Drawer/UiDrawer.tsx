@@ -24,12 +24,19 @@ interface Props extends UiModalLikeProps {
    * Will default to `'left'`.
    */
   position?: 'left' | 'right'
+
+  /**
+   * Determines how content will be aligned.
+   * Will default to `'center'`.
+   */
+  align?: 'top' | 'center'
 }
 
 const UiDrawer: React.VFC<Props> = ({
   title = null,
   size = 'auto',
   position = 'left',
+  align = 'center',
   ...modalProps
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -43,6 +50,7 @@ const UiDrawer: React.VFC<Props> = ({
           isShaking={isShaking}
           size={size}
           position={position}
+          align={align}
           onClick={(e) => e.stopPropagation()}
         >
           <Content>
@@ -69,18 +77,25 @@ export default Object.assign(UiDrawer, {
   Body: UiModalLike.Body,
 })
 
+const Content = styled.div`
+  margin: auto;
+  width: 100%;
+
+  ${Themed.media.xs.only} {
+    margin: unset;
+  }
+`
 const Container = styled.div<{
   isOpen: boolean
   size: 'auto' | 'full' | 'fixed'
   position: 'left' | 'right'
+  align: 'top' | 'center'
   isShaking: boolean
 }>`
   ${UiContainer.fluidCss};
   position: fixed;
   ${({ position }) => position}: 0;
   
-  
-
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -158,17 +173,13 @@ const Container = styled.div<{
       justify-content: flex-end;
     }
   `}
+  
+  ${({ align }) => align === 'top' && css`
+    > ${Content} {
+      margin: unset;
+    }
+  `}
 `
-
-const Content = styled.div`
-  margin: auto;
-  width: 100%;
-
-  ${Themed.media.xs.only} {
-    margin: unset;
-  }
-`
-
 const TitleContainer = styled.div`
   display: flex;
   width: 100%;
