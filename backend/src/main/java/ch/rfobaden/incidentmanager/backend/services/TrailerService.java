@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code TrailerService} is a {@link ModelRepositoryService.Basic} that
- * accesses the {@link TrailerRepository} methods.
+ * {@code TrailerService} is a {@link ModelService} for {@link Trailer trailers}.
  */
 @Service
 public class TrailerService
