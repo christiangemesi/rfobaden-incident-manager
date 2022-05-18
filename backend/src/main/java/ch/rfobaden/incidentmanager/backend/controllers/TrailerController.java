@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Trailer;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.TrailerService;
@@ -16,14 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code TrailerController} extends {@link ModelController.Basic}.
+ * It provides an additional method as well as changed access on existing methods.
+ */
+
 @RestController
 @RequestMapping(path = "api/v1/trailers")
 public class TrailerController
     extends ModelController.Basic<Trailer, TrailerService> {
 
+    /**
+     * Constructor to create a new trailer controller.
+     */
     public TrailerController() {
     }
 
+    /**
+     * Loads all visible trailers over the defined get path.
+     *
+     * @return All trailers whose visibility is true.
+     */
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
@@ -31,6 +45,15 @@ public class TrailerController
         return service.listVisible();
     }
 
+    /**
+     * Creates a new trailer by calling {@link ModelController.Basic#create} with modified access.
+     * If the trailer already exists with a given name, update the visibility to true.
+     *
+     * @param path   The trailers' path.
+     * @param entity The trailer.
+     * @return Created or updated trailer.
+     * @throws ApiException If the id does not exist.
+     */
     @Override
     @RequireAgent
     public Trailer create(@ModelAttribute EmptyPath path, @RequestBody Trailer entity) {
@@ -42,6 +65,16 @@ public class TrailerController
         return super.create(path, entity);
     }
 
+    /**
+     * Update an existing trailer of a given id by calling {@link ModelController.Basic#update}
+     * with modified access.
+     *
+     * @param emptyPath The trailers' path.
+     * @param id        The id of the trailer to be updated.
+     * @param entity    The trailers new data.
+     * @return Updated trailer.
+     * @throws ApiException If the id does not exist or is not equal to the id of new data.
+     */
     @Override
     @RequireAgent
     public Trailer update(
@@ -52,12 +85,27 @@ public class TrailerController
         return super.update(emptyPath, id, entity);
     }
 
+    /**
+     * Find a trailer by a given id by calling {@link ModelController.Basic#find}
+     * with modified access.
+     *
+     * @param emptyPath The trailers' path.
+     * @param id        The id of the trailer.
+     * @return Trailer with the given id.
+     * @throws ApiException If the id does not exist.
+     */
     @Override
     @RequireAgent
     public Trailer find(@ModelAttribute EmptyPath emptyPath, @PathVariable Long id) {
         return super.find(emptyPath, id);
     }
 
+    /**
+     * List all trailers by calling {@link ModelController.Basic#list} with modified access.
+     *
+     * @param emptyPath The trailers' path.
+     * @return All trailers.
+     */
     @Override
     @RequireAgent
     public List<Trailer> list(@ModelAttribute EmptyPath emptyPath) {
