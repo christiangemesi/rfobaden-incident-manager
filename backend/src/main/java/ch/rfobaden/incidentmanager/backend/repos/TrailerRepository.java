@@ -19,7 +19,7 @@ public interface TrailerRepository
     /**
      * Loads all visible trailers.
      *
-     * @return All trailers whose visibility is true.
+     * @return All visible trailers.
      */
     @Query(
         "SELECT trailer"
