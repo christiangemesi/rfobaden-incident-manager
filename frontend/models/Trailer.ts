@@ -14,7 +14,7 @@ export const parseTrailer = (data: Trailer): Trailer => ({
   updatedAt: parseDate(data.updatedAt),
 })
 
-export const getVehicleName = async (trailerId: Id<Trailer> | null): Promise<string> => {
+export const getTrailerName = async (trailerId: Id<Trailer> | null): Promise<string> => {
   if (trailerId === null) {
     return ''
   }
