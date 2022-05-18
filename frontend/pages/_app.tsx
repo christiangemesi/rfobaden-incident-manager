@@ -15,6 +15,8 @@ import UiAlert from '@/components/Ui/Alert/UiAlert'
 
 import 'reset-css/reset.css'
 import { useBreakpointName } from '@/utils/hooks/useBreakpoints'
+import { useRouter } from 'next/router'
+import { useModalReset } from '@/components/Ui/Modal/Like/UiModalLike'
 
 interface Props extends AppProps {
   user: User | null
@@ -29,6 +31,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     }
   })
 
+  const router = useRouter()
   const alerts = useAlerts()
 
   const { currentUser } = useSession()
@@ -38,6 +41,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       ? <Component {...pageProps} />
       : <React.Fragment />
   ), [Component, pageProps, currentUser, user])
+
+  useModalReset(router)
 
   return (
     <Fragment>
