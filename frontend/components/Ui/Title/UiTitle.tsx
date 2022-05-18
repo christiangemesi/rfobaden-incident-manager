@@ -6,21 +6,22 @@ import { Themed } from '@/theme'
 interface Props extends StyledProps {
 
   /**
-   * Children to be displayed.
+   * Headings content to be displayed.
    */
   children: ReactNode
+
   /**
-   * Size of Title equivalent to <h#> in HTML.
+   * The level of the heading, between 1 to 6.
    */
   level: number
 
   /**
-   * Centers the Title.
+   * Centers the title.
    */
   isCentered?: boolean
 }
 /**
- * `UiTitle` is a Component to display a Header.
+ * `UiTitle` displays a HTML heading.
  */
 const UiTitle: React.VFC<Props> = ({
   className,
