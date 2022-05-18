@@ -6,6 +6,12 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import Priority from '@/models/Priority'
 
+/**
+ * `UiPrioritySlider` is a control component to choose one of the following priority values:
+ * - {@link Priority.LOW}
+ * - {@link Priority.MEDIUM}
+ * - {@link Priority.HIGH}
+ */
 const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
   value,
   onChange: handleChange,
@@ -21,10 +27,10 @@ const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
           <Icon  priority={Priority.LOW} onClick={() => handleChange(Priority.LOW)}>
             <UiIcon.PriorityLow />
           </Icon>
-          <Icon onClick={() => handleChange(Priority.MEDIUM)} priority={Priority.MEDIUM}>
+          <Icon priority={Priority.MEDIUM} onClick={() => handleChange(Priority.MEDIUM)}>
             <UiIcon.PriorityMedium />
           </Icon>
-          <Icon onClick={() => handleChange(Priority.HIGH)} priority={Priority.HIGH}>
+          <Icon priority={Priority.HIGH} onClick={() => handleChange(Priority.HIGH)}>
             <UiIcon.PriorityHigh />
           </Icon>
         </IconContainer>
