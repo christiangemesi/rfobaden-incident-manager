@@ -16,7 +16,7 @@ interface Props extends StyledProps {
   isCentered?: boolean
 }
 /**
- * `UiTitle` is a View component for Strings.
+ * `UiTitle` is a Component to display a Header.
  */
 const UiTitle: React.VFC<Props> = ({
   className,
