@@ -12,7 +12,7 @@ The _path_ of a model describes at which endpoint the API (and thus the entire b
 
 A few examples:
 
-- `Transport` instances always belong to a specific `Incident`.  The API exposes them at `/incidents/{incidentId}/transports`. Thus, the path of a report consists of an  `incidentId`, which is the incident to which a specific `Transport` belongs.
+- `Transport` instances always belong to a specific `Incident`. The API exposes them at `/incidents/{incidentId}/transports`. Thus, the path of a report consists of an `incidentId`, which is the incident to which a specific `Transport` belongs.
 - `Subtask` instances always belong to a specific `Task`, which belongs to a specific `Report`, which belongs to a specific `Incident`. The API exposes subtasks at `/incident/{incidentId}/reports/{reportId}/tasks/{taskId}/subtasks`. Thus, the path of a subtask consists of an `incidentId`, `reportId` and `taskId`.
 - `Incident` instances do not belong to anything. The API exposes them at `/incidents`. Thus, their path does not contain anything - it is _empty_.
 

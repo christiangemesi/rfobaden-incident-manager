@@ -65,14 +65,16 @@ rd /s /q "backend\build"
 
 ### Dumping Database
 
+> The database has to be running in order for these commands to work.
+> Note that this only exports the data, not the structure of the database.
+
 ```shell
 docker compose exec database sh -c 'mysqldump -u root -p${MYSQL_ROOT_PASSWORD} --no-create-info ${MYSQL_DATABASE}' > dump.sql
 ```
 
-> The database has to be running in order for these commands to work.
-> Note that this only exports the data, not the structure of the database.
-
 ### Importing Sample Data
+
+> The database and backend have to be running in order for these commands to work.
 
 ```shell
 # Load minimal data(only admin and agent users):
@@ -84,5 +86,3 @@ docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQ
 # Load dumped production data:
 docker compose exec database sh -c 'mysql -uroot -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /data-prod.sql'
 ```
-
-> The database and backend have to be running in order for these commands to work.

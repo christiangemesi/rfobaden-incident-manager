@@ -1,6 +1,6 @@
 # Controllers
 
-Controllers are defined in the `controllers` package.  They are responsible for defining API endpoints, and thus represent the presentation layer.
+Controllers are defined in the `controllers` package. They are responsible for defining API endpoints, and thus represent the presentation layer.
 
 ## Authorization
 
