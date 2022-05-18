@@ -3,9 +3,15 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * The alerts to be displayed.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiAlertList` is a component to show multiple alerts.
+ */
 const UiAlertList: React.VFC<Props> = ({ children }) => {
   return (
     <AlertContainer>
