@@ -87,7 +87,6 @@ const BridgeClip = styled.div`
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
   height: 3.5rem;
   position: relative;
-  overflow: visible;
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
