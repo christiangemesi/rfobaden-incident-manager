@@ -16,9 +16,9 @@ public class TrailerService
     extends ModelRepositoryService.Basic<Trailer, TrailerRepository> {
 
     /**
-     * Loads all trailers whose visibility is true.
+     * Loads all {@link Trailer#isVisible() visible} trailers.
      *
-     * @return Visible trailers.
+     * @return All visible trailers.
      */
     public List<Trailer> listVisible() {
         return repository.findAllVisible();
