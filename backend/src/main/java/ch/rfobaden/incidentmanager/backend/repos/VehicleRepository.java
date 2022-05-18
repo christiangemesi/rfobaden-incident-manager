@@ -19,9 +19,9 @@ public interface VehicleRepository
     extends JpaRepository<Vehicle, Long>, ModelRepository.Basic<Vehicle> {
 
     /**
-     * Loads all entities at a given path.
+     * Loads all visible vehicles.
      *
-     * @return All entities whose visibility is true.
+     * @return All vehicles whose visibility is true.
      */
     @Query(
         "SELECT vehicle"
@@ -37,8 +37,8 @@ public interface VehicleRepository
      * Attempts to load a vehicle with a specific name.
      *
      * @param name The name of the vehicle.
-     * @return An {@link Optional} containing the entity,
-     *     or {@link Optional#empty()}, if no matching entity exists.
+     * @return An {@link Optional} containing the vehicle,
+     *     or {@link Optional#empty()}, if no matching vehicle exists.
      */
     @Query(
         "SELECT vehicle"
