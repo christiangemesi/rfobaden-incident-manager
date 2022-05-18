@@ -59,14 +59,6 @@ public class TrailerController
         return super.create(path, entity);
     }
 
-    /**
-     * Updates an existing trailer.
-     *
-     * @param emptyPath The trailer's path.
-     * @param id The trailer's id.
-     * @param entity The updated trailer.
-     * @return The updated trailer.
-     */
     @Override
     @RequireAgent
     public Trailer update(
