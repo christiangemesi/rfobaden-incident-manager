@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * {@code TrailerController} is a {@link ModelController.Basic}
- * that gives access to the {@link TrailerService}.
+ * {@code TrailerController} is a {@link ModelController} for {@link Trailer trailers}.
  */
-
 @RestController
 @RequestMapping(path = "api/v1/trailers")
 public class TrailerController
