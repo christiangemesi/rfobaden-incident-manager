@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * {@code Vehicle} extends {@link ModelWithName}.
- * It provides basic fields, functionality and utilities of {@link ModelWithName}.
+ * {@code Vehicle} extends {@link ModelWithName} that represents
+ * a vehicle usable in a {@link Transport}.
  */
 @Entity
 @Table(name = "vehicle")
