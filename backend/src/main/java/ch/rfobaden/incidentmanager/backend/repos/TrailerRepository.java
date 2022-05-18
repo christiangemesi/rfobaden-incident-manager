@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code TrailerRepository} is a {@link ModelRepository} that give access
- * to the {@link Trailer} data in the database.
+ * {@code TrailerRepository} is a {@link ModelRepository} for {@link Trailer trailers}.
  */
 @Repository
 public interface TrailerRepository
