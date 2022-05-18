@@ -29,8 +29,8 @@ public class VehicleService
      * Attempts to load a vehicle with a specific name.
      *
      * @param name The name of the vehicle.
-     * @return An {@link Optional} containing the entity,
-     *     or {@link Optional#empty()}, if no matching entity exists.
+     * @return An {@link Optional} containing the vehicle,
+     *     or {@link Optional#empty()}, if no matching vehicle exists.
      */
     public Optional<Vehicle> findByName(String name) {
         return repository.findByName(name);
