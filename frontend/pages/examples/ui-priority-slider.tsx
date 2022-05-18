@@ -3,15 +3,10 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 
 /**
- * Example to demonstrate the use of a UiPrioritySlider.
+ * Example to demonstrate the use of a {@link UiPrioritySlider}.
  */
 const UiPrioritySliderExample: React.VFC = () => {
 
-  /**
-   * The priority is managed by a {@link useState} hook.
-   * {@link value} contains the current priority
-   * {@link setValue} callback to set a new priority
-   */
   const [value, setValue] = useState(Priority.MEDIUM as Priority | null)
 
   return(

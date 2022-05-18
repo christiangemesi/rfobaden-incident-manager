@@ -7,10 +7,7 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import Priority from '@/models/Priority'
 
 /**
- * `UiPrioritySlider` is a control component to choose one of the following priority values:
- * - {@link Priority.LOW}
- * - {@link Priority.MEDIUM}
- * - {@link Priority.HIGH}
+ * `UiPrioritySlider` is an input component with which an {@link Priority} value can be selected.
  */
 const UiPrioritySlider: React.VFC<UiInputProps<Priority | null>> = ({
   value,
