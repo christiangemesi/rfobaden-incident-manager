@@ -42,11 +42,11 @@ public class VehicleController
      * Creates a new vehicle.
      * <p>
      *     If there's already a vehicle with the same name, no new vehicle is created,
-     *     and the existing one returned instead.
+     *     and the existing one is returned instead.
      *     In any case, the returned vehicle will be made {@link Vehicle#isVisible() visible}.
      * </p>
      *
-     * @param path   The vehicles' path.
+     * @param path   The vehicle's path.
      * @param entity The new vehicle.
      * @return A visible vehicle matching {@code entity}.
      */

@@ -3,13 +3,14 @@ package ch.rfobaden.incidentmanager.backend.services;
 import ch.rfobaden.incidentmanager.backend.models.Vehicle;
 import ch.rfobaden.incidentmanager.backend.repos.VehicleRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code VehicleService} is a {@link ModelRepositoryService} for {@link Vehicle vehicles}.
+ * {@code VehicleService} is a {@link ModelService} for {@link Vehicle vehicles}.
  */
 @Service
 public class VehicleService
