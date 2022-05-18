@@ -22,7 +22,7 @@ const Caption = styled.div<{ isEmphasis?: boolean, onClick?: () => void }>`
   ${({ onClick }) => onClick !== undefined  && css`
     :hover {
       cursor: pointer;
-      transform: scale(1.1);
+      text-decoration: underline;
     }
   `}
 
