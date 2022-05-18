@@ -4,18 +4,18 @@ import styled from 'styled-components'
 interface Props {
 
   /**
-   * Text of Component.
+   * Text to display.
    */
   text: string
 
   /**
-   * Display of Children.
+   * The icon to display.
    */
   children: ReactNode
 }
 
 /**
- * `UiTextWithIcon` is a view component for a Text with an Icon.
+ * `UiTextWithIcon` displays text next to an icon.
  */
 const UiTextWithIcon: React.VFC<Props> = ({ children, text }) => {
   return (
