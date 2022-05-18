@@ -6,7 +6,7 @@ export interface UiInputProps<T> {
   value: T
 
   /**
-   * Event caused by when the input value is changed.
+   * Event caused by input value being changed.
    */
   onChange: (value: T) => void
 
