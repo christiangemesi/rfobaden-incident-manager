@@ -115,6 +115,6 @@ const LinkCaption = styled(UiCaption)`
 
   &:hover {
     cursor: pointer;
-    transform: scale(1.1);
+    color: black;
   }
 `
