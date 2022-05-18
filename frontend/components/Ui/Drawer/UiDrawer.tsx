@@ -45,17 +45,19 @@ const UiDrawer: React.VFC<Props> = ({
           position={position}
           onClick={(e) => e.stopPropagation()}
         >
-          {title === null ? nav : (
-            <TitleContainer>
-              <UiTitle level={2}>
-                {title}
-              </UiTitle>
-              <div>
-                {nav}
-              </div>
-            </TitleContainer>
-          )}
-          {children}
+          <Content>
+            {title === null ? nav : (
+              <TitleContainer>
+                <UiTitle level={2}>
+                  {title}
+                </UiTitle>
+                <div>
+                  {nav}
+                </div>
+              </TitleContainer>
+            )}
+            {children}
+          </Content>
         </Container>
       )}
     />
@@ -75,13 +77,17 @@ const Container = styled.div<{
 }>`
   ${UiContainer.fluidCss};
   position: fixed;
-  top: 0;
   ${({ position }) => position}: 0;
   
-  height: 100vh;
-  padding-top: 3rem;
-  padding-bottom: 5rem;
+  
 
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+  
   box-shadow: 
           0 8px 17px 2px rgba(0, 0, 0, 0.14),
           0 3px 14px 2px rgba(0, 0, 0, 0.12), 
@@ -154,6 +160,15 @@ const Container = styled.div<{
   `}
 `
 
+const Content = styled.div`
+  margin: auto;
+  width: 100%;
+
+  ${Themed.media.xs.only} {
+    margin: unset;
+  }
+`
+
 const TitleContainer = styled.div`
   display: flex;
   width: 100%;
@@ -161,5 +176,8 @@ const TitleContainer = styled.div`
   
   & > ${UiTitle} {
     flex: 0 1 100%;
+  }
+  
+  & > ${UiModalLike.Nav} {
   }
 `
