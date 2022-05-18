@@ -2,10 +2,16 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 interface Props {
+  /**
+   * Text of Component.
+   */
   text: string
   children: ReactNode
 }
 
+/**
+ * `UiTextWithIcon` is a view component for a Text with an Icon.
+ */
 const UiTextWithIcon: React.VFC<Props> = ({ children, text }) => {
   return (
     <StyledContainer>
