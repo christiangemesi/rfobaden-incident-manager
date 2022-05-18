@@ -11,9 +11,12 @@ interface Props extends UiInputProps<boolean> {
    */
   label?: string
   /**
-   * Sets the default value to false.
+   * Disables the Checkbox.
    */
   isDisabled?: boolean
+  /**
+   * The color of the Checkbox.
+   */
   color?: ColorName
 }
 /**
