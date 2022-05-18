@@ -59,7 +59,7 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <LinkCaption isEmphasis>
         <BackButton href="/ereignisse">Ereignis</BackButton>
       </LinkCaption>
-      <UiDrawer size="full">
+      <UiDrawer size="full" align="top">
         <UiDrawer.Trigger>{({ open }) => (
           <UiCaption onClick={open}>
             {incident.organizationIds.length}

@@ -23,7 +23,7 @@ const DocumentDrawer: React.VFC<Props> = ({
 }) => {
 
   return (
-    <UiDrawer size="auto">
+    <UiDrawer size="auto" align="top">
       <UiDrawer.Trigger>{({ open }) => (
         children ? children({ open }) : (
           <UiCaption onClick={ open }>
