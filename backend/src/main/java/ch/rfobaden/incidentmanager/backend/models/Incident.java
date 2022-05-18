@@ -24,6 +24,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Incident} represents any major event organized and handled via the IncidentManager.
+ * It is further divided into {@link Transport} and {@link Report} entities.
+ */
 @Entity
 @Table(name = "incident")
 public class Incident extends Model.Basic
@@ -31,35 +35,72 @@ public class Incident extends Model.Basic
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The title of the {@code Incident}.
+     */
     @NotBlank
     @Size(max = 100)
     @Column(nullable = false)
     private String title;
 
+    /**
+     * A textual description of what the {@code Incident} is about.
+     */
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * Whether the {@code Incident} is closed.
+     * A closed incident counts as completed.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    /**
+     * The reason for closing the {@code Incident}.
+     * It is {@code null} if the entity has never been {@link #isClosed closed}.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
+    /**
+     * The moment in time at which the {@code Incident} will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     */
     private LocalDateTime startsAt;
 
+    /**
+     * The moment in time at which the {@code Incident} will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
     private LocalDateTime endsAt;
 
+    /**
+     * The {@link Report reports} of the entity.
+     */
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
+
+    /**
+     * The {@link Transport transports} of the entity.
+     */
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Transport> transports = new ArrayList<>();
 
+    /**
+     * The images attached to the entity, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the entity.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -101,6 +142,13 @@ public class Incident extends Model.Basic
         isClosed = closed;
     }
 
+    /**
+     * Whether the {@code Incident} is done.
+     * An incident is done when all its {@link #getTransports() transports}
+     * and {@link #getReports() reports} are all closed or done.
+     *
+     * @return Whether the entity is done.
+     */
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getReports().isEmpty()
@@ -123,6 +171,11 @@ public class Incident extends Model.Basic
         return getReports().stream().map(Report::getId).collect(Collectors.toList());
     }
 
+    /**
+     * Lists the {@link Report#getId() ids} of all closed {@link #getReports() reports}.
+     *
+     * @return The ids of all closed reports.
+     */
     public List<Long> getClosedReportIds() {
         return getReports().stream()
             .filter(r -> r.isClosed() || r.isDone())
@@ -140,10 +193,20 @@ public class Incident extends Model.Basic
         this.transports = transports;
     }
 
+    /**
+     * Lists the {@link Transport#getId() ids} of all {@link #getTransports() transports}.
+     *
+     * @return The ids of all transports.
+     */
     public List<Long> getTransportIds() {
         return getTransports().stream().map(Transport::getId).collect(Collectors.toList());
     }
-
+    
+    /**
+     * Lists the {@link Report#getId() ids} of all closed {@link #getTransports() transports}.
+     *
+     * @return The ids of all closed transports.
+     */
     public List<Long> getClosedTransportIds() {
         return getTransports().stream()
             .filter(Transport::isClosed)
@@ -191,24 +254,30 @@ public class Incident extends Model.Basic
         this.images = images;
     }
 
+    /**
+     * Creates the set of the ids of all {@link Organization organizations}
+     * that are connected to this incident.
+     *
+     * @return The set of all organization ids.
+     */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Set<Long> getOrganizationIds() {
         return Stream.concat(
-            Stream.concat(
                 Stream.concat(
-                    reports.stream(),
-                    transports.stream()
+                    Stream.concat(
+                        reports.stream(),
+                        transports.stream()
+                    ),
+                    reports.stream()
+                        .map(Report::getTasks)
+                        .flatMap(Collection::stream)
                 ),
                 reports.stream()
                     .map(Report::getTasks)
                     .flatMap(Collection::stream)
-            ),
-            reports.stream()
-                .map(Report::getTasks)
-                .flatMap(Collection::stream)
-                .map(Task::getSubtasks)
-                .flatMap(Collection::stream)
-        )
+                    .map(Task::getSubtasks)
+                    .flatMap(Collection::stream)
+            )
             .map(Trackable::getAssignee)
             .filter(Objects::nonNull)
             .map(User::getOrganizationId)
