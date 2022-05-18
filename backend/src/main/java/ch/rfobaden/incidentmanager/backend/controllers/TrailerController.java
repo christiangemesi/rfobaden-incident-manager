@@ -40,7 +40,7 @@ public class TrailerController
      * Creates a new trailer.
      * <p>
      *     If there's already a trailer with the same name, no new trailer is created,
-     *     and the existing one returned instead.
+     *     and the existing one is returned instead.
      *     In any case, the returned trailer will be made {@link Trailer#isVisible() visible}.
      * </p>
      *
