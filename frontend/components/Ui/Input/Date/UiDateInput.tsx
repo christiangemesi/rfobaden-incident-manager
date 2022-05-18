@@ -99,7 +99,7 @@ const PickerButton = styled.button.attrs(() => ({
 }))`
   background: ${({ theme }) => theme.colors.primary.value};
   outline: none;
-  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
   border-radius: 0 0.5rem 0.5rem 0;
   width: 60px;
   margin: 0;
@@ -175,7 +175,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
     .react-datepicker {
       background: white;
-      color: ${({ theme }) => theme.colors.tertiary.contrast};
+      color: ${({ theme }) => theme.colors.light.contrast};
       border-color: ${({ theme }) => theme.colors.primary.value};
       font-family: ${({ theme }) => theme.fonts.body};
       display: flex;
@@ -192,7 +192,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
       }
 
       .react-datepicker__navigation {
-        color: ${({ theme }) => theme.colors.tertiary.contrast};
+        color: ${({ theme }) => theme.colors.light.contrast};
 
         &.react-datepicker__navigation--years {
           display: block;
@@ -329,8 +329,8 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
             .react-datepicker__year-read-view,
             .react-datepicker__month-read-view {
-              background: ${({ theme }) => theme.colors.tertiary.value};
-              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              background: ${({ theme }) => theme.colors.light.value};
+              color: ${({ theme }) => theme.colors.light.contrast};
               height: 100%;
               display: flex;
               justify-content: space-between;
@@ -355,7 +355,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
               .react-datepicker__year-read-view--down-arrow,
               .react-datepicker__month-read-view--down-arrow {
-                border-color: ${({ theme }) => theme.colors.tertiary.contrast};
+                border-color: ${({ theme }) => theme.colors.light.contrast};
                 right: auto;
                 height: 6px;
                 width: 6px;
@@ -413,7 +413,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
             .react-datepicker__day {
               background: transparent;
-              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              color: ${({ theme }) => theme.colors.light.contrast};
               border: 1px solid transparent;
 
               transition: 150ms ease;
@@ -460,7 +460,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
           .react-datepicker__time-box {
             background: white;
-            color: ${({ theme }) => theme.colors.tertiary.contrast};
+            color: ${({ theme }) => theme.colors.light.contrast};
             border-right: 1px solid ${({ theme }) => theme.colors.primary.value};
 
             .react-datepicker__time-list {
@@ -501,7 +501,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     padding: 0.5rem;
     font-size: 0.9rem;
     outline: none;
-    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+    border: 1px solid ${({ theme }) => theme.colors.light.contrast};
     font-family: ${({ theme }) => theme.fonts.body};
 
     transition: 250ms ease;

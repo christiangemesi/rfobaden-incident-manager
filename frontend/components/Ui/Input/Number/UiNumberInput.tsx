@@ -53,7 +53,7 @@ const StyledInput = styled.input<{ hasChildren: boolean }>`
   border-radius: 0.5rem;
   outline: none;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
   font-family: ${({ theme }) => theme.fonts.body};
 
   ${({ hasChildren }) => hasChildren && css`

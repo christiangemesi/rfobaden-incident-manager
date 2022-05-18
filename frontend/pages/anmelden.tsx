@@ -57,10 +57,10 @@ const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  background-color: ${({ theme }) => theme.colors.light.value};
   z-index: 0;
   padding: 3rem;
-  box-shadow: 0 0 4px 1px ${({ theme }) => theme.colors.tertiary.contrast}
+  box-shadow: 0 0 4px 1px ${({ theme }) => theme.colors.light.contrast}
 `
 const CenterContainer = styled(UiContainer)`
   height: 100vh;

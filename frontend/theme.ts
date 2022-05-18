@@ -5,6 +5,7 @@ export type Theme = {
     primary: Color
     secondary: Color
     tertiary: Color
+    light: Color
     success: Color
     error: Color
     warning: Color
@@ -74,6 +75,10 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     tertiary: {
+      value: '#BDD7EA',
+      contrast: contrastDark,
+    },
+    light: {
       value: contrastLight,
       contrast: contrastDark,
     },
@@ -98,8 +103,7 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     hover: {
-      // value: '#D1E0EB',
-      value: '#BDD7EA',
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
   },

@@ -50,13 +50,7 @@ const TrackableListItem = <T extends Trackable>({
 }
 export default TrackableListItem
 
-const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive }) => isActive && css`
-    transition-duration: 300ms;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-  `}
-`
+
 
 const Bridge = styled.div<{ isActive: boolean }>`
   width: 100%;
@@ -77,7 +71,7 @@ const Bridge = styled.div<{ isActive: boolean }>`
     transform: scaleX(1);
     transform-origin: right center;
 
-    background-color: ${theme.colors.tertiary.value};
+    background-color: ${theme.colors.light.value};
   `}
 `
 
@@ -90,5 +84,15 @@ const BridgeClip = styled.div`
 
   ${Themed.media.md.max} {
     display: none;
+  }
+`
+const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+  ${({ isActive }) => isActive && css`
+    transition-duration: 300ms;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  `}
+  :hover ${Bridge} {
+    background-color: ${({ theme }) => theme.colors.hover.value};
   }
 `

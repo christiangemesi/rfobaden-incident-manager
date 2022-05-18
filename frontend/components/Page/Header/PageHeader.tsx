@@ -96,7 +96,7 @@ const Header = styled.header`
   padding: 0.75rem 3rem;
   margin-bottom: 3rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
-  background: ${({ theme }) => theme.colors.hover.value};
+  background: ${({ theme }) => theme.colors.tertiary.value};
 
   ${Themed.media.xs.only} {
     z-index: 2;

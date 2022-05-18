@@ -41,7 +41,7 @@ const SortButton = styled(UiListHeader)`
   cursor: pointer;
   margin: 0 0.2rem;
   padding: 0.5rem;
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  color: ${({ theme }) => theme.colors.light.contrast};
 
   will-change: background-color;
   transition: 200ms ease-out;

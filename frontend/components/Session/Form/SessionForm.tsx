@@ -82,7 +82,7 @@ interface LoginData {
 }
 
 const StyledTitle = styled(UiTitle)`
-  color: ${({ theme }) => theme.colors.tertiary.value};
+  color: ${({ theme }) => theme.colors.light.value};
   margin-bottom: 3rem;
 `
 const FieldContainer = styled.div`

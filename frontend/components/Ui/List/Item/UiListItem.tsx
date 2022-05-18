@@ -66,7 +66,7 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean, isCl
   `}
 
   ${({ isActive, theme }) => isActive && css`
-    background-color: ${theme.colors.tertiary.value};
+    background-color: ${theme.colors.light.value};
     border-color: ${({ theme }) => theme.colors.grey.value};
   `}
 
