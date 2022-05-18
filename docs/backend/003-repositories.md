@@ -1,6 +1,6 @@
 # Repositories
 
-Repositores are defined in the `repos` package.  They are responsible for loading from and storing to the database, and thus represent the persistence layer. They are mainly implemented using Spring JPA repositories.
+Repositories are defined in the `repos` package.  They are responsible for loading from and storing into the database, and thus represent the persistence layer. They are mainly implemented using Spring JPA repositories.
 
 ## `Model` Repositories
 
