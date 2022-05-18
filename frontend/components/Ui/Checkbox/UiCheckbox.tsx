@@ -6,11 +6,19 @@ import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 interface Props extends UiInputProps<boolean> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+  /**
+   * Sets the default value to false.
+   */
   isDisabled?: boolean
   color?: ColorName
 }
-
+/**
+ * `UiCheckbox` is an input component of 2 boolean values.
+ */
 const UiCheckbox: React.VFC<Props> = ({
   label,
   value,
