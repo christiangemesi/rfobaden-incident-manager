@@ -22,7 +22,7 @@ const UiAlert: React.VFC<Props> = ({
   alert,
 
   /**
-   * Event caused by closing the alert.
+   * Event caused by closing the {@link Alert}.
    */
   onRemove: handleRemove,
 }) => {
