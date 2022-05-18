@@ -1,6 +1,6 @@
 # Authentication
 
-The backend API authenticates it's users via JWT. These JWTs have a lifetime of 30 days. They can be set back to the client via either HTTP cookie, or by  `Authorization`-Header set to `Bearer <jwt>`.
+The backend API authenticates it's users via JWT. These JWTs have a lifetime of 30 days. They can be set back to the client either via an HTTP cookie, or by an `Authorization`-Header set to `Bearer <jwt>`.
 
 JWTs are managed by the `SessionController`.
 

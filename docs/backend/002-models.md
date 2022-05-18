@@ -1,6 +1,6 @@
 # Models
 
-Models are defined in the `models` package. They represent how data is persisted in the database, and also is which structure this data is sent from and received by the API.
+Models are defined in the `models` package. They represent how data is persisted in the database, and also in which structure this data is sent from and received by the API.
 
 ## The `Model`
 
@@ -22,11 +22,11 @@ Model which have a path should implement `PathConvertible`. Models with an empty
 
 ## Testing
 
-Test classes for models may extend `PojoTest`, which provides tests for `equals(Object)` and `toString()`. `Model` subtypes may extend `ModelTests`, which builts on top of `PojoTest`, but requires a `Generator`.
+Test classes for models may extend `PojoTest`, which provides tests for `equals(Object)` and `toString()`. `Model` subtypes may extend `ModelTests`, which builds on top of `PojoTest`, but requires a `Generator`.
 
 ### Generators
 
-Generators are classes that provide fake data for testing purposes. They are stored in the tests packages under `test.generators`. It is recommended that you implement generators for every model type. Normal models can extend `Generator`, generator for `Model` subtypes can extend `ModelGenerator`.
+Generators are classes that provide fake data for testing purposes. They are stored in the tests packages under `test.generators`. It is recommended that you implement generators for every model type. Normal models can extend `Generator`, generators for `Model` subtypes can extend `ModelGenerator`.
 
 After implementing a new generator, it has to be added to the `@Import`  annotation of the  `TestConfig` class found in the test package. This ensures that the generator gets loaded into your tests.
 

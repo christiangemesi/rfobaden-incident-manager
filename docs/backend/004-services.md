@@ -1,6 +1,6 @@
 # Services
 
-Services are defined in the `services` package.  They are responsible for implementing general logic and behaviour, and thus represent the business layer. 
+Services are defined in the `services` package. They are responsible for implementing general logic and behaviour and thus represent the business layer. 
 
 # `Model` Services
 

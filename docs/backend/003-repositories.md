@@ -10,4 +10,4 @@ Repositories for `Model` data types may extend from `repos.base.ModelRepository`
 
 Test Classes for classes implementing `ModelRepository` may extend `ModelRepositoryTest`, which provides tests for all commonly used methods of that interface. Note that this requires a generator for the model type.
 
-if the model has relations to other models, your test will then have to save them. To do so, override the `saveRelations` method in your test class, and load the relations. See `ReportRepositoryTest` for an example of how this is done.
+If the model has relations to other models, your test will then have to save them. To do so, override the `saveRelations` method in your test class, and load the relations. See `ReportRepositoryTest` for an example of how this is done.

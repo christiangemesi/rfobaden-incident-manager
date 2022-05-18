@@ -6,6 +6,8 @@ Controllers are defined in the `controllers` package.  They are responsible for 
 
 Authorization is provided by Spring Security. To authorize a user, you can use annotations provided by Spring Security, such as `@PreAuthorize`. As an alternative, the backend provides the custom `@RequireAgent` and `@RequireAdmin` annotations.
 
+> `@RequireAgent` also allows `ADMIN` access.
+
 Authorization annotations can be either applied directly to controller methods, or to the entire controller at once.
 
 ## Model Controllers
@@ -14,7 +16,7 @@ Controllers for `Model` data types may extend from the `controllers.base.ModelCo
 
 ### Loading Relations
 
-if the model has relations to other models, your controller will have to load them when the model is being changed. To do so, override the `loadRelations` method in your controller and load the relations.
+If the model has relations to other models, your controller will have to load them when the model is being changed. To do so, override the `loadRelations` method in your controller and load the relations.
 See `ReportController` for an example of how this is done.
 
 ### Authorization
@@ -27,4 +29,4 @@ By default, `ModelController` allows read-only access for all `AGENT` users, and
 
 Test Classes for  `ModelController` subtypes may extend `ModelControllerTest`, which provides tests for all methods of that class. Note that this requires a generator for the model type.
 
-if the model has relations to other models, your test will then have to mock them. To do so, override the `mockRelations` method in your test class. See `ReportControllerTest` for an example of how this is done.
+If the model has relations to other models, your test will then have to mock them. To do so, override the `mockRelations` method in your test class. See `ReportControllerTest` for an example of how this is done.
