@@ -17,7 +17,7 @@ interface Props {
 const UiAlert: React.VFC<Props> = ({
 
   /**
-   * The {@link Alert} to be shown.
+   * The {@link Alert} to be displayed.
    */
   alert,
 

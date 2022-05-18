@@ -5,22 +5,22 @@ import { ColorName } from '@/theme'
  */
 export default interface Alert {
   /**
-   * An unique identifier for each alert.
+   * An unique identifier for each `Alert`.
    */
   id: number
 
   /**
-   * The text which will be displayed on the alert.
+   * The text which will be displayed on the `Alert`.
    */
   text: string
 
   /**
-   * The type of alert defined by a {@link ColorName}
+   * The type of `Alert` defined by a {@link ColorName}
    */
   type: ColorName
 
   /**
-   * Enables automatic fading out of the alert.
+   * Enables automatic fading out of the `Alert`.
    */
   isFading: boolean
 }

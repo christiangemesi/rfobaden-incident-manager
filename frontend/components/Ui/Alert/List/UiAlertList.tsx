@@ -4,13 +4,13 @@ import { Themed } from '@/theme'
 
 interface Props {
   /**
-   * The alerts to be displayed.
+   * The {@link Alert}'s to be displayed.
    */
   children: ReactNode
 }
 
 /**
- * `UiAlertList` is a component to show multiple alerts.
+ * `UiAlertList` is a component to display multiple {@link Alert}'s.
  */
 const UiAlertList: React.VFC<Props> = ({ children }) => {
   return (
