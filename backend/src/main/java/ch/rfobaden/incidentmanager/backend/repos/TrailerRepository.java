@@ -17,7 +17,7 @@ public interface TrailerRepository
     extends JpaRepository<Trailer, Long>, ModelRepository.Basic<Trailer> {
 
     /**
-     * Loads all visible trailers.
+     * Loads all {@link Trailer#isVisible() visible} trailers.
      *
      * @return All visible trailers.
      */
