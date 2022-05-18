@@ -4,6 +4,10 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
+
+  /**
+   * Children to be displayed.
+   */
   children: ReactNode
   /**
    * Size of Title equivalent to <h#> in HTML.
@@ -11,7 +15,7 @@ interface Props extends StyledProps {
   level: number
 
   /**
-   * Centeres the Title.
+   * Centers the Title.
    */
   isCentered?: boolean
 }
