@@ -73,7 +73,7 @@ public class VehicleController
      * @param id        The id of the vehicle to be updated.
      * @param entity    The vehicles new data.
      * @return Updated vehicle.
-     * @throws ApiException If the id does not exist or is not equal to id of new data.
+     * @throws ApiException If the id does not exist or is not equal to the id of new data.
      */
     @Override
     @RequireAgent
