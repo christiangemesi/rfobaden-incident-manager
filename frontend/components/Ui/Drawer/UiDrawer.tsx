@@ -73,6 +73,7 @@ const Container = styled.div<{
   position: 'left' | 'right'
   isShaking: boolean
 }>`
+  ${UiContainer.fluidCss};
   position: fixed;
   top: 0;
   ${({ position }) => position}: 0;
@@ -94,7 +95,6 @@ const Container = styled.div<{
     width: 100%;
   `};
   ${({ size }) => size === 'fixed' && css`
-    ${UiContainer.fluidCss};
     ${Themed.media.lg.min} {
       width: 60vw;
     }
