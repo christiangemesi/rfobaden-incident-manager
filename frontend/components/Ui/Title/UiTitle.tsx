@@ -5,10 +5,19 @@ import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
   children: ReactNode
+  /**
+   * Size of Title equivalent to <h#> in HTML.
+   */
   level: number
+
+  /**
+   * Defines wether the Text is centered or not.
+   */
   isCentered?: boolean
 }
-
+/**
+ * `UiTitle` is a View component for Strings.
+ */
 const UiTitle: React.VFC<Props> = ({
   className,
   style,
