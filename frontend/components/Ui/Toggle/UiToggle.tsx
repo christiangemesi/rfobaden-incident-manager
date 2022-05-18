@@ -5,9 +5,17 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { noop } from '@/utils/control-flow'
 
 interface Props extends UiInputProps<boolean | null> {
+  /**
+   * Forces the Toggle to have a label.
+   *
+   * Text displayed left to the toggle symbol
+   */
   label?: string,
 }
 
+/**
+ * `UiToggle` is an Input component that has the logic of a Checkbox in Toggle form.
+ */
 const UiToggle: React.VFC<Props> = ({
   value,
   onChange: handleChange,
