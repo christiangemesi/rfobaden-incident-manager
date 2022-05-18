@@ -9,6 +9,7 @@ interface Props extends StyledProps {
    * Children to be displayed.
    */
   children: ReactNode
+
   /**
    * Size of Title equivalent to <h#> in HTML.
    */
@@ -19,6 +20,7 @@ interface Props extends StyledProps {
    */
   isCentered?: boolean
 }
+
 /**
  * `UiTitle` is a Component to display a Header.
  */
