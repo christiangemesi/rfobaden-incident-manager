@@ -20,7 +20,7 @@ interface Props extends UiInputProps<boolean> {
   color?: ColorName
 }
 /**
- * `UiCheckbox` is an input component of 2 boolean values.
+ * `UiCheckbox` is an input component of a boolean value.
  */
 const UiCheckbox: React.VFC<Props> = ({
   label,
