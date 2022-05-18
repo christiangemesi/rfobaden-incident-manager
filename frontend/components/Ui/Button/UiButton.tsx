@@ -92,7 +92,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   
   :hover:not(&[disabled]) {
     cursor: pointer;
-    filter: brightness(90%);
+    background-color: ${({ theme }) => theme.colors.hover.value};
   }
 
   :active:not(&[disabled]) {

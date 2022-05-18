@@ -10,6 +10,7 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
+    hover: Color
   }
   fonts: {
     heading: string
@@ -69,7 +70,7 @@ export const defaultTheme: Theme = {
     },
     secondary: {
       // value: '#E8F2F9',
-      value: '#D1E0EB',
+      value: '#DBEBF7',
       contrast: contrastDark,
     },
     tertiary: {
@@ -94,6 +95,10 @@ export const defaultTheme: Theme = {
     },
     grey: {
       value: '#b0b0b0',
+      contrast: contrastDark,
+    },
+    hover: {
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
   },

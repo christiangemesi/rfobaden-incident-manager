@@ -76,7 +76,7 @@ const Container = styled.div`
 
   :hover:not(&[disabled]), :active:not(&[disabled]) {
     cursor: pointer;
-    filter: brightness(90%);
+    background-color: ${({ theme }) => theme.colors.hover.value};
   }
 
   :active:not(&[disabled]) {

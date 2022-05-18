@@ -73,7 +73,7 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean, isCl
   ${({ isClickable }) => isClickable && css`
     :hover {
       cursor: pointer;
-      filter: brightness(0.9);
+      background-color: ${({ theme }) => theme.colors.hover.value};
     }
   `}
 `

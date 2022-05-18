@@ -45,7 +45,7 @@ const ActionButton = styled.button<{ color: ColorName }>`
   transition-property: filter, box-shadow;
   
   :hover:not([disabled]) {
-    filter: brightness(90%);
+    filter: brightness(90%); //fixme
   }
   
   :disabled {
