@@ -44,7 +44,7 @@ public class TrailerController
      *     In any case, the returned trailer will be made {@link Trailer#isVisible() visible}.
      * </p>
      *
-     * @param path The trailers' path.
+     * @param path The trailer's path.
      * @param entity The new trailer.
      * @return A visible trailer matching {@code entity}.
      */
