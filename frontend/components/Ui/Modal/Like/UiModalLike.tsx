@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react'
 import { noop } from '@/utils/control-flow'
-import { createGlobalState, useKey, usePrevious, useUpdate, useUpdateEffect } from 'react-use'
+import { createGlobalState, useKey, usePrevious, useScrollbarWidth, useUpdate, useUpdateEffect } from 'react-use'
 import UiPersist from '@/components/Ui/Persist/UiPersist'
 import ReactDOM from 'react-dom'
 import UiOverlay from '@/components/Ui/Overlay/UiOverlay'
@@ -231,6 +231,33 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   useUpdateEffect(function resetPersistence() {
     isPersistentRef.current = isPersistent ?? false
   }, [state.isOpen, isPersistent])
+
+  // The width of the browser's scrollbar.
+  // Used to disable window scroll without introducing visual jitter.
+  const scrollbarWidth = useScrollbarWidth()
+
+  // Disable body scroll when the first dialog is opened.
+  // Enable body scroll when the last dialog is closed.
+  useEffect(function toggleBodyScroll() {
+    if (state.isOpen) {
+      if (globalLevel.current !== 1) {
+        return
+      }
+      document.body.style.top = `-${window.scrollY}px`
+      document.body.style.position = 'fixed'
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    } else {
+      if (globalLevel.current !== 0) {
+        return
+      }
+      const scrollY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.paddingRight = ''
+      window.scrollTo(0, parseInt(scrollY || '0') * -1)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.isOpen])
 
   const [renderTrigger, renderBody] = useMemo(() => {
     if (typeof children === 'function') {
