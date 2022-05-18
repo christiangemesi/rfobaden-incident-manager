@@ -12,7 +12,7 @@ Authorization annotations can be either applied directly to controller methods, 
 
 ## Model Controllers
 
-Controllers for `Model` data types may extend from the `controllers.base.ModelController` base class. It provides all normal REST CRUD routes. To do so, it requires only an instance of a `ModelService`.
+Controllers for `Model` data types may extend the `controllers.base.ModelController` base class. It provides all normal REST CRUD routes. To do so, it requires only an instance of a `ModelService`.
 
 ### Loading Relations
 
