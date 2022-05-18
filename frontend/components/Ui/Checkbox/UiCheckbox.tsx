@@ -13,18 +13,18 @@ interface Props extends UiInputProps<boolean> {
   label?: string
 
   /**
-   * Disables the Checkbox.
+   * Disables the checkbox.
    */
   isDisabled?: boolean
 
   /**
-   * The color of the Checkbox.
+   * The color of the checkbox.
    */
   color?: ColorName
 }
 
 /**
- * `UiCheckbox` is an input component of a boolean value.
+ * `UiCheckbox` is an input component for boolean value.
  */
 const UiCheckbox: React.VFC<Props> = ({
   label,
