@@ -236,7 +236,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
 
   // Disable body scroll when the first dialog is opened.
   // Enable body scroll when the last dialog is closed.
-  useEffect(function toggleBodyScroll() {
+  useUpdateEffect(function toggleBodyScroll() {
     if (state.isOpen) {
       if (globalLevel.current !== 1) {
         return
@@ -252,7 +252,6 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       resetBodyScrollStyles()
       window.scrollTo(0, parseInt(scrollY || '0') * -1)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.isOpen])
 
   const [renderTrigger, renderBody] = useMemo(() => {
