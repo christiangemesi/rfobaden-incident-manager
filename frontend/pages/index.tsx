@@ -93,7 +93,7 @@ const Card = styled.div`
   border-radius: 0.5rem;
   
   transition: 250ms ease;
-  transition-property: filter;
+  transition-property: background-color;
   
   :hover:not(&[disabled]), :active:not(&[disabled]) {
     cursor: pointer;

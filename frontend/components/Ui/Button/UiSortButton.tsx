@@ -48,7 +48,7 @@ const SortButton = styled(UiListHeader)`
   transition-property: background-color;
 
   :hover {
-    background-color: ${({ theme }) => theme.colors.grey.value};
+    background-color: ${({ theme }) => theme.colors.grey.value}; 
   }
 
   &:first-child {

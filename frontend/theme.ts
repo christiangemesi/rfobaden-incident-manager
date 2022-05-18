@@ -98,7 +98,8 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
     },
     hover: {
-      value: '#D1E0EB',
+      // value: '#D1E0EB',
+      value: '#BDD7EA',
       contrast: contrastDark,
     },
   },

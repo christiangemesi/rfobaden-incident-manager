@@ -96,7 +96,7 @@ const Header = styled.header`
   padding: 0.75rem 3rem;
   margin-bottom: 3rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
-  background: ${({ theme }) => theme.colors.secondary.value};
+  background: ${({ theme }) => theme.colors.hover.value};
 
   ${Themed.media.xs.only} {
     z-index: 2;
@@ -133,7 +133,7 @@ const LoggedInUser = styled.div`
   align-items: center;
 `
 const Username = styled.span`
-  font-size: 1.5em;  
+  font-size: 1em;  
   margin-right: 0.25rem;
 
   ${Themed.media.xs.only} {
