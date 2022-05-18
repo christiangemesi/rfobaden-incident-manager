@@ -51,6 +51,17 @@ public class TrailerController
      * @param entity The trailer.
      * @return Created or updated trailer.
      * @throws ApiException If the id does not exist.
+    /**
+     * Creates a new trailer.
+     * <p>
+     *     If there's already a trailer with the same name, no new trailer is created,
+     *     and the existing one returned instead.
+     *     In any case, the returned trailer will be made {@link Trailer#isVisible() visible}.
+     * </p>
+     *
+     * @param path The trailers' path.
+     * @param entity The new trailer.
+     * @return A visible trailer matching {@code entity}.
      */
     @Override
     @RequireAgent
