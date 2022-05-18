@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * {@code VehicleController} is a {@link ModelController} for {@link Vehicle}.
+ * {@code VehicleController} is a {@link ModelController} for {@link Vehicle vehicles}.
  */
 @RestController
 @RequestMapping(path = "api/v1/vehicles")
@@ -27,7 +27,7 @@ public class VehicleController
     extends ModelController.Basic<Vehicle, VehicleService> {
 
     /**
-     * List all {@link Vehicle#isVisible() visible} vehicles.
+     * Lists all {@link Vehicle#isVisible() visible} vehicles.
      *
      * @return All visible vehicles.
      */

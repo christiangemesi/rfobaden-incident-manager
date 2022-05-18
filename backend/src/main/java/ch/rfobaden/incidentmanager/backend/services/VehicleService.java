@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code VehicleService} extends {@link ModelRepositoryService.Basic}
- * offering more vehicle specific methods in addition to the extended CRUD.
+ * {@code VehicleService} is a {@link ModelRepositoryService} for {@link Vehicle vehicles}.
  */
 @Service
 public class VehicleService
     extends ModelRepositoryService.Basic<Vehicle, VehicleRepository> {
 
     /**
-     * Loads all visible vehicles.
+     * Loads all {@link Vehicle#isVisible() visible} vehicles.
      *
-     * @return All vehicles whose visibility is true.
+     * @return All visible vehicles.
      */
     public List<Vehicle> listVisible() {
         return repository.findAllVisible();

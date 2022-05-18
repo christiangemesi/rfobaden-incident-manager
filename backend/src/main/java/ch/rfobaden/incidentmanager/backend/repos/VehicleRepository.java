@@ -10,18 +10,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code VehicleRepository} extends {@link ModelRepository.Basic}.
- * It defines methods with which a {@link Vehicle} is accessed in the database
- * additional to the {@link ModelRepository} methods.
+ * {@code VehicleRepository} is a {@link ModelRepository} for {@link Vehicle vehicles}.
  */
 @Repository
 public interface VehicleRepository
     extends JpaRepository<Vehicle, Long>, ModelRepository.Basic<Vehicle> {
 
     /**
-     * Loads all visible vehicles.
+     * Loads all {@link Vehicle#isVisible() visible} vehicles.
      *
-     * @return All vehicles whose visibility is true.
+     * @return All visible vehicles.
      */
     @Query(
         "SELECT vehicle"
