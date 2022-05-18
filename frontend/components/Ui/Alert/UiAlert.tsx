@@ -40,7 +40,7 @@ const UiAlert: React.VFC<Props> = ({
   })
 
   /**
-   * Determine which {@link UiIcon} should be displayed in relation to the {@link alert.type}
+   * Determine which {@link UiIcon} should be displayed in relation to the {@link alert.type}.
    */
   const icon = useMemo(() => {
     switch (alert.type) {

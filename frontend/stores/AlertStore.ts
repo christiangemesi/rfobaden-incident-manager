@@ -22,7 +22,7 @@ let nextId = 0
 
 /**
  * `AlertStore` is used to store {@link Alert}'s globally.
- * These alerts are displayed by using a {@link UiAlertList}
+ * These alerts are displayed by using a {@link UiAlertList}.
  */
 const AlertStore = createStore(initialState, (getState, setState) => ({
 
