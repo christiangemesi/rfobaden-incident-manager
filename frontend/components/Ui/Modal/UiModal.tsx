@@ -15,7 +15,7 @@ interface Props extends UiModalLikeProps {
   size?: 'full' | 'auto' | 'fixed'
 
   /**
-   * Text that is displayed as the modals title.
+   * Text that is displayed as the modal's title.
    */
   title?: string
 }

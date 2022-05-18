@@ -7,7 +7,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UserForm from '@/components/User/Form/UserForm'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import BackendService, { BackendResponse } from '@/services/BackendService'
@@ -70,14 +70,14 @@ const UserListItem: React.VFC<Props> = ({
                 {isAdmin(currentUser) && (
                   <UiDropDown.Item onClick={() => resendPassword(user.id)}>Neues Passwort senden</UiDropDown.Item>
                 )}
-                <UiModal title="Benutzer bearbeiten" size="fixed">
-                  <UiModal.Trigger>{({ open }) => (
+                <UiDrawer title="Benutzer bearbeiten" size="fixed">
+                  <UiDrawer.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Trigger>
-                  <UiModal.Body>{({ close }) => (
+                  )}</UiDrawer.Trigger>
+                  <UiDrawer.Body>{({ close }) => (
                     <UserForm user={user} onClose={close} />
-                  )}</UiModal.Body>
-                </UiModal>
+                  )}</UiDrawer.Body>
+                </UiDrawer>
                 {isAdmin(currentUser) && (
                   <UiDropDown.Item onClick={() => handleDelete(user.id)}>Löschen</UiDropDown.Item>
                 )}

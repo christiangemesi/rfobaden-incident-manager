@@ -6,7 +6,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import BackendService from '@/services/BackendService'
 import { useUsers } from '@/stores/UserStore'
@@ -14,7 +14,6 @@ import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
 import Organization from '@/models/Organization'
 import OrganizationForm from '@/components/Organization/Form/OrganizationForm'
-import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UserList from '@/components/User/List/UserList'
 import OrganizationStore from '@/stores/OrganizationStore'
 
@@ -61,14 +60,14 @@ const OrganizationListItem: React.VFC<Props> = ({
                     </UiIconButton>
                   )}</UiDropDown.Trigger>
                   <UiDropDown.Menu>
-                    <UiModal title="Organisation bearbeiten" size="fixed">
-                      <UiModal.Trigger>{({ open }) => (
+                    <UiDrawer title="Organisation bearbeiten" size="fixed">
+                      <UiDrawer.Trigger>{({ open }) => (
                         <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
-                      )}</UiModal.Trigger>
-                      <UiModal.Body>{({ close }) => (
+                      )}</UiDrawer.Trigger>
+                      <UiDrawer.Body>{({ close }) => (
                         <OrganizationForm organization={organization} onClose={close} />
-                      )}</UiModal.Body>
-                    </UiModal>
+                      )}</UiDrawer.Body>
+                    </UiDrawer>
                     {isAdmin(currentUser) && (
                       <UiDropDown.Item onClick={() => handleDelete(organization.id)}>Löschen</UiDropDown.Item>
                     )}

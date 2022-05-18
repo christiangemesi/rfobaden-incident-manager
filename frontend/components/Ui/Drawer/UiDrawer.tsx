@@ -3,14 +3,21 @@ import styled, { css } from 'styled-components'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiModalLike, { Props as UiModalLikeProps } from '@/components/Ui/Modal/Like/UiModalLike'
 import { Themed } from '@/theme'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props extends UiModalLikeProps {
+  /**
+   * Text that is displayed as the drawer's title.
+   */
+  title?: string
+
   /**
    * Width sizing of the drawer. Default is `'auto'`.
    * - `'auto'` makes the drawer take just enough space to fit its content.
    * - `'full'` forces the drawer to span the full breakpoint width.
+   * - `'fixed'` forces the drawer into a predefined width.
    */
-  size?: 'full' | 'auto'
+  size?: 'full' | 'auto' | 'fixed'
 
   /**
    * Determines the side from which the drawer will appear.
@@ -20,6 +27,7 @@ interface Props extends UiModalLikeProps {
 }
 
 const UiDrawer: React.VFC<Props> = ({
+  title = null,
   size = 'auto',
   position = 'left',
   ...modalProps
@@ -37,7 +45,16 @@ const UiDrawer: React.VFC<Props> = ({
           position={position}
           onClick={(e) => e.stopPropagation()}
         >
-          {nav}
+          {title === null ? nav : (
+            <TitleContainer>
+              <UiTitle level={2}>
+                {title}
+              </UiTitle>
+              <div>
+                {nav}
+              </div>
+            </TitleContainer>
+          )}
           {children}
         </Container>
       )}
@@ -52,16 +69,14 @@ export default Object.assign(UiDrawer, {
 
 const Container = styled.div<{
   isOpen: boolean
-  size: 'auto' | 'full'
+  size: 'auto' | 'full' | 'fixed'
   position: 'left' | 'right'
   isShaking: boolean
 }>`
-  ${UiContainer.fluidCss};
-
   position: fixed;
   top: 0;
   ${({ position }) => position}: 0;
-  width: ${({ size }) => size === 'auto' ? 'auto' : '100%'};
+  
   height: 100vh;
   padding-top: 3rem;
   padding-bottom: 5rem;
@@ -74,6 +89,20 @@ const Container = styled.div<{
   background: ${({ theme }) => theme.colors.tertiary.value};
   color: ${({ theme }) => theme.colors.tertiary.contrast};
 
+  width: auto;
+  ${({ size }) => size === 'full' && css`
+    width: 100%;
+  `};
+  ${({ size }) => size === 'fixed' && css`
+    ${UiContainer.fluidCss};
+    ${Themed.media.lg.min} {
+      width: 60vw;
+    }
+    ${Themed.media.xl.min} {
+      width: 50vw;
+    }
+  `};
+  
   ${Themed.media.xs.only} {
     max-width: 100%;
     width: 100%;
@@ -125,3 +154,12 @@ const Container = styled.div<{
   `}
 `
 
+const TitleContainer = styled.div`
+  display: flex;
+  width: 100%;
+  column-gap: 1rem;
+  
+  & > ${UiTitle} {
+    flex: 0 1 100%;
+  }
+`

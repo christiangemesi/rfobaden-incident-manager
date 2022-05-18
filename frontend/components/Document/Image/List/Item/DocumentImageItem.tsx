@@ -3,8 +3,9 @@ import Image from 'next/image'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import Document, { getImageUrl } from '@/models/Document'
+import UiModal from '@/components/Ui/Modal/UiModal'
 
 interface Props {
   image: Document
@@ -37,9 +38,9 @@ const DocumentImageItem: React.VFC<Props> = ({
           </ImageName>
         </ImageCard>
       )}</UiModal.Trigger>
-      <UiModal.Body>
+      <UiDrawer.Body>
         <Image src={src} width={1280} height={720} objectFit="contain" alt={src} />
-      </UiModal.Body>
+      </UiDrawer.Body>
     </UiModal>
   )
 }

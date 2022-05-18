@@ -1,4 +1,4 @@
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React, { ReactNode } from 'react'
 
@@ -9,14 +9,14 @@ interface Props {
 
 const TrackableEditAction: React.VFC<Props> = ({ title, children }) => {
   return (
-    <UiModal title={title} size="fixed">
-      <UiModal.Trigger>{({ open }) => (
+    <UiDrawer title={title} size="fixed">
+      <UiDrawer.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           Bearbeiten
         </UiDropDown.Item>
-      )}</UiModal.Trigger>
-      <UiModal.Body children={children} />
-    </UiModal>
+      )}</UiDrawer.Trigger>
+      <UiDrawer.Body children={children} />
+    </UiDrawer>
   )
 }
 export default TrackableEditAction
