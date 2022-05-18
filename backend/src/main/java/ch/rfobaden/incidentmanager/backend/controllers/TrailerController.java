@@ -83,6 +83,13 @@ public class TrailerController
      * @param entity    The trailers new data.
      * @return Updated trailer.
      * @throws ApiException If the id does not exist or is not equal to the id of new data.
+    /**
+     * Updates an existing trailer.
+     *
+     * @param emptyPath The trailer's path.
+     * @param id The trailer's id.
+     * @param entity The updated trailer.
+     * @return The updated trailer.
      */
     @Override
     @RequireAgent
