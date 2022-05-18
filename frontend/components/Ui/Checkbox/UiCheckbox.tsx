@@ -6,19 +6,23 @@ import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 interface Props extends UiInputProps<boolean> {
+
   /**
    * Text of the input label.
    */
   label?: string
+
   /**
    * Disables the Checkbox.
    */
   isDisabled?: boolean
+
   /**
    * The color of the Checkbox.
    */
   color?: ColorName
 }
+
 /**
  * `UiCheckbox` is an input component of a boolean value.
  */
