@@ -4,9 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * {@code Trailer} extends {@link ModelWithName}.
- * It provides basic fields, functionality and utilities of {@link ModelWithName}.
+ * {@code Trailer} is a {@link ModelWithName} that can be chosen
+ * as a vehicle trailer in a {@link Transport}.
  */
 @Entity
 @Table(name = "trailer")
-public class Trailer extends ModelWithName {}
+public class Trailer extends ModelWithName {
+}

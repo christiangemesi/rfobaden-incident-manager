@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code TrailerRepository} extends {@link ModelRepository.Basic}.
- * It defines methods with which a {@link Trailer} is accessed in the database
- * additional to the {@link ModelRepository} methods.
+ * {@code TrailerRepository} is a {@link ModelRepository} that give access
+ * to the {@link Trailer} data in the database.
  */
 @Repository
 public interface TrailerRepository

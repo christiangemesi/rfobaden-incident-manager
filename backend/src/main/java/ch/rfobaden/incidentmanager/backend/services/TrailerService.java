@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code TrailerService} extends {@link ModelRepositoryService.Basic}
- * offering more trailer specific methods in addition to the extended CRUD.
+ * {@code TrailerService} is a {@link ModelRepositoryService.Basic} that
+ * accesses the {@link TrailerRepository} methods.
  */
 @Service
 public class TrailerService
     extends ModelRepositoryService.Basic<Trailer, TrailerRepository> {
 
     /**
-     * Loads all visible trailers.
+     * Loads all trailers whose visibility is true.
      *
-     * @return All trailers whose visibility is true.
+     * @return Visible trailers.
      */
     public List<Trailer> listVisible() {
         return repository.findAllVisible();

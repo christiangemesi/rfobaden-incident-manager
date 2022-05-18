@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * {@code TrailerController} extends {@link ModelController.Basic}.
- * It provides an additional method as well as changed access on existing methods.
+ * {@code TrailerController} is a {@link ModelController.Basic}
+ * that gives access to the {@link TrailerService}.
  */
 
 @RestController
@@ -34,9 +34,9 @@ public class TrailerController
     }
 
     /**
-     * Loads all visible trailers over the defined get path.
+     * Loads all trailers over the defined get path whose visibility is true.
      *
-     * @return All trailers whose visibility is true.
+     * @return Visible trailers.
      */
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
