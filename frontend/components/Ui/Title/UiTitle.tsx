@@ -11,7 +11,7 @@ interface Props extends StyledProps {
   level: number
 
   /**
-   * Defines wether the Text is centered or not.
+   * Centeres the Title.
    */
   isCentered?: boolean
 }
