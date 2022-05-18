@@ -9,10 +9,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code TrailerRepository} extends {@link ModelRepository.Basic}.
+ * It defines methods with which a {@link Trailer} is accessed in the database
+ * additional to the {@link ModelRepository} methods.
+ */
 @Repository
 public interface TrailerRepository
     extends JpaRepository<Trailer, Long>, ModelRepository.Basic<Trailer> {
 
+    /**
+     * Loads all trailers whose visibility is true.
+     *
+     * @return All trailers whose visibility is true.
+     */
     @Query(
         "SELECT trailer"
             + " FROM "
@@ -23,6 +33,13 @@ public interface TrailerRepository
     )
     List<Trailer> findAllVisible();
 
+    /**
+     * Attempts to load a trailer with a specific name.
+     *
+     * @param name The name of the trailer.
+     * @return An {@link Optional} containing the trailer,
+     *     or {@link Optional#empty()}, if no matching trailer exists.
+     */
     @Query(
         "SELECT trailer"
             + " FROM "
