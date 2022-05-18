@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.services;
 import ch.rfobaden.incidentmanager.backend.models.Trailer;
 import ch.rfobaden.incidentmanager.backend.repos.TrailerRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
