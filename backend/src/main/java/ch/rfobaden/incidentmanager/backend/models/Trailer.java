@@ -4,8 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * {@code Trailer} is a {@link ModelWithName} that can be chosen
- * as a vehicle trailer in a {@link Transport}.
+ * {@code Trailer} is a {@link ModelWithName} that represents a trailer usable in a {@link Transport}.
  */
 @Entity
 @Table(name = "trailer")
