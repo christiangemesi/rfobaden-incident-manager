@@ -20,6 +20,7 @@ interface Props extends StyledProps {
    */
   isCentered?: boolean
 }
+
 /**
  * `UiTitle` displays a HTML heading.
  */
