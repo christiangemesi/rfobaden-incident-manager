@@ -9,7 +9,7 @@ interface AlertState {
 
 const initialState: AlertState = {
   /**
-   * Empty array of {@link Alert}'s as initial state.
+   * Empty array of {@link Alert}'s as initial state of the `AlertStore`.
    */
   alerts: [],
 }
