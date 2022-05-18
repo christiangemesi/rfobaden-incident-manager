@@ -35,6 +35,7 @@ Some parts of the application are persisted even when it's containers are stoppe
 > Note that the docker containers have to be stopped in order for these commands to work.
 
 Remove frontend dependencies:
+
 ```shell
 docker volume rm rfobaden-incident-manager_frontend.node_modules
 ```
@@ -46,6 +47,7 @@ docker volume rm rfobaden-incident-manager_database
 ```
 
 Remove backend Gradle cache, including dependencies:
+
 ```shell
 docker volume rm rfobaden-incident-manager_backend.cache
 ```
