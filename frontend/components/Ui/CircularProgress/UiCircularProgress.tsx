@@ -58,7 +58,7 @@ const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, cent
       strokeWidth="1rem"
       strokeDasharray={circ}
       strokeDashoffset={progress === 0 ? 0 : strokePct}
-      strokeLinecap="round"
+      strokeLinecap="butt"
     />
   )
 }
