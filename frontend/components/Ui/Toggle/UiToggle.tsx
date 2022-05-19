@@ -12,7 +12,7 @@ interface Props extends UiInputProps<boolean | null> {
 }
 
 /**
- * `UiToggle` is an Input component for boolean values.
+ * `UiToggle` is an input component for boolean values.
  */
 const UiToggle: React.VFC<Props> = ({
   value,
