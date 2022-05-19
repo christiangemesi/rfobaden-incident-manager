@@ -16,14 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code TrailerController} is a {@link ModelController} for {@link Trailer trailers}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/trailers")
 public class TrailerController
     extends ModelController.Basic<Trailer, TrailerService> {
 
-    public TrailerController() {
-    }
-
+    /**
+     * Lists all {@link Trailer#isVisible() visible} trailers.
+     *
+     * @return All visible trailers.
+     */
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
@@ -31,6 +36,18 @@ public class TrailerController
         return service.listVisible();
     }
 
+    /**
+     * Creates a new trailer.
+     * <p>
+     *     It will create a new trailer with the given name or
+     *     return the already existing trailer with the given name.
+     *     In any case, the returned trailer will be made {@link Trailer#isVisible() visible}.
+     * </p>
+     *
+     * @param path The trailer's path.
+     * @param entity The new trailer.
+     * @return A visible trailer matching {@code entity}.
+     */
     @Override
     @RequireAgent
     public Trailer create(@ModelAttribute EmptyPath path, @RequestBody Trailer entity) {
