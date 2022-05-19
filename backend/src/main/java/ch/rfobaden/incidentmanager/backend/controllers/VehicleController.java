@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
+import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Vehicle;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.VehicleService;
@@ -17,14 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code VehicleController} is a {@link ModelController} for {@link Vehicle vehicles}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/vehicles")
 public class VehicleController
     extends ModelController.Basic<Vehicle, VehicleService> {
 
-    public VehicleController() {
-    }
-
+    /**
+     * Lists all {@link Vehicle#isVisible() visible} vehicles.
+     *
+     * @return All visible vehicles.
+     */
     @GetMapping("visible")
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
@@ -32,6 +38,18 @@ public class VehicleController
         return service.listVisible();
     }
 
+    /**
+     * Creates a new vehicle.
+     * <p>
+     *      It will create a new vehicle with the given name or
+     *      return the already existing vehicle with the given name.
+     *      In any case, the returned vehicle will be made {@link Vehicle#isVisible() visible}.
+     * </p>
+     *
+     * @param path   The vehicle's path.
+     * @param entity The new vehicle.
+     * @return A visible vehicle matching {@code entity}.
+     */
     @Override
     @RequireAgent
     public Vehicle create(@ModelAttribute EmptyPath path, @RequestBody Vehicle entity) {

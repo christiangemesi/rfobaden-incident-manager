@@ -64,7 +64,7 @@ type ColSize =
   | 'auto'
   | true
 
-type ColSizeProp = ColSize | {
+export type ColSizeProp = ColSize | {
   [K in Breakpoint]?: ColSize
 }
 
