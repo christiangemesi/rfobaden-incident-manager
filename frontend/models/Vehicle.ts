@@ -13,7 +13,7 @@ export default interface Vehicle extends Model {
   name: string
 
   /**
-   * Defines the visibility of the vehicle in the {@link UiSelect}.
+   * Defines the visibility of the vehicle in the {@link UiSelectInput}.
    */
   isVisible: boolean
 }
@@ -22,6 +22,7 @@ export default interface Vehicle extends Model {
  * Parses the vehicle data to a unique format.
  *
  * @param data Vehicle to parse.
+ * @return Parsed vehicle.
  */
 export const parseVehicle = (data: Vehicle): Vehicle => ({
   ...data,
@@ -33,13 +34,14 @@ export const parseVehicle = (data: Vehicle): Vehicle => ({
  * Gets the name of a vehicle by its id from the backend.
  *
  * @param vehicleId Id of the vehicle.
+ * @return Name of vehicle.
  */
 export const getVehicleName = async (vehicleId: Id<Vehicle> | null): Promise<string> => {
   if (vehicleId === null) {
     return ''
   }
 
-  // get the vehicle from the backend
+  // load the vehicle with the id from the backend
   const [vehicle, vehicleError]: BackendResponse<Vehicle> = await BackendService.find(
     `vehicles/${vehicleId}`,
   )

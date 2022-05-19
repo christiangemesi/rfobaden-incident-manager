@@ -15,11 +15,17 @@ export default VehicleStore
 
 /**
  * Gets a specific vehicle from the vehicle store by its id.
+ *
+ * @param id Id of the vehicle.
+ * @return The vehicle.
  */
 export const useVehicle = createUseRecord(VehicleStore)
 
 /**
  * Gets all vehicles from the vehicle store with an optional transformation.
+ *
+ * @param idsOrTransform? Optional filtering of all vehicles.
+ * @return List of vehicles.
  */
 export const useVehicles = createUseRecords(VehicleStore)
 
