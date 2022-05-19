@@ -24,7 +24,7 @@ interface Props extends UiInputProps<boolean> {
 }
 
 /**
- * `UiCheckbox` is an input component for boolean value.
+ * `UiCheckbox` is an input component for a boolean value.
  */
 const UiCheckbox: React.VFC<Props> = ({
   label,
