@@ -162,10 +162,22 @@ class ValidationState<T> {
       })
       return field.errors.length === 0
     }
+    const fieldValidators = this.validators[fieldName]
+    if (field.update === undefined) {
+      if (fieldValidators.length === 0) {
+        // The value is a nested object with an empty validator array.
+        // This means that that object should not get validated.
+        return true
+      }
+      // The value is a nested object, and it has at least one validator.
+      // Validating in such a way is not currently supported,
+      // as there's nowhere to store possible errors.
+      throw new Error(`direction validation of nested objects is not supported: ${fieldName}`)
+    }
 
     const fieldValue = value[fieldName]
     const errors = [] as string[]
-    for (const validate of this.validators[fieldName]) {
+    for (const validate of fieldValidators) {
       const error = validate(fieldValue, value)
       if (error !== true) {
         errors.push(error)
