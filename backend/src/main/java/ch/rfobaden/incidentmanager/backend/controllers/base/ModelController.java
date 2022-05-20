@@ -74,8 +74,8 @@ public abstract class ModelController<
     /**
      * Loads an entity with a specific id at a given path.
      *
-     * @param path The entities' path.
-     * @param id The entities' id.
+     * @param path The entity's path.
+     * @param id The entity's id.
      * @return The entity.
      *
      * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching entity was found.
@@ -110,12 +110,12 @@ public abstract class ModelController<
     /**
      * Updates an entity with a specific id at a given path.
      *
-     * @param path The entities' path.
-     * @param id The entities' id.
+     * @param path The entity's path.
+     * @param id The entity's id.
      * @param entity The updated entity.
      * @return The updated entity.
      *
-     * @throws ApiException {@link HttpStatus#UNPROCESSABLE_ENTITY} if the entities id
+     * @throws ApiException {@link HttpStatus#UNPROCESSABLE_ENTITY} if the entity's id
      *                      and the id from the request path do not match.
      *                      {@link HttpStatus#NOT_FOUND} if no matching entity was found.
      */
@@ -140,8 +140,8 @@ public abstract class ModelController<
     /**
      * Deletes an entity with a specific id at a given path.
      *
-     * @param path The entities' path.
-     * @param id The entities' id.
+     * @param path The entity's path.
+     * @param id The entity's id.
      *
      * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching entity was found.
      */
