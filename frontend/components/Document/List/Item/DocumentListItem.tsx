@@ -19,7 +19,7 @@ interface Props {
 }
 
 /**
- * `DocumentListItem` is a component to display {@link Document} value in a list.
+ * `DocumentListItem` is a component to display {@link Document} values in a list.
  */
 const DocumentListItem: React.VFC<Props> = ({
   document,
