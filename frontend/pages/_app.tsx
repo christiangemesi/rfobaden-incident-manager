@@ -3,11 +3,10 @@ import React, { Fragment, useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useMountedState } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
 import User from '@/models/User'
-import UiScroll from '@/components/Ui/Scroll/UiScroll'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import { IncomingMessage } from 'http'
 import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
@@ -16,6 +15,8 @@ import UiAlert from '@/components/Ui/Alert/UiAlert'
 
 import 'reset-css/reset.css'
 import { useBreakpointName } from '@/utils/hooks/useBreakpoints'
+import { useRouter } from 'next/router'
+import { useModalReset } from '@/components/Ui/Modal/Like/UiModalLike'
 
 interface Props extends AppProps {
   user: User | null
@@ -30,6 +31,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
     }
   })
 
+  const router = useRouter()
   const alerts = useAlerts()
 
   const { currentUser } = useSession()
@@ -40,6 +42,8 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       : <React.Fragment />
   ), [Component, pageProps, currentUser, user])
 
+  useModalReset(router)
+
   return (
     <Fragment>
       <Head>
@@ -49,17 +53,15 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
       </Head>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-        <UiScroll>
-          {component}
-          <UiAlertList>
-            {alerts.map((alert) =>
-              <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
-            )}
-          </UiAlertList>
-          {process.env.NODE_ENV === 'development' && (
-            <BreakpointOverlay />
+        {component}
+        <UiAlertList>
+          {alerts.map((alert) =>
+            <UiAlert key={alert.id} alert={alert} onRemove={AlertStore.remove} />
           )}
-        </UiScroll>
+        </UiAlertList>
+        {process.env.NODE_ENV === 'development' && (
+          <BreakpointOverlay />
+        )}
       </ThemeProvider>
     </Fragment>
   )
@@ -114,6 +116,7 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
       height: 100%;
       background: ${theme.colors.light.value};
       color: ${theme.colors.light.contrast};
+      overflow: auto;
     }
   `}
   button {
@@ -129,7 +132,8 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
 const BreakpointOverlay: React.VFC = () => {
   const breakpoint = useBreakpointName()
-  return <BreakpointBox>{breakpoint}</BreakpointBox>
+  const isMounted = useMountedState()
+  return <BreakpointBox>{isMounted() ? breakpoint : 'xs'}</BreakpointBox>
 }
 
 const BreakpointBox = styled.div`

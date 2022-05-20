@@ -10,13 +10,14 @@ import React, {
   useState,
 } from 'react'
 import { noop } from '@/utils/control-flow'
-import { createGlobalState, useKey, usePrevious, useUpdate, useUpdateEffect } from 'react-use'
+import { useEffectOnce, useKey, usePrevious, useScrollbarWidth, useUpdate, useUpdateEffect } from 'react-use'
 import UiPersist from '@/components/Ui/Persist/UiPersist'
 import ReactDOM from 'react-dom'
 import UiOverlay from '@/components/Ui/Overlay/UiOverlay'
 import styled, { useTheme } from 'styled-components'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import { NextRouter } from 'next/router'
 
 export interface Props {
   /**
@@ -110,9 +111,6 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
 
   // Shows if the component is currently running its open/close animation.
   const isAnimating = useRef(false)
-  
-  // The global level shows how many modals are open on top of each other.
-  const [globalLevel] = useLevel()
   
   // The level shows on which level the modal has been opened.
   // A closed modal does have a level of `null`.
@@ -216,7 +214,7 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
       globalLevel.current -= 1
       level.current = null
     }
-  }, [state.isOpen, previousOpenState, globalLevel])
+  }, [state.isOpen, previousOpenState])
 
   // Close the modal if the escape key is pressed.
   // The modal will not be closed if there are other modals open on top of it.
@@ -231,6 +229,30 @@ const UiModalLike: React.VFC<Props & ConfigProps> = ({
   useUpdateEffect(function resetPersistence() {
     isPersistentRef.current = isPersistent ?? false
   }, [state.isOpen, isPersistent])
+
+  // The width of the browser's scrollbar.
+  // Used to disable window scroll without introducing visual jitter.
+  const scrollbarWidth = useScrollbarWidth()
+
+  // Disable body scroll when the first dialog is opened.
+  // Enable body scroll when the last dialog is closed.
+  useUpdateEffect(function toggleBodyScroll() {
+    if (state.isOpen) {
+      if (globalLevel.current !== 1) {
+        return
+      }
+      document.body.style.top = `-${window.scrollY}px`
+      document.body.style.position = 'fixed'
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    } else {
+      if (globalLevel.current !== 0) {
+        return
+      }
+      const scrollY = document.body.style.top
+      resetBodyScrollStyles()
+      window.scrollTo(0, parseInt(scrollY || '0') * -1)
+    }
+  }, [state.isOpen])
 
   const [renderTrigger, renderBody] = useMemo(() => {
     if (typeof children === 'function') {
@@ -329,7 +351,15 @@ const Nav = styled.div`
   }
 `
 
-export const useLevel = createGlobalState({ current: 0 })
+// The global level shows how many modals are open on top of each other.
+const globalLevel = { current: 0 }
+export const getGlobalLevel = (): number => globalLevel.current
+
+const resetBodyScrollStyles = () => {
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.paddingRight = ''
+}
 
 export default Object.assign(UiModalLike, {
   Trigger,
@@ -337,4 +367,12 @@ export default Object.assign(UiModalLike, {
   Nav,
 })
 
-
+export const useModalReset = (router: NextRouter): void => {
+  useEffectOnce(() => {
+    router.beforePopState(() => {
+      globalLevel.current = 0
+      resetBodyScrollStyles()
+      return true
+    })
+  })
+}
