@@ -25,7 +25,7 @@ interface Props {
 
   /**
    * Event caused by deleting a {@link Document}.
-   * This will store the manipulated list of {@link Document documents} in the corresponding {@link Store}.
+   * This will store the manipulated list of {@link Document documents} to the corresponding {@link Store}.
    */
   storeDocuments: (documents: Document[]) => void
 

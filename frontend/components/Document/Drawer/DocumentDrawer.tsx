@@ -22,7 +22,7 @@ interface Props {
   storeDocuments: (documents: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding model.
+   * The {@link Id} of the corresponding {@link Model}.
    */
   modelId: Id<Incident | Report | Task | Subtask>
 

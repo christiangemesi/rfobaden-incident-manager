@@ -22,7 +22,7 @@ interface Props {
   storeImages: (images: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding model.
+   * The {@link Id} of the corresponding {@link Model}.
    */
   modelId: Id<Incident | Report | Task | Subtask>
 
@@ -38,7 +38,7 @@ interface Props {
 }
 
 /**
- * `DocumentImageDrawer` is a component which uses a {@link @UiDrawer} to display {@link Document documents}.
+ * `DocumentImageDrawer` is a component which uses a {@link @UiDrawer} to display {@link Document images}.
  * The `DocumentImageDrawer` is opening by clicking on a {@link UiCaption}.
  */
 const DocumentImageDrawer: React.VFC<Props> = ({
