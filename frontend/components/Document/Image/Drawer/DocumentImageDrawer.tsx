@@ -1,5 +1,5 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import Document from '@/models/Document'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
@@ -31,8 +31,6 @@ interface Props {
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 
-  children?: (props: { open: () => void }) => ReactNode
-
   /**
    * Event caused by adding a new {@link Document image}.
    */
@@ -48,20 +46,17 @@ const DocumentImageDrawer: React.VFC<Props> = ({
   storeImages,
   modelId,
   modelName,
-  children,
   onAddImage,
 }) => {
 
   return (
     <UiDrawer size="full">
       <UiDrawer.Trigger>{({ open }) => (
-        children ? children({ open }) : (
-          <UiCaption onClick={ open }>
-            {images.length}
-            &nbsp;
-            {images.length === 1 ? 'Bild' : 'Bilder'}
-          </UiCaption>
-        )
+        <UiCaption onClick={open}>
+          {images.length}
+          &nbsp;
+          {images.length === 1 ? 'Bild' : 'Bilder'}
+        </UiCaption>
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentImageList
