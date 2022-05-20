@@ -122,7 +122,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
    */
   useEffectOnce(() => {
     (async () => {
-      // load and save the visible vehicles
+      // Load and save the visible vehicles.
       const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
         'vehicles/visible',
       )
