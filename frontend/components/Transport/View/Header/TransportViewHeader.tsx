@@ -32,10 +32,7 @@ const TransportViewHeader: React.VFC<Props> = ({
   onClose: handleClose,
 }) => {
 
-  /**
-   * Load all {@link Vehicle vehicles} to get the display name of the vehicle.
-   */
-  useEffectOnce(() => {
+  useEffectOnce(function loadVehicles() {
     (async () => {
       // load and save all vehicles
       const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
