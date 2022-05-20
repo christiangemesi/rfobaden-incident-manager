@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@code Incident} represents any major event organized and handled via the IncidentManager.
+ * {@code Incident} represents any major event handled via the IncidentManager.
  * It is further divided into {@link Transport} and {@link Report} entities.
  */
 @Entity
@@ -69,6 +69,9 @@ public class Incident extends Model.Basic
      * The moment in time at which the {@code Incident} will start.
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
+     * <p>
+     *     This is used to plan for an incident in advance.
+     * </p>
      */
     private LocalDateTime startsAt;
 
@@ -100,6 +103,7 @@ public class Incident extends Model.Basic
 
     /**
      * The {@link Document documents} attached to the entity.
+     * Does not include the entities' {@link #images image documents}.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
@@ -263,7 +267,7 @@ public class Incident extends Model.Basic
      * Creates the set of the ids of all {@link Organization organizations}
      * that are connected to this incident.
      *
-     * @return The set of all organization ids.
+     * @return The set of ids of all connected organizations.
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Set<Long> getOrganizationIds() {
