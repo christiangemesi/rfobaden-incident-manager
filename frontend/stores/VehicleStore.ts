@@ -22,10 +22,11 @@ export default VehicleStore
 export const useVehicle = createUseRecord(VehicleStore)
 
 /**
- * Gets all vehicles from the vehicle store with an optional transformation.
+ * {@code useVehicles} is a react hook that loads all vehicles from {@link VehicleStore}.
+ * It re-renders whenever the store is modified.
  *
- * @param idsOrTransform? Optional filtering of all vehicles.
- * @return List of vehicles.
+ * @param idsOrTransform? An list of ids to load, or a function that modifies the returned list.
+ * @return The list of vehicles.
  */
 export const useVehicles = createUseRecords(VehicleStore)
 
