@@ -19,10 +19,10 @@ export default interface Vehicle extends Model {
 }
 
 /**
- * Parses the vehicle data to a unique format.
+ * Parses a vehicle's JSON structure.
  *
- * @param data Vehicle to parse.
- * @return Parsed vehicle.
+ * @param data The vehicle to parse.
+ * @return The parsed vehicle.
  */
 export const parseVehicle = (data: Vehicle): Vehicle => ({
   ...data,
