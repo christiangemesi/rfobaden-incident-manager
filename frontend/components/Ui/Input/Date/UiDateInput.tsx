@@ -46,30 +46,36 @@ const UiDateInput: React.VFC<Props> = ({
   onChange: handleChange,
   errors = [],
 }) => {
+
+  // Init input field states
   const [date, setDate] = useState(value)
   const [isInvalid, setInvalid] = useState(false)
   const [isOpen, toggleOpen] = useToggle(false)
 
   useUpdateEffect(function handleDateTimeValidation() {
+    // Handle no date
     if (date === null) {
       handleChange(null)
       setInvalid(false)
       return
     }
 
+    // Handle wrong formatted date
     if (isNaN(date.getTime())) {
       handleChange(null)
       setInvalid(true)
       return
     }
 
+    // Handle correct date
     handleChange(date)
     setInvalid(false)
   }, [date])
 
-  // Handle close of date picker popup
+  // Prepare close of date picker popup
   const close = useCallback( () => toggleOpen(false),[toggleOpen])
 
+  // Prepare input extras
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0 || isInvalid
 
@@ -82,6 +88,8 @@ const UiDateInput: React.VFC<Props> = ({
       )}
       <InputAndErrorBox hasError={hasError}>
         <DateTimePicker isOpened={isOpen}>
+
+          {/* Date time input field */}
           <DatePicker
             locale={de}
             selected={date}
@@ -103,9 +111,12 @@ const UiDateInput: React.VFC<Props> = ({
             showWeekNumbers
             isClearable
           />
+
+          {/* Date time popup button */}
           <PickerButton onClick={toggleOpen}>
             <UiIcon.Calendar />
           </PickerButton>
+
         </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
@@ -119,9 +130,9 @@ const PickerButton = styled.button.attrs(() => ({
   type: 'button',
 }))`
   background: ${({ theme }) => theme.colors.primary.value};
-  outline: none;
   border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
   border-radius: 0 0.5rem 0.5rem 0;
+  outline: none;
   width: 60px;
   margin: 0;
 
@@ -152,6 +163,7 @@ const StyledLabel = styled.label`
 const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   display: flex;
 
+  // Affects non error input fields 
   ${({ hasError }) => !hasError && css`
     input {
       :active, :focus {
@@ -160,6 +172,7 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
     }
   `}
 
+  // Affects error input fields 
   ${({ hasError }) => hasError && css`
     input {
       border-color: ${({ theme }) => theme.colors.error.value};
@@ -178,6 +191,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     position: relative;
   }
 
+  // Affects clear field icon (X)
   .react-datepicker__close-icon {
     display: flex;
     align-items: center;
@@ -191,6 +205,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // Affects date time picker popup
   .react-datepicker__portal,
   .react-datepicker-popper {
 
@@ -212,6 +227,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Affects navigation elements for month and year
       .react-datepicker__navigation {
         color: ${({ theme }) => theme.colors.tertiary.contrast};
 
@@ -258,6 +274,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Affects date calendar header
       .react-datepicker__header {
         background: ${({ theme }) => theme.colors.secondary.value};
         color: ${({ theme }) => theme.colors.secondary.contrast};
@@ -268,6 +285,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Affects date calendar months and days
       .react-datepicker__month-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
 
@@ -279,6 +297,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           margin-bottom: 0.5rem;
         }
 
+        // Affect month and year dropdown in calendar
         .react-datepicker__header__dropdown {
           height: 1.5rem;
           display: flex;
@@ -388,6 +407,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Affect title row of calendar days
         .react-datepicker__day-names {
           margin-top: 0.5rem;
           display: flex;
@@ -404,6 +424,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Affect days and their titles
         .react-datepicker__day-name,
         .react-datepicker__day {
           border-radius: 0.1rem;
@@ -419,6 +440,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Affect details month view
         .react-datepicker__month {
           margin: 0;
 
@@ -469,13 +491,11 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Affects time column
       .react-datepicker__time-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
-
-
-        .react-datepicker-time__header {
-
-        }
+        
+        .react-datepicker-time__header {}
 
         .react-datepicker__time {
 
@@ -516,6 +536,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // Affects date input field
   .react-datepicker__input-container > input {
     width: 100%;
     height: 100%;
@@ -528,17 +549,17 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     transition: 250ms ease;
     transition-property: border-color;
 
-    // for additional input
+    // For button beside input field
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
   }
 
-  // for additional input
+  // For button beside input field
   > div:first-child {
     width: calc(100% - 60px);
   }
 
-  // function of calender icon
+  // Function of calender icon
   ${({ isOpened }) => !isOpened && css`
     .react-datepicker__portal,
     .react-datepicker-popper {
