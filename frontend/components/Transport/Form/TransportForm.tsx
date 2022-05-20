@@ -121,7 +121,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       }
       VehicleStore.saveAll(vehicles.map(parseVehicle))
 
-      // load and save the visible trailers
+      // Load and save the visible trailers
       const [trailers, trailersError]: BackendResponse<Trailer[]> = await BackendService.list(
         'trailers/visible',
       )
@@ -161,26 +161,14 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     VehicleStore.save(parseVehicle(updatedVehicle))
   }
 
-  /**
-   * Defines the event triggered by the creation of a new {@link Trailer}.
-   *
-   * <p>
-   *   With the given `name` the backend request creates a new trailer which
-   *   is returned and saved in the trailer store. It sets the new trailer as
-   *   selected value of the trailer {@link UiSelectInput}.
-   * </p>
-   *
-   * @param trailerName Name of the trailer.
-   * @return A function which handles a trailer creation.
-   */
   const handleCreateTrailer = async (trailerName: string) => {
-    // validate trailer name
+    // Validate trailer name
     if (trailerName.length > 100) {
       alert('Anhängername ist zu lang.')
       return
     }
 
-    // create and save the new trailer
+    // Create and save the new trailer
     const [data, error]: BackendResponse<Trailer> = await BackendService.create('trailers', {
       name: trailerName,
       isVisible: true,
@@ -194,27 +182,15 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     form.trailerId.setValue(data.id)
   }
 
-  /**
-   * Defines the event triggered by the deletion of an existing {@link Trailer}.
-   *
-   * <p>
-   *   With the given `id` the trailer gets loaded from the backend and the
-   *   visibility gets updated to false. It is returned and saved in the trailer
-   *   store. It removes the trailer from its {@link UiSelectInput}.
-   * </p>
-   *
-   * @param id Id of the trailer.
-   * @return A function which handles a trailer deletion.
-   */
   const handleDeleteTrailer = async (id: Id<Trailer>) => {
-    // load the trailer and update the visibility
+    // Load the trailer and update the visibility
     const [data, error]: BackendResponse<Trailer> = await BackendService.find('trailers', id)
     if (error !== null) {
       throw error
     }
     data.isVisible = false
 
-    // update and save the trailer
+    // Update and save the trailer
     const [updatedTrailer, updatedTrailerError]: BackendResponse<Trailer> = await BackendService.update('trailers', id, data)
     if (updatedTrailerError !== null) {
       throw updatedTrailerError
@@ -228,7 +204,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     return vehicles.map(({ id }) => id)
   }, [vehicles])
 
-  // filter the visible trailers and map their ids
+  // Filter the visible trailers and map their ids
   const trailers = useTrailers((records) => records.filter((e) => e.isVisible))
   const trailerIds = useMemo(() => {
     return trailers.map(({ id }) => id)
@@ -276,7 +252,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
-          {/* trailer select input with the creation and deletion functionality */}
+          {/* Trailer select input with the creation and deletion functionality */}
           <UiForm.Field field={form.trailerId} deps={[trailers]}>{(props) => (
             <UiSelectInput
               {...props}
@@ -350,10 +326,10 @@ const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
 }
 
 /**
- * Gets the name of a trailer by the id of it.
+ * Maps the id of a trailer to its name.
  *
- * @param id Id of the trailer.
- * @return Name of the trailer.
+ * @param id The id of the trailer.
+ * @return The trailer's name.
  */
 const mapTrailerIdToName = (id: Id<Trailer>): string | null => {
   const trailer = TrailerStore.find(id)
