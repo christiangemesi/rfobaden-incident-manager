@@ -10,7 +10,6 @@ const VehicleStore = createModelStore(parseVehicle, {
     vehicle.name.toLowerCase(),
   ],
 })
-
 export default VehicleStore
 
 /**
