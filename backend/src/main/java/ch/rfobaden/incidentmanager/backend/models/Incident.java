@@ -167,6 +167,11 @@ public class Incident extends Model.Basic
         this.reports = reports;
     }
 
+    /**
+     * Lists the {@link Report#getId() ids} of all {@link #getReports()} reports}.
+     *
+     * @return The ids of all reports.
+     */
     public List<Long> getReportIds() {
         return getReports().stream().map(Report::getId).collect(Collectors.toList());
     }
