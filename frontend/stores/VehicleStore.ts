@@ -14,9 +14,10 @@ const VehicleStore = createModelStore(parseVehicle, {
 export default VehicleStore
 
 /**
- * Gets a specific vehicle from the vehicle store by its id.
+ * {@code useVehicle} is a react hook which loads a specific vehicle from {@link VehicleStore}.
+ * It re-renders whenever the vehicle is changed.
  *
- * @param id Id of the vehicle.
+ * @param id The id of the vehicle.
  * @return The vehicle.
  */
 export const useVehicle = createUseRecord(VehicleStore)
