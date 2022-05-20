@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@code ModelRepository} defines CRUD methods for a a {@link Model}.
+ * {@code ModelRepository} defines CRUD methods for a {@link Model}.
  * The model class is required to implement {@link PathConvertible}.
  *
  * @param <TModel> The {@link Model} whose instances are being accessed.
