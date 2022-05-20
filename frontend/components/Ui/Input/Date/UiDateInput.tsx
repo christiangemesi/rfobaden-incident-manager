@@ -8,15 +8,35 @@ import { de } from 'date-fns/locale'
 import { Themed } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+// Default date picker styling
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
+  /**
+   * Text of the date input label.
+   */
   label?: string
+
+  /**
+   * Text of the date input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * Class name of the date picker.
+   */
   className?: string
+
+  /**
+   * Placement of the date time picker popup.
+   */
   placement?: 'top' | 'bottom' | 'auto'
 }
 
+/**
+ * `UiDateInput` is an input component for a date value.
+ * It offers the user to input the date via date time picker.
+ */
 const UiDateInput: React.VFC<Props> = ({
   value,
   label = '',
@@ -26,12 +46,11 @@ const UiDateInput: React.VFC<Props> = ({
   onChange: handleChange,
   errors = [],
 }) => {
-
   const [date, setDate] = useState(value)
   const [isInvalid, setInvalid] = useState(false)
   const [isOpen, toggleOpen] = useToggle(false)
 
-  useUpdateEffect(() => {
+  useUpdateEffect(function handleDateTimeValidation() {
     if (date === null) {
       handleChange(null)
       setInvalid(false)
@@ -43,10 +62,12 @@ const UiDateInput: React.VFC<Props> = ({
       setInvalid(true)
       return
     }
+
     handleChange(date)
     setInvalid(false)
   }, [date])
 
+  // Handle close of date picker popup
   const close = useCallback( () => toggleOpen(false),[toggleOpen])
 
   const Label = label == null ? 'div' : StyledLabel
