@@ -351,10 +351,10 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 }
 
 /**
- * Gets the name of a vehicle by the id of it.
+ * Maps the id of a vehicle to its id.
  *
- * @param id Id of the vehicle.
- * @return Name of the vehicle.
+ * @param id The id of the vehicle.
+ * @return The vehicle's name.
  */
 const mapVehicleIdToName = (id: Id<Vehicle>): string => {
   const vehicle = VehicleStore.find(id)
