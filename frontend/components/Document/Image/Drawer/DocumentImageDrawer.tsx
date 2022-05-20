@@ -3,16 +3,46 @@ import React, { ReactNode } from 'react'
 import Document from '@/models/Document'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import DocumentImageList from '@/components/Document/Image/List/DocumentImageList'
+import Id from '@/models/base/Id'
+import Incident from '@/models/Incident'
+import Report from '@/models/Report'
+import Task from '@/models/Task'
+import Subtask from '@/models/Subtask'
 
 interface Props {
+  /**
+   * The {@link Document images} to be displayed.
+   */
   images: Document[]
+
+  /**
+   * Event caused by deleting a {@link Document image}.
+   * This will store the manipulated list of {@link Document images} in the corresponding {@link Store}.
+   */
   storeImages: (images: Document[]) => void
-  modelId: number
+
+  /**
+   * The {@link Id} of the corresponding model.
+   */
+  modelId: Id<Incident | Report | Task | Subtask>
+
+  /**
+   * The name of the corresponding {@link Model}.
+   */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+
   children?: (props: { open: () => void }) => ReactNode
+
+  /**
+   * Event caused by adding a new {@link Document image}.
+   */
   onAddImage: (image: Document) => void
 }
 
+/**
+ * `DocumentImageDrawer` is a component which uses a {@link @UiDrawer} to display {@link Document documents}.
+ * The `DocumentImageDrawer` is opening by clicking on a {@link UiCaption}.
+ */
 const DocumentImageDrawer: React.VFC<Props> = ({
   images,
   storeImages,

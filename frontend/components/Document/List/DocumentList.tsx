@@ -18,13 +18,37 @@ import useSort from '@/utils/hooks/useSort'
 import UiSortButton from '@/components/Ui/Button/UiSortButton'
 
 interface Props {
+  /**
+   * The {@link Document documents} to be displayed.
+   */
   documents: Document[]
+
+  /**
+   * Event caused by deleting a {@link Document}.
+   * This will store the manipulated list of {@link Document documents} in the corresponding {@link Store}.
+   */
   storeDocuments: (documents: Document[]) => void
+
+  /**
+   * The {@link Id} of the corresponding {@link Model}.
+   */
   modelId: Id<Incident | Report | Task>
+
+  /**
+   * The name of the corresponding {@link Model}.
+   */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+
+  /**
+   * Event caused by adding a new {@link Document}.
+   */
   onAddDocument: (documents: Document) => void
 }
 
+/**
+ * `DocumentList` is a component to display {@link DocumentListItem DocumentListItems}
+ * in a {@link UiList}.
+ */
 const DocumentList: React.VFC<Props> = ({
   documents,
   storeDocuments,
