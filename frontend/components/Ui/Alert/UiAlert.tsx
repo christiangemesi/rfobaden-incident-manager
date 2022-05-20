@@ -12,7 +12,7 @@ interface Props {
 }
 
 /**
- * `UiAlert` is a component to inform the user about past events.
+ * `UiAlert` is a component to display {@link Alert} value.
  */
 const UiAlert: React.VFC<Props> = ({
 
@@ -22,7 +22,7 @@ const UiAlert: React.VFC<Props> = ({
   alert,
 
   /**
-   * Event caused by closing the {@link Alert}.
+   * Event caused by closing the {@link UiAlert}.
    */
   onRemove: handleRemove,
 }) => {
@@ -39,9 +39,7 @@ const UiAlert: React.VFC<Props> = ({
     }
   })
 
-  /**
-   * Determine which {@link UiIcon} should be displayed in relation to the {@link alert.type}.
-   */
+  // Determine which {@link UiIcon} should be displayed in relation to the {@link alert.type}.
   const icon = useMemo(() => {
     switch (alert.type) {
     case 'warning' :

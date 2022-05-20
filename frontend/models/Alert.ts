@@ -1,7 +1,7 @@
 import { ColorName } from '@/theme'
 
 /**
- * `Alert` represents an event, which will be displayed to a user.
+ * `Alert` represents an event which will be displayed to the user.
  */
 export default interface Alert {
   /**

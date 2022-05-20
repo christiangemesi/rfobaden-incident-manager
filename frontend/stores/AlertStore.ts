@@ -2,26 +2,25 @@ import { createStore } from '@/stores/base/Store'
 import { useStore } from '@/stores/base/hooks'
 import Alert from '@/models/Alert'
 
-
 interface AlertState {
   alerts: Alert[]
 }
 
+/**
+ * The initial state of the `AlertStore`.
+ */
 const initialState: AlertState = {
-  /**
-   * Empty array of {@link Alert}'s as initial state of the `AlertStore`.
-   */
   alerts: [],
 }
 
 /**
  * `nextId` is used to generate the unique identifier for each {@link Alert}.
- * This value will be incremented by creating {@link Alert}'s.
+ * This value will be incremented by creating {@link Alert alerts}.
  */
 let nextId = 0
 
 /**
- * `AlertStore` is used to store {@link Alert}'s globally.
+ * `AlertStore` is used to store {@link Alert alerts} globally.
  * These alerts are displayed by using a {@link UiAlertList}.
  */
 const AlertStore = createStore(initialState, (getState, setState) => ({
@@ -49,7 +48,7 @@ const AlertStore = createStore(initialState, (getState, setState) => ({
 export default AlertStore
 
 /**
- * @returns All {@link Alert}'s which are stored in the `AlertStore`.
+ * @returns All {@link Alert alerts} which are stored in the `AlertStore`.
  */
 export const useAlerts = (): Alert[] => {
   const { alerts } = useStore(AlertStore)
