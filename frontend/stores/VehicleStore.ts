@@ -3,7 +3,7 @@ import { parseVehicle } from '@/models/Vehicle'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
 /**
- * Store that manages name-sorted vehicles.
+ * {@code VehicleStore} manages all loaded {@link Vehicle vehicles}.
  */
 const VehicleStore = createModelStore(parseVehicle, {
   sortBy: (vehicle) => [
