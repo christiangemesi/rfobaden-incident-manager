@@ -17,17 +17,16 @@ interface Props {
 
   /**
    * Event caused by deleting a {@link Document}.
-   * This will store the manipulated list of {@link Document documents} in the corresponding {@link Store}.
    */
   storeDocuments: (documents: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding {@link Model}.
+   * The {@link Id} of the {@link Model} to which the documents belong.
    */
   modelId: Id<Incident | Report | Task | Subtask>
 
   /**
-   * The name of the corresponding {@link Model}.
+   * The name of the {@link Model} to which the documents belong.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 
@@ -38,8 +37,8 @@ interface Props {
 }
 
 /**
- * `DocumentDrawer` is a component which uses a {@link @UiDrawer} to display {@link Document documents}.
- * The `DocumentDrawer` is opening by clicking on a {@link UiCaption}.
+ * `DocumentDrawer` is a component which uses a {@link UiDrawer} to display {@link Document documents}.
+ * The drawer is opened by clicking on an {@link UiCaption} displayed by this component.
  */
 const DocumentDrawer: React.VFC<Props> = ({
   documents,

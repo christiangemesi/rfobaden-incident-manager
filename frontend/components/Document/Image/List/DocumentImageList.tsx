@@ -22,17 +22,16 @@ interface Props {
 
   /**
    * Event caused by deleting an {@link Document image}.
-   * This will store the manipulated list of {@link Document images} to the corresponding {@link Store}.
    */
   storeImages: (images: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding {@link Model}.
+   * The {@link Id} of the {@link Model} to which the images belong.
    */
   modelId: Id<Incident | Report | Task>
 
   /**
-   * The name of the corresponding {@link Model}.
+   * The name of the {@link Model} to which the images belong.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 

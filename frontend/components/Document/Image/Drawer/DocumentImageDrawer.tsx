@@ -17,17 +17,16 @@ interface Props {
 
   /**
    * Event caused by deleting a {@link Document image}.
-   * This will store the manipulated list of {@link Document images} in the corresponding {@link Store}.
    */
   storeImages: (images: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding {@link Model}.
+   * The {@link Id} of the {@link Model} to which the images belong.
    */
   modelId: Id<Incident | Report | Task | Subtask>
 
   /**
-   * The name of the corresponding {@link Model}.
+   * The name of the {@link Model} to which the images belong.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 
@@ -39,7 +38,7 @@ interface Props {
 
 /**
  * `DocumentImageDrawer` is a component which uses a {@link @UiDrawer} to display {@link Document images}.
- * The `DocumentImageDrawer` is opening by clicking on a {@link UiCaption}.
+ * The drawer is opened by clicking on an {@link UiCaption} displayed by this component.
  */
 const DocumentImageDrawer: React.VFC<Props> = ({
   images,

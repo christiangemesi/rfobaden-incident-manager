@@ -25,17 +25,16 @@ interface Props {
 
   /**
    * Event caused by deleting a {@link Document}.
-   * This will store the manipulated list of {@link Document documents} to the corresponding {@link Store}.
    */
   storeDocuments: (documents: Document[]) => void
 
   /**
-   * The {@link Id} of the corresponding {@link Model}.
+   * The {@link Id} of the {@link Model} to which the documents belong.
    */
   modelId: Id<Incident | Report | Task>
 
   /**
-   * The name of the corresponding {@link Model}.
+   * The name of the {@link Model} to which the documents belong.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 

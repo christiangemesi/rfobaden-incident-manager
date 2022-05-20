@@ -1,27 +1,27 @@
 import Id from '@/models/base/Id'
 
 /**
- * `Document` represents a document like a PDF or an image like a png or jpg.
+ * `Document` represents an uploaded file.
  */
 export default interface Document {
 
   /**
-   * An unique identifier for each `Document`.
+   * Uniquely identifies the `document`.
    */
   id: Id<this>
 
   /**
-   * The name of a `Document`.
+   * The name of the `document`.
    */
   name: string
 
   /**
-   * The mime type of `Document`.
+   * The mime type of the `document`.
    */
   mimeType: string
 
   /**
-   * The extension of `Document` representing a `mimeType`.
+   * The extension of the `document` based on its `mimeType`.
    */
   extension: string
 }

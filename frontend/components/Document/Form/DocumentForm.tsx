@@ -15,18 +15,17 @@ import FileUpload from '@/models/FileUpload'
 
 interface Props {
   /**
-   * The {@link Id} of the corresponding {@link Model}.
+   * The {@link Id} of the {@link Model} to which the document belong.
    */
   modelId: Id<Incident | Report | Task>
 
   /**
-   * The name of the corresponding {@link Model}.
+   * The name of the {@link Model} to which the document belong.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 
   /**
-   * The type of the {@link Document} which will be added.
-   * This field is used by the backend request.
+   * The type of the {@link Document}, determines how it is stored and displayed.
    */
   type: 'image' | 'document'
 
@@ -42,7 +41,7 @@ interface Props {
 }
 
 /**
- * `DocumentForm` is an input component to add new {@link Document documents and images}.
+ * `DocumentForm` allows the creation of new {@link Document documents and images}.
  */
 const DocumentForm: React.VFC<Props> = ({
   modelId,
