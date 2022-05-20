@@ -1,5 +1,5 @@
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import Document from '@/models/Document'
 import DocumentList from '@/components/Document/List/DocumentList'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
@@ -11,7 +11,8 @@ interface Props {
   documents: Document[]
 
   /**
-   * Callback to store the manipulated list of documents in the corresponding {@link Store}.
+   * Event caused by deleting a document.
+   * This will store the manipulated list of documents in the corresponding {@link Store}.
    */
   storeDocuments: (documents: Document[]) => void
 
@@ -24,10 +25,9 @@ interface Props {
    * The name of the corresponding model.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
-  children?: (props: { open: () => void }) => ReactNode
 
   /**
-   * Caused by adding a new `Document`.
+   * Event caused by adding a new `Document`.
    */
   onAddDocument: (document: Document) => void
 }
@@ -41,20 +41,17 @@ const DocumentDrawer: React.VFC<Props> = ({
   storeDocuments,
   modelId,
   modelName,
-  children,
   onAddDocument,
 }) => {
 
   return (
     <UiDrawer size="auto">
       <UiDrawer.Trigger>{({ open }) => (
-        children ? children({ open }) : (
-          <UiCaption onClick={ open }>
-            {documents.length}
-            &nbsp;
-            {documents.length === 1 ? 'Dokument' : 'Dokumente'}
-          </UiCaption>
-        )
+        <UiCaption onClick={open}>
+          {documents.length}
+          &nbsp;
+          {documents.length === 1 ? 'Dokument' : 'Dokumente'}
+        </UiCaption>
       )}</UiDrawer.Trigger>
       <UiDrawer.Body>
         <DocumentList
