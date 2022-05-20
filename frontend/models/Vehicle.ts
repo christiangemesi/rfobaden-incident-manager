@@ -13,7 +13,7 @@ export default interface Vehicle extends Model {
   name: string
 
   /**
-   * Defines the visibility of the vehicle in the {@link UiSelectInput}.
+   * Whether the vehicle is visible to users.
    */
   isVisible: boolean
 }
