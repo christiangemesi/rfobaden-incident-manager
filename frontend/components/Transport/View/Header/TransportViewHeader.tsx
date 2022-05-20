@@ -32,9 +32,9 @@ const TransportViewHeader: React.VFC<Props> = ({
   onClose: handleClose,
 }) => {
 
-  useEffectOnce(function loadVehicles() {
+  useEffectOnce(function loadVehiclesAndTrailers() {
     (async () => {
-      // load and save all vehicles
+      // Load and save all vehicles.
       const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
         'vehicles',
       )

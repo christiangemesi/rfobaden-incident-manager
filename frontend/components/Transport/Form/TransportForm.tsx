@@ -111,16 +111,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
 
   useCancel(form, handleClose)
 
-  /**
-   * Load the {@link UiSelectInput} options of vehicles and trailers.
-   *
-   * <p>
-   *   The visible vehicles and trailers are loaded from the backend and
-   *   saved in the stores. The vehicles and the trailers are used in an
-   *   own `UiSelectInput`.
-   * </p>
-   */
-  useEffectOnce(() => {
+  useEffectOnce(function loadVisibleVehiclesAndTrailers() {
     (async () => {
       // Load and save the visible vehicles.
       const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
@@ -141,26 +132,14 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     })()
   })
 
-  /**
-   * Defines the event triggered by the creation of a new {@link Vehicle}.
-   *
-   * <p>
-   *   With the given `name` the backend request creates a new vehicle which
-   *   is returned and saved in the vehicle store. It sets the new vehicle as
-   *   selected value of the vehicle {@link UiSelectInput}.
-   * </p>
-   *
-   * @param vehicleName Name of the vehicle.
-   * @return A function which handles a vehicle creation.
-   */
   const handleCreateVehicle = async (vehicleName: string) => {
-    // validate vehicle name
+    // Validate vehicle name
     if (vehicleName.length > 100) {
       alert('Fahrzeugname ist zu lang.')
       return
     }
 
-    // create and save the new vehicle
+    // Create and save the new vehicle
     const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
       name: vehicleName,
       isVisible: true,
@@ -170,31 +149,19 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     }
     VehicleStore.save(parseVehicle(data))
 
-    // update the vehicle select value
+    // Update the vehicle select value
     form.vehicleId.setValue(data.id)
   }
 
-  /**
-   * Defines the event triggered by the deletion of an existing {@link Vehicle}.
-   *
-   * <p>
-   *   With the given `id` the vehicle gets loaded from the backend and the
-   *   visibility gets updated to false. It is returned and saved in the vehicle
-   *   store. It removes the vehicle from its {@link UiSelectInput}.
-   * </p>
-   *
-   * @param id Id of the vehicle.
-   * @return A function which handles a vehicle deletion.
-   */
   const handleDeleteVehicle = async (id: Id<Vehicle>) => {
-    // load the vehicle and update the visibility
+    // Load the vehicle and update the visibility
     const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
     if (error !== null) {
       throw error
     }
     data.isVisible = false
 
-    // update and save the vehicle
+    // Update and save the vehicle
     const [updatedVehicle, updatedVehicleError]: BackendResponse<Vehicle> = await BackendService.update('vehicles', id, data)
     if (updatedVehicleError !== null) {
       throw updatedVehicleError
@@ -231,7 +198,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     TrailerStore.save(parseTrailer(updatedTrailer))
   }
 
-  // filter the visible vehicles and map their ids
+  // Filter the visible vehicles and map their ids
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
@@ -270,7 +237,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
 
-          {/* vehicle select input with creation and deletion functionality */}
+          {/* Vehicle select input with creation and deletion functionality */}
           <UiForm.Field field={form.vehicleId} deps={[vehicles]}>{(props) => (
             <UiSelectInput
               {...props}
@@ -351,7 +318,7 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 }
 
 /**
- * Maps the id of a vehicle to its id.
+ * Maps the id of a vehicle to its name.
  *
  * @param id The id of the vehicle.
  * @return The vehicle's name.

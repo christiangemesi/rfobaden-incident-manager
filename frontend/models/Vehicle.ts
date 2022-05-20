@@ -34,14 +34,14 @@ export const parseVehicle = (data: Vehicle): Vehicle => ({
  * Loads the name of a vehicle.
  *
  * @param vehicleId The id of the vehicle.
- * @return The name of vehicle.
+ * @return The vehicle's name.
  */
 export const getVehicleName = async (vehicleId: Id<Vehicle> | null): Promise<string> => {
   if (vehicleId === null) {
     return ''
   }
 
-  // load the vehicle with the id from the backend
+  // Load the vehicle with the id from the backend
   const [vehicle, vehicleError]: BackendResponse<Vehicle> = await BackendService.find(
     `vehicles/${vehicleId}`,
   )
