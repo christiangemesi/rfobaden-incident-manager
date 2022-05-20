@@ -70,7 +70,7 @@ public class Incident extends Model.Basic
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
      * <p>
-     *     This is used to plan for an incident in advance.
+     *     This is used to plan an incident in advance.
      * </p>
      */
     private LocalDateTime startsAt;
@@ -103,7 +103,7 @@ public class Incident extends Model.Basic
 
     /**
      * The {@link Document documents} attached to the entity.
-     * Does not include the entities' {@link #images image documents}.
+     * Does not include the entity's {@link #images image documents}.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
