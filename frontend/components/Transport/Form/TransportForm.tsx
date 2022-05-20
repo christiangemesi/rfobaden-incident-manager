@@ -348,6 +348,7 @@ const PrioritySliderPositioner = styled.div`
   display: flex;
   justify-content: right;
   margin: 0.5rem;
+
   ${Themed.media.sm.max} {
     justify-content: center;
   }
