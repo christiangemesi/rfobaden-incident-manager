@@ -59,12 +59,27 @@ public abstract class ModelController<
      */
     protected abstract void loadRelations(TPath path, TModel entity);
 
+    /**
+     * Lists all entities at a specific path.
+     *
+     * @param path The path whose entities are listed.
+     * @return The entities.
+     */
     @GetMapping
     @RequireAgent
     public List<TModel> list(@ModelAttribute TPath path) {
         return service.list(path);
     }
 
+    /**
+     * Loads an entity with a specific id at a given path.
+     *
+     * @param path The entities' path.
+     * @param id The entities' id.
+     * @return The entity.
+     *
+     * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching entity was found.
+     */
     @GetMapping(value = "{id}")
     @RequireAgent
     public TModel find(@ModelAttribute TPath path, @PathVariable Long id) {
@@ -73,6 +88,15 @@ public abstract class ModelController<
         ));
     }
 
+    /**
+     * Creates a new entity at a specific path.
+     *
+     * @param path The path at which the entity is created.
+     * @param entity The entity to create.
+     * @return The created entity.
+     *
+     * @throws ApiException {@link HttpStatus#UNPROCESSABLE_ENTITY} if the entity already has an id.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TModel create(@ModelAttribute TPath path, @RequestBody TModel entity) {
@@ -83,6 +107,18 @@ public abstract class ModelController<
         return service.create(path, entity);
     }
 
+    /**
+     * Updates an entity with a specific id at a given path.
+     *
+     * @param path The entities' path.
+     * @param id The entities' id.
+     * @param entity The updated entity.
+     * @return The updated entity.
+     *
+     * @throws ApiException {@link HttpStatus#UNPROCESSABLE_ENTITY} if the entities id
+     *                      and the id from the request path do not match.
+     *                      {@link HttpStatus#NOT_FOUND} if no matching entity was found.
+     */
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public TModel update(
@@ -101,6 +137,14 @@ public abstract class ModelController<
         ));
     }
 
+    /**
+     * Deletes an entity with a specific id at a given path.
+     *
+     * @param path The entities' path.
+     * @param id The entities' id.
+     *
+     * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching entity was found.
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@ModelAttribute TPath path, @PathVariable Long id) {
