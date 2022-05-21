@@ -10,17 +10,63 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props<T> extends UiInputProps<T | null> {
+  /**
+   * Text of the select input label.
+   */
   label?: string
+
+  /**
+   * Values of the select dropdown items.
+   */
   options: T[]
+
+  /**
+   * Mapping function for the option names.
+   *
+   * @param option The option to map.
+   * @return The name to display.
+   */
   optionName?: keyof T | ((option: T) => string | null)
-  onCreate?: (value: string) => void
+
+  /**
+   * Disables the checkbox.
+   */
   isDisabled?: boolean,
+
+  /**
+   * Whether the select options can be searched.
+   */
   isSearchable?: boolean,
+
+  /**
+   * Text of the select input placeholder.
+   */
   placeholder?: string,
+
+  /**
+   * Placement of the select dropdown.
+   */
   menuPlacement?: 'auto' | 'top' | 'bottom'
+
+  /**
+   * Function triggered by the creation of an option.
+   *
+   * @param value The value of the option to create.
+   */
+  onCreate?: (value: string) => void
+
+  /**
+   * Function triggered by the deletion of an option.
+   *
+   * @param value The option to delete.
+   */
   onDelete?: (value: T) => void
 }
 
+/**
+ * `UiSelectInput` is an input component for displaying a range of options.
+ * It offers the user to choose one option out of many.
+ */
 const UiSelectInput = <T, >({
   value = null,
   onChange: setValue,
@@ -28,13 +74,15 @@ const UiSelectInput = <T, >({
   label,
   options,
   optionName,
-  onCreate: handleCreate,
   isDisabled = false,
   isSearchable = false,
   placeholder = '',
   menuPlacement = 'auto',
+  onCreate: handleCreate,
   onDelete: handleDelete,
 }: Props<T>): JSX.Element => {
+
+  // Prepare the displayed option names
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
     options.map((option) => {
@@ -42,6 +90,7 @@ const UiSelectInput = <T, >({
     })
   ), [optionToLabel, options])
 
+  // Prepare value and handle
   const defaultValue = useMemo(() => (
     value === null ? null : { value, label: optionToLabel(value) ?? '' }
   ), [optionToLabel, value])
@@ -54,8 +103,9 @@ const UiSelectInput = <T, >({
 
   const hasErrors = errors && errors.length > 0
 
+  // Style the React select input component
   const customStyles: StylesConfig<Option<T>, false> = {
-    // style of main select box
+    // Main select box
     control: (styles, { isFocused }) => ({
       ...styles,
       borderRadius: '0.5rem',
@@ -70,14 +120,14 @@ const UiSelectInput = <T, >({
         borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
       },
     }),
-    // style of option container
+    // Option container
     menu: (styles) => ({
       ...styles,
       borderRadius: '0.5rem',
       marginTop: 2,
       marginBottom: 0,
     }),
-    // style of option element
+    // Option item
     option: (styles, { isDisabled, isSelected }) => {
       return {
         ...styles,
@@ -108,17 +158,17 @@ const UiSelectInput = <T, >({
         },
       }
     },
-    // style of input field in main select with search input
+    // Input field in main select with search input
     input: (styles) => ({
       ...styles,
       color: contrastDark,
     }),
-    // style placeholder in main select
+    // Placeholder in main select
     placeholder: (styles) => ({
       ...styles,
       color: 'rgb(150,150,150)',
     }),
-    // style of current shown value in select
+    // Current shown value in select
     singleValue: (styles) => ({
       ...styles,
     }),
@@ -151,6 +201,7 @@ const UiSelectInput = <T, >({
           styles={customStyles}
           menuPlacement={menuPlacement}
           components={{
+            // Customize option item
             Option: (props) => (
               <components.Option {...props}>
                 {props.label}
@@ -198,8 +249,18 @@ type OptionAttribute<T> =
   | keyof T
   | ((option: T) => string | null)
 
+/**
+ * {@code useOptionAttribute} is a React hook which prepares
+ * the option label mapping function.
+ * It re-renders whenever the option attributes is changed.
+ *
+ * @param attr The option name mapping function.
+ * @return A mapping function with an option parameter and a string return
+ */
 const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => string | null => {
   return useMemo(() => {
+
+    // Use option as function return
     if (attr === undefined) {
       return (option) => {
         if (typeof option === 'string') {
@@ -208,9 +269,13 @@ const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => strin
         throw new Error(`option is not a string nor a number: ${option}`)
       }
     }
+
+    // Use function from arguments
     if (typeof attr === 'function') {
       return attr
     }
+
+    // Use option value as function return
     return (option) => {
       const value = option[attr]
       if (typeof value === 'string') {
