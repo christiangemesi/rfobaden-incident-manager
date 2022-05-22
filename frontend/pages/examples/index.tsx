@@ -154,7 +154,6 @@ const UiComponentsExample: React.VFC = () => {
 }
 export default UiComponentsExample
 
-
 const Spacer = styled.div`
   margin: 2rem;
   > h1, > h2, > h3, > h4 {

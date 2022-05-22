@@ -24,5 +24,4 @@ const UiCheckboxExample: React.VFC = () => {
     </UiContainer>
   )
 }
-
 export default UiCheckboxExample
