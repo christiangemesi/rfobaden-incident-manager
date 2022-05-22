@@ -3,17 +3,15 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
+/**
+ * Example link list for an easy navigation to a specific example page.
+ * The links are grouped and alphabetically ordered.
+ */
 const UiComponentsExample: React.VFC = () => {
   return (
     <Spacer>
       <UiTitle level={3}>Examples</UiTitle>
-      <UiTitle level={4}>Layouts</UiTitle>
-      <Link href="examples/ui-grid">
-        <a>
-          UiGrid
-        </a>
-      </Link>
-      <br />
+
       <UiTitle level={4}>Inputs</UiTitle>
       <Link href="examples/ui-checkbox">
         <a>
@@ -57,6 +55,7 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+
       <UiTitle level={4}>Buttons</UiTitle>
       <Link href="examples/ui-action-button">
         <a>
@@ -76,6 +75,7 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+
       <UiTitle level={4}>Display Components</UiTitle>
       <Link href="examples/ui-badge">
         <a>
@@ -113,10 +113,11 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+
       <UiTitle level={4}>Overlays</UiTitle>
-      <Link href="examples/ui-modal">
+      <Link href="examples/ui-alert">
         <a>
-          UiModal
+          UiAlert
         </a>
       </Link>
       <br />
@@ -126,6 +127,21 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
+      <Link href="examples/ui-modal">
+        <a>
+          UiModal
+        </a>
+      </Link>
+      <br />
+
+      <UiTitle level={4}>Layouts</UiTitle>
+      <Link href="examples/ui-grid">
+        <a>
+          UiGrid
+        </a>
+      </Link>
+      <br />
+
       <UiTitle level={4}>Responsive Design</UiTitle>
       <Link href="examples/custom-grid">
         <a>
