@@ -21,7 +21,7 @@ interface Props {
 }
 
 /**
- * `UiCircularProgress` displays the progress of an incident.
+ * `UiCircularProgress` displays progress on a total number of items.
  */
 const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false }) => {
   return useMemo(() => {
