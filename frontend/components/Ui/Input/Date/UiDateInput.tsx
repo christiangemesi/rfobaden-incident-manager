@@ -400,7 +400,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
-        // Affect title row of calendar days
+        // Day names in the title row of the picker's calendar.
         .react-datepicker__day-names {
           margin-top: 0.5rem;
           display: flex;
