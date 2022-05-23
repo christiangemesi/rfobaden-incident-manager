@@ -249,7 +249,7 @@ type OptionAttribute<T> =
  * It re-renders whenever the option attributes changes.
  *
  * @param attr Determines how options are mapped.
- * @return A mapping function with an option parameter and a string return
+ * @return A function mapping an option to its display value.
  */
 const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => string | null => {
   return useMemo(() => {
