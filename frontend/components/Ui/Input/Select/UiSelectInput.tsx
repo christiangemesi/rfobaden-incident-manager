@@ -11,7 +11,7 @@ import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props<T> extends UiInputProps<T | null> {
   /**
-   * Text of the select input label.
+   * Text of the input label.
    */
   label?: string
 
