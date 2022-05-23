@@ -21,10 +21,8 @@ interface Props<T> extends UiInputProps<T | null> {
   options: T[]
 
   /**
-   * Mapping function for the option names.
-   *
-   * @param option The option to map.
-   * @return The name to display.
+   * The key of a {@link options} property whose value is displayed,
+   * or a function which maps each option to a value which can be displayed.
    */
   optionName?: keyof T | ((option: T) => string | null)
 
