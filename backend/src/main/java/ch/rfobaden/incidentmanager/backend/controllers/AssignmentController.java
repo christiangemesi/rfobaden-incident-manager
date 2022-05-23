@@ -28,40 +28,11 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/v1/assignments")
 public class AssignmentController extends AppController {
-    /**
-     * The service giving access to {@link Transport}.
-     */
     private final TransportService transportService;
-
-    /**
-     * The service giving access to {@link Report}.
-     */
     private final ReportService reportService;
-
-    /**
-     * The service giving access to {@link Task}.
-     */
     private final TaskService taskService;
-
-    /**
-     * The service giving access to {@link Subtask}.
-     */
     private final SubtaskService subtaskService;
-
-    /**
-     * The service giving access to the current user and session.
-     */
     private final AuthService authService;
-
-    /**
-     * Constructor to initialize the needed services.
-     *
-     * @param transportService The transport service.
-     * @param reportService    The report service.
-     * @param taskService      The task service.
-     * @param subtaskService   The subtask service.
-     * @param authService      The authentication service.
-     */
     public AssignmentController(
         TransportService transportService,
         ReportService reportService,
