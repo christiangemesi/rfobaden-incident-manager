@@ -1,5 +1,5 @@
 import Trackable from '@/models/Trackable'
-import React, { Fragment, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled, { css } from 'styled-components'
 import IncidentStore from '@/stores/IncidentStore'
@@ -10,12 +10,30 @@ import UiList from '@/components/Ui/List/UiList'
 
 
 interface Props<T extends Trackable> {
+  /**
+   * Title of the list item.
+   */
   title: string
+
+  /**
+   * List of assigned {@link Trackable entities}.
+   */
   records: T[]
+
+  /**
+   * A function representing the link.
+   */
   href: (record: T) => string
+
+  /**
+   * Additional item content.
+   */
   children?: (record: T) => ReactNode
 }
 
+/**
+ * `AssignmentListItem` is a component that displays an assigned {@link Trackable entity} linked to its source.
+ */
 const AssignmentListItem = <T extends Trackable>({
   title,
   records,
@@ -27,7 +45,7 @@ const AssignmentListItem = <T extends Trackable>({
   }
 
   return (
-    <Fragment>
+    <React.Fragment>
       <UiTitle level={3}>{title}</UiTitle>
       <EntityContainer>
         {records.map((e) => (
@@ -50,7 +68,7 @@ const AssignmentListItem = <T extends Trackable>({
           </UiLink>
         ))}
       </EntityContainer>
-    </Fragment>
+    </React.Fragment>
   )
 }
 
