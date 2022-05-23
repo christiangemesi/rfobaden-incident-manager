@@ -15,7 +15,7 @@ const UiSelectInputExample: React.VFC = () => {
     'Option 4',
   ])
 
-  // Prepare current values for each select
+  // The currently selected values of each select.
   const [currentValue, setCurrentValue] = useState<string | null>(null)
   const [currentValue2, setCurrentValue2] = useState<string | null>(null)
   const [currentValue3, setCurrentValue3] = useState<string | null>(null)
