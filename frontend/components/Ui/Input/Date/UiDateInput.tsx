@@ -417,7 +417,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
-        // Affect days and their titles
+        // Day numbers and names.
         .react-datepicker__day-name,
         .react-datepicker__day {
           border-radius: 0.1rem;
