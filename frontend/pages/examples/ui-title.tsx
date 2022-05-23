@@ -2,7 +2,7 @@ import React from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
 /**
- * Example to demonstrate the use of a {@link UiTitle}.
+ * `UiTitleExample` is an example page for the {@link UiTitle} component.
  */
 const UiTitleExample: React.VFC = () => {
   return (
