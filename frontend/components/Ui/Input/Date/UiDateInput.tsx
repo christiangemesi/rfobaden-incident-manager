@@ -34,8 +34,7 @@ interface Props extends UiInputProps<Date | null> {
 }
 
 /**
- * `UiDateInput` is an input component for a date value.
- * It offers the user to input the date via date time picker.
+ * `UiDateInput` is an input component for a {@link Date} value.
  */
 const UiDateInput: React.VFC<Props> = ({
   value,
