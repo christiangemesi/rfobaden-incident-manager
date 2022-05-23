@@ -97,7 +97,7 @@ const UiSelectInput = <T, >({
 
   const hasErrors = errors && errors.length > 0
 
-  // Style the React select input component
+  // Styles for the select component.
   const customStyles: StylesConfig<Option<T>, false> = {
     // Main select box
     control: (styles, { isFocused }) => ({
