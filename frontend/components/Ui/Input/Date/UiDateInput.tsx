@@ -51,21 +51,21 @@ const UiDateInput: React.VFC<Props> = ({
   const [isOpen, toggleOpen] = useToggle(false)
 
   useUpdateEffect(function handleDateTimeValidation() {
-    // Handle no date
+    // Handle no date.
     if (date === null) {
       handleChange(null)
       setInvalid(false)
       return
     }
 
-    // Handle wrong formatted date
+    // Handle wrong formatted date.
     if (isNaN(date.getTime())) {
       handleChange(null)
       setInvalid(true)
       return
     }
 
-    // Handle correct date
+    // Handle correct date.
     handleChange(date)
     setInvalid(false)
   }, [date])
@@ -86,7 +86,7 @@ const UiDateInput: React.VFC<Props> = ({
       <InputAndErrorBox hasError={hasError}>
         <DateTimePicker isOpened={isOpen}>
 
-          {/* Date time input field */}
+          {/* Date time input field. */}
           <DatePicker
             locale={de}
             selected={date}
@@ -109,7 +109,7 @@ const UiDateInput: React.VFC<Props> = ({
             isClearable
           />
 
-          {/* Date time popup button */}
+          {/* Date time popup button. */}
           <PickerButton onClick={toggleOpen}>
             <UiIcon.Calendar />
           </PickerButton>
@@ -222,7 +222,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
-      // month/year navigation elements.
+      // Month/year navigation elements.
       .react-datepicker__navigation {
         color: ${({ theme }) => theme.colors.tertiary.contrast};
 
@@ -547,7 +547,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     border-right: none;
   }
 
-  // For button beside input field
+  // Button at the end of the input.
   > div:first-child {
     width: calc(100% - 60px);
   }
