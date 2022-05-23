@@ -4,8 +4,7 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiSelectInput from '@/components/Ui/Input/Select/UiSelectInput'
 
 /**
- * `UiSelectInputExample` is an example page of a {@link UiSelectInput}.
- * It shows the usage of the `UiSelectInput` component with different functionality.
+ * `UiSelectInputExample` is an example page for the {@link UiSelectInput} component.
  */
 const UiSelectInputExample: React.VFC = () => {
   // Default option for all selects
