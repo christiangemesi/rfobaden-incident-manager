@@ -254,7 +254,7 @@ type OptionAttribute<T> =
 const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => string | null => {
   return useMemo(() => {
 
-    // Use option as function return
+    // There is no option attribute, so we use the option itself as display value.
     if (attr === undefined) {
       return (option) => {
         if (typeof option === 'string') {
