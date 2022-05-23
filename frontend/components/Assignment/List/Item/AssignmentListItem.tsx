@@ -13,6 +13,7 @@ interface Props<T extends Trackable> {
   title: string
   records: T[]
   href: (record: T) => string
+  idDone?: (record: T) => boolean
   children?: (record: T) => ReactNode
 }
 
@@ -20,6 +21,7 @@ const AssignmentListItem = <T extends Trackable>({
   title,
   records,
   href,
+  idDone = () => false,
   children,
 }: Props<T>): JSX.Element => {
   if (records.length === 0) {
@@ -37,7 +39,7 @@ const AssignmentListItem = <T extends Trackable>({
           >
             <Item
               isActive={false}
-              isClosed={e.isClosed}
+              isClosed={e.isClosed || idDone(e)}
               title={e.title}
               priority={e.priority}
               user={IncidentStore.find(e.incidentId)?.title ?? ''}
