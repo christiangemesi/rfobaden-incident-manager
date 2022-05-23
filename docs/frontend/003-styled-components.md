@@ -52,13 +52,13 @@ For this to work, the component needs to define the prop `className?: string`, w
 
 ```tsx
 interface Props extends StyledProps {
-    ...
+  ...
 }
     
 const UiButton: React.VFC<Props> = ({ className, style, ... }) => {
-    return (
-        <button className={className} style={style} />
-    )
+  return (
+    <button className={className} style={style} />
+  )
 }
 export default styled(UiButton)``
 ```

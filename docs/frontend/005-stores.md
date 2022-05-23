@@ -19,22 +19,22 @@ The store is then created using `createStore`, together with an initial state va
 const initialState: CounterState = { counter: 0 }
 
 const CounterStore = createStore(initialState, (getState, setState) => ({
-    // These are the store's actions:
-      
-    // Returns the counter's current value.
-    getCounter(): number {
-        return getState().counter
-    },
+  // These are the store's actions:
     
-    // Sets the counter to a new value.
-    setCounter(value: number) {
-        setState({ counter: value })
-    },
-    
-    // Increments the counter by one.
-    increment() {
-        setState(({ counter }) => ({ counter: counter + 1 }))
-    },
+  // Returns the counter's current value.
+  getCounter(): number {
+      return getState().counter
+  },
+  
+  // Sets the counter to a new value.
+  setCounter(value: number) {
+      setState({ counter: value })
+  },
+  
+  // Increments the counter by one.
+  increment() {
+      setState(({ counter }) => ({ counter: counter + 1 }))
+  },
 }))
 export default CounterStore
 ```
@@ -61,8 +61,8 @@ The hook will re-render your component if the store's value changes. The `useSto
 ```ts
 // In your store file:
 const useCounter = (): number => {
-    const { counter } = useStore(CounterStore)
-    return counter
+  const { counter } = useStore(CounterStore)
+  return counter
 }
 
 // In your component:
