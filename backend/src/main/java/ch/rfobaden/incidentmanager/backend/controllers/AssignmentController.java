@@ -3,10 +3,12 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
@@ -20,19 +22,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code AssignmentController} for {@link AssignmentsData assingments}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/assignments")
 public class AssignmentController extends AppController {
+    /**
+     * The service giving access to {@link Transport}.
+     */
     private final TransportService transportService;
 
+    /**
+     * The service giving access to {@link Report}.
+     */
     private final ReportService reportService;
 
+    /**
+     * The service giving access to {@link Task}.
+     */
     private final TaskService taskService;
 
+    /**
+     * The service giving access to {@link Subtask}.
+     */
     private final SubtaskService subtaskService;
 
+    /**
+     * The service giving access to the current user and session.
+     */
     private final AuthService authService;
 
+    /**
+     * Constructor to initialize the needed services.
+     *
+     * @param transportService The transport service.
+     * @param reportService    The report service.
+     * @param taskService      The task service.
+     * @param subtaskService   The subtask service.
+     * @param authService      The authentication service.
+     */
     public AssignmentController(
         TransportService transportService,
         ReportService reportService,
@@ -47,6 +76,17 @@ public class AssignmentController extends AppController {
         this.authService = authService;
     }
 
+    /**
+     * Lists all {@link AssignmentsData assignments}.
+     * <p>
+     * An assignment contains all {@link Transport transports},
+     * {@link Report reports}, {@link Task tasks} and
+     * {@link Subtask subtasks} assigned to the current
+     * {@link User user}.
+     * </p>
+     *
+     * @return The assignments.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
@@ -63,10 +103,29 @@ public class AssignmentController extends AppController {
         );
     }
 
+    /**
+     * {@code AssignmentsData} contains of a list of each assignable entity
+     * from all opened {@link Incident incidents}.
+     */
     public static final class AssignmentsData {
+        /**
+         * List of assigned {@link Transport transports}.
+         */
         private List<Transport> transports;
+
+        /**
+         * List of assigned {@link Report reports}.
+         */
         private List<Report> reports;
+
+        /**
+         * List of assigned {@link Task tasks}.
+         */
         private List<Task> tasks;
+
+        /**
+         * List of assigned {@link Subtask subtasks}.
+         */
         private List<Subtask> subtasks;
 
         public AssignmentsData() {
