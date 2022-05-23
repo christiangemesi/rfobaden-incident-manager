@@ -186,7 +186,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     position: relative;
   }
 
-  // Affects clear field icon (X)
+  // The date input clear button.
   .react-datepicker__close-icon {
     display: flex;
     align-items: center;
