@@ -52,9 +52,7 @@ interface Props<T> extends UiInputProps<T | null> {
   onCreate?: (value: string) => void
 
   /**
-   * Function triggered by the deletion of an option.
-   *
-   * @param value The option to delete.
+   * Event caused by deleting an option.
    */
   onDelete?: (value: T) => void
 }
