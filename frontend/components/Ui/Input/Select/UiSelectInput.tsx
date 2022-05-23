@@ -269,7 +269,7 @@ const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => strin
       return attr
     }
 
-    // Use option value as function return
+    // The option attribute is a key of the actual option value.
     return (option) => {
       const value = option[attr]
       if (typeof value === 'string') {
