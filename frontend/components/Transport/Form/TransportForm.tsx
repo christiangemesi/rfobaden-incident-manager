@@ -121,6 +121,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       }
       VehicleStore.saveAll(vehicles.map(parseVehicle))
 
+      // Load and save the visible trailers
       const [trailers, trailersError]: BackendResponse<Trailer[]> = await BackendService.list(
         'trailers/visible',
       )
@@ -161,10 +162,13 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
   }
 
   const handleCreateTrailer = async (trailerName: string) => {
+    // Validate trailer name
     if (trailerName.length > 100) {
       alert('Anhängername ist zu lang.')
       return
     }
+
+    // Create and save the new trailer
     const [data, error]: BackendResponse<Trailer> = await BackendService.create('trailers', {
       name: trailerName,
       isVisible: true,
@@ -173,15 +177,20 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       throw error
     }
     TrailerStore.save(parseTrailer(data))
+
+    // update the trailer select value
     form.trailerId.setValue(data.id)
   }
 
   const handleDeleteTrailer = async (id: Id<Trailer>) => {
+    // Load the trailer and update the visibility
     const [data, error]: BackendResponse<Trailer> = await BackendService.find('trailers', id)
     if (error !== null) {
       throw error
     }
     data.isVisible = false
+
+    // Update and save the trailer
     const [updatedTrailer, updatedTrailerError]: BackendResponse<Trailer> = await BackendService.update('trailers', id, data)
     if (updatedTrailerError !== null) {
       throw updatedTrailerError
@@ -195,6 +204,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     return vehicles.map(({ id }) => id)
   }, [vehicles])
 
+  // Filter the visible trailers and map their ids
   const trailers = useTrailers((records) => records.filter((e) => e.isVisible))
   const trailerIds = useMemo(() => {
     return trailers.map(({ id }) => id)
@@ -242,6 +252,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             />
           )}</UiForm.Field>
 
+          {/* Trailer select input with the creation and deletion functionality */}
           <UiForm.Field field={form.trailerId} deps={[trailers]}>{(props) => (
             <UiSelectInput
               {...props}
@@ -314,6 +325,12 @@ const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
     : vehicle.name
 }
 
+/**
+ * Maps the id of a trailer to its name.
+ *
+ * @param id The id of the trailer.
+ * @return The trailer's name.
+ */
 const mapTrailerIdToName = (id: Id<Trailer>): string | null => {
   const trailer = TrailerStore.find(id)
   return trailer === null
@@ -331,6 +348,7 @@ const PrioritySliderPositioner = styled.div`
   display: flex;
   justify-content: right;
   margin: 0.5rem;
+
   ${Themed.media.sm.max} {
     justify-content: center;
   }
