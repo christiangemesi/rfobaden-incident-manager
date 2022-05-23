@@ -13,7 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
   /**
-   * Text of the date input label.
+   * Text of the input label.
    */
   label?: string
 
