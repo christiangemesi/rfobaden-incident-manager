@@ -200,7 +200,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
-  // Affects date time picker popup
+  // The datepicker popup container.
   .react-datepicker__portal,
   .react-datepicker-popper {
 
