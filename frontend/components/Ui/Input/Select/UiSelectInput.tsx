@@ -47,9 +47,7 @@ interface Props<T> extends UiInputProps<T | null> {
   menuPlacement?: 'auto' | 'top' | 'bottom'
 
   /**
-   * Function triggered by the creation of an option.
-   *
-   * @param value The value of the option to create.
+   * Event caused by creating a new option.
    */
   onCreate?: (value: string) => void
 
