@@ -168,7 +168,6 @@ const InputAndErrorBox = styled.div<{ hasError: boolean }>`
     }
   `}
 
-  // Affects error input fields 
   ${({ hasError }) => hasError && css`
     input {
       border-color: ${({ theme }) => theme.colors.error.value};
