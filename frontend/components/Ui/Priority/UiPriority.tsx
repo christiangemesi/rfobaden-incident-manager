@@ -8,18 +8,18 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 interface Props extends StyledProps {
 
   /**
-   * The level of the priority, between low, medium and high.
+   * The {@link Priority} to display.
    */
   priority: Priority
 
   /**
-   * Size of the priority label.
+   * Makes the shown icon smaller.
    */
   isSmall?: boolean
 }
 
 /**
- * `UiPriority` defines the priority.
+ * `UiPriority` displays a {@link Priority} value as an icon.
  */
 const UiPriority: React.VFC<Props> = ({ priority, isSmall = false, style, className }) => {
   const [PriorityIcon, priorityColor] = useMemo(() => {
