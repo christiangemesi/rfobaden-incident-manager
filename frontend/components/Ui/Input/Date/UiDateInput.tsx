@@ -160,7 +160,6 @@ const StyledLabel = styled.label`
 const InputAndErrorBox = styled.div<{ hasError: boolean }>`
   display: flex;
 
-  // Affects non error input fields 
   ${({ hasError }) => !hasError && css`
     input {
       :active, :focus {
