@@ -222,7 +222,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
-      // Affects navigation elements for month and year
+      // month/year navigation elements.
       .react-datepicker__navigation {
         color: ${({ theme }) => theme.colors.tertiary.contrast};
 
