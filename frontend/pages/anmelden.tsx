@@ -8,9 +8,15 @@ import Image from 'next/image'
 import logo from '@/public/rfobaden-logo-text.png'
 
 interface Props {
+  /**
+   * Array index of image to display in the background.
+   */
   imageIndex: number
 }
 
+/**
+ * `AnmeldenPage` is a page that shows a {@link SessionForm login form}.
+ */
 const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
   return (
     <Page noHeader noFooter>
@@ -28,13 +34,18 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
 }
 export default AnmeldenPage
 
+/**
+ * Load background image index.
+ */
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { user } = getSessionFromRequest(req)
   if (user !== null) {
     return { redirect: { statusCode: 302, destination: '/' }}
   }
 
+  // Calculate background image index.
   const index = Math.floor(Math.random() * images.length)
+
   return {
     props: {
       imageIndex: index,
@@ -42,6 +53,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 }
 
+/**
+ * Possible background images to show.
+ */
 const images = [
   '/assets/background1.jpg',
   '/assets/background2.jpg',
