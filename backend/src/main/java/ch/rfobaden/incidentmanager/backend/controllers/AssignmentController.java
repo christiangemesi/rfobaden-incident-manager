@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * {@code AssignmentController} implements endpoints to give access to the assignments of a user.
+ * {@code AssignmentController} implements endpoints to give access to
+ * the assignments of a {@link User user}.
  */
 @RestController
 @RequestMapping(path = "api/v1/assignments")
@@ -33,6 +34,7 @@ public class AssignmentController extends AppController {
     private final TaskService taskService;
     private final SubtaskService subtaskService;
     private final AuthService authService;
+
     public AssignmentController(
         TransportService transportService,
         ReportService reportService,
@@ -75,7 +77,8 @@ public class AssignmentController extends AppController {
     }
 
     /**
-     * {@code AssignmentsData} contains all entities assigned to a specific user which have not been closed yet.
+     * {@code AssignmentsData} contains all entities assigned to a specific {@link User user}
+     * which have not been closed yet.
      */
     public static final class AssignmentsData {
         /**
