@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * {@code AssignmentController} for {@link AssignmentsData assingments}.
+ * {@code AssignmentController} implements endpoints to give access to the assignments of a user.
  */
 @RestController
 @RequestMapping(path = "api/v1/assignments")
