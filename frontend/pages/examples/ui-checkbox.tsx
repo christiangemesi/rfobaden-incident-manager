@@ -6,7 +6,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
  * `UiCheckboxExample` is an example page for the {@link UiCheckbox} component.
  */
 const UiCheckboxExample: React.VFC = () => {
-  // Prepare value
+  // The input's current value.
   const [value, setValue] = useState(false)
 
   return (

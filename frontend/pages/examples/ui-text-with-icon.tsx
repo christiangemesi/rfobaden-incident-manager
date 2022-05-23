@@ -3,7 +3,7 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTextWithIcon from '@/components/Ui/TextWithIcon/UiTextWithIcon'
 
 /**
- * `UiTextWithInputExample` is an example page for the {@link UiTextWithInput} component.
+ * `UiTextWithInputExample` is an example page for the {@link UiTextWithIcon} component.
  */
 const UiTextWithInputExample: React.VFC = () => {
   return (
