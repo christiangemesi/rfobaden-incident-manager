@@ -269,7 +269,6 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
-      // Affects date calendar header
       .react-datepicker__header {
         background: ${({ theme }) => theme.colors.secondary.value};
         color: ${({ theme }) => theme.colors.secondary.contrast};
