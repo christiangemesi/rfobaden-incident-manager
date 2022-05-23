@@ -6,8 +6,6 @@ import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
-import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
-import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
