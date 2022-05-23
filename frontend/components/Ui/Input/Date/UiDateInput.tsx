@@ -484,7 +484,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
-      // Affects time column
+      // The scrollable time column. 
       .react-datepicker__time-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
         
