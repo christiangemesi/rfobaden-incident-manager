@@ -552,7 +552,6 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     width: calc(100% - 60px);
   }
 
-  // Function of calender icon
   ${({ isOpened }) => !isOpened && css`
     .react-datepicker__portal,
     .react-datepicker-popper {
