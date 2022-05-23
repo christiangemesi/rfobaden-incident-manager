@@ -24,7 +24,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
     users.filter((it) => it.id !== user?.id).map(({ email }) => email.toLowerCase())
   ), [user?.id])
 
-  const form = useForm<ModelData<User>>(user,() => ({
+  const form = useForm<ModelData<User>>(user, () => ({
     email: '',
     firstName: '',
     lastName: '',
@@ -37,7 +37,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
       validate.maxLength(100),
-      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt' ,
+      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt',
     ],
     firstName: [
       validate.notBlank(),
@@ -94,7 +94,13 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
           <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
         )}</UiForm.Field>
         <UiForm.Field field={form.organizationId}>{(props) => (
-          <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
+          <UiSelectInput
+            {...props}
+            menuPlacement="top"
+            label="Organisation"
+            options={organizationIds}
+            optionName={mapOrganizationIdToName}
+          />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </UiForm>

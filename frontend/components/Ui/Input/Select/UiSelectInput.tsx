@@ -150,6 +150,7 @@ const UiSelectInput = <T, >({
           isSearchable={isSearchable}
           styles={customStyles}
           menuPlacement={menuPlacement}
+          maxMenuHeight={200}
           components={{
             Option: (props) => (
               <components.Option {...props}>
@@ -179,6 +180,7 @@ const UiSelectInput = <T, >({
           isSearchable={isSearchable}
           styles={customStyles}
           menuPlacement={menuPlacement}
+          maxMenuHeight={200}
         />
       )
       }
