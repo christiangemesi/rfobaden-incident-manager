@@ -3,7 +3,7 @@ import UiToggle from '@/components/Ui/Toggle/UiToggle'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 
 /**
- * Example to demonstrate the use of a {@link UiToggle}.
+ * `UiToggleExample` is an example page for the {@link UiToggle} component.
  */
 const UiToggleExample: React.VFC = () => {
   // Prepare value
