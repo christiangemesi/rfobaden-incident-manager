@@ -37,7 +37,7 @@ interface Props<T> extends UiInputProps<T | null> {
   isSearchable?: boolean,
 
   /**
-   * Text of the select input placeholder.
+   * Text of the input placeholder.
    */
   placeholder?: string,
 
