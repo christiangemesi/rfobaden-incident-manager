@@ -40,8 +40,12 @@ const Main = styled.main<{ noHeader: boolean, noFooter: boolean }>`
 
   position: relative;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  
+
   ${Themed.media.xs.only} {
     padding-top: 5rem;
+
+    ${({ noHeader }) => noHeader && css`
+      padding-top: 0;
+    `}
   }
 `

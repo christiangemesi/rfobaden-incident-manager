@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
@@ -52,7 +52,7 @@ const SessionForm: React.VFC = () => {
   })
 
   return (
-    <Fragment>
+    <PaddingContainer>
       <StyledTitle level={1} isCentered>
         Willkommen
       </StyledTitle>
@@ -71,7 +71,7 @@ const SessionForm: React.VFC = () => {
           </UiForm>
         </UiGrid.Col>
       </UiGrid>
-    </Fragment>
+    </PaddingContainer>
   )
 }
 export default SessionForm
@@ -84,9 +84,15 @@ interface LoginData {
 const StyledTitle = styled(UiTitle)`
   color: ${({ theme }) => theme.colors.tertiary.value};
   margin-bottom: 3rem;
+  min-height: 1em;
 `
+
 const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`
+
+const PaddingContainer = styled.div`
+  padding: 0 2rem;
 `
