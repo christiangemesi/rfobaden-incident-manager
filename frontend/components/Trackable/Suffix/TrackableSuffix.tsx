@@ -5,12 +5,26 @@ import UiDateLabel from '@/components/Ui/DateLabel/UiDateLabel'
 import { Themed } from '@/theme'
 
 interface Props<T extends Trackable> {
+  /**
+   * Makes the date labels smaller.
+   */
   isSmall: boolean
+
+  /**
+   * The {@link Trackable entity} of the date.
+   */
   trackable: T
+
+  /**
+   * Additional trackable content.
+   */
   children: ReactNode
 }
 
-const AssignmentListItem = <T extends Trackable>({
+/**
+ * `TrackableSuffix` is a component that displays the date of an {@link Trackable entity}.
+ */
+const TrackableSuffix = <T extends Trackable>({
   isSmall,
   trackable,
   children,
@@ -24,8 +38,7 @@ const AssignmentListItem = <T extends Trackable>({
     </SuffixList>
   )
 }
-
-export default AssignmentListItem
+export default TrackableSuffix
 
 const SuffixDate = styled.div<{ hasEnd: boolean }>`
   ${Themed.media.sm.max} {
@@ -43,6 +56,7 @@ const SuffixDate = styled.div<{ hasEnd: boolean }>`
     }
   }
 `
+
 const SuffixList = styled.div<{ isSmall: boolean }>`
   display: flex;
   align-items: center;
