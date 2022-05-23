@@ -13,6 +13,7 @@ The IncidentManager is split in two parts: a backend and a frontend.
   An introduction to the backend can be found [here](./backend/001-backend-introduction.md).
 - The frontend consists of a JavaScript client, which makes use of the backend to load and modify data.
   It's source code can be found in the `frontend/` directory.
+  An introduction to the backend can be found [here](./frontend/001-frontend-introduction.md).
 
 ## Development
 
