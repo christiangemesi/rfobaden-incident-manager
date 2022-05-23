@@ -246,7 +246,7 @@ type OptionAttribute<T> =
 /**
  * {@code useOptionAttribute} is a React hook which prepares
  * the option label mapping function.
- * It re-renders whenever the option attributes is changed.
+ * It re-renders whenever the option attributes changes.
  *
  * @param attr The option name mapping function.
  * @return A mapping function with an option parameter and a string return
