@@ -3,11 +3,26 @@ import styled, { css, useTheme } from 'styled-components'
 
 
 interface Props {
+
+  /**
+   * The amount of finished reports.
+   */
   done: number
+
+  /**
+   * The amount of total reports.
+   */
   total: number
+
+  /**
+   * No fcking clue why this is here.
+   */
   isClosed?: boolean
 }
 
+/**
+ * `UiCircularProgress` displays the progress of an incident.
+ */
 const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false }) => {
   return useMemo(() => {
     const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
