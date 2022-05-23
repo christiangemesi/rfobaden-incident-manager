@@ -71,7 +71,6 @@ const AssignmentListItem = <T extends Trackable>({
     </React.Fragment>
   )
 }
-
 export default AssignmentListItem
 
 const EntityContainer = styled(UiList)`

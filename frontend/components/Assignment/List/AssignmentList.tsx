@@ -52,11 +52,14 @@ const AssignmentList: React.VFC<Props> = ({
         (<UiTitle level={2}>{title}</UiTitle>)
       }
       <Content>
+        {/* Display transports */}
         <AssignmentListItem
           title="Transporte"
           records={transports}
           href={(transport) => '/ereignisse/' + transport.incidentId + '/transporte/' + transport.id}
         />
+
+        {/* Display reports with task progress, key report and location flag */}
         <AssignmentListItem
           title="Meldungen"
           records={reports}
@@ -76,6 +79,8 @@ const AssignmentList: React.VFC<Props> = ({
             </React.Fragment>
           )}
         </AssignmentListItem>
+
+        {/* Display tasks with subtask progress */}
         <AssignmentListItem
           title="Aufträge"
           records={tasks}
@@ -87,6 +92,8 @@ const AssignmentList: React.VFC<Props> = ({
             </React.Fragment>
           )}
         </AssignmentListItem>
+
+        {/* Display subtasks */}
         <AssignmentListItem
           title="Teilaufträge"
           records={subtasks}
@@ -96,7 +103,6 @@ const AssignmentList: React.VFC<Props> = ({
     </React.Fragment>
   )
 }
-
 export default AssignmentList
 
 const ICON_MULTIPLIER_SMALL = 0.75
