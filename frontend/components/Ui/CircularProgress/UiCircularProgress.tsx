@@ -10,7 +10,7 @@ interface Props {
   done: number
 
   /**
-   * The amount of total reports.
+   * The total amount of items.
    */
   total: number
 
