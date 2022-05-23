@@ -16,7 +16,7 @@ interface Props<T> extends UiInputProps<T | null> {
   label?: string
 
   /**
-   * Values of the select dropdown items.
+   * The values which can be selected.
    */
   options: T[]
 
