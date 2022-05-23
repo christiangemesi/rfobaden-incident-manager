@@ -84,7 +84,7 @@ const UiSelectInput = <T, >({
     })
   ), [optionToLabel, options])
 
-  // Prepare value and handle
+  // The currently selected option.
   const defaultValue = useMemo(() => (
     value === null ? null : { value, label: optionToLabel(value) ?? '' }
   ), [optionToLabel, value])
