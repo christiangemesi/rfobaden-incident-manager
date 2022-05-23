@@ -3,8 +3,7 @@ import React, { useState } from 'react'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 
 /**
- * `UiDateInputExample` is an example page of a {@link UiDateInput}.
- * It shows the usage of the `UiDateInput` component.
+ * `UiDateInputExample` is an example page for the {@link UiDateInput} component.
  */
 const UiDateInputExample: React.VFC = () => {
   const [value, setValue] = useState<Date | null>(null)
