@@ -291,7 +291,6 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           margin-bottom: 0.5rem;
         }
 
-        // Affect month and year dropdown in calendar
         .react-datepicker__header__dropdown {
           height: 1.5rem;
           display: flex;
