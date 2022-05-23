@@ -76,7 +76,7 @@ const UiSelectInput = <T, >({
   onDelete: handleDelete,
 }: Props<T>): JSX.Element => {
 
-  // Prepare the displayed option names
+  // Map options to their display value.
   const optionToLabel = useOptionAttribute(optionName)
   const mappedOptions: Option<T>[] = useMemo(() => (
     options.map((option) => {
