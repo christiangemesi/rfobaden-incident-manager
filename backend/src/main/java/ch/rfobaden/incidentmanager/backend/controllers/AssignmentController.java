@@ -50,10 +50,10 @@ public class AssignmentController extends AppController {
     /**
      * Lists all {@link AssignmentsData assignments}.
      * <p>
-     * An assignment contains all {@link Transport transports},
-     * {@link Report reports}, {@link Task tasks} and
-     * {@link Subtask subtasks} assigned to the current
-     * {@link User user}.
+     *     An assignment contains all {@link Transport transports},
+     *     {@link Report reports}, {@link Task tasks} and
+     *     {@link Subtask subtasks} assigned to the current
+     *     {@link User user}.
      * </p>
      *
      * @return The assignments.
