@@ -18,7 +18,7 @@ interface Props extends UiInputProps<Date | null> {
   label?: string
 
   /**
-   * Text of the date input placeholder.
+   * Text of the input placeholder.
    */
   placeholder?: string
 
