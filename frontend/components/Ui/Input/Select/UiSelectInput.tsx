@@ -58,8 +58,8 @@ interface Props<T> extends UiInputProps<T | null> {
 }
 
 /**
- * `UiSelectInput` is an input component for displaying a range of options.
- * It offers the user to choose one option out of many.
+ * `UiSelectInput` is an input component which allows
+ * the selection a single value out of a list of options.
  */
 const UiSelectInput = <T, >({
   value = null,
