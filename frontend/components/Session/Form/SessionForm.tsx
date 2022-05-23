@@ -12,16 +12,22 @@ import { SessionResponse } from '@/models/Session'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
+/**
+ * `SessionForm` is a component that displays a login form and creates a session.
+ */
 const SessionForm: React.VFC = () => {
+  // The currently filled values.
   const form = useForm<LoginData>(() => ({
     email: '',
     password: '',
   }))
+
   useValidate(form, () => ({
     email: [],
     password: [],
   }))
 
+  // Redirect logged-in user
   const router = useRouter()
   const { currentUser } = useSession()
   useEffect(() => {
@@ -31,8 +37,11 @@ const SessionForm: React.VFC = () => {
   }, [router, currentUser])
 
   useSubmit(form, async (formData: LoginData) => {
+    // Check login data via backend in session
     const [data, error] = await BackendService.create<LoginData, SessionResponse>('session', formData)
+
     if (error !== null) {
+      // Create validation errors
       if (error.status === 401) {
         setFormField(form.email, {
           errors: [''],
@@ -45,6 +54,7 @@ const SessionForm: React.VFC = () => {
       }
       throw error
     }
+
     if (data.user == null) {
       throw new Error('session was successfully created, but we did not receive user')
     }
@@ -58,6 +68,8 @@ const SessionForm: React.VFC = () => {
       </StyledTitle>
       <UiGrid align="center" justify="center">
         <UiGrid.Col size={{ md: 8, lg: 5, xl: 3, xxl: 2 }}>
+
+          {/* Login form */}
           <UiForm form={form}>
             <FieldContainer>
               <UiForm.Field field={form.email}>{(props) => (
@@ -76,6 +88,9 @@ const SessionForm: React.VFC = () => {
 }
 export default SessionForm
 
+/**
+ * Data used to log in.
+ */
 interface LoginData {
   email: string
   password: string
