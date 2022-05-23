@@ -197,7 +197,7 @@ const UiSelectInput = <T, >({
           styles={customStyles}
           menuPlacement={menuPlacement}
           maxMenuHeight={200}
-          noOptionsMessage={() => `Keine ${noOptionMessage} vorhanden`}
+          noOptionsMessage={() => `Kein(e) ${noOptionMessage} vorhanden`}
           // eslint-disable-next-line react/no-unescaped-entities
           formatCreateLabel={(inputValue) => <span>"{inputValue}" hinzufügen</span>}
           components={{
