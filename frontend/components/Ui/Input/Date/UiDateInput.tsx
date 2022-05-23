@@ -73,7 +73,6 @@ const UiDateInput: React.VFC<Props> = ({
   // Closes the picker.
   const close = useCallback(() => toggleOpen(false), [toggleOpen])
 
-  // Prepare input extras
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0 || isInvalid
 
