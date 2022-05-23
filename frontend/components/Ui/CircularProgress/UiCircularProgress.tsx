@@ -5,7 +5,7 @@ import styled, { css, useTheme } from 'styled-components'
 interface Props {
 
   /**
-   * The amount of finished reports.
+   * The amount of finished items.
    */
   done: number
 
