@@ -42,7 +42,7 @@ interface Props<T> extends UiInputProps<T | null> {
   placeholder?: string,
 
   /**
-   * Placement of the select dropdown.
+   * Direction in which the dropdown menu opens.
    */
   menuPlacement?: 'auto' | 'top' | 'bottom'
 
