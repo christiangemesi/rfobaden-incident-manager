@@ -75,8 +75,7 @@ public class AssignmentController extends AppController {
     }
 
     /**
-     * {@code AssignmentsData} contains of a list of each assignable entity
-     * from all opened {@link Incident incidents}.
+     * {@code AssignmentsData} contains all entities assigned to a specific user which have not been closed yet.
      */
     public static final class AssignmentsData {
         /**
