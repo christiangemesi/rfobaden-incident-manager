@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -22,6 +24,12 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
         notificationService.notifyAssigneeIfChanged(oldRecord, record);
     }
 
+    /**
+     * Loads all assigned {@link Report reports} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned reports.
+     */
     public List<Report> listWhereAssigneeId(Long id) {
         return repository.findAllByAssigneeId(id);
     }
