@@ -433,7 +433,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
-        // Affect details month view
+        // Month selection view.
         .react-datepicker__month {
           margin: 0;
 
