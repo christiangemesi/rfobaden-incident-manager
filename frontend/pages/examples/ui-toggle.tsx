@@ -6,7 +6,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
  * `UiToggleExample` is an example page for the {@link UiToggle} component.
  */
 const UiToggleExample: React.VFC = () => {
-  // Prepare value
+  // The input's current value.
   const [value, setValue] = useState(false as boolean | null)
 
   return (
