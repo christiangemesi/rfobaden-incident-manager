@@ -15,7 +15,7 @@ interface Props {
   total: number
 
   /**
-   * No fcking clue why this is here.
+   * Signals a closed state by using different colors.
    */
   isClosed?: boolean
 }
