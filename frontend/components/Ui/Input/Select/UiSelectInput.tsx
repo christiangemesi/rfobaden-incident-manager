@@ -264,7 +264,7 @@ const useOptionAttribute = <T, >(attr: OptionAttribute<T>): (option: T) => strin
       }
     }
 
-    // Use function from arguments
+    // The option attribute itself is the mapping function.
     if (typeof attr === 'function') {
       return attr
     }
