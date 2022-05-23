@@ -279,7 +279,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
-      // Affects date calendar months and days
+      // Elements containing month and day numbers.
       .react-datepicker__month-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
 
