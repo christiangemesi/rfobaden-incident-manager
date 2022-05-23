@@ -70,8 +70,8 @@ const UiDateInput: React.VFC<Props> = ({
     setInvalid(false)
   }, [date])
 
-  // Prepare close of date picker popup
-  const close = useCallback( () => toggleOpen(false),[toggleOpen])
+  // Closes the picker.
+  const close = useCallback(() => toggleOpen(false), [toggleOpen])
 
   // Prepare input extras
   const Label = label == null ? 'div' : StyledLabel
