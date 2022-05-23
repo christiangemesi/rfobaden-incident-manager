@@ -56,7 +56,7 @@ const UiSelectInputExample: React.VFC = () => {
           }} errors={['Fail not selected']} menuPlacement="top" placeholder="error" />
         </UiGrid.Col>
 
-        {/* Creatable select input with searching functionality */}
+        {/* Creatable select input with search functionality */}
         <UiGrid.Col>
           <UiSelectInput isSearchable onCreate={
             (string) => {
