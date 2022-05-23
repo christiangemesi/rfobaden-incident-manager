@@ -542,7 +542,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     transition: 250ms ease;
     transition-property: border-color;
 
-    // For button beside input field
+    // Button at the end of the input.
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
   }
