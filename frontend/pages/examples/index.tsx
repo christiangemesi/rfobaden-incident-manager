@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
 /**
- * Example link list for an easy navigation to a specific example page.
+ * Navigation page linking to all example pages.
  * The links are grouped and alphabetically ordered.
  */
 const UiComponentsExample: React.VFC = () => {
