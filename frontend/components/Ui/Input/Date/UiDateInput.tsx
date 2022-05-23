@@ -46,7 +46,6 @@ const UiDateInput: React.VFC<Props> = ({
   errors = [],
 }) => {
 
-  // Init input field states
   const [date, setDate] = useState(value)
   const [isInvalid, setInvalid] = useState(false)
   const [isOpen, toggleOpen] = useToggle(false)
