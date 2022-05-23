@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
@@ -52,7 +52,7 @@ const SessionForm: React.VFC = () => {
   })
 
   return (
-    <Fragment>
+    <React.Fragment>
       <StyledTitle level={1} isCentered>
         Willkommen
       </StyledTitle>
@@ -71,7 +71,7 @@ const SessionForm: React.VFC = () => {
           </UiForm>
         </UiGrid.Col>
       </UiGrid>
-    </Fragment>
+    </React.Fragment>
   )
 }
 export default SessionForm
