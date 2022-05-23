@@ -529,7 +529,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
-  // Affects date input field
+  // Date input field.
   .react-datepicker__input-container > input {
     width: 100%;
     height: 100%;
