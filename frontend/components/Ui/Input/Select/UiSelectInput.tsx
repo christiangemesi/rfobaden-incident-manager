@@ -85,7 +85,7 @@ const UiSelectInput = <T, >({
   ), [optionToLabel, options])
 
   // The currently selected option.
-  const defaultValue = useMemo(() => (
+  const selectedValue = useMemo(() => (
     value === null ? null : { value, label: optionToLabel(value) ?? '' }
   ), [optionToLabel, value])
 
@@ -185,7 +185,7 @@ const UiSelectInput = <T, >({
       {handleCreate !== undefined ? (
         <CreatableSelect
           options={mappedOptions}
-          value={defaultValue}
+          value={selectedValue}
           placeholder={placeholder}
           onChange={handleChange}
           onCreateOption={handleCreate}
@@ -216,7 +216,7 @@ const UiSelectInput = <T, >({
       ) : (
         <Select
           options={mappedOptions}
-          value={defaultValue}
+          value={selectedValue}
           placeholder={placeholder}
           onChange={handleChange}
           isClearable
