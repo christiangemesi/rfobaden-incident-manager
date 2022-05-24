@@ -111,8 +111,9 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
 
   useCancel(form, handleClose)
 
-  useEffectOnce(() => {
+  useEffectOnce(function loadVisibleVehiclesAndTrailers() {
     (async () => {
+      // Load and save the visible vehicles.
       const [vehicles, vehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
         'vehicles/visible',
       )
@@ -133,10 +134,13 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
   })
 
   const handleCreateVehicle = async (vehicleName: string) => {
+    // Validate vehicle name
     if (vehicleName.length > 100) {
       alert('Fahrzeugname ist zu lang.')
       return
     }
+
+    // Create and save the new vehicle
     const [data, error]: BackendResponse<Vehicle> = await BackendService.create('vehicles', {
       name: vehicleName,
       isVisible: true,
@@ -145,15 +149,20 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       throw error
     }
     VehicleStore.save(parseVehicle(data))
+
+    // Update the vehicle select value
     form.vehicleId.setValue(data.id)
   }
 
   const handleDeleteVehicle = async (id: Id<Vehicle>) => {
+    // Load the vehicle and update the visibility
     const [data, error]: BackendResponse<Vehicle> = await BackendService.find('vehicles', id)
     if (error !== null) {
       throw error
     }
     data.isVisible = false
+
+    // Update and save the vehicle
     const [updatedVehicle, updatedVehicleError]: BackendResponse<Vehicle> = await BackendService.update('vehicles', id, data)
     if (updatedVehicleError !== null) {
       throw updatedVehicleError
@@ -178,7 +187,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     }
     TrailerStore.save(parseTrailer(data))
 
-    // update the trailer select value
+    // Update the trailer select value
     form.trailerId.setValue(data.id)
   }
 
@@ -198,7 +207,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
     TrailerStore.save(parseTrailer(updatedTrailer))
   }
 
-
+  // Filter the visible vehicles and map their ids
   const vehicles = useVehicles((records) => records.filter((e) => e.isVisible))
   const vehicleIds = useMemo(() => {
     return vehicles.map(({ id }) => id)
@@ -238,6 +247,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
             <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
           )}</UiForm.Field>
 
+          {/* Vehicle select input with creation and deletion functionality */}
           <UiForm.Field field={form.vehicleId} deps={[vehicles]}>{(props) => (
             <UiSelectInput
               {...props}
@@ -318,10 +328,16 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
-const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
+/**
+ * Maps the id of a vehicle to its name.
+ *
+ * @param id The id of the vehicle.
+ * @return The vehicle's name.
+ */
+const mapVehicleIdToName = (id: Id<Vehicle>): string => {
   const vehicle = VehicleStore.find(id)
   return vehicle === null
-    ? ''
+    ? '-'
     : vehicle.name
 }
 
@@ -334,7 +350,7 @@ const mapVehicleIdToName = (id: Id<Vehicle>): string | null => {
 const mapTrailerIdToName = (id: Id<Trailer>): string | null => {
   const trailer = TrailerStore.find(id)
   return trailer === null
-    ? ''
+    ? '-'
     : trailer.name
 }
 
