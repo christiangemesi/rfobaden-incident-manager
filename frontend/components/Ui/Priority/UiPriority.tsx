@@ -6,10 +6,21 @@ import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
+
+  /**
+   * The {@link Priority} to display.
+   */
   priority: Priority
+
+  /**
+   * Makes the shown icon smaller.
+   */
   isSmall?: boolean
 }
 
+/**
+ * `UiPriority` displays a {@link Priority} value as an icon.
+ */
 const UiPriority: React.VFC<Props> = ({ priority, isSmall = false, style, className }) => {
   const [PriorityIcon, priorityColor] = useMemo(() => {
     switch (priority) {

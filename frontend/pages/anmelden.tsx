@@ -1,4 +1,3 @@
-import UiContainer from '@/components/Ui/Container/UiContainer'
 import SessionForm from '@/components/Session/Form/SessionForm'
 import React from 'react'
 import { GetServerSideProps } from 'next'
@@ -16,11 +15,13 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
   return (
     <Page noHeader noFooter>
       <CenterContainer>
-        <LogoContainer>
-          <Image src={logo} alt="RFO Baden" width="300" height="42" />
-        </LogoContainer>
-        <SessionForm />
-        <BackgroundContainer image={images[imageIndex]} />
+        <Center>
+          <LogoContainer>
+            <Image src={logo} alt="RFO Baden" width="300" height="42" />
+          </LogoContainer>
+          <SessionForm />
+          <BackgroundContainer image={images[imageIndex]} />
+        </Center>
       </CenterContainer>
     </Page>
   )
@@ -45,10 +46,6 @@ const images = [
   '/assets/background1.jpg',
   '/assets/background2.jpg',
   '/assets/background3.jpg',
-  // '/assets/bg1.jpeg',
-  // '/assets/bg2.jpeg',
-  // '/assets/bg3.jpeg',
-  // '/assets/bg4.jpeg',
 ]
 
 const LogoContainer = styled.div`
@@ -62,15 +59,22 @@ const LogoContainer = styled.div`
   padding: 3rem;
   box-shadow: 0 0 4px 1px ${({ theme }) => theme.colors.tertiary.contrast}
 `
-const CenterContainer = styled(UiContainer)`
+
+const CenterContainer = styled.div`
   height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding-bottom: 10%;
+  overflow-x: hidden;
 `
+
+const Center = styled.div`
+  margin: auto 0;
+  padding-bottom: 2rem;
+  width: 100%;
+`
+
 const BackgroundContainer = styled.div<{ image: string }>`
   position: fixed;
   left: 0;

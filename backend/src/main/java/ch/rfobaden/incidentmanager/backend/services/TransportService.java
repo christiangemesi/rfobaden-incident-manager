@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.services;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
@@ -23,6 +25,12 @@ public class TransportService
         notificationService.notifyAssigneeIfChanged(oldRecord, record);
     }
 
+    /**
+     * Loads all assigned {@link Transport transports} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned transports.
+     */
     public List<Transport> listWhereAssigneeId(Long id) {
         return repository.findAllByAssigneeId(id);
     }

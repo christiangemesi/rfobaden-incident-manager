@@ -24,6 +24,7 @@ interface Props<T extends Trackable> {
    * Map an entity to its frontend path.
    */
   href: (record: T) => string
+  isDone?: (record: T) => boolean
 
   /**
    * Additional item content.
@@ -38,6 +39,7 @@ const AssignmentListItem = <T extends Trackable>({
   title,
   records,
   href,
+  isDone = () => false,
   children,
 }: Props<T>): JSX.Element => {
   if (records.length === 0) {
@@ -55,7 +57,7 @@ const AssignmentListItem = <T extends Trackable>({
           >
             <Item
               isActive={false}
-              isClosed={e.isClosed}
+              isClosed={e.isClosed || isDone(e)}
               title={e.title}
               priority={e.priority}
               user={IncidentStore.find(e.incidentId)?.title ?? ''}
