@@ -16,7 +16,6 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
  * `SessionForm` is a component that displays a login form.
  */
 const SessionForm: React.VFC = () => {
-  // The currently filled values.
   const form = useForm<LoginData>(() => ({
     email: '',
     password: '',
