@@ -24,6 +24,10 @@ interface Props<T extends Trackable> {
    * Map an entity to its frontend path.
    */
   href: (record: T) => string
+
+  /**
+   * Map an entity to its done value.
+   */
   isDone?: (record: T) => boolean
 
   /**
