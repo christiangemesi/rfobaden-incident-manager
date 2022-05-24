@@ -43,6 +43,7 @@ const TransportViewHeader: React.VFC<Props> = ({
       }
       VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
 
+      // Load and save all trailers
       const [visibleTrailers, visibleTrailersError]: BackendResponse<Trailer[]> = await BackendService.list(
         'trailer',
       )

@@ -38,7 +38,7 @@ class IncidentControllerTest extends ModelControllerTest.Basic<Incident, Inciden
         var record = generator.generate();
         var closeReason = closeReasonGenerator.generate();
 
-        var closeData = new IncidentController.CloseMessageData();
+        var closeData = new IncidentController.CloseData();
         closeData.setMessage(closeReason.getMessage());
 
         var updatedRecord = generator.copy(record);
@@ -72,7 +72,7 @@ class IncidentControllerTest extends ModelControllerTest.Basic<Incident, Inciden
         var record = generator.generate();
         var closeReason = closeReasonGenerator.generate();
 
-        var closeData = new IncidentController.CloseMessageData();
+        var closeData = new IncidentController.CloseData();
         closeData.setMessage(closeReason.getMessage());
         record.setCloseReason(closeReason);
         record.setClosed(true);

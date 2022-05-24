@@ -7,10 +7,20 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import Document, { getImageUrl } from '@/models/Document'
 
 interface Props {
+  /**
+   * The {@link Document image} to be displayed.
+   */
   image: Document
+
+  /**
+   * Event caused by deleting a {@link Document image}.
+   */
   onDelete: (image: Document) => void
 }
 
+/**
+ * `DocumentImageItem` is a component to display {@link Document image} values in a list.
+ */
 const DocumentImageItem: React.VFC<Props> = ({
   image,
   onDelete,

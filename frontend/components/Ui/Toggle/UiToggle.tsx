@@ -5,9 +5,15 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { noop } from '@/utils/control-flow'
 
 interface Props extends UiInputProps<boolean | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string,
 }
 
+/**
+ * `UiToggle` is an input component for boolean values.
+ */
 const UiToggle: React.VFC<Props> = ({
   value,
   onChange: handleChange,

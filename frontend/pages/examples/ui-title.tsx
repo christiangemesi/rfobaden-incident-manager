@@ -1,9 +1,13 @@
 import React from 'react'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
+/**
+ * `UiTitleExample` is an example page for the {@link UiTitle} component.
+ */
 const UiTitleExample: React.VFC = () => {
   return (
     <div>
+      {/* Default level titles */}
       <UiTitle level={1}>
         H1
       </UiTitle>
@@ -22,6 +26,8 @@ const UiTitleExample: React.VFC = () => {
       <UiTitle level={6}>
         H6
       </UiTitle>
+
+      {/* Centered title levels */}
       <UiTitle level={1} isCentered>
         Centered H1
       </UiTitle>
@@ -40,7 +46,6 @@ const UiTitleExample: React.VFC = () => {
       <UiTitle level={6} isCentered>
         Centered H6
       </UiTitle>
-
     </div>
   )
 }
