@@ -256,8 +256,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               optionName={mapVehicleIdToName}
               menuPlacement="auto"
               placeholder="Fahrzeug"
-              onCreate={handleCreateVehicle}
               isSearchable
+              onCreate={handleCreateVehicle}
               onDelete={handleDeleteVehicle}
             />
           )}</UiForm.Field>
@@ -271,8 +271,8 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               optionName={mapTrailerIdToName}
               menuPlacement="auto"
               placeholder="Anhänger"
-              onCreate={handleCreateTrailer}
               isSearchable
+              onCreate={handleCreateTrailer}
               onDelete={handleDeleteTrailer}
             />
           )}</UiForm.Field>

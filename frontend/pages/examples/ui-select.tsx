@@ -20,7 +20,8 @@ const UiSelectInputExample: React.VFC = () => {
   const [currentValue2, setCurrentValue2] = useState<string | null>(null)
   const [currentValue3, setCurrentValue3] = useState<string | null>(null)
   const [currentValue4, setCurrentValue4] = useState<string | null>(null)
-  const [currentValue5, setCurrentValue5] = useState<string | null>(null)
+  const [currentValue5] = useState<string | null>(null)
+  const [currentValue6, setCurrentValue6] = useState<string | null>(null)
 
   return (
     <UiContainer>
@@ -56,15 +57,22 @@ const UiSelectInputExample: React.VFC = () => {
           }} errors={['Fail not selected']} menuPlacement="top" placeholder="error" />
         </UiGrid.Col>
 
+        {/* Select input without options */}
+        <UiGrid.Col>
+          <UiSelectInput label="empty options" options={[]} value={currentValue5} onChange={() => {
+            return
+          }} placeholder="Empty" />
+        </UiGrid.Col>
+
         {/* Creatable select input with search functionality */}
         <UiGrid.Col>
           <UiSelectInput isSearchable onCreate={
             (string) => {
-              setCurrentValue5(string)
+              setCurrentValue6(string)
               setOptions([...options, string])
             }
-          } label="creatable" options={options} value={currentValue5} onChange={(newValue) => {
-            setCurrentValue5(newValue)
+          } label="creatable" options={options} value={currentValue6} onChange={(newValue) => {
+            setCurrentValue6(newValue)
           }} menuPlacement="bottom" placeholder="creatable" />
         </UiGrid.Col>
       </UiGrid>

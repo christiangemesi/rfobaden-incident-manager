@@ -175,6 +175,8 @@ const UiSelectInput = <T, >({
     return <React.Fragment />
   }
 
+  const noOptionMessage = placeholder?.length > 0 ? placeholder : 'Eintrag'
+
   return (
     <Label>
       {label !== null && (
@@ -195,6 +197,9 @@ const UiSelectInput = <T, >({
           styles={customStyles}
           menuPlacement={menuPlacement}
           maxMenuHeight={200}
+          noOptionsMessage={() => `Kein(e) ${noOptionMessage} vorhanden`}
+          // eslint-disable-next-line react/no-unescaped-entities
+          formatCreateLabel={(inputValue) => <span>"{inputValue}" hinzufügen</span>}
           components={{
             // Customize option item
             Option: (props) => (
@@ -211,8 +216,6 @@ const UiSelectInput = <T, >({
               </components.Option>
             ),
           }}
-          // eslint-disable-next-line react/no-unescaped-entities
-          formatCreateLabel={(inputValue) => <span>"{inputValue}" hinzufügen</span>}
         />
       ) : (
         <Select
@@ -226,6 +229,7 @@ const UiSelectInput = <T, >({
           styles={customStyles}
           menuPlacement={menuPlacement}
           maxMenuHeight={200}
+          noOptionsMessage={() => `Keine ${noOptionMessage} vorhanden`}
         />
       )
       }
