@@ -11,7 +11,7 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
-    hover: Color
+    //hover: Color
   }
   fonts: {
     heading: string
@@ -58,6 +58,7 @@ export type ColorName = keyof Theme['colors']
 export interface Color {
   value: string
   contrast: string
+  hover: string
 }
 
 export const contrastDark = '#051A27'
@@ -68,43 +69,48 @@ export const defaultTheme: Theme = {
     primary: {
       value: '#1980C3',
       contrast: contrastLight,
+      hover: '#0B72B5',
     },
     secondary: {
       // value: '#E8F2F9',
       value: '#DBEBF7',
       contrast: contrastDark,
+      hover: '#D1E0EB',
     },
     tertiary: {
       value: '#BDD7EA',
       contrast: contrastDark,
+      hover: '#1980C3',
     },
     light: {
       value: contrastLight,
       contrast: contrastDark,
+      hover: '#1980C3',
     },
     success: {
       value: '#05A74E',
       contrast: contrastLight,
+      hover: '#1980C3',
     },
     error: {
       value: '#FF4D4F',
       contrast: contrastLight,
+      hover: '#1980C3',
     },
     warning: {
       value: '#FAAD14',
       contrast: contrastDark,
+      hover: '#1980C3',
     },
     info: {
       value: '#7465C6',
       contrast: contrastLight,
+      hover: '#1980C3',
     },
     grey: {
       value: '#b0b0b0',
       contrast: contrastDark,
-    },
-    hover: {
-      value: '#D1E0EB',
-      contrast: contrastDark,
+      hover: '#1980C3',
     },
   },
   fonts: {
