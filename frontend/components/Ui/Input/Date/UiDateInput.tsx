@@ -109,10 +109,14 @@ const PickerButton = styled.button.attrs(() => ({
   align-items: center;
 
   color: ${({ theme }) => theme.colors.primary.contrast};
-  cursor: pointer;
 
   transition: 250ms ease;
   transition-property: border-color;
+  
+  :hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.primary.hover};
+  }
 `
 
 const StyledLabel = styled.label`
