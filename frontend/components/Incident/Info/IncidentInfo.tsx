@@ -112,7 +112,7 @@ const BackButton = styled(UiLink)`
 
   &:hover {
     cursor: pointer;
-    color: black;
+    color: ${({ theme }) => theme.colors.secondary.contrast};
   }
 `
 
