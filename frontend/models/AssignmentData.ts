@@ -43,7 +43,7 @@ type Prioritized<T> = {
 }
 
 /**
- * Group all entities by their priorities and filter them by the assigned user.
+ * Group all assigned entities by their priority.
  *
  * @param currentUser The logged-in user.
  * @param isOpen A function checking the close state of the entity.
