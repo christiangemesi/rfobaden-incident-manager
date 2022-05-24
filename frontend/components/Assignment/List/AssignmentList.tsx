@@ -37,7 +37,7 @@ interface Props {
 }
 
 /**
- * `AssignmentList` is a component that lists {@link AssignmentListItem} for each {@link Trackable entity}.
+ * `AssignmentList` is a component that displays a list of assigned {@link Trackable entities} using {@link AssignmentListItem}.
  */
 const AssignmentList: React.VFC<Props> = ({
   title = '',
