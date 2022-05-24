@@ -91,9 +91,6 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
 }
 export default MeineAufgabenPage
 
-/**
- * Load assignments and incidents from backend.
- */
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
 }) => {
