@@ -39,6 +39,7 @@ const AssignmentList: React.VFC<Props> = ({
           title="Meldungen"
           records={reports}
           href={(report) => '/ereignisse/' + report.incidentId + '/meldungen/' + report.id}
+          isDone={(report) => report.isDone}
         >
           {(report) => (
             <Fragment key={report.id}>
@@ -58,6 +59,7 @@ const AssignmentList: React.VFC<Props> = ({
           title="Aufträge"
           records={tasks}
           href={(task) => '/ereignisse/' + task.incidentId + '/meldungen/' + task.reportId + '/auftraege/' + task.id}
+          isDone={(task) => task.isDone}
         >
           {(task) => (
             <Fragment key={task.id}>
