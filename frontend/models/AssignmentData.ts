@@ -34,7 +34,7 @@ export default interface AssignmentData {
 }
 
 /**
- * Priorities of assignments.
+ * Groups values by priority and close status.
  */
 type Prioritized<T> = {
   [K in Priority]: T[]
