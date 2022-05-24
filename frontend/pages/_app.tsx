@@ -1,5 +1,5 @@
 import NextApp, { AppProps } from 'next/app'
-import React, { Fragment, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
 import { defaultTheme, Theme } from '@/theme'
@@ -45,7 +45,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   useModalReset(router)
 
   return (
-    <Fragment>
+    <React.Fragment>
       <Head>
         <title key="title">RFOBaden IncidentManager</title>
         <meta charSet="utf-8" />
@@ -63,7 +63,7 @@ const App: React.FC<Props> = ({ Component, pageProps, user }) => {
           <BreakpointOverlay />
         )}
       </ThemeProvider>
-    </Fragment>
+    </React.Fragment>
   )
 }
 export default App

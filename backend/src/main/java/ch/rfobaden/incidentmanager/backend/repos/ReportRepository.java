@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,6 +51,12 @@ public interface ReportRepository
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
 
+    /**
+     * Loads all assigned {@link Report reports} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned reports.
+     */
     @Query(
         "SELECT report"
             + " FROM "

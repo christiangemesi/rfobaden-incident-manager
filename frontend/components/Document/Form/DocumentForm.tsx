@@ -14,13 +14,35 @@ import BackendService from '@/services/BackendService'
 import FileUpload from '@/models/FileUpload'
 
 interface Props {
+  /**
+   * The {@link Id} of the {@link Model} to which the document belong.
+   */
   modelId: Id<Incident | Report | Task>
+
+  /**
+   * The name of the {@link Model} to which the document belong.
+   */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+
+  /**
+   * The type of the {@link Document}, determines how it is stored and displayed.
+   */
   type: 'image' | 'document'
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
+
+  /**
+   * Event caused by saving the {@link Document}.
+   */
   onSave: (document: Document) => void
 }
 
+/**
+ * `DocumentForm` allows the creation of new {@link Document documents and images}.
+ */
 const DocumentForm: React.VFC<Props> = ({
   modelId,
   modelName,
