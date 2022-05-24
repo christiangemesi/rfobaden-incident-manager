@@ -38,7 +38,6 @@ const SessionForm: React.VFC = () => {
     const [data, error] = await BackendService.create<LoginData, SessionResponse>('session', formData)
 
     if (error !== null) {
-      // Create validation errors
       if (error.status === 401) {
         setFormField(form.email, {
           errors: [''],
