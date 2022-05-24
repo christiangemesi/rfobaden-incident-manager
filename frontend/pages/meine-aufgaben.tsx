@@ -20,18 +20,41 @@ import { useEffectOnce } from 'react-use'
 import { useCurrentUser } from '@/stores/SessionStore'
 import Page from '@/components/Page/Page'
 
-
 interface Props {
   data: {
+    /**
+     * List of {@link Incident incidents} with assigned entities.
+     */
     incidents: Incident[]
+
+    /**
+     * List of assigned {@link Transport transports}.
+     */
     transports: Transport[]
+
+    /**
+     * List of assigned {@link Report reports}.
+     */
     reports: Report[]
+
+    /**
+     * List of assigned {@link Task tasks}.
+     */
     tasks: Task[]
+
+    /**
+     * List of assigned {@link Subtask subtasks}.
+     */
     subtasks: Subtask[]
   }
 }
 
+/**
+ * `MeineAufgabenPage` is a page that shows all entities assigned to the current {@link User}.
+ */
 const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
+
+  // Load assignment data to stores.
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
     TransportStore.saveAll(data.transports.map(parseTransport))
@@ -42,6 +65,7 @@ const MeineAufgabenPage: React.VFC<Props> = ({ data }) => {
 
   const currentUser = useCurrentUser()
 
+  // Load grouped assignment data.
   const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
   const reports = useReports(groupAssigned(currentUser, isOpenReport))
   const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
