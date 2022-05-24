@@ -16,7 +16,7 @@ interface Props<T extends Trackable> {
   trackable: T
 
   /**
-   * Additional trackable content.
+   * Additional content.
    */
   children: ReactNode
 }
