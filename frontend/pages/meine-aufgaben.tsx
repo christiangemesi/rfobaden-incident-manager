@@ -21,7 +21,6 @@ import { useCurrentUser } from '@/stores/SessionStore'
 import Page from '@/components/Page/Page'
 
 interface Props {
-  // Server side data assigned to currently logged-in user
   data: {
     /**
      * List of {@link Incident incidents} with assigned entities.
