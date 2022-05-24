@@ -54,7 +54,7 @@ const TransportViewHeader: React.VFC<Props> = ({
     })()
   })
 
-  // prepare names of vehicle and trailer
+  // Prepare names of vehicle and trailer
   const vehicle = useVehicle(transport.vehicleId)?.name ?? '-'
   const trailer = useTrailer(transport.trailerId)?.name ?? '-'
 
