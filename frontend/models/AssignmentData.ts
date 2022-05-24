@@ -46,7 +46,7 @@ type Prioritized<T> = {
  * Group all assigned entities by their priority.
  *
  * @param currentUser The logged-in user.
- * @param isOpen A function checking the close state of the entity.
+ * @param isOpen A function checking the close state of an entity.
  */
 export const groupAssigned = <T extends Trackable>(currentUser: User, isOpen: (record: T) => boolean) => (records: readonly T[]): Prioritized<T> => {
   const result: Prioritized<T> = {
