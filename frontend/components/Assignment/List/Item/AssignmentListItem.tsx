@@ -21,7 +21,7 @@ interface Props<T extends Trackable> {
   records: T[]
 
   /**
-   * A function representing the link.
+   * Map an entity to its frontend path.
    */
   href: (record: T) => string
 
