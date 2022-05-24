@@ -80,17 +80,17 @@ export const defaultTheme: Theme = {
     tertiary: {
       value: '#BDD7EA',
       contrast: contrastDark,
-      hover: '#1980C3',
+      hover: '#FF1A2A',
     },
     light: {
       value: contrastLight,
       contrast: contrastDark,
-      hover: '#1980C3',
+      hover: '#FF1A2A',
     },
     success: {
       value: '#05A74E',
       contrast: contrastLight,
-      hover: '#1980C3',
+      hover: '#FF1A2A',
     },
     error: {
       value: '#FF4D4F',
@@ -110,7 +110,7 @@ export const defaultTheme: Theme = {
     grey: {
       value: '#b0b0b0',
       contrast: contrastDark,
-      hover: '#1980C3',
+      hover: '#FF1A2A',
     },
   },
   fonts: {
