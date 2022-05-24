@@ -11,7 +11,7 @@ interface Props<T extends Trackable> {
   isSmall: boolean
 
   /**
-   * The {@link Trackable entity} of the date.
+   * The {@link Trackable trackable entity}.
    */
   trackable: T
 
