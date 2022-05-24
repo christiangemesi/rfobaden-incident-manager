@@ -1,10 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
-import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAdmin;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.services.IncidentService;
