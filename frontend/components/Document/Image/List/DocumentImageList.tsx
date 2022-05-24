@@ -15,13 +15,36 @@ import DocumentForm from '@/components/Document/Form/DocumentForm'
 import Document from '@/models/Document'
 
 interface Props {
+  /**
+   * The {@link Document images} to be displayed.
+   */
   images: Document[]
+
+  /**
+   * Event caused by deleting an {@link Document image}.
+   */
   storeImages: (images: Document[]) => void
+
+  /**
+   * The {@link Id} of the {@link Model} to which the images belong.
+   */
   modelId: Id<Incident | Report | Task>
+
+  /**
+   * The name of the {@link Model} to which the images belong.
+   */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+
+  /**
+   * Event caused by adding a new {@link Document}.
+   */
   onAddImage: (image: Document) => void
 }
 
+/**
+ * `DocumentImageList` is a component to display {@link DocumentListItem DocumentImageItems}
+ * in a list.
+ */
 const DocumentImageList: React.VFC<Props> = ({
   images,
   storeImages,

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { parseUser } from '@/models/User'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import BackendService from '@/services/BackendService'
@@ -12,11 +12,15 @@ import { SessionResponse } from '@/models/Session'
 import { useValidate } from '@/components/Ui/Form/validate'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
+/**
+ * `SessionForm` is a component that displays a login form.
+ */
 const SessionForm: React.VFC = () => {
   const form = useForm<LoginData>(() => ({
     email: '',
     password: '',
   }))
+
   useValidate(form, () => ({
     email: [],
     password: [],
@@ -24,7 +28,7 @@ const SessionForm: React.VFC = () => {
 
   const router = useRouter()
   const { currentUser } = useSession()
-  useEffect(() => {
+  useEffect(function redirectAfterLogin() {
     if (currentUser !== null) {
       router.push('/')
     }
@@ -32,6 +36,7 @@ const SessionForm: React.VFC = () => {
 
   useSubmit(form, async (formData: LoginData) => {
     const [data, error] = await BackendService.create<LoginData, SessionResponse>('session', formData)
+
     if (error !== null) {
       if (error.status === 401) {
         setFormField(form.email, {
@@ -45,6 +50,7 @@ const SessionForm: React.VFC = () => {
       }
       throw error
     }
+
     if (data.user == null) {
       throw new Error('session was successfully created, but we did not receive user')
     }
@@ -52,12 +58,14 @@ const SessionForm: React.VFC = () => {
   })
 
   return (
-    <Fragment>
+    <PaddingContainer>
       <StyledTitle level={1} isCentered>
         Willkommen
       </StyledTitle>
       <UiGrid align="center" justify="center">
         <UiGrid.Col size={{ md: 8, lg: 5, xl: 3, xxl: 2 }}>
+
+          {/* Login form */}
           <UiForm form={form}>
             <FieldContainer>
               <UiForm.Field field={form.email}>{(props) => (
@@ -71,11 +79,14 @@ const SessionForm: React.VFC = () => {
           </UiForm>
         </UiGrid.Col>
       </UiGrid>
-    </Fragment>
+    </PaddingContainer>
   )
 }
 export default SessionForm
 
+/**
+ * Data used to log in.
+ */
 interface LoginData {
   email: string
   password: string
@@ -84,9 +95,15 @@ interface LoginData {
 const StyledTitle = styled(UiTitle)`
   color: ${({ theme }) => theme.colors.light.value};
   margin-bottom: 3rem;
+  min-height: 1em;
 `
+
 const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`
+
+const PaddingContainer = styled.div`
+  padding: 0 2rem;
 `

@@ -31,9 +31,10 @@ const TransportViewHeader: React.VFC<Props> = ({
   hasPriority = false,
   onClose: handleClose,
 }) => {
-  useEffectOnce(() => {
-    (async () => {
 
+  useEffectOnce(function loadVehiclesAndTrailers() {
+    (async () => {
+      // Load and save all vehicles.
       const [visibleVehicles, visibleVehiclesError]: BackendResponse<Vehicle[]> = await BackendService.list(
         'vehicles',
       )
@@ -42,6 +43,7 @@ const TransportViewHeader: React.VFC<Props> = ({
       }
       VehicleStore.saveAll(visibleVehicles.map(parseVehicle))
 
+      // Load and save all trailers
       const [visibleTrailers, visibleTrailersError]: BackendResponse<Trailer[]> = await BackendService.list(
         'trailer',
       )
@@ -49,9 +51,10 @@ const TransportViewHeader: React.VFC<Props> = ({
         throw visibleTrailersError
       }
       TrailerStore.saveAll(visibleTrailers.map(parseTrailer))
-
     })()
   })
+
+  // Prepare names of vehicle and trailer
   const vehicle = useVehicle(transport.vehicleId)?.name ?? '-'
   const trailer = useTrailer(transport.trailerId)?.name ?? '-'
 

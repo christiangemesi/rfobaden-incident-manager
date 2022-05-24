@@ -8,15 +8,34 @@ import { de } from 'date-fns/locale'
 import { Themed } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+// Default date picker styling
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * Class name of the date picker.
+   */
   className?: string
+
+  /**
+   * Placement of the date time picker popup.
+   */
   placement?: 'top' | 'bottom' | 'auto'
 }
 
+/**
+ * `UiDateInput` is an input component for a {@link Date} value.
+ */
 const UiDateInput: React.VFC<Props> = ({
   value,
   label = '',
@@ -31,23 +50,28 @@ const UiDateInput: React.VFC<Props> = ({
   const [isInvalid, setInvalid] = useState(false)
   const [isOpen, toggleOpen] = useToggle(false)
 
-  useUpdateEffect(() => {
+  useUpdateEffect(function handleDateTimeValidation() {
+    // Handle no date.
     if (date === null) {
       handleChange(null)
       setInvalid(false)
       return
     }
 
+    // Handle wrong formatted date.
     if (isNaN(date.getTime())) {
       handleChange(null)
       setInvalid(true)
       return
     }
+
+    // Handle correct date.
     handleChange(date)
     setInvalid(false)
   }, [date])
 
-  const close = useCallback( () => toggleOpen(false),[toggleOpen])
+  // Closes the picker.
+  const close = useCallback(() => toggleOpen(false), [toggleOpen])
 
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0 || isInvalid
@@ -61,6 +85,8 @@ const UiDateInput: React.VFC<Props> = ({
       )}
       <InputAndErrorBox hasError={hasError}>
         <DateTimePicker isOpened={isOpen}>
+
+          {/* Date time input field. */}
           <DatePicker
             locale={de}
             selected={date}
@@ -82,9 +108,12 @@ const UiDateInput: React.VFC<Props> = ({
             showWeekNumbers
             isClearable
           />
+
+          {/* Date time popup button. */}
           <PickerButton onClick={toggleOpen}>
             <UiIcon.Calendar />
           </PickerButton>
+
         </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
@@ -161,6 +190,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     position: relative;
   }
 
+  // The date input clear button.
   .react-datepicker__close-icon {
     display: flex;
     align-items: center;
@@ -174,6 +204,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // The datepicker popup container.
   .react-datepicker__portal,
   .react-datepicker-popper {
 
@@ -195,6 +226,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Month/year navigation elements.
       .react-datepicker__navigation {
         color: ${({ theme }) => theme.colors.light.contrast};
 
@@ -251,6 +283,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Elements containing month and day numbers.
       .react-datepicker__month-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
 
@@ -371,6 +404,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Day names in the title row of the picker's calendar.
         .react-datepicker__day-names {
           margin-top: 0.5rem;
           display: flex;
@@ -387,6 +421,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Day numbers and names.
         .react-datepicker__day-name,
         .react-datepicker__day {
           border-radius: 0.1rem;
@@ -402,6 +437,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Month selection view.
         .react-datepicker__month {
           margin: 0;
 
@@ -452,13 +488,11 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // The scrollable time column. 
       .react-datepicker__time-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
-
-
-        .react-datepicker-time__header {
-
-        }
+        
+        .react-datepicker-time__header {}
 
         .react-datepicker__time {
 
@@ -499,6 +533,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // Date input field.
   .react-datepicker__input-container > input {
     width: 100%;
     height: 100%;
@@ -511,17 +546,16 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     transition: 250ms ease;
     transition-property: border-color;
 
-    // for additional input
+    // Button at the end of the input.
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
   }
 
-  // for additional input
+  // Button at the end of the input.
   > div:first-child {
     width: calc(100% - 60px);
   }
 
-  // function of calender icon
   ${({ isOpened }) => !isOpened && css`
     .react-datepicker__portal,
     .react-datepicker-popper {

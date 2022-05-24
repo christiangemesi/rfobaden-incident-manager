@@ -16,15 +16,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * {code ModelRepositoryService} implements {@link ModelService}
+ * using an instance of {@link ModelRepository}.
+ *
+ * @param <TModel> The {@link Model} whose instances are being accessed.
+ * @param <TPath> The type of the path under which the model instances can be found.
+ * @param <TRepository> The {@link ModelRepository} giving access to {@link TModel} instances.
+ */
 public abstract class ModelRepositoryService<
     TModel extends Model & PathConvertible<TPath>,
     TPath,
     TRepository extends ModelRepository<TModel, TPath> & JpaRepository<TModel, Long>
     > implements ModelService<TModel, TPath> {
 
+    /**
+     * The repository giving access to {@link TModel}.
+     */
     @Autowired
     protected TRepository repository;
 
+    /**
+     * Utils to validate entities with before saving them.
+     */
     @Autowired
     private ValidationUtils validationUtils;
 
@@ -103,18 +117,68 @@ public abstract class ModelRepositoryService<
         validationUtils.validate(entity, this::validate);
     }
 
+    /**
+     * Allows for custom, in-place validations on an entity.
+     * <p>
+     *     This method is called right before saving.
+     *     It can be freely overwritten by subclasses.
+     * </p>
+     *
+     * @param entity The entity to validate.
+     * @param violations The violations to which validation errors can be written.
+     */
     protected void validate(TModel entity, Violations violations) {}
 
+    /**
+     * Called when a new entity has been created.
+     * <p>
+     *     This method can be freely overwritten by subclasses.
+     * </p>
+     *
+     * @param entity The newly created entity.
+     */
     protected void afterCreate(TModel entity) {}
 
+    /**
+     * Called when an existing entity has been updated.
+     * <p>
+     *     This method can be freely overwritten by subclasses.
+     * </p>
+     *
+     * @param oldEntity The entity as it was before it had been updated.
+     * @param newEntity The newly updated entity.
+     */
     protected void afterUpdate(TModel oldEntity, TModel newEntity) {}
 
+    /**
+     * Called before creating or updating an entity.
+     * <p>
+     *     This method can be freely overwritten by subclasses.
+     * </p>
+     *
+     * @param oldEntity The entity as it was before it had been updated.
+     *                  Is {@code null} if the entity has just been created.
+     * @param entity The newly saved entity.
+     */
     protected void afterSave(@Nullable TModel oldEntity, TModel entity) {}
 
+    /**
+     * Checks if an entity has been created yet.
+     *
+     * @param entity The entity to check.
+     * @return Whether the entity is persisted.
+     */
     protected static boolean isPersisted(Model entity) {
         return entity.getId() == null;
     }
 
+    /**
+     * Checks if two {@link LocalDateTime} represent the same point in time.
+     *
+     * @param a The first instance.
+     * @param b The second instance.
+     * @return Whether both parameters are the same.
+     */
     private boolean isSameDateTime(LocalDateTime a, LocalDateTime b) {
         return Objects.equals(
             a.minusNanos(a.getNano()),
@@ -122,6 +186,13 @@ public abstract class ModelRepositoryService<
         );
     }
 
+    /**
+     * {@code ModelRepositoryService.Basic} represents a {@link ModelRepositoryService}
+     * whose {@link TModel} is always found at an {@link EmptyPath}.
+     *
+     * @param <TModel> The {@link Model} whose instances are being accessed.
+     * @param <TRepository> The {@link ModelRepository} giving access to {@link TModel} instances.
+     */
     public abstract static class Basic<
         TModel extends Model & PathConvertible<EmptyPath>,
         TRepository extends ModelRepository<TModel, EmptyPath> & JpaRepository<TModel, Long>

@@ -3,11 +3,26 @@ import styled, { css, useTheme } from 'styled-components'
 
 
 interface Props {
+
+  /**
+   * The amount of finished items.
+   */
   done: number
+
+  /**
+   * The total amount of items.
+   */
   total: number
+
+  /**
+   * Signals a closed state by using different colors.
+   */
   isClosed?: boolean
 }
 
+/**
+ * `UiCircularProgress` displays progress on a total number of items.
+ */
 const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false }) => {
   return useMemo(() => {
     const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
