@@ -84,10 +84,8 @@ const EntityContainer = styled(UiList)`
 `
 
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive }) => isActive && css`
-    transition-duration: 300ms;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-  `}
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
+  }
 }
 `

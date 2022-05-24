@@ -77,10 +77,12 @@ const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
     opacity: 0.75;
 
     &:hover {
-      filter: grayscale(0.8) brightness(0.8);
-      opacity: 1;
+      //filter: grayscale(0.8) brightness(0.8);
+      //opacity: 1;
+      background-color: ${({ theme }) => theme.colors.secondary.hover}; //todo grau
     }
-  `}
+  `
+}
 `
 
 const LeftSide = styled.div`
