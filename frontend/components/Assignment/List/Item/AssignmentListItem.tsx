@@ -32,7 +32,7 @@ interface Props<T extends Trackable> {
 }
 
 /**
- * `AssignmentListItem` is a component that displays an assigned {@link Trackable entity} linked to its source.
+ * `AssignmentListItem` is a component that displays an assigned {@link Trackable trackable entity} linked to its source.
  */
 const AssignmentListItem = <T extends Trackable>({
   title,
