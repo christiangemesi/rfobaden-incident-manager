@@ -34,9 +34,6 @@ const AnmeldenPage: React.VFC<Props> = ({ imageIndex }) => {
 }
 export default AnmeldenPage
 
-/**
- * Load background image index.
- */
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { user } = getSessionFromRequest(req)
   if (user !== null) {
