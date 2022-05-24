@@ -13,7 +13,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 
 /**
- * `SessionForm` is a component that displays a login form and creates a session.
+ * `SessionForm` is a component that displays a login form.
  */
 const SessionForm: React.VFC = () => {
   // The currently filled values.
