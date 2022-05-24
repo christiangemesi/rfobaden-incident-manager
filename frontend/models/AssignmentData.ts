@@ -56,7 +56,6 @@ export const groupAssigned = <T extends Trackable>(currentUser: User, isOpen: (r
     closed: [],
   }
 
-  // Group the entity to the correct priority
   for (const record of records) {
     if (record.assigneeId !== currentUser.id) {
       continue
