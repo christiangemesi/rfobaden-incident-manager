@@ -22,7 +22,7 @@ interface Props<T extends Trackable> {
 }
 
 /**
- * `TrackableSuffix` is a component that displays the date of an {@link Trackable entity}.
+ * `TrackableSuffix` is a component that displays the date of a {@link Trackable trackable entity}.
  */
 const TrackableSuffix = <T extends Trackable>({
   isSmall,
