@@ -65,6 +65,7 @@ const Container = styled.div<{
   height: 100vh;
   padding-top: 3rem;
   padding-bottom: 5rem;
+  overflow-y: auto;
 
   box-shadow: 
           0 8px 17px 2px rgba(0, 0, 0, 0.14),

@@ -65,6 +65,10 @@ configurations {
 compileJava.inputs.files(processResources)
 compileTestJava.inputs.files(processTestResources)
 
+bootJar {
+    archiveFileName = "backend.${archiveExtension.get()}"
+}
+
 test {
     useJUnitPlatform()
     testLogging {

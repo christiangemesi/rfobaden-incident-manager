@@ -10,6 +10,6 @@ FROM openjdk:18-jdk-alpine3.15
 
 WORKDIR /app
 
-COPY --from=build /app/build/libs/*.jar /app/backend.jar
+COPY --from=build /app/build/libs/backend.jar /app/backend.jar
 
 CMD ["java", "-jar", "/app/backend.jar"]
