@@ -26,10 +26,9 @@ const SessionForm: React.VFC = () => {
     password: [],
   }))
 
-  // Redirect logged-in user
   const router = useRouter()
   const { currentUser } = useSession()
-  useEffect(() => {
+  useEffect(function redirectAfterLogin() {
     if (currentUser !== null) {
       router.push('/')
     }
