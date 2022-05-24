@@ -35,7 +35,6 @@ const SessionForm: React.VFC = () => {
   }, [router, currentUser])
 
   useSubmit(form, async (formData: LoginData) => {
-    // Check login data via backend in session
     const [data, error] = await BackendService.create<LoginData, SessionResponse>('session', formData)
 
     if (error !== null) {
