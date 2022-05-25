@@ -11,7 +11,7 @@ import Organization, { parseOrganization } from '@/models/Organization'
 interface Props {
 
   /**
-   * Decides wether an existent {@link Organization} is edited or a new {@link Organization} is created
+   * The {@link Organization} to edit, or `null`, if a new organization should be created.
    */
   organization?: Organization | null
 
