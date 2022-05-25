@@ -11,7 +11,6 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
-    //hover: Color
   }
   fonts: {
     heading: string
@@ -80,37 +79,37 @@ export const defaultTheme: Theme = {
     tertiary: {
       value: '#BDD7EA',
       contrast: contrastDark,
-      hover: '#FF1A2A',
+      hover: '#B4CFE3',
     },
     light: {
       value: contrastLight,
       contrast: contrastDark,
-      hover: '#FF1A2A',
+      hover: '#EDF1F4',
     },
     success: {
       value: '#05A74E',
       contrast: contrastLight,
-      hover: '#FF1A2A',
+      hover: '#0B9F4E',
     },
     error: {
       value: '#FF4D4F',
       contrast: contrastLight,
-      hover: '#1980C3',
+      hover: '#EE4F51',
     },
     warning: {
       value: '#FAAD14',
       contrast: contrastDark,
-      hover: '#1980C3',
+      hover: '#ECA519',
     },
     info: {
       value: '#7465C6',
       contrast: contrastLight,
-      hover: '#1980C3',
+      hover: '#6857C8',
     },
     grey: {
-      value: '#b0b0b0',
+      value: '#e8edf0',
       contrast: contrastDark,
-      hover: '#FF1A2A',
+      hover: '#edf3f7',
     },
   },
   fonts: {
