@@ -23,7 +23,7 @@ interface Props {
   transport: Transport
   hasPriority?: boolean
   onClose?: () => void
-  onToggle: (transport: Transport) => () => void
+  onToggle: (transport: Transport) => void
 }
 
 const TransportViewHeader: React.VFC<Props> = ({

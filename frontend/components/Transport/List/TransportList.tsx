@@ -12,7 +12,7 @@ interface Props extends StyledProps {
   transports: readonly Transport[]
   selected?: Transport | null,
   onSelect?: (report: Transport) => void
-  onToggle: (transport: Transport) => () => void
+  onToggle: (transport: Transport) => void
 }
 
 const TransportList: React.VFC<Props> = ({

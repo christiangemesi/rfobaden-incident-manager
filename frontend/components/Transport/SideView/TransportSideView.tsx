@@ -44,7 +44,7 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
       : query.transportId
   }, [router.query])
 
-  const useHandleToggle = (transport: Transport) => useCallback(async () => {
+  const handleToggle = useCallback(async (transport: Transport) => {
     const newTransport = { ...transport, isClosed: !transport.isClosed }
     const [data, error]: BackendResponse<Transport> = await BackendService.update(
       `incidents/${transport.incidentId}/transports`,
@@ -55,7 +55,7 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
       throw error
     }
     TransportStore.save(parseTransport(data))
-  }, [transport])
+  }, [])
 
   return (
     <UiSideList
@@ -70,11 +70,11 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
           transports={transports}
           selected={selected}
           onSelect={select}
-          onToggle={useHandleToggle}
+          onToggle={handleToggle}
         />
       )}
       renderView={({ selected, close }) => (
-        <TransportView incident={incident} transport={selected} onClose={close} onToggle={useHandleToggle} />
+        <TransportView incident={incident} transport={selected} onClose={close} onToggle={handleToggle} />
       )}
     />
   )

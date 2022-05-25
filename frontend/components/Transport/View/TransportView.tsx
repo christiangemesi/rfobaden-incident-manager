@@ -8,7 +8,7 @@ interface Props {
   incident: Incident
   transport: Transport
   onClose?: () => void
-  onToggle: (transport: Transport) => () => void
+  onToggle: (transport: Transport) => void
 }
 
 const TransportView: React.VFC<Props> = ({

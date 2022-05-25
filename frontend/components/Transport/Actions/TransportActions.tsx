@@ -16,7 +16,7 @@ interface Props {
   incident: Incident
   transport: Transport
   onDelete?: () => void
-  onToggle: (transport: Transport) => () => void
+  onToggle: (transport: Transport) => void
 }
 
 const ReportActions: React.VFC<Props> = ({
@@ -35,6 +35,10 @@ const ReportActions: React.VFC<Props> = ({
     }
   }, [transport, handleDeleteCb])
 
+  const toggleTransportClose = useCallback(() => {
+    handleToggle(transport)
+  }, [transport, handleToggle])
+
   return (
     <UiDropDown>
       <UiDropDown.Trigger>
@@ -51,8 +55,8 @@ const ReportActions: React.VFC<Props> = ({
 
         <TrackableCloseAction
           isClosed={transport.isClosed}
-          onClose={handleToggle(transport)}
-          onReopen={handleToggle(transport)}
+          onClose={toggleTransportClose}
+          onReopen={toggleTransportClose}
         />
 
         <UiPrinter renderContent={() => <TransportPrintView transport={transport} />}>{({ trigger }) => (
