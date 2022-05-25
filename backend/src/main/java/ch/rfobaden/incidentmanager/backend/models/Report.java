@@ -111,14 +111,16 @@ public class Report extends Model
     private String location;
 
     /**
-     * Whether the report is one of the currently most important reports of its {@link #incident Incident}.
+     * Whether the report is one of the currently most important reports
+     * of its {@link #incident Incident}.
      */
     @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
     /**
-     * Whether the report affects its location, making it important to other reports happening in that same place.
+     * Whether the report affects its location, making it important to
+     * other reports happening in the same place.
      */
     @NotNull
     @Column(nullable = false)
