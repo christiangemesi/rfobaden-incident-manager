@@ -10,7 +10,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 interface Props {
 
   /**
-   * The {@link User} to be displayed.
+   * The user whose password gets edited.
    */
   user: User
 
