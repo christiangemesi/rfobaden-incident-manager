@@ -47,7 +47,7 @@ const TransportViewHeader: React.VFC<Props> = ({
 
       // Load and save all trailers
       const [visibleTrailers, visibleTrailersError]: BackendResponse<Trailer[]> = await BackendService.list(
-        'trailer',
+        'trailers',
       )
       if (visibleTrailersError !== null) {
         throw visibleTrailersError
