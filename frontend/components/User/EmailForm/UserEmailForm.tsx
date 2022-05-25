@@ -23,7 +23,7 @@ interface Props {
 }
 
 /**
- * `UserEmailForm` displays a form to edit an Email of a {@link User}.
+ * `UserEmailForm` displays a form to edit the email of a {@link User}.
  */
 const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
