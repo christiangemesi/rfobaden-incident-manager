@@ -98,7 +98,7 @@ export default PeopleStore
 
 ### Model Store Hooks
 
-### Single Record Hook
+#### Single Record Hook
 
 The `usePerson` hook can be used to load a record by id:
 ```ts
@@ -111,7 +111,7 @@ It also accepts an instance of `People`, which is then parsed and saved into the
 const person: Person = usePerson(myUnparsedPerson)
 ```
 
-### Multi Record Hook
+#### Multi Record Hook
 
 The `usePeople` hook can be used to load all stored records:
 
