@@ -22,7 +22,7 @@ interface Props {
 }
 
 /**
- * `OrganizationForm` allows the creation of new {@link Organization organizations}.
+ * `OrganizationForm` displays a form to create and edit an {@link Organization}.
  */
 const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Organization>>(organization, () => ({
