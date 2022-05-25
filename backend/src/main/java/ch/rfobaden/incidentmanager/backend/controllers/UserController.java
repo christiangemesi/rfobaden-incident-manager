@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * {@code IncidentController} is a {@link ModelController} for {@link User users}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/users")
 public class UserController extends ModelController.Basic<User, UserService> {
@@ -51,6 +55,16 @@ public class UserController extends ModelController.Basic<User, UserService> {
         return super.update(path, id, user);
     }
 
+    /**
+     * Updates a user's password.
+     *
+     * @param response The http response object.
+     * @param id The id of the user whose password gets updated.
+     * @param data The new password data.
+     * @return The updated user.
+     *
+     * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching user exists.
+     */
     @PutMapping("/{id}/password")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@auth.isCurrentUser(#id)")
@@ -69,6 +83,15 @@ public class UserController extends ModelController.Basic<User, UserService> {
         return user;
     }
 
+    /**
+     *¨Sets a user's password to a new randomly generated value.
+     *
+     * @param response The http response object.
+     * @param id The id of the user whose password gets reset.
+     * @return The updated user.
+     *
+     * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching user exists.
+     */
     @PostMapping("/{id}/reset")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN') or @auth.isCurrentUser(#id)")
