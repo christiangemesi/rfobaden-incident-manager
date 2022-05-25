@@ -4,6 +4,9 @@ import UiButton, { Props as UiButtonProps } from '@/components/Ui/Button/UiButto
 
 export type Props = Exclude<UiButtonProps, 'color'>;
 
+/**
+ * `UiCreateButton` is an input component to create Entities.
+ */
 const UiCreateButton: React.VFC<Props> = ({ isFull= true, ...props }) => {
   return (
     <CreateButton {...props} color="secondary" isFull={isFull} />

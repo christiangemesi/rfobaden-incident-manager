@@ -4,6 +4,10 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiButton from '@/components/Ui/Button/UiButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+
+/**
+ * `UiButtonExample` is an example page for the {@link UiButton} component.
+ */
 const UiButtonExample: React.VFC = () => {
   return (
     <UiContainer>
