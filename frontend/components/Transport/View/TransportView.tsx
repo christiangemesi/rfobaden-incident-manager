@@ -8,13 +8,19 @@ interface Props {
   incident: Incident
   transport: Transport
   onClose?: () => void
+  onToggle: (transport: Transport) => () => void
 }
 
-const TransportView: React.VFC<Props> = ({ incident, transport, onClose: handleClose }) => {
+const TransportView: React.VFC<Props> = ({
+  incident,
+  transport,
+  onClose: handleClose,
+  onToggle: handleToggle,
+}) => {
   return (
     <UiLevel>
       <UiLevel.Header>
-        <TransportViewHeader incident={incident} transport={transport} onClose={handleClose} />
+        <TransportViewHeader incident={incident} transport={transport} onClose={handleClose} onToggle={handleToggle} />
       </UiLevel.Header>
     </UiLevel>
   )

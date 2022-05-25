@@ -12,11 +12,13 @@ interface Props extends StyledProps {
   transports: readonly Transport[]
   selected?: Transport | null,
   onSelect?: (report: Transport) => void
+  onToggle: (transport: Transport) => () => void
 }
 
 const TransportList: React.VFC<Props> = ({
   incident,
   transports,
+  onToggle: handleToggle,
   ...listProps
 }) => {
   return (
@@ -33,6 +35,7 @@ const TransportList: React.VFC<Props> = ({
           {...itemProps}
           record={record}
           isClosed={record.isClosed}
+          onToggle={handleToggle}
         />
       )}
     />
