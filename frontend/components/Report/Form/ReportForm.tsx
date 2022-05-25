@@ -23,7 +23,14 @@ import { EntryTypeSource } from '@/models/EntryType'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * The {@link Incident} the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to update, or `null`, if a new should be created.
+   */
   report?: Report | null
   onSave?: (report: Report) => void
   onClose?: () => void
