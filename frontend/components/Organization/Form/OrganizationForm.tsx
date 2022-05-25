@@ -9,10 +9,21 @@ import OrganizationStore from '@/stores/OrganizationStore'
 import Organization, { parseOrganization } from '@/models/Organization'
 
 interface Props {
+
+  /**
+   * Decides wether an existent {@link Organization} is edited or a new {@link Organization} is created
+   */
   organization?: Organization | null
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `OrganizationForm` allows the creation of new {@link Organization organizations}.
+ */
 const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Organization>>(organization, () => ({
     name: '',

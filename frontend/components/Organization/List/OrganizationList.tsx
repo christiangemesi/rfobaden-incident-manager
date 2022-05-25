@@ -16,10 +16,22 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+
+  /**
+   * The {@link Organization organizations} to be displayed.
+   */
   organizations: readonly Organization[]
+
+  /**
+   * Displays a Button to create new {@link Organization}.
+   */
   hasCreateButton?: boolean
 }
 
+/**
+ * `OrganizationList` is a component to display {@link OrganizationListItem organizationListItems}
+ * in a {@link UiList}.
+ */
 const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
