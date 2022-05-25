@@ -3,6 +3,9 @@ import UiAlert from '@/components/Ui/Alert/UiAlert'
 import UiAlertList from '@/components/Ui/Alert/List/UiAlertList'
 import Alert from '@/models/Alert'
 
+/**
+ * `UiAlertExample` is an example page for the {@link UiAlert} component.
+ */
 const UiAlertExample: React.VFC = () => {
   const [alerts, setAlerts] = useState<Alert[]>(
     [
