@@ -12,7 +12,7 @@ import { useValidate } from '@/components/Ui/Form/validate'
 interface Props {
 
   /**
-   * The Email of the {@link User} to edit.
+   * The user whose email gets edited.
    */
   user: User
 
