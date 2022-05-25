@@ -23,7 +23,7 @@ interface Props {
   users: readonly User[]
 
   /**
-   * Displays a Button to create new {@link User users}.
+   * Whether to show a button with which a {@link UserForm} can be opened.
    */
   hasCreateButton?: boolean
 }
