@@ -28,7 +28,7 @@ interface Props {
 }
 
 /**
- * `UserForm` displays a form to edit a {@link User}.
+ * `UserForm` displays a form to create or edit a {@link User}.
  */
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   const userEmails = useUsers((users) => (
