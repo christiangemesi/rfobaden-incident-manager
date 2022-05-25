@@ -10,7 +10,7 @@ public interface Closeable {
     /**
      * Whether the entity is open or closed.
      *
-     * @return {@code true} if the entity is open, {@code false} if it's closed.
+     * @return {@code true} if the entity is closed, {@code false} if it's opend.
      */
     @JsonProperty("isClosed")
     boolean isClosed();
