@@ -10,10 +10,21 @@ import SessionStore from '@/stores/SessionStore'
 import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
+
+  /**
+   * The Email of the {@link User} to edit.
+   */
   user: User
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `UserEmailForm` displays a form to edit an Email of a {@link User}.
+ */
 const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
     email: user.email,

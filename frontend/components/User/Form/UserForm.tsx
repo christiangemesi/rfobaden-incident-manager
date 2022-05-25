@@ -15,10 +15,21 @@ import Organization from '@/models/Organization'
 import AlertStore from '@/stores/AlertStore'
 
 interface Props {
+
+  /**
+   * The {@link User} to edit, or `null`, if a new user should be created.
+   */
   user?: User | null
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `UserForm` displays a form to edit a {@link User}.
+ */
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   const userEmails = useUsers((users) => (
     users.filter((it) => it.id !== user?.id).map(({ email }) => email.toLowerCase())

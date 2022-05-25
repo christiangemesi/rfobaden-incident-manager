@@ -8,10 +8,21 @@ import SessionStore from '@/stores/SessionStore'
 import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
+
+  /**
+   * The {@link User} to be displayed.
+   */
   user: User
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `UserPasswordForm` displays a form to edit a password of {@link User}.
+ */
 const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
     password: '',
