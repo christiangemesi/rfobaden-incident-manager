@@ -21,7 +21,7 @@ interface Props {
 }
 
 /**
- * `UserPasswordForm` displays a form to edit a password of {@link User}.
+ * `UserPasswordForm` displays a form to edit the password of a {@link User}.
  */
 const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
