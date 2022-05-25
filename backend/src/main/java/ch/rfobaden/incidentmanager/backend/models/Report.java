@@ -27,8 +27,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@code Report} represents any incoming report handled in an {@link Incident}.
- * It is further divided into {@link Task} entities.
+ * {@code Report} represents a report handled in an {@link Incident}.
+ * It can be further divided into {@link Task tasks}.
  */
 @Entity
 @Table(name = "report")
@@ -38,14 +38,14 @@ public class Report extends Model
     private static final long serialVersionUID = 1L;
 
     /**
-     * The {@link User assignee} responsible for the completion of the {@link Report}.
+     * The {@link User assignee} responsible for the completion of the report.
      */
     @ManyToOne
     @JoinColumn
     private User assignee;
 
     /**
-     * The {@link Incident} the entity belongs to.
+     * The {@link Incident} the report belongs to.
      */
     @NotNull
     @ManyToOne(optional = false)
@@ -53,7 +53,7 @@ public class Report extends Model
     private Incident incident;
 
     /**
-     * The title of the {@code Report}.
+     * The title of the report.
      */
     @Size(max = 100)
     @NotBlank
@@ -61,26 +61,26 @@ public class Report extends Model
     private String title;
 
     /**
-     * A textual description of what the {@code Report} is about.
+     * A textual description of what the report is about.
      */
     @Column(columnDefinition = "TEXT")
     private String description;
 
     /**
-     * The way a report was received.
+     * The way the report was received.
      */
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private EntryType entryType;
 
     /**
-     * Additional information about the {@code Report}.
+     * Additional information about the report.
      */
     @Column(columnDefinition = "TEXT")
     private String notes;
 
     /**
-     * Whether the {@code Report} is closed.
+     * Whether the report is closed.
      * A closed report counts as completed.
      */
     @NotNull
@@ -88,7 +88,7 @@ public class Report extends Model
     private boolean isClosed;
 
     /**
-     * The moment in time at which the {@code Report} will start.
+     * The moment in time at which the report will start.
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
      * <p>
@@ -98,34 +98,34 @@ public class Report extends Model
     private LocalDateTime startsAt;
 
     /**
-     * The moment in time at which the {@code Report} will end.
+     * The moment in time at which the report will end.
      * This represents the actual time at which the real-life event
      * managed in this entity will end.
      */
     private LocalDateTime endsAt;
 
     /**
-     * The place where the report handles.
+     * The name of the location at which the report takes place.
      */
     @Size(max = 100)
     private String location;
 
     /**
-     * Whether the {@code Report} has key functionality for the {@link Incident}.
+     * Whether the report is one of the currently most important reports of its {@link #incident Incident}.
      */
     @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
     /**
-     * Whether the {@code Report} is location relevant for the  {@link Incident}.
+     * Whether the report affects its location, making it important to other reports happening in that same place.
      */
     @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
     /**
-     * The importance of the {@code Report} for the {@link Incident}.
+     * The priority of the report.
      */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
@@ -133,19 +133,19 @@ public class Report extends Model
     private Priority priority;
 
     /**
-     * The {@link Task tasks} of the entity.
+     * The {@link Task tasks} of the report.
      */
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
     /**
-     * The images attached to the entity, stored as {@link Document} instances.
+     * The images attached to the report, stored as {@link Document} instances.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
     /**
-     * The {@link Document documents} attached to the entity.
+     * The {@link Document documents} attached to the report.
      * Does not include the entity's {@link #images image documents}.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -333,7 +333,7 @@ public class Report extends Model
     }
 
     /**
-     * Whether the {@code Report} is done.
+     * Whether the report is done.
      * A report is done when all its {@link #getTasks() tasks} are all closed or done.
      *
      * @return Whether the entity is done.
