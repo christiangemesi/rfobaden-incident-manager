@@ -59,8 +59,8 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
   max-height: 90vh;
   width: 100%;
 
-  background: ${({ theme }) => theme.colors.tertiary.value};
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  background: ${({ theme }) => theme.colors.light.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
   
   border-radius: 1rem;
   padding: 1rem;

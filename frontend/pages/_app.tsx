@@ -114,8 +114,8 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     body {
       width: 100%;
       height: 100%;
-      background: ${theme.colors.tertiary.value};
-      color: ${theme.colors.tertiary.contrast};
+      background: ${theme.colors.light.value};
+      color: ${theme.colors.light.contrast};
       overflow: auto;
     }
   `}

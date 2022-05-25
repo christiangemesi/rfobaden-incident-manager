@@ -25,5 +25,5 @@ const ListHeader = styled.div`
   border-radius: 0.5rem;
   background: transparent;
 
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  color: ${({ theme }) => theme.colors.light.contrast};
 `

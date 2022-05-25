@@ -5,11 +5,13 @@ export type Theme = {
     primary: Color
     secondary: Color
     tertiary: Color
+    light: Color
     success: Color
     error: Color
     warning: Color
     info: Color
     grey: Color
+    hover: Color
   }
   fonts: {
     heading: string
@@ -69,10 +71,14 @@ export const defaultTheme: Theme = {
     },
     secondary: {
       // value: '#E8F2F9',
-      value: '#D1E0EB',
+      value: '#DBEBF7',
       contrast: contrastDark,
     },
     tertiary: {
+      value: '#BDD7EA',
+      contrast: contrastDark,
+    },
+    light: {
       value: contrastLight,
       contrast: contrastDark,
     },
@@ -94,6 +100,10 @@ export const defaultTheme: Theme = {
     },
     grey: {
       value: '#b0b0b0',
+      contrast: contrastDark,
+    },
+    hover: {
+      value: '#D1E0EB',
       contrast: contrastDark,
     },
   },

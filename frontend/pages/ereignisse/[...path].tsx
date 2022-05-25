@@ -118,8 +118,8 @@ const StyledIncidentView = styled(IncidentView)`
 const ContentTabs = styled(UiTabs)`
   padding-right: 0;
   
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
+  background-color: ${({ theme }) => theme.colors.light.value};
 `
 
 const Divider = styled.div`
