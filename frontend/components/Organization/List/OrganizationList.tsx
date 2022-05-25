@@ -29,8 +29,7 @@ interface Props {
 }
 
 /**
- * `OrganizationList` is a component to display {@link OrganizationListItem organizationListItems}
- * in a {@link UiList}.
+ * `OrganizationList` is a component that displays a list of {@link Organization organizations}.
  */
 const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
