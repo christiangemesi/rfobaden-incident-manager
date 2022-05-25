@@ -1,8 +1,8 @@
 # Styled Components
 
-Styling is handled using [styled-components](https://styled-components.com/),
+Styling is handled using [styled-components](https://styled-components.com/).
 Reusable styled components are stored the same way as normal components, using their own file.
-Styled components exclusively used by a single component can be stored in the  same file as that component, with their definition at the end of the file:
+Styled components exclusively used by a single component can be stored in the same file as that component, with their definition at the end of the file:
 
 ```ts
 interface Props {
@@ -34,7 +34,7 @@ Components that cannot be described in a comprehensible or otherwise meaningful 
 - `StyledButton` is a locally used styled button.
 - `StyledSection` is a locally used styled section.
 
-> Be aware that this naming scheme can easily lead to confusion if not  applied carefully - prefer naming using the components purpose over  simple prefixing!
+> Be aware that this naming scheme can easily lead to confusion if not applied carefully - prefer naming using the components purpose over simple prefixing!
 
 ## (Re-)Styling Components
 

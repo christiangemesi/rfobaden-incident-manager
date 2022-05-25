@@ -11,7 +11,7 @@ class MyServiceOrHelper {
 export default new MyServiceOrHelper()
 ```
 
-The difference between services and helpers is their portability: Services are *project-specific*, while helpers are *generalized utilities*. This means that services may make use of all of the projects features (e.g. API, stores, components, other services, helpers). Helpers, on the other hand, are expected to use only the standard library (e.g.  strings, arrays, fetch) and/or specific external libraries, for which they provide their utilities.
+The difference between services and helpers is their portability: Services are *project-specific*, while helpers are *generalized utilities*. This means that services may make use of all of the project's features (e.g. API, stores, components, other services, helpers). Helpers, on the other hand, are expected to use only the standard library (e.g. strings, arrays, fetch) and/or specific external libraries, for which they provide their utilities.
 
 Examples for services:
 
