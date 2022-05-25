@@ -23,7 +23,7 @@ interface Props {
   organizations: readonly Organization[]
 
   /**
-   * Displays a Button to create new {@link Organization}.
+   * Displays a Button to create new {@link Organization organizations}.
    */
   hasCreateButton?: boolean
 }
