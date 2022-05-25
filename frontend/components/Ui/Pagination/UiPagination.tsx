@@ -96,7 +96,7 @@ const PaginationButton = styled(UiButton)<{ isActive?: boolean}>`
     color: ${theme.colors.secondary.contrast};
     
     :hover:not(&[disabled]) {
-      background: ${({ theme }) => theme.colors.secondary.hover}; //todo: active is hovering 
+      background: ${({ theme }) => theme.colors.secondary.hover}; //TODO active is hovering 
     }
   `}
   
