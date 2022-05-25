@@ -32,7 +32,7 @@ interface Props extends StyledProps {
 }
 
 /**
- * `OrganizationListItem` is a component to display {@link Organization} values in a list.
+ * `OrganizationListItem` is a component that displays one of multiple {@link Organization} in a list.
  */
 const OrganizationListItem: React.VFC<Props> = ({
   organization,
