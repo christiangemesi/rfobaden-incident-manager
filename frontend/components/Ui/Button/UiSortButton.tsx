@@ -13,7 +13,7 @@ interface Props extends ListHeaderProps {
 }
 
 /**
- * `UiSortButton` is an input component to sort fields.
+ * `UiSortButton` displays a button with which a list of entities can be sorted by a specific field.
  */
 const UiSortButton: React.VFC<Props> = ({
   children,
