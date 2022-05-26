@@ -14,24 +14,42 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * {@code CloseReason} represents a reason why an {@link Incident} is closed.
+ * It can be linked to older close reasons.
+ */
 @Entity
 @Table(name = "close_reason")
 public class CloseReason implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The close reasons id, unique to it's model.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
 
+    /**
+     * The reason why the incident is closed.
+     */
     @NotBlank
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    /**
+     * The moment in time at which the close reason was created.
+     * This value should not be changed after first saving the close reason.
+     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * Link to the previous close reason, {@code null} if it is
+     * the first close reason of the incident.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     private CloseReason previous;
 

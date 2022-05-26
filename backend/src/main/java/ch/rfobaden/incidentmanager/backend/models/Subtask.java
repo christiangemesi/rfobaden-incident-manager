@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,67 +23,90 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Subtask} represents a subtask handled in a {@link Task}.
+ * It is not further divided.
+ */
 @Entity
 @Table(name = "subtask")
 public class Subtask extends Model
     implements PathConvertible<SubtaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The {@link User assignee} responsible for the completion of the subtasks.
+     */
     @ManyToOne
     @JoinColumn
     private User assignee;
 
+    /**
+     * The {@link Task} the subtask belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
+    /**
+     * The title of the subtask.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String title;
 
+    /**
+     * A textual description of what the subtask is about.
+     */
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * The moment in time at which the transport will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     * <p>
+     * This is used to plan a transport in advance.
+     * </p>
+     */
     private LocalDateTime startsAt;
 
+    /**
+     * The moment in time at which the transport will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
     private LocalDateTime endsAt;
 
+    /**
+     * Whether the subtask is closed.
+     * A closed subtask counts as completed.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    /**
+     * The priority of the subtask.
+     */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
+    /**
+     * The images attached to the subtask, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the subtask.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
-
-    @Override
-    public List<Document> getImages() {
-        return images;
-    }
-
-    @Override
-    public void setImages(List<Document> images) {
-        this.images = images;
-    }
-
-    @Override
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    @Override
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-    }
 
     @JsonIgnore
     public User getAssignee() {
@@ -96,13 +118,23 @@ public class Subtask extends Model
         this.assignee = assignee;
     }
 
-    public Long getTaskId() {
+    /**
+     * Allows access to the {@link #getTask().getReport().getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
+    public Long getIncidentId() {
         if (task == null) {
             return null;
         }
-        return task.getId();
+        return task.getReport().getIncidentId();
     }
 
+    /**
+     * Allows access to the {@link #getTask().getReport() report}'s id.
+     *
+     * @return The report's id.
+     */
     public Long getReportId() {
         if (task == null) {
             return null;
@@ -110,11 +142,16 @@ public class Subtask extends Model
         return task.getReportId();
     }
 
-    public Long getIncidentId() {
+    /**
+     * Allows access to the {@link #getTask() task}'s id.
+     *
+     * @return The task's id.
+     */
+    public Long getTaskId() {
         if (task == null) {
             return null;
         }
-        return task.getReport().getIncidentId();
+        return task.getId();
     }
 
     @JsonIgnore
@@ -184,6 +221,26 @@ public class Subtask extends Model
     @Override
     public void setClosed(boolean closed) {
         isClosed = closed;
+    }
+
+    @Override
+    public List<Document> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setImages(List<Document> images) {
+        this.images = images;
+    }
+
+    @Override
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    @Override
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     @Override

@@ -15,11 +15,17 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Organization} represents an organization to which {@link User users} can belong.
+ */
 @Entity
 @Table(name = "organization")
 public final class Organization extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The {@link User users} which belong to the organization.
+     */
     @OneToMany(
         mappedBy = "organization",
         cascade = {
@@ -31,6 +37,9 @@ public final class Organization extends Model.Basic implements Serializable {
     )
     private List<User> users = new ArrayList<>();
 
+    /**
+     * The name of the organization.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
@@ -55,6 +64,11 @@ public final class Organization extends Model.Basic implements Serializable {
         this.users = users;
     }
 
+    /**
+     * Allows access to the {@link #getUsers() users}'s id.
+     *
+     * @return The users' ids.
+     */
     public List<Long> getUserIds() {
         List<Long> userIds = new ArrayList<>();
         for (User user : users) {
@@ -63,6 +77,11 @@ public final class Organization extends Model.Basic implements Serializable {
         return userIds;
     }
 
+    /**
+     * Sets the {@link #getUsers() users} to the users with the ids.
+     *
+     * @param ids The users' ids.
+     */
     public void setUserIds(List<Long> ids) {
         users = new ArrayList<>();
         for (Long id : ids) {
