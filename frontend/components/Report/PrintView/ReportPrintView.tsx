@@ -7,10 +7,20 @@ import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import TaskPrintView from '@/components/Task/PrintView/TaskPrintView'
 
 interface Props {
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Whether the nested {@link Task tasks} and {@link Subtask subtasks} should be included in the print out.
+   */
   isNested?: boolean
 }
 
+/**
+ * `ReportPrintView` is a component that displays a report for a print out.
+ */
 const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
   const tasks = useTasksOfReport(report.id)
 
