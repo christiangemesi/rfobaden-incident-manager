@@ -11,9 +11,15 @@ import DocumentImageDrawer from '@/components/Document/Image/Drawer/DocumentImag
 import DocumentDrawer from '@/components/Document/Drawer/DocumentDrawer'
 
 interface Props {
+  /**
+   * The report to display.
+   */
   report: Report
 }
 
+/**
+ * `ReportInfo` displays the important information about a report.
+ */
 const ReportInfo: React.VFC<Props> = ({ report }) => {
   const assigneeName = useUsername(useUser(report.assigneeId))
 
@@ -33,7 +39,6 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
     ReportStore.save({ ...report, documents: [...report.documents, document]})
   }, [report])
 
-
   return (
     <UiCaptionList>
       <UiCaption isEmphasis>
@@ -52,6 +57,7 @@ const ReportInfo: React.VFC<Props> = ({ report }) => {
       <UiCaption>
         <UiDateLabel start={report.startsAt ?? report.createdAt} end={report.endsAt} />
       </UiCaption>
+
       <DocumentImageDrawer
         images={report.images}
         storeImages={storeImages}
