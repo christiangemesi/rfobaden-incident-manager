@@ -16,7 +16,7 @@ interface Props extends StyledProps {
   /**
    * The reports to display.
    */
-  reports: Report[]
+  reports: readonly Report[]
 
   /**
    * The currently selected report.
