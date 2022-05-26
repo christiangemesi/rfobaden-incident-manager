@@ -93,7 +93,7 @@ const UiSideList = <T extends Trackable>({
       >
         {renderList({ selected, select: setSelected })}
       </ListContainer>
-      
+
       <ListOverlay
         ref={setOverlayRef}
         hasSelected={selected !== null}
