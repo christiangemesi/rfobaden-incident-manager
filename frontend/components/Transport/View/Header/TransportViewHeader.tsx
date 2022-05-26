@@ -17,13 +17,14 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
 import Trailer, { parseTrailer } from '@/models/Trailer'
 import TrailerStore, { useTrailer } from '@/stores/TrailerStore'
+import { noop } from '@/utils/control-flow'
 
 interface Props {
   incident: Incident
   transport: Transport
   hasPriority?: boolean
   onClose?: () => void
-  onToggle: (transport: Transport) => void
+  onToggle?: (transport: Transport) => void
 }
 
 const TransportViewHeader: React.VFC<Props> = ({
@@ -31,9 +32,8 @@ const TransportViewHeader: React.VFC<Props> = ({
   transport,
   hasPriority = false,
   onClose: handleClose,
-  onToggle: handleToggle,
+  onToggle: handleToggle = noop,
 }) => {
-
   useEffectOnce(function loadVehiclesAndTrailers() {
     (async () => {
       // Load and save all vehicles.
