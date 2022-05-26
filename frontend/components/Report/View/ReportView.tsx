@@ -22,15 +22,30 @@ import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
 import useHeight from '@/utils/hooks/useHeight'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Event caused by closing the report view.
+   */
   onClose?: () => void
 }
 
+/**
+ * `ReportView` displays the detailed information about a report.
+ */
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }) => {
   const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
+  // The currently selected task, null if no tasks is selected.
   const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => {
     const query = parseIncidentQuery(router.query)
     return query === null || query.mode !== 'task'
@@ -38,11 +53,12 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
       : query.taskId
   })
 
+  // Handle task selection.
   const selected = useTask(selectedId)
-  const setSelected = useCallback((task: Task | null) => {
+  const setSelected = useCallback(function selectTask(task: Task | null) {
     setSelectedId(task?.id ?? null)
   }, [])
-  const clearSelected = useCallback(() => {
+  const clearSelected = useCallback(function unselectTask() {
     setSelectedId(null)
   }, [])
 
@@ -94,6 +110,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
             />
           )}
         </TaskContainer>
+
         <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
@@ -110,8 +127,8 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  
   padding: 0 2rem;
+
   ${Themed.media.xs.only} {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
