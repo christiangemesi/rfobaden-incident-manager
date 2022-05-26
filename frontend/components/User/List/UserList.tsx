@@ -62,7 +62,7 @@ const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
       )}
       <OuterScroll>
         <InnerScroll>
-          <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
+          <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
             <UiGrid.Col size={5}>
               <UiSortButton field={sort.firstName}>
                 <UiTitle level={6}>Vorname</UiTitle>
