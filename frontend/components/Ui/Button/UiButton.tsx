@@ -49,7 +49,7 @@ export interface Props extends StyledProps {
 }
 
 /**
- * `UiButton` is an input component that displays buttons.
+ * `UiButton` displays a button element.
  */
 const UiButton: React.VFC<Props> = ({
   color = 'primary',
