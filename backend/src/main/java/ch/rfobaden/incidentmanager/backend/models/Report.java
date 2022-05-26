@@ -105,7 +105,7 @@ public class Report extends Model
     private LocalDateTime endsAt;
 
     /**
-     * The name of the location at which the report takes place.
+     * The location at which the report takes place.
      */
     @Size(max = 100)
     private String location;
