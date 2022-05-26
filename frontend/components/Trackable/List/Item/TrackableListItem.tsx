@@ -92,19 +92,36 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-  `}
-  
-  :hover ${Bridge} {
-    background-color: ${({ theme }) => theme.colors.secondary.hover};
-  }
-  
-  ${({ isClosed }) => isClosed && css`
-    ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.grey.value};
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.light.value};
     }
     
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.grey.hover};
+      background-color: ${({ theme }) => theme.colors.light.value};
     }
   `}
+  
+  
+  
+  ${({ isActive, isClosed }) => isActive && isClosed && css`
+    transition-duration: 300ms;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+
+    background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    
+    ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+
+    :hover ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+  `}
+  
 `

@@ -11,6 +11,7 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
+    backgroundgrey: Color
   }
   fonts: {
     heading: string
@@ -109,7 +110,13 @@ export const defaultTheme: Theme = {
     grey: {
       value: '#e8edf0',
       contrast: contrastDark,
-      hover: '#edf3f7',
+      hover: '#eaf0f4',
+      // hover: '#edf3f7',
+    },
+    backgroundgrey: {
+      value: '#eff4f7',
+      contrast: contrastDark,
+      hover: '#e2e8ec',
     },
   },
   fonts: {
