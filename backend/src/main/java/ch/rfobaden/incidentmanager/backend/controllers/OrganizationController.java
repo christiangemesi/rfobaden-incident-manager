@@ -2,7 +2,6 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
-import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAdmin;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Organization;
 import ch.rfobaden.incidentmanager.backend.models.User;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@code OrganizationController} is a {@link ModelController} for {@link Organization organizations}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/organizations")
 public class OrganizationController
