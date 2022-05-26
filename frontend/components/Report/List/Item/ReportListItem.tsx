@@ -7,9 +7,23 @@ import { Themed } from '@/theme'
 
 type Props = Omit<TrackableListItemProps<Report>, 'children'>
 
+/**
+ * `ReportListItem` is a component that displays a {@link Report report} in a list.
+ */
 const ReportListItem: React.VFC<Props> = ({
+  /**
+   * The report to display.
+   */
   record: report,
+
+  /**
+   * Whether the item is small.
+   */
   isSmall,
+
+  /**
+   * Additional properties like: isActive, isClosed, onClick?, children?
+   */
   ...itemProps
 }) => {
   const defaultIcon = useMemo(() => isSmall ? (
