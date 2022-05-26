@@ -92,7 +92,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   
   :hover:not(&[disabled]) {
     cursor: pointer;
-    background-color: ${({ theme, color }) => theme.colors[color].value}; // TODO add hover color for each color und use it like theme.colors.[color].hover}
+    background-color: ${({ theme, color }) => theme.colors[color].hover};
   }
 
   :active:not(&[disabled]) {
