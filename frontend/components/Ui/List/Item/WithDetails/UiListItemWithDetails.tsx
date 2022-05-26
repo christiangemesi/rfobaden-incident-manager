@@ -73,13 +73,10 @@ const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
   column-gap: 1rem;
 
   ${({ isClosed }) => isClosed && css`
-    filter: grayscale(0.8) brightness(0.8);
-    opacity: 0.75;
+    background-color: ${({ theme }) => theme.colors.grey.value};
 
     &:hover {
-      //filter: grayscale(0.8) brightness(0.8);
-      //opacity: 1;
-      background-color: ${({ theme }) => theme.colors.secondary.hover}; //todo grau
+      background-color: ${({ theme }) => theme.colors.grey.hover};
     }
   `
 }
