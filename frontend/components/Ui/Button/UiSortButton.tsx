@@ -7,7 +7,7 @@ import UiListHeader, { ListHeaderProps } from '@/components/Ui/List/UiListHeader
 interface Props extends ListHeaderProps {
 
   /**
-   * The sortable items.
+   * The field to sort by.
    */
   field: SortField
 }
