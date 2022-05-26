@@ -3,7 +3,6 @@ import styled, { css, useTheme } from 'styled-components'
 
 
 interface Props {
-
   /**
    * The amount of finished items.
    */
@@ -23,16 +22,27 @@ interface Props {
 /**
  * `UiCircularProgress` displays progress on a total number of items.
  */
-const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false }) => {
+const UiCircularProgress: React.VFC<Props> = ({
+  done,
+  total,
+  isClosed = false,
+}) => {
   return useMemo(() => {
     const progress = total == 0 ? 0 : parseFloat((done / total).toFixed(2))
     return (
       <svg width={SVG_SIZE} height={SVG_SIZE}>
         <g transform={`rotate(-90 ${RADIUS_OUTER} ${RADIUS_OUTER})`}>
           <OuterCircle radius={RADIUS_OUTER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} />
-          <ProgressCircle progress={progress} radius={RADIUS_PROGRESS} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} isClosed={isClosed} />
+          <ProgressCircle
+            progress={progress}
+            radius={RADIUS_PROGRESS}
+            centerX={SVG_CENTER_X}
+            centerY={SVG_CENTER_Y}
+            isClosed={isClosed}
+          />
           <InnerCircle radius={RADIUS_INNER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} isClosed={isClosed} />
         </g>
+
         <ProgressText done={done} total={total} />
         <Percentage progress={progress} />
       </svg>
@@ -41,6 +51,7 @@ const UiCircularProgress: React.VFC<Props> = ({ done, total, isClosed = false })
 }
 export default UiCircularProgress
 
+// Constant circle calculations.
 const BORDER_SIZE = 2
 const RADIUS_PROGRESS = 3.5 * 16
 const RADIUS_OUTER = 4 * 16
@@ -50,13 +61,35 @@ const SVG_CENTER_X = SVG_SIZE / 2 - BORDER_SIZE * 2
 const SVG_CENTER_Y = SVG_SIZE / 2
 
 interface ProgressCircleProps {
+  /**
+   * Progress to display.
+   */
   progress: number
+
+  /**
+   * Size of the inner circle.
+   */
   radius: number
+
+  /**
+   * X center of the inner circle.
+   */
   centerX: number
+
+  /**
+   * Y center of the inner circle.
+   */
   centerY: number
+
+  /**
+   * Whether the entity is closed or opened.
+   */
   isClosed: boolean
 }
 
+/**
+ * `ProgressCircle` displays progress that is done until now.
+ */
 const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
   const color = isClosed ? theme.colors.grey.value : theme.colors.success.value
@@ -80,11 +113,25 @@ const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, cent
 
 
 interface OuterCircleProps {
+  /**
+   * Size of the outer circle.
+   */
   radius: number
+
+  /**
+   * X center of the outer circle.
+   */
   centerX: number
+
+  /**
+   * Y center of the outer circle.
+   */
   centerY: number
 }
 
+/**
+ * `OuterCircle` displays progress that is not done.
+ */
 const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY }) => {
   const theme = useTheme()
 
@@ -101,12 +148,30 @@ const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY }) 
 }
 
 interface InnerCircleProps {
+  /**
+   * Size of the inner circle.
+   */
   radius: number
+
+  /**
+   * X center of the inner circle.
+   */
   centerX: number
+
+  /**
+   * Y center of the inner circle.
+   */
   centerY: number
+
+  /**
+   * Whether the entity is closed or opened.
+   */
   isClosed: boolean
 }
 
+/**
+ * `InnerCircle` displays the inner circle with the text.
+ */
 const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
 
@@ -127,11 +192,16 @@ const StyledCircle = styled.circle<{ isClosed: boolean }>`
   `}
 `
 
-
+/**
+ * Display percentage text.
+ */
 interface TextProps {
   progress: number
 }
 
+/**
+ * `Percentage` displays the percentage text.
+ */
 const Percentage: React.VFC<TextProps> = ({ progress }) => {
   return (
     <text
@@ -146,11 +216,17 @@ const Percentage: React.VFC<TextProps> = ({ progress }) => {
   )
 }
 
+/**
+ * Display progress text.
+ */
 interface ProgressProps {
   done: number
   total: number
 }
 
+/**
+ * `ProgressText` displays the number of progressed entities as text.
+ */
 const ProgressText: React.VFC<ProgressProps> = ({ done, total }) => {
   return (
     <text
