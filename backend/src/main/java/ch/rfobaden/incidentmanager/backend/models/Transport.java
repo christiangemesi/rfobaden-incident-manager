@@ -16,27 +16,71 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ * {@code Transport} represents a transport handled in an {@link Incident}.
+ * It is not further divided.
+ */
 @Entity
 @Table(name = "transport")
 public final class Transport extends Model implements PathConvertible<TransportPath>, Trackable,
     Serializable {
+
+    /**
+     * The {@link User assignee} responsible for the completion of the transport.
+     */
+    @ManyToOne
+    @JoinColumn
+    private User assignee;
+
+    /**
+     * The {@link Incident} the transport belongs to.
+     */
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    /**
+     * The title of the transport.
+     */
+    @Size(max = 100)
+    @NotBlank
     @Column(nullable = false)
     private String title;
+
+    /**
+     * A textual description of what the transport is about.
+     */
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * Whether the transport is closed.
+     * A closed transport counts as completed.
+     */
+    @NotNull
+    @Column(nullable = false)
+    private boolean isClosed;
+
+    /**
+     * The number of people involved in the transport.
+     */
     @Min(0)
     private long peopleInvolved;
+
+    /**
+     * The person who drives the transport.
+     */
     @Size(min = 1, max = 100)
     private String driver;
 
+    /**
+     * The vehicle which is driven.
+     */
+    @NotNull
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -45,6 +89,9 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @JoinColumn(nullable = false)
     private Vehicle vehicle;
 
+    /**
+     * The trailer which is needed, null if none is needed.
+     */
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -53,26 +100,79 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @JoinColumn
     private Trailer trailer;
 
-    private LocalDateTime startsAt;
-    private LocalDateTime endsAt;
-
+    /**
+     * The departure location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfDeparture;
+
+    /**
+     * The arrival location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfArrival;
 
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
+    /**
+     * The moment in time at which the transport will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     * <p>
+     * This is used to plan a transport in advance.
+     * </p>
+     */
+    private LocalDateTime startsAt;
 
+    /**
+     * The moment in time at which the transport will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
+    private LocalDateTime endsAt;
+
+    /**
+     * The priority of the transport.
+     */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
+    /**
+     * Allows access to the {@link #getAssignee() assignee}'s id.
+     * Is {@code null} if there's currently no assignee.
+     *
+     * @return The assignee's id.
+     */
+    public Long getAssigneeId() {
+        if (assignee == null) {
+            return null;
+        }
+        return assignee.getId();
+    }
+
+    /**
+     * Sets the {@link #getAssignee() assignee}'s id.
+     * If there's no assignee, a new user will be created using the specified id.
+     * If the id is {@code null}, the assignee will be removed.
+     *
+     * @param id The assignee's new id.
+     */
+    public void setAssigneeId(Long id) {
+        if (id == null) {
+            assignee = null;
+            return;
+        }
+        assignee = new User();
+        assignee.setId(id);
+    }
 
     @JsonIgnore
     public Incident getIncident() {
@@ -84,6 +184,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.incident = incident;
     }
 
+    /**
+     * Allows access to the {@link #getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
     public Long getIncidentId() {
         if (incident == null) {
             return null;
@@ -91,6 +196,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return incident.getId();
     }
 
+    /**
+     * Sets the {@link #getIncident()} () incident}'s id.
+     *
+     * @param id The incident's new id.
+     */
     public void setIncidentId(Long id) {
         if (id == null) {
             incident = null;
@@ -114,6 +224,16 @@ public final class Transport extends Model implements PathConvertible<TransportP
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    @Override
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
     public long getPeopleInvolved() {
@@ -140,6 +260,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.vehicle = vehicle;
     }
 
+    /**
+     * Allows access to the {@link #getVehicle()() vehilce}'s id.
+     *
+     * @return The vehicle's id.
+     */
     public Long getVehicleId() {
         if (vehicle == null) {
             return null;
@@ -147,6 +272,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return vehicle.getId();
     }
 
+    /**
+     * Sets the {@link #getVehicle() vehicle}'s id.
+     *
+     * @param id The vehicle's new id.
+     */
     public void setVehicleId(Long id) {
         if (id == null) {
             vehicle = null;
@@ -164,6 +294,12 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.trailer = trailer;
     }
 
+    /**
+     * Allows access to the {@link #getTrailer() trailer}'s id.
+     * Is {@code null} if there's currently no trailer.
+     *
+     * @return The trailer's id.
+     */
     public Long getTrailerId() {
         if (trailer == null) {
             return null;
@@ -171,6 +307,12 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return trailer.getId();
     }
 
+    /**
+     * Sets the {@link #getTrailer() trailer}'s id.
+     * If the id is {@code null}, the trailer will be removed.
+     *
+     * @param id The trailer's new id.
+     */
     public void setTrailerId(Long id) {
         if (id == null) {
             trailer = null;
@@ -178,22 +320,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         }
         trailer = new Trailer();
         trailer.setId(id);
-    }
-
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     public String getPointOfDeparture() {
@@ -212,28 +338,20 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.pointOfArrival = destinationPlace;
     }
 
-    public User getAssignee() {
-        return assignee;
+    public LocalDateTime getStartsAt() {
+        return startsAt;
     }
 
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
+    public void setStartsAt(LocalDateTime startsAt) {
+        this.startsAt = startsAt;
     }
 
-    public Long getAssigneeId() {
-        if (assignee == null) {
-            return null;
-        }
-        return assignee.getId();
+    public LocalDateTime getEndsAt() {
+        return endsAt;
     }
 
-    public void setAssigneeId(Long id) {
-        if (id == null) {
-            assignee = null;
-            return;
-        }
-        assignee = new User();
-        assignee.setId(id);
+    public void setEndsAt(LocalDateTime endsAt) {
+        this.endsAt = endsAt;
     }
 
     @Override
@@ -246,17 +364,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.priority = priority;
     }
 
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
     @Override
     public String getLink() {
         return "/ereignisse/" + getIncident().getId() + "/transporte/" + getId();
@@ -266,7 +373,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
     public String getFullTitle() {
         return getIncident().getTitle() + "/" + getTitle();
     }
-
 
     @Override
     public boolean equals(Object other) {
