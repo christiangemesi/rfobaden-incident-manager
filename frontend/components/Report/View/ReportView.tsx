@@ -39,7 +39,7 @@ interface Props {
 }
 
 /**
- * `ReportView` displays the detailed information about a report.
+ * `ReportView` displays the report's information and its tasks.
  */
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }) => {
   const router = useRouter()
