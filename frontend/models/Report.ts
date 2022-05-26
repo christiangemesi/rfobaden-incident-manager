@@ -60,12 +60,12 @@ export default interface Report extends Model, Trackable {
   taskIds: Id<Task>[]
 
   /**
-   * The images attached to the report, stored as {@link Document} instances.
+   * The images attached to the report, stored as document instances.
    */
   images: Document[]
 
   /**
-   * The {@link Document documents} attached to the report.
+   * The documents attached to the report.
    * Does not include the entity's {@link #images image documents}.
    */
   documents: Document[]

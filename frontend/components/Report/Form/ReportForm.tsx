@@ -24,7 +24,7 @@ import { Themed } from '@/theme'
 
 interface Props {
   /**
-   * The {@link Incident} the report belongs to.
+   * The incident the report belongs to.
    */
   incident: Incident
 
