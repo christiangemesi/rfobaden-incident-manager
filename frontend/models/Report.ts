@@ -21,7 +21,10 @@ export default interface Report extends Model, Trackable {
    */
   location: string | null
 
-
+  /**
+   * Whether the report is done.
+   * A report is done when all its {@link Task tasks} are all closed or done.
+   */
   isDone: boolean
 
   /**
