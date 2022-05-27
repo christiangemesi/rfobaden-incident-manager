@@ -77,7 +77,7 @@ const OrganizationListItem: React.VFC<Props> = ({
                         <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                       )}</UiModal.Trigger>
                       <UiModal.Body>{({ close }) => (
-                        <OrganizationForm organization={organization} onClose={close} />
+                        <OrganizationForm organization={organization} onClose={close} buttonText="Bearbeiten" />
                       )}</UiModal.Body>
                     </UiModal>
                     {isAdmin(currentUser) && (
