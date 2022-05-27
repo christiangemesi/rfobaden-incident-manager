@@ -66,7 +66,7 @@ const PageHeader: React.VFC = () => {
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserPasswordForm user={currentUser} onClose={close} />
+                    <UserPasswordForm user={currentUser} onClose={close} buttonText="Bearbeiten" />
                   )}</UiModal.Body>
                 </UiModal>
                 <UiModal title="E-Mail ändern">
@@ -74,7 +74,7 @@ const PageHeader: React.VFC = () => {
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserEmailForm user={currentUser} onClose={close} />
+                    <UserEmailForm user={currentUser} onClose={close} buttonText="Bearbeiten" />
                   )}</UiModal.Body>
                 </UiModal>
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
@@ -133,7 +133,7 @@ const LoggedInUser = styled.div`
   align-items: center;
 `
 const Username = styled.span`
-  font-size: 1em;  
+  font-size: 1em;
   margin-right: 0.25rem;
 
   ${Themed.media.xs.only} {
