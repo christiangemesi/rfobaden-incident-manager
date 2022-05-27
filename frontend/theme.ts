@@ -72,7 +72,6 @@ export const defaultTheme: Theme = {
       hover: '#0B72B5',
     },
     secondary: {
-      // value: '#E8F2F9',
       value: '#DBEBF7',
       contrast: contrastDark,
       hover: '#D1E0EB',
@@ -111,7 +110,6 @@ export const defaultTheme: Theme = {
       value: '#e8edf0',
       contrast: contrastDark,
       hover: '#eaf0f4',
-      // hover: '#edf3f7',
     },
     backgroundgrey: {
       value: '#eff4f7',
