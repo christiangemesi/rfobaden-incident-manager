@@ -63,7 +63,7 @@ public class SessionController extends AppController {
 
     /**
      * Loads the current session.
-     * Returns en empty body if there's no active session.
+     * Returns an empty body if there is no active session.
      *
      * @return The current session.
      */
@@ -112,7 +112,7 @@ public class SessionController extends AppController {
     /**
      * Authenticates a user.
      *
-     * @param data the login data.
+     * @param data The login data.
      * @return The authenticated user.
      */
     private User authenticate(LoginData data) {
