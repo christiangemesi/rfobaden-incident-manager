@@ -10,7 +10,7 @@ const UiButtonExample: React.VFC = () => {
       <UiGrid gap={0.5}>
         <UiGrid.Col size={3}>
           <UiButton isFull isDisabled color="success">
-            <UiIcon.SubmitAction />
+            Erstellen
           </UiButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
@@ -20,7 +20,7 @@ const UiButtonExample: React.VFC = () => {
         </UiGrid.Col>
         <UiGrid.Col size={3}>
           <UiButton isFull color="success">
-            <UiIcon.SubmitAction />
+            Erstellen
           </UiButton>
         </UiGrid.Col>
         <UiGrid.Col size={2}>
