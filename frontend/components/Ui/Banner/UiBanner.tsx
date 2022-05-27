@@ -6,7 +6,7 @@ interface Props {
 }
 
 const UiBanner = styled.div<Props>`
-  padding: 1rem;
+  padding: 0.5rem;
   font-size: ${({ theme }) => theme.fonts.sizes.small};
   font-weight: bold;
   display: flex;
