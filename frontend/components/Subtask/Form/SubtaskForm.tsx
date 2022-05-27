@@ -24,9 +24,15 @@ interface Props {
   task: Task,
   subtask?: Subtask | null
   onClose?: () => void
+  buttonText?: string
 }
 
-const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleClose }) => {
+const SubtaskForm: React.VFC<Props> = ({
+  task,
+  subtask = null,
+  onClose: handleClose,
+  buttonText = 'Erstellen',
+}) => {
   const form = useForm<ModelData<Subtask>>(subtask, () => ({
     title: '',
     description: null,
@@ -123,7 +129,7 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
 
         </UiGrid>
 
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text={buttonText} />
       </FormContainer>
     </UiForm>
   )
