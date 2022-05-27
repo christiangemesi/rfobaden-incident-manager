@@ -95,6 +95,12 @@ public class DocumentService {
         return document;
     }
 
+    /**
+     * Deletes a document and its file.
+     *
+     * @param id The id of the document to delete.
+     * @return Whether there was a document to delete.
+     */
     public boolean delete(Long id) {
         return repository.findById(id)
             .map(document -> {
