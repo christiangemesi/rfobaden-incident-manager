@@ -35,7 +35,6 @@ const Box = styled.ul`
     &, :after {
       border-bottom-left-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
-      //margin-bottom: 0.5rem;
     }
   }
 `
