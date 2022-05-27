@@ -20,12 +20,17 @@ interface Props {
    * Event caused by closing the form.
    */
   onClose?: () => void
+
+  /**
+   * The text of the form's submit button.
+   */
+  buttonText?: string
 }
 
 /**
  * `UserEmailForm` displays a form to edit the email of a {@link User}.
  */
-const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
+const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose, buttonText = 'Erstellen' }) => {
   const form = useForm<FormData>(() => ({
     email: user.email,
   }))
@@ -62,7 +67,7 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text={buttonText} />
       </UiForm>
     </div>
   )

@@ -18,12 +18,17 @@ interface Props {
    * Event caused by closing the form.
    */
   onClose?: () => void
+
+  /**
+   * The text of the form's submit button.
+   */
+  buttonText?: string
 }
 
 /**
  * `UserPasswordForm` displays a form to edit the password of a {@link User}.
  */
-const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
+const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose, buttonText = 'Erstellen' }) => {
   const form = useForm<FormData>(() => ({
     password: '',
     passwordRepeat: '',
@@ -60,7 +65,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.passwordRepeat}>{(props) => (
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text={buttonText} />
       </UiForm>
     </div>
   )
