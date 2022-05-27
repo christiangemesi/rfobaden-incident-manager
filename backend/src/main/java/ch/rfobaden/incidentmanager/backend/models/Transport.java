@@ -220,6 +220,7 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.assignee = assignee;
     }
 
+    @Override
     public Long getAssigneeId() {
         if (assignee == null) {
             return null;
@@ -227,6 +228,7 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return assignee.getId();
     }
 
+    @Override
     public void setAssigneeId(Long id) {
         if (id == null) {
             assignee = null;

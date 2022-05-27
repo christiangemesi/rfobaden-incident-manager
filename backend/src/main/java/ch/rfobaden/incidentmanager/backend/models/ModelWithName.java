@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -10,7 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-public abstract class ModelWithName extends Model.Basic {
+public abstract class ModelWithName extends Model.Basic implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false, unique = true)
