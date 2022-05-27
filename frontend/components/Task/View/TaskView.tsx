@@ -11,6 +11,7 @@ import { sleep } from '@/utils/control-flow'
 import TaskViewHeader from '@/components/Task/View/Header/TaskViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
 import { Themed } from '@/theme'
+import UiBanner from '@/components/Ui/Banner/UiBanner'
 
 interface Props {
   report: Report
@@ -32,6 +33,11 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
 
   return (
     <StyledLevel ref={innerRef} isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
+      { task.isClosed && (
+        <UiBanner color="grey">
+          GESCHLOSSEN
+        </UiBanner>
+      )}
       <UiLevel.Header>
         <TaskViewHeader report={report} task={task} onClose={handleClose} />
       </UiLevel.Header>

@@ -20,6 +20,7 @@ import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
 import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
 import useHeight from '@/utils/hooks/useHeight'
+import UiBanner from '@/components/Ui/Banner/UiBanner'
 
 interface Props {
   incident: Incident
@@ -78,6 +79,11 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
 
   return (
     <UiLevel>
+      { report.isClosed && (
+        <UiBanner color="grey">
+          GESCHLOSSEN
+        </UiBanner>
+      )}
       <UiLevel.Header>
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>

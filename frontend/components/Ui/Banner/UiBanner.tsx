@@ -7,10 +7,15 @@ interface Props {
 
 const UiBanner = styled.div<Props>`
   padding: 1rem;
+  font-size: ${({ theme }) => theme.fonts.sizes.small};
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
   ${({ theme, color = 'primary' }) => css`
-    color: ${theme.colors[color].contrast};
     background-color: ${theme.colors[color].value};
+    color: ${({ theme }) => theme.colors[color].contrast};
   `}
 `
 export default UiBanner
