@@ -1,7 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
-import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAdmin;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Report;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * {@code ReportController} is a {@link ModelController} for {@link Report reports}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/incidents/{incidentId}/reports")
 public class ReportController extends ModelController<Report, ReportPath, ReportService> {
