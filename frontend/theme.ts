@@ -11,7 +11,8 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
-    backgroundgrey: Color
+    backgroundactiv: Color
+    backgroundclosed: Color
   }
   fonts: {
     heading: string
@@ -72,7 +73,6 @@ export const defaultTheme: Theme = {
       hover: '#0B72B5',
     },
     secondary: {
-      // value: '#E8F2F9',
       value: '#DBEBF7',
       contrast: contrastDark,
       hover: '#D1E0EB',
@@ -108,13 +108,17 @@ export const defaultTheme: Theme = {
       hover: '#6857C8',
     },
     grey: {
-      value: '#e8edf0',
+      value: '#E2E9ED',
       contrast: contrastDark,
-      hover: '#eaf0f4',
-      // hover: '#edf3f7',
+      hover: '#DDE5EB',
     },
-    backgroundgrey: {
-      value: '#eff4f7',
+    backgroundactiv: {
+      value: '#EFF6FB',
+      contrast: contrastDark,
+      hover: '#B4CFE3',
+    },
+    backgroundclosed: {
+      value: '#EFF4F8',
       contrast: contrastDark,
       hover: '#e2e8ec',
     },

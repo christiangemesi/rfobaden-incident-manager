@@ -90,13 +90,13 @@ const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY,isC
   const theme = useTheme()
 
   return (
-    <InnerCircleStyled
+    <StyledCircle
       r={radius}
       cx={centerX}
       cy={centerY}
       isClosed={isClosed}
       fill={theme.colors.success.contrast}
-      stroke={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
+      stroke={isClosed ? theme.colors.grey.value : theme.colors.secondary.value}
       strokeWidth={`${BORDER_SIZE}px`}
     />
   )
@@ -114,17 +114,19 @@ const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, is
   const theme = useTheme()
 
   return (
-    <InnerCircleStyled
+    <StyledCircle
       r={radius}
       cx={centerX}
       cy={centerY}
       isClosed={isClosed}
-      fill={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
+      stroke={isClosed ? theme.colors.grey.value : theme.colors.secondary.value }
+      fill={isClosed ? theme.colors.backgroundclosed.value : theme.colors.secondary.value}
+      strokeWidth={`${BORDER_SIZE}px`}
     />
   )
 }
 
-const InnerCircleStyled = styled.circle<{ isClosed: boolean }>`
+const StyledCircle = styled.circle<{ isClosed: boolean }>`
   ${({ isClosed }) => isClosed && css`
     //TODO what can be put inhere so that it isnt empty? 
   `}
