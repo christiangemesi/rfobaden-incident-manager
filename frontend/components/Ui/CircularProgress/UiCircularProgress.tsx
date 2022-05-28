@@ -88,7 +88,7 @@ interface ProgressCircleProps {
 }
 
 /**
- * `ProgressCircle` displays progress that is done until now.
+ * `ProgressCircle` displays the progress part of a {@link UiCircularProgress}.
  */
 const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
@@ -130,7 +130,7 @@ interface OuterCircleProps {
 }
 
 /**
- * `OuterCircle` displays progress that is not done.
+ * `OuterCircle` displays the outer circle of a {@link UiCircularProgress}.
  */
 const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY }) => {
   const theme = useTheme()
@@ -170,7 +170,7 @@ interface InnerCircleProps {
 }
 
 /**
- * `InnerCircle` displays the inner circle with the text.
+ * `InnerCircle` displays the inner circle, including the text, of a {@link UiCircularProgress}.
  */
 const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
@@ -192,15 +192,12 @@ const StyledCircle = styled.circle<{ isClosed: boolean }>`
   `}
 `
 
-/**
- * Display percentage text.
- */
 interface TextProps {
   progress: number
 }
 
 /**
- * `Percentage` displays the percentage text.
+ * `Percentage` displays the percentage text of a {@link UiCircularProgress}.
  */
 const Percentage: React.VFC<TextProps> = ({ progress }) => {
   return (
@@ -216,9 +213,6 @@ const Percentage: React.VFC<TextProps> = ({ progress }) => {
   )
 }
 
-/**
- * Display progress text.
- */
 interface ProgressProps {
   done: number
   total: number
