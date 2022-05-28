@@ -26,66 +26,130 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Report} represents a report handled in an {@link Incident}.
+ * It can be further divided into {@link Task tasks}.
+ */
 @Entity
 @Table(name = "report")
 public class Report extends Model
     implements PathConvertible<ReportPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
+
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The {@link User assignee} responsible for the completion of the report.
+     */
     @ManyToOne
     @JoinColumn
     private User assignee;
 
+    /**
+     * The {@link Incident} the report belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    /**
+     * The title of the report.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String title;
 
+    /**
+     * A textual description of what the report is about.
+     */
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * The way the report was received.
+     */
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private EntryType entryType;
 
+    /**
+     * Additional information about the report.
+     */
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    private LocalDateTime startsAt;
-
-    private LocalDateTime endsAt;
-
-    @Size(max = 100)
-    private String location;
-
+    /**
+     * Whether the report is closed.
+     * A closed report counts as completed.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    /**
+     * The moment in time at which the report will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     * <p>
+     * This is used to plan a report in advance.
+     * </p>
+     */
+    private LocalDateTime startsAt;
+
+    /**
+     * The moment in time at which the report will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
+    private LocalDateTime endsAt;
+
+    /**
+     * The location at which the report takes place.
+     */
+    @Size(max = 100)
+    private String location;
+
+    /**
+     * Whether the report is one of the currently most important reports
+     * of its {@link #incident Incident}.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
+    /**
+     * Whether the report affects its location, making it important to
+     * other reports happening in the same place.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    /**
+     * The priority of the report.
+     */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
+    /**
+     * The {@link Task tasks} of the report.
+     */
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
+    /**
+     * The images attached to the report, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the report.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -154,6 +218,16 @@ public class Report extends Model
     }
 
     @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    @Override
+    public void setClosed(boolean closed) {
+        isClosed = closed;
+    }
+
+    @Override
     public LocalDateTime getStartsAt() {
         return startsAt;
     }
@@ -219,29 +293,6 @@ public class Report extends Model
         this.tasks = tasks;
     }
 
-    public List<Long> getTaskIds() {
-        return getTasks().stream().map(Task::getId).collect(Collectors.toList());
-    }
-
-    public List<Long> getClosedTaskIds() {
-        return getTasks().stream()
-            .filter(t -> t.isClosed() || t.isDone())
-            .map(Task::getId)
-            .collect(Collectors.toList());
-    }
-
-    @JsonProperty("isDone")
-    public boolean isDone() {
-        return !getTasks().isEmpty()
-            && (getTasks().stream().allMatch(Task::isClosed)
-            || getTasks().stream().allMatch(Task::isDone));
-    }
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
     @Override
     public List<Document> getImages() {
         return images;
@@ -262,8 +313,38 @@ public class Report extends Model
         this.documents = documents;
     }
 
-    public void setClosed(boolean closed) {
-        isClosed = closed;
+    /**
+     * Lists the {@link Task#getId() ids} of all {@link #getTasks tasks}.
+     *
+     * @return The ids of all tasks.
+     */
+    public List<Long> getTaskIds() {
+        return getTasks().stream().map(Task::getId).collect(Collectors.toList());
+    }
+
+    /**
+     * Lists the {@link Task#getId() ids} of all closed {@link #getTasks() tasks}.
+     *
+     * @return The ids of all closed tasks.
+     */
+    public List<Long> getClosedTaskIds() {
+        return getTasks().stream()
+            .filter(t -> t.isClosed() || t.isDone())
+            .map(Task::getId)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Whether the report is done.
+     * A report is done when all its {@link #getTasks() tasks} are all closed or done.
+     *
+     * @return Whether the entity is done.
+     */
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return !getTasks().isEmpty()
+            && (getTasks().stream().allMatch(Task::isClosed)
+            || getTasks().stream().allMatch(Task::isDone));
     }
 
     @Override

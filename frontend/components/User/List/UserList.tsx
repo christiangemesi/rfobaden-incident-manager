@@ -16,10 +16,21 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+
+  /**
+   * The {@link User users} to be displayed.
+   */
   users: readonly User[]
+
+  /**
+   * Whether to show a button with which a {@link UserForm} can be opened.
+   */
   hasCreateButton?: boolean
 }
 
+/**
+ * `UserList` is a component that displays a list of {@link User users}.
+ */
 const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
