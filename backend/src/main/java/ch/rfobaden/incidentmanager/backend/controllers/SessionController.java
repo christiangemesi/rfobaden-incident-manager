@@ -7,7 +7,6 @@ import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +29,7 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @Validated
 @RequestMapping(path = "api/v1/session")
-public class SessionController extends AppController {
+public class SessionController implements AppController {
     private final AuthenticationManager authManager;
 
     private final AuthService authService;

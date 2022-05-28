@@ -155,24 +155,6 @@ public final class Transport extends TrackableModel implements PathConvertible<T
     }
 
     @Override
-    public Long getAssigneeId() {
-        if (getAssignee() == null) {
-            return null;
-        }
-        return getAssignee().getId();
-    }
-
-    @Override
-    public void setAssigneeId(Long id) {
-        if (id == null) {
-            setAssignee(null);
-            return;
-        }
-        setAssignee(new User());
-        getAssignee().setId(id);
-    }
-
-    @Override
     public String getLink() {
         return "/ereignisse/" + getIncident().getId() + "/transporte/" + getId();
     }
