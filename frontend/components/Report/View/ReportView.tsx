@@ -79,7 +79,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
 
   return (
     <UiLevel>
-      { report.isClosed && (
+      { (report.isClosed || report.isDone) && (
         <UiBanner color="grey">
           <StyledText>
             GESCHLOSSEN
