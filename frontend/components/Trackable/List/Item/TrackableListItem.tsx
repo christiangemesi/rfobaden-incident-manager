@@ -14,12 +14,12 @@ export interface Props<T> {
   record: T
 
   /**
-   * Whether the record is active/selected.
+   * Whether the item is currently selected.
    */
   isActive: boolean
 
   /**
-   * Whether the record item is small.
+   * Whether the item should make its contents slightly smaller.
    */
   isSmall: boolean
 
@@ -29,12 +29,12 @@ export interface Props<T> {
   isClosed: boolean
 
   /**
-   * Event caused by clicking on the record.
+   * Event caused by clicking on the item.
    */
   onClick?: (record: T) => void
 
   /**
-   * Additional content of the record to display.
+   * Additional content to display.
    */
   children?: ReactNode
 }

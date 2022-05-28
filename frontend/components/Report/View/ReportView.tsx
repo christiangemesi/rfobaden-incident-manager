@@ -39,13 +39,13 @@ interface Props {
 }
 
 /**
- * `ReportView` displays the report's information and its tasks.
+ * `ReportView` displays a report's information, as well as a list of its tasks.
  */
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }) => {
   const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
-  // The currently selected task, null if no tasks is selected.
+  // The id of the currently selected task, or `null` if none is selected.
   const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => {
     const query = parseIncidentQuery(router.query)
     return query === null || query.mode !== 'task'
@@ -55,10 +55,10 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
 
   // Handle task selection.
   const selected = useTask(selectedId)
-  const setSelected = useCallback(function selectTask(task: Task | null) {
+  const setSelected = useCallback((task: Task | null) => {
     setSelectedId(task?.id ?? null)
   }, [])
-  const clearSelected = useCallback(function unselectTask() {
+  const clearSelected = useCallback(() => {
     setSelectedId(null)
   }, [])
 

@@ -66,7 +66,7 @@ export default interface Report extends Model, Trackable {
 
   /**
    * The documents attached to the report.
-   * Does not include the entity's {@link #images image documents}.
+   * Does not include the entity's {@link images image documents}.
    */
   documents: Document[]
 }
@@ -84,8 +84,8 @@ export const parseReport = (data: Report): Report => ({
 })
 
 /**
- * `OpenReport` represents a not completed report.
- * Neither all its tasks are completed nor it is manually closed.
+ * `OpenReport` represents a report that's neither
+ * {@link Report.isClosed closed} nor {@link Report.isDone done}.
  */
 export interface OpenReport extends Report {
   isClosed: false
@@ -93,11 +93,9 @@ export interface OpenReport extends Report {
 }
 
 /**
- * Checks if a report is completed.
- * A report counts as completed if all {@link Task tasks} are completed
- * or the report is closed manually.
- *
+ * Checks if a report is an instance of {@link OpenReport}.
+ * 
  * @param report The report.
- * @return Whether a report is completed.
+ * @return Whether the report is a {@link OpenReport}.
  */
 export const isOpenReport = (report: Report): report is OpenReport => !report.isClosed && !report.isDone

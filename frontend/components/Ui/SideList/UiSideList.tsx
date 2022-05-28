@@ -12,27 +12,27 @@ import Trackable from '@/models/Trackable'
 
 interface Props<T extends Model> {
   /**
-   * The id if the initial selected record, `null` if none is selected.
+   * The id of the record to select right at the start, or `null` if none should get selected.
    */
   initialId?: Id<T> | null
 
   /**
-   * Store of the record type.
+   * Store holding the records to display.
    */
   store: ModelStore<T>
 
   /**
-   * Map a record to its closed value.
+   * Checks whether a specific record is closed.
    */
   isClosed: (record: T) => boolean
 
   /**
-   * Content to render for the record list.
+   * Renders the list of selectable items. It is assumed that the items are rendered using {@link TrackableListItem}.
    */
   renderList: (props: { selected: T | null, select: (record: T | null) => void }) => ReactNode
 
   /**
-   * Content to render for the selected record view.
+   * Renders the currently selected record.
    */
   renderView: (props: { selected: T, close: () => void }) => ReactNode
 
@@ -48,7 +48,8 @@ interface Props<T extends Model> {
 }
 
 /**
- * `UiSideList` renders a list of records and if one of them is selected a view of the selected one.
+ * `UiSideList` renders a list of selectable {@link Trackable trackable entities}.
+ * For selected entities, detailed information is displayed.
  */
 const UiSideList = <T extends Trackable>({
   initialId,

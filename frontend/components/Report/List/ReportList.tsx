@@ -31,15 +31,15 @@ interface Props extends StyledProps {
 
 /**
  * `ReportList` is a component that displays a list of {@link Report reports} using {@link ReportListItem}.
- * It offers a form to add new {@link Task tasks} to the report.
+ * The list includes a button which allow the creation of new reports
  */
 const ReportList: React.VFC<Props> = ({
   incident,
   reports,
   ...listProps
 }) => {
-  const [keyReports, normalReports] = useMemo(function splitOfKeyReports() {
-    return reports.reduce(([key, normal], report) => {
+  const [keyReports, normalReports] = useMemo(() => (
+    reports.reduce(([key, normal], report) => {
       if (report.isKeyReport) {
         key.push(report)
       } else {
@@ -47,7 +47,7 @@ const ReportList: React.VFC<Props> = ({
       }
       return [key, normal]
     }, [[] as Report[], [] as Report[]])
-  }, [reports])
+  ), [reports])
 
   return (
     <TrackableList

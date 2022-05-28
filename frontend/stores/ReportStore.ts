@@ -7,7 +7,7 @@ import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
 /**
- * {@code ReportStore} manages all loaded {@link Transport transports}.
+ * {@code ReportStore} manages all loaded {@link Report reports}.
  */
 const ReportStore = createModelStore(parseReport, {
   sortBy: (report) => [
@@ -43,11 +43,12 @@ export const useReport = createUseRecord(ReportStore)
 export const useReports = createUseRecords(ReportStore)
 
 /**
- * {@code useReportsOfIncident} is a React hook that loads all vehicles from {@link VehicleStore}.
+ * {@code useReportsOfIncident} is a React hook that loads all reports
+ * belonging to a specific incident from {@link VehicleStore}.
  * It re-renders whenever the store is modified.
  *
- * @param incidentId An list of ids to load, or a function that modifies the returned list.
- * @return The list of reports.
+ * @param incidentId The id of the incident to which the reports belong.
+ * @return The list of reports belonging to the incident.
  */
 export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[] => (
   useReports((reports) => (
@@ -59,8 +60,7 @@ export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[
  * After a task creation the report needs to update the `tasksIds`, `closedTasksIds` and `isDone`.
  *
  * <p>
- *    A completed report, with the condition all tasks are completed, has to reopen
- *    when a new tasks is added.
+ *    A completed report has to reopen when a new uncompleted task is added.
  * </p>
  */
 TaskStore.onCreate((task) => {
@@ -86,9 +86,8 @@ TaskStore.onCreate((task) => {
  * After a task update the report needs to update the `closedTasksIds` and `isDone`.
  *
  * <p>
- *    A completed report, with the condition all tasks are completed, has to reopen
- *    when a completed tasks is reopened. An uncompleted report has to complete
- *    when the last uncompleted task is completed.
+ *    A completed report has to reopen when one of its tasks is reopened.
+ *    An open report has to be set to done when its last open task is completed.
  * </p>
  */
 TaskStore.onUpdate((task) => {
@@ -116,7 +115,7 @@ TaskStore.onUpdate((task) => {
  * After a task deletion the report needs to update the `tasksIds`, `closedTasksIds` and `isDone`.
  *
  * <p>
- *    An uncompleted report has to complete when the last tasks is completed.
+ *    An open report has to be set to done when its last tasks is completed.
  * </p>
 */
 TaskStore.onRemove((task) => {

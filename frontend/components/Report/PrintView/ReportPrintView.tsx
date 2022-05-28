@@ -13,7 +13,7 @@ interface Props {
   report: Report
 
   /**
-   * Whether the nested {@link Task tasks} and {@link Subtask subtasks} should be included in the print out.
+   * Whether this is the top-level item of this print. Setting this to `true` displays some more metadata, such as the title of the incident that the report belongs to.
    */
   isNested?: boolean
 }

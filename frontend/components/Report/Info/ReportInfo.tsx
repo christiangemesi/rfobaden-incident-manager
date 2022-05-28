@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * `ReportInfo` displays the important information about a report.
+ * `ReportInfo` displays the most important information of a report using relatively little space.
  */
 const ReportInfo: React.VFC<Props> = ({ report }) => {
   const assigneeName = useUsername(useUser(report.assigneeId))

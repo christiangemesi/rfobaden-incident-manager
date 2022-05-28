@@ -25,7 +25,7 @@ interface Props {
   report: Report
 
   /**
-   * Whether a report has a priority to display.
+   * Whether the report has a priority to display.
    */
   hasPriority?: boolean
 
@@ -36,7 +36,7 @@ interface Props {
 }
 
 /**
- * `ReportViewHeader` displays detailed information about the report.
+ * `ReportViewHeader` displays detailed information about a report.
  */
 const ReportViewHeader: React.VFC<Props> = ({
   incident,

@@ -17,13 +17,13 @@ interface Props {
 
 /**
  * `ReportSideView` displays a {@link UiSideList} of {@link Report reports}.
- * It is divided into the {@link ReportList} and the {@link ReportView}.
+ * It is divided into a {@link ReportList} and a {@link ReportView}.
  */
 const ReportSideView: React.VFC<Props> = ({ incident }) => {
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)
 
-  const rerouteToReport = useCallback(function openReportView(selected: Report) {
+  const rerouteToReport = useCallback((selected: Report) => {
     const query = parseIncidentQuery(router.query)
     if (query === null) {
       return
@@ -33,7 +33,7 @@ const ReportSideView: React.VFC<Props> = ({ incident }) => {
     }
   }, [router])
 
-  const rerouteToRoot = useCallback(function closeReportView() {
+  const rerouteToRoot = useCallback(() => {
     const query = parseIncidentQuery(router.query)
     if (query === null) {
       return

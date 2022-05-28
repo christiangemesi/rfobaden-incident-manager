@@ -33,7 +33,7 @@ interface Props {
 }
 
 /**
- * `ReportActions` displays the possible actions of a report in a dropdown menu.
+ * `ReportActions` displays a dropdown button which contains the actions of a report.
  */
 const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {

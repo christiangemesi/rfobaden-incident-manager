@@ -29,7 +29,7 @@ interface Props {
   incident: Incident
 
   /**
-   * The report to update, or `null`, if a new should be created.
+   * The report to update, or `null`, if a new one should be created.
    */
   report?: Report | null
 
@@ -45,7 +45,7 @@ interface Props {
 }
 
 /**
- * `ReportForm` allows the creation or update of a {@link Report report}.
+ * `ReportForm` allows the creation or update of a {@link Report}.
  */
 const ReportForm: React.VFC<Props> = ({
   incident,
@@ -254,7 +254,7 @@ const mapUserIdToName = (id: Id<User>): string | null => {
 /**
  * Maps the entry type enum to its name.
  *
- * @param source The enum source of the entry type.
+ * @param source The entry type to map.
  * @return The entry type's name.
  */
 export const mapEntryTypeToName = (source: string): string => {
@@ -277,10 +277,10 @@ export const mapEntryTypeToName = (source: string): string => {
 }
 
 /**
- * Transform a string to a unique format.
+ * Uppercase the first letter of each word in a string.
  *
- * @param str The string.
- * @return The transformed string.
+ * @param str The string to transform.
+ * @return The string in title case.
  */
 const toTitleCase = (str: string): string => {
   return str
