@@ -5,8 +5,6 @@ import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,40 +12,24 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "report")
-public class Report extends Model
-    implements PathConvertible<ReportPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
+public class Report extends TrackableModel
+    implements PathConvertible<ReportPath>, ImageOwner, DocumentOwner {
 
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
-
-    @Size(max = 100)
-    @NotBlank
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
@@ -56,16 +38,8 @@ public class Report extends Model
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    private LocalDateTime startsAt;
-
-    private LocalDateTime endsAt;
-
     @Size(max = 100)
     private String location;
-
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
 
     @NotNull
     @Column(nullable = false)
@@ -75,11 +49,6 @@ public class Report extends Model
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private Priority priority;
-
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
@@ -88,16 +57,6 @@ public class Report extends Model
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
-
-    @JsonIgnore
-    public User getAssignee() {
-        return assignee;
-    }
-
-    @Override
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
 
     @JsonIgnore
     public Incident getIncident() {
@@ -117,26 +76,6 @@ public class Report extends Model
         this.incident = incident;
     }
 
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public EntryType getEntryType() {
         return entryType;
     }
@@ -151,26 +90,6 @@ public class Report extends Model
 
     public void setNotes(String addendum) {
         this.notes = addendum;
-    }
-
-    @Override
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    @Override
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    @Override
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    @Override
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     public String getLocation() {
@@ -197,16 +116,6 @@ public class Report extends Model
 
     public void setLocationRelevantReport(boolean locationRelevantReport) {
         isLocationRelevantReport = locationRelevantReport;
-    }
-
-    @Override
-    public Priority getPriority() {
-        return priority;
-    }
-
-    @Override
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     @JsonIgnore
@@ -238,11 +147,6 @@ public class Report extends Model
     }
 
     @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
     public List<Document> getImages() {
         return images;
     }
@@ -260,10 +164,6 @@ public class Report extends Model
     @Override
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
-    }
-
-    public void setClosed(boolean closed) {
-        isClosed = closed;
     }
 
     @Override
@@ -285,39 +185,25 @@ public class Report extends Model
             return false;
         }
         Report report = (Report) o;
-        return equalsModel(report)
-            && Objects.equals(assignee, report.assignee)
+        return equalsTrackableModel(report)
             && Objects.equals(incident, report.incident)
-            && Objects.equals(title, report.title)
-            && Objects.equals(description, report.description)
             && Objects.equals(entryType, report.entryType)
             && Objects.equals(notes, report.notes)
-            && Objects.equals(startsAt, report.startsAt)
-            && Objects.equals(endsAt, report.endsAt)
             && Objects.equals(location, report.location)
-            && Objects.equals(isClosed, report.isClosed)
             && Objects.equals(isKeyReport, report.isKeyReport)
-            && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport)
-            && priority == report.priority;
+            && Objects.equals(isLocationRelevantReport, report.isLocationRelevantReport);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            modelHashCode(),
-            assignee,
+            trackableModelHashCode(),
             incident,
-            title,
-            description,
             entryType,
             notes,
-            startsAt,
-            endsAt,
             location,
-            isClosed,
             isKeyReport,
-            isLocationRelevantReport,
-            priority
+            isLocationRelevantReport
         );
     }
 

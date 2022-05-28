@@ -5,35 +5,24 @@ import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "task")
-public class Task extends Model
-    implements PathConvertible<TaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
+public class Task extends TrackableModel
+    implements PathConvertible<TaskPath>, ImageOwner, DocumentOwner {
 
     @NotNull
     @ManyToOne(optional = false)
@@ -41,28 +30,7 @@ public class Task extends Model
     private Report report;
 
     @Size(max = 100)
-    @NotBlank
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private LocalDateTime startsAt;
-
-    private LocalDateTime endsAt;
-
-    @Size(max = 100)
     private String location;
-
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
-
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private Priority priority;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
@@ -94,17 +62,6 @@ public class Task extends Model
     }
 
     @JsonIgnore
-    @Override
-    public User getAssignee() {
-        return assignee;
-    }
-
-    @Override
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
-    @JsonIgnore
     public Report getReport() {
         return report;
     }
@@ -130,62 +87,12 @@ public class Task extends Model
         this.report = report;
     }
 
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    @Override
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    @Override
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    @Override
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    @Override
-    public Priority getPriority() {
-        return priority;
-    }
-
-    @Override
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     @JsonIgnore
@@ -216,17 +123,6 @@ public class Task extends Model
     }
 
     @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
-
-    @Override
     public String getLink() {
         return getReport().getLink() + "/auftraege/" + getId();
     }
@@ -245,31 +141,17 @@ public class Task extends Model
             return false;
         }
         Task task = (Task) o;
-        return equalsModel(task)
-            && Objects.equals(assignee, task.assignee)
+        return equalsTrackableModel(task)
             && Objects.equals(report, task.report)
-            && Objects.equals(title, task.title)
-            && Objects.equals(description, task.description)
-            && Objects.equals(startsAt, task.startsAt)
-            && Objects.equals(endsAt, task.endsAt)
-            && Objects.equals(isClosed, task.isClosed)
-            && Objects.equals(location, task.location)
-            && priority == task.priority;
+            && Objects.equals(location, task.location);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            modelHashCode(),
-            assignee,
+            trackableModelHashCode(),
             report,
-            title,
-            description,
-            startsAt,
-            endsAt,
-            location,
-            isClosed,
-            priority
+            location
         );
     }
 
