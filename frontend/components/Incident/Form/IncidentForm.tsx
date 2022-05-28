@@ -15,10 +15,9 @@ import styled from 'styled-components'
 interface Props {
   incident?: Incident | null
   onClose?: () => void
-  buttonText?: string
 }
 
-const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose, buttonText = 'Erstellen' }) => {
+const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose }) => {
   const form = useForm<ModelData<Incident>>(incident, () => ({
     title: '',
     description: null,
@@ -99,7 +98,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose,
           </UiGrid.Col>
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={buttonText} />
+        <UiForm.Buttons form={form} text={incident === null ? 'Erstellen' : 'Bearbeiten'} />
       </FormContainer>
     </UiForm>
   )
