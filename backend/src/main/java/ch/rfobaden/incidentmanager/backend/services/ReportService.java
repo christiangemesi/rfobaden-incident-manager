@@ -20,8 +20,8 @@ public class ReportService extends ModelRepositoryService<Report, ReportPath, Re
     }
 
     @Override
-    protected void afterSave(Report oldRecord, Report record) {
-        notificationService.notifyAssigneeIfChanged(oldRecord, record);
+    protected void afterSave(Report oldReport, Report report) {
+        notificationService.notifyAssigneeIfChanged(oldReport, report);
     }
 
     /**
