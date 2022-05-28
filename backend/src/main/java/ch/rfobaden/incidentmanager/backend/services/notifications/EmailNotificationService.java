@@ -19,6 +19,8 @@ public class EmailNotificationService implements NotificationService {
 
     private final JavaMailSender sender;
 
+    private final String MAIL_TITLE = "<h1>Incident Manager RFOBaden</h1>";
+
     public EmailNotificationService(RfoConfig rfoConfig, JavaMailSender sender) {
         this.rfoConfig = rfoConfig;
         this.sender = sender;
@@ -32,30 +34,9 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildNewUserMessage(User user, String plainPassword) {
         StringBuilder msg = new StringBuilder();
-        msg.append("<h1>Incident Manager RFOBaden</h1>");
+        msg.append(MAIL_TITLE);
         msg.append("<p>Ein Benutzer wurde für Sie im Incident Manager erstellt.</p><br>");
-        msg.append("<table>");
-        msg.append("  <tr>");
-        msg.append("    <th style=\"display:block; margin-right: 50px; text-align: left;\">");
-        msg.append("      E-Mail");
-        msg.append("    </th>");
-        msg.append("    <td>");
-        msg.append(user.getEmail());
-        msg.append("    </td>");
-        msg.append("  <tr>");
-        msg.append("  <tr>");
-        msg.append("    <th style=\"display:block; margin-right: 50px; text-align: left;\">");
-        msg.append("      Passwort");
-        msg.append("    </th>");
-        msg.append("    <td>");
-        msg.append(plainPassword);
-        msg.append("    </td>");
-        msg.append("  <tr>");
-        msg.append("</table>");
-        msg.append("<br>");
-        msg.append(buildLoginMessage());
-        msg.append(buildDoNotAnswerMessage());
-        return msg.toString();
+        return emailAndPasswordBody(user, plainPassword, msg);
     }
 
     @Override
@@ -70,7 +51,7 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildAssigneeMessage(Trackable entity) {
         StringBuilder msg = new StringBuilder();
-        msg.append("<h1>Incident Manager RFOBaden</h1>");
+        msg.append(MAIL_TITLE);
         msg.append("<p>");
         msg.append("  Ihnen wurde etwas zugewiesen.");
         msg.append("</p>");
@@ -104,8 +85,12 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildPasswordResetMessage(User user, String plainPassword) {
         var msg = new StringBuilder();
-        msg.append("<h1>Incident Manager RFOBaden</h1>");
+        msg.append(MAIL_TITLE);
         msg.append("<p>Ihr Passwort wurde zurückgesetzt.</p><br>");
+        return emailAndPasswordBody(user, plainPassword, msg);
+    }
+
+    private String emailAndPasswordBody(User user, String plainPassword, StringBuilder msg) {
         msg.append("<table>");
         msg.append("  <tr>");
         msg.append("    <th style=\"display:block; margin-right: 50px; text-align: left;\">");
