@@ -6,12 +6,23 @@ interface AlertState {
   alerts: Alert[]
 }
 
+/**
+ * The initial state of the `AlertStore`.
+ */
 const initialState: AlertState = {
   alerts: [],
 }
 
+/**
+ * `nextId` is used to generate the unique identifier for each {@link Alert}.
+ * This value will be incremented by creating {@link Alert alerts}.
+ */
 let nextId = 0
 
+/**
+ * `AlertStore` is used to store {@link Alert alerts} globally.
+ * These alerts are displayed by using a {@link UiAlertList}.
+ */
 const AlertStore = createStore(initialState, (getState, setState) => ({
 
   add(alert: Omit<Alert, 'id'>) {
@@ -36,6 +47,9 @@ const AlertStore = createStore(initialState, (getState, setState) => ({
 
 export default AlertStore
 
+/**
+ * @returns All {@link Alert alerts} which are stored in the `AlertStore`.
+ */
 export const useAlerts = (): Alert[] => {
   const { alerts } = useStore(AlertStore)
   return alerts

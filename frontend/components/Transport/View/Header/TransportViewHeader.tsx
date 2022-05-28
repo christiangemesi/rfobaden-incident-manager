@@ -17,12 +17,14 @@ import BackendService, { BackendResponse } from '@/services/BackendService'
 import Vehicle, { parseVehicle } from '@/models/Vehicle'
 import Trailer, { parseTrailer } from '@/models/Trailer'
 import TrailerStore, { useTrailer } from '@/stores/TrailerStore'
+import { noop } from '@/utils/control-flow'
 
 interface Props {
   incident: Incident
   transport: Transport
   hasPriority?: boolean
   onClose?: () => void
+  onToggle?: (transport: Transport) => void
 }
 
 const TransportViewHeader: React.VFC<Props> = ({
@@ -30,8 +32,8 @@ const TransportViewHeader: React.VFC<Props> = ({
   transport,
   hasPriority = false,
   onClose: handleClose,
+  onToggle: handleToggle = noop,
 }) => {
-
   useEffectOnce(function loadVehiclesAndTrailers() {
     (async () => {
       // Load and save all vehicles.
@@ -45,7 +47,7 @@ const TransportViewHeader: React.VFC<Props> = ({
 
       // Load and save all trailers
       const [visibleTrailers, visibleTrailersError]: BackendResponse<Trailer[]> = await BackendService.list(
-        'trailer',
+        'trailers',
       )
       if (visibleTrailersError !== null) {
         throw visibleTrailersError
@@ -74,7 +76,7 @@ const TransportViewHeader: React.VFC<Props> = ({
         </TitleContainer>
 
         <UiIconButtonGroup>
-          <TransportActions incident={incident} transport={transport} onDelete={handleClose} />
+          <TransportActions incident={incident} transport={transport} onDelete={handleClose} onToggle={handleToggle} />
 
           <UiIconButton onClick={handleClose}>
             <UiIcon.CancelAction />

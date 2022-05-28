@@ -6,7 +6,8 @@ import Incident from '@/models/Incident'
 import TransportStore, { useTransportsOfIncident } from '@/stores/TransportStore'
 import TransportList from '@/components/Transport/List/TransportList'
 import TransportView from '@/components/Transport/View/TransportView'
-import Transport from '@/models/Transport'
+import Transport, { parseTransport } from '@/models/Transport'
+import BackendService, { BackendResponse } from '@/services/BackendService'
 
 interface Props {
   incident: Incident
@@ -43,6 +44,19 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
       : query.transportId
   }, [router.query])
 
+  const handleToggle = useCallback(async (transport: Transport) => {
+    const newTransport = { ...transport, isClosed: !transport.isClosed }
+    const [data, error]: BackendResponse<Transport> = await BackendService.update(
+      `incidents/${transport.incidentId}/transports`,
+      transport.id,
+      newTransport,
+    )
+    if (error !== null) {
+      throw error
+    }
+    TransportStore.save(parseTransport(data))
+  }, [])
+
   return (
     <UiSideList
       store={TransportStore}
@@ -51,10 +65,16 @@ const TransportSideView: React.VFC<Props> = ({ incident }) => {
       onSelect={rerouteToTransport}
       onDeselect={rerouteToTransports}
       renderList={({ selected, select }) => (
-        <TransportList incident={incident} transports={transports} selected={selected} onSelect={select} />
+        <TransportList
+          incident={incident}
+          transports={transports}
+          selected={selected}
+          onSelect={select}
+          onToggle={handleToggle}
+        />
       )}
       renderView={({ selected, close }) => (
-        <TransportView incident={incident} transport={selected} onClose={close} />
+        <TransportView incident={incident} transport={selected} onClose={close} onToggle={handleToggle} />
       )}
     />
   )

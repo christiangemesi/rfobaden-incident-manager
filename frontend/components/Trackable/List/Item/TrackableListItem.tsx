@@ -93,6 +93,6 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
     border-bottom-right-radius: 0 !important;
   `}
   :hover ${Bridge} {
-    background-color: ${({ theme }) => theme.colors.hover.value};
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
   }
 `

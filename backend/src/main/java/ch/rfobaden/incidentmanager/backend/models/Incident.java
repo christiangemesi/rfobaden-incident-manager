@@ -36,7 +36,7 @@ public class Incident extends Model.Basic
     private static final long serialVersionUID = 1L;
 
     /**
-     * The title of the {@code Incident}.
+     * The title of the incident.
      */
     @NotBlank
     @Size(max = 100)
@@ -44,13 +44,13 @@ public class Incident extends Model.Basic
     private String title;
 
     /**
-     * A textual description of what the {@code Incident} is about.
+     * A textual description of what the incident is about.
      */
     @Column(columnDefinition = "TEXT")
     private String description;
 
     /**
-     * Whether the {@code Incident} is closed.
+     * Whether the incident is closed.
      * A closed incident counts as completed.
      */
     @NotNull
@@ -58,15 +58,15 @@ public class Incident extends Model.Basic
     private boolean isClosed;
 
     /**
-     * The reason for closing the {@code Incident}.
-     * It is {@code null} if the entity has never been {@link #isClosed closed}.
+     * The reason for closing the incident.
+     * It is {@code null} if the incident has never been {@link #isClosed closed}.
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "close_reason_id")
     private CloseReason closeReason;
 
     /**
-     * The moment in time at which the {@code Incident} will start.
+     * The moment in time at which the incident will start.
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
      * <p>
@@ -76,34 +76,34 @@ public class Incident extends Model.Basic
     private LocalDateTime startsAt;
 
     /**
-     * The moment in time at which the {@code Incident} will end.
+     * The moment in time at which the incident will end.
      * This represents the actual time at which the real-life event
      * managed in this entity will end.
      */
     private LocalDateTime endsAt;
 
     /**
-     * The {@link Report reports} of the entity.
+     * The {@link Report reports} of the incident.
      */
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
 
     /**
-     * The {@link Transport transports} of the entity.
+     * The {@link Transport transports} of the incident.
      */
     @OneToMany(mappedBy = "incident", cascade = CascadeType.REMOVE)
     private List<Transport> transports = new ArrayList<>();
 
     /**
-     * The images attached to the entity, stored as {@link Document} instances.
+     * The images attached to the incident, stored as {@link Document} instances.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
     /**
-     * The {@link Document documents} attached to the entity.
-     * Does not include the entity's {@link #images image documents}.
+     * The {@link Document documents} attached to the incident.
+     * Does not include the incident's {@link #images image documents}.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
@@ -147,11 +147,11 @@ public class Incident extends Model.Basic
     }
 
     /**
-     * Whether the {@code Incident} is done.
+     * Whether the incident is done.
      * An incident is done when all its {@link #getTransports() transports}
      * and {@link #getReports() reports} are all closed or done.
      *
-     * @return Whether the entity is done.
+     * @return Whether the incident is done.
      */
     @JsonProperty("isDone")
     public boolean isDone() {

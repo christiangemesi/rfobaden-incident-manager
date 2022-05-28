@@ -94,9 +94,13 @@ const PaginationButton = styled(UiButton)<{ isActive?: boolean}>`
   ` : css`
     background: ${theme.colors.secondary.value};
     color: ${theme.colors.secondary.contrast};
+    
+    :hover:not(&[disabled]) {
+      background: ${({ theme }) => theme.colors.secondary.hover}; //TODO active is hovering 
+    }
   `}
+  
 `
 const MorePlaceholder = styled.div`
   padding-top: 0.8rem;
 `
-

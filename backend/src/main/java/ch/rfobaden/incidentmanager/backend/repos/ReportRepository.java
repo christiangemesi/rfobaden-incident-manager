@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code ReportRepository} is a {@link ModelRepository} for {@link Report reports}.
+ */
 @Repository
 public interface ReportRepository
     extends JpaRepository<Report, Long>, ModelRepository<Report, ReportPath> {
@@ -47,7 +50,6 @@ public interface ReportRepository
             + " WHERE "
             + "report.incident.id = :#{#path.incidentId}"
     )
-
     @Override
     List<Report> findAllByPath(@Param("path") ReportPath path);
 
