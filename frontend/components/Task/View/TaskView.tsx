@@ -33,7 +33,7 @@ const TaskView: React.VFC<Props> = ({ report, task, innerRef, onClose: handleClo
 
   return (
     <StyledLevel ref={innerRef} isClosed={report.isClosed || report.isDone || task.isClosed || task.isDone}>
-      { task.isClosed && (
+      { (report.isClosed || report.isDone || task.isClosed || task.isDone ) && (
         <UiBanner color="grey">
           GESCHLOSSEN
         </UiBanner>
