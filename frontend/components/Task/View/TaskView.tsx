@@ -56,7 +56,7 @@ export default TaskView
 
 const StyledLevel = styled(UiLevel)<{ isClosed: boolean }>`
   ${({ isClosed }) => isClosed && css`
-    background-color: ${({ theme }) => theme.colors.backgroundclosed.value};
+    background-color: ${({ theme }) => theme.colors.activeclosed.value};
   `}
 `
 

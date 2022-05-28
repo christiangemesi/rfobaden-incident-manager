@@ -25,8 +25,8 @@ export default styled(UiInlineDrawer)`
   width: 100%;
   min-height: 100%;
 
-  background-color: ${({ theme }) => theme.colors.backgroundactiv.value};
-  border-top: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover}; // TODO adapt color when isClosed
+  background-color: ${({ theme }) => theme.colors.active.value};
+  border-top: 1px solid ${({ theme }) => theme.colors.active.hover}; // TODO adapt color when isClosed
 
   will-change: transform;
   transition: 300ms cubic-bezier(.23,1,.32,1);

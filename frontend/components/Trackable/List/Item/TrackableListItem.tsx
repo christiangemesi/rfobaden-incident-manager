@@ -61,17 +61,17 @@ const Bridge = styled.div<{ isActive: boolean }>`
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform, background-color, box-shadow;
-  // border-top: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
-  // border-bottom: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
+  // border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+  // border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   
 
   ${({ isActive, theme }) => isActive && css`
     transition-duration: 300ms;
     transform: scaleX(1);
     transform-origin: right center;
-    background-color: ${theme.colors.backgroundactiv.value};
-    border-top: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
+    background-color: ${theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   `}
 `
 const BridgeClip = styled.div`
@@ -94,17 +94,17 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    background-color: ${({ theme }) => theme.colors.backgroundactiv.value};
-    border-top: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
-    border-left: 1px solid ${({ theme }) => theme.colors.backgroundactiv.hover};
+    background-color: ${({ theme }) => theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.active.hover};
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.backgroundactiv.value};
+      background-color: ${({ theme }) => theme.colors.active.value};
     }
     
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.backgroundactiv.value};
+      background-color: ${({ theme }) => theme.colors.active.value};
     }
   `}
   
@@ -115,23 +115,23 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 
-    background-color: ${({ theme }) => theme.colors.backgroundclosed.value};
-    border-top: 1px solid ${({ theme }) => theme.colors.backgroundclosed.hover};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.backgroundclosed.hover};
-    border-left: 1px solid ${({ theme }) => theme.colors.backgroundclosed.hover};
+    background-color: ${({ theme }) => theme.colors.activeclosed.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
     
     ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.backgroundclosed.value};
-      border-top: 1px solid ${({ theme }) => theme.colors.backgroundclosed.hover};
-      border-bottom: 1px solid ${({ theme }) => theme.colors.backgroundclosed.hover};
+      background-color: ${({ theme }) => theme.colors.activeclosed.value};
+      border-top: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
     }
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.backgroundclosed.value};
+      background-color: ${({ theme }) => theme.colors.activeclosed.value};
     }
 
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.backgroundclosed.value};
+      background-color: ${({ theme }) => theme.colors.activeclosed.value};
     }
   `}
   

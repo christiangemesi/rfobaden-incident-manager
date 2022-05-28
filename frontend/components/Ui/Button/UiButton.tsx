@@ -102,7 +102,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
 
   :disabled {
     cursor: not-allowed;
-    background: ${({ theme }) => theme.colors.backgroundclosed.hover};
+    background: ${({ theme }) => theme.colors.activeclosed.hover};
     color: ${({ theme, color }) => theme.colors[color].contrast};
   }
 `
