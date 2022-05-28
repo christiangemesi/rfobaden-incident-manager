@@ -22,7 +22,6 @@ import javax.validation.constraints.Size;
 
 /**
  * {@code Transport} represents a transport handled in an {@link Incident}.
- * It is not further divided.
  */
 @Entity
 @Table(name = "transport")
@@ -72,13 +71,13 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private long peopleInvolved;
 
     /**
-     * The person who drives the transport.
+     * The name of the person which will drive the vehicle of this tranport.
      */
     @Size(min = 1, max = 100)
     private String driver;
 
     /**
-     * The vehicle which is driven.
+     * The vehicle used in the transport.
      */
     @NotNull
     @ManyToOne(cascade = {
@@ -90,7 +89,7 @@ public final class Transport extends Model implements PathConvertible<TransportP
     private Vehicle vehicle;
 
     /**
-     * The trailer which is needed, null if none is needed.
+     * The trailer used in the transport, or `null`, if none is needed.
      */
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
@@ -197,7 +196,7 @@ public final class Transport extends Model implements PathConvertible<TransportP
     }
 
     /**
-     * Sets the {@link #getIncident()} () incident}'s id.
+     * Sets the {@link #getIncident() incident}'s id.
      *
      * @param id The incident's new id.
      */
@@ -261,7 +260,7 @@ public final class Transport extends Model implements PathConvertible<TransportP
     }
 
     /**
-     * Allows access to the {@link #getVehicle()() vehilce}'s id.
+     * Allows access to the {@link #getVehicle() vehicle}'s id.
      *
      * @return The vehicle's id.
      */

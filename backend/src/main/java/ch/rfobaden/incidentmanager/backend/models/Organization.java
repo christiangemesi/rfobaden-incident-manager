@@ -65,9 +65,9 @@ public final class Organization extends Model.Basic implements Serializable {
     }
 
     /**
-     * Allows access to the {@link #getUsers() users}'s id.
+     * The ids of the {@link #users users} of this organization.
      *
-     * @return The users' ids.
+     * @return The user ids.
      */
     public List<Long> getUserIds() {
         List<Long> userIds = new ArrayList<>();
@@ -78,9 +78,9 @@ public final class Organization extends Model.Basic implements Serializable {
     }
 
     /**
-     * Sets the {@link #getUsers() users} to the users with the ids.
+     * Replaces all {@link #users() users} with new users, created from a list of ids.
      *
-     * @param ids The users' ids.
+     * @param ids The new user ids.
      */
     public void setUserIds(List<Long> ids) {
         users = new ArrayList<>();

@@ -15,8 +15,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * {@code CloseReason} represents a reason why an {@link Incident} is closed.
- * It can be linked to older close reasons.
+ * {@code CloseReason} describes why an {@link Incident} has been closed.
+ * Whenever an incident is closed, a new close reason has to be stated.
+ * <p>
+ *    When a close reason is created, and it's incident has already been closed once,
+ *    the old close reason is linked to the new one.
+ *    This creates a chain of close reasons, which tracks the close history of a single incident.
+ * </p>
  */
 @Entity
 @Table(name = "close_reason")
@@ -24,7 +29,7 @@ public class CloseReason implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The close reasons id, unique to it's model.
+     * The close reason's id, unique to its model.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +37,7 @@ public class CloseReason implements Serializable {
     private Long id;
 
     /**
-     * The reason why the incident is closed.
+     * The reason why the incident has been closed.
      */
     @NotBlank
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -40,6 +45,7 @@ public class CloseReason implements Serializable {
 
     /**
      * The moment in time at which the close reason was created.
+     * This also represents the time at which the incident has been closed.
      * This value should not be changed after first saving the close reason.
      */
     @NotNull
@@ -48,7 +54,7 @@ public class CloseReason implements Serializable {
 
     /**
      * Link to the previous close reason, {@code null} if it is
-     * the first close reason of the incident.
+     * the first close reason of its incident.
      */
     @OneToOne(cascade = CascadeType.ALL)
     private CloseReason previous;

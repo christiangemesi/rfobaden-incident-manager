@@ -1,7 +1,7 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
 /**
- * {@code Priority} represents a selection of 3 priority levels a {@link Model entity} can have.
+ * {@code Priority} represents how important a specific entity is.
  */
 public enum Priority {
     LOW,

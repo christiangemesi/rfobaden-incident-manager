@@ -24,8 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@code Subtask} represents a subtask handled in a {@link Task}.
- * It is not further divided.
+ * {@code Subtask} represents a subtask, which is pat of a {@link Task}.
  */
 @Entity
 @Table(name = "subtask")
@@ -67,7 +66,7 @@ public class Subtask extends Model
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
      * <p>
-     * This is used to plan a transport in advance.
+     * This is used to plan a subtask in advance.
      * </p>
      */
     private LocalDateTime startsAt;
@@ -119,7 +118,7 @@ public class Subtask extends Model
     }
 
     /**
-     * Allows access to the {@link #getTask().getReport().getIncident() incident}'s id.
+     * The id of the incident to which the subtask belongs.
      *
      * @return The incident's id.
      */

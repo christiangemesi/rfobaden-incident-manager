@@ -10,7 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@code ModelWithName} defines an entity whose visibility can be changed.
+ * {@code ModelWithName} defines an named entity.
+ * Entities of this model can be hidden from users by changing their visibility.
  */
 @MappedSuperclass
 public abstract class ModelWithName extends Model.Basic {
