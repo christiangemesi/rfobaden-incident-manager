@@ -68,7 +68,7 @@ const TaskActions: React.VFC<Props> = ({ report, task, onDelete: handleDeleteCb 
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
         <TrackableEditAction title="Auftrag bearbeiten">{({ close }) => (
-          <TaskForm report={report} task={task} onClose={close} buttonText="Bearbeiten" />
+          <TaskForm report={report} task={task} onClose={close} />
         )}</TrackableEditAction>
 
         {!task.isDone && (

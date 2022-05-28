@@ -31,7 +31,7 @@ const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) =
             </UiCreateButton>
           )}</UiModal.Trigger>
           <UiModal.Body>{({ close }) => (
-            <TaskForm report={report} onSave={handleSelect} onClose={close} buttonText="Erstellen" />
+            <TaskForm report={report} onSave={handleSelect} onClose={close} />
           )}</UiModal.Body>
         </UiModal>
       )}

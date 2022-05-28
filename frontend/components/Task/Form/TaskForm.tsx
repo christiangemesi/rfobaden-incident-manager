@@ -25,7 +25,6 @@ interface Props {
   task?: Task | null
   onSave?: (task: Task) => void
   onClose?: () => void
-  buttonText: string
 }
 
 const TaskForm: React.VFC<Props> = ({
@@ -33,7 +32,6 @@ const TaskForm: React.VFC<Props> = ({
   task = null,
   onSave: handleSave,
   onClose: handleClose,
-  buttonText,
 }) => {
   const form = useForm<ModelData<Task>>(task, () => ({
     title: '',
@@ -153,7 +151,7 @@ const TaskForm: React.VFC<Props> = ({
           </UiGrid.Col>
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={buttonText} />
+        <UiForm.Buttons form={form} text={task === null ? 'Erstellen' : 'Bearbeiten'} />
       </FormContainer>
     </UiForm>
   )
