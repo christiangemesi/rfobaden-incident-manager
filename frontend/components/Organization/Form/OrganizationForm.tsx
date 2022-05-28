@@ -19,11 +19,6 @@ interface Props {
    * Event caused by closing the form.
    */
   onClose?: () => void
-
-  /**
-   * The text of the form's submit button.
-   */
-  buttonText?: string
 }
 
 /**
@@ -32,7 +27,6 @@ interface Props {
 const OrganizationForm: React.VFC<Props> = ({
   organization = null,
   onClose: handleClose,
-  buttonText = 'Erstellen',
 }) => {
   const form = useForm<ModelData<Organization>>(organization, () => ({
     name: '',
@@ -67,7 +61,7 @@ const OrganizationForm: React.VFC<Props> = ({
       <UiForm.Field field={form.name}>{(props) => (
         <UiTextInput {...props} label="Organisation" />
       )}</UiForm.Field>
-      <UiForm.Buttons form={form} text={buttonText} />
+      <UiForm.Buttons form={form} text={organization === null ? 'Erstellen' : 'Bearbeiten'} />
     </UiForm>
   )
 }
