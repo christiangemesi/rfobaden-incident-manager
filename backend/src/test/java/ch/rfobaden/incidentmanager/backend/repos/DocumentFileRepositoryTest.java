@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @SpringBootTest
-public class DocumentFileRepositoryTest {
+class DocumentFileRepositoryTest {
 
     public static final String PATH_TO_TEST_FILE = "src/test/resources/files/blank.pdf";
 

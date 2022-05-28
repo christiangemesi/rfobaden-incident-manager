@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 
 @SpringBootTest
-public class IncidentServiceTest
+class IncidentServiceTest
     extends ModelRepositoryServiceTest.Basic<Incident, IncidentService, IncidentRepository> {
     @Autowired
     Faker faker;

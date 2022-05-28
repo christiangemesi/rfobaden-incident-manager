@@ -26,7 +26,7 @@ import javax.mail.internet.MimeMessage;
 
 @SpringBootTest
 @Import(TestConfig.class)
-public class EmailNotificationServiceTest {
+class EmailNotificationServiceTest {
     @Autowired
     EmailNotificationService service;
 

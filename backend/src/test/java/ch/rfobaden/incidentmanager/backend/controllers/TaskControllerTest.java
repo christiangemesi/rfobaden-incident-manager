@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 @WebMvcTest(TaskController.class)
-public class TaskControllerTest
+class TaskControllerTest
     extends ModelControllerTest<Task, TaskPath, TaskService> {
 
     @MockBean

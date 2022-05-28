@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @SpringBootTest
-public class DocumentServiceTest {
+class DocumentServiceTest {
 
     public static final String DOCUMENT_NAME = "name";
     public static final String PATH_TO_FILE = "src/test/resources/files/blank.pdf";
@@ -47,7 +47,7 @@ public class DocumentServiceTest {
     }
 
     @Test
-    void testFindDocument() throws IOException {
+    void testFindDocument() {
         // Given
         String documentName = "name";
         Document document = new Document(documentName);

@@ -29,7 +29,7 @@ import java.util.function.Supplier;
     TestConfig.class,
     AuthServiceTest.SecurityContextMock.class,
 })
-public class AuthServiceTest {
+class AuthServiceTest {
     @Autowired
     UserGenerator userGenerator;
 

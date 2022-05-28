@@ -21,12 +21,12 @@ import java.util.Optional;
 
 @SpringBootTest
 @Import(TestConfig.class)
-public class ModelServiceTest {
+class ModelServiceTest {
     @Mock(answer = Answers.CALLS_REAL_METHODS)
     ModelService<Model.Basic, EmptyPath> service;
 
     @RepeatedTest(5)
-    public void testCreate() {
+    void testCreate() {
         // Given
         var input = new TestModel();
         var output = new TestModel();
@@ -43,7 +43,7 @@ public class ModelServiceTest {
     }
 
     @RepeatedTest(5)
-    public void testUpdate() {
+    void testUpdate() {
         // Given
         var input = new TestModel();
         var output = new TestModel();
@@ -60,7 +60,7 @@ public class ModelServiceTest {
     }
 
     @RepeatedTest(5)
-    public void testDelete() {
+    void testDelete() {
         // Given
         var input = new TestModel();
 

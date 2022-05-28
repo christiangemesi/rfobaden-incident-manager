@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.stream.Collectors;
 
 @WebMvcTest(VehicleController.class)
-public class VehicleControllerTest
+class VehicleControllerTest
     extends ModelControllerTest.Basic<Vehicle, VehicleService> {
 
     @Autowired

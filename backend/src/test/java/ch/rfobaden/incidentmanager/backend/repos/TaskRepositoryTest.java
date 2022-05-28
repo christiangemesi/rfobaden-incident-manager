@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.ArrayList;
 
 @DataJpaTest
-public class TaskRepositoryTest extends
+class TaskRepositoryTest extends
     ModelRepositoryTest<Task, TaskPath, TaskRepository> {
 
     @Autowired
