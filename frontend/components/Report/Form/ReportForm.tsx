@@ -26,16 +26,13 @@ interface Props {
   incident: Incident
   report?: Report | null
   onSave?: (report: Report) => void
-  onClose?: () => void
-  buttonText?: string
-}
+  onClose?: () => void}
 
 const ReportForm: React.VFC<Props> = ({
   incident,
   report = null,
   onSave: handleSave,
   onClose: handleClose,
-  buttonText = 'Erstellen',
 }) => {
   const form = useForm<ModelData<Report>>(report, () => ({
     title: '',
@@ -209,7 +206,7 @@ const ReportForm: React.VFC<Props> = ({
             </UiGrid.Col>
           </UiGrid>
 
-          <UiForm.Buttons form={form} text={buttonText} />
+          <UiForm.Buttons form={form} text={report === null ? 'Erstellen' : 'Bearbeiten'} />
         </FormContainer>
       </UiForm>
     </div>

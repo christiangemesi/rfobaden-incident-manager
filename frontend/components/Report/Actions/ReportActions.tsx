@@ -77,7 +77,7 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
       )}</UiDropDown.Trigger>
       <UiDropDown.Menu>
         <TrackableEditAction title="Meldung bearbeiten">{({ close }) => (
-          <ReportForm incident={incident} report={report} onClose={close} buttonText="Bearbeiten" />
+          <ReportForm incident={incident} report={report} onClose={close} />
         )}</TrackableEditAction>
 
         {!report.isDone && (
