@@ -66,7 +66,7 @@ const PageHeader: React.VFC = () => {
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserPasswordForm user={currentUser} onClose={close} buttonText="Bearbeiten" />
+                    <UserPasswordForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 <UiModal title="E-Mail ändern">
@@ -74,7 +74,7 @@ const PageHeader: React.VFC = () => {
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserEmailForm user={currentUser} onClose={close} buttonText="Bearbeiten" />
+                    <UserEmailForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
