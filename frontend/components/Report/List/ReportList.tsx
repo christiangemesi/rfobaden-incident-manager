@@ -31,7 +31,7 @@ interface Props extends StyledProps {
 
 /**
  * `ReportList` is a component that displays a list of {@link Report reports} using {@link ReportListItem}.
- * The list includes a button which allow the creation of new reports
+ * The list includes a button which allow the creation of new reports.
  */
 const ReportList: React.VFC<Props> = ({
   incident,
