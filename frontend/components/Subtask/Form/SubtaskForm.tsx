@@ -24,14 +24,12 @@ interface Props {
   task: Task,
   subtask?: Subtask | null
   onClose?: () => void
-  buttonText?: string
 }
 
 const SubtaskForm: React.VFC<Props> = ({
   task,
   subtask = null,
   onClose: handleClose,
-  buttonText = 'Erstellen',
 }) => {
   const form = useForm<ModelData<Subtask>>(subtask, () => ({
     title: '',
@@ -126,10 +124,9 @@ const SubtaskForm: React.VFC<Props> = ({
               <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
-
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={buttonText} />
+        <UiForm.Buttons form={form} text={subtask === null ? 'Erstellen' : 'Bearbeiten'} />
       </FormContainer>
     </UiForm>
   )
