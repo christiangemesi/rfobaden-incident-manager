@@ -82,7 +82,7 @@ const UserListItem: React.VFC<Props> = ({
                     <UiDropDown.Item onClick={open}>Bearbeiten</UiDropDown.Item>
                   )}</UiModal.Trigger>
                   <UiModal.Body>{({ close }) => (
-                    <UserForm user={user} onClose={close} buttonText="Bearbeiten" />
+                    <UserForm user={user} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
                 {isAdmin(currentUser) && (

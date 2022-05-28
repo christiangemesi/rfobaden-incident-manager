@@ -25,17 +25,12 @@ interface Props {
    * Event caused by closing the form.
    */
   onClose?: () => void
-
-  /**
-   * The text of the form's submit button.
-   */
-  buttonText?: string
 }
 
 /**
  * `UserForm` displays a form to create or edit a {@link User}.
  */
-const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose, buttonText = 'Erstellen' }) => {
+const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   const userEmails = useUsers((users) => (
     users.filter((it) => it.id !== user?.id).map(({ email }) => email.toLowerCase())
   ), [user?.id])
@@ -118,7 +113,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose, buttonT
             optionName={mapOrganizationIdToName}
           />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} text={buttonText} />
+        <UiForm.Buttons form={form} text={user === null ? 'Erstellen' : 'Bearbeiten'} />
       </UiForm>
     </div>
   )
