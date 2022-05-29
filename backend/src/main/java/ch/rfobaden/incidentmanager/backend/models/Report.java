@@ -21,40 +21,74 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Report} represents a report handled in an {@link Incident}.
+ * It can be further divided into {@link Task tasks}.
+ */
 @Entity
 @Table(name = "report")
 public class Report extends TrackableModel
     implements PathConvertible<ReportPath>, ImageOwner, DocumentOwner {
 
+    /**
+     * The {@link Incident} the report belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    /**
+     * The way the report was received.
+     */
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private EntryType entryType;
 
+    /**
+     * Additional information about the report.
+     */
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    /**
+     * The location at which the report takes place.
+     */
     @Size(max = 100)
     private String location;
 
+    /**
+     * Whether the report is one of the currently most important reports
+     * of its {@link #incident Incident}.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isKeyReport;
 
+    /**
+     * Whether the report affects its location, making it important to
+     * other reports happening in the same place.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isLocationRelevantReport;
 
+    /**
+     * The {@link Task tasks} of the report.
+     */
     @OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
+    /**
+     * The images attached to the report, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the report.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -128,10 +162,20 @@ public class Report extends TrackableModel
         this.tasks = tasks;
     }
 
+    /**
+     * Lists the {@link Task#getId() ids} of all {@link #getTasks tasks}.
+     *
+     * @return The ids of all tasks.
+     */
     public List<Long> getTaskIds() {
         return getTasks().stream().map(Task::getId).collect(Collectors.toList());
     }
 
+    /**
+     * Lists the {@link Task#getId() ids} of all closed {@link #getTasks() tasks}.
+     *
+     * @return The ids of all closed tasks.
+     */
     public List<Long> getClosedTaskIds() {
         return getTasks().stream()
             .filter(t -> t.isClosed() || t.isDone())
@@ -139,6 +183,12 @@ public class Report extends TrackableModel
             .collect(Collectors.toList());
     }
 
+    /**
+     * Whether the report is done.
+     * A report is done when all its {@link #getTasks() tasks} are all closed or done.
+     *
+     * @return Whether the entity is done.
+     */
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getTasks().isEmpty()
