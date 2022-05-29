@@ -83,8 +83,8 @@ const DropDown = styled.ul<{ isOpen: boolean }>`
   transition-property: transform, opacity;
 
   ${({ theme }) => css`
-    background: ${theme.colors.tertiary.value};
-    color: ${theme.colors.tertiary.contrast};
+    background: ${theme.colors.light.value};
+    color: ${theme.colors.light.contrast};
   `};
   
   box-shadow:

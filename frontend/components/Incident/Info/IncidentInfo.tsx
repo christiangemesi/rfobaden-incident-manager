@@ -106,15 +106,16 @@ export default IncidentInfo
 
 const BackButton = styled(UiLink)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
+
+  transition: ease 100ms;
+  transition-property: color;
+
+  &:hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.secondary.contrast};
+  }
 `
 
 const LinkCaption = styled(UiCaption)`
   color: ${({ theme }) => theme.colors.secondary.contrast};
-  transition: ease 100ms;
-  transition-property: transform;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-  }
 `

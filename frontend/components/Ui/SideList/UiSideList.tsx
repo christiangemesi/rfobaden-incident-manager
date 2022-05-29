@@ -144,7 +144,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   overflow: hidden;
   z-index: 2;
 
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  background-color: ${({ theme }) => theme.colors.light.value};
   border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);

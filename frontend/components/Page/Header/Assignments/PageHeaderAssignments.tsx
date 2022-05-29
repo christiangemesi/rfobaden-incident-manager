@@ -104,7 +104,7 @@ const PriorityIcon = styled(UiPriority)`
 `
 const Counter = styled.span`
   position: absolute;
-  background-color: ${({ theme }) => theme.colors.grey.value};
+  background-color: ${({ theme }) => theme.colors.primary.contrast};
   border-radius: 50%;
   top: -0.3rem;
   right: -0.3rem;

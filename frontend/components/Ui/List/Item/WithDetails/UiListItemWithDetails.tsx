@@ -67,7 +67,7 @@ const UiListItemWithDetails: React.VFC<Props> = ({
 export default styled(UiListItemWithDetails)``
 
 const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
-  padding-left: 0;
+  padding: 0 1rem 0 0;
   transition-property: inherit, padding;
   flex-wrap: wrap;
   column-gap: 1rem;
@@ -77,10 +77,12 @@ const StyledListItem = styled(UiListItem)<{ isClosed: boolean }>`
     opacity: 0.75;
 
     &:hover {
-      filter: grayscale(0.8) brightness(0.8);
-      opacity: 1;
+      //filter: grayscale(0.8) brightness(0.8);
+      //opacity: 1;
+      background-color: ${({ theme }) => theme.colors.secondary.hover}; //TODO grey
     }
-  `}
+  `
+}
 `
 
 const LeftSide = styled.div`
@@ -116,6 +118,7 @@ const ItemDescription = styled.div`
   white-space: nowrap;
   overflow: hidden;
   margin-left: 1rem;
+  padding: 0.5rem 0;
   
   ${Themed.media.lg.max} {
     display: none;
@@ -133,6 +136,7 @@ const TextContent = styled.div<{ isTitleSwitched: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   width: 18rem;
+  padding: 0.5rem 0;
   
   ${({ isTitleSwitched }) => isTitleSwitched && css`
     display: flex;

@@ -155,4 +155,8 @@ const Item = styled(UiListItemWithDetails)<{ isDragging: boolean, isClosed: bool
       filter: brightness(0.6);
     }
   `}
+  
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
+  }
 `

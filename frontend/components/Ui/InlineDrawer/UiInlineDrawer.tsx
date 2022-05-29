@@ -25,7 +25,7 @@ export default styled(UiInlineDrawer)`
   width: 100%;
   min-height: 100%;
 
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  background-color: ${({ theme }) => theme.colors.light.value};
   border: 1px solid ${({ theme }) => theme.colors.grey.value};
 
   will-change: transform;

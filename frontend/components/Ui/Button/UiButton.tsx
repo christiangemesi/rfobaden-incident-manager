@@ -84,7 +84,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   color: ${({ theme, color }) => theme.colors[color].contrast};
 
   transition: 250ms ease;
-  transition-property: filter, box-shadow;
+  transition-property: filter, box-shadow, background-color;
   
   ${({ isFull }) => isFull && css`
     width: 100%;
@@ -92,7 +92,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
   
   :hover:not(&[disabled]) {
     cursor: pointer;
-    filter: brightness(90%);
+    background-color: ${({ theme, color }) => theme.colors[color].hover};
   }
 
   :active:not(&[disabled]) {

@@ -64,5 +64,5 @@ const StyledButton = styled.button<{ color?: ColorName }>`
   color: ${({
     theme,
     color,
-  }) => color === undefined ? theme.colors.tertiary.contrast : theme.colors[color].value};
+  }) => color === undefined ? theme.colors.light.contrast : theme.colors[color].value};
 `

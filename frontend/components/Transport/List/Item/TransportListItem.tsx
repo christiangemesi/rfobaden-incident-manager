@@ -1,35 +1,27 @@
-import Transport, { parseTransport } from '@/models/Transport'
+import Transport from '@/models/Transport'
 import React, { useCallback } from 'react'
-import TransportStore from '@/stores/TransportStore'
 import UiCheckbox from '@/components/Ui/Checkbox/UiCheckbox'
-import BackendService, { BackendResponse } from '@/services/BackendService'
 import TrackableListItem, { Props as TrackableListItemProps } from '@/components/Trackable/List/Item/TrackableListItem'
 
-type Props = TrackableListItemProps<Transport>
+interface Props extends TrackableListItemProps<Transport> {
+  onToggle: (transport: Transport) => void
+}
 
 const TransportListItem: React.VFC<Props> = ({
   record: transport,
+  onToggle: handleToggle,
   ...itemProps
 }) => {
-  const handleToggle = useCallback(async () => {
-    const newTransport = { ...transport, isClosed: !transport.isClosed }
-    const [data, error]: BackendResponse<Transport> = await BackendService.update(
-      `incidents/${transport.incidentId}/transports`,
-      transport.id,
-      newTransport
-    )
-    if (error !== null) {
-      throw error
-    }
-    TransportStore.save(parseTransport(data))
-  }, [transport])
+  const toggleTransportClose = useCallback(() => {
+    handleToggle(transport)
+  }, [transport, handleToggle])
 
   return (
     <TrackableListItem
       {...itemProps}
       record={transport}
     >
-      <UiCheckbox value={transport.isClosed} onChange={handleToggle} />
+      <UiCheckbox value={transport.isClosed} onChange={toggleTransportClose} />
     </TrackableListItem>
   )
 }

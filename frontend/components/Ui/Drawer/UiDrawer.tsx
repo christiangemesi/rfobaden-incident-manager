@@ -72,8 +72,8 @@ const Container = styled.div<{
           0 3px 14px 2px rgba(0, 0, 0, 0.12), 
           5px 5px -3px rgba(0, 0, 0, 0.2);
 
-  background: ${({ theme }) => theme.colors.tertiary.value};
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  background: ${({ theme }) => theme.colors.light.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
 
   ${Themed.media.xs.only} {
     max-width: 100%;
