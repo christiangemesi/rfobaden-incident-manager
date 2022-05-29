@@ -34,7 +34,12 @@ interface Props {
   onClose?: () => void
 }
 
-const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: handleSave, onClose: handleClose }) => {
+const TransportForm: React.VFC<Props> = ({
+  incident,
+  transport = null,
+  onSave: handleSave,
+  onClose: handleClose,
+}) => {
   const currentUser = useCurrentUser()
 
   const form = useForm<ModelData<Transport>>(transport, () => ({
@@ -313,7 +318,7 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
-          <UiForm.Buttons form={form} />
+          <UiForm.Buttons form={form} text={transport === null ? 'Erstellen' : 'Bearbeiten'} />
         </FormContainer>
       </UiForm>
     </div>

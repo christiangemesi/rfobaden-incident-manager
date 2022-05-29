@@ -133,7 +133,7 @@ const LoggedInUser = styled.div`
   align-items: center;
 `
 const Username = styled.span`
-  font-size: 1em;  
+  font-size: 1em;
   margin-right: 0.25rem;
 
   ${Themed.media.xs.only} {

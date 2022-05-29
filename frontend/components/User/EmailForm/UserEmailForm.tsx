@@ -62,7 +62,7 @@ const UserEmailForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.email}>{(props) => (
           <UiTextInput {...props} label="E-Mail" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text="Bearbeiten" />
       </UiForm>
     </div>
   )
