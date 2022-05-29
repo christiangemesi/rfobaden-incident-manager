@@ -48,6 +48,9 @@ export interface Props extends StyledProps {
   href?: string
 }
 
+/**
+ * `UiButton` displays a button element.
+ */
 const UiButton: React.VFC<Props> = ({
   color = 'primary',
   type = 'button',
@@ -85,7 +88,7 @@ const StyledButton = styled.button<{ isFull: boolean, isDisabled: boolean, color
 
   transition: 250ms ease;
   transition-property: filter, box-shadow, background-color;
-  
+
   ${({ isFull }) => isFull && css`
     width: 100%;
   `}
