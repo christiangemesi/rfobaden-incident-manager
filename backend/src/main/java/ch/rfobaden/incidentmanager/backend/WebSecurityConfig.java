@@ -33,6 +33,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * {@code WebSecurityConfig} configures elements of Spring security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -64,7 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
+            // The service loading authorization users.
             .userDetailsService(detailsWrapperService)
+
+            // Encoder for user passwords.
             .passwordEncoder(passwordEncoder);
     }
 
@@ -73,21 +79,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         AuthenticationManagerBuilder authenticationManagerBuilder
     ) throws Exception {
         authenticationManagerBuilder
+            // The service loading authorization users.
             .userDetailsService(detailsWrapperService)
+
+            // Encoder for user passwords.
             .passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+            // Enable cors, as the API runs on a different host than the frontend.
             .cors()
+
+            // Disable csrf.
             .and().csrf().disable()
+
+            // Permit all requests by default,
+            // as we authorize them using annotations.
             .authorizeRequests().anyRequest().permitAll()
             .and().exceptionHandling().authenticationEntryPoint(authEntryPoint)
 
-
-            // make sure we use stateless session; session won't be used to
-            // store user's state.
+            // make sure we use stateless session;
+            // session won't be used to store user's state.
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
@@ -101,6 +115,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManagerBean();
     }
 
+    /**
+     * {@code AuthEntryPoint} is an {@link AuthenticationEntryPoint} that
+     * handles our custom exceptions.
+     */
     public static class AuthEntryPoint implements AuthenticationEntryPoint {
         private final ApiExceptionHandler exceptionHandler;
 
@@ -121,7 +139,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-
+    /**
+     * {@code DetailsWrapperService} is a {@link UserDetailsService}
+     * that wraps a {@link UserService}.
+     */
     public static class DetailsWrapperService implements UserDetailsService {
         private final UserService userService;
 
@@ -138,6 +159,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
+    /**
+     * {@code DetailsWrapper} is a {@link UserDetails} that wraps a {@link User}.
+     */
     public static class DetailsWrapper implements UserDetails {
         private final User user;
 

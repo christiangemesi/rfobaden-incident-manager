@@ -22,6 +22,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * {@code JwtAuthFilter} is a {@link OncePerRequestFilter} that
+ * parses the current session from requests.
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     private static final String BEARER_HEADER_PREFIX = "Bearer ";
@@ -51,6 +55,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * Attempts to parse a session from a http request.
+     * <p>
+     *     If an expired session token exists,
+     *     it will be deleted from the response.
+     * </p>
+     *
+     * @param request The http request.
+     * @param response The http response.
+     * @return The session token, if it exists.
+     */
     private Optional<SessionData> processRequest(
         HttpServletRequest request,
         HttpServletResponse response
@@ -66,6 +81,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             });
     }
 
+    /**
+     * Attempts to parse the session token from the request
+     * by checking if an Authorization header exists.
+     *
+     * @param request The http request.
+     * @return The session token, if it exists.
+     */
     private Optional<String> getTokenFromHeader(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
         if (authHeader == null || authHeader.isEmpty()) {
@@ -80,6 +102,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return Optional.of(authHeader.substring(BEARER_HEADER_PREFIX.length()));
     }
 
+    /**
+     * Attempts to parse the session token from the request
+     * by checking if a session cookie exists.
+     *
+     * @param request The http request.
+     * @return The session token, if it exists.
+     */
     private Optional<String> getTokenFromCookie(HttpServletRequest request) {
         var cookies = request.getCookies();
         if (cookies == null) {

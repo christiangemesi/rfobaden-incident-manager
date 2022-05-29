@@ -22,21 +22,28 @@ import java.security.Key;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+/**
+ * {@code JwtHelper} contains shared utility methods used to handle JWT tokens.
+ */
 @Component
 public class JwtHelper {
+    /**
+     * The duration over which a JWT remains valid.
+     */
     private static final long EXPIRATION_MILLIS = TimeUnit.DAYS.toMillis(30);
 
-    private final Key secretKey;
-
     private final JwtParser jwtParser;
-
     private final UserService userService;
+
+    /**
+     * The secret key used to create and validate tokens.
+     */
+    private final Key secretKey;
 
     public JwtHelper(RfoConfig rfoConfig, UserService userService) {
         this.secretKey = parseKey(rfoConfig.getJwt().getSecret());
@@ -44,12 +51,25 @@ public class JwtHelper {
         this.jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
     }
 
+    /**
+     * Encodes a user into a JWT.
+     *
+     * @param user The user to encode.
+     * @return The encoded JWT.
+     */
     public String encodeUser(User user) {
         return encode((jwt) -> jwt
             .setSubject(user.getId().toString())
         );
     }
 
+    /**
+     * Decodes a JWT into a {@link User} instance.
+     *
+     * @param token The token to decode.
+     * @return An {@link Optional} containing the decoded user,
+     *         or {@link Optional#empty()}, if the decoding failed.
+     */
     public Optional<User> decodeUser(String token) {
         var jwt = decode(token).orElse(null);
         if (jwt == null) {
@@ -81,6 +101,12 @@ public class JwtHelper {
         return Optional.of(user);
     }
 
+    /**
+     * Encodes a new JWT.
+     *
+     * @param build Builds the JWT.
+     * @return The encoded JWT.
+     */
     public String encode(Consumer<JwtBuilder> build) {
         var builder = Jwts.builder()
             // Add 1 second to issuedAt.
@@ -94,6 +120,12 @@ public class JwtHelper {
         return builder.signWith(secretKey).compact();
     }
 
+    /**
+     * Decodes a JWT.
+     *
+     * @param token The token to decode.
+     * @return The decoded JWT.
+     */
     public Optional<Jws<Claims>> decode(String token) {
         try {
             return Optional.of(jwtParser.parseClaimsJws(token));
@@ -107,10 +139,21 @@ public class JwtHelper {
         }
     }
 
+    /**
+     * Access to {@link #EXPIRATION_MILLIS} as a {@link Duration}.
+     *
+     * @return The duration for which a JWT remains valid.
+     */
     public Duration getTokenDuration() {
         return Duration.of(EXPIRATION_MILLIS, ChronoUnit.MILLIS);
     }
 
+    /**
+     * Parses a secret key string into a {@link Key}.
+     *
+     * @param jwtSecret The secret key string.
+     * @return The parsed key.
+     */
     private static Key parseKey(String jwtSecret) {
         try {
             return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
