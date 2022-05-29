@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code TaskRepository} is a {@link ModelRepository} for {@link Task tasks}.
+ */
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>, ModelRepository<Task, TaskPath> {
 
@@ -53,7 +56,6 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " AND "
             + "task.report.id = :#{#path.reportId}"
     )
-
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
 

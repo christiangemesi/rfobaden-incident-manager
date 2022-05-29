@@ -69,7 +69,8 @@ const Item = styled(UiListItem)`
   :hover {
     & * ${DeleteButton} {
       visibility: visible;
-    }
+    } 
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
   }
 `
 

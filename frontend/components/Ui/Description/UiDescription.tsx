@@ -33,12 +33,13 @@ const Paragraph = styled.p`
   white-space: pre-wrap;
   display: flex;
   align-items: center;
-  
+  word-break: break-word;
+
   :not(:first-child) {
     margin-top: 0.25rem;
   }
-  
+
   ${UiIcon}:first-child {
-    margin-right: 0.25rem;  
+    margin-right: 0.25rem;
   }
 `

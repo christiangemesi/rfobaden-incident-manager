@@ -50,7 +50,7 @@ const StyledButton = styled.button<{ color?: ColorName }>`
   transition-property: background-color;
 
   :hover {
-    background-color: ${({ theme }) => theme.colors.grey.value};
+    background-color: ${({ theme }) => theme.colors.grey.hover};
   }
   
   &:first-child {
