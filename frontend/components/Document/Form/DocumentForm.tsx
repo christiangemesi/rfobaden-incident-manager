@@ -1,7 +1,7 @@
 import Incident from '@/models/Incident'
 import Document from '@/models/Document'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiForm from '@/components/Ui/Form/UiForm'
 import styled from 'styled-components'
@@ -88,11 +88,14 @@ const DocumentForm: React.VFC<Props> = ({
   })
   useCancel(form, handleClose)
 
-  const fileNameArray = form.file.value?.name
-    .split('.')
-    .slice() ?? ['']
-  fileNameArray.splice(-1, 1)
-  const fileName = fileNameArray.join('.')
+  // The default value of the placeholder.
+  const fileName = useMemo(() => {
+    const fileNameArray = form.file.value?.name
+      .split('.')
+      .slice() ?? ['']
+    fileNameArray.splice(-1, 1)
+    return fileNameArray.join('.')
+  }, [form])
 
   return (
     <UiForm form={form}>
