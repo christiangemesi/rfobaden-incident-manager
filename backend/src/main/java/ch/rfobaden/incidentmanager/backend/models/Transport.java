@@ -11,21 +11,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ * {@code Transport} represents a transport handled in an {@link Incident}.
+ */
 @Entity
 @Table(name = "transport")
 public final class Transport extends TrackableModel implements PathConvertible<TransportPath> {
+
+    /**
+     * The {@link Incident} the transport belongs to.
+     */
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
+    /**
+     * The number of people involved in the transport.
+     */
     @Min(0)
     private long peopleInvolved;
+
+    /**
+     * The name of the person which will drive the vehicle of this tranport.
+     */
     @Size(min = 1, max = 100)
     private String driver;
 
+    /**
+     * The vehicle used in the transport.
+     */
+    @NotNull
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -34,6 +53,9 @@ public final class Transport extends TrackableModel implements PathConvertible<T
     @JoinColumn(nullable = false)
     private Vehicle vehicle;
 
+    /**
+     * The trailer used in the transport, or `null`, if none is needed.
+     */
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -42,9 +64,15 @@ public final class Transport extends TrackableModel implements PathConvertible<T
     @JoinColumn
     private Trailer trailer;
 
+    /**
+     * The departure location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfDeparture;
 
+    /**
+     * The arrival location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfArrival;
 
@@ -58,6 +86,11 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         this.incident = incident;
     }
 
+    /**
+     * Allows access to the {@link #getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
     public Long getIncidentId() {
         if (incident == null) {
             return null;
@@ -65,6 +98,11 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         return incident.getId();
     }
 
+    /**
+     * Sets the {@link #getIncident() incident}'s id.
+     *
+     * @param id The incident's new id.
+     */
     public void setIncidentId(Long id) {
         if (id == null) {
             incident = null;
@@ -98,6 +136,11 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         this.vehicle = vehicle;
     }
 
+    /**
+     * Allows access to the {@link #getVehicle() vehicle}'s id.
+     *
+     * @return The vehicle's id.
+     */
     public Long getVehicleId() {
         if (vehicle == null) {
             return null;
@@ -105,6 +148,11 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         return vehicle.getId();
     }
 
+    /**
+     * Sets the {@link #getVehicle() vehicle}'s id.
+     *
+     * @param id The vehicle's new id.
+     */
     public void setVehicleId(Long id) {
         if (id == null) {
             vehicle = null;
@@ -122,6 +170,12 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         this.trailer = trailer;
     }
 
+    /**
+     * Allows access to the {@link #getTrailer() trailer}'s id.
+     * Is {@code null} if there's currently no trailer.
+     *
+     * @return The trailer's id.
+     */
     public Long getTrailerId() {
         if (trailer == null) {
             return null;
@@ -129,6 +183,12 @@ public final class Transport extends TrackableModel implements PathConvertible<T
         return trailer.getId();
     }
 
+    /**
+     * Sets the {@link #getTrailer() trailer}'s id.
+     * If the id is {@code null}, the trailer will be removed.
+     *
+     * @param id The trailer's new id.
+     */
     public void setTrailerId(Long id) {
         if (id == null) {
             trailer = null;
@@ -163,7 +223,6 @@ public final class Transport extends TrackableModel implements PathConvertible<T
     public String getFullTitle() {
         return getIncident().getTitle() + "/" + getTitle();
     }
-
 
     @Override
     public boolean equals(Object other) {

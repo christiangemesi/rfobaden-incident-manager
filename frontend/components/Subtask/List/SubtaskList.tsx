@@ -186,7 +186,8 @@ const List = styled.ul`
   flex-basis: 0;
   flex-grow: 1;
   max-width: 100%;
-  
+  padding-top: 0.5rem;
+
   width: 100%;
 
   div:first-child > ${UiListItem} {

@@ -24,7 +24,10 @@ interface Props {
 /**
  * `OrganizationForm` displays a form to create and edit an {@link Organization}.
  */
-const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: handleClose }) => {
+const OrganizationForm: React.VFC<Props> = ({
+  organization = null,
+  onClose: handleClose,
+}) => {
   const form = useForm<ModelData<Organization>>(organization, () => ({
     name: '',
     userIds: [],
@@ -58,7 +61,7 @@ const OrganizationForm: React.VFC<Props> = ({ organization = null, onClose: hand
       <UiForm.Field field={form.name}>{(props) => (
         <UiTextInput {...props} label="Organisation" />
       )}</UiForm.Field>
-      <UiForm.Buttons form={form} />
+      <UiForm.Buttons form={form} text={organization === null ? 'Erstellen' : 'Bearbeiten'} />
     </UiForm>
   )
 }

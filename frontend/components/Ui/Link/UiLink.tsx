@@ -37,6 +37,6 @@ const TextA = styled(A)`
   color: ${({ theme }) => theme.colors.primary.value};
 
   &:hover {
-    filter: brightness(150%);
+    filter: brightness(150%); // TODO find where it is used
   }
 `

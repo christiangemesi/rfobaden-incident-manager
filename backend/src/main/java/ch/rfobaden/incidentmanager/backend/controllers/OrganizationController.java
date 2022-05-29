@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@code OrganizationController} is a {@link ModelController} for {@link Organization organizations}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/organizations")
 public class OrganizationController

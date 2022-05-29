@@ -238,7 +238,8 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           height: 10px;
 
           &:hover {
-            filter: brightness(130%);
+            border-top: solid 2px ${({ theme }) => theme.colors.primary.hover};
+            border-left: solid 2px ${({ theme }) => theme.colors.primary.hover};
           }
 
           &.react-datepicker__navigation--months-upcoming,
@@ -269,14 +270,15 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         .react-datepicker__navigation-icon {
           &::before {
             border-color: ${({ theme }) => theme.colors.primary.value};
+            
           }
         }
       }
 
       .react-datepicker__header {
-        background: ${({ theme }) => theme.colors.secondary.value};
-        color: ${({ theme }) => theme.colors.secondary.contrast};
-        border-color: ${({ theme }) => theme.colors.secondary.value};
+        background: ${({ theme }) => theme.colors.tertiary.value};
+        color: ${({ theme }) => theme.colors.tertiary.contrast};
+        border-color: ${({ theme }) => theme.colors.tertiary.value};
 
         ${Themed.media.sm.max} {
           border-top-right-radius: 0.3rem;
@@ -510,6 +512,9 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
               }
 
               .react-datepicker__time-list-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 transition: 150ms ease;
                 transition-property: background-color, color, font-weight;
 

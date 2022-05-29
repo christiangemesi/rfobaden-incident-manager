@@ -16,19 +16,32 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ * {@code Subtask} represents a subtask, which is pat of a {@link Task}.
+ */
 @Entity
 @Table(name = "subtask")
 public class Subtask extends TrackableModel
     implements PathConvertible<SubtaskPath>, ImageOwner, DocumentOwner {
 
+    /**
+     * The {@link Task} the subtask belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Task task;
 
+    /**
+     * The images attached to the subtask, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the subtask.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -52,13 +65,23 @@ public class Subtask extends TrackableModel
         this.documents = documents;
     }
 
-    public Long getTaskId() {
+    /**
+     * The id of the incident to which the subtask belongs.
+     *
+     * @return The incident's id.
+     */
+    public Long getIncidentId() {
         if (task == null) {
             return null;
         }
-        return task.getId();
+        return task.getReport().getIncidentId();
     }
 
+    /**
+     * Allows access to the {@link #getTask().getReport() report}'s id.
+     *
+     * @return The report's id.
+     */
     public Long getReportId() {
         if (task == null) {
             return null;
@@ -66,11 +89,16 @@ public class Subtask extends TrackableModel
         return task.getReportId();
     }
 
-    public Long getIncidentId() {
+    /**
+     * Allows access to the {@link #getTask() task}'s id.
+     *
+     * @return The task's id.
+     */
+    public Long getTaskId() {
         if (task == null) {
             return null;
         }
-        return task.getReport().getIncidentId();
+        return task.getId();
     }
 
     @JsonIgnore

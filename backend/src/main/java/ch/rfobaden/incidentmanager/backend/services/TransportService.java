@@ -6,11 +6,15 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * {@code TransportService} is a {@link ModelService} for {@link Transport transports}.
+ */
 @Service
 public class TransportService
     extends ModelRepositoryService<Transport, TransportPath, TransportRepository> {
@@ -34,5 +38,4 @@ public class TransportService
     public List<Transport> listWhereAssigneeId(Long id) {
         return repository.findAllByAssigneeId(id);
     }
-
 }

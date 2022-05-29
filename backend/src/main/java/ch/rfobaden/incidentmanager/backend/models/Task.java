@@ -19,25 +19,45 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Task} represents a task handled in an {@link Report}.
+ * It can be further divided into {@link Subtask subtasks}.
+ */
 @Entity
 @Table(name = "task")
 public class Task extends TrackableModel
     implements PathConvertible<TaskPath>, ImageOwner, DocumentOwner {
 
+    /**
+     * The {@link Report} the task belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
+    /**
+     * The location at which the task takes place.
+     */
     @Size(max = 100)
     private String location;
 
+    /**
+     * The {@link Subtask subtasks} of the task.
+     */
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
+    /**
+     * The images attached to the task, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the task.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -61,11 +81,24 @@ public class Task extends TrackableModel
         this.documents = documents;
     }
 
-    @JsonIgnore
-    public Report getReport() {
-        return report;
+    /**
+     * Allows access to the {@link #getReport().getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
+    @JsonProperty
+    public Long getIncidentId() {
+        if (report == null) {
+            return null;
+        }
+        return report.getIncident().getId();
     }
 
+    /**
+     * Allows access to the {@link #getReport() report}'s id.
+     *
+     * @return The report's id.
+     */
     @JsonProperty
     public Long getReportId() {
         if (report == null) {
@@ -74,12 +107,9 @@ public class Task extends TrackableModel
         return report.getId();
     }
 
-    @JsonProperty
-    public Long getIncidentId() {
-        if (report == null) {
-            return null;
-        }
-        return report.getIncident().getId();
+    @JsonIgnore
+    public Report getReport() {
+        return report;
     }
 
     @JsonProperty

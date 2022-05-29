@@ -97,7 +97,7 @@ const DocumentForm: React.VFC<Props> = ({
         <UiForm.Field field={form.name}>{(props) => (
           <UiTextInput {...props} label="Name" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text="Speichern" />
       </FormContainer>
     </UiForm>
   )
