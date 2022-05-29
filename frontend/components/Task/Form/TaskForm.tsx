@@ -59,7 +59,9 @@ const TaskForm: React.VFC<Props> = ({ report, task = null, onSave: handleSave, o
       validate.notBlank({ allowNull: true }),
       validate.maxLength(100),
     ],
-    priority: [],
+    priority: [
+      validate.notNull(),
+    ],
     assigneeId: [],
     closedAt: [],
     startsAt: [],

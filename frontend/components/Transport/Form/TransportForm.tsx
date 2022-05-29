@@ -82,7 +82,9 @@ const TransportForm: React.VFC<Props> = ({ incident, transport = null, onSave: h
       peopleInvolved: [
         (value) => value >= 0 || 'muss positiv sein',
       ],
-      priority: [],
+      priority: [
+        validate.notNull(),
+      ],
       isClosed: [],
       startsAt: [],
       endsAt: [],

@@ -76,7 +76,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      priority: [],
+      priority: [
+        validate.notNull(),
+      ],
       incidentId: [],
       authorId: [],
       assigneeId: [],

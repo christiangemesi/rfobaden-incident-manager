@@ -51,7 +51,9 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
     description: [
       validate.notBlank({ allowNull: true }),
     ],
-    priority: [],
+    priority: [
+      validate.notNull(),
+    ],
     assigneeId: [],
     closedAt: [],
     startsAt: [],
