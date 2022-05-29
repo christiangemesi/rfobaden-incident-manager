@@ -100,7 +100,7 @@ const DocumentForm: React.VFC<Props> = ({
         <UiForm.Field field={form.file}>{(props) => (
           <FileInput {...props} accept={type === 'image' ? 'image/*' : ''} />
         )}</UiForm.Field>
-        <UiForm.Field field={form.name}>{(props) => (
+        <UiForm.Field field={form.name} deps={[fileName]}>{(props) => (
           <UiTextInput {...props} label="Name" placeholder={fileName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
