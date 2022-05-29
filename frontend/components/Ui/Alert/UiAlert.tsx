@@ -86,7 +86,6 @@ const Box = styled.div<{ type: ColorName, isVisible: boolean }>`
   ${({ isVisible }) => !isVisible && css`
     opacity: 0;
   `}
-
   ${Themed.media.sm.max} {
     width: 95%;
   }

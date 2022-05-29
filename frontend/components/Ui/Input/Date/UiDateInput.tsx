@@ -39,7 +39,7 @@ interface Props extends UiInputProps<Date | null> {
 const UiDateInput: React.VFC<Props> = ({
   value,
   label = '',
-  placeholder = 'dd.MM.yyyy',
+  placeholder = 'dd.mm.yyyy hh:mm',
   placement = 'auto',
   className,
   onChange: handleChange,
@@ -141,7 +141,7 @@ const PickerButton = styled.button.attrs(() => ({
 
   transition: 250ms ease;
   transition-property: border-color;
-  
+
   :hover {
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.primary.hover};
@@ -412,7 +412,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
           .react-datepicker__day-name {
             line-height: 1.2;
-            
+
             :first-child {
               ${Themed.media.xs.only} {
                 display: none;
@@ -431,7 +431,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          
+
           ${Themed.media.xs.only} {
             padding: 0.55rem 1.05rem;
           }
@@ -491,8 +491,9 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
       // The scrollable time column. 
       .react-datepicker__time-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
-        
-        .react-datepicker-time__header {}
+
+        .react-datepicker-time__header {
+        }
 
         .react-datepicker__time {
 
