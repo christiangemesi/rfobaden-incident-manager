@@ -88,6 +88,12 @@ const DocumentForm: React.VFC<Props> = ({
   })
   useCancel(form, handleClose)
 
+  const fileNameArray = form.file.value?.name
+    .split('.')
+    .slice() ?? ['']
+  fileNameArray.splice(-1, 1)
+  const fileName = fileNameArray.join('.')
+
   return (
     <UiForm form={form}>
       <FormContainer>
@@ -95,7 +101,7 @@ const DocumentForm: React.VFC<Props> = ({
           <FileInput {...props} accept={type === 'image' ? 'image/*' : ''} />
         )}</UiForm.Field>
         <UiForm.Field field={form.name}>{(props) => (
-          <UiTextInput {...props} label="Name" />
+          <UiTextInput {...props} label="Name" placeholder={fileName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} />
       </FormContainer>
