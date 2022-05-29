@@ -140,8 +140,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   }
 
   ${({ isClosed }) => isClosed && css`
-    background-color: ${({ theme }) => theme.colors.grey.value};
-    filter: brightness(1.2);
+    background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
   `}
   
   ${Themed.media.md.max} {

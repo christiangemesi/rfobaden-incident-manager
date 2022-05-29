@@ -63,7 +63,7 @@ const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = f
             )}</UiModal.Body>
           </UiModal>
         )}
-        <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
+        <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
           <UiGrid.Col size={7}>
             <UiSortButton field={sort.name}>
               <UiTitle level={6}>Organisation</UiTitle>

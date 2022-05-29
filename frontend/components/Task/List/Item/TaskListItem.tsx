@@ -35,9 +35,10 @@ const LeftSpacer = styled.div`
 
 const StyledUiListItemWithDetails = styled(UiListItemWithDetails)<{isClosed: boolean}>`
   ${({ isClosed }) => isClosed && css`
-    filter: grayscale(0.7) brightness(0.7);
+    background-color: ${({ theme }) => theme.colors.grey.value};
+    
     :hover {
-      filter: brightness(0.6);
+      background-color: ${({ theme }) => theme.colors.grey.hover};
     }
   `}
 `

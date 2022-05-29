@@ -40,7 +40,7 @@ const Item = styled.li`
     }
     
     :hover {
-      background-color: ${theme.colors.grey.value};
+      background-color: ${theme.colors.grey.hover};
     }
   `}
 `

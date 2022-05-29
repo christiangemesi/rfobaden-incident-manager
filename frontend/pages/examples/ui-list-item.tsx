@@ -1,6 +1,5 @@
 import React from 'react'
 import UiList from '@/components/Ui/List/UiList'
-import UiActionButton from '@/components/Ui/Button/UiActionButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
@@ -8,6 +7,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import UiItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemWithDetails'
 import Priority from '@/models/Priority'
+import UiButton from '@/components/Ui/Button/UiButton'
 
 const UiListContainerExample: React.VFC = () => {
   return (
@@ -17,9 +17,9 @@ const UiListContainerExample: React.VFC = () => {
         <UiGrid.Col>
           <UiList>
             <UiIcon.PriorityHigh />
-            <UiActionButton>
+            <UiButton>
               test
-            </UiActionButton>
+            </UiButton>
             <UiIcon.SubmitAction />
           </UiList>
         </UiGrid.Col>
@@ -32,9 +32,9 @@ const UiListContainerExample: React.VFC = () => {
               <UiIcon.PriorityHigh />
             </UiListItem>
             <UiListItem onClick={() => alert('test')}>
-              <UiActionButton color="secondary">
+              <UiButton color="secondary">
                 test
-              </UiActionButton>
+              </UiButton>
               <UiIcon.PriorityMedium />
               <UiIcon.PriorityLow />
               <UiIcon.EditAction />

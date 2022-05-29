@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code TransportRepository} is a {@link ModelRepository} for {@link Transport transports}.
+ */
 @Repository
 public interface TransportRepository
     extends JpaRepository<Transport, Long>, ModelRepository<Transport, TransportPath> {
@@ -48,7 +51,6 @@ public interface TransportRepository
             + " WHERE "
             + "transport.incident.id = :#{#path.incidentId}"
     )
-
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
 

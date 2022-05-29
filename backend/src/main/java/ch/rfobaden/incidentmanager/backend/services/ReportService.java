@@ -6,11 +6,15 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.ReportPath;
 import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * {@code ReportService} is a {@link ModelService} for {@link Report reports}.
+ */
 @Service
 public class ReportService extends ModelRepositoryService<Report, ReportPath, ReportRepository> {
     private final NotificationService notificationService;

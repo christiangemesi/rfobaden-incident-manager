@@ -32,7 +32,7 @@ const UiCircularProgress: React.VFC<Props> = ({
     return (
       <svg width={SVG_SIZE} height={SVG_SIZE}>
         <g transform={`rotate(-90 ${RADIUS_OUTER} ${RADIUS_OUTER})`}>
-          <OuterCircle radius={RADIUS_OUTER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} />
+          <OuterCircle radius={RADIUS_OUTER} centerX={SVG_CENTER_X} centerY={SVG_CENTER_Y} isClosed={isClosed} />
           <ProgressCircle
             progress={progress}
             radius={RADIUS_PROGRESS}
@@ -92,7 +92,7 @@ interface ProgressCircleProps {
  */
 const ProgressCircle: React.VFC<ProgressCircleProps> = ({ progress, radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
-  const color = isClosed ? theme.colors.grey.value : theme.colors.success.value
+  const color = isClosed ? theme.colors.grey.hover : theme.colors.success.value
   const circ = 2 * Math.PI * radius
   const strokePct = ((100 - progress * 100) * circ) / 100
 
@@ -127,21 +127,23 @@ interface OuterCircleProps {
    * Y center of the outer circle.
    */
   centerY: number
+  isClosed: boolean
 }
 
 /**
  * `OuterCircle` displays the outer circle of a {@link UiCircularProgress}.
  */
-const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY }) => {
+const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY,isClosed }) => {
   const theme = useTheme()
 
   return (
-    <circle
+    <InnerCircleStyled
       r={radius}
       cx={centerX}
       cy={centerY}
+      isClosed={isClosed}
       fill={theme.colors.success.contrast}
-      stroke={theme.colors.secondary.value}
+      stroke={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
       strokeWidth={`${BORDER_SIZE}px`}
     />
   )
@@ -176,19 +178,19 @@ const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, is
   const theme = useTheme()
 
   return (
-    <StyledCircle
+    <InnerCircleStyled
       r={radius}
       cx={centerX}
       cy={centerY}
       isClosed={isClosed}
-      fill={isClosed ? theme.colors.grey.value : theme.colors.secondary.value}
+      fill={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
     />
   )
 }
 
-const StyledCircle = styled.circle<{ isClosed: boolean }>`
+const InnerCircleStyled = styled.circle<{ isClosed: boolean }>`
   ${({ isClosed }) => isClosed && css`
-    filter: brightness(1.2);
+    //TODO what can be put inhere so that it isnt empty? 
   `}
 `
 

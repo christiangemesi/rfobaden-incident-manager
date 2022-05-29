@@ -25,51 +25,100 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Task} represents a task handled in an {@link Report}.
+ * It can be further divided into {@link Subtask subtasks}.
+ */
 @Entity
 @Table(name = "task")
 public class Task extends Model
     implements PathConvertible<TaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The {@link User assignee} responsible for the completion of the tasks.
+     */
     @ManyToOne
     @JoinColumn
     private User assignee;
 
+    /**
+     * The {@link Report} the task belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
+    /**
+     * The title of the task.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String title;
 
+    /**
+     * A textual description of what the task is about.
+     */
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * The moment in time at which the transport will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     * <p>
+     * This is used to plan a transport in advance.
+     * </p>
+     */
     private LocalDateTime startsAt;
 
+    /**
+     * The moment in time at which the transport will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
     private LocalDateTime endsAt;
 
+    /**
+     * The location at which the task takes place.
+     */
     @Size(max = 100)
     private String location;
 
+    /**
+     * Whether the task is closed.
+     * A closed task counts as completed.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isClosed;
 
+    /**
+     * The priority of the task.
+     */
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Priority priority;
 
+    /**
+     * The {@link Subtask subtasks} of the task.
+     */
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
+    /**
+     * The images attached to the task, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the task.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -104,11 +153,24 @@ public class Task extends Model
         this.assignee = assignee;
     }
 
-    @JsonIgnore
-    public Report getReport() {
-        return report;
+    /**
+     * Allows access to the {@link #getReport().getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
+    @JsonProperty
+    public Long getIncidentId() {
+        if (report == null) {
+            return null;
+        }
+        return report.getIncident().getId();
     }
 
+    /**
+     * Allows access to the {@link #getReport() report}'s id.
+     *
+     * @return The report's id.
+     */
     @JsonProperty
     public Long getReportId() {
         if (report == null) {
@@ -117,12 +179,9 @@ public class Task extends Model
         return report.getId();
     }
 
-    @JsonProperty
-    public Long getIncidentId() {
-        if (report == null) {
-            return null;
-        }
-        return report.getIncident().getId();
+    @JsonIgnore
+    public Report getReport() {
+        return report;
     }
 
     @JsonProperty

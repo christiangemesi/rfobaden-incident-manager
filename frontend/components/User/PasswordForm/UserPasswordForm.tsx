@@ -60,7 +60,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.passwordRepeat}>{(props) => (
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text="Bearbeiten" />
       </UiForm>
     </div>
   )

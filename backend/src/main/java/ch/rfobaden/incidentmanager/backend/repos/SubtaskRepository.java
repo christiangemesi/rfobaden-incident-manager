@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code SubtaskRepository} is a {@link ModelRepository} for {@link Subtask subtasks}.
+ */
 @Repository
 public interface SubtaskRepository
     extends JpaRepository<Subtask, Long>, ModelRepository<Subtask, SubtaskPath> {
@@ -60,7 +63,6 @@ public interface SubtaskRepository
             + " AND "
             + "subtask.task.id = :#{#path.taskId}"
     )
-
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
 

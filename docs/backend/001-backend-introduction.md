@@ -1,6 +1,6 @@
 # Backend: Introduction
 
-The backend of the IncidentManager is implemented using Java. It's built using _Gradle_ and uses _Spring Boot_. It exposes a JSON-based REST-API, and persists its data in an MySQL database.
+The backend of the IncidentManager is implemented in Java. It's built using _Gradle_ and uses _Spring Boot_. It exposes a JSON-based REST-API, and persists its data in an MySQL database.
 
 ## Structure
 

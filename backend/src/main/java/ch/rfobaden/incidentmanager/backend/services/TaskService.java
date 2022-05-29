@@ -6,11 +6,15 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.TaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * {@code TaskService} is a {@link ModelService} for {@link Task tasks}.
+ */
 @Service
 public class TaskService extends ModelRepositoryService<Task, TaskPath, TaskRepository> {
     private final NotificationService notificationService;
