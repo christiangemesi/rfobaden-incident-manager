@@ -6,11 +6,15 @@ import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
+import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
 import ch.rfobaden.incidentmanager.backend.services.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * {@code SubtaskService} is a {@link ModelService} for {@link Subtask subtasks}.
+ */
 @Service
 public class SubtaskService
     extends ModelRepositoryService<Subtask, SubtaskPath, SubtaskRepository> {

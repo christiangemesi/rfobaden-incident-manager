@@ -9,13 +9,23 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code ModelWithName} defines an named entity.
+ * Entities of this model can be hidden from users by changing their visibility.
+ */
 @MappedSuperclass
 public abstract class ModelWithName extends Model.Basic {
+    /**
+     * The name of the entity.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false, unique = true)
     private String name;
 
+    /**
+     * Whether the entity is visible.
+     */
     @NotNull
     @Column(nullable = false)
     private boolean isVisible;
