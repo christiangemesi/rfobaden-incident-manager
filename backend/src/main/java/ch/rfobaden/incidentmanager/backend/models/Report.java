@@ -97,6 +97,11 @@ public class Report extends TrackableModel
         return incident;
     }
 
+    /**
+     * The id of the incident to which the report belongs.
+     *
+     * @return The incident's id.
+     */
     @JsonProperty
     public Long getIncidentId() {
         if (incident == null) {
@@ -187,7 +192,7 @@ public class Report extends TrackableModel
      * Whether the report is done.
      * A report is done when all its {@link #getTasks() tasks} are all closed or done.
      *
-     * @return Whether the entity is done.
+     * @return Whether the report is done.
      */
     @JsonProperty("isDone")
     public boolean isDone() {

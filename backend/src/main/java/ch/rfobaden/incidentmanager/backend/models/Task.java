@@ -135,10 +135,20 @@ public class Task extends TrackableModel
         this.subtasks = subtasks;
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all subtasks.
+     */
     public List<Long> getSubtaskIds() {
         return getSubtasks().stream().map(Subtask::getId).collect(Collectors.toList());
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all closed {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all closed subtasks.
+     */
     public List<Long> getClosedSubtaskIds() {
         return getSubtasks().stream()
             .filter(Subtask::isClosed)
@@ -146,6 +156,12 @@ public class Task extends TrackableModel
             .collect(Collectors.toList());
     }
 
+    /**
+     * Whether the task is done.
+     * A task is done when all its {@link #getSubtasks() subtasks} are all closed or done.
+     *
+     * @return Whether the task is done.
+     */
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getSubtasks().isEmpty()
@@ -185,7 +201,6 @@ public class Task extends TrackableModel
         );
     }
 
-
     @Override
     public TaskPath toPath() {
         var path = new TaskPath();
@@ -193,6 +208,4 @@ public class Task extends TrackableModel
         path.setReportId(getReport().getId());
         return path;
     }
-
-
 }
