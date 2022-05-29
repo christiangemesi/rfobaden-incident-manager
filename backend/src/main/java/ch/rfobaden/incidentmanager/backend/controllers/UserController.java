@@ -84,7 +84,7 @@ public class UserController extends ModelController.Basic<User, UserService> {
     }
 
     /**
-     *¨Sets a user's password to a new randomly generated value.
+     * Sets a user's password to a new randomly generated value.
      *
      * @param response The http response object.
      * @param id The id of the user whose password gets reset.
