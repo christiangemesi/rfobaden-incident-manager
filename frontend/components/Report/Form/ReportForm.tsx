@@ -61,7 +61,9 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
         validate.notBlank({ allowNull: true }),
       ],
       entryType: {
-        source: [],
+        source: [
+          validate.notNull(),
+        ],
         descriptor: [
           validate.notBlank({ allowNull: true }),
           validate.maxLength(100),
@@ -153,6 +155,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
                 <UiSelectInput
                   {...props}
                   label="Meldeart"
+                  placeholder="Meldeart"
                   options={Object.values(EntryTypeSource)}
                   optionName={mapEntryTypeToName}
                   menuPlacement="bottom"
@@ -176,6 +179,7 @@ const ReportForm: React.VFC<Props> = ({ incident, report = null, onSave: handleS
                 <UiSelectInput
                   {...props}
                   label="Zuweisung"
+                  placeholder="Zuweisung"
                   options={userIds}
                   optionName={mapUserIdToName}
                   menuPlacement="top"
