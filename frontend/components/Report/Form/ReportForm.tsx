@@ -26,7 +26,8 @@ interface Props {
   incident: Incident
   report?: Report | null
   onSave?: (report: Report) => void
-  onClose?: () => void}
+  onClose?: () => void
+}
 
 const ReportForm: React.VFC<Props> = ({
   incident,
