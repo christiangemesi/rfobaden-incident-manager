@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * {@code SubtaskController} is a {@link ModelController} for {@link Subtask subtasks}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/incidents/{incidentId}/reports/{reportId}/tasks/{taskId}/subtasks")
 public class SubtaskController extends ModelController<Subtask, SubtaskPath, SubtaskService> {

@@ -12,21 +12,33 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-
+/**
+ * {@code EntryType} represents the type how a {@link Report} comes in and
+ * how the reporter can be contacted.
+ */
 @Entity
 @Table(name = "entry_type")
 public class EntryType implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The entry type id, unique to it's model.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
 
+    /**
+     * The type a reporter comes in.
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Source source;
 
+    /**
+     * The details a reporter can be reached.
+     */
     @Size(min = 1, max = 100)
     private String descriptor;
 
@@ -83,6 +95,9 @@ public class EntryType implements Serializable {
             + '}';
     }
 
+    /**
+     * Types how a reporter can come in.
+     */
     public enum Source {
         PHONE,
         EMAIL,

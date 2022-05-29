@@ -109,15 +109,44 @@ const BridgeClip = styled.div`
     display: none;
   }
 `
-const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
+const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boolean}>`
   height: 3.5rem;
   position: relative;
+  
   ${({ isActive }) => isActive && css`
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.light.value};
+    }
+    
+    :hover ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.light.value};
+    }
   `}
-  :hover ${Bridge} {
-    background-color: ${({ theme }) => theme.colors.secondary.hover};
-  }
+  
+  
+  
+  ${({ isActive, isClosed }) => isActive && isClosed && css`
+    transition-duration: 300ms;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+
+    background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    
+    ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+
+    :hover ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    }
+  `}
+  
 `

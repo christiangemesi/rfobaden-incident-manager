@@ -57,11 +57,6 @@ const UiComponentsExample: React.VFC = () => {
       <br />
 
       <UiTitle level={4}>Buttons</UiTitle>
-      <Link href="examples/ui-action-button">
-        <a>
-          UiActionButton
-        </a>
-      </Link>
       <br />
       <Link href="examples/ui-button">
         <a>
