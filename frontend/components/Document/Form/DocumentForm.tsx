@@ -88,14 +88,14 @@ const DocumentForm: React.VFC<Props> = ({
   })
   useCancel(form, handleClose)
 
-  // The default value of the placeholder.
+  // The default value of the file name field.
   const fileName = useMemo(() => {
     const fileNameArray = form.file.value?.name
       .split('.')
       .slice() ?? ['']
     fileNameArray.splice(-1, 1)
     return fileNameArray.join('.')
-  }, [form])
+  }, [form.file.value])
 
   return (
     <UiForm form={form}>
