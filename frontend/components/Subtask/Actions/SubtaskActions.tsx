@@ -47,7 +47,6 @@ const SubtaskActions: React.VFC<Props> = ({ task, subtask, onDelete: handleDelet
             Drucken
           </UiDropDown.Item>
         )}</UiPrinter>
-
         <UiDropDown.Item onClick={handleDelete}>
           Löschen
         </UiDropDown.Item>

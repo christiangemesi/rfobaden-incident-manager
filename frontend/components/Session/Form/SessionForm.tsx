@@ -74,7 +74,7 @@ const SessionForm: React.VFC = () => {
               <UiForm.Field field={form.password}>{(props) => (
                 <UiTextInput {...props} placeholder="Passwort" type="password" />
               )}</UiForm.Field>
-              <UiForm.Buttons form={form} />
+              <UiForm.Buttons form={form} text="Anmelden" />
             </FieldContainer>
           </UiForm>
         </UiGrid.Col>
