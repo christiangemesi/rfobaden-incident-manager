@@ -23,12 +23,30 @@ import { EntryTypeSource } from '@/models/EntryType'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to update, or `null`, if a new one should be created.
+   */
   report?: Report | null
+
+  /**
+   * Event caused by saving the form.
+   */
   onSave?: (report: Report) => void
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `ReportForm` allows the creation or update of a {@link Report}.
+ */
 const ReportForm: React.VFC<Props> = ({
   incident,
   report = null,
@@ -130,6 +148,7 @@ const ReportForm: React.VFC<Props> = ({
                     <UiToggle {...props} label="Schlüsselmeldung" />
                   )}</UiForm.Field>
                 </UiGrid.Col>
+
                 <UiGrid.Col>
                   <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                     <UiToggle {...props} label="Lagerelevant" />
@@ -137,6 +156,7 @@ const ReportForm: React.VFC<Props> = ({
                 </UiGrid.Col>
               </UiGrid>
             </UiGrid.Col>
+
             <SliderCol size={{ xs: 12, sm: 3 }}>
               <UiForm.Field field={form.priority}>{(props) => (
                 <UiPrioritySlider {...props} />
@@ -164,6 +184,7 @@ const ReportForm: React.VFC<Props> = ({
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.descriptor}>{(props) => (
                 <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
@@ -187,6 +208,7 @@ const ReportForm: React.VFC<Props> = ({
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.location}>{(props) => (
                 <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
@@ -200,6 +222,7 @@ const ReportForm: React.VFC<Props> = ({
                 <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.endsAt}>{(props) => (
                 <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
@@ -215,6 +238,12 @@ const ReportForm: React.VFC<Props> = ({
 }
 export default ReportForm
 
+/**
+ * Maps the id of a user to its name.
+ *
+ * @param id The id of the user.
+ * @return The user's name.
+ */
 const mapUserIdToName = (id: Id<User>): string | null => {
   const user = UserStore.find(id)
   return user === null
@@ -222,6 +251,12 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
+/**
+ * Maps the entry type enum to its name.
+ *
+ * @param source The entry type to map.
+ * @return The entry type's name.
+ */
 export const mapEntryTypeToName = (source: string): string => {
   switch (source) {
   case EntryTypeSource.PHONE:
@@ -241,6 +276,12 @@ export const mapEntryTypeToName = (source: string): string => {
   }
 }
 
+/**
+ * Uppercase the first letter of each word in a string.
+ *
+ * @param str The string to transform.
+ * @return The string in title case.
+ */
 const toTitleCase = (str: string): string => {
   return str
     .split(' ')
@@ -258,5 +299,6 @@ const SliderCol = styled(UiGrid.Col)`
   ${Themed.media.sm.max} {
     text-align: center;
   }
+
   text-align: right;
 `

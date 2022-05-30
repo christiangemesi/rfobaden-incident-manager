@@ -35,7 +35,7 @@ public class Application {
      * <p>
      *     The context is not directly injected, but instead available by
      *     calling the injected {@code Supplier}. This is necessary since each
-     *     request has it's own context, which it has to load itself.
+     *     request has its own context, which it has to load itself.
      * </p>
      */
     @Bean

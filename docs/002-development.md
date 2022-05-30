@@ -20,7 +20,7 @@ docker compose down
 
 ## Dependencies
 
-For the frontend to work correctly, it's dependencies need to be manually installed:
+For the frontend to work correctly, its dependencies need to be manually installed:
 
 ```shell
 docker compose run --no-deps frontend sh -c "npm install"
@@ -30,7 +30,7 @@ Backend dependencies are automatically fetched on startup.
 
 ## Persisted Data
 
-Some parts of the application are persisted even when it's containers are stopped. They have to be manually removed, if you desire to do so.
+Some parts of the application are persisted even when its containers are stopped. They have to be manually removed, if you desire to do so.
 
 > Note that the docker containers have to be stopped in order for these commands to work.
 

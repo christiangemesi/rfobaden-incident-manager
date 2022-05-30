@@ -7,6 +7,9 @@ import { Themed } from '@/theme'
 
 type Props = Omit<TrackableListItemProps<Report>, 'children'>
 
+/**
+ * `ReportListItem` is a component that displays a {@link Report} in a list.
+ */
 const ReportListItem: React.VFC<Props> = ({
   record: report,
   isSmall,

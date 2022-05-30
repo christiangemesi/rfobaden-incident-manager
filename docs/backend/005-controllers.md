@@ -23,7 +23,7 @@ See `ReportController` for an example of how this is done.
 
 By default, `ModelController` allows read-only access for all `AGENT` users, and read-and-write access for `ADMIN` users. This can be changed by either applying an authorization annotation to your entire controller, or by overriding a specific method, and applying an annotation to it.
 
-> If you override a controller method, you must also copy all the annotations of it's parameters!
+> If you override a controller method, you must also copy all the annotations of its parameters!
 
 ### Testing
 

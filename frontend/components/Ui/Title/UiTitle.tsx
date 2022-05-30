@@ -11,7 +11,7 @@ interface Props extends StyledProps {
   children: ReactNode
 
   /**
-   * The level of the heading, between 1 to 6.
+   * The level of the heading, between 1 and 6.
    */
   level: number
 

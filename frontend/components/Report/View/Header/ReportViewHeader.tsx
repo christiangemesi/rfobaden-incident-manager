@@ -14,12 +14,30 @@ import UiPriority from '@/components/Ui/Priority/UiPriority'
 import { mapEntryTypeToName } from '@/components/Report/Form/ReportForm'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Whether the report has a priority to display.
+   */
   hasPriority?: boolean
+
+  /**
+   * Event caused by closing the report view.
+   */
   onClose?: () => void
 }
 
+/**
+ * `ReportViewHeader` displays detailed information about a report.
+ */
 const ReportViewHeader: React.VFC<Props> = ({
   incident,
   report,
@@ -32,6 +50,7 @@ const ReportViewHeader: React.VFC<Props> = ({
         <UiGrid.Col>
           <ReportInfo report={report} />
         </UiGrid.Col>
+
         <UiGrid.Col size="auto" textAlign="right">
           <UiIconButtonGroup>
             <ReportActions incident={incident} report={report} onDelete={handleClose} />
@@ -41,6 +60,7 @@ const ReportViewHeader: React.VFC<Props> = ({
           </UiIconButtonGroup>
         </UiGrid.Col>
       </UiGrid>
+
       <TitleContainer>
         {hasPriority && (
           <UiPriority priority={report.priority} />
@@ -51,6 +71,7 @@ const ReportViewHeader: React.VFC<Props> = ({
           </UiTitle>
         </div>
       </TitleContainer>
+
       <InfoContainer>
         <UiDescription description={report.description} notes={report.notes} />
         <InfoTable>
@@ -63,6 +84,7 @@ const ReportViewHeader: React.VFC<Props> = ({
                 <span>{mapEntryTypeToName(report.entryType.source)}</span>
               </td>
             </tr>
+
             <tr>
               <th>
                 <UiTitle level={6}>Melder-Info:</UiTitle>
@@ -103,6 +125,7 @@ const InfoContainer = styled.div`
 const InfoTable = styled.table`
   table-layout: fixed;
   text-align: left;
+  
   th {
     width: 10rem;
   }

@@ -8,12 +8,31 @@ import Incident from '@/models/Incident'
 import TrackableList from '@/components/Trackable/List/TrackableList'
 
 interface Props extends StyledProps {
+  /**
+   * The incident the reports belongs to.
+   */
   incident: Incident
+
+  /**
+   * The reports to display.
+   */
   reports: readonly Report[]
-  selected?: Report | null,
+
+  /**
+   * The currently selected report.
+   */
+  selected?: Report | null
+
+  /**
+   * Event caused by selecting a report.
+   */
   onSelect?: (report: Report) => void
 }
 
+/**
+ * `ReportList` is a component that displays a list of {@link Report reports} using {@link ReportListItem}.
+ * The list includes a button which allow the creation of new reports.
+ */
 const ReportList: React.VFC<Props> = ({
   incident,
   reports,
