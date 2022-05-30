@@ -26,7 +26,7 @@ const FooterContainer = styled.footer`
   height: 4rem;
   padding: 10px 50px;
   margin-top: 2rem;
-  background: ${({ theme }) => theme.colors.secondary.value};
+  background: ${({ theme }) => theme.colors.tertiary.value};
   font-size: 0.8em;
 `
 
