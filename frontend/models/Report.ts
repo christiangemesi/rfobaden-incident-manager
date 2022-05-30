@@ -1,5 +1,4 @@
 import Model from '@/models/base/Model'
-import Incident from '@/models/Incident'
 import Id from '@/models/base/Id'
 import Task from '@/models/Task'
 import Document from '@/models/Document'
@@ -31,11 +30,6 @@ export default interface Report extends Model, Trackable {
    * The way the report was received.
    */
   entryType: EntryType
-
-  /**
-   * The {@link Incident} id the report belongs to.
-   */
-  incidentId: Id<Incident>
 
   /**
    * Whether the report is one of the currently most important reports
@@ -84,7 +78,7 @@ export const parseReport = (data: Report): Report => ({
 })
 
 /**
- * `OpenReport` represents a report that's neither
+ * `OpenReport` represents a report that is neither
  * {@link Report.isClosed closed} nor {@link Report.isDone done}.
  */
 export interface OpenReport extends Report {
@@ -94,8 +88,9 @@ export interface OpenReport extends Report {
 
 /**
  * Checks if a report is an instance of {@link OpenReport}.
- * 
+ *
  * @param report The report.
  * @return Whether the report is a {@link OpenReport}.
  */
-export const isOpenReport = (report: Report): report is OpenReport => !report.isClosed && !report.isDone
+export const isOpenReport = (report: Report): report is OpenReport =>
+  !report.isClosed && !report.isDone
