@@ -151,7 +151,7 @@ class DocumentControllerTest extends AppControllerTest {
     @Test
     @WithMockAgent
     void testUploadDocument_ownerNotFound() throws Exception {
-        for (var model : new String[]{"transport", "report", "task", "subtask"}) {
+        for (var model : new String[]{"report", "task", "subtask"}) {
             // When
             Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 

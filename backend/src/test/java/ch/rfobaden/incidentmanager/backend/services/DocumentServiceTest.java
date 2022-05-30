@@ -66,6 +66,4 @@ class DocumentServiceTest {
         assertThat(fileSystemResource).isNotNull();
         assertThat(fileSystemResource).isEqualTo(resource);
     }
-
-
 }
