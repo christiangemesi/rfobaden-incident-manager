@@ -48,7 +48,8 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     <Page>
       <UiContainer>
         <UiTitle level={1} isCentered>
-          IncidentManager
+          {/*//TODO make responsive - title does not break yet*/}
+          <Bold>INCIDENT</Bold><Light>MANAGER</Light>
         </UiTitle>
         <Subtitle>
           Regionales Führungsorgan Baden
@@ -100,10 +101,17 @@ const CardColumn: React.VFC<CardProps> = ({
 const Subtitle = styled.div`
   width: 100%;
   text-align: center;
-  margin-top: -0.5rem;
+  //margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 `
+
+const Bold = styled.span`
+ font-weight: bolder; 
+ `
+const Light = styled.span`
+ font-weight: lighter; 
+ `
 
 const Card = styled.div`
   height: 15rem;
