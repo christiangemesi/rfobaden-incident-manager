@@ -97,9 +97,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     <UiLevel>
       { (report.isClosed || report.isDone) && (
         <UiBanner color="grey">
-          <StyledText>
-            GESCHLOSSEN
-          </StyledText>
+          GESCHLOSSEN
         </UiBanner>
       )}
       <UiLevel.Header>
@@ -146,6 +144,3 @@ const TaskDrawer = styled(UiInlineDrawer)`
   left: -1px;
   width: calc(100% + 2px);
 `
-const StyledText = styled.span`
- opacity: 0.7; 
- `
