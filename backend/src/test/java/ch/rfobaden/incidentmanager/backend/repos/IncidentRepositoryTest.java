@@ -5,7 +5,7 @@ import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepositoryTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class IncidentRepositoryTest
+class IncidentRepositoryTest
     extends ModelRepositoryTest.Basic<Incident, IncidentRepository> {
 
     @Override

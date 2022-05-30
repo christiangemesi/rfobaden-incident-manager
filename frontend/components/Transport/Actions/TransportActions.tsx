@@ -19,7 +19,7 @@ interface Props {
   onToggle: (transport: Transport) => void
 }
 
-const ReportActions: React.VFC<Props> = ({
+const TransportActions: React.VFC<Props> = ({
   incident,
   transport,
   onDelete: handleDeleteCb,
@@ -72,4 +72,4 @@ const ReportActions: React.VFC<Props> = ({
     </UiDropDown>
   )
 }
-export default ReportActions
+export default TransportActions

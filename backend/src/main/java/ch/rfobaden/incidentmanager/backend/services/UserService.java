@@ -3,10 +3,6 @@ package ch.rfobaden.incidentmanager.backend.services;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.UserCredentials;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
-import ch.rfobaden.incidentmanager.backend.repos.ReportRepository;
-import ch.rfobaden.incidentmanager.backend.repos.SubtaskRepository;
-import ch.rfobaden.incidentmanager.backend.repos.TaskRepository;
-import ch.rfobaden.incidentmanager.backend.repos.TransportRepository;
 import ch.rfobaden.incidentmanager.backend.repos.UserRepository;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryService;
 import ch.rfobaden.incidentmanager.backend.services.base.ModelService;
@@ -35,18 +31,6 @@ public class UserService extends ModelRepositoryService.Basic<User, UserReposito
     private final NotificationService notificationService;
 
     private final SecureRandom passwordRandom = new SecureRandom();
-
-    @Autowired
-    private TransportRepository transportRepository;
-
-    @Autowired
-    private ReportRepository reportRepository;
-
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private SubtaskRepository subtaskRepository;
 
     @Autowired
     public UserService(PasswordEncoder passwordEncoder, NotificationService notificationService) {

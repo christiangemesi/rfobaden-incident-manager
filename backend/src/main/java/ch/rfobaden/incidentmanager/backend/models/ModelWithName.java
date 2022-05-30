@@ -2,6 +2,7 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -14,7 +15,9 @@ import javax.validation.constraints.Size;
  * Entities of this model can be hidden from users by changing their visibility.
  */
 @MappedSuperclass
-public abstract class ModelWithName extends Model.Basic {
+public abstract class ModelWithName extends Model.Basic implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The name of the entity.
      */

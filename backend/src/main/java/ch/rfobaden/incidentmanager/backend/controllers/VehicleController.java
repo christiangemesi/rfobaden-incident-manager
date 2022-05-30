@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
-import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.Vehicle;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.VehicleService;
