@@ -2,6 +2,8 @@ package ch.rfobaden.incidentmanager.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -9,14 +11,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * {@code TrackableModel} is the class for types class representing trackable database entities.
+ * {@code TrackableModel} is the base class for types class representing trackable database entities.
  * It provides trackable fields, functionality and utilities for such types.
  */
 @MappedSuperclass
-public abstract class TrackableModel extends ClosableModel implements Trackable {
+public abstract class TrackableModel extends Model implements Trackable, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -25,6 +29,45 @@ public abstract class TrackableModel extends ClosableModel implements Trackable 
     @ManyToOne
     @JoinColumn
     private User assignee;
+
+    /**
+     * The title of the trackable entity.
+     */
+    @Size(max = 100)
+    @NotBlank
+    @Column(nullable = false)
+    private String title;
+
+    /**
+     * A textual description of what the trackable entity is about.
+     */
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    /**
+     * The moment in time at which the trackable entity will start.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will start.
+     * <p>
+     *     This is used to plan a trackable entity in advance.
+     * </p>
+     */
+    private LocalDateTime startsAt;
+
+    /**
+     * The moment in time at which the trackable entity will end.
+     * This represents the actual time at which the real-life event
+     * managed in this entity will end.
+     */
+    private LocalDateTime endsAt;
+
+    /**
+     * Whether the trackable entity is closed.
+     * A closed trackable entity counts as completed.
+     */
+    @NotNull
+    @Column(nullable = false)
+    private boolean isClosed;
 
     /**
      * The priority of the trackable entity.
@@ -45,6 +88,46 @@ public abstract class TrackableModel extends ClosableModel implements Trackable 
     }
 
     @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public LocalDateTime getStartsAt() {
+        return startsAt;
+    }
+
+    @Override
+    public void setStartsAt(LocalDateTime startsAt) {
+        this.startsAt = startsAt;
+    }
+
+    @Override
+    public LocalDateTime getEndsAt() {
+        return endsAt;
+    }
+
+    @Override
+    public void setEndsAt(LocalDateTime endsAt) {
+        this.endsAt = endsAt;
+    }
+
+    @Override
     public Priority getPriority() {
         return priority;
     }
@@ -52,6 +135,16 @@ public abstract class TrackableModel extends ClosableModel implements Trackable 
     @Override
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    @Override
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
     /**
@@ -75,6 +168,11 @@ public abstract class TrackableModel extends ClosableModel implements Trackable 
         var that = (TrackableModel) other;
         return equalsModel(that)
             && Objects.equals(assignee, that.assignee)
+            && Objects.equals(title, that.title)
+            && Objects.equals(description, that.description)
+            && Objects.equals(startsAt, that.startsAt)
+            && Objects.equals(endsAt, that.endsAt)
+            && Objects.equals(isClosed, that.isClosed)
             && priority == that.priority;
     }
 
@@ -87,6 +185,11 @@ public abstract class TrackableModel extends ClosableModel implements Trackable 
         return Objects.hash(
             modelHashCode(),
             assignee,
+            title,
+            description,
+            startsAt,
+            endsAt,
+            isClosed,
             priority
         );
     }
