@@ -184,7 +184,7 @@ const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, is
       cy={centerY}
       isClosed={isClosed}
       stroke={isClosed ? theme.colors.grey.value : theme.colors.secondary.value }
-      fill={isClosed ? theme.colors.activeclosed.value : theme.colors.secondary.value}
+      fill={isClosed ? theme.colors.activeClosed.value : theme.colors.secondary.value}
       strokeWidth={`${BORDER_SIZE}px`}
     />
   )

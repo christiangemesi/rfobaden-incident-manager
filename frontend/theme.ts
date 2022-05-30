@@ -12,7 +12,7 @@ export type Theme = {
     info: Color
     grey: Color
     active: Color
-    activeclosed: Color
+    activeClosed: Color
   }
   fonts: {
     heading: string
@@ -117,7 +117,7 @@ export const defaultTheme: Theme = {
       contrast: contrastDark,
       hover: '#B4CFE3',
     },
-    activeclosed: {
+    activeClosed: {
       value: '#EFF4F8',
       contrast: contrastDark,
       hover: '#e2e8ec',

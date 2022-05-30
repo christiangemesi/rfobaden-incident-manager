@@ -140,23 +140,23 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 
-    background-color: ${({ theme }) => theme.colors.activeclosed.value};
-    border-top: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
-    border-left: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+    background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
     
     ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.activeclosed.value};
-      border-top: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
-      border-bottom: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
+      border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
     }
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.activeclosed.value};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
     }
 
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.activeclosed.value};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
     }
   `}
   

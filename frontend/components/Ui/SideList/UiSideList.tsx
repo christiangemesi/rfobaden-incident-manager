@@ -169,8 +169,8 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   }
 
   ${({ isClosed }) => isClosed && css`
-    background-color: ${({ theme }) => theme.colors.activeclosed.value};
-    border: 1px solid ${({ theme }) => theme.colors.activeclosed.hover};
+    background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    border: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
   `}
   
   ${Themed.media.md.max} {
