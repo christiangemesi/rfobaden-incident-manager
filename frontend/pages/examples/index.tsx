@@ -90,12 +90,6 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-text-with-icon">
-        <a>
-          UiTextWithIcon
-        </a>
-      </Link>
-      <br />
       <Link href="examples/ui-title">
         <a>
           UiTitle
