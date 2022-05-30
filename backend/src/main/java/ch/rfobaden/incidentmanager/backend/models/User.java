@@ -196,6 +196,7 @@ public final class User extends Model.Basic implements Serializable {
         organization.setId(id);
     }
 
+    @JsonIgnore
     public List<Transport> getAssignedTransports() {
         return assignedTransports;
     }
