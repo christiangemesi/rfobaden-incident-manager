@@ -69,5 +69,4 @@ const Content = styled(UiLevel.Content)`
   ${Themed.media.md.min} {
     justify-content: center;
   }
-
 `
