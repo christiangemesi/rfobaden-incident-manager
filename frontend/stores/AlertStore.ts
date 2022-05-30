@@ -44,7 +44,6 @@ const AlertStore = createStore(initialState, (getState, setState) => ({
     }
   },
 }))
-
 export default AlertStore
 
 /**

@@ -7,7 +7,6 @@ import TransportStore from './TransportStore'
 const IncidentStore = createModelStore(parseIncident, {
   sortBy: (incident) => [[incident.isClosed, 'desc'], incident.startsAt ?? incident.createdAt, incident.endsAt],
 })
-
 export default IncidentStore
 
 export const useIncident = createUseRecord(IncidentStore)
@@ -29,6 +28,7 @@ ReportStore.onCreate((report) => {
     isDone: incident.isDone && (report.isClosed || report.isDone),
   })
 })
+
 ReportStore.onUpdate((report) => {
   const incident = IncidentStore.find(report.incidentId)
   if (incident === null) {
@@ -48,6 +48,7 @@ ReportStore.onUpdate((report) => {
     isDone: closedReportIds.size === incident.reportIds.length,
   })
 })
+
 ReportStore.onRemove((report) => {
   const incident = IncidentStore.find(report.incidentId)
   if (incident === null) {
@@ -85,6 +86,7 @@ TransportStore.onCreate((transport) => {
     isDone: incident.isDone && transport.isClosed,
   })
 })
+
 ReportStore.onUpdate((transport) => {
   const incident = IncidentStore.find(transport.incidentId)
   if (incident === null) {
@@ -104,6 +106,7 @@ ReportStore.onUpdate((transport) => {
     isDone: closedTransportIds.size === incident.transportIds.length,
   })
 })
+
 ReportStore.onRemove((transport) => {
   const incident = IncidentStore.find(transport.incidentId)
   if (incident === null) {

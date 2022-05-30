@@ -13,7 +13,6 @@ const TaskStore = createModelStore(parseTask, {
     [task.title.toLowerCase(), 'asc'],
   ],
 })
-
 export default TaskStore
 
 export const useTask = createUseRecord(TaskStore)
@@ -42,6 +41,7 @@ SubtaskStore.onCreate((subtask) => {
     isDone: task.isDone && subtask.isClosed,
   })
 })
+
 SubtaskStore.onUpdate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {
@@ -61,6 +61,7 @@ SubtaskStore.onUpdate((subtask) => {
     isDone: closedSubtaskIds.size === task.subtaskIds.length,
   })
 })
+
 SubtaskStore.onRemove((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {

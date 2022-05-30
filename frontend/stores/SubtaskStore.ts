@@ -12,7 +12,6 @@ const SubtaskStore = createModelStore(parseSubtask, {
     [subtask.title.toLowerCase(), 'asc'],
   ],
 })
-
 export default SubtaskStore
 
 export const useSubtask = createUseRecord(SubtaskStore)

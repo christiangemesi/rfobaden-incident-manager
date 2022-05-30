@@ -15,7 +15,6 @@ const TransportStore = createModelStore(parseTransport, {
     Transport.id,
   ],
 })
-
 export default TransportStore
 
 export const useTransport = createUseRecord(TransportStore)
