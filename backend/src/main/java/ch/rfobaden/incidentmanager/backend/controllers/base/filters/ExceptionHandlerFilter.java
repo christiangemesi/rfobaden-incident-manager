@@ -11,6 +11,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * {@code ExceptionHandlerFilter} catches exceptions thrown in the filter chain
+ * and handles them using the configured {@link HandlerExceptionResolver}.
+ */
 @Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(getClass());
