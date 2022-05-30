@@ -4,6 +4,9 @@ import { createModelStore } from './base/Store'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import TransportStore from './TransportStore'
 
+/**
+ * `IncidentStore` manages all loaded {@link Incident incidents}.
+ */
 const IncidentStore = createModelStore(parseIncident, {
   sortBy: (incident) => [
     // Closed incidents are always at the bottom.
@@ -17,7 +20,22 @@ const IncidentStore = createModelStore(parseIncident, {
 })
 export default IncidentStore
 
+/**
+ * `useIncident` is a React hook which loads a specific incident from {@link IncidentStore}.
+ * It re-renders whenever the incident is changed.
+ *
+ * @param id The id of the incident.
+ * @return The incident.
+ */
 export const useIncident = createUseRecord(IncidentStore)
+
+/**
+ * `useIncidents` is a React hook that loads all incidents from {@link IncidentStore}.
+ * It re-renders whenever the store is modified.
+ *
+ * @param idsOrTransform? An list of ids to load, or a function that modifies the returned list.
+ * @return The list of incidents.
+ */
 export const useIncidents = createUseRecords(IncidentStore)
 
 ReportStore.onCreate((report) => {

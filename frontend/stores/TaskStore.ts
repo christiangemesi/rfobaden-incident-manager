@@ -6,6 +6,9 @@ import SubtaskStore from '@/stores/SubtaskStore'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
+/**
+ * `TaskStore` manages all loaded {@link Task tasks}.
+ */
 const TaskStore = createModelStore(parseTask, {
   sortBy: (task) => [
     // Closed tasks are always at the bottom.
@@ -19,9 +22,32 @@ const TaskStore = createModelStore(parseTask, {
 })
 export default TaskStore
 
+/**
+ * `useTask` is a React hook which loads a specific task from {@link TaskStore}.
+ * It re-renders whenever the tasks is changed.
+ *
+ * @param id The id of the tasks.
+ * @return The tasks.
+ */
 export const useTask = createUseRecord(TaskStore)
+
+/**
+ * `useTasks` is a React hook that loads all tasks from {@link TaskStore}.
+ * It re-renders whenever the store is modified.
+ *
+ * @param idsOrTransform? An list of ids to load, or a function that modifies the returned list.
+ * @return The list of tasks.
+ */
 export const useTasks = createUseRecords(TaskStore)
 
+/**
+ * `useTasksOfReport` is a React hook that loads all tasks
+ * belonging to a specific report from {@link ReportStore}.
+ * It re-renders whenever the store is modified.
+ *
+ * @param reportId The id of the report to which the tasks belong.
+ * @return The list of tasks belonging to the report.
+ */
 export const useTasksOfReport = (reportId: Id<Report>): Task[] => (
   useTasks((tasks) => (
     tasks.filter((task) => task.reportId === reportId)

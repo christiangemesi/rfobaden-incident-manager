@@ -44,7 +44,7 @@ export const useReports = createUseRecords(ReportStore)
 
 /**
  * `useReportsOfIncident` is a React hook that loads all reports
- * belonging to a specific incident from {@link VehicleStore}.
+ * belonging to a specific incident from {@link IncidentStore}.
  * It re-renders whenever the store is modified.
  *
  * @param incidentId The id of the incident to which the reports belong.
