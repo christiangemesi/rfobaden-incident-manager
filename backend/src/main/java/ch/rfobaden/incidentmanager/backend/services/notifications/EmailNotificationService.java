@@ -19,7 +19,7 @@ public class EmailNotificationService implements NotificationService {
 
     private final JavaMailSender sender;
 
-    private final String MAIL_TITLE = "<h1>Incident Manager RFOBaden</h1>";
+    private static final String MAILTITLE = "<h1>Incident Manager RFOBaden</h1>";
 
     public EmailNotificationService(RfoConfig rfoConfig, JavaMailSender sender) {
         this.rfoConfig = rfoConfig;
@@ -34,7 +34,7 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildNewUserMessage(User user, String plainPassword) {
         StringBuilder msg = new StringBuilder();
-        msg.append(MAIL_TITLE);
+        msg.append(MAILTITLE);
         msg.append("<p>Ein Benutzer wurde für Sie im Incident Manager erstellt.</p><br>");
         return emailAndPasswordBody(user, plainPassword, msg);
     }
@@ -51,7 +51,7 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildAssigneeMessage(Trackable entity) {
         StringBuilder msg = new StringBuilder();
-        msg.append(MAIL_TITLE);
+        msg.append(MAILTITLE);
         msg.append("<p>");
         msg.append("  Ihnen wurde etwas zugewiesen.");
         msg.append("</p>");
@@ -85,7 +85,7 @@ public class EmailNotificationService implements NotificationService {
 
     private String buildPasswordResetMessage(User user, String plainPassword) {
         var msg = new StringBuilder();
-        msg.append(MAIL_TITLE);
+        msg.append(MAILTITLE);
         msg.append("<p>Ihr Passwort wurde zurückgesetzt.</p><br>");
         return emailAndPasswordBody(user, plainPassword, msg);
     }
