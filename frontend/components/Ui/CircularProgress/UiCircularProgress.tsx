@@ -133,7 +133,7 @@ interface OuterCircleProps {
 /**
  * `OuterCircle` displays the outer circle of a {@link UiCircularProgress}.
  */
-const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY,isClosed }) => {
+const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
 
   return (
