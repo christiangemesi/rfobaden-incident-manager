@@ -57,7 +57,7 @@ export const useReportsOfIncident = (incidentId: Id<Incident>): readonly Report[
 )
 
 /*
- * After a task creation the report needs to update the `tasksIds`, `closedTasksIds` and `isDone`.
+ * After a task creation the report needs to update the `taskIds`, `closedTaskIds` and `isDone`.
  *
  * <p>
  *    A completed report has to reopen when a new uncompleted task is added.
@@ -83,10 +83,10 @@ TaskStore.onCreate((task) => {
 })
 
 /*
- * After a task update the report needs to update the `closedTasksIds` and `isDone`.
+ * After a task update the report needs to update the `closedTaskIds` and `isDone`.
  *
  * <p>
- *    A completed report has to reopen when one of its tasks is reopened.
+ *    A completed report has to reopen when one of its task is reopened.
  *    An open report has to be set to done when its last open task is completed.
  * </p>
  */
@@ -112,10 +112,10 @@ TaskStore.onUpdate((task) => {
 })
 
 /*
- * After a task deletion the report needs to update the `tasksIds`, `closedTasksIds` and `isDone`.
+ * After a task deletion the report needs to update the `taskIds`, `closedTaskIds` and `isDone`.
  *
  * <p>
- *    An open report has to be set to done when its last tasks is completed.
+ *    An open report has to be set to done when its last task is completed.
  * </p>
 */
 TaskStore.onRemove((task) => {

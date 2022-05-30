@@ -54,12 +54,20 @@ export const useTasksOfReport = (reportId: Id<Report>): Task[] => (
   ), [reportId])
 )
 
+/*
+ * After a subtask creation the task needs to update the `subtaskIds`, `closedSubtaskIds` and `isDone`.
+ *
+ * <p>
+ *    A completed task has to reopen when a new uncompleted subtask is added.
+ * </p>
+ */
 SubtaskStore.onCreate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {
     return
   }
 
+  // Save the new subtask in subtaskIds and if necessary adjust closedSubtaskIds and isDone.
   TaskStore.save({
     ...task,
     subtaskIds: [...new Set([...task.subtaskIds, subtask.id])],
@@ -72,12 +80,21 @@ SubtaskStore.onCreate((subtask) => {
   })
 })
 
+/*
+ * After a subtask update the task needs to update the `closedSubtaskIds` and `isDone`.
+ *
+ * <p>
+ *    A completed task has to reopen when one of its subtask is reopened.
+ *    An open task has to be set to done when its last open subtask is completed.
+ * </p>
+ */
 SubtaskStore.onUpdate((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {
     return
   }
 
+  // Add/remove the updated subtask to/from closedSubtaskIds.
   const closedSubtaskIds = new Set(task.closedSubtaskIds)
   if (subtask.isClosed) {
     closedSubtaskIds.add(subtask.id)
@@ -92,12 +109,20 @@ SubtaskStore.onUpdate((subtask) => {
   })
 })
 
+/*
+ * After a subtask deletion the task needs to update the `subtaskIds`, `closedSubtaskIds` and `isDone`.
+ *
+ * <p>
+ *    An open task has to be set to done when its last subtask is completed.
+ * </p>
+*/
 SubtaskStore.onRemove((subtask) => {
   const task = TaskStore.find(subtask.taskId)
   if (task === null) {
     return
   }
 
+  // Remove the deleted subtask from subtaskIds and closedSubtaskIds.
   const subtaskIds = [...task.subtaskIds]
   subtaskIds.splice(subtaskIds.indexOf(subtask.id), 1)
 
