@@ -8,9 +8,13 @@ import { getPriorityIndex } from '@/models/Priority'
 
 const TaskStore = createModelStore(parseTask, {
   sortBy: (task) => [
+    // Closed tasks are always at the bottom.
     [task.isClosed || task.isDone, 'asc'],
+
+    // Sort order: priority > start date
     getPriorityIndex(task.priority),
-    [task.title.toLowerCase(), 'asc'],
+    [task.startsAt ?? task.createdAt, 'asc'],
+    task.id,
   ],
 })
 export default TaskStore

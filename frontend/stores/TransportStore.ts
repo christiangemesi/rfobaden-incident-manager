@@ -6,13 +6,14 @@ import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
 const TransportStore = createModelStore(parseTransport, {
-  sortBy: (Transport) => [
-    // Closed Transports are always at the bottom.
-    [Transport.isClosed, 'asc'],
+  sortBy: (transport) => [
+    // Closed transports are always at the bottom.
+    [transport.isClosed, 'asc'],
 
-    getPriorityIndex(Transport.priority),
-    [Transport.startsAt ?? Transport.createdAt, 'asc'],
-    Transport.id,
+    // Sort order: priority > start date
+    getPriorityIndex(transport.priority),
+    [transport.startsAt ?? transport.createdAt, 'asc'],
+    transport.id,
   ],
 })
 export default TransportStore

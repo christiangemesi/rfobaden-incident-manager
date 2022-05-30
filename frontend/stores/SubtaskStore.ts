@@ -7,9 +7,13 @@ import { getPriorityIndex } from '@/models/Priority'
 
 const SubtaskStore = createModelStore(parseSubtask, {
   sortBy: (subtask) => [
+    // Closed subtasks are always at the bottom.
     [subtask.isClosed, 'asc'],
+
+    // Sort order: > priority > start date
     getPriorityIndex(subtask.priority),
-    [subtask.title.toLowerCase(), 'asc'],
+    [subtask.startsAt ?? subtask.createdAt, 'asc'],
+    subtask.id,
   ],
 })
 export default SubtaskStore

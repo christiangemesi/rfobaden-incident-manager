@@ -5,7 +5,15 @@ import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import TransportStore from './TransportStore'
 
 const IncidentStore = createModelStore(parseIncident, {
-  sortBy: (incident) => [[incident.isClosed, 'desc'], incident.startsAt ?? incident.createdAt, incident.endsAt],
+  sortBy: (incident) => [
+    // Closed incidents are always at the bottom.
+    [incident.isClosed, 'desc'],
+
+    // Sort order: start date > end date
+    incident.startsAt ?? incident.createdAt,
+    incident.endsAt,
+    incident.id,
+  ],
 })
 export default IncidentStore
 
