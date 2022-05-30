@@ -78,12 +78,6 @@ const UiComponentsExample: React.VFC = () => {
         </a>
       </Link>
       <br />
-      <Link href="examples/ui-breadcrumb">
-        <a>
-          UiBreadcrumb
-        </a>
-      </Link>
-      <br />
       <Link href="examples/ui-date-label">
         <a>
           UiDateLabel
