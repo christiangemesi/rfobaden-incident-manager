@@ -64,7 +64,9 @@ const TaskForm: React.VFC<Props> = ({
       validate.notBlank({ allowNull: true }),
       validate.maxLength(100),
     ],
-    priority: [],
+    priority: [
+      validate.notNull(),
+    ],
     assigneeId: [],
     closedAt: [],
     startsAt: [],
@@ -112,11 +114,11 @@ const TaskForm: React.VFC<Props> = ({
           )}</UiForm.Field>
         </PrioritySliderPositioner>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" placeholder="Titel" />
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
 
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+          <UiTextArea {...props} label="Beschreibung" />
         )}</UiForm.Field>
 
         <UiGrid gapH={1}>
@@ -133,7 +135,7 @@ const TaskForm: React.VFC<Props> = ({
           </UiGrid.Col>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.location}>{(props) => (
-              <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+              <UiTextInput {...props} label="Ort / Gebiet" />
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
@@ -141,12 +143,12 @@ const TaskForm: React.VFC<Props> = ({
         <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Beginn" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
           <UiGrid.Col size={{ xs: 12, sm: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Ende" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>
@@ -170,10 +172,12 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 `
+
 const PrioritySliderPositioner = styled.div`
   display: flex;
   justify-content: right;
   margin: 0.5rem;
+
   ${Themed.media.sm.max} {
     justify-content: center;
   }

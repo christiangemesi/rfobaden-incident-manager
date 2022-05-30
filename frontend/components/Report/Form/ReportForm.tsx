@@ -84,7 +84,9 @@ const ReportForm: React.VFC<Props> = ({
         validate.notBlank({ allowNull: true }),
       ],
       entryType: {
-        source: [],
+        source: [
+          validate.notNull(),
+        ],
         descriptor: [
           validate.notBlank({ allowNull: true }),
           validate.maxLength(100),
@@ -97,7 +99,9 @@ const ReportForm: React.VFC<Props> = ({
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      priority: [],
+      priority: [
+        validate.notNull(),
+      ],
       incidentId: [],
       authorId: [],
       assigneeId: [],
@@ -165,11 +169,11 @@ const ReportForm: React.VFC<Props> = ({
           </UiGrid>
 
           <UiForm.Field field={form.title}>{(props) => (
-            <UiTextInput {...props} label="Titel" placeholder="Titel" />
+            <UiTextInput {...props} label="Titel" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.description}>{(props) => (
-            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+            <UiTextArea {...props} label="Beschreibung" />
           )}</UiForm.Field>
 
           <UiGrid gapH={1}>
@@ -187,13 +191,13 @@ const ReportForm: React.VFC<Props> = ({
 
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.descriptor}>{(props) => (
-                <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
+                <UiTextInput {...props} label="Melder-Info" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
 
           <UiForm.Field field={form.notes}>{(props) => (
-            <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
+            <UiTextArea {...props} label="Notiz" />
           )}</UiForm.Field>
 
           <UiGrid gapH={1}>
@@ -211,7 +215,7 @@ const ReportForm: React.VFC<Props> = ({
 
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.location}>{(props) => (
-                <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+                <UiTextInput {...props} label="Ort / Gebiet" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
@@ -219,13 +223,13 @@ const ReportForm: React.VFC<Props> = ({
           <UiGrid gapH={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
-                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Beginn" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
 
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.endsAt}>{(props) => (
-                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Ende" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>

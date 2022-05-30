@@ -30,6 +30,7 @@ const AlertContainer = styled.div`
   position: fixed;
   bottom: 5rem;
   left: 2rem;
+  z-index: 150;
 
   ${Themed.media.sm.max} {
     left: 0;
