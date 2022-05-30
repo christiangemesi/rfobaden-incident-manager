@@ -271,7 +271,7 @@ public final class User extends Model.Basic implements Serializable {
     public enum Role {
         /**
          * The {@code AGENT} role gives users a basic permission level.
-         * It's the role given to the majority of users.
+         * It is the role given to the majority of users.
          */
         AGENT,
 
