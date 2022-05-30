@@ -11,17 +11,46 @@ import { noop } from '@/utils/control-flow'
 import Trackable from '@/models/Trackable'
 
 interface Props<T extends Model> {
+  /**
+   * The id of the record to select right at the start, or `null` if none should get selected.
+   */
   initialId?: Id<T> | null
+
+  /**
+   * Store holding the records to display.
+   */
   store: ModelStore<T>
+
+  /**
+   * Checks whether a specific record is closed.
+   */
   isClosed: (record: T) => boolean
 
+  /**
+   * Renders the list of selectable items. It is assumed that the items are rendered using {@link TrackableListItem}.
+   */
   renderList: (props: { selected: T | null, select: (record: T | null) => void }) => ReactNode
+
+  /**
+   * Renders the currently selected record.
+   */
   renderView: (props: { selected: T, close: () => void }) => ReactNode
 
+  /**
+   * Event caused by selecting a record.
+   */
   onSelect?: (record: T) => void
+
+  /**
+   * Event caused by deselecting a record.
+   */
   onDeselect?: () => void
 }
 
+/**
+ * `UiSideList` renders a list of selectable {@link Trackable trackable entities}.
+ * For selected entities, detailed information is displayed.
+ */
 const UiSideList = <T extends Trackable>({
   initialId,
   store,
@@ -65,6 +94,7 @@ const UiSideList = <T extends Trackable>({
       >
         {renderList({ selected, select: setSelected })}
       </ListContainer>
+
       <ListOverlay
         ref={setOverlayRef}
         hasSelected={selected !== null}
@@ -85,13 +115,10 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   position: relative;
   height: calc(100% - 4px);
   min-width: calc(100% - 0.8rem);
+  z-index: 0;
 
   ${Themed.media.lg.min} {
     min-width: calc(100% - 4rem);
-  }
-  
-  z-index: 0;
-  ${Themed.media.lg.min} {
     z-index: 3;
   }
   
@@ -126,12 +153,14 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   opacity: 0;
   transform: translateX(50vw);
   transform-origin: right center;
+  
   ${({ hasSelected }) => hasSelected && css`
     opacity: 1;
     transform: translateX(0);
   `}
   
   width: calc(100% + 2px);
+  
   ${Themed.media.lg.min} {
     width: calc(65% + 4rem);
   }
@@ -150,6 +179,7 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
     left: 0;
     width: calc(100% + 1px);
     transform: translateY(100%);
+    
     ${({ hasSelected }) => hasSelected && css`
       transform: translateY(0);
     `}

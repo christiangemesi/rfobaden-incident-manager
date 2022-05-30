@@ -15,7 +15,7 @@ const UiDateInputExample: React.VFC = () => {
         value={value}
         onChange={setValue}
         label="Date Input as Popover"
-        placeholder="dd.MM.yyyy hh:mm" />
+      />
 
       {/* Shows date time value */}
       <div>Date: {value?.toLocaleString()}</div>

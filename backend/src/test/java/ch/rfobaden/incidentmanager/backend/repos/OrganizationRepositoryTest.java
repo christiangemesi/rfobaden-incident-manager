@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
-public class OrganizationRepositoryTest
+class OrganizationRepositoryTest
     extends ModelRepositoryTest.Basic<Organization, OrganizationRepository> {
 
     @Autowired

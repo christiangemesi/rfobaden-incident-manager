@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @WebMvcTest(AssignmentController.class)
-public class AssignmentControllerTest extends AppControllerTest {
+class AssignmentControllerTest extends AppControllerTest {
 
     @Autowired
     MockMvc mockMvc;

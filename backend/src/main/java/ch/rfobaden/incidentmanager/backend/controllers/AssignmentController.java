@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "api/v1/assignments")
-public class AssignmentController extends AppController {
+public class AssignmentController implements AppController {
     private final TransportService transportService;
     private final ReportService reportService;
     private final TaskService taskService;

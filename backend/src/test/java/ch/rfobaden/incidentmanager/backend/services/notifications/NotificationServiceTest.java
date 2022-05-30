@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootTest
 @Import(TestConfig.class)
-public class NotificationServiceTest {
+class NotificationServiceTest {
     @MockBean(answer = Answers.CALLS_REAL_METHODS)
     NotificationService service;
 

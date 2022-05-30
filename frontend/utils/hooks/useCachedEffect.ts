@@ -13,15 +13,7 @@ import { useEffect, useMemo, useState } from 'react'
  */
 const useCachedEffect = <T>(cacheId: unknown, key: T, load: (key: T) => Promise<void>): boolean => {
   const cache: Set<T> = useMemo(() => {
-    if (cacheId === null) {
-      return new Set()
-    }
-    if (caches.has(cacheId)) {
-      return caches.get(cacheId) as Set<T>
-    }
-    const newCache = new Set<T>()
-    caches.set(cacheId, newCache)
-    return newCache
+    return resolveCache(cacheId)
   }, [cacheId])
 
   const [isLoading, setLoading] = useState(false)

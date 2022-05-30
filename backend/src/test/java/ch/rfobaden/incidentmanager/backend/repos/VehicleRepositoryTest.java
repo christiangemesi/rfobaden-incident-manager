@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @DataJpaTest
-public class VehicleRepositoryTest
+class VehicleRepositoryTest
     extends ModelRepositoryTest.Basic<Vehicle, VehicleRepository> {
 
     @Test

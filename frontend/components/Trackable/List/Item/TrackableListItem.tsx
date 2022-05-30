@@ -8,14 +8,40 @@ import Trackable from '@/models/Trackable'
 import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
 
 export interface Props<T> {
+  /**
+   * The record to display.
+   */
   record: T
+
+  /**
+   * Whether the item is currently selected.
+   */
   isActive: boolean
+
+  /**
+   * Whether the item should make its contents slightly smaller.
+   */
   isSmall: boolean
+
+  /**
+   * Whether the record is closed.
+   */
   isClosed: boolean
+
+  /**
+   * Event caused by clicking on the item.
+   */
   onClick?: (record: T) => void
+
+  /**
+   * Additional content to display.
+   */
   children?: ReactNode
 }
 
+/**
+ * `TrackableListItem` is a component that displays a {@link Trackable trackable entity} in a list.
+ */
 const TrackableListItem = <T extends Trackable>({
   record,
   isActive,
@@ -64,7 +90,6 @@ const Bridge = styled.div<{ isActive: boolean }>`
   // border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
   // border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   
-
   ${({ isActive, theme }) => isActive && css`
     transition-duration: 300ms;
     transform: scaleX(1);

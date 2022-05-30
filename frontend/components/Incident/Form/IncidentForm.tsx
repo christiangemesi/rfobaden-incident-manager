@@ -78,22 +78,23 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" placeholder="Titel" />
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
 
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" rows={5} />
+          <UiTextArea {...props} label="Beschreibung" rows={5} />
         )}</UiForm.Field>
 
         <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Beginn" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
+
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Ende" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
         </UiGrid>

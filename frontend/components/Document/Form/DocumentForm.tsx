@@ -1,7 +1,7 @@
 import Incident from '@/models/Incident'
 import Document from '@/models/Document'
 import { clearForm, useCancel, useForm, useSubmit } from '@/components/Ui/Form'
-import React from 'react'
+import React, { useMemo } from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiForm from '@/components/Ui/Form/UiForm'
 import styled from 'styled-components'
@@ -88,14 +88,23 @@ const DocumentForm: React.VFC<Props> = ({
   })
   useCancel(form, handleClose)
 
+  // The default value of the file name field.
+  const fileName = useMemo(() => {
+    const fileNameArray = form.file.value?.name
+      .split('.')
+      .slice() ?? ['']
+    fileNameArray.splice(-1, 1)
+    return fileNameArray.join('.')
+  }, [form.file.value])
+
   return (
     <UiForm form={form}>
       <FormContainer>
         <UiForm.Field field={form.file}>{(props) => (
           <FileInput {...props} accept={type === 'image' ? 'image/*' : ''} />
         )}</UiForm.Field>
-        <UiForm.Field field={form.name}>{(props) => (
-          <UiTextInput {...props} label="Name" />
+        <UiForm.Field field={form.name} deps={[fileName]}>{(props) => (
+          <UiTextInput {...props} label="Name" placeholder={fileName} />
         )}</UiForm.Field>
         <UiForm.Buttons form={form} text="Speichern" />
       </FormContainer>

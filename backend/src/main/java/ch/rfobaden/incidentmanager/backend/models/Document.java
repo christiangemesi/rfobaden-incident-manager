@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +15,12 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "document")
-public class Document {
+public class Document implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * The documents' id, uniquely identifying it.
      */
+
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)

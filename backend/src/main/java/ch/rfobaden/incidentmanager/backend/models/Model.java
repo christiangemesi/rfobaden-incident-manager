@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 @MappedSuperclass
 public abstract class Model {
     /**
-     * The entities' id, unique to it's model.
+     * The entities' id, unique to its model.
      */
     @Id
     @GeneratedValue

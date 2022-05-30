@@ -23,12 +23,30 @@ import { EntryTypeSource } from '@/models/EntryType'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to update, or `null`, if a new one should be created.
+   */
   report?: Report | null
+
+  /**
+   * Event caused by saving the form.
+   */
   onSave?: (report: Report) => void
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `ReportForm` allows the creation or update of a {@link Report}.
+ */
 const ReportForm: React.VFC<Props> = ({
   incident,
   report = null,
@@ -66,7 +84,9 @@ const ReportForm: React.VFC<Props> = ({
         validate.notBlank({ allowNull: true }),
       ],
       entryType: {
-        source: [],
+        source: [
+          validate.notNull(),
+        ],
         descriptor: [
           validate.notBlank({ allowNull: true }),
           validate.maxLength(100),
@@ -79,7 +99,9 @@ const ReportForm: React.VFC<Props> = ({
         validate.notBlank({ allowNull: true }),
         validate.maxLength(100),
       ],
-      priority: [],
+      priority: [
+        validate.notNull(),
+      ],
       incidentId: [],
       authorId: [],
       assigneeId: [],
@@ -130,6 +152,7 @@ const ReportForm: React.VFC<Props> = ({
                     <UiToggle {...props} label="Schlüsselmeldung" />
                   )}</UiForm.Field>
                 </UiGrid.Col>
+
                 <UiGrid.Col>
                   <UiForm.Field field={form.isLocationRelevantReport}>{(props) => (
                     <UiToggle {...props} label="Lagerelevant" />
@@ -137,6 +160,7 @@ const ReportForm: React.VFC<Props> = ({
                 </UiGrid.Col>
               </UiGrid>
             </UiGrid.Col>
+
             <SliderCol size={{ xs: 12, sm: 3 }}>
               <UiForm.Field field={form.priority}>{(props) => (
                 <UiPrioritySlider {...props} />
@@ -145,11 +169,11 @@ const ReportForm: React.VFC<Props> = ({
           </UiGrid>
 
           <UiForm.Field field={form.title}>{(props) => (
-            <UiTextInput {...props} label="Titel" placeholder="Titel" />
+            <UiTextInput {...props} label="Titel" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.description}>{(props) => (
-            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+            <UiTextArea {...props} label="Beschreibung" />
           )}</UiForm.Field>
 
           <UiGrid gapH={1}>
@@ -164,15 +188,16 @@ const ReportForm: React.VFC<Props> = ({
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.entryType.descriptor}>{(props) => (
-                <UiTextInput {...props} label="Melder-Info" placeholder="Melder-Info" />
+                <UiTextInput {...props} label="Melder-Info" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
 
           <UiForm.Field field={form.notes}>{(props) => (
-            <UiTextArea {...props} label="Notiz" placeholder="Notiz" />
+            <UiTextArea {...props} label="Notiz" />
           )}</UiForm.Field>
 
           <UiGrid gapH={1}>
@@ -187,9 +212,10 @@ const ReportForm: React.VFC<Props> = ({
                 />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.location}>{(props) => (
-                <UiTextInput {...props} label="Ort / Gebiet" placeholder="Ort / Gebiet" />
+                <UiTextInput {...props} label="Ort / Gebiet" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
@@ -197,12 +223,13 @@ const ReportForm: React.VFC<Props> = ({
           <UiGrid gapH={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
-                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Beginn" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
+
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.endsAt}>{(props) => (
-                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Ende" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
@@ -215,6 +242,12 @@ const ReportForm: React.VFC<Props> = ({
 }
 export default ReportForm
 
+/**
+ * Maps the id of a user to its name.
+ *
+ * @param id The id of the user.
+ * @return The user's name.
+ */
 const mapUserIdToName = (id: Id<User>): string | null => {
   const user = UserStore.find(id)
   return user === null
@@ -222,6 +255,12 @@ const mapUserIdToName = (id: Id<User>): string | null => {
     : `${user.firstName} ${user.lastName}`
 }
 
+/**
+ * Maps the entry type enum to its name.
+ *
+ * @param source The entry type to map.
+ * @return The entry type's name.
+ */
 export const mapEntryTypeToName = (source: string): string => {
   switch (source) {
   case EntryTypeSource.PHONE:
@@ -241,6 +280,12 @@ export const mapEntryTypeToName = (source: string): string => {
   }
 }
 
+/**
+ * Uppercase the first letter of each word in a string.
+ *
+ * @param str The string to transform.
+ * @return The string in title case.
+ */
 const toTitleCase = (str: string): string => {
   return str
     .split(' ')
@@ -258,5 +303,6 @@ const SliderCol = styled(UiGrid.Col)`
   ${Themed.media.sm.max} {
     text-align: center;
   }
+
   text-align: right;
 `

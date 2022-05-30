@@ -44,7 +44,7 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @Validated
 @RequestMapping(path = "api/v1/session")
-public class SessionController extends AppController {
+public class SessionController implements AppController {
     private final AuthenticationManager authManager;
 
     private final AuthService authService;

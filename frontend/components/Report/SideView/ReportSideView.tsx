@@ -9,9 +9,16 @@ import { useRouter } from 'next/router'
 import Incident from '@/models/Incident'
 
 interface Props {
+  /**
+   * The incident the {@link Report reports} belongs to.
+   */
   incident: Incident
 }
 
+/**
+ * `ReportSideView` displays a {@link UiSideList} of {@link Report reports}.
+ * It is divided into a {@link ReportList} and a {@link ReportView}.
+ */
 const ReportSideView: React.VFC<Props> = ({ incident }) => {
   const router = useRouter()
   const reports = useReportsOfIncident(incident.id)

@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.stream.Collectors;
 
 @WebMvcTest(TrailerController.class)
-public class TrailerControllerTest
+class TrailerControllerTest
     extends ModelControllerTest.Basic<Trailer, TrailerService> {
 
     @Autowired

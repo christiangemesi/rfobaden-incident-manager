@@ -5,23 +5,17 @@ import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,16 +25,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "task")
-public class Task extends Model
-    implements PathConvertible<TaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * The {@link User assignee} responsible for the completion of the tasks.
-     */
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
+public class Task extends TrackableModel
+    implements PathConvertible<TaskPath>, ImageOwner, DocumentOwner {
 
     /**
      * The {@link Report} the task belongs to.
@@ -51,57 +37,10 @@ public class Task extends Model
     private Report report;
 
     /**
-     * The title of the task.
-     */
-    @Size(max = 100)
-    @NotBlank
-    @Column(nullable = false)
-    private String title;
-
-    /**
-     * A textual description of what the task is about.
-     */
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    /**
-     * The moment in time at which the transport will start.
-     * This represents the actual time at which the real-life event
-     * managed in this entity will start.
-     * <p>
-     * This is used to plan a transport in advance.
-     * </p>
-     */
-    private LocalDateTime startsAt;
-
-    /**
-     * The moment in time at which the transport will end.
-     * This represents the actual time at which the real-life event
-     * managed in this entity will end.
-     */
-    private LocalDateTime endsAt;
-
-    /**
      * The location at which the task takes place.
      */
     @Size(max = 100)
     private String location;
-
-    /**
-     * Whether the task is closed.
-     * A closed task counts as completed.
-     */
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
-
-    /**
-     * The priority of the task.
-     */
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private Priority priority;
 
     /**
      * The {@link Subtask subtasks} of the task.
@@ -142,17 +81,6 @@ public class Task extends Model
         this.documents = documents;
     }
 
-    @JsonIgnore
-    @Override
-    public User getAssignee() {
-        return assignee;
-    }
-
-    @Override
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
     /**
      * Allows access to the {@link #getReport().getIncident() incident}'s id.
      *
@@ -189,62 +117,12 @@ public class Task extends Model
         this.report = report;
     }
 
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    @Override
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    @Override
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    @Override
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    @Override
-    public Priority getPriority() {
-        return priority;
-    }
-
-    @Override
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     @JsonIgnore
@@ -257,10 +135,20 @@ public class Task extends Model
         this.subtasks = subtasks;
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all subtasks.
+     */
     public List<Long> getSubtaskIds() {
         return getSubtasks().stream().map(Subtask::getId).collect(Collectors.toList());
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all closed {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all closed subtasks.
+     */
     public List<Long> getClosedSubtaskIds() {
         return getSubtasks().stream()
             .filter(Subtask::isClosed)
@@ -268,22 +156,17 @@ public class Task extends Model
             .collect(Collectors.toList());
     }
 
+    /**
+     * Whether the task is done.
+     * A task is done when all its {@link #getSubtasks() subtasks} are all closed or done.
+     *
+     * @return Whether the task is done.
+     */
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getSubtasks().isEmpty()
             && getSubtasks().stream().allMatch(Subtask::isClosed);
     }
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
 
     @Override
     public String getLink() {
@@ -304,34 +187,19 @@ public class Task extends Model
             return false;
         }
         Task task = (Task) o;
-        return equalsModel(task)
-            && Objects.equals(assignee, task.assignee)
+        return equalsTrackableModel(task)
             && Objects.equals(report, task.report)
-            && Objects.equals(title, task.title)
-            && Objects.equals(description, task.description)
-            && Objects.equals(startsAt, task.startsAt)
-            && Objects.equals(endsAt, task.endsAt)
-            && Objects.equals(isClosed, task.isClosed)
-            && Objects.equals(location, task.location)
-            && priority == task.priority;
+            && Objects.equals(location, task.location);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            modelHashCode(),
-            assignee,
+            trackableModelHashCode(),
             report,
-            title,
-            description,
-            startsAt,
-            endsAt,
-            location,
-            isClosed,
-            priority
+            location
         );
     }
-
 
     @Override
     public TaskPath toPath() {
@@ -340,6 +208,4 @@ public class Task extends Model
         path.setReportId(getReport().getId());
         return path;
     }
-
-
 }

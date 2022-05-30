@@ -44,7 +44,7 @@ import java.util.function.BiConsumer;
  */
 @RestController
 @RequestMapping(path = "api/v1/documents")
-public class DocumentController extends AppController {
+public class DocumentController implements AppController {
     private final DocumentService documentService;
     private final IncidentService incidentService;
     private final ReportService reportService;

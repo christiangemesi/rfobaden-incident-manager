@@ -24,11 +24,18 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code User} represents a user of the IncidentManager application.
+ */
 @Entity
 @Table(name = "user")
 public final class User extends Model.Basic implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The organization to which the user belongs.
+     * Can be {@code null}.
+     */
     @ManyToOne(cascade = {
         CascadeType.PERSIST,
         CascadeType.REFRESH,
@@ -38,31 +45,59 @@ public final class User extends Model.Basic implements Serializable {
     @JoinColumn
     private Organization organization;
 
+    /**
+     * The user's email. Must be unique.
+     */
     @Size(max = 100)
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
+    /**
+     * The user's first name.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String firstName;
 
+    /**
+     * The user's last name.
+     */
     @Size(max = 100)
     @NotBlank
     @Column(nullable = false)
     private String lastName;
 
+    /**
+     * The user's role.
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
+    /**
+     * The user's credentials.
+     */
     @Valid
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserCredentials credentials;
 
+    /**
+     * The transports assigned to this user.
+     */
+    @OneToMany(
+        mappedBy = "assignee",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.DETACH
+    )
+    private List<Transport> assignedTransports;
+
+    /**
+     * The reports assigned to this user.
+     */
     @OneToMany(
         mappedBy = "assignee",
         fetch = FetchType.LAZY,
@@ -70,6 +105,9 @@ public final class User extends Model.Basic implements Serializable {
     )
     private List<Report> assignedReports;
 
+    /**
+     * The tasks assigned to this user.
+     */
     @OneToMany(
         mappedBy = "assignee",
         fetch = FetchType.LAZY,
@@ -77,6 +115,9 @@ public final class User extends Model.Basic implements Serializable {
     )
     private List<Task> assignedTasks;
 
+    /**
+     * The subtasks assigned to this user.
+     */
     @OneToMany(
         mappedBy = "assignee",
         fetch = FetchType.LAZY,
@@ -156,6 +197,11 @@ public final class User extends Model.Basic implements Serializable {
     }
 
     @JsonIgnore
+    public List<Transport> getAssignedTransports() {
+        return assignedTransports;
+    }
+
+    @JsonIgnore
     public List<Report> getAssignedReports() {
         return assignedReports;
     }
@@ -207,15 +253,31 @@ public final class User extends Model.Basic implements Serializable {
         return Objects.hash(modelHashCode(), email, firstName, lastName, role, organization);
     }
 
+    /**
+     * Remove the user from all entities it was assigned to before it's being deleted.
+     */
     @PreRemove
     private void nullifyAssignments() {
         getAssignedSubtasks().forEach((it) -> it.setAssignee(null));
         getAssignedTasks().forEach((it) -> it.setAssignee(null));
         getAssignedReports().forEach((it) -> it.setAssignee(null));
+        getAssignedTransports().forEach((it) -> it.setAssignee(null));
     }
 
+    /**
+     * {@code Role} defines the roles a user can have.
+     * Users have differing levels of permission depending on their role.
+     */
     public enum Role {
+        /**
+         * The {@code AGENT} role gives users a basic permission level.
+         * It's the role given to the majority of users.
+         */
         AGENT,
+
+        /**
+         * The {@code ADMIN} role gives users full access to all features.
+         */
         ADMIN,
     }
 }

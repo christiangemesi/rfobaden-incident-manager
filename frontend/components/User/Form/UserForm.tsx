@@ -58,7 +58,9 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.maxLength(100),
     ],
-    role: [],
+    role: [
+      validate.notNull(),
+    ],
     organizationId: [],
   }))
 

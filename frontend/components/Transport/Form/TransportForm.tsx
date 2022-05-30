@@ -87,7 +87,9 @@ const TransportForm: React.VFC<Props> = ({
       peopleInvolved: [
         (value) => value >= 0 || 'muss positiv sein',
       ],
-      priority: [],
+      priority: [
+        validate.notNull(),
+      ],
       isClosed: [],
       startsAt: [],
       endsAt: [],
@@ -237,19 +239,19 @@ const TransportForm: React.VFC<Props> = ({
           </PrioritySliderPositioner>
 
           <UiForm.Field field={form.title}>{(props) => (
-            <UiTextInput {...props} label="Titel" placeholder="Titel" />
+            <UiTextInput {...props} label="Titel" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.description}>{(props) => (
-            <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+            <UiTextArea {...props} label="Beschreibung" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.driver}>{(props) => (
-            <UiTextInput {...props} label="Fahrer" placeholder="Fahrer" />
+            <UiTextInput {...props} label="Fahrer" />
           )}</UiForm.Field>
 
           <UiForm.Field field={form.peopleInvolved}>{(props) => (
-            <UiNumberInput {...props} label="Anz. Personen" placeholder="Anz. Personen" />
+            <UiNumberInput {...props} label="Anz. Personen" />
           )}</UiForm.Field>
 
           {/* Vehicle select input with creation and deletion functionality */}
@@ -260,7 +262,6 @@ const TransportForm: React.VFC<Props> = ({
               options={vehicleIds}
               optionName={mapVehicleIdToName}
               menuPlacement="auto"
-              placeholder="Fahrzeug"
               isSearchable
               onCreate={handleCreateVehicle}
               onDelete={handleDeleteVehicle}
@@ -275,7 +276,6 @@ const TransportForm: React.VFC<Props> = ({
               options={trailerIds}
               optionName={mapTrailerIdToName}
               menuPlacement="auto"
-              placeholder="Anhänger"
               isSearchable
               onCreate={handleCreateTrailer}
               onDelete={handleDeleteTrailer}
@@ -285,16 +285,17 @@ const TransportForm: React.VFC<Props> = ({
           <UiGrid gapH={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.pointOfDeparture}>{(props) => (
-                <UiTextInput {...props} label="Abfahrtsort" placeholder="Abfahrtsort" />
+                <UiTextInput {...props} label="Abfahrtsort" />
               )}</UiForm.Field>
             </UiGrid.Col>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
               <UiForm.Field field={form.pointOfArrival}>{(props) => (
-                <UiTextInput {...props} label="Ankunftsort" placeholder="Ankunftsort" />
+                <UiTextInput {...props} label="Ankunftsort" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
+
           <UiForm.Field field={form.assigneeId}>{(props) => (
             <UiSelectInput
               {...props}
@@ -308,16 +309,17 @@ const TransportForm: React.VFC<Props> = ({
           <UiGrid gapH={1}>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
               <UiForm.Field field={form.startsAt}>{(props) => (
-                <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Beginn" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
             <UiGrid.Col size={{ xs: 12, md: 6 }}>
 
               <UiForm.Field field={form.endsAt}>{(props) => (
-                <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+                <UiDateInput {...props} label="Ende" placement="top" />
               )}</UiForm.Field>
             </UiGrid.Col>
           </UiGrid>
+
           <UiForm.Buttons form={form} text={transport === null ? 'Erstellen' : 'Bearbeiten'} />
         </FormContainer>
       </UiForm>

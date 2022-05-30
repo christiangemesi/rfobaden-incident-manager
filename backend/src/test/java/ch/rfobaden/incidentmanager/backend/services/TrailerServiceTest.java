@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 
 @SpringBootTest
-public class TrailerServiceTest extends ModelRepositoryServiceTest.Basic<
+class TrailerServiceTest extends ModelRepositoryServiceTest.Basic<
     Trailer,
     TrailerService,
     TrailerRepository> {

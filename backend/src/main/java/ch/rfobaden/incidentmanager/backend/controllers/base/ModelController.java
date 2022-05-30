@@ -34,7 +34,7 @@ public abstract class ModelController<
     TModel extends Model & PathConvertible<TPath>,
     TPath,
     TService extends ModelService<TModel, TPath>
-    > extends AppController {
+    > implements AppController {
     private static final String RECORD_NOT_FOUND_MESSAGE = "record not found";
     /**
      * The service giving access to {@link TModel}.

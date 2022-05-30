@@ -25,8 +25,8 @@ public class TransportService
     }
 
     @Override
-    protected void afterSave(Transport oldRecord, Transport record) {
-        notificationService.notifyAssigneeIfChanged(oldRecord, record);
+    protected void afterSave(Transport oldTransport, Transport transport) {
+        notificationService.notifyAssigneeIfChanged(oldTransport, transport);
     }
 
     /**

@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 @WebMvcTest(ReportController.class)
-public class ReportControllerTest extends ModelControllerTest<Report, ReportPath, ReportService> {
+class ReportControllerTest extends ModelControllerTest<Report, ReportPath, ReportService> {
     @Autowired
     protected UserService userService;
 
