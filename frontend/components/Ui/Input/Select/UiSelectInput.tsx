@@ -250,7 +250,7 @@ type OptionAttribute<T> =
   | ((option: T) => string | null)
 
 /**
- * {@code useOptionAttribute} is a React hook which prepares
+ * `useOptionAttribute` is a React hook which prepares
  * the option label mapping function.
  * It re-renders whenever the option attributes changes.
  *

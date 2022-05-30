@@ -7,7 +7,7 @@ import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
 /**
- * {@code ReportStore} manages all loaded {@link Report reports}.
+ * `ReportStore` manages all loaded {@link Report reports}.
  */
 const ReportStore = createModelStore(parseReport, {
   sortBy: (report) => [
@@ -25,7 +25,7 @@ const ReportStore = createModelStore(parseReport, {
 export default ReportStore
 
 /**
- * {@code useReport} is a React hook which loads a specific report from {@link ReportStore}.
+ * `useReport` is a React hook which loads a specific report from {@link ReportStore}.
  * It re-renders whenever the report is changed.
  *
  * @param id The id of the report.
@@ -34,7 +34,7 @@ export default ReportStore
 export const useReport = createUseRecord(ReportStore)
 
 /**
- * {@code useReports} is a React hook that loads all reports from {@link ReportStore}.
+ * `useReports` is a React hook that loads all reports from {@link ReportStore}.
  * It re-renders whenever the store is modified.
  *
  * @param idsOrTransform? An list of ids to load, or a function that modifies the returned list.
@@ -43,7 +43,7 @@ export const useReport = createUseRecord(ReportStore)
 export const useReports = createUseRecords(ReportStore)
 
 /**
- * {@code useReportsOfIncident} is a React hook that loads all reports
+ * `useReportsOfIncident` is a React hook that loads all reports
  * belonging to a specific incident from {@link VehicleStore}.
  * It re-renders whenever the store is modified.
  *
