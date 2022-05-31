@@ -2,6 +2,9 @@ import React from 'react'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiBadge from '@/components/Ui/Badge/UiBadge'
 
+/**
+ * `UiBadgeExample` is an example page for the {@link UiBadge} component.
+ */
 const UiBadgeExample: React.VFC = () => {
   return (
     <React.Fragment>
