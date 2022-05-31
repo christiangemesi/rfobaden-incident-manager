@@ -10,7 +10,7 @@ interface Props extends StyledProps {
   isEmphasis?: boolean
 
   /**
-   * The component to be styled as caption.
+   * The caption's content.
    */
   children: ReactNode
 
@@ -21,7 +21,7 @@ interface Props extends StyledProps {
 }
 
 /**
- * `UiCaption` is a wrapper to style a component as a caption.
+ * `UiCaption` styles text as a caption.
  */
 const UiCaption: React.VFC<Props> = (props) => {
   return <Caption {...props} />
