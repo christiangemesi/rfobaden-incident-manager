@@ -25,7 +25,7 @@ interface Props {
 }
 
 /**
- * `UiConfirmButtons` is a wrapper for a {@link UiButton}.
+ * `UiConfirmButtons` is a wrapper for a {@link UiButton} used to confirm forms.
  */
 const UiConfirmButtons: React.VFC<Props> = ({
   type,
