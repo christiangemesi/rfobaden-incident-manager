@@ -41,7 +41,7 @@ export const useTransports = createUseRecords(TransportStore)
 
 /**
  * `useTransportsOfIncident` is a React hook that loads all transports
- * belonging to a specific incident from {@link IncidentStore}.
+ * belonging to a specific incident from {@link TransportStore}.
  * It re-renders whenever the store is modified.
  *
  * @param incidentId The id of the incident to which the transports belong.

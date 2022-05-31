@@ -50,6 +50,7 @@ export const useSession = (): Session => {
 
 /**
  * `useCurrentUser` is a React hook that loads the current user from the {@link Session}.
+ * It will cause an error if there is no active session.
  *
  * @return The current user.
  */

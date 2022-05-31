@@ -1,7 +1,7 @@
 import Id from '@/models/base/Id'
 
 /**
- * `EntryTypeSource` represents types how a reporter can come in.
+ * `EntryTypeSource` represents possible sources which can cause a report to be created.
  */
 export enum EntryTypeSource {
   PHONE = 'PHONE',
@@ -14,8 +14,7 @@ export enum EntryTypeSource {
 }
 
 /**
- * `EntryType` represents the type how a {@link Report} comes in and
- * how the reporter can be contacted.
+ * `EntryType` describes how a {@link Report} was reported, i.e. who or what caused it to be created.
  */
 export default interface EntryType {
   id: Id<this>

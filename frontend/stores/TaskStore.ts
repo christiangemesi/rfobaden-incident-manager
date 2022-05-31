@@ -42,7 +42,7 @@ export const useTasks = createUseRecords(TaskStore)
 
 /**
  * `useTasksOfReport` is a React hook that loads all tasks
- * belonging to a specific report from {@link ReportStore}.
+ * belonging to a specific report from {@link TaskStore}.
  * It re-renders whenever the store is modified.
  *
  * @param reportId The id of the report to which the tasks belong.

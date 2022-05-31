@@ -1,5 +1,5 @@
 /**
- * `FileUpload` represents a file upload.
+ * `FileUpload` represents a file that gets uploaded to the backend.
  */
 export default interface FileUpload {
   /**

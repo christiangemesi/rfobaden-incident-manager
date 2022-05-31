@@ -71,6 +71,12 @@ export const parseUser = (data: User): User => {
  * @param user The user.
  * @return The user's username.
  */
+/**
+ * `useUsername` is a React hook which builds the display name of a {@link User} 
+ *
+ * @param user The user.
+ * @return The user's username.
+ */
 export const useUsername = (user: User | null): string | null => {
   return useMemo(() => (
     (user === null) ? null : `${user.firstName} ${user.lastName}`

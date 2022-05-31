@@ -5,17 +5,17 @@ import { parseDate } from '@/models/base/Date'
  */
 export default interface CloseReason {
   /**
-   * The message with the reason.
+   * The close message.
    */
   message: string
 
   /**
-   * Date created the close reason.
+   * Point in time at which the `CloseReason` has been created.
    */
   createdAt: Date
 
   /**
-   * The last close reason of the {@link Incident}, or `null`, if it is the first one.
+   * The `CloseReason` entered before this one, if it exists.
    */
   previous: CloseReason | null
 }

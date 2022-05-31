@@ -9,7 +9,7 @@ const OrganizationStore = createModelStore(parseOrganization)
 export default OrganizationStore
 
 /**
- * `useOrganization` is a React hook which loads a specific report from {@link OrganizationStore}.
+ * `useOrganization` is a React hook which loads a specific organization from {@link OrganizationStore}.
  * It re-renders whenever the organization is changed.
  *
  * @param id The id of the organization.
