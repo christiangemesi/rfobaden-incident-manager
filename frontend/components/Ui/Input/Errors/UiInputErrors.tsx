@@ -2,9 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 
 interface Props {
+  /**
+   * Errors caused by validating user inputs.
+   */
   errors?: string[]
 }
 
+/**
+ * `UiInputErrors` is a wrapper displaying multiple errors beneath each other.
+ */
 const UiInputErrors: React.VFC<Props> = ({
   errors = [],
 }) => {
