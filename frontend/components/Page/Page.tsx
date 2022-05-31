@@ -5,11 +5,25 @@ import PageFooter from '@/components/Page/Footer/PageFooter'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * Removes header from page.
+   */
   noHeader?: boolean
+
+  /**
+   * Removes footer from page.
+   */
   noFooter?: boolean
+
+  /**
+   * Main content of the page.
+   */
   children?: ReactNode
 }
 
+/**
+ * `Page` is a component which structs the page content in header, main and footer.
+ */
 const Page: React.VFC<Props> = ({
   noHeader = false,
   noFooter = false,
@@ -18,9 +32,11 @@ const Page: React.VFC<Props> = ({
   return (
     <React.Fragment>
       {noHeader || <PageHeader />}
+
       <Main noHeader={noHeader} noFooter={noFooter}>
         {children}
       </Main>
+
       {noFooter || <PageFooter />}
     </React.Fragment>
   )
@@ -28,6 +44,9 @@ const Page: React.VFC<Props> = ({
 export default Page
 
 const Main = styled.main<{ noHeader: boolean, noFooter: boolean }>`
+  position: relative;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+
   --header-height: 7rem;
   --footer-height: 6rem;
 
@@ -37,10 +56,6 @@ const Main = styled.main<{ noHeader: boolean, noFooter: boolean }>`
   ${({ noFooter }) => noFooter && css`
     --footer-height: 0px;
   `}
-
-  position: relative;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-
   ${Themed.media.xs.only} {
     padding-top: 5rem;
 
