@@ -8,13 +8,13 @@ interface Props {
   value: number
 
   /**
-   * The component to which the {@link UiBadge} is applied.
+   * The content to which the {@link UiBadge} is applied.
    */
   children: ReactNode
 }
 
 /**
- * `UiBadge` is a component that attaches a number to a component.
+ * `UiBadge` is a component that attaches a number to its contents.
  */
 const UiBadge: React.VFC<Props> = ({ value, children }) => {
   return (
