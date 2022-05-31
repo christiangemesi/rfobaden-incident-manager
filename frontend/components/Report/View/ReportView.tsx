@@ -20,6 +20,7 @@ import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
 import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
 import useHeight from '@/utils/hooks/useHeight'
+import UiBanner from '@/components/Ui/Banner/UiBanner'
 
 interface Props {
   /**
@@ -92,8 +93,15 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     }
   }, [report, router, selected])
 
+
+
   return (
     <UiLevel>
+      { (report.isClosed || report.isDone) && (
+        <UiBanner color="grey">
+          GESCHLOSSEN
+        </UiBanner>
+      )}
       <UiLevel.Header>
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
@@ -111,7 +119,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
           )}
         </TaskContainer>
 
-        <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
+        <TaskDrawer isOpen={selected !== null} isClosed={selected !== null && (selected.isClosed || selected.isDone)} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}

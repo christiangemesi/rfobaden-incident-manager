@@ -87,14 +87,16 @@ const Bridge = styled.div<{ isActive: boolean }>`
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform, background-color, box-shadow;
-  border-top: 1px solid ${({ theme }) => theme.colors.grey.value};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey.value};
+  // border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+  // border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   
   ${({ isActive, theme }) => isActive && css`
     transition-duration: 300ms;
     transform: scaleX(1);
     transform-origin: right center;
-    background-color: ${theme.colors.light.value};
+    background-color: ${theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   `}
 `
 const BridgeClip = styled.div`
@@ -117,13 +119,17 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     transition-duration: 300ms;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    background-color: ${({ theme }) => theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.active.hover};
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.light.value};
+      background-color: ${({ theme }) => theme.colors.active.value};
     }
     
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.light.value};
+      background-color: ${({ theme }) => theme.colors.active.value};
     }
   `}
   
@@ -134,18 +140,23 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 
-    background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
     
     ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
+      border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
     }
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
     }
 
     :hover ${Bridge} {
-      background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
     }
   `}
   

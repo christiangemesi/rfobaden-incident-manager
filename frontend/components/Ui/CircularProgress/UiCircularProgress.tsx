@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 
 
 interface Props {
@@ -133,17 +133,16 @@ interface OuterCircleProps {
 /**
  * `OuterCircle` displays the outer circle of a {@link UiCircularProgress}.
  */
-const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY,isClosed }) => {
+const OuterCircle: React.VFC<OuterCircleProps> = ({ radius, centerX, centerY, isClosed }) => {
   const theme = useTheme()
 
   return (
-    <InnerCircleStyled
+    <circle
       r={radius}
       cx={centerX}
       cy={centerY}
-      isClosed={isClosed}
       fill={theme.colors.success.contrast}
-      stroke={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
+      stroke={isClosed ? theme.colors.grey.value : theme.colors.secondary.value}
       strokeWidth={`${BORDER_SIZE}px`}
     />
   )
@@ -178,21 +177,16 @@ const InnerCircle: React.VFC<InnerCircleProps> = ({ radius, centerX, centerY, is
   const theme = useTheme()
 
   return (
-    <InnerCircleStyled
+    <circle
       r={radius}
       cx={centerX}
       cy={centerY}
-      isClosed={isClosed}
-      fill={isClosed ? theme.colors.backgroundgrey.hover : theme.colors.secondary.value}
+      stroke={isClosed ? theme.colors.grey.value : theme.colors.secondary.value }
+      fill={isClosed ? theme.colors.activeClosed.value : theme.colors.secondary.value}
+      strokeWidth={`${BORDER_SIZE}px`}
     />
   )
 }
-
-const InnerCircleStyled = styled.circle<{ isClosed: boolean }>`
-  ${({ isClosed }) => isClosed && css`
-    //TODO what can be put inhere so that it isnt empty? 
-  `}
-`
 
 interface TextProps {
   progress: number
