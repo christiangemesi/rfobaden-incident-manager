@@ -20,7 +20,7 @@ interface Props extends UiInputProps<string | null> {
   placeholder?: string
 
   /**
-   * Content is used for displaying advanced input options.
+   * Content used for displaying advanced input options.
    */
   children?: ReactNode
 

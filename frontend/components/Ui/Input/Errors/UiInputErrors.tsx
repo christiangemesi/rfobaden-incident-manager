@@ -9,7 +9,7 @@ interface Props {
 }
 
 /**
- * `UiInputErrors` is a wrapper displaying multiple errors beneath each other.
+ * `UiInputErrors` is a component displaying multiple error messages beneath each other.
  */
 const UiInputErrors: React.VFC<Props> = ({
   errors = [],

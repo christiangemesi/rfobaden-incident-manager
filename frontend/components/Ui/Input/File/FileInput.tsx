@@ -12,7 +12,7 @@ interface Props extends UiInputProps<File | null> {
 }
 
 /**
- * `FileInput` is a input component for a {@link Document}.
+ * `FileInput` is a input component for files.
  */
 const FileInput: React.VFC<Props> = ({
   accept,

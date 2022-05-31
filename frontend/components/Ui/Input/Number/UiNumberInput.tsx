@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactNode, useCallback } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
@@ -13,11 +13,6 @@ interface Props extends UiInputProps<number | null> {
    * Text of the input placeholder.
    */
   placeholder?: string
-
-  /**
-   * tbd? Is never used sensibly!
-   */
-  children?: ReactNode
 }
 
 /**
@@ -29,7 +24,6 @@ const UiNumberInput: React.VFC<Props> = ({
   onChange: setValue,
   label,
   errors = [],
-  children,
 }) => {
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.valueAsNumber)
@@ -37,7 +31,7 @@ const UiNumberInput: React.VFC<Props> = ({
 
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
-  const hasChildren = children !== undefined
+  const hasChildren = false
 
   return (
     <Label>
