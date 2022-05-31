@@ -3,10 +3,20 @@ import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
+  /**
+   * The text to be displayed.
+   */
   description: string | null
+
+  /**
+   * The notes to be displayed.
+   */
   notes?: string | null
 }
 
+/**
+ * `UiDescription` is a component that displays a text.
+ */
 const UiDescription: React.VFC<Props> = ({ description, notes = null }) => {
   return (
     <Article>
