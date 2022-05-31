@@ -82,7 +82,7 @@ public class Task extends TrackableModel
     }
 
     /**
-     * Allows access to the {@link #getReport().getIncident() incident}'s id.
+     * Allows access to the {@link Incident incident}'s id.
      *
      * @return The incident's id.
      */

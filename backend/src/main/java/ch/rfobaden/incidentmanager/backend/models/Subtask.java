@@ -78,7 +78,7 @@ public class Subtask extends TrackableModel
     }
 
     /**
-     * Allows access to the {@link #getTask().getReport() report}'s id.
+     * Allows access to the {@link Report report}'s id.
      *
      * @return The report's id.
      */

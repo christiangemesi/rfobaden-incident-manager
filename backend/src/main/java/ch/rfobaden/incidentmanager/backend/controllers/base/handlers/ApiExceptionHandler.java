@@ -45,7 +45,8 @@ public class ApiExceptionHandler {
      * Handles {@link UpdateConflictException} instances.
      *
      * @param e The exception to display.
-     * @return A {@link ErrorResponse} with the status code {@link HttpStatus#PRECONDITION_REQUIRED}.
+     * @return A {@link ErrorResponse} with
+     *      the status code {@link HttpStatus#PRECONDITION_REQUIRED}.
      */
     @ExceptionHandler(UpdateConflictException.class)
     public ResponseEntity<ErrorResponse> handle(UpdateConflictException e) {
@@ -57,7 +58,8 @@ public class ApiExceptionHandler {
      * Handles {@link MailException} instances.
      *
      * @param e The exception to display.
-     * @return A {@link ErrorResponse} with the status code {@link HttpStatus#INTERNAL_SERVER_ERROR}.
+     * @return A {@link ErrorResponse} with
+     *      the status code {@link HttpStatus#INTERNAL_SERVER_ERROR}.
      */
     @ExceptionHandler(MailException.class)
     public ResponseEntity<ErrorResponse> handle(MailException e) {
@@ -69,7 +71,8 @@ public class ApiExceptionHandler {
      * Handles {@link AuthenticationException} instances.
      *
      * @param e The exception to display.
-     * @return A {@link ErrorResponse} with the status code {@link HttpStatus#UNAUTHORIZED}.
+     * @return A {@link ErrorResponse} with
+     *      the status code {@link HttpStatus#UNAUTHORIZED}.
      */
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handle(AuthenticationException e) {
@@ -81,7 +84,8 @@ public class ApiExceptionHandler {
      * Handles {@link AccessDeniedException} instances.
      *
      * @param e The exception to display.
-     * @return A {@link FieldErrorsResponse} with the status code {@link HttpStatus#FORBIDDEN}.
+     * @return A {@link FieldErrorsResponse} with
+     *      the status code {@link HttpStatus#FORBIDDEN}.
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handle(AccessDeniedException e) {
@@ -94,7 +98,8 @@ public class ApiExceptionHandler {
      * They are caused mostly by sending invalid parameters to an API endpoint.
      *
      * @param e The exception to display.
-     * @return A {@link FieldErrorsResponse} with the status code {@link HttpStatus#UNPROCESSABLE_ENTITY}.
+     * @return A {@link FieldErrorsResponse} with
+     *      the status code {@link HttpStatus#UNPROCESSABLE_ENTITY}.
      */
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -119,7 +124,8 @@ public class ApiExceptionHandler {
      * Handles {@link ValidationException} instances.
      *
      * @param e The exception to display.
-     * @return A {@link FieldErrorsResponse} with the status code {@link HttpStatus#UNPROCESSABLE_ENTITY}.
+     * @return A {@link FieldErrorsResponse} with
+     *      the status code {@link HttpStatus#UNPROCESSABLE_ENTITY}.
      */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<FieldErrorsResponse> handle(ValidationException e) {
@@ -133,7 +139,8 @@ public class ApiExceptionHandler {
      * Handles any non-specialized exceptions.
      *
      * @param e The exception to display.
-     * @return An {@link ErrorResponse} with the status code {@link HttpStatus#INTERNAL_SERVER_ERROR}.
+     * @return An {@link ErrorResponse} with
+     *      the status code {@link HttpStatus#INTERNAL_SERVER_ERROR}.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleRemaining(Exception e) {
@@ -177,7 +184,8 @@ public class ApiExceptionHandler {
     }
 
     /**
-     * {@code FieldErrorsResponse} displays a mapping of field names to error messages to the client.
+     * {@code FieldErrorsResponse} displays a mapping of field names
+     * to error messages to the client.
      * This is mainly caused by failed validations.
      */
     public static class FieldErrorsResponse extends ErrorResponse {
