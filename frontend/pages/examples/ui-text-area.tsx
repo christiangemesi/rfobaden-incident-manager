@@ -8,8 +8,7 @@ const UiTextAreaExample: React.VFC = () => {
     <React.Fragment>
       <h2>UiTextArea</h2>
       <UiTextArea value={value} placeholder="Schrieb was dri" onChange={setValue} />
-      <UiTextArea label="test" value={value2} isRequired rows={1}
-        onChange={setValue2} />
+      <UiTextArea label="test" value={value2} rows={1} onChange={setValue2} />
       <UiTextArea value={value}
         onChange={setValue} errors={['You can never make me happy']} />
     </React.Fragment>
