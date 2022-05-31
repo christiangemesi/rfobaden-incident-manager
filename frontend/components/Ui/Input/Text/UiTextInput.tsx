@@ -4,13 +4,35 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 
 interface Props extends UiInputProps<string | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * The type of the input.
+   */
   type?: 'text' | 'password'
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * Content is used for displaying advanced input options.
+   */
   children?: ReactNode
+
+  /**
+   * Event caused by clicking on the advanced input options.
+   */
   onClick?: () => void
 }
 
+/**
+ * `UiTextInput` is an input component for a text values.
+ */
 const UiTextInput: React.VFC<Props> = ({
   value,
   placeholder = '',
