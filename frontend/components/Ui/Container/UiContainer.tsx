@@ -19,7 +19,7 @@ interface Props {
  * IT can be used to "center" elements by forcing them to not take up the full available width.
  */
 const UiContainer = styled.div<Props>`
-  ${({ isFluid }) => isFluid ? sharedCss : fluidCss}
+  ${({ isFluid }) => isFluid ? sharedCss : defaultCss}
 `
 
 const sharedCss = css`
@@ -27,7 +27,7 @@ const sharedCss = css`
   margin-inline: auto;
 `
 
-const fluidCss = css`
+const defaultCss = css`
   ${sharedCss};
   
   padding-left: 0.8rem;
@@ -45,5 +45,5 @@ const fluidCss = css`
 `
 
 export default Object.assign(UiContainer, {
-  fluidCss: fluidCss,
+  style: defaultCss,
 })
