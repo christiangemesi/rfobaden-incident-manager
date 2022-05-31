@@ -16,17 +16,23 @@ import rfoBadenLogo from '@/public/rfobaden-logo-text.png'
 import PageHeaderAssignments from '@/components/Page/Header/Assignments/PageHeaderAssignments'
 import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 
+/**
+ * `PageHeader` represents the header on the top of each page.
+ */
 const PageHeader: React.VFC = () => {
   const { currentUser } = useSession()
 
   const router = useRouter()
 
   const logout = useCallback(async () => {
+    // Destroy the session.
     const error = await BackendService.delete('session')
     if (error !== null) {
       throw error
     }
+
     SessionStore.clear({ silent: true })
+
     await router.push('/anmelden')
   }, [router])
 
@@ -39,13 +45,16 @@ const PageHeader: React.VFC = () => {
           </UiLink>
         </ImageContainer>
       </NavContainer>
+
       <ButtonList>
         {currentUser !== null && (
           <PageHeaderAssignments currentUser={currentUser} />
         )}
+
         <PageHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
         </PageHeaderItem>
+
         {currentUser !== null && (
           <LoggedInUser>
             <UiDropDown>
@@ -57,10 +66,13 @@ const PageHeader: React.VFC = () => {
                   <UiIcon.UserInCircle />
                 </IconButton>
               )}</UiDropDown.Trigger>
+
+              {/* Account action menu */}
               <UiDropDown.Menu>
                 <DropDownUsername>
                   {currentUser.firstName} {currentUser.lastName}
                 </DropDownUsername>
+
                 <UiModal title="Passwort bearbeiten">
                   <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
@@ -69,6 +81,7 @@ const PageHeader: React.VFC = () => {
                     <UserPasswordForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
+
                 <UiModal title="E-Mail ändern">
                   <UiModal.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
@@ -77,6 +90,7 @@ const PageHeader: React.VFC = () => {
                     <UserEmailForm user={currentUser} onClose={close} />
                   )}</UiModal.Body>
                 </UiModal>
+
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
               </UiDropDown.Menu>
             </UiDropDown>
@@ -105,9 +119,11 @@ const Header = styled.header`
     top: 0;
   }
 `
+
 const NavContainer = styled.div`
   display: flex;
 `
+
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -119,6 +135,7 @@ const ImageContainer = styled.div`
     transform: scale(1.05);
   }
 `
+
 const ButtonList = styled.div`
   display: flex;
   gap: 2rem;
@@ -132,6 +149,7 @@ const LoggedInUser = styled.div`
   display: flex;
   align-items: center;
 `
+
 const Username = styled.span`
   font-size: 1em;
   margin-right: 0.25rem;
@@ -140,12 +158,14 @@ const Username = styled.span`
     display: none;
   }
 `
+
 const IconButton = styled(UiIconButton)`
   :hover {
     background-color: transparent;
     transform: scale(1.05);
   }
 `
+
 const DropDownUsername = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey.value};
   padding: 0.5rem 1rem;

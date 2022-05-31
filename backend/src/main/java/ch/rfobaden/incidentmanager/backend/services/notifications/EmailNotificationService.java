@@ -19,7 +19,7 @@ public class EmailNotificationService implements NotificationService {
 
     private final JavaMailSender sender;
 
-    private final String MAIL_TITLE = "<h1>Incident Manager RFOBaden</h1>";
+    private static final String MAIL_TITLE = "<h1>Incident Manager RFOBaden</h1>";
 
     public EmailNotificationService(RfoConfig rfoConfig, JavaMailSender sender) {
         this.rfoConfig = rfoConfig;
