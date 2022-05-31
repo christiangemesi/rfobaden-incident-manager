@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 interface Props extends StyledProps {
   /**
-   * The URL that the hyperlink points to.
+   * The URL or path that the hyperlink points to.
    */
   href: string
 
@@ -15,18 +15,18 @@ interface Props extends StyledProps {
   children?: ReactNode
 
   /**
-   * Defines the content as text.
+   * Signals that the content is text-only, causing the link to be styled differently.
    */
   isText?: boolean
 
   /**
-   * The target where the content should be displayed.
+   * The target attribute for the displayed anchor element.
    */
   target?: string
 }
 
 /**
- * `UiLink` provides a navigation to other resources.
+ * `UiLink` displays a HTML anchor element.
  */
 const UiLink: React.VFC<Props> = ({
   href,
