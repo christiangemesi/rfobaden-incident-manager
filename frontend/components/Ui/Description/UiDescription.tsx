@@ -9,7 +9,7 @@ interface Props {
   description: string | null
 
   /**
-   * The notes to be displayed.
+   * Additional, important information to display.
    */
   notes?: string | null
 }
