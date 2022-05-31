@@ -7,9 +7,32 @@ import styled from 'styled-components'
 import { useEffectOnce, useGetSet } from 'react-use'
 
 interface Props {
+  /**
+   * The dropdown's layout.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiDropDown` is a component that displays a dropdown menu.
+ * 
+ * @example
+ * <UiDropDown>
+ *   <UiDropDown.Trigger>{({ toggle }) => (
+ *     <button onClick={toggle}>
+ *       Open me!  
+ *     </button>
+ *   )}</UiDropDown.Trigger>
+ *   <UiDropDown.Menu>
+ *     <UiDropDown.Item>
+ *       The first item!
+ *     </UiDropDown.Item>
+ *     <UiDropDown.Item>
+ *       The second item!
+ *     </UiDropDown.Item>
+ *   </UiDropDown.Menu>
+ * </UiDropDown>
+ */
 const UiDropDown: React.VFC<Props> = ({ children }) => {
   const [getState, setState] = useGetSet<UiDropDownState>(() => ({
     containerRef: { current: null },
