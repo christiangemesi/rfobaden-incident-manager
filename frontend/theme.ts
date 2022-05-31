@@ -119,7 +119,7 @@ export const defaultTheme: Theme = {
     },
     activeClosed: {
       value: '#EFF4F8',
-      contrast: contrastDark,
+      contrast: '#BFBFBF',
       hover: '#e2e8ec',
     },
   },
