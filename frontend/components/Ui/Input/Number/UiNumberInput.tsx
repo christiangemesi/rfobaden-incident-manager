@@ -4,11 +4,25 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 
 interface Props extends UiInputProps<number | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * tbd? Is never used sensibly!
+   */
   children?: ReactNode
 }
 
+/**
+ * `UiNumberInput` is input component for a numerical value.
+ */
 const UiNumberInput: React.VFC<Props> = ({
   value,
   placeholder = '',
