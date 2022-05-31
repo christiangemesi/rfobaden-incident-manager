@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * {@code UiContainer} is a component that gives a horizontal padding to its contents.
+ * `UiContainer` is a component that gives a horizontal padding to its contents.
  * IT can be used to "center" elements by forcing them to not take up the full available width.
  */
 const UiContainer = styled.div<Props>`
