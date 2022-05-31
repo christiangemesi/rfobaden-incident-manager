@@ -3,11 +3,26 @@ import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
+
+  /**
+   * Sets the caption to be bold.
+   */
   isEmphasis?: boolean
+
+  /**
+   * The caption's content.
+   */
   children: ReactNode
+
+  /**
+   * Event caused by clicking on the {@link UiCaption}.
+   */
   onClick?: () => void
 }
 
+/**
+ * `UiCaption` styles text as a caption.
+ */
 const UiCaption: React.VFC<Props> = (props) => {
   return <Caption {...props} />
 }

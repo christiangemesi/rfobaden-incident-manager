@@ -1,12 +1,18 @@
-import React from 'react'
-import { Children, ReactNode } from 'react'
+import React, { Children, ReactNode } from 'react'
 import styled from 'styled-components'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
+import UiCaption from '@/components/Ui/Caption/UiCaption'
 
 interface Props {
+  /**
+   * The components to be displayed in the list.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiCaptionList` is a component that displays {@link UiCaption} in a list side by side.
+ */
 const UiCaptionList: React.VFC<Props> = ({ children }) => {
   return (
     <List>
