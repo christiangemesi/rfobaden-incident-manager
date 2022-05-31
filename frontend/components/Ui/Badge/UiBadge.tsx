@@ -2,10 +2,20 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 interface Props {
+  /**
+   * The number displayed on the {@link UiBadge}.
+   */
   value: number
+
+  /**
+   * The component to which the {@link UiBadge} is applied.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiBadge` is a component that attaches a number to a component.
+ */
 const UiBadge: React.VFC<Props> = ({ value, children }) => {
   return (
     <CircleContainer>
