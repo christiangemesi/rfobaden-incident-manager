@@ -93,6 +93,8 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     }
   }, [report, router, selected])
 
+
+
   return (
     <UiLevel>
       { (report.isClosed || report.isDone) && (
@@ -117,7 +119,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
           )}
         </TaskContainer>
 
-        <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
+        <TaskDrawer isOpen={selected !== null} isClosed={selected !== null && (selected.isClosed || selected.isDone)} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
