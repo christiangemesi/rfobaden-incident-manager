@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import UiTextInput from '@/components/Ui/Input/Text/UiTextInput'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+/**
+ * `UiTextInputExample` is an example page for the {@link UiTextInput} component.
+ */
 const UiTextInputExample: React.VFC = () => {
 
   const [value1, setValue1] = useState<string | null>(null)
