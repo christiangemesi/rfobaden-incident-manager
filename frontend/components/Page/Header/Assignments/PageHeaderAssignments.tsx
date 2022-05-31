@@ -17,9 +17,15 @@ import SubtaskStore, { useSubtasks } from '@/stores/SubtaskStore'
 import User from '@/models/User'
 
 interface Props {
+  /**
+   * The current user logged in.
+   */
   currentUser: User
 }
 
+/**
+ * `PageHeaderAssignments` is a component to display the {@link AssignmentData assignments} of the current user.
+ */
 const PageHeaderAssignments: React.VFC<Props> = ({
   currentUser,
 }) => {
@@ -29,11 +35,13 @@ const PageHeaderAssignments: React.VFC<Props> = ({
     low: 0,
   }))
 
+  // Group all assignment entities by priority or closed.
   const transports = useTransports(groupAssigned(currentUser, isOpenTransport))
   const reports = useReports(groupAssigned(currentUser, isOpenReport))
   const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
   const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
 
+  // Calculate the number opened entities for each priority.
   useEffect(() => {
     setAssignmentCount({
       low: transports.LOW.length + reports.LOW.length + tasks.LOW.length + subtasks.LOW.length,
@@ -42,6 +50,7 @@ const PageHeaderAssignments: React.VFC<Props> = ({
     })
   }, [transports, reports, tasks, subtasks])
 
+  // Load all assignments of the current user.
   useEffect(() => {
     (async () => {
       if (currentUser === null) {
@@ -69,10 +78,12 @@ const PageHeaderAssignments: React.VFC<Props> = ({
             <PriorityIcon priority={Priority.HIGH} />
             <Counter>{assignmentCount.high}</Counter>
           </PriorityContainer>
+
           <PriorityContainer>
             <PriorityIcon priority={Priority.MEDIUM} />
             <Counter>{assignmentCount.medium}</Counter>
           </PriorityContainer>
+
           <PriorityContainer>
             <PriorityIcon priority={Priority.LOW} />
             <Counter>{assignmentCount.low}</Counter>
@@ -82,7 +93,6 @@ const PageHeaderAssignments: React.VFC<Props> = ({
     </UiLink>
   )
 }
-
 export default PageHeaderAssignments
 
 const AssignmentCounter = styled.div`
@@ -90,24 +100,29 @@ const AssignmentCounter = styled.div`
   justify-content: center;
   align-items: center;
 `
+
 const PriorityContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  
   gap: 0.2rem;
   margin: 0 0.4rem;
   color: ${({ theme }) => theme.colors.secondary.contrast};
 `
+
 const PriorityIcon = styled(UiPriority)`
   transform: scale(0.75);
 `
+
 const Counter = styled.span`
   position: absolute;
   background-color: ${({ theme }) => theme.colors.primary.contrast};
+  font-size: 0.75em;
   border-radius: 50%;
+  
   top: -0.3rem;
   right: -0.3rem;
   padding: 0.25rem 0.4rem;
-  font-size: 0.75em;
 `
