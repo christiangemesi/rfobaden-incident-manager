@@ -5,9 +5,15 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props extends UiInputProps<File | null> {
+  /**
+   * The accepted file type.
+   */
   accept: string
 }
 
+/**
+ * `FileInput` is a input component for a {@link Document}.
+ */
 const FileInput: React.VFC<Props> = ({
   accept,
   errors = [],
