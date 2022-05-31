@@ -3,12 +3,23 @@ import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * Makes the container fluid, causing it to take up as much width as its content needs.
+   */
   isFluid?: boolean
+
+  /**
+   * The container's contents.
+   */
   children?: ReactNode
 }
 
+/**
+ * {@code UiContainer} is a component that gives a horizontal padding to its contents.
+ * IT can be used to "center" elements by forcing them to not take up the full available width.
+ */
 const UiContainer = styled.div<Props>`
-  ${({ isFluid }) => !isFluid ? fluidCss : sharedCss}
+  ${({ isFluid }) => isFluid ? sharedCss : fluidCss}
 `
 
 const sharedCss = css`
@@ -34,5 +45,5 @@ const fluidCss = css`
 `
 
 export default Object.assign(UiContainer, {
-  fluidCss,
+  fluidCss: fluidCss,
 })
