@@ -4,12 +4,30 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import Link from 'next/link'
 
 interface Props extends StyledProps {
+  /**
+   * The URL that the hyperlink points to.
+   */
   href: string
+
+  /**
+   * The content that is displayed as the link.
+   */
   children?: ReactNode
+
+  /**
+   * Defines the content as text.
+   */
   isText?: boolean
+
+  /**
+   * The target where the content should be displayed.
+   */
   target?: string
 }
 
+/**
+ * `UiLink` provides a navigation to other resources.
+ */
 const UiLink: React.VFC<Props> = ({
   href,
   className,
