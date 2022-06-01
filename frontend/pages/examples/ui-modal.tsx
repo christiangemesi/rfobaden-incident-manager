@@ -4,6 +4,9 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiModal from '@/components/Ui/Modal/UiModal'
 import UiButton from '@/components/Ui/Button/UiButton'
 
+/**
+ * `UiModalExample` is an example page for the {@link UiModal} component.
+ */
 const UiModalExample: React.VFC = () => {
   return (
     <UiContainer>

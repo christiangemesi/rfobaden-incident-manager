@@ -12,12 +12,16 @@ import UiPagination from '@/components/Ui/Pagination/UiPagination'
 import Page from '@/components/Page/Page'
 
 interface Props {
+
   offset: number
   data: {
     page: PageData
   }
 }
 
+/**
+ * `ArchivPage` displays closed {@link Incident}.
+ */
 const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   useEffect(() => {
     IncidentStore.saveAll(data.page.data.map(parseIncident))

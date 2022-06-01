@@ -28,14 +28,37 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+
+    /**
+     * The {@link Incident} to be displayed.
+     */
     incident: Incident
+
+    /**
+     * The list of {@link Report} that are involved.
+     */
     reports: Report[]
+
+    /**
+     * The list of {@link Transport} that are involved.
+     */
     transports: Transport[]
+
+    /**
+     * The list of {@link User} that are involved.
+     */
     users: User[]
+
+    /**
+     * The list of {@link Organization} that are involved.
+     */
     organizations: Organization[]
   }
 }
 
+/**
+ * `IncidentPage` displays information of a {@link Incident}.
+ */
 const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))

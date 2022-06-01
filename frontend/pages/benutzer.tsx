@@ -14,11 +14,21 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+    /**
+     * List of {@link User users} with assigned entities.
+     */
     users: User[]
+
+    /**
+     * List of {@link Organization organizations}.
+     */
     organizations: Organization[]
   }
 }
 
+/**
+ * `BenutzerPage` displays all {@link User}.
+ */
 const BenutzerPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     UserStore.saveAll(data.users.map(parseUser))

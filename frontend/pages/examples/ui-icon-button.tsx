@@ -6,6 +6,10 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UiIconButtonGroup from '@/components/Ui/Icon/Button/Group/UiIconButtonGroup'
 
+
+/**
+ * `UiIconButtonGroupExample` is an example page for the {@link UiIconButtonGroup} component.
+ */
 const UiIconButtonGroupExample: React.VFC = () => {
   return (
     <UiContainer>
