@@ -12,7 +12,6 @@ import UiPagination from '@/components/Ui/Pagination/UiPagination'
 import Page from '@/components/Page/Page'
 
 interface Props {
-
   offset: number
   data: {
     page: PageData
@@ -20,7 +19,7 @@ interface Props {
 }
 
 /**
- * `ArchivPage` displays closed {@link Incident}.
+ * `ArchivPage` displays closed {@link Incident incidents}.
  */
 const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   useEffect(() => {

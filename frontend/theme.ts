@@ -1,24 +1,87 @@
 import { css, FlattenSimpleInterpolation, Keyframes, keyframes } from 'styled-components'
 
+/**
+ * `Theme` updates the colors, fonts and fontsizes of the application
+ */
 export type Theme = {
   colors: {
+
+    /**
+     * primary color used by the application.
+     */
     primary: Color
+
+    /**
+     * secondary color used by the application.
+     */
     secondary: Color
+
+    /**
+     * tertiary color used by the application.
+     */
     tertiary: Color
+
+    /**
+     * light color used by the application.
+     */
     light: Color
+
+    /**
+     * success color used by the application.
+     */
     success: Color
+
+    /**
+     * error color used by the application.
+     */
     error: Color
+
+    /**
+     * warning color used by the application.
+     */
     warning: Color
+
+    /**
+     * info color used by the application.
+     */
     info: Color
+
+    /**
+     * grey color used by the application.
+     */
     grey: Color
+
+    /**
+     * active color used by the application.
+     */
     active: Color
+
+    /**
+     * activeClosed color used by the application.
+     */
     activeClosed: Color
   }
   fonts: {
+
+    /**
+     * heading font used by the application.
+     */
     heading: string
+
+    /**
+     * body font used by the application.
+     */
     body: string
     sizes: {
+
+      /**
+       * root size used by the application.
+       */
       root: string,
+
+      /**
+       * small size used by the application.
+       */
       small: string,
     }
   }

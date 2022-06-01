@@ -15,7 +15,7 @@ import Page from '@/components/Page/Page'
 interface Props {
   data: {
     /**
-     * List of {@link User users} with assigned entities.
+     * List of {@link User users}.
      */
     users: User[]
 
