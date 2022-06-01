@@ -87,15 +87,35 @@ export type Theme = {
   }
   breakpoints: {
     [K in Breakpoint]: {
+
+      /**
+       * minimum breakpoint size.
+       */
       min: number
+
+      /**
+       * maximum breakpoint size.
+       */
       max: number
     }
   }
   transitions: {
+
+    /**
+     * SlideIn type and time used for the slide.
+     */
     slideIn: string;
+
+    /**
+     * SlideOut type and time used for the slide.
+     */
     slideOut: string;
   }
   animations: {
+
+    /**
+     * with this i need help
+     */
     [K in AnimationName]: Animation
   }
 }
