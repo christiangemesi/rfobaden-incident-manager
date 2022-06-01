@@ -140,7 +140,6 @@ const SubtaskListItem: React.VFC<Props> = ({
 export default SubtaskListItem
 
 const Item = styled(UiListItemWithDetails)<{ isDragging: boolean, isClosed: boolean }>`
-  padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
   
   transition: 150ms ease-out;
