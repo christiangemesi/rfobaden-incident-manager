@@ -3,10 +3,20 @@ import { run } from '@/utils/control-flow'
 import DateHelper from '@/utils/helpers/DateHelper'
 
 interface Props {
+  /**
+   * The date to display formatted.
+   */
   value: Date
+
+  /**
+   * The date's format type.
+   */
   type?: UiDateType
 }
 
+/**
+ * `UiDate` displays a formatted date time value.
+ */
 const UiDate: React.VFC<Props> = ({ value, type = 'auto' }) => {
   const actualType = useMemo(() => {
     if (type !== 'auto') {
@@ -17,6 +27,7 @@ const UiDate: React.VFC<Props> = ({ value, type = 'auto' }) => {
       : 'datetime'
   }, [type, value])
 
+  // Format the date.
   const day = prefixZero(value.getDate())
   const month = prefixZero(value.getMonth() + 1)
   const year = value.getFullYear()
@@ -42,8 +53,17 @@ const UiDate: React.VFC<Props> = ({ value, type = 'auto' }) => {
 }
 export default UiDate
 
+/**
+ * The date formats.
+ */
 export type UiDateType = 'auto' | 'date' | 'time' | 'datetime'
 
+/**
+ * Format the value as a two-digit number.
+ *
+ * @param value The value.
+ * @return The formatted value.
+ */
 const prefixZero = (value: number): string => {
   if (value < 10) {
     return `0${value}`
