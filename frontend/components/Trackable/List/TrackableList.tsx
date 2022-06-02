@@ -13,18 +13,47 @@ import { Props as TrackableListItemProps } from '@/components/Trackable/List/Ite
 import Incident from '@/models/Incident'
 
 interface Props<T> extends StyledProps {
+  /**
+   * The incident the records belongs to.
+   */
   incident: Incident
 
+  /**
+   * The records to display.
+   */
   records: Array<readonly T[]>
-  selected?: T | null,
+
+  /**
+   * The currently selected record.
+   */
+  selected?: T | null
+
+  /**
+   * Event caused by selecting a record.
+   */
   onSelect?: (record: T) => void
 
+  /**
+   * The modal's title.
+   */
   formTitle: string
+
+  /**
+   * Renders the form for the record.
+   */
   renderForm: (props: { save(record: T): void, close(): void }) => ReactNode
+
+  /**
+   * Renders the record item.
+   */
   renderItem: (props: Omit<TrackableListItemProps<T>, 'isClosed' | 'children'>) => ReactNode
 }
 
-const ReportList = <T extends Trackable>({
+/**
+ * `TrackableList` is a component that displays a list of {@link Trackable trackable records} using {@link TrackableListItem}.
+ * The list includes a button which allow the creation of new trackable record.
+ */
+const TrackableList = <T extends Trackable>({
   incident,
   records,
   selected = null,
@@ -48,6 +77,7 @@ const ReportList = <T extends Trackable>({
               <UiIcon.CreateAction size={1.5} />
             </UiCreateButton>
           )}</UiModal.Trigger>
+
           <UiModal.Body>{({ close }) => (
             renderForm({ save: handleSelect ?? noop, close })
           )}</UiModal.Body>
@@ -71,7 +101,7 @@ const ReportList = <T extends Trackable>({
     </ListContainer>
   )
 }
-export default asStyled(ReportList)
+export default asStyled(TrackableList)
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
@@ -81,6 +111,7 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: padding-right;
   transition-property: padding-right;
+
   ${({ hasSelected }) => hasSelected && css`
     ${Themed.media.lg.min} {
       padding-right: 2rem;

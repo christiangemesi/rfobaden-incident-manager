@@ -19,7 +19,7 @@ interface Props {
 }
 
 /**
- * `TrackableCloseAction` displays a `DropDown.Item` to close and reopen an entity.
+ * `TrackableCloseAction` displays a `DropDown.Item` to close and reopen a record.
  */
 const TrackableCloseAction: React.VFC<Props> = ({
   isClosed,

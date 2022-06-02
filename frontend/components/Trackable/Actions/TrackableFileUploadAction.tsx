@@ -8,12 +8,12 @@ import Id from '@/models/base/Id'
 
 interface Props {
   /**
-   * The entity's id.
+   * The record's id.
    */
   id: Id<Model>
 
   /**
-   * The entity's type.
+   * The record's type.
    */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
 
@@ -29,7 +29,7 @@ interface Props {
 }
 
 /**
- * `TrackableFileUploadAction` displays the `DropDown.Item` to upload a document for an entity.
+ * `TrackableFileUploadAction` displays the `DropDown.Item` to upload a document for a record.
  */
 const TrackableFileUploadAction: React.VFC<Props> = ({
   id,

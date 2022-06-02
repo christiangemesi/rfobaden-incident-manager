@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * `TrackableEditAction` displays a `DropDown.Item` to open the edit form for an entity.
+ * `TrackableEditAction` displays a `DropDown.Item` to open the edit form for a record.
  */
 const TrackableEditAction: React.VFC<Props> = ({ title, children }) => {
   return (
