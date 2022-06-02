@@ -7,19 +7,36 @@ import Model from '@/models/base/Model'
 import Id from '@/models/base/Id'
 
 interface Props {
+  /**
+   * The entity's id.
+   */
   id: Id<Model>
+
+  /**
+   * The entity's type.
+   */
   modelName: 'incident' | 'report' | 'task' | 'subtask'
+
+  /**
+   * The document's type.
+   */
   type: 'image' | 'document'
+
+  /**
+   * Event caused by adding a document.
+   */
   onAddDocument: (document: Document) => void
 }
 
+/**
+ * `TrackableFileUploadAction` displays the `DropDown.Item` to upload a document for an entity.
+ */
 const TrackableFileUploadAction: React.VFC<Props> = ({
   id,
   modelName,
   type,
   onAddDocument: handleAddFile,
 }) => {
-
   const title = type === 'image' ? 'Bild' : 'Dokument'
 
   return (
