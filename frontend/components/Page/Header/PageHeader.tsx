@@ -25,7 +25,6 @@ const PageHeader: React.VFC = () => {
   const router = useRouter()
 
   const logout = useCallback(async () => {
-    // Destroy the session.
     const error = await BackendService.delete('session')
     if (error !== null) {
       throw error

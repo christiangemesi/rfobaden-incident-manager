@@ -6,12 +6,12 @@ import { Themed } from '@/theme'
 
 interface Props {
   /**
-   * Removes header from page.
+   * Hides the header.
    */
   noHeader?: boolean
 
   /**
-   * Removes footer from page.
+   * Hides the footer.
    */
   noFooter?: boolean
 
@@ -22,7 +22,7 @@ interface Props {
 }
 
 /**
- * `Page` is a component which structs the page content in header, main and footer.
+ * `Page` is a component which structures a page in header, main and footer.
  */
 const Page: React.VFC<Props> = ({
   noHeader = false,

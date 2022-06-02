@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 interface Props extends StyledProps {
   /**
-   * The destination link of the item.
+   * The link of the item.
    */
   href?: string
 
@@ -17,18 +17,18 @@ interface Props extends StyledProps {
   onClick?: () => void
 
   /**
-   * The title of the itam.
+   * The title of the item.
    */
   title?: string
 
   /**
-   * The content to display.
+   * The content of the item.
    */
   children: ReactNode
 }
 
 /**
- * `PageHeaderItem` is a component to display parts of a {@link PageHeader}.
+ * `PageHeaderItem` is a component that displays an item inside a {@link PageHeader}.
  */
 const PageHeaderItem: React.VFC<Props> = ({ href, onClick, title, children }) => {
   const router = useRouter()

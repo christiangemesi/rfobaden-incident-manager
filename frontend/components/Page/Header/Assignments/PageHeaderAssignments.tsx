@@ -18,7 +18,7 @@ import User from '@/models/User'
 
 interface Props {
   /**
-   * The current user logged in.
+   * The currently logged in user.
    */
   currentUser: User
 }
@@ -41,7 +41,7 @@ const PageHeaderAssignments: React.VFC<Props> = ({
   const tasks = useTasks(groupAssigned(currentUser, isOpenTask))
   const subtasks = useSubtasks(groupAssigned(currentUser, isOpenSubtask))
 
-  // Calculate the number opened entities for each priority.
+  // Calculate the number of opened entities for each priority.
   useEffect(() => {
     setAssignmentCount({
       low: transports.LOW.length + reports.LOW.length + tasks.LOW.length + subtasks.LOW.length,

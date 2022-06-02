@@ -16,9 +16,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@code TrackableModel} is the base class for types class representing
- * trackable database entities.
- * It provides trackable fields, functionality and utilities for such types.
+ * {@code TrackableModel} is a base class for types representing {@link Trackable} entities.
+ * It provides fields, functionality and utilities for such types.
  */
 @MappedSuperclass
 public abstract class TrackableModel extends Model implements Trackable, Serializable {
