@@ -15,7 +15,7 @@ interface Props extends StyledProps {
   color?: ColorName
 
   /**
-   * The content of the button.
+   * The icon to display.
    */
   children: ReactNode
 
