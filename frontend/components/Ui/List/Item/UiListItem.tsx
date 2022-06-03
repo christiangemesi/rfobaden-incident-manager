@@ -2,16 +2,40 @@ import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 import Link from 'next/link'
+import UiList from '@/components/Ui/List/UiList'
 
 export interface Props extends StyledProps {
   href?: string | URL
+
+  /**
+   * The item's title.
+   */
   title?: string
+
+  /**
+   * Sets the item to be active.
+   */
   isActive?: boolean
+
+  /**
+   * Sets the item to be closed.
+   */
   isClosed?: boolean
+
+  /**
+   * Event caused by clicking on the list item.
+   */
   onClick?: EventHandler<MouseEvent>
+
+  /**
+   * The item's content.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiListItem` is a component that displays information in a {@link UiList}.
+ */
 const UiListItem: React.VFC<Props> = ({
   href = null,
   isActive = false,
