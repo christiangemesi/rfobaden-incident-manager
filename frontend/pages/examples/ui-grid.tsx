@@ -3,6 +3,9 @@ import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import styled from 'styled-components'
 
+/**
+ * `UiGridExample` is an example page for the {@link UiGrid} component.
+ */
 const UiGridExample: React.VFC = () => {
   const colStyle: CSSProperties = {
     border: '1px solid black',
