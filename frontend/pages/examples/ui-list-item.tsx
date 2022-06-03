@@ -9,6 +9,9 @@ import UiItemWithDetails from '@/components/Ui/List/Item/WithDetails/UiListItemW
 import Priority from '@/models/Priority'
 import UiButton from '@/components/Ui/Button/UiButton'
 
+/**
+ * `UiAlertExample` is an example page for the {@link UiList} component.
+ */
 const UiListContainerExample: React.VFC = () => {
   return (
     <UiContainer>
