@@ -36,7 +36,6 @@ const UiDrawer: React.VFC<Props> = ({
   title = null,
   size = 'auto',
   position = 'left',
-  align = 'center',
   ...modalProps
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -50,7 +49,6 @@ const UiDrawer: React.VFC<Props> = ({
           isShaking={isShaking}
           size={size}
           position={position}
-          //align={align}
           onClick={(e) => e.stopPropagation()}
         >
           <Content>
