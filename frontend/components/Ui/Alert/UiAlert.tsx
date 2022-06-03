@@ -95,7 +95,7 @@ const TextContainer = styled.div`
   display: flex;
   align-items: center;
   color: white;
-  word-break: break-all;
+  word-break: break-word;
   white-space: normal;
   overflow: visible;
   width: 100%;
