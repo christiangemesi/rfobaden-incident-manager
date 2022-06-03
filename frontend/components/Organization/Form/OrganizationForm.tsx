@@ -61,7 +61,7 @@ const OrganizationForm: React.VFC<Props> = ({
       <UiForm.Field field={form.name}>{(props) => (
         <UiTextInput {...props} label="Organisation" />
       )}</UiForm.Field>
-      <UiForm.Buttons form={form} text={organization === null ? 'Erstellen' : 'Bearbeiten'} />
+      <UiForm.Buttons form={form} text={organization === null ? 'Erstellen' : 'Speichern'} />
     </UiForm>
   )
 }
