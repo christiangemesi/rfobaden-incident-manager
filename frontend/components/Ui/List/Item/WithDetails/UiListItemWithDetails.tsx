@@ -5,19 +5,58 @@ import UiListItem, { Props as UiListItemProps } from '@/components/Ui/List/Item/
 import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiPriority from '@/components/Ui/Priority/UiPriority'
 import { Themed } from '@/theme'
+import UiList from '@/components/Ui/List/UiList'
 
 interface Props extends UiListItemProps {
+  /**
+   * The item's {@link Priority}.
+   */
   priority: Priority
+
+  /**
+   * The item's title.
+   */
   title: string
+
+  /**
+   * The {@link User} assigned to that item.
+   */
   user: string
+
+  /**
+   * The item's description.
+   */
   description?: string
+
+  /**
+   * The item's content.
+   */
   body?: ReactNode
+
+  /**
+   * The item's caption.
+   */
   caption?: ReactNode
+
+  /**
+   * Sets the item to be closed.
+   */
   isClosed?: boolean
+
+  /**
+   * Signals that the item is displayed more compactly.
+   */
   isSmall?: boolean
+
+  /**
+   * Signals that the item's title is below the description.
+   */
   isTitleSwitched?: boolean
 }
 
+/**
+ * `UiListItemWithDetails` is a component that displays information in a {@link UiList}.
+ */
 const UiListItemWithDetails: React.VFC<Props> = ({
   priority,
   title,
