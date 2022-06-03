@@ -34,24 +34,24 @@ interface Props<T> extends StyledProps {
   onSelect?: (record: T) => void
 
   /**
-   * The modal's title.
+   * The title for the modal displaying the creation form.
    */
   formTitle: string
 
   /**
-   * Renders the form for the record.
+   * Renders the creation form.
    */
   renderForm: (props: { save(record: T): void, close(): void }) => ReactNode
 
   /**
-   * Renders the record item.
+   * Renders the selected item.
    */
   renderItem: (props: Omit<TrackableListItemProps<T>, 'isClosed' | 'children'>) => ReactNode
 }
 
 /**
  * `TrackableList` is a component that displays a list of {@link Trackable trackable records} using {@link TrackableListItem}.
- * The list includes a button which allow the creation of new trackable record.
+ * The list includes a button which allows the creation of new trackable records.
  */
 const TrackableList = <T extends Trackable>({
   incident,

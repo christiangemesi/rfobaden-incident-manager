@@ -29,7 +29,7 @@ interface Props {
 }
 
 /**
- * `TrackableFileUploadAction` displays the `DropDown.Item` to upload a document for a record.
+ * `TrackableFileUploadAction` displays a `DropDown.Item` to upload a document for a record.
  */
 const TrackableFileUploadAction: React.VFC<Props> = ({
   id,

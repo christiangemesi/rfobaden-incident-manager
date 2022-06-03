@@ -3,23 +3,24 @@ import React from 'react'
 
 interface Props {
   /**
-   * Signals a closed state by using a different keyword.
+   * Whether the trackable record is currently closed.
    */
   isClosed: boolean
 
   /**
-   * Event caused by clicking on `Abschliessen`.
+   * Event caused by closing the trackable record.
    */
   onClose: () => void
 
   /**
-   * Event caused by clicking on `Öffnen`.
+   * Event caused by reopening the trackable record.
    */
   onReopen: () => void
 }
 
 /**
- * `TrackableCloseAction` displays a `DropDown.Item` to close and reopen a record.
+ * `TrackableCloseAction` displays a `DropDown.Item` that allows a trackable item
+ * to be closed and reopened.
  */
 const TrackableCloseAction: React.VFC<Props> = ({
   isClosed,
