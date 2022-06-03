@@ -87,8 +87,6 @@ const Bridge = styled.div<{ isActive: boolean }>`
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform, background-color, box-shadow;
-  // border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
-  // border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   
   ${({ isActive, theme }) => isActive && css`
     transition-duration: 300ms;
@@ -99,6 +97,7 @@ const Bridge = styled.div<{ isActive: boolean }>`
     border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   `}
 `
+
 const BridgeClip = styled.div`
   position: absolute;
   top: -1px;
@@ -111,6 +110,7 @@ const BridgeClip = styled.div`
     display: none;
   }
 `
+
 const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boolean}>`
   height: 3.5rem;
   position: relative;
@@ -132,8 +132,6 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
       background-color: ${({ theme }) => theme.colors.active.value};
     }
   `}
-  
-  
   
   ${({ isActive, isClosed }) => isActive && isClosed && css`
     transition-duration: 300ms;
@@ -159,5 +157,4 @@ const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boole
       background-color: ${({ theme }) => theme.colors.activeClosed.value};
     }
   `}
-  
 `
