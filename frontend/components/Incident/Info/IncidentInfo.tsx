@@ -59,6 +59,11 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
       <LinkCaption isEmphasis>
         <BackButton href="/ereignisse">Ereignis</BackButton>
       </LinkCaption>
+
+      <UiCaption>
+        <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
+      </UiCaption>
+
       <UiDrawer size="full" align="top">
         <UiDrawer.Trigger>{({ open }) => (
           <UiCaption onClick={open}>
@@ -80,10 +85,6 @@ const IncidentInfo: React.VFC<Props> = ({ incident }) => {
           </UiGrid.Col>
         </UiDrawer.Body>
       </UiDrawer>
-
-      <UiCaption>
-        <UiDateLabel start={incident.startsAt ?? incident.createdAt} end={incident.endsAt} />
-      </UiCaption>
 
       <DocumentImageDrawer
         images={incident.images}
