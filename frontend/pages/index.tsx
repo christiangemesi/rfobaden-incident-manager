@@ -101,7 +101,6 @@ const CardColumn: React.VFC<CardProps> = ({
 const Subtitle = styled.div`
   width: 100%;
   text-align: center;
-  //margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 `
