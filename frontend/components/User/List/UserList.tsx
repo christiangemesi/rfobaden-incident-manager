@@ -71,6 +71,7 @@ const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
           )}</UiModal.Body>
         </UiModal>
       )}
+
       <OuterScroll>
         <InnerScroll>
           <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
@@ -93,6 +94,7 @@ const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
               </UiSortButton>
             </UiGrid.Col>
           </UiGrid>
+
           <UiList>
             {sortedUsers.map((user) => (
               <UserListItem
