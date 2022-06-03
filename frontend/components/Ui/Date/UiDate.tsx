@@ -59,7 +59,7 @@ export default UiDate
 export type UiDateType = 'auto' | 'date' | 'time' | 'datetime'
 
 /**
- * Format a value as a two-digit number.
+ * Formats a value to a two-digit number.
  *
  * @param value The value.
  * @return The formatted value.
