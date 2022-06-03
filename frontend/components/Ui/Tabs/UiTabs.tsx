@@ -25,6 +25,10 @@ const Tab = styled.li<{ isActive: boolean }>`
   `}
 `
 
+/**
+ * `UiTabs` is a component to display different content on the same page.
+ * The displayed content is toggled by clicking on a tab.
+ */
 export default Object.assign(UiTabs, {
   Tab,
 })
