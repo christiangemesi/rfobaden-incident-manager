@@ -56,7 +56,7 @@ const Container = styled.div<{
   position: 'left' | 'right'
   isShaking: boolean
 }>`
-  ${UiContainer.fluidCss};
+  ${UiContainer.style};
 
   position: fixed;
   top: 0;
