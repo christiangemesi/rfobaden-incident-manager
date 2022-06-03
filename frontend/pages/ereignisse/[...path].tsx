@@ -35,7 +35,7 @@ interface Props {
     incident: Incident
 
     /**
-     * The list of {@link Report} that are involved.
+     * The list of {@link Report reports} that are involved.
      */
     reports: Report[]
 
