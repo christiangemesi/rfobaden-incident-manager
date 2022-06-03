@@ -4,9 +4,15 @@ import UiListItem from '@/components/Ui/List/Item/UiListItem'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
+  /**
+   * The content of the list.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiList` is displaying multiple {@link UiListItem} beneath each other.
+ */
 const UiList: React.VFC<Props> = ({ children, style, className }) => {
   return (
     <Box style={style} className={className}>
