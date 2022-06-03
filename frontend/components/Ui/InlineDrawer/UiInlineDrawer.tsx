@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 
 interface Props extends ElementProps<HTMLDivElement> {
   /**
-   * Signals that the drawer is open.
+   * Whether the drawer is currently open.
    */
   isOpen: boolean
 
@@ -19,13 +19,14 @@ interface Props extends ElementProps<HTMLDivElement> {
   children: ReactNode
 
   /**
-   * Signals that the current {@link Model} is closed.
+   * Whether the drawer's content are closed.
    */
   isClosed: boolean
 }
 
 /**
- * `UiInlineDrawer` a component that displays further {@link Model} information in a drawer on the same page.
+ * `UiInlineDrawer` a component that displays a drawer that opens relative to its parent element,
+ * instead of taking up the entire page.
  */
 const UiInlineDrawer: React.VFC<Props> = ({ isOpen: _, ...props }: Props) => {
   return (
