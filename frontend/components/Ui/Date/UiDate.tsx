@@ -4,12 +4,12 @@ import DateHelper from '@/utils/helpers/DateHelper'
 
 interface Props {
   /**
-   * The date to display formatted.
+   * The date to display.
    */
   value: Date
 
   /**
-   * The date's format type.
+   * The display format.
    */
   type?: UiDateType
 }
@@ -54,12 +54,12 @@ const UiDate: React.VFC<Props> = ({ value, type = 'auto' }) => {
 export default UiDate
 
 /**
- * The date formats.
+ * `UiDateType` represents possible formats with which dates can be displayed.
  */
 export type UiDateType = 'auto' | 'date' | 'time' | 'datetime'
 
 /**
- * Format the value as a two-digit number.
+ * Format a value as a two-digit number.
  *
  * @param value The value.
  * @return The formatted value.
