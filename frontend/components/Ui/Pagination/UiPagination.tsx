@@ -5,12 +5,12 @@ import styled, { css } from 'styled-components'
 
 interface Props {
   /**
-   *
+   * The current offset indicates which page is currently active.
    */
   currentOffset: number
 
   /**
-   * Number of all pages.
+   * The amount of all pages.
    */
   totalPages: number
 
