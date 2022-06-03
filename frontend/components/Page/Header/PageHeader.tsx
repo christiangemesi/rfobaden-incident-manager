@@ -17,7 +17,7 @@ import PageHeaderAssignments from '@/components/Page/Header/Assignments/PageHead
 import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 
 /**
- * `PageHeader` represents the header on the top of each page.
+ * `PageHeader` represents the header at the top of each page.
  */
 const PageHeader: React.VFC = () => {
   const { currentUser } = useSession()
