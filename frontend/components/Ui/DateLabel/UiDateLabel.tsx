@@ -4,12 +4,12 @@ import DateHelper from '@/utils/helpers/DateHelper'
 
 interface Props {
   /**
-   * The start of a date range.
+   * The start of the date range.
    */
   start: Date
 
   /**
-   * The end of a date range, or `null` if the range has no end.
+   * The end of the date range, or `null` if it has no fixed end.
    */
   end?: Date | null
 
