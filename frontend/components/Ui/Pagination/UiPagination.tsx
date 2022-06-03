@@ -4,11 +4,25 @@ import UiButton from '@/components/Ui/Button/UiButton'
 import styled, { css } from 'styled-components'
 
 interface Props {
+  /**
+   *
+   */
   currentOffset: number
+
+  /**
+   * Number of all pages.
+   */
   totalPages: number
+
+  /**
+   * Event caused by creating a path to its resource.
+   */
   makeHref: (offset: number) => string
 }
 
+/**
+ * `UiPagination` is a component that indicates a series of related content exists across multiple pages.
+ */
 const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref }) => {
   const more = <MorePlaceholder><UiIcon.More size={0.8} /></MorePlaceholder>
   const prevMore = totalPages > 5 && currentOffset > 2 ? more : <React.Fragment />
