@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { ColorName } from '@/theme'
+import { ColorName, Themed } from '@/theme'
 
 interface Props {
   color?: ColorName
@@ -17,5 +17,10 @@ const UiBanner = styled.div<Props>`
     background-color: ${theme.colors[color].value};
     color: ${({ theme }) => theme.colors[color].contrast};
   `}
+
+  ${Themed.media.sm.max} {
+    font-size: ${({ theme }) => (theme.fonts.sizes.smaller)};
+  }
+
 `
 export default UiBanner
