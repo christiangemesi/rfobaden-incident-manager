@@ -156,7 +156,7 @@ const Divider = styled.div`
 `
 
 const TabContent = styled.div`
-  ${UiContainer.fluidCss};
+  ${UiContainer.style};
   
   margin-top: 2rem;
   ${Themed.media.lg.min} {

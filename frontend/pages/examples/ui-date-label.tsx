@@ -9,6 +9,7 @@ const UiDateLabelExample: React.VFC = () => {
   const now = new Date()
   const future = new Date()
   future.setFullYear(now.getFullYear() + 1)
+
   return (
     <React.Fragment>
       <h2>UiBadge</h2>
