@@ -27,7 +27,7 @@ interface Props {
 }
 
 /**
- * `BenutzerPage` displays all {@link User}.
+ * `BenutzerPage` displays all {@link User users}.
  */
 const BenutzerPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
