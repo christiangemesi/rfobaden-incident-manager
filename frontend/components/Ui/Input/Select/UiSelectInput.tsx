@@ -107,11 +107,11 @@ const UiSelectInput = <T, >({
       marginTop: '0.25rem',
 
       boxShadow: 'none',
-      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
+      borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : defaultTheme.colors.activeClosed.contrast),
       color: contrastDark,
 
       ':hover': {
-        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : contrastDark),
+        borderColor: hasErrors ? defaultTheme.colors.error.value : (isFocused ? defaultTheme.colors.primary.value : defaultTheme.colors.activeClosed.contrast),
       },
     }),
     // Option container
