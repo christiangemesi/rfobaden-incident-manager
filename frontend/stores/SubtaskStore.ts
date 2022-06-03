@@ -6,7 +6,7 @@ import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 import { getPriorityIndex } from '@/models/Priority'
 
 /**
- * `SubtaskStore` manages all loaded {@link User users}.
+ * `SubtaskStore` manages all loaded {@link Subtask subtasks}.
  */
 const SubtaskStore = createModelStore(parseSubtask, {
   sortBy: (subtask) => [
