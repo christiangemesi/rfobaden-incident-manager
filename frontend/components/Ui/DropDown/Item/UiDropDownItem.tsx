@@ -4,7 +4,7 @@ import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContex
 
 interface Props {
   /**
-   * Event caused by clicking on the menu.
+   * Event caused by clicking on the item.
    */
   onClick?: () => void
 
