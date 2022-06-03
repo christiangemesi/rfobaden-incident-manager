@@ -4,7 +4,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import styled from 'styled-components'
 
 /**
- * `UiButtonExample` is an example page for the {@link UiGrid} component.
+ * `UiGridExample` is an example page for the {@link UiGrid} component.
  */
 const UiGridExample: React.VFC = () => {
   const colStyle: CSSProperties = {
