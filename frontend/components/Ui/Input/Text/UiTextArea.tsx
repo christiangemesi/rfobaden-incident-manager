@@ -4,14 +4,27 @@ import { UiInputProps } from '@/components/Ui/Input'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 
 interface Props extends UiInputProps<string | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string,
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string,
-  isRequired?: boolean,
+
+  /**
+   * The number of text lines.
+   */
   rows?: number
 }
 
 const processText = (v: string) => v.length === 0 ? null : v
 
+/**
+ * `UiTextArea is an input component for multiline text values.
+ */
 const UiTextArea: React.VFC<Props> = ({
   label = '',
   value,
@@ -23,7 +36,6 @@ const UiTextArea: React.VFC<Props> = ({
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
 
-  /* TODO add star to label when isRequired*/
   return (
     <Label>
       {label !== null && (
@@ -55,7 +67,7 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   min-width: 100%; // so you cant resize it horizontally
   min-height: 2.1rem; // so you cant resize smaller then 1 row
-  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
   resize: vertical;
   transition: 250ms ease;
   transition-property: border-color;

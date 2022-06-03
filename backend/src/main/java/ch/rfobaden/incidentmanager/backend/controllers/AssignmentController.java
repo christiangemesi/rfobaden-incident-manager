@@ -3,10 +3,12 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
 import ch.rfobaden.incidentmanager.backend.controllers.base.annotations.RequireAgent;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Report;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
 import ch.rfobaden.incidentmanager.backend.models.Task;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
 import ch.rfobaden.incidentmanager.backend.services.ReportService;
 import ch.rfobaden.incidentmanager.backend.services.SubtaskService;
@@ -20,17 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code AssignmentController} implements endpoints to give access to
+ * the assignments of a {@link User user}.
+ */
 @RestController
 @RequestMapping(path = "api/v1/assignments")
-public class AssignmentController extends AppController {
+public class AssignmentController implements AppController {
     private final TransportService transportService;
-
     private final ReportService reportService;
-
     private final TaskService taskService;
-
     private final SubtaskService subtaskService;
-
     private final AuthService authService;
 
     public AssignmentController(
@@ -47,6 +49,17 @@ public class AssignmentController extends AppController {
         this.authService = authService;
     }
 
+    /**
+     * Lists all {@link AssignmentsData assignments}.
+     * <p>
+     *     An assignment contains all {@link Transport transports},
+     *     {@link Report reports}, {@link Task tasks} and
+     *     {@link Subtask subtasks} assigned to the current
+     *     {@link User user}.
+     * </p>
+     *
+     * @return The assignments.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @RequireAgent
@@ -63,10 +76,29 @@ public class AssignmentController extends AppController {
         );
     }
 
+    /**
+     * {@code AssignmentsData} contains all entities assigned to a specific {@link User user}
+     * which belong to a not closed {@link Incident}.
+     */
     public static final class AssignmentsData {
+        /**
+         * List of assigned {@link Transport transports}.
+         */
         private List<Transport> transports;
+
+        /**
+         * List of assigned {@link Report reports}.
+         */
         private List<Report> reports;
+
+        /**
+         * List of assigned {@link Task tasks}.
+         */
         private List<Task> tasks;
+
+        /**
+         * List of assigned {@link Subtask subtasks}.
+         */
         private List<Subtask> subtasks;
 
         public AssignmentsData() {

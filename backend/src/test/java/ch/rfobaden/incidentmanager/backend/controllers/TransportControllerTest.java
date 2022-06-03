@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 @WebMvcTest(TransportController.class)
-public class TransportControllerTest
+class TransportControllerTest
     extends ModelControllerTest<Transport, TransportPath, TransportService> {
 
     @Autowired

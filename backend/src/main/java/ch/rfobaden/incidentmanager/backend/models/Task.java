@@ -5,71 +5,59 @@ import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Task} represents a task handled in an {@link Report}.
+ * It can be further divided into {@link Subtask subtasks}.
+ */
 @Entity
 @Table(name = "task")
-public class Task extends Model
-    implements PathConvertible<TaskPath>, Trackable, ImageOwner, DocumentOwner, Serializable {
-    private static final long serialVersionUID = 1L;
+public class Task extends TrackableModel
+    implements PathConvertible<TaskPath>, ImageOwner, DocumentOwner {
 
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
-
+    /**
+     * The {@link Report} the task belongs to.
+     */
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Report report;
 
-    @Size(max = 100)
-    @NotBlank
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private LocalDateTime startsAt;
-
-    private LocalDateTime endsAt;
-
+    /**
+     * The location at which the task takes place.
+     */
     @Size(max = 100)
     private String location;
 
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
-
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private Priority priority;
-
+    /**
+     * The {@link Subtask subtasks} of the task.
+     */
     @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private List<Subtask> subtasks = new ArrayList<>();
 
+    /**
+     * The images attached to the task, stored as {@link Document} instances.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> images = new ArrayList<>();
 
+    /**
+     * The {@link Document documents} attached to the task.
+     * Does not include the entity's {@link #images image documents}.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<>();
 
@@ -93,30 +81,11 @@ public class Task extends Model
         this.documents = documents;
     }
 
-    @JsonIgnore
-    @Override
-    public User getAssignee() {
-        return assignee;
-    }
-
-    @Override
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
-    @JsonIgnore
-    public Report getReport() {
-        return report;
-    }
-
-    @JsonProperty
-    public Long getReportId() {
-        if (report == null) {
-            return null;
-        }
-        return report.getId();
-    }
-
+    /**
+     * Allows access to the {@link #getReport().getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
     @JsonProperty
     public Long getIncidentId() {
         if (report == null) {
@@ -125,49 +94,27 @@ public class Task extends Model
         return report.getIncident().getId();
     }
 
+    /**
+     * Allows access to the {@link #getReport() report}'s id.
+     *
+     * @return The report's id.
+     */
+    @JsonProperty
+    public Long getReportId() {
+        if (report == null) {
+            return null;
+        }
+        return report.getId();
+    }
+
+    @JsonIgnore
+    public Report getReport() {
+        return report;
+    }
+
     @JsonProperty
     public void setReport(Report report) {
         this.report = report;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    @Override
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    @Override
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    @Override
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     public String getLocation() {
@@ -176,16 +123,6 @@ public class Task extends Model
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    @Override
-    public Priority getPriority() {
-        return priority;
-    }
-
-    @Override
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     @JsonIgnore
@@ -198,10 +135,20 @@ public class Task extends Model
         this.subtasks = subtasks;
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all subtasks.
+     */
     public List<Long> getSubtaskIds() {
         return getSubtasks().stream().map(Subtask::getId).collect(Collectors.toList());
     }
 
+    /**
+     * Lists the {@link Subtask#getId() ids} of all closed {@link #getSubtasks() subtasks}.
+     *
+     * @return The ids of all closed subtasks.
+     */
     public List<Long> getClosedSubtaskIds() {
         return getSubtasks().stream()
             .filter(Subtask::isClosed)
@@ -209,22 +156,17 @@ public class Task extends Model
             .collect(Collectors.toList());
     }
 
+    /**
+     * Whether the task is done.
+     * A task is done when all its {@link #getSubtasks() subtasks} are all closed or done.
+     *
+     * @return Whether the task is done.
+     */
     @JsonProperty("isDone")
     public boolean isDone() {
         return !getSubtasks().isEmpty()
             && getSubtasks().stream().allMatch(Subtask::isClosed);
     }
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
 
     @Override
     public String getLink() {
@@ -245,34 +187,19 @@ public class Task extends Model
             return false;
         }
         Task task = (Task) o;
-        return equalsModel(task)
-            && Objects.equals(assignee, task.assignee)
+        return equalsTrackableModel(task)
             && Objects.equals(report, task.report)
-            && Objects.equals(title, task.title)
-            && Objects.equals(description, task.description)
-            && Objects.equals(startsAt, task.startsAt)
-            && Objects.equals(endsAt, task.endsAt)
-            && Objects.equals(isClosed, task.isClosed)
-            && Objects.equals(location, task.location)
-            && priority == task.priority;
+            && Objects.equals(location, task.location);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            modelHashCode(),
-            assignee,
+            trackableModelHashCode(),
             report,
-            title,
-            description,
-            startsAt,
-            endsAt,
-            location,
-            isClosed,
-            priority
+            location
         );
     }
-
 
     @Override
     public TaskPath toPath() {
@@ -281,6 +208,4 @@ public class Task extends Model
         path.setReportId(getReport().getId());
         return path;
     }
-
-
 }

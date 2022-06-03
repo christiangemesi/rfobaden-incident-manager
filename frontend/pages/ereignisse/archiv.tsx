@@ -14,7 +14,7 @@ import Page from '@/components/Page/Page'
 interface Props {
   offset: number
   data: {
-    page: Page
+    page: PageData
   }
 }
 
@@ -73,7 +73,7 @@ export default ArchivPage
 
 const PAGE_LIMIT = 10
 
-interface Page {
+interface PageData {
   total: number
   data: Incident[]
 }
@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
   }
   const offset = typeof query.p === 'string' ? parseInt(query.p) : 0
 
-  const [page, pageError]: BackendResponse<Page> = await backendService.get(`incidents/archive?limit=${PAGE_LIMIT}&offset=${offset}`)
+  const [page, pageError]: BackendResponse<PageData> = await backendService.get(`incidents/archive?limit=${PAGE_LIMIT}&offset=${offset}`)
   if (pageError !== null) {
     throw pageError
   }

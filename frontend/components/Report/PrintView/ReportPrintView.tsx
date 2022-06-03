@@ -7,10 +7,20 @@ import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import TaskPrintView from '@/components/Task/PrintView/TaskPrintView'
 
 interface Props {
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Whether this is the top-level item of this print. Setting this to `true` displays some more metadata, such as the title of the incident that the report belongs to.
+   */
   isNested?: boolean
 }
 
+/**
+ * `ReportPrintView` is a component that displays a report for a print out.
+ */
 const ReportPrintView: React.VFC<Props> = ({ report, isNested = false }) => {
   const tasks = useTasksOfReport(report.id)
 

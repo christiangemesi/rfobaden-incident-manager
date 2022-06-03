@@ -16,9 +16,16 @@ import Id from '@/models/base/Id'
 import { useCurrentUser } from '@/stores/SessionStore'
 
 interface Props extends StyledProps {
+
+  /**
+   * The {@link User} to be displayed.
+   */
   user: User
 }
 
+/**
+ * `UserListItem` is a component that displays one of multiple {@link User users} in a list.
+ */
 const UserListItem: React.VFC<Props> = ({
   user,
 }) => {

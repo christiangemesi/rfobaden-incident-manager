@@ -8,19 +8,38 @@ import { de } from 'date-fns/locale'
 import { Themed } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
+// Default date picker styling
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props extends UiInputProps<Date | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * Class name of the date picker.
+   */
   className?: string
+
+  /**
+   * Placement of the date time picker popup.
+   */
   placement?: 'top' | 'bottom' | 'auto'
 }
 
+/**
+ * `UiDateInput` is an input component for a {@link Date} value.
+ */
 const UiDateInput: React.VFC<Props> = ({
   value,
   label = '',
-  placeholder = 'dd.MM.yyyy',
+  placeholder = 'dd.mm.yyyy hh:mm',
   placement = 'auto',
   className,
   onChange: handleChange,
@@ -31,23 +50,28 @@ const UiDateInput: React.VFC<Props> = ({
   const [isInvalid, setInvalid] = useState(false)
   const [isOpen, toggleOpen] = useToggle(false)
 
-  useUpdateEffect(() => {
+  useUpdateEffect(function handleDateTimeValidation() {
+    // Handle no date.
     if (date === null) {
       handleChange(null)
       setInvalid(false)
       return
     }
 
+    // Handle wrong formatted date.
     if (isNaN(date.getTime())) {
       handleChange(null)
       setInvalid(true)
       return
     }
+
+    // Handle correct date.
     handleChange(date)
     setInvalid(false)
   }, [date])
 
-  const close = useCallback( () => toggleOpen(false),[toggleOpen])
+  // Closes the picker.
+  const close = useCallback(() => toggleOpen(false), [toggleOpen])
 
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0 || isInvalid
@@ -61,6 +85,8 @@ const UiDateInput: React.VFC<Props> = ({
       )}
       <InputAndErrorBox hasError={hasError}>
         <DateTimePicker isOpened={isOpen}>
+
+          {/* Date time input field. */}
           <DatePicker
             locale={de}
             selected={date}
@@ -82,9 +108,12 @@ const UiDateInput: React.VFC<Props> = ({
             showWeekNumbers
             isClearable
           />
+
+          {/* Date time popup button. */}
           <PickerButton onClick={toggleOpen}>
             <UiIcon.Calendar />
           </PickerButton>
+
         </DateTimePicker>
       </InputAndErrorBox>
       <UiInputErrors errors={errors} />
@@ -99,7 +128,7 @@ const PickerButton = styled.button.attrs(() => ({
 }))`
   background: ${({ theme }) => theme.colors.primary.value};
   outline: none;
-  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
   border-radius: 0 0.5rem 0.5rem 0;
   width: 60px;
   margin: 0;
@@ -109,10 +138,14 @@ const PickerButton = styled.button.attrs(() => ({
   align-items: center;
 
   color: ${({ theme }) => theme.colors.primary.contrast};
-  cursor: pointer;
 
   transition: 250ms ease;
   transition-property: border-color;
+
+  :hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.primary.hover};
+  }
 `
 
 const StyledLabel = styled.label`
@@ -157,6 +190,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     position: relative;
   }
 
+  // The date input clear button.
   .react-datepicker__close-icon {
     display: flex;
     align-items: center;
@@ -170,12 +204,13 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // The datepicker popup container.
   .react-datepicker__portal,
   .react-datepicker-popper {
 
     .react-datepicker {
       background: white;
-      color: ${({ theme }) => theme.colors.tertiary.contrast};
+      color: ${({ theme }) => theme.colors.light.contrast};
       border-color: ${({ theme }) => theme.colors.primary.value};
       font-family: ${({ theme }) => theme.fonts.body};
       display: flex;
@@ -191,8 +226,9 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // Month/year navigation elements.
       .react-datepicker__navigation {
-        color: ${({ theme }) => theme.colors.tertiary.contrast};
+        color: ${({ theme }) => theme.colors.light.contrast};
 
         &.react-datepicker__navigation--years {
           display: block;
@@ -202,7 +238,8 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           height: 10px;
 
           &:hover {
-            filter: brightness(130%);
+            border-top: solid 2px ${({ theme }) => theme.colors.primary.hover};
+            border-left: solid 2px ${({ theme }) => theme.colors.primary.hover};
           }
 
           &.react-datepicker__navigation--months-upcoming,
@@ -233,20 +270,22 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         .react-datepicker__navigation-icon {
           &::before {
             border-color: ${({ theme }) => theme.colors.primary.value};
+            
           }
         }
       }
 
       .react-datepicker__header {
-        background: ${({ theme }) => theme.colors.secondary.value};
-        color: ${({ theme }) => theme.colors.secondary.contrast};
-        border-color: ${({ theme }) => theme.colors.secondary.value};
+        background: ${({ theme }) => theme.colors.tertiary.value};
+        color: ${({ theme }) => theme.colors.tertiary.contrast};
+        border-color: ${({ theme }) => theme.colors.tertiary.value};
 
         ${Themed.media.sm.max} {
           border-top-right-radius: 0.3rem;
         }
       }
 
+      // Elements containing month and day numbers.
       .react-datepicker__month-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
 
@@ -329,8 +368,8 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
             .react-datepicker__year-read-view,
             .react-datepicker__month-read-view {
-              background: ${({ theme }) => theme.colors.tertiary.value};
-              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              background: ${({ theme }) => theme.colors.light.value};
+              color: ${({ theme }) => theme.colors.light.contrast};
               height: 100%;
               display: flex;
               justify-content: space-between;
@@ -355,7 +394,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
               .react-datepicker__year-read-view--down-arrow,
               .react-datepicker__month-read-view--down-arrow {
-                border-color: ${({ theme }) => theme.colors.tertiary.contrast};
+                border-color: ${({ theme }) => theme.colors.light.contrast};
                 right: auto;
                 height: 6px;
                 width: 6px;
@@ -367,6 +406,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Day names in the title row of the picker's calendar.
         .react-datepicker__day-names {
           margin-top: 0.5rem;
           display: flex;
@@ -374,7 +414,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
           .react-datepicker__day-name {
             line-height: 1.2;
-            
+
             :first-child {
               ${Themed.media.xs.only} {
                 display: none;
@@ -383,6 +423,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           }
         }
 
+        // Day numbers and names.
         .react-datepicker__day-name,
         .react-datepicker__day {
           border-radius: 0.1rem;
@@ -392,12 +433,13 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          
+
           ${Themed.media.xs.only} {
             padding: 0.55rem 1.05rem;
           }
         }
 
+        // Month selection view.
         .react-datepicker__month {
           margin: 0;
 
@@ -413,7 +455,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
 
             .react-datepicker__day {
               background: transparent;
-              color: ${({ theme }) => theme.colors.tertiary.contrast};
+              color: ${({ theme }) => theme.colors.light.contrast};
               border: 1px solid transparent;
 
               transition: 150ms ease;
@@ -448,19 +490,18 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
         }
       }
 
+      // The scrollable time column. 
       .react-datepicker__time-container {
         border-color: ${({ theme }) => theme.colors.primary.value};
 
-
         .react-datepicker-time__header {
-
         }
 
         .react-datepicker__time {
 
           .react-datepicker__time-box {
             background: white;
-            color: ${({ theme }) => theme.colors.tertiary.contrast};
+            color: ${({ theme }) => theme.colors.light.contrast};
             border-right: 1px solid ${({ theme }) => theme.colors.primary.value};
 
             .react-datepicker__time-list {
@@ -472,6 +513,9 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
               }
 
               .react-datepicker__time-list-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 transition: 150ms ease;
                 transition-property: background-color, color, font-weight;
 
@@ -495,29 +539,29 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     }
   }
 
+  // Date input field.
   .react-datepicker__input-container > input {
     width: 100%;
     height: 100%;
     padding: 0.5rem;
     font-size: 0.9rem;
     outline: none;
-    border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+    border: 1px solid ${({ theme }) => theme.colors.light.contrast};
     font-family: ${({ theme }) => theme.fonts.body};
 
     transition: 250ms ease;
     transition-property: border-color;
 
-    // for additional input
+    // Button at the end of the input.
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
   }
 
-  // for additional input
+  // Button at the end of the input.
   > div:first-child {
     width: calc(100% - 60px);
   }
 
-  // function of calender icon
   ${({ isOpened }) => !isOpened && css`
     .react-datepicker__portal,
     .react-datepicker-popper {

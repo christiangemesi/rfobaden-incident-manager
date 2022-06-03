@@ -12,19 +12,31 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * {@code UserCredentials} contains the login information of a specific {@link User}.
+ */
 @Entity
 @Table(name = "user_credentials")
 public final class UserCredentials extends Model implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The user to which the credentials belong.
+     */
     @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
+    /**
+     * The password of the user.
+     */
     @NotBlank
     @Column(nullable = false)
     private String encryptedPassword;
 
+    /**
+     * The point in time at which the {@link #encryptedPassword password} has last been changed.
+     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime lastPasswordChangeAt;

@@ -33,7 +33,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -103,22 +102,6 @@ class DocumentControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testUploadDocumentToIncident_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
-        Mockito.when(incidentService.find(document.getId())).thenReturn(Optional.empty());
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
-                .file(file)
-                .param("modelName", "report")
-                .param("modelId", document.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
-    }
-
-    @Test
-    @WithMockAgent
     void testUploadDocumentToReport() throws Exception {
         // When
         Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
@@ -131,21 +114,6 @@ class DocumentControllerTest extends AppControllerTest {
                 .param("modelId", document.getId().toString()))
             .andExpect(status().is(200))
             .andExpect(content().json(mapper.writeValueAsString(document)));
-    }
-
-    @Test
-    @WithMockAgent
-    void testUploadDocumentToReport_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
-                .file(file)
-                .param("modelName", "report")
-                .param("modelId", document.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
     }
 
     @Test
@@ -166,21 +134,6 @@ class DocumentControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testUploadDocumentToTask_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
-
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
-                .file(file)
-                .param("modelName", "task")
-                .param("modelId", document.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
-    }
-
-    @Test
-    @WithMockAgent
     void testUploadDocumentToSubtask() throws Exception {
         // When
         Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
@@ -197,17 +150,19 @@ class DocumentControllerTest extends AppControllerTest {
 
     @Test
     @WithMockAgent
-    void testUploadDocumentToSubtask_ownerNotFound() throws Exception {
-        // When
-        Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
+    void testUploadDocument_ownerNotFound() throws Exception {
+        for (var model : new String[]{"report", "task", "subtask"}) {
+            // When
+            Mockito.when(documentService.create(any(), eq(bytes))).thenReturn(document);
 
-        // Then
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
-                .file(file)
-                .param("modelName", "subtask")
-                .param("modelId", document.getId().toString()))
-            .andExpect(status().is4xxClientError())
-            .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
+            // Then
+            mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents")
+                    .file(file)
+                    .param("modelName", model)
+                    .param("modelId", document.getId().toString()))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message").value("owner not found: " + document.getId()));
+        }
     }
 
     @Test
@@ -242,8 +197,8 @@ class DocumentControllerTest extends AppControllerTest {
 
         // Then
         mockMvc.perform(request)
-                .andExpect(status().is(200))
-                .andExpect(content().json(mapper.writeValueAsString(document)));
+            .andExpect(status().is(200))
+            .andExpect(content().json(mapper.writeValueAsString(document)));
     }
 
     @Test

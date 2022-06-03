@@ -16,11 +16,25 @@ import { loadCached } from '@/utils/hooks/useCachedEffect'
 import TaskStore from '@/stores/TaskStore'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Event caused by deleting the report.
+   */
   onDelete?: () => void
 }
 
+/**
+ * `ReportActions` displays a dropdown button which contains the actions of a report.
+ */
 const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDeleteCb }) => {
   const handleDelete = useCallback(async () => {
     if (confirm(`Sind sie sicher, dass sie die Meldung "${report.title}" löschen wollen?`)) {
@@ -75,6 +89,7 @@ const ReportActions: React.VFC<Props> = ({ incident, report, onDelete: handleDel
           <UiIcon.More />
         </UiIconButton>
       )}</UiDropDown.Trigger>
+
       <UiDropDown.Menu>
         <TrackableEditAction title="Meldung bearbeiten">{({ close }) => (
           <ReportForm incident={incident} report={report} onClose={close} />

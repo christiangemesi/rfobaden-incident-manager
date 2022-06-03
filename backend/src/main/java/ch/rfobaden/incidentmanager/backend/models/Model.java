@@ -21,17 +21,36 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+/**
+ * {@code Model} is the base class for types class representing database entities.
+ * It provides basic fields, functionality and utilities for such types.
+ * <p>
+ *     Not every model type has to extend {@code Model}.
+ *     However, if you're unsure of whether it is correct to do so, it probably is.
+ * </p>
+ */
 @MappedSuperclass
 public abstract class Model {
+    /**
+     * The entities' id, unique to its model.
+     */
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
     private Long id;
 
+    /**
+     * The moment in time at which this entity was created.
+     * This value should not be changed after first saving the entity.
+     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * The moment in time at which this entity was last changed.
+     * This value should be changed before every save.
+     */
     @NotNull
     @Column(nullable = false)
     private LocalDateTime updatedAt;
@@ -63,6 +82,17 @@ public abstract class Model {
     @Override
     public abstract boolean equals(Object other);
 
+    /**
+     * Compares the fields of two {@link Model} instances.
+     * <p>
+     *     This is a utility method meant to be used in implementations of {@link #equals(Object)}.
+     *     It can be called after ensuring that the other object is a {@code Model},
+     *     and before comparing your own column fields.
+     * </p>
+     *
+     * @param that The other model.
+     * @return Whether the {@code Model} fields of {@code this} and {@code that} are equal.
+     */
     protected final boolean equalsModel(Model that) {
         return Objects.equals(id, that.id)
             && Objects.equals(createdAt, that.createdAt)
@@ -72,15 +102,30 @@ public abstract class Model {
     @Override
     public abstract int hashCode();
 
+    /**
+     * Computes a hashCode over the {@link Model} fields of this entity.
+     *
+     * @return The computed code.
+     */
     protected final int modelHashCode() {
         return Objects.hash(id, createdAt, updatedAt);
     }
 
+    /**
+     * Generates a string representation of this entity,
+     * containing all of its database fields and many-to-one relations.
+     *
+     * @return The string representation.
+     */
     @Override
     public final String toString() {
         return new Stringifier(this).getString();
     }
 
+    /**
+     * {@code Model.Basic} is a specialization of {@link Model}.
+     * It implements {@link PathConvertible} with {@link EmptyPath}.
+     */
     @MappedSuperclass
     public abstract static class Basic extends Model implements PathConvertible<EmptyPath> {
         @Override
@@ -89,13 +134,30 @@ public abstract class Model {
         }
     }
 
+    /**
+     * {@code Stringifier} allows stringification of any {@link Model} type.
+     */
     private static final class Stringifier {
+        /**
+         * The model entity to be stringified.
+         */
         private final Model entity;
 
+        /**
+         * The {@code StringBuilder} into which the stringified output is written.
+         */
         private final StringBuilder builder;
 
+        /**
+         * The class of the {@link #entity}.
+         */
         private final Class<? extends Model> clazz;
 
+        /**
+         * Creates a new {@link Stringifier} which creates a {@link String} from {@code entity}.
+         *
+         * @param entity The {@code Model} instance to stringify.
+         */
         private Stringifier(Model entity) {
             this.entity = entity;
             this.clazz = entity.getClass();
@@ -103,10 +165,18 @@ public abstract class Model {
             this.build();
         }
 
+        /**
+         * Get the result of this {@link Stringifier}.
+         *
+         * @return The result.
+         */
         public String getString() {
             return builder.toString();
         }
 
+        /**
+         * Writes the string representation of {@link #entity} into {@link #builder}.
+         */
         private void build() {
             builder
                 .append(clazz.getSimpleName())
@@ -126,6 +196,11 @@ public abstract class Model {
                 .append(')');
         }
 
+        /**
+         * Writes a {@link Field} into {@link #builder}.
+         *
+         * @param field The field to be inserted.
+         */
         private void insertField(Field field) {
             try {
                 if (Modifier.isStatic(field.getModifiers())) {
@@ -153,10 +228,29 @@ public abstract class Model {
             }
         }
 
+        /**
+         * Inserts the name and value of a field into {@link #builder}.
+         * The field's value is stringified using {@link Object#toString()}.
+         *
+         * @param field The field to be inserted.
+         * @param value The field's value.
+         */
         private void insertNormalField(Field field, Object value) {
             builder.append(field.getName()).append(": ").append(value);
         }
 
+        /**
+         * Inserts the name and value of a field into {@link #builder}.
+         * The value needs to be a {@link Model}.
+         * <p>
+         *     If the field is annotated with {@link JoinColumn},
+         *     the value is stringified using {@link Object#toString()}.
+         *     Otherwise, only the id of the value is inserted.
+         * </p>
+         *
+         * @param field The field to be inserted.
+         * @param value The field's value.
+         */
         private void insertModelField(Field field, Model value) {
             builder.append(field.getName());
             if (field.isAnnotationPresent(JoinColumn.class)) {
@@ -168,6 +262,13 @@ public abstract class Model {
             }
         }
 
+        /**
+         * Inserts the name and value of a field into {@link #builder}.
+         * The value needs to be a {@link Collection}.
+         *
+         * @param field The field to be inserted.
+         * @param value The field's value.
+         */
         private void insertCollectionField(Field field, Collection<?> value) {
             var oneToManyAnnotation = field.getAnnotation(OneToMany.class);
             if (oneToManyAnnotation != null && oneToManyAnnotation.fetch() == FetchType.LAZY) {
@@ -201,6 +302,12 @@ public abstract class Model {
             }
         }
 
+        /**
+         * Attemps to find the getter method for a specific field.
+         *
+         * @param fieldName The name of the field to search for.
+         * @return The field's getter, or {@code null}, if none was found.
+         */
         private Method findGetter(String fieldName) {
             try {
                 var getter = clazz.getMethod(

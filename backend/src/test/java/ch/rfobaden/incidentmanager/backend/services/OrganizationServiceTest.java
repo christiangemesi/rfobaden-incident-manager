@@ -6,7 +6,7 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryServiceT
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class OrganizationServiceTest
+class OrganizationServiceTest
     extends ModelRepositoryServiceTest.Basic<
     Organization,
     OrganizationService,

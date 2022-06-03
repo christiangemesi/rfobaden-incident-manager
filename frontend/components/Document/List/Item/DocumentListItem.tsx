@@ -7,10 +7,20 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 
 interface Props {
+  /**
+   * The {@link Document} to be displayed.
+   */
   document: Document
+
+  /**
+   * Event caused by deleting a {@link Document}.
+   */
   onDelete: (document: Document) => void
 }
 
+/**
+ * `DocumentListItem` is a component to display {@link Document} values in a list.
+ */
 const DocumentListItem: React.VFC<Props> = ({
   document,
   onDelete,
@@ -59,7 +69,8 @@ const Item = styled(UiListItem)`
   :hover {
     & * ${DeleteButton} {
       visibility: visible;
-    }
+    } 
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
   }
 `
 

@@ -9,7 +9,6 @@ interface Props {
 }
 
 const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'auto' }) => {
-  const prefix = useMemo(() => start < new Date() ? 'seit' : 'ab', [start])
   const dateType = useMemo(() => {
     if (type !== 'auto') {
       return type
@@ -20,12 +19,11 @@ const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'auto' }) => 
     <span suppressHydrationWarning={true}>
       {end === null ? (
         <React.Fragment>
-          {prefix} <UiDate value={start} type={dateType} />
+          <UiDate value={start} type={dateType} />
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <span>von <UiDate value={start} type={dateType} /> </span>
-          <span> bis <UiDate value={end} type={dateType} /></span>
+          <p><UiDate value={start} type={dateType} /> - <UiDate value={end} type={dateType} /></p>
         </React.Fragment>
       )}
 

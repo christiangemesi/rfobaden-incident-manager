@@ -30,7 +30,7 @@ import java.util.Optional;
 @Import({
     TestConfig.class,
 })
-public class WebSecurityConfigTest {
+class WebSecurityConfigTest {
     @Autowired
     WebSecurityConfig config;
 

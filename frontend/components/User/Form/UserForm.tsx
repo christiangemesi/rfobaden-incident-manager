@@ -15,16 +15,27 @@ import Organization from '@/models/Organization'
 import AlertStore from '@/stores/AlertStore'
 
 interface Props {
+
+  /**
+   * The {@link User} to edit, or `null`, if a new user should be created.
+   */
   user?: User | null
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `UserForm` displays a form to create or edit a {@link User}.
+ */
 const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
   const userEmails = useUsers((users) => (
     users.filter((it) => it.id !== user?.id).map(({ email }) => email.toLowerCase())
   ), [user?.id])
 
-  const form = useForm<ModelData<User>>(user,() => ({
+  const form = useForm<ModelData<User>>(user, () => ({
     email: '',
     firstName: '',
     lastName: '',
@@ -37,7 +48,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.match(/^\S+@\S+\.\S+$/, { message: 'muss eine gültige E-Mail-Adresse sein' }),
       validate.maxLength(100),
-      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt' ,
+      (value) => userEmails.find((email) => email === value.toLowerCase()) === undefined || 'E-Mail-Adresse wird schon benutzt',
     ],
     firstName: [
       validate.notBlank(),
@@ -47,7 +58,9 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
       validate.notBlank(),
       validate.maxLength(100),
     ],
-    role: [],
+    role: [
+      validate.notNull(),
+    ],
     organizationId: [],
   }))
 
@@ -94,9 +107,15 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
           <UiSelectInput {...props} label="Rolle" options={Object.values(UserRole)} />
         )}</UiForm.Field>
         <UiForm.Field field={form.organizationId}>{(props) => (
-          <UiSelectInput {...props} label="Organisation" options={organizationIds} optionName={mapOrganizationIdToName} />
+          <UiSelectInput
+            {...props}
+            menuPlacement="top"
+            label="Organisation"
+            options={organizationIds}
+            optionName={mapOrganizationIdToName}
+          />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text={user === null ? 'Erstellen' : 'Bearbeiten'} />
       </UiForm>
     </div>
   )

@@ -4,7 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] - 14.05.2022
+## [Unreleased]
+### Added
+- Transports can now be closed via dropdown item.
+
+### Changed
+- The start page now shows all panels on desktop, without the need to scroll.
+- Adjusted multiple colors to better fit together.
+- Closed records and tasks now show that with a banner.
+- The organization list on the incident page no longer contains an add button.
+- Submit buttons now contain text instead of icons.
+
+### Fixed
+- The page is no longer scrollable while a modal is open.
+- The vehicle and trailer dropdowns in transport forms now work as expected.
+- Adjusted multiple elements to always be visible on mobile.
+
+## [0.5.0] - 14.05.2022
 ### Added
 - Incidents, reports, transports, tasks and subtasks can now be printed.
 - Uploaded images can now be seen by clicking on the image counter in the header of the record they belong.
@@ -32,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The filename and type of documents is now displayed correctly.
 - The organization count on incidents is now displayed correctly.
 
-## [3.0.0] - 13.04.2022
+## [0.4.0] - 13.04.2022
 ### Added
 - Modals can now be closed by pressing the escape key.
 - Incidents, reports and tasks now support manual closing.

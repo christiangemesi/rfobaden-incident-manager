@@ -52,28 +52,26 @@ const StyledListItem = styled.li<{ isActive: boolean, isClickable: boolean, isCl
   transition-property: filter, background-color, opacity, border-color;
   will-change: filter, background-color, opacity, border-color;
   border: 1px solid transparent;
+
+  ${({ isClickable }) => isClickable && css`
+    :hover {
+      cursor: pointer;
+      background-color: ${({ theme }) => theme.colors.secondary.hover};
+    }
+  `}
   
   ${({ isClosed, isClickable }) => isClosed && css`
-    filter: grayscale(0.8) brightness(0.8);
-    opacity: 0.75;
+    background-color: ${({ theme }) => theme.colors.grey.value};
 
     ${() => isClickable && css`
       &:hover {
-        filter: grayscale(0.8) brightness(0.8);
-        opacity: 1;
+        background-color: ${({ theme }) => theme.colors.grey.hover};
       }
     `}
   `}
 
   ${({ isActive, theme }) => isActive && css`
-    background-color: ${theme.colors.tertiary.value};
+    background-color: ${theme.colors.light.value};
     border-color: ${({ theme }) => theme.colors.grey.value};
-  `}
-
-  ${({ isClickable }) => isClickable && css`
-    :hover {
-      cursor: pointer;
-      filter: brightness(0.9);
-    }
   `}
 `

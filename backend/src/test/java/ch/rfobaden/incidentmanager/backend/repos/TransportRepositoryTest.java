@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.ArrayList;
 
 @DataJpaTest
-public class TransportRepositoryTest
+class TransportRepositoryTest
     extends ModelRepositoryTest<Transport, TransportPath, TransportRepository> {
 
     @Autowired

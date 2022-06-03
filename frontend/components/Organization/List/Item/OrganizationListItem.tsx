@@ -18,10 +18,21 @@ import UserList from '@/components/User/List/UserList'
 import OrganizationStore from '@/stores/OrganizationStore'
 
 interface Props extends StyledProps {
+
+  /**
+   * The {@link Organization} to be displayed.
+   */
   organization: Organization
+
+  /**
+   * Event caused by clicking on a {@link Organization}.
+   */
   onClick?: EventHandler<MouseEvent>
 }
 
+/**
+ * `OrganizationListItem` is a component that displays one of multiple {@link Organization organizations} in a list.
+ */
 const OrganizationListItem: React.VFC<Props> = ({
   organization,
 }) => {

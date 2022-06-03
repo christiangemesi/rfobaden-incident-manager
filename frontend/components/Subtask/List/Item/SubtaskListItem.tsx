@@ -145,14 +145,18 @@ const Item = styled(UiListItemWithDetails)<{ isDragging: boolean, isClosed: bool
   transition: 150ms ease-out;
   transition-property: transform;
   
+  :hover {
+    background-color: ${({ theme }) => theme.colors.secondary.hover};
+  }
+  
   ${({ isDragging }) => isDragging && css`
       transform: rotate(3deg);
   `}
 
   ${({ isClosed }) => isClosed && css`
-    filter: grayscale(0.7) brightness(0.7);
+    background-color: ${({ theme }) => theme.colors.grey.value};
     :hover {
-      filter: brightness(0.6);
+      background-color: ${({ theme }) => theme.colors.grey.hover};
     }
   `}
 `

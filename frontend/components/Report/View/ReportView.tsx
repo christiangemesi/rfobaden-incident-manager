@@ -20,17 +20,33 @@ import ReportViewHeader from '@/components/Report/View/Header/ReportViewHeader'
 import BackendFetchService from '@/services/BackendFetchService'
 import useAsyncEffect from '@/utils/hooks/useAsyncEffect'
 import useHeight from '@/utils/hooks/useHeight'
+import UiBanner from '@/components/Ui/Banner/UiBanner'
 
 interface Props {
+  /**
+   * The incident the report belongs to.
+   */
   incident: Incident
+
+  /**
+   * The report to display.
+   */
   report: Report
+
+  /**
+   * Event caused by closing the report view.
+   */
   onClose?: () => void
 }
 
+/**
+ * `ReportView` displays a report's information, as well as a list of its tasks.
+ */
 const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }) => {
   const router = useRouter()
   const tasks = useTasksOfReport(report.id)
 
+  // The id of the currently selected task, or `null` if none is selected.
   const [selectedId, setSelectedId] = useState<Id<Task> | null>(() => {
     const query = parseIncidentQuery(router.query)
     return query === null || query.mode !== 'task'
@@ -38,6 +54,7 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
       : query.taskId
   })
 
+  // Handle task selection.
   const selected = useTask(selectedId)
   const setSelected = useCallback((task: Task | null) => {
     setSelectedId(task?.id ?? null)
@@ -76,8 +93,15 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
     }
   }, [report, router, selected])
 
+
+
   return (
     <UiLevel>
+      { (report.isClosed || report.isDone) && (
+        <UiBanner color="grey">
+          GESCHLOSSEN
+        </UiBanner>
+      )}
       <UiLevel.Header>
         <ReportViewHeader incident={incident} report={report} onClose={handleClose} />
       </UiLevel.Header>
@@ -94,7 +118,8 @@ const ReportView: React.VFC<Props> = ({ incident, report, onClose: handleClose }
             />
           )}
         </TaskContainer>
-        <TaskDrawer isOpen={selected !== null} onClose={clearSelected}>
+
+        <TaskDrawer isOpen={selected !== null} isClosed={selected !== null && (selected.isClosed || selected.isDone)} onClose={clearSelected}>
           {selected && (
             <TaskView innerRef={setTaskViewRef} report={report} task={selected} onClose={clearSelected} />
           )}
@@ -110,8 +135,8 @@ const TaskContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  
   padding: 0 2rem;
+
   ${Themed.media.xs.only} {
     padding-left: 0.8rem;
     padding-right: 0.8rem;

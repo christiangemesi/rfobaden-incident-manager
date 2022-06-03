@@ -8,10 +8,21 @@ import SessionStore from '@/stores/SessionStore'
 import { useValidate } from '@/components/Ui/Form/validate'
 
 interface Props {
+
+  /**
+   * The user whose password gets edited.
+   */
   user: User
+
+  /**
+   * Event caused by closing the form.
+   */
   onClose?: () => void
 }
 
+/**
+ * `UserPasswordForm` displays a form to edit the password of a {@link User}.
+ */
 const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
   const form = useForm<FormData>(() => ({
     password: '',
@@ -49,7 +60,7 @@ const UserPasswordForm: React.VFC<Props> = ({ user, onClose: handleClose }) => {
         <UiForm.Field field={form.passwordRepeat}>{(props) => (
           <UiTextInput {...props} label="Passwort wiederholen" type="password" />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text="Bearbeiten" />
       </UiForm>
     </div>
   )

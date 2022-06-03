@@ -9,9 +9,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code VehicleRepository} is a {@link ModelRepository} for {@link Vehicle vehicles}.
+ */
 @Repository
 public interface VehicleRepository
     extends JpaRepository<Vehicle, Long>, ModelRepository.Basic<Vehicle> {
+
+    /**
+     * Loads all {@link Vehicle#isVisible() visible} vehicles.
+     *
+     * @return All visible vehicles.
+     */
     @Query(
         "SELECT vehicle"
             + " FROM "
@@ -22,6 +31,13 @@ public interface VehicleRepository
     )
     List<Vehicle> findAllVisible();
 
+    /**
+     * Attempts to load a vehicle with a specific name.
+     *
+     * @param name The name of the vehicle.
+     * @return An {@link Optional} containing the vehicle,
+     *     or {@link Optional#empty()}, if no matching vehicle exists.
+     */
     @Query(
         "SELECT vehicle"
             + " FROM "

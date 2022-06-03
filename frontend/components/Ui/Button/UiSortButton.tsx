@@ -5,9 +5,16 @@ import { SortField } from '@/utils/hooks/useSort'
 import UiListHeader, { ListHeaderProps } from '@/components/Ui/List/UiListHeader'
 
 interface Props extends ListHeaderProps {
+
+  /**
+   * The field to sort by.
+   */
   field: SortField
 }
 
+/**
+ * `UiSortButton` displays a button with which a list of entities can be sorted by a specific field.
+ */
 const UiSortButton: React.VFC<Props> = ({
   children,
   field,
@@ -41,7 +48,7 @@ const SortButton = styled(UiListHeader)`
   cursor: pointer;
   margin: 0 0.2rem;
   padding: 0.5rem;
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  color: ${({ theme }) => theme.colors.light.contrast};
 
   will-change: background-color;
   transition: 200ms ease-out;

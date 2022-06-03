@@ -4,14 +4,9 @@ import ch.rfobaden.incidentmanager.backend.models.paths.PathConvertible;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,24 +14,36 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ * {@code Transport} represents a transport handled in an {@link Incident}.
+ */
 @Entity
 @Table(name = "transport")
-public final class Transport extends Model implements PathConvertible<TransportPath>, Trackable,
-    Serializable {
+public final class Transport extends TrackableModel implements PathConvertible<TransportPath> {
+
+    /**
+     * The {@link Incident} the transport belongs to.
+     */
     @ManyToOne
     @JoinColumn(nullable = false)
     private Incident incident;
 
-    @Column(nullable = false)
-    private String title;
-    private String description;
-
+    /**
+     * The number of people involved in the transport.
+     */
     @Min(0)
     private long peopleInvolved;
+
+    /**
+     * The name of the person which will drive the vehicle of this tranport.
+     */
     @Size(min = 1, max = 100)
     private String driver;
 
+    /**
+     * The vehicle used in the transport.
+     */
+    @NotNull
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -45,6 +52,9 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @JoinColumn(nullable = false)
     private Vehicle vehicle;
 
+    /**
+     * The trailer used in the transport, or `null`, if none is needed.
+     */
     @ManyToOne(cascade = {
         CascadeType.REFRESH,
         CascadeType.DETACH,
@@ -53,26 +63,17 @@ public final class Transport extends Model implements PathConvertible<TransportP
     @JoinColumn
     private Trailer trailer;
 
-    private LocalDateTime startsAt;
-    private LocalDateTime endsAt;
-
+    /**
+     * The departure location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfDeparture;
+
+    /**
+     * The arrival location of the transport.
+     */
     @Size(min = 1, max = 100)
     private String pointOfArrival;
-
-    @ManyToOne
-    @JoinColumn
-    private User assignee;
-
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private Priority priority;
-
-    @NotNull
-    @Column(nullable = false)
-    private boolean isClosed;
 
     @JsonIgnore
     public Incident getIncident() {
@@ -84,6 +85,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.incident = incident;
     }
 
+    /**
+     * Allows access to the {@link #getIncident() incident}'s id.
+     *
+     * @return The incident's id.
+     */
     public Long getIncidentId() {
         if (incident == null) {
             return null;
@@ -91,6 +97,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return incident.getId();
     }
 
+    /**
+     * Sets the {@link #getIncident() incident}'s id.
+     *
+     * @param id The incident's new id.
+     */
     public void setIncidentId(Long id) {
         if (id == null) {
             incident = null;
@@ -98,22 +109,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         }
         incident = new Incident();
         incident.setId(id);
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public long getPeopleInvolved() {
@@ -140,6 +135,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.vehicle = vehicle;
     }
 
+    /**
+     * Allows access to the {@link #getVehicle() vehicle}'s id.
+     *
+     * @return The vehicle's id.
+     */
     public Long getVehicleId() {
         if (vehicle == null) {
             return null;
@@ -147,6 +147,11 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return vehicle.getId();
     }
 
+    /**
+     * Sets the {@link #getVehicle() vehicle}'s id.
+     *
+     * @param id The vehicle's new id.
+     */
     public void setVehicleId(Long id) {
         if (id == null) {
             vehicle = null;
@@ -164,6 +169,12 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.trailer = trailer;
     }
 
+    /**
+     * Allows access to the {@link #getTrailer() trailer}'s id.
+     * Is {@code null} if there's currently no trailer.
+     *
+     * @return The trailer's id.
+     */
     public Long getTrailerId() {
         if (trailer == null) {
             return null;
@@ -171,6 +182,12 @@ public final class Transport extends Model implements PathConvertible<TransportP
         return trailer.getId();
     }
 
+    /**
+     * Sets the {@link #getTrailer() trailer}'s id.
+     * If the id is {@code null}, the trailer will be removed.
+     *
+     * @param id The trailer's new id.
+     */
     public void setTrailerId(Long id) {
         if (id == null) {
             trailer = null;
@@ -178,22 +195,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         }
         trailer = new Trailer();
         trailer.setId(id);
-    }
-
-    public LocalDateTime getStartsAt() {
-        return startsAt;
-    }
-
-    public void setStartsAt(LocalDateTime startsAt) {
-        this.startsAt = startsAt;
-    }
-
-    public LocalDateTime getEndsAt() {
-        return endsAt;
-    }
-
-    public void setEndsAt(LocalDateTime endsAt) {
-        this.endsAt = endsAt;
     }
 
     public String getPointOfDeparture() {
@@ -212,51 +213,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
         this.pointOfArrival = destinationPlace;
     }
 
-    public User getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
-    public Long getAssigneeId() {
-        if (assignee == null) {
-            return null;
-        }
-        return assignee.getId();
-    }
-
-    public void setAssigneeId(Long id) {
-        if (id == null) {
-            assignee = null;
-            return;
-        }
-        assignee = new User();
-        assignee.setId(id);
-    }
-
-    @Override
-    public Priority getPriority() {
-        return priority;
-    }
-
-    @Override
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    @Override
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
     @Override
     public String getLink() {
         return "/ereignisse/" + getIncident().getId() + "/transporte/" + getId();
@@ -266,7 +222,6 @@ public final class Transport extends Model implements PathConvertible<TransportP
     public String getFullTitle() {
         return getIncident().getTitle() + "/" + getTitle();
     }
-
 
     @Override
     public boolean equals(Object other) {
@@ -278,24 +233,26 @@ public final class Transport extends Model implements PathConvertible<TransportP
         }
         var that = (Transport) other;
 
-        return equalsModel(that)
-            && Objects.equals(title, that.title)
+        return equalsTrackableModel(that)
             && Objects.equals(incident, that.incident)
             && Objects.equals(peopleInvolved, that.peopleInvolved)
-            && Objects.equals(description, that.description)
             && Objects.equals(trailer, that.trailer)
-            && Objects.equals(startsAt, that.startsAt)
-            && Objects.equals(endsAt, that.endsAt)
             && Objects.equals(vehicle, that.vehicle)
             && Objects.equals(pointOfArrival, that.pointOfArrival)
-            && Objects.equals(pointOfDeparture, that.pointOfDeparture)
-            && Objects.equals(assignee, that.assignee);
+            && Objects.equals(pointOfDeparture, that.pointOfDeparture);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, incident, peopleInvolved, description, trailer,
-            startsAt, endsAt, vehicle, pointOfArrival, pointOfDeparture, assignee);
+        return Objects.hash(
+            trackableModelHashCode(),
+            incident,
+            peopleInvolved,
+            trailer,
+            vehicle,
+            pointOfArrival,
+            pointOfDeparture
+        );
     }
 
     @Override

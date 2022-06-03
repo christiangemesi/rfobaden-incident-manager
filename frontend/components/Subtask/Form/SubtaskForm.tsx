@@ -26,7 +26,11 @@ interface Props {
   onClose?: () => void
 }
 
-const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleClose }) => {
+const SubtaskForm: React.VFC<Props> = ({
+  task,
+  subtask = null,
+  onClose: handleClose,
+}) => {
   const form = useForm<ModelData<Subtask>>(subtask, () => ({
     title: '',
     description: null,
@@ -51,7 +55,9 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
     description: [
       validate.notBlank({ allowNull: true }),
     ],
-    priority: [],
+    priority: [
+      validate.notNull(),
+    ],
     assigneeId: [],
     closedAt: [],
     startsAt: [],
@@ -86,17 +92,19 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
   return (
     <UiForm form={form}>
       <FormContainer>
+
         <PrioritySliderPositioner>
           <UiForm.Field field={form.priority}>{(props) => (
             <UiPrioritySlider {...props} />
           )}</UiForm.Field>
         </PrioritySliderPositioner>
+
         <UiForm.Field field={form.title}>{(props) => (
-          <UiTextInput {...props} label="Titel" placeholder="Titel" />
+          <UiTextInput {...props} label="Titel" />
         )}</UiForm.Field>
 
         <UiForm.Field field={form.description}>{(props) => (
-          <UiTextArea {...props} label="Beschreibung" placeholder="Beschreibung" />
+          <UiTextArea {...props} label="Beschreibung" />
         )}</UiForm.Field>
 
         <UiForm.Field field={form.assigneeId}>{(props) => (
@@ -112,18 +120,18 @@ const SubtaskForm: React.VFC<Props> = ({ task, subtask = null, onClose: handleCl
         <UiGrid gapH={1}>
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.startsAt}>{(props) => (
-              <UiDateInput {...props} label="Beginn" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Beginn" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
+
           <UiGrid.Col size={{ xs: 12, md: 6 }}>
             <UiForm.Field field={form.endsAt}>{(props) => (
-              <UiDateInput {...props} label="Ende" placeholder="dd.mm.yyyy hh:mm" placement="top" />
+              <UiDateInput {...props} label="Ende" placement="top" />
             )}</UiForm.Field>
           </UiGrid.Col>
-
         </UiGrid>
 
-        <UiForm.Buttons form={form} />
+        <UiForm.Buttons form={form} text={subtask === null ? 'Erstellen' : 'Bearbeiten'} />
       </FormContainer>
     </UiForm>
   )
@@ -147,6 +155,7 @@ const PrioritySliderPositioner = styled.div`
   display: flex;
   justify-content: right;
   margin: 0.5rem;
+
   ${Themed.media.sm.max} {
     justify-content: center;
   }

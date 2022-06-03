@@ -8,14 +8,40 @@ import Trackable from '@/models/Trackable'
 import TrackableSuffix from '@/components/Trackable/Suffix/TrackableSuffix'
 
 export interface Props<T> {
+  /**
+   * The record to display.
+   */
   record: T
+
+  /**
+   * Whether the item is currently selected.
+   */
   isActive: boolean
+
+  /**
+   * Whether the item should make its contents slightly smaller.
+   */
   isSmall: boolean
+
+  /**
+   * Whether the record is closed.
+   */
   isClosed: boolean
+
+  /**
+   * Event caused by clicking on the item.
+   */
   onClick?: (record: T) => void
+
+  /**
+   * Additional content to display.
+   */
   children?: ReactNode
 }
 
+/**
+ * `TrackableListItem` is a component that displays a {@link Trackable trackable entity} in a list.
+ */
 const TrackableListItem = <T extends Trackable>({
   record,
   isActive,
@@ -50,45 +76,88 @@ const TrackableListItem = <T extends Trackable>({
 }
 export default TrackableListItem
 
-const Item = styled(UiListItemWithDetails)<{ isActive: boolean }>`
-  ${({ isActive }) => isActive && css`
-    transition-duration: 300ms;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-  `}
-`
-
 const Bridge = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 100%;
 
   background-color: ${({ theme }) => theme.colors.secondary.value};
 
-  transition: 300ms ease-in-out;
+  transition: 150ms ease-out;
   transition-property: transform, background-color, box-shadow;
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform, background-color, box-shadow;
-  border-top: 1px solid ${({ theme }) => theme.colors.grey.value};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey.value};
+  // border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+  // border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   
-
   ${({ isActive, theme }) => isActive && css`
+    transition-duration: 300ms;
     transform: scaleX(1);
     transform-origin: right center;
-
-    background-color: ${theme.colors.tertiary.value};
+    background-color: ${theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
   `}
 `
-
 const BridgeClip = styled.div`
   position: absolute;
+  top: -1px;
   left: 100%;
   width: calc(2rem + 2px);
-  height: calc(100% + 2px);
+  height: 3.5rem;
   z-index: 3;
 
   ${Themed.media.md.max} {
     display: none;
   }
+`
+const Item = styled(UiListItemWithDetails)<{ isActive: boolean , isClosed: boolean}>`
+  height: 3.5rem;
+  position: relative;
+  
+  ${({ isActive }) => isActive && css`
+    transition-duration: 300ms;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    background-color: ${({ theme }) => theme.colors.active.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.active.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.active.hover};
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.active.value};
+    }
+    
+    :hover ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.active.value};
+    }
+  `}
+  
+  
+  
+  ${({ isActive, isClosed }) => isActive && isClosed && css`
+    transition-duration: 300ms;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+
+    background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    border-left: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    
+    ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
+      border-top: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
+    }
+
+    :hover {
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    }
+
+    :hover ${Bridge} {
+      background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    }
+  `}
+  
 `

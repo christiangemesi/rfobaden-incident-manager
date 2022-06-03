@@ -16,10 +16,21 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+
+  /**
+   * The {@link User users} to be displayed.
+   */
   users: readonly User[]
+
+  /**
+   * Whether to show a button with which a {@link UserForm} can be opened.
+   */
   hasCreateButton?: boolean
 }
 
+/**
+ * `UserList` is a component that displays a list of {@link User users}.
+ */
 const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
   const currentUser = useCurrentUser()
 
@@ -62,7 +73,7 @@ const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
       )}
       <OuterScroll>
         <InnerScroll>
-          <UiGrid style={{ padding: '0.5rem' }} gapH={0.5}>
+          <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
             <UiGrid.Col size={5}>
               <UiSortButton field={sort.firstName}>
                 <UiTitle level={6}>Vorname</UiTitle>

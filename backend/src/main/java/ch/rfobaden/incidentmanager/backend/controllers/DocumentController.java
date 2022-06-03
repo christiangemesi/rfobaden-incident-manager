@@ -34,9 +34,17 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+/**
+ * {@code DocumentController} implements endpoints to handle file uploads.
+ * <p>
+ *     Uploaded files are stored as {@link Document documents} and then attached to other entities.
+ *     These entities are called the document's <i>owner</i> and have to implement either
+ *     {@link DocumentOwner}, {@link ImageOwner}, or both.
+ * </p>
+ */
 @RestController
 @RequestMapping(path = "api/v1/documents")
-public class DocumentController extends AppController {
+public class DocumentController implements AppController {
     private final DocumentService documentService;
     private final IncidentService incidentService;
     private final ReportService reportService;
@@ -57,6 +65,14 @@ public class DocumentController extends AppController {
         this.subtaskService = subtaskService;
     }
 
+    /**
+     * Loads an uploaded file.
+     *
+     * @param id The id of the document whose file gets loaded.
+     * @return The uploaded file contents.
+     *
+     * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching document was found.
+     */
     @GetMapping(value = "/{id}")
     public ResponseEntity<FileSystemResource> find(@PathVariable Long id) {
         var document = documentService.findDocument(id).orElseThrow(() -> (
@@ -82,6 +98,23 @@ public class DocumentController extends AppController {
         return ResponseEntity.ok().headers(headers).body(file);
     }
 
+    /**
+     * Creates a new document from an uploaded file, and attaches it to a specific entity.
+     *
+     * @param file The uploaded file.
+     * @param modelName The name of the model to which the entity
+     *                  that the document gets attached to belongs.
+     * @param modelId The id of the model entity to which the document gets attached.
+     * @param name The document's filename. Can be empty to use the uploaded file's name.
+     * @param type Determines how the documents are attached to their owning entities.
+     *             Use {@code "document"} for a {@link DocumentOwner normal document},
+     *             and {@code "image"} for {@link ImageOwner images}.
+     *             Defaults to {@code "document"} if not specified.
+     * @return The newly created document.
+     *
+     * @throws ApiException {@link HttpStatus#BAD_REQUEST} If the owner entity could not be found.
+     *                      {@link HttpStatus#BAD_REQUEST} If the type is invalid.
+     */
     @RequireAgent
     @PostMapping
     public Document create(
@@ -95,7 +128,7 @@ public class DocumentController extends AppController {
         var content = readFile(file);
         var document = buildDocument(file, name, content);
 
-        var saveToOwner = prepareOwner(document, type);
+        var saveToOwner = prepareSaveDocument(document, type);
         var owner = service.find(modelId).orElseThrow(() -> (
             new ApiException(HttpStatus.BAD_REQUEST, "owner not found: " + modelId)
         ));
@@ -107,6 +140,19 @@ public class DocumentController extends AppController {
         return document;
     }
 
+    /**
+     * Deletes a document.
+     *
+     * @param modelName The name of the model to which the document's owning entity belongs.
+     * @param modelId The id of the document's owning entity.
+     * @param id The document's id.
+     * @param type The document's type, see
+     *             {@link #create(MultipartFile, String, Long, Optional, Optional)}.
+     *
+     * @throws ApiException {@link HttpStatus#BAD_REQUEST} If the owner entity could not be found.
+     *                      {@link HttpStatus#BAD_REQUEST} If the type is invalid.
+     *                      {@link HttpStatus#NOT_FOUND} If no matching document was found.
+     */
     @RequireAgent
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -137,6 +183,14 @@ public class DocumentController extends AppController {
         }
     }
 
+    /**
+     * Creates a new {@link Document} instance.
+     *
+     * @param file The uploaded file.
+     * @param name The name to use as the document's filename.
+     * @param content The uploaded file's contents.
+     * @return The new {@code Document} instance.
+     */
     private Document buildDocument(MultipartFile file, Optional<String> name, byte[] content) {
         var mimeType = documentService.detectMimeType(content);
 
@@ -156,7 +210,19 @@ public class DocumentController extends AppController {
         return document;
     }
 
-    private <M extends DocumentOwner & ImageOwner> BiConsumer<M, Document> prepareOwner(
+    /**
+     * Determines how a document is attached to its owner.
+     * Creates a {@link BiConsumer} which accepts the owner and the document entity,
+     * and then attaches the document.
+     *
+     * @param document The document to attach.
+     * @param type The type of the document.
+     * @param <M> The type of the owning entity.
+     * @return A {@link BiConsumer} which attaches a document to its owner.
+     *
+     * @throws ApiException {@link HttpStatus#BAD_REQUEST} if the {@code type} is invalid.
+     */
+    private <M extends DocumentOwner & ImageOwner> BiConsumer<M, Document> prepareSaveDocument(
         Document document,
         Optional<String> type
     ) {
@@ -176,6 +242,13 @@ public class DocumentController extends AppController {
         }
     }
 
+    /**
+     * Maps the name of a model to its service.
+     *
+     * @param modelName The name of the model.
+     * @param <M> The model type.
+     * @return The service of the model.
+     */
     @SuppressWarnings("unchecked")
     private <M extends Model & PathConvertible<?> & DocumentOwner & ImageOwner>
         ModelService<M, ?> resolveService(String modelName) {
@@ -194,6 +267,12 @@ public class DocumentController extends AppController {
         }
     }
 
+    /**
+     * Reads an uploaded file's contents.
+     *
+     * @param file The uploaded file.
+     * @return The file's contents.
+     */
     private static byte[] readFile(MultipartFile file) {
         try {
             return file.getBytes();

@@ -7,6 +7,6 @@ import ch.rfobaden.incidentmanager.backend.services.base.ModelRepositoryServiceT
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ReportServiceTest
+class ReportServiceTest
     extends ModelRepositoryServiceTest<Report, ReportPath, ReportService, ReportRepository> {
 }

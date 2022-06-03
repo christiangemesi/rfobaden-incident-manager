@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 @WebMvcTest(SubtaskController.class)
-public class SubtaskControllerTest
+class SubtaskControllerTest
     extends ModelControllerTest<Subtask, SubtaskPath, SubtaskService> {
 
     @MockBean

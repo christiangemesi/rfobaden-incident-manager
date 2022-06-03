@@ -3,7 +3,7 @@ import UiPrioritySlider from '@/components/Ui/PrioritySlider/UiPrioritySlider'
 import Priority from '@/models/Priority'
 
 /**
- * Example to demonstrate the use of a {@link UiPrioritySlider}.
+ * `UiPrioritySliderExample` is an example page for the {@link UiPrioritySlider} component.
  */
 const UiPrioritySliderExample: React.VFC = () => {
 

@@ -3,9 +3,16 @@ import styled from 'styled-components'
 import { Themed } from '@/theme'
 
 interface Props {
+  /**
+   * The {@link Alert alerts} to be displayed.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiAlertList` is a wrapper displaying multiple {@link UiAlert} instances
+ * beneath each other.
+ */
 const UiAlertList: React.VFC<Props> = ({ children }) => {
   return (
     <AlertContainer>
@@ -23,6 +30,7 @@ const AlertContainer = styled.div`
   position: fixed;
   bottom: 5rem;
   left: 2rem;
+  z-index: 150;
 
   ${Themed.media.sm.max} {
     left: 0;

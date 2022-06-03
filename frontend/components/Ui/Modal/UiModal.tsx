@@ -59,8 +59,8 @@ const Dialog = styled.dialog<{ isShaking: boolean }>`
   max-height: 90vh;
   width: 100%;
 
-  background: ${({ theme }) => theme.colors.tertiary.value};
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  background: ${({ theme }) => theme.colors.light.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
   
   border-radius: 1rem;
   padding: 1rem;
@@ -88,15 +88,15 @@ const DialogContainer = styled.div<{ size: 'full' | 'auto' | 'fixed' }>`
   max-width: calc(100vw - 0.8rem);
   
   ${({ size }) => size === 'full' && css`
-    ${UiContainer.fluidCss};
+    ${UiContainer.style};
     & > ${Dialog} {
-      ${UiContainer.fluidCss};
+      ${UiContainer.style};
     }
   `};
   ${({ size }) => size === 'fixed' && css`
-    ${UiContainer.fluidCss};
+    ${UiContainer.style};
     & > ${Dialog} {
-      ${UiContainer.fluidCss};
+      ${UiContainer.style};
       ${Themed.media.lg.min} {
         width: 60vw;
       }

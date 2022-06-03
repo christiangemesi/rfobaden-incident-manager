@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Transport;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TransportPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code TransportRepository} is a {@link ModelRepository} for {@link Transport transports}.
+ */
 @Repository
 public interface TransportRepository
     extends JpaRepository<Transport, Long>, ModelRepository<Transport, TransportPath> {
@@ -46,10 +51,15 @@ public interface TransportRepository
             + " WHERE "
             + "transport.incident.id = :#{#path.incidentId}"
     )
-
     @Override
     List<Transport> findAllByPath(@Param("path") TransportPath path);
 
+    /**
+     * Loads all assigned {@link Transport transports} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned transports.
+     */
     @Query(
         "SELECT transport"
             + " FROM "

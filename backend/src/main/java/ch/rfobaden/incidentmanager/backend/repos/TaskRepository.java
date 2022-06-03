@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Task;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.TaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code TaskRepository} is a {@link ModelRepository} for {@link Task tasks}.
+ */
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>, ModelRepository<Task, TaskPath> {
 
@@ -51,10 +56,15 @@ public interface TaskRepository extends JpaRepository<Task, Long>, ModelReposito
             + " AND "
             + "task.report.id = :#{#path.reportId}"
     )
-
     @Override
     List<Task> findAllByPath(@Param("path") TaskPath path);
 
+    /**
+     * Loads all assigned {@link Task tasks} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned tasks.
+     */
     @Query(
         "SELECT task "
             + " FROM "

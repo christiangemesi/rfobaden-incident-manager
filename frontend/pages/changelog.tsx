@@ -23,7 +23,7 @@ const ChangelogPage : React.VFC = () => {
 export default ChangelogPage
 
 const LogContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.tertiary.value};
+  background-color: ${({ theme }) => theme.colors.light.value};
   
   ul {
     list-style: disc;

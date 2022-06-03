@@ -1,21 +1,29 @@
-import React, { ChangeEvent, ReactNode, useCallback } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 
 interface Props extends UiInputProps<number | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
-  children?: ReactNode
 }
 
+/**
+ * `UiNumberInput` is input component for a numerical value.
+ */
 const UiNumberInput: React.VFC<Props> = ({
   value,
   placeholder = '',
   onChange: setValue,
   label,
   errors = [],
-  children,
 }) => {
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.valueAsNumber)
@@ -23,7 +31,7 @@ const UiNumberInput: React.VFC<Props> = ({
 
   const Label = label == null ? 'div' : StyledLabel
   const hasError = errors.length !== 0
-  const hasChildren = children !== undefined
+  const hasChildren = false
 
   return (
     <Label>
@@ -53,7 +61,7 @@ const StyledInput = styled.input<{ hasChildren: boolean }>`
   border-radius: 0.5rem;
   outline: none;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.tertiary.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
   font-family: ${({ theme }) => theme.fonts.body};
 
   ${({ hasChildren }) => hasChildren && css`

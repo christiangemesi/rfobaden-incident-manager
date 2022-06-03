@@ -4,13 +4,26 @@ import ScrollHelper from '@/utils/helpers/ScrollHelper'
 import { useUpdateEffect } from 'react-use'
 import { ElementProps } from '@/utils/helpers/StyleHelper'
 import { noop } from '@/utils/control-flow'
-import { useLevel } from '@/components/Ui/Modal/Like/UiModalLike'
+import { getGlobalLevel } from '@/components/Ui/Modal/Like/UiModalLike'
 
 interface Props extends ElementProps<HTMLDivElement> {
+  /**
+   * Whether the overlay is currently visible.
+   * Setting this to `false` will visually hide the overlay, but it will still be present on the screen.
+   * This will cause mouse events to not pass through it, among other things.
+   */
   isOpen: boolean
+
+  /**
+   * Whether the overlay is currently hidden.
+   * A hidden component is completely removed from the page.
+   */
   isHidden?: boolean
 }
 
+/**
+ * `UiOverlay` is a component that displays a semi-transparent overlay on top of the current page.
+ */
 const UiOverlay: React.VFC<Props> = ({
   isOpen,
   children,
@@ -41,9 +54,8 @@ const UiOverlay: React.VFC<Props> = ({
 
   // The modal level at which this overlay is shown.
   // This is required to determine at which z-level this overlay has to be shown.
-  const [globalLevel] = useLevel()
   const level = useRef<number | null>(null)
-  level.current = level.current ?? (isOpen ? globalLevel.current : null)
+  level.current = level.current ?? (isOpen ? getGlobalLevel() : null)
 
   // Makes the overlay visible right when it opens,
   // and hides it after its close transition has ended.

@@ -1,6 +1,8 @@
 package ch.rfobaden.incidentmanager.backend.repos;
 
+import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.Subtask;
+import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.SubtaskPath;
 import ch.rfobaden.incidentmanager.backend.repos.base.ModelRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code SubtaskRepository} is a {@link ModelRepository} for {@link Subtask subtasks}.
+ */
 @Repository
 public interface SubtaskRepository
     extends JpaRepository<Subtask, Long>, ModelRepository<Subtask, SubtaskPath> {
@@ -58,10 +63,15 @@ public interface SubtaskRepository
             + " AND "
             + "subtask.task.id = :#{#path.taskId}"
     )
-
     @Override
     List<Subtask> findAllByPath(@Param("path") SubtaskPath path);
 
+    /**
+     * Loads all assigned {@link Subtask subtasks} over all opened {@link Incident incidents}.
+     *
+     * @param id The id of the {@link User assignee}.
+     * @return The list of assigned subtasks.
+     */
     @Query(
         "SELECT subtask "
             + " FROM "

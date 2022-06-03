@@ -1,5 +1,6 @@
 package ch.rfobaden.incidentmanager.backend.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,22 +10,39 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Document} represents an uploaded file.
+ */
 @Entity
 @Table(name = "document")
-public class Document {
+public class Document implements Serializable {
+    private static final long serialVersionUID = 1L;
+    /**
+     * The documents' id, uniquely identifying it.
+     */
+
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
     private Long id;
 
+    /**
+     * The name of the document.
+     */
     @NotBlank
     @Size(max = 100)
     private String name;
 
+    /**
+     * The mime type of the document.
+     */
     @NotBlank
     @Column(nullable = false)
     private String mimeType;
 
+    /**
+     * The file extension of the document, based on its {@link #mimeType mime type}.
+     */
     private String extension;
 
     public Document() {

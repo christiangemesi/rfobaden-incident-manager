@@ -50,7 +50,7 @@ const UiDrawer: React.VFC<Props> = ({
           isShaking={isShaking}
           size={size}
           position={position}
-          align={align}
+          //align={align}
           onClick={(e) => e.stopPropagation()}
         >
           <Content>
@@ -89,41 +89,26 @@ const Container = styled.div<{
   isOpen: boolean
   size: 'auto' | 'full' | 'fixed'
   position: 'left' | 'right'
-  align: 'top' | 'center'
   isShaking: boolean
 }>`
-  ${UiContainer.fluidCss};
+  ${UiContainer.style};
+
   position: fixed;
   ${({ position }) => position}: 0;
-  
-  display: flex;
-  flex-direction: column;
+  width: ${({ size }) => size === 'auto' ? 'auto' : '100%'};
   height: 100vh;
-  overflow-y: auto;
-  padding-top: 2rem;
+  padding-top: 3rem;
   padding-bottom: 5rem;
-  
+  overflow-y: auto;
+
   box-shadow: 
           0 8px 17px 2px rgba(0, 0, 0, 0.14),
           0 3px 14px 2px rgba(0, 0, 0, 0.12), 
           5px 5px -3px rgba(0, 0, 0, 0.2);
 
-  background: ${({ theme }) => theme.colors.tertiary.value};
-  color: ${({ theme }) => theme.colors.tertiary.contrast};
+  background: ${({ theme }) => theme.colors.light.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
 
-  width: auto;
-  ${({ size }) => size === 'full' && css`
-    width: 100%;
-  `};
-  ${({ size }) => size === 'fixed' && css`
-    ${Themed.media.lg.min} {
-      width: 60vw;
-    }
-    ${Themed.media.xl.min} {
-      width: 50vw;
-    }
-  `};
-  
   ${Themed.media.xs.only} {
     max-width: 100%;
     width: 100%;
@@ -174,11 +159,7 @@ const Container = styled.div<{
     }
   `}
   
-  ${({ align }) => align === 'top' && css`
-    > ${Content} {
-      margin: unset;
-    }
-  `}
+ 
 `
 const TitleContainer = styled.div`
   display: flex;

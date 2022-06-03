@@ -4,11 +4,26 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
+
+  /**
+   * Headings content to be displayed.
+   */
   children: ReactNode
+
+  /**
+   * The level of the heading, between 1 and 6.
+   */
   level: number
+
+  /**
+   * Centers the title.
+   */
   isCentered?: boolean
 }
 
+/**
+ * `UiTitle` displays a HTML heading.
+ */
 const UiTitle: React.VFC<Props> = ({
   className,
   style,
@@ -44,8 +59,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   `}
 
   h1& {
-    font-weight: 400;
-    font-size: 3em;
+    font-weight: 600;
+    font-size: 2.25em;
     line-height: 1.28;
     
     ${Themed.media.sm.max} {
@@ -55,7 +70,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
 
   h2& {
     font-weight: 500;
-    font-size: 2.25em;
+    font-size: 1.8em;
     line-height: 1.22;
 
     ${Themed.media.sm.max} {
@@ -65,7 +80,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
 
   h3& {
     font-weight: 500;
-    font-size: 1.875em;
+    font-size: 1.6em;
     line-height: 1.26;
 
     ${Themed.media.sm.max} {
@@ -74,8 +89,8 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   }
 
   h4& {
-    font-weight: 400;
-    font-size: 1.5em;
+    font-weight: 500;
+    font-size: 1.3em;
     line-height: 1.25;
     
     ${Themed.media.sm.max} {

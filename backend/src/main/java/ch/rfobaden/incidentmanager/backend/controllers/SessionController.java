@@ -2,12 +2,12 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 
 import ch.rfobaden.incidentmanager.backend.WebSecurityConfig;
 import ch.rfobaden.incidentmanager.backend.controllers.base.AppController;
+import ch.rfobaden.incidentmanager.backend.controllers.base.filters.JwtAuthFilter;
 import ch.rfobaden.incidentmanager.backend.controllers.data.SessionData;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.services.AuthService;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,10 +27,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * {@code SessionController} exposes endpoints to manage user sessions.
+ * <p>
+ *     Sessions are stateless, and represented via JWT tokens.
+ *     The token is sent back to client when creating a new session in two ways:
+ *     as httpOnly cookie and as field in the response body.
+ *     The client may choose if it wishes to persists the cookie,
+ *     or wants to attach an Authorization-Header containing the bearer token.
+ * </p>
+ *
+ * @see SessionHelper
+ * @see JwtAuthFilter
+ * @see WebSecurityConfig
+ */
 @RestController
 @Validated
 @RequestMapping(path = "api/v1/session")
-public class SessionController extends AppController {
+public class SessionController implements AppController {
     private final AuthenticationManager authManager;
 
     private final AuthService authService;
@@ -47,6 +61,12 @@ public class SessionController extends AppController {
         this.sessionHelper = sessionHelper;
     }
 
+    /**
+     * Loads the current session.
+     * Returns an empty body if there is no active session.
+     *
+     * @return The current session.
+     */
     @GetMapping
     public SessionData find() {
         return authService.getSession()
@@ -56,6 +76,18 @@ public class SessionController extends AppController {
             .orElse(null);
     }
 
+    /**
+     * Creates a new session.
+     * Returns both a {@link SessionData} and attaches an httpOnly cookie to the response.
+     *
+     * @param data The login data.
+     * @param response The http response.
+     * @return The newly created session.
+     *
+     * @throws ApiException {@link HttpStatus#FORBIDDEN} if the user exists,
+     *                      but is disabled or locked.
+     *                      {@link HttpStatus#UNAUTHORIZED} if the login data is invalid.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SessionData create(
@@ -66,12 +98,23 @@ public class SessionController extends AppController {
         return sessionHelper.addSessionToResponse(response, user);
     }
 
+    /**
+     * Deletes the session cookie, if it exists.
+     *
+     * @param response The http response.
+     */
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(HttpServletResponse response) {
         sessionHelper.deleteSessionFromResponse(response);
     }
 
+    /**
+     * Authenticates a user.
+     *
+     * @param data The login data.
+     * @return The authenticated user.
+     */
     private User authenticate(LoginData data) {
         try {
             var token = new UsernamePasswordAuthenticationToken(
@@ -89,12 +132,21 @@ public class SessionController extends AppController {
         }
     }
 
+    /**
+     * {@code LoginData} represents the data required to create a new session.
+     */
     @Validated
     public static final class LoginData {
+        /**
+         * The login email.
+         */
         @Email
         @NotBlank
         private String email;
 
+        /**
+         * The login password.
+         */
         @NotBlank
         private String password;
 
