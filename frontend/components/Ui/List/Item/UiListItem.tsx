@@ -13,12 +13,12 @@ export interface Props extends StyledProps {
   title?: string
 
   /**
-   * Sets the item to be active.
+   * Whether the item is currently active.
    */
   isActive?: boolean
 
   /**
-   * Sets the item to be closed.
+   * Whether the item is closed.
    */
   isClosed?: boolean
 
@@ -34,7 +34,7 @@ export interface Props extends StyledProps {
 }
 
 /**
- * `UiListItem` is a component that displays information in a {@link UiList}.
+ * `UiListItem` is a component that displays an item of a {@link UiList}.
  */
 const UiListItem: React.VFC<Props> = ({
   href = null,
