@@ -234,7 +234,7 @@ const ReportForm: React.VFC<Props> = ({
             </UiGrid.Col>
           </UiGrid>
 
-          <UiForm.Buttons form={form} text={report === null ? 'Erstellen' : 'Bearbeiten'} />
+          <UiForm.Buttons form={form} text={report === null ? 'Erstellen' : 'Speichern'} />
         </FormContainer>
       </UiForm>
     </div>

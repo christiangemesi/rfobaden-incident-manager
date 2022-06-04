@@ -3,7 +3,7 @@ import Incident from '@/models/Incident'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import IncidentListItem from '@/components/Incident/List/Item/IncidentListItem'
 import IncidentCreateButton from '@/components/Incident/CreateButton/IncidentCreateButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import IncidentForm from '@/components/Incident/Form/IncidentForm'
 import { useCurrentUser } from '@/stores/SessionStore'
@@ -25,16 +25,16 @@ const IncidentList: React.VFC<Props> = ({ incidents }) => {
       ))}
       {isAdmin(currentUser) && (
         <UiGrid.Col size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
-          <UiModal title="Ereignis erstellen" size="fixed">
-            <UiModal.Trigger>{({ open }) => (
+          <UiDrawer title="Ereignis erstellen" size="fixed">
+            <UiDrawer.Trigger>{({ open }) => (
               <IncidentCreateButton onClick={open}>
                 <UiIcon.CreateAction size={2} />
               </IncidentCreateButton>
-            )}</UiModal.Trigger>
-            <UiModal.Body>{({ close }) => (
+            )}</UiDrawer.Trigger>
+            <UiDrawer.Body>{({ close }) => (
               <IncidentForm onClose={close} />
-            )}</UiModal.Body>
-          </UiModal>
+            )}</UiDrawer.Body>
+          </UiDrawer>
         </UiGrid.Col>
       )}
     </UiGrid>

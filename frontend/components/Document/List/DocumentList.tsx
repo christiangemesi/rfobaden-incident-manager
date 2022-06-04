@@ -9,7 +9,7 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import UiList from '@/components/Ui/List/UiList'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import DocumentListItem from '@/components/Document/List/Item/DocumentListItem'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
 import Document from '@/models/Document'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -81,13 +81,13 @@ const DocumentList: React.VFC<Props> = ({
       <UiTitle level={2}>
         Dokumente
       </UiTitle>
-      <UiModal title="Dokument hinzufügen" size="fixed">
-        <UiModal.Trigger>{({ open }) => (
+      <UiDrawer title="Dokument hinzufügen" size="fixed">
+        <UiDrawer.Trigger>{({ open }) => (
           <Button onClick={open}>
             <UiIcon.CreateAction size={1.5} />
           </Button>
-        )}</UiModal.Trigger>
-        <UiModal.Body>{({ close }) => (
+        )}</UiDrawer.Trigger>
+        <UiDrawer.Body>{({ close }) => (
           <DocumentForm
             modelId={modelId}
             modelName={modelName}
@@ -95,8 +95,8 @@ const DocumentList: React.VFC<Props> = ({
             onClose={close}
             type="document"
           />
-        )}</UiModal.Body>
-      </UiModal>
+        )}</UiDrawer.Body>
+      </UiDrawer>
       <UiGrid gapH={0.5}>
         <UiGrid.Col>
           <UiSortButton field={sort.name}>
