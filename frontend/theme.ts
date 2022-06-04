@@ -1,38 +1,122 @@
 import { css, FlattenSimpleInterpolation, Keyframes, keyframes } from 'styled-components'
 
+/**
+ * `Theme` defines the data used to style the application.
+ */
 export type Theme = {
   colors: {
+
+    /**
+     * The primary color.
+     */
     primary: Color
+
+    /**
+     * The secondary color.
+     */
     secondary: Color
+
+    /**
+     * The tertiary color.
+     */
     tertiary: Color
+
+    /**
+     * A lighter color, used for contrasts.
+     */
     light: Color
+
+    /**
+     * The success color.
+     */
     success: Color
+
+    /**
+     * The error color.
+     */
     error: Color
+
+    /**
+     * The warning color.
+     */
     warning: Color
+
+    /**
+     * The info color.
+     */
     info: Color
+
+    /**
+     * A grey color, used for disabled or less relevant elements.
+     */
     grey: Color
+
+    /**
+     * The active color, used for currently selected elements.
+     */
     active: Color
+
+    /**
+     * The activeClosed color, used for currently selected elements that are already closed.
+     */
     activeClosed: Color
   }
   fonts: {
+
+    /**
+     * The font used for headings and titles.
+     */
     heading: string
+
+    /**
+     * The font used for any normal text.
+     */
     body: string
     sizes: {
+
+      /**
+       * The root font size.
+       */
       root: string,
+
+      /**
+       * Small font size in relation to the root size.
+       */
       small: string,
+      smaller: string,
     }
   }
   breakpoints: {
     [K in Breakpoint]: {
+
+      /**
+       * The minimum breakpoint size.
+       */
       min: number
+
+      /**
+       * The maximum breakpoint size.
+       */
       max: number
     }
   }
   transitions: {
+
+    /**
+     * Transition used for sliding something into view.
+     */
     slideIn: string;
+
+    /**
+     * Transition used for sliding something out of view.
+     */
     slideOut: string;
   }
   animations: {
+
+    /**
+     * CSS animation definitions.
+     */
     [K in AnimationName]: Animation
   }
 }
@@ -129,6 +213,7 @@ export const defaultTheme: Theme = {
     sizes: {
       root: '16px',
       small: '0.9em',
+      smaller: '0.8em',
     },
   },
   breakpoints: {

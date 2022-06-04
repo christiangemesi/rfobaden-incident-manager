@@ -3,23 +3,37 @@ import styled, { css } from 'styled-components'
 import UiContainer from '@/components/Ui/Container/UiContainer'
 import UiModalLike, { Props as UiModalLikeProps } from '@/components/Ui/Modal/Like/UiModalLike'
 import { Themed } from '@/theme'
+import UiTitle from '@/components/Ui/Title/UiTitle'
 
 interface Props extends UiModalLikeProps {
+  /**
+   * Text that is displayed as the drawer's title.
+   */
+  title?: string
+
   /**
    * Width sizing of the drawer. Default is `'auto'`.
    * - `'auto'` makes the drawer take just enough space to fit its content.
    * - `'full'` forces the drawer to span the full breakpoint width.
+   * - `'fixed'` forces the drawer into a predefined width.
    */
-  size?: 'full' | 'auto'
+  size?: 'full' | 'auto' | 'fixed'
 
   /**
    * Determines the side from which the drawer will appear.
    * Will default to `'left'`.
    */
   position?: 'left' | 'right'
+
+  /**
+   * Determines how content will be aligned.
+   * Will default to `'center'`.
+   */
+  align?: 'top' | 'center'
 }
 
 const UiDrawer: React.VFC<Props> = ({
+  title = null,
   size = 'auto',
   position = 'left',
   ...modalProps
@@ -37,8 +51,19 @@ const UiDrawer: React.VFC<Props> = ({
           position={position}
           onClick={(e) => e.stopPropagation()}
         >
-          {nav}
-          {children}
+          <Content>
+            {title === null ? nav : (
+              <TitleContainer>
+                <UiTitle level={2}>
+                  {title}
+                </UiTitle>
+                <div>
+                  {nav}
+                </div>
+              </TitleContainer>
+            )}
+            {children}
+          </Content>
         </Container>
       )}
     />
@@ -50,16 +75,23 @@ export default Object.assign(UiDrawer, {
   Body: UiModalLike.Body,
 })
 
+const Content = styled.div`
+  margin: auto;
+  width: 100%;
+
+  ${Themed.media.xs.only} {
+    margin: unset;
+  }
+`
 const Container = styled.div<{
   isOpen: boolean
-  size: 'auto' | 'full'
+  size: 'auto' | 'full' | 'fixed'
   position: 'left' | 'right'
   isShaking: boolean
 }>`
-  ${UiContainer.fluidCss};
+  ${UiContainer.style};
 
   position: fixed;
-  top: 0;
   ${({ position }) => position}: 0;
   width: ${({ size }) => size === 'auto' ? 'auto' : '100%'};
   height: 100vh;
@@ -124,5 +156,18 @@ const Container = styled.div<{
       justify-content: flex-end;
     }
   `}
+  
+ 
 `
-
+const TitleContainer = styled.div`
+  display: flex;
+  width: 100%;
+  column-gap: 1rem;
+  
+  & > ${UiTitle} {
+    flex: 0 1 100%;
+  }
+  
+  & > ${UiModalLike.Nav} {
+  }
+`

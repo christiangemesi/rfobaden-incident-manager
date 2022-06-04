@@ -64,7 +64,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.28;
     
     ${Themed.media.sm.max} {
-      font-size: 2.75em;
+      font-size: 1.9em;
     }
   }
 
@@ -74,7 +74,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.22;
 
     ${Themed.media.sm.max} {
-      font-size: 2em;
+      font-size: 1.6em;
     }
   }
 
@@ -84,7 +84,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.26;
 
     ${Themed.media.sm.max} {
-      font-size: 1.625em;
+      font-size: 1.5em;
     }
   }
 
@@ -94,7 +94,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.25;
     
     ${Themed.media.sm.max} {
-      font-size: 1.25em;
+      font-size: 1.1em;
     }
   }
 
@@ -104,7 +104,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.3;
     
     ${Themed.media.sm.max} {
-      font-size: 1.125em;
+      font-size: 1.1em;
     }
   }
 

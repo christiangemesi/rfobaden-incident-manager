@@ -28,14 +28,37 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+
+    /**
+     * The {@link Incident} to be displayed.
+     */
     incident: Incident
+
+    /**
+     * The list of {@link Report reports} that are involved.
+     */
     reports: Report[]
+
+    /**
+     * The list of {@link Transport transports} that are involved.
+     */
     transports: Transport[]
+
+    /**
+     * The list of {@link User users} that are involved.
+     */
     users: User[]
+
+    /**
+     * The list of {@link Organization organizations} that are involved.
+     */
     organizations: Organization[]
   }
 }
 
+/**
+ * `IncidentPage` displays detailed information about an {@link Incident}.
+ */
 const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     ReportStore.saveAll(data.reports.map(parseReport))
@@ -133,7 +156,7 @@ const Divider = styled.div`
 `
 
 const TabContent = styled.div`
-  ${UiContainer.fluidCss};
+  ${UiContainer.style};
   
   margin-top: 2rem;
   ${Themed.media.lg.min} {

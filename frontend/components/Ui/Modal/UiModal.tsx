@@ -15,7 +15,7 @@ interface Props extends UiModalLikeProps {
   size?: 'full' | 'auto' | 'fixed'
 
   /**
-   * Text that is displayed as the modals title.
+   * Text that is displayed as the modal's title.
    */
   title?: string
 }
@@ -88,15 +88,15 @@ const DialogContainer = styled.div<{ size: 'full' | 'auto' | 'fixed' }>`
   max-width: calc(100vw - 0.8rem);
   
   ${({ size }) => size === 'full' && css`
-    ${UiContainer.fluidCss};
+    ${UiContainer.style};
     & > ${Dialog} {
-      ${UiContainer.fluidCss};
+      ${UiContainer.style};
     }
   `};
   ${({ size }) => size === 'fixed' && css`
-    ${UiContainer.fluidCss};
+    ${UiContainer.style};
     & > ${Dialog} {
-      ${UiContainer.fluidCss};
+      ${UiContainer.style};
       ${Themed.media.lg.min} {
         width: 60vw;
       }

@@ -131,7 +131,7 @@ const SubtaskForm: React.VFC<Props> = ({
           </UiGrid.Col>
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={subtask === null ? 'Erstellen' : 'Bearbeiten'} />
+        <UiForm.Buttons form={form} text={subtask === null ? 'Erstellen' : 'Speichern'} />
       </FormContainer>
     </UiForm>
   )

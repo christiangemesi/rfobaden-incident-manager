@@ -2,13 +2,13 @@ import React from 'react'
 import Task from '@/models/Task'
 import UiList from '@/components/Ui/List/UiList'
 import TaskListItem from '@/components/Task/List/Item/TaskListItem'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import TaskForm from '@/components/Task/Form/TaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import Report from '@/models/Report'
 import styled from 'styled-components'
 import { useIncident } from '@/stores/IncidentStore'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 
 interface Props {
   report: Report
@@ -24,16 +24,16 @@ const TaskList: React.VFC<Props> = ({ report, tasks, onSelect: handleSelect }) =
   return (
     <Container>
       {!incident.isClosed && (
-        <UiModal title="Auftrag erfassen" size="fixed">
-          <UiModal.Trigger>{({ open }) => (
+        <UiDrawer title="Auftrag erfassen" size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
             <UiCreateButton onClick={open} title="Auftrag erfassen">
               <UiIcon.CreateAction size={1.5} />
             </UiCreateButton>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>{({ close }) => (
             <TaskForm report={report} onSave={handleSelect} onClose={close} />
-          )}</UiModal.Body>
-        </UiModal>
+          )}</UiDrawer.Body>
+        </UiDrawer>
       )}
       <UiList>
         {tasks.map((task) => (

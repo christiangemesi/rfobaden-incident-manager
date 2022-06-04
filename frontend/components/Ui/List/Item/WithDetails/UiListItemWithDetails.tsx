@@ -145,6 +145,7 @@ const BottomSide = styled.div<{ isSmall: boolean }>`
   flex: 1 0 100%;
   max-width: 100%;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   padding-left: calc(${({ isSmall }) => isSmall ? '0.5rem' : '1rem'} * 2 + 36px);
 `
 

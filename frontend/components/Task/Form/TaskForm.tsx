@@ -153,7 +153,7 @@ const TaskForm: React.VFC<Props> = ({
           </UiGrid.Col>
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={task === null ? 'Erstellen' : 'Bearbeiten'} />
+        <UiForm.Buttons form={form} text={task === null ? 'Erstellen' : 'Speichern'} />
       </FormContainer>
     </UiForm>
   )

@@ -99,7 +99,7 @@ const IncidentForm: React.VFC<Props> = ({ incident = null, onClose: handleClose 
           </UiGrid.Col>
         </UiGrid>
 
-        <UiForm.Buttons form={form} text={incident === null ? 'Erstellen' : 'Bearbeiten'} />
+        <UiForm.Buttons form={form} text={incident === null ? 'Erstellen' : 'Speichern'} />
       </FormContainer>
     </UiForm>
   )

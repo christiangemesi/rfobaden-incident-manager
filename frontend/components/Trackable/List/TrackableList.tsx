@@ -3,7 +3,7 @@ import UiList from '@/components/Ui/List/UiList'
 import styled, { css } from 'styled-components'
 import useBreakpoint from '@/utils/hooks/useBreakpoints'
 import { asStyled, StyledProps } from '@/utils/helpers/StyleHelper'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import { Themed } from '@/theme'
@@ -13,18 +13,47 @@ import { Props as TrackableListItemProps } from '@/components/Trackable/List/Ite
 import Incident from '@/models/Incident'
 
 interface Props<T> extends StyledProps {
+  /**
+   * The incident the records belongs to.
+   */
   incident: Incident
 
+  /**
+   * The records to display.
+   */
   records: Array<readonly T[]>
-  selected?: T | null,
+
+  /**
+   * The currently selected record.
+   */
+  selected?: T | null
+
+  /**
+   * Event caused by selecting a record.
+   */
   onSelect?: (record: T) => void
 
+  /**
+   * The title for the modal displaying the creation form.
+   */
   formTitle: string
+
+  /**
+   * Renders the creation form.
+   */
   renderForm: (props: { save(record: T): void, close(): void }) => ReactNode
+
+  /**
+   * Renders the selected item.
+   */
   renderItem: (props: Omit<TrackableListItemProps<T>, 'isClosed' | 'children'>) => ReactNode
 }
 
-const ReportList = <T extends Trackable>({
+/**
+ * `TrackableList` is a component that displays a list of {@link Trackable trackable records} using {@link TrackableListItem}.
+ * The list includes a button which allows the creation of new trackable records.
+ */
+const TrackableList = <T extends Trackable>({
   incident,
   records,
   selected = null,
@@ -42,16 +71,17 @@ const ReportList = <T extends Trackable>({
   return (
     <ListContainer hasSelected={selected !== null} style={style} className={className}>
       {!incident.isClosed && (
-        <UiModal title={formTitle} size="fixed">
-          <UiModal.Trigger>{({ open }) => (
+        <UiDrawer title={formTitle} size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
             <UiCreateButton onClick={open} title={formTitle}>
               <UiIcon.CreateAction size={1.5} />
             </UiCreateButton>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
+          )}</UiDrawer.Trigger>
+
+          <UiDrawer.Body>{({ close }) => (
             renderForm({ save: handleSelect ?? noop, close })
-          )}</UiModal.Body>
-        </UiModal>)
+          )}</UiDrawer.Body>
+        </UiDrawer>)
       }
 
       {records.map((sectionRecords, i) => (
@@ -71,7 +101,7 @@ const ReportList = <T extends Trackable>({
     </ListContainer>
   )
 }
-export default asStyled(ReportList)
+export default asStyled(TrackableList)
 
 const ListContainer = styled.div<{ hasSelected: boolean }>`
   display: flex;
@@ -81,6 +111,7 @@ const ListContainer = styled.div<{ hasSelected: boolean }>`
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: padding-right;
   transition-property: padding-right;
+
   ${({ hasSelected }) => hasSelected && css`
     ${Themed.media.lg.min} {
       padding-right: 2rem;

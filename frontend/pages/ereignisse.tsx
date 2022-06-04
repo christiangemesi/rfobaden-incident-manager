@@ -13,10 +13,16 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+    /**
+     * List of all {@link Incident incidents}.
+     */
     incidents: Incident[]
   }
 }
 
+/**
+ * `EreignissePage` displays all open {@link Incident incidents}.
+ */
 const EreignissePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))

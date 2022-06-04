@@ -18,6 +18,9 @@ interface Props {
   }
 }
 
+/**
+ * `ArchivPage` displays closed {@link Incident incidents}.
+ */
 const ArchivPage: React.VFC<Props> = ({ offset, data }) => {
   useEffect(() => {
     IncidentStore.saveAll(data.page.data.map(parseIncident))

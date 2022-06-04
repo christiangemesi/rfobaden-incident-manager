@@ -8,6 +8,10 @@ import { GetServerSideProps } from 'next'
 import { getSessionFromRequest } from '@/services/BackendService'
 import Page from '@/components/Page/Page'
 
+
+/**
+ * `ChangelogPage` displays the changelog.
+ */
 const ChangelogPage : React.VFC = () => {
   return (
     <Page>

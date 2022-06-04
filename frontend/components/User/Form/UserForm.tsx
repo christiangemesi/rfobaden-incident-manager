@@ -115,7 +115,7 @@ const UserForm: React.VFC<Props> = ({ user = null, onClose: handleClose }) => {
             optionName={mapOrganizationIdToName}
           />
         )}</UiForm.Field>
-        <UiForm.Buttons form={form} text={user === null ? 'Erstellen' : 'Bearbeiten'} />
+        <UiForm.Buttons form={form} text={user === null ? 'Erstellen' : 'Speichern'} />
       </UiForm>
     </div>
   )

@@ -5,17 +5,54 @@ import { Breakpoint, Themed } from '@/theme'
 import { run } from '@/utils/control-flow'
 
 interface Props extends StyledProps {
+  /**
+   * The horizontal and vertical gap between columns.
+   * This is a factor that gets multiplied by `1rem`.
+   */
   gap?: number
+
+  /**
+   * The horizontal gap between columns.
+   * This is a factor that gets multiplied by `1rem`.
+   */
   gapH?: number
+
+  /**
+   * The vertical gap between columns.
+   * This is a factor that gets multiplied by `1rem`.
+   */
   gapV?: number
+
+  /**
+   * Justifies the grid's contents.
+   * This acts horizontally if the `direction` is `row`,
+   * and vertically if the `direction` is `column`.
+   */
   justify?: CSSProperties['justifyContent']
+
+  /**
+   * Aligns the grid's contents.
+   * This acts vertically if the `direction` is `row`,
+   * and horizontally if the `direction` is `column`.
+   */
   align?: CSSProperties['alignItems']
+
+  /**
+   * The direction in which the columns are layed out.
+   */
   direction?: CSSProperties['flexDirection']
+
+  /**
+   * The grid's columns.
+   */
   children?: ReactNode
 }
 
+/**
+ * `UiGrid` is a layout component that divides its contents into 12 evenly-sized columns.
+ * The columns can be configured using {@link Col UiGrid.Col}.
+ */
 const UiGrid = styled.div<Props>`
-  
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -37,14 +74,41 @@ const UiGrid = styled.div<Props>`
 `
 
 interface ColProps {
+  /**
+   * The size of the column.
+   */
   size?: ColSizeProp
+
+  /**
+   * The order of the column.
+   * A lower value will cause the column to appear after siblings with a higher order.
+   */
   order?: Order
+
+  /**
+   * Sets the alignment of the column's text.
+   */
   textAlign?: CSSProperties['textAlign']
+
+  /**
+   * The css classes applied to the column element.
+   */
   className?: string
+
+  /**
+   * Inline styles applied to the column element.
+   */
   style?: CSSProperties
+
+  /**
+   * The column's contents.
+   */
   children?: ReactNode
 }
 
+/**
+ * A column inside a {@link UiGrid}.
+ */
 const Col = styled.div<ColProps>`
   position: relative;
   // width: 100%;
@@ -59,17 +123,30 @@ export default Object.assign(UiGrid, {
   Col,
 })
 
+/**
+ * The definite size of a single column.
+ * Can be either a number for a fixed size, `'auto'` for automatic sizing,
+ * or `true` to take as much space as required and possible.
+ */
 type ColSize =
   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
   | 'auto'
   | true
 
+/**
+ * The size of a column.
+ * It is possible to use different sizes at different breakpoints.
+ */
 export type ColSizeProp = ColSize | {
   [K in Breakpoint]?: ColSize
 }
 
+/**
+ * The order of a column.
+ * It is possible to use different orders at different breakpoints.
+ */
 type Order = number | null | {
-  [K in Breakpoint]?: Order
+  [K in Breakpoint]?: number | null
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
