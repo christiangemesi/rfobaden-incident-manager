@@ -1,7 +1,7 @@
 import React from 'react'
 import { isAdmin } from '@/models/User'
 import UiList from '@/components/Ui/List/UiList'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiCreatButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -51,16 +51,16 @@ const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = f
   return (
     <React.Fragment>
       {isAdmin(currentUser) && hasCreateButton && (
-        <UiModal title="Organisation erfassen" size="fixed">
-          <UiModal.Trigger>{({ open }) => (
+        <UiDrawer title="Organisation erfassen" size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
             <UiCreatButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />
             </UiCreatButton>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>{({ close }) => (
             <OrganizationForm onClose={close} />
-          )}</UiModal.Body>
-        </UiModal>
+          )}</UiDrawer.Body>
+        </UiDrawer>
       )}
 
       <OuterScroll>

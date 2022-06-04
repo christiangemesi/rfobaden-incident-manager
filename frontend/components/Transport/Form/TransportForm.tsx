@@ -320,7 +320,7 @@ const TransportForm: React.VFC<Props> = ({
             </UiGrid.Col>
           </UiGrid>
 
-          <UiForm.Buttons form={form} text={transport === null ? 'Erstellen' : 'Bearbeiten'} />
+          <UiForm.Buttons form={form} text={transport === null ? 'Erstellen' : 'Speichern'} />
         </FormContainer>
       </UiForm>
     </div>

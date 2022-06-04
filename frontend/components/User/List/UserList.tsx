@@ -1,7 +1,7 @@
 import React from 'react'
 import User, { isAdmin } from '@/models/User'
 import UiList from '@/components/Ui/List/UiList'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiTitle from '@/components/Ui/Title/UiTitle'
@@ -60,16 +60,16 @@ const UserList: React.VFC<Props> = ({ users, hasCreateButton = false }) => {
   return (
     <React.Fragment>
       {isAdmin(currentUser) && hasCreateButton && (
-        <UiModal title="Benutzer erfassen" size="fixed">
-          <UiModal.Trigger>{({ open }) => (
+        <UiDrawer title="Benutzer erfassen" size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
             <UiCreateButton onClick={open}>
               <UiIcon.CreateAction size={1.4} />
             </UiCreateButton>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>{({ close }) => (
             <UserForm onClose={close} />
-          )}</UiModal.Body>
-        </UiModal>
+          )}</UiDrawer.Body>
+        </UiDrawer>
       )}
 
       <OuterScroll>

@@ -10,7 +10,7 @@ import UiContainer from '@/components/Ui/Container/UiContainer'
 import DocumentImageItem from '@/components/Document/Image/List/Item/DocumentImageItem'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
 import Document from '@/models/Document'
 
@@ -74,13 +74,13 @@ const DocumentImageList: React.VFC<Props> = ({
         Bilder
       </UiTitle>
       <ImageContainer>
-        <UiModal title="Bild hinzufügen" size="fixed">
-          <UiModal.Trigger>{({ open }) => (
+        <UiDrawer title="Bild hinzufügen" size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
             <Button onClick={open}>
               <UiIcon.CreateAction size={2} />
             </Button>
-          )}</UiModal.Trigger>
-          <UiModal.Body>{({ close }) => (
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>{({ close }) => (
             <DocumentForm
               modelId={modelId}
               modelName={modelName}
@@ -88,8 +88,8 @@ const DocumentImageList: React.VFC<Props> = ({
               onSave={onAddImage}
               onClose={close}
             />
-          )}</UiModal.Body>
-        </UiModal>
+          )}</UiDrawer.Body>
+        </UiDrawer>
         {images.map((image) => (
           <DocumentImageItem
             key={image.id}

@@ -1,6 +1,6 @@
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
 import React from 'react'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import DocumentForm from '@/components/Document/Form/DocumentForm'
 import Document from '@/models/Document'
 import Model from '@/models/base/Model'
@@ -40,13 +40,13 @@ const TrackableFileUploadAction: React.VFC<Props> = ({
   const title = type === 'image' ? 'Bild' : 'Dokument'
 
   return (
-    <UiModal title={title + ' hinzufügen'} size="fixed">
-      <UiModal.Trigger>{({ open }) => (
+    <UiDrawer title={title + ' hinzufügen'} size="fixed">
+      <UiDrawer.Trigger>{({ open }) => (
         <UiDropDown.Item onClick={open}>
           {title + ' hinzufügen'}
         </UiDropDown.Item>
-      )}</UiModal.Trigger>
-      <UiModal.Body>{({ close }) => (
+      )}</UiDrawer.Trigger>
+      <UiDrawer.Body>{({ close }) => (
         <DocumentForm
           modelId={id}
           modelName={modelName}
@@ -54,8 +54,8 @@ const TrackableFileUploadAction: React.VFC<Props> = ({
           onSave={handleAddFile}
           onClose={close}
         />
-      )}</UiModal.Body>
-    </UiModal>
+      )}</UiDrawer.Body>
+    </UiDrawer>
   )
 }
 export default TrackableFileUploadAction
