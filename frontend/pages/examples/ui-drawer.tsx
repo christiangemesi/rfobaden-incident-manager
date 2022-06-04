@@ -5,7 +5,9 @@ import React from 'react'
 import UiButton from '@/components/Ui/Button/UiButton'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import UiLink from '@/components/Ui/Link/UiLink'
-
+/**
+ * `UiDrawerExample` is an example page for the {@link UiDrawer} component.
+ */
 const UiDrawerExample: NextPage = () => {
   return (
     <UiContainer>
