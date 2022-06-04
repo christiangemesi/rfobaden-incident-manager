@@ -1,7 +1,7 @@
 import { css, FlattenSimpleInterpolation, Keyframes, keyframes } from 'styled-components'
 
 /**
- * `Theme` updates the colors, fonts and fontsizes of the application
+ * `Theme` defines the data used to style the application.
  */
 export type Theme = {
   colors: {
