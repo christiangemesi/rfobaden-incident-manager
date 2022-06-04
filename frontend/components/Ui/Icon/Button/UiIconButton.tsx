@@ -4,13 +4,31 @@ import { ColorName } from '@/theme'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
 
 interface Props extends StyledProps {
+  /**
+   * The title of the button.
+   */
   title?: string
+
+  /**
+   * The color of the icon.
+   */
   color?: ColorName
+
+  /**
+   * The icon to display.
+   */
   children: ReactNode
+
+  /**
+   * Event caused by clicking on the button.
+   */
   onClick?: EventHandler<MouseEvent>
 }
 
-const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner ({
+/**
+ * `UiIconButton` is a component that displays a button with an icon.
+ */
+const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner({
   children,
   title = '',
   color,
@@ -32,7 +50,6 @@ const UiIconButton = forwardRef<HTMLButtonElement, Props>(function Inner ({
     </StyledButton>
   )
 })
-
 export default styled(UiIconButton)``
 
 const StyledButton = styled.button<{ color?: ColorName }>`
@@ -44,7 +61,7 @@ const StyledButton = styled.button<{ color?: ColorName }>`
   cursor: pointer;
   margin: 0 0.2rem;
   padding: 0;
-  
+
   will-change: background-color;
   transition: 200ms ease-out;
   transition-property: background-color;
@@ -52,14 +69,14 @@ const StyledButton = styled.button<{ color?: ColorName }>`
   :hover {
     background-color: ${({ theme }) => theme.colors.grey.hover};
   }
-  
+
   &:first-child {
     margin-left: 0;
-  } 
-  &:last-child{
-    margin-right: 0;
   }
 
+  &:last-child {
+    margin-right: 0;
+  }
 
   color: ${({
     theme,

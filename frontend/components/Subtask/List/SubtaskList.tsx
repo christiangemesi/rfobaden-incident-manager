@@ -8,7 +8,7 @@ import { Themed } from '@/theme'
 import UiCaption from '@/components/Ui/Caption/UiCaption'
 import BackendService from '@/services/BackendService'
 import Task from '@/models/Task'
-import UiModal from '@/components/Ui/Modal/UiModal'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 import SubtaskForm from '@/components/Subtask/Form/SubtaskForm'
 import UiCreateButton from '@/components/Ui/Button/UiCreateButton'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -77,16 +77,16 @@ const SubtaskList: React.VFC<Props> = ({
           </UiCaption>
 
           {!incident.isClosed &&
-          <UiModal title="Teilauftrag erfassen" size="fixed">
-            <UiModal.Trigger>{({ open }) => (
+          <UiDrawer title="Teilauftrag erfassen" size="fixed">
+            <UiDrawer.Trigger>{({ open }) => (
               <UiCreateButton onClick={open} title="Teilauftrag erfassen" style={{ marginBottom: '1rem' }}>
                 <UiIcon.CreateAction size={1.5} />
               </UiCreateButton>
-            )}</UiModal.Trigger>
-            <UiModal.Body>{({ close }) => (
+            )}</UiDrawer.Trigger>
+            <UiDrawer.Body>{({ close }) => (
               <SubtaskForm task={task} onClose={close} />
-            )}</UiModal.Body>
-          </UiModal>}
+            )}</UiDrawer.Body>
+          </UiDrawer>}
 
           <Droppable droppableId={LIST_OPEN_ID}>{(provided) => (
             <DropTarget

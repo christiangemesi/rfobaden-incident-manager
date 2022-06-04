@@ -15,6 +15,7 @@ import Image from 'next/image'
 import rfoBadenLogo from '@/public/rfobaden-logo-text.png'
 import PageHeaderAssignments from '@/components/Page/Header/Assignments/PageHeaderAssignments'
 import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
+import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 
 /**
  * `PageHeader` represents the header at the top of each page.
@@ -72,23 +73,23 @@ const PageHeader: React.VFC = () => {
                   {currentUser.firstName} {currentUser.lastName}
                 </DropDownUsername>
 
-                <UiModal title="Passwort bearbeiten">
-                  <UiModal.Trigger>{({ open }) => (
+                <UiDrawer title="Passwort bearbeiten" position="right">
+                  <UiDrawer.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Trigger>
-                  <UiModal.Body>{({ close }) => (
+                  )}</UiDrawer.Trigger>
+                  <UiDrawer.Body>{({ close }) => (
                     <UserPasswordForm user={currentUser} onClose={close} />
-                  )}</UiModal.Body>
-                </UiModal>
+                  )}</UiDrawer.Body>
+                </UiDrawer>
 
-                <UiModal title="E-Mail ändern">
-                  <UiModal.Trigger>{({ open }) => (
+                <UiDrawer title="E-Mail ändern" position="right">
+                  <UiDrawer.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
-                  )}</UiModal.Trigger>
-                  <UiModal.Body>{({ close }) => (
+                  )}</UiDrawer.Trigger>
+                  <UiDrawer.Body>{({ close }) => (
                     <UserEmailForm user={currentUser} onClose={close} />
-                  )}</UiModal.Body>
-                </UiModal>
+                  )}</UiDrawer.Body>
+                </UiDrawer>
 
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
               </UiDropDown.Menu>

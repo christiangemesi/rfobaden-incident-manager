@@ -11,7 +11,8 @@ export type Theme = {
     warning: Color
     info: Color
     grey: Color
-    backgroundgrey: Color
+    active: Color
+    activeClosed: Color
   }
   fonts: {
     heading: string
@@ -19,6 +20,7 @@ export type Theme = {
     sizes: {
       root: string,
       small: string,
+      smaller: string,
     }
   }
   breakpoints: {
@@ -107,13 +109,18 @@ export const defaultTheme: Theme = {
       hover: '#6857C8',
     },
     grey: {
-      value: '#e8edf0',
+      value: '#E2E9ED',
       contrast: contrastDark,
-      hover: '#eaf0f4',
+      hover: '#DDE5EB',
     },
-    backgroundgrey: {
-      value: '#eff4f7',
+    active: {
+      value: '#EFF6FB',
       contrast: contrastDark,
+      hover: '#B4CFE3',
+    },
+    activeClosed: {
+      value: '#EFF4F8',
+      contrast: '#BFBFBF',
       hover: '#e2e8ec',
     },
   },
@@ -123,6 +130,7 @@ export const defaultTheme: Theme = {
     sizes: {
       root: '16px',
       small: '0.9em',
+      smaller: '0.8em',
     },
   },
   breakpoints: {

@@ -7,10 +7,23 @@ import { noop } from '@/utils/control-flow'
 import { getGlobalLevel } from '@/components/Ui/Modal/Like/UiModalLike'
 
 interface Props extends ElementProps<HTMLDivElement> {
+  /**
+   * Whether the overlay is currently visible.
+   * Setting this to `false` will visually hide the overlay, but it will still be present on the screen.
+   * This will cause mouse events to not pass through it, among other things.
+   */
   isOpen: boolean
+
+  /**
+   * Whether the overlay is currently hidden.
+   * A hidden component is completely removed from the page.
+   */
   isHidden?: boolean
 }
 
+/**
+ * `UiOverlay` is a component that displays a semi-transparent overlay on top of the current page.
+ */
 const UiOverlay: React.VFC<Props> = ({
   isOpen,
   children,

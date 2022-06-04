@@ -128,7 +128,7 @@ const PickerButton = styled.button.attrs(() => ({
 }))`
   background: ${({ theme }) => theme.colors.primary.value};
   outline: none;
-  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.primary.value};
   border-radius: 0 0.5rem 0.5rem 0;
   width: 60px;
   margin: 0;
@@ -546,7 +546,7 @@ const DateTimePicker = styled.div<{ isOpened: boolean }>`
     padding: 0.5rem;
     font-size: 0.9rem;
     outline: none;
-    border: 1px solid ${({ theme }) => theme.colors.light.contrast};
+    border: 1px solid ${({ theme }) => theme.colors.activeClosed.contrast};
     font-family: ${({ theme }) => theme.fonts.body};
 
     transition: 250ms ease;

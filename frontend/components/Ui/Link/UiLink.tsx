@@ -4,12 +4,30 @@ import { StyledProps } from '@/utils/helpers/StyleHelper'
 import Link from 'next/link'
 
 interface Props extends StyledProps {
+  /**
+   * The URL or path that the hyperlink points to.
+   */
   href: string
+
+  /**
+   * The content that is displayed as the link.
+   */
   children?: ReactNode
+
+  /**
+   * Signals that the content is text-only, causing the link to be styled differently.
+   */
   isText?: boolean
+
+  /**
+   * The target attribute for the displayed anchor element.
+   */
   target?: string
 }
 
+/**
+ * `UiLink` displays a HTML anchor element.
+ */
 const UiLink: React.VFC<Props> = ({
   href,
   className,
@@ -34,9 +52,10 @@ const A = styled.a`
 `
 
 const TextA = styled(A)`
-  color: ${({ theme }) => theme.colors.primary.value};
+  color: ${({ theme }) => theme.colors.light.contrast};
+  text-decoration: none;
 
   &:hover {
-    filter: brightness(150%); // TODO find where it is used
+    color: ${({ theme }) => theme.colors.primary.hover};
   }
 `

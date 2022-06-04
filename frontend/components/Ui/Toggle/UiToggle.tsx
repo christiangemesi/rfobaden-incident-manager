@@ -61,7 +61,7 @@ const Slider = styled.span`
   width: 40px;
   height: 20px;
   border-radius: 80px;
-  background-color: #bfbfbf;
+  background-color: ${({ theme }) => theme.colors.activeClosed.contrast};
   position: relative;
   transition: background-color 0.2s;
   margin-right: 0.5rem;

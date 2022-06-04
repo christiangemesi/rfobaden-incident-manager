@@ -3,32 +3,44 @@ import UiDate, { UiDateType } from '@/components/Ui/Date/UiDate'
 import DateHelper from '@/utils/helpers/DateHelper'
 
 interface Props {
+  /**
+   * The start of the date range.
+   */
   start: Date
+
+  /**
+   * The end of the date range, or `null` if it has no fixed end.
+   */
   end?: Date | null
+
+  /**
+   * The date's format.
+   */
   type?: UiDateType
 }
 
+/**
+ * `UiDateLabel` displays a formatted date time range.
+ */
 const UiDateLabel: React.VFC<Props> = ({ start, end = null, type = 'auto' }) => {
-  const prefix = useMemo(() => start < new Date() ? 'seit' : 'ab', [start])
   const dateType = useMemo(() => {
     if (type !== 'auto') {
       return type
     }
     return DateHelper.isDayRange(start, end) ? 'date' : 'datetime'
   }, [type, start, end])
+
   return (
     <span suppressHydrationWarning={true}>
       {end === null ? (
         <React.Fragment>
-          {prefix} <UiDate value={start} type={dateType} />
+          <UiDate value={start} type={dateType} />
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <p>von <UiDate value={start} type={dateType} /> </p>
-          <p>bis <UiDate value={end} type={dateType} /></p>
+          <p><UiDate value={start} type={dateType} /> - <UiDate value={end} type={dateType} /></p>
         </React.Fragment>
       )}
-
     </span>
   )
 }

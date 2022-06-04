@@ -144,8 +144,8 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   overflow: hidden;
   z-index: 2;
 
-  background-color: ${({ theme }) => theme.colors.light.value};
-  border: 1px solid ${({ theme }) => theme.colors.grey.value};
+  background-color: ${({ theme }) => theme.colors.active.value};
+  border: 1px solid ${({ theme }) => theme.colors.active.hover};
 
   transition: 300ms cubic-bezier(0.23, 1, 0.32, 1);
   transition-property: transform, opacity;
@@ -169,7 +169,8 @@ const ListOverlay = styled.div<{ hasSelected: boolean, isClosed: boolean }>`
   }
 
   ${({ isClosed }) => isClosed && css`
-    background-color: ${({ theme }) => theme.colors.backgroundgrey.value};
+    background-color: ${({ theme }) => theme.colors.activeClosed.value};
+    border: 1px solid ${({ theme }) => theme.colors.activeClosed.hover};
   `}
   
   ${Themed.media.md.max} {

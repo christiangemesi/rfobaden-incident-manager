@@ -59,42 +59,42 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
   `}
 
   h1& {
-    font-weight: 400;
-    font-size: 3em;
+    font-weight: 600;
+    font-size: 2.25em;
     line-height: 1.28;
     
     ${Themed.media.sm.max} {
-      font-size: 2.75em;
+      font-size: 1.9em;
     }
   }
 
   h2& {
     font-weight: 500;
-    font-size: 2.25em;
+    font-size: 1.8em;
     line-height: 1.22;
 
     ${Themed.media.sm.max} {
-      font-size: 2em;
+      font-size: 1.6em;
     }
   }
 
   h3& {
     font-weight: 500;
-    font-size: 1.875em;
+    font-size: 1.6em;
     line-height: 1.26;
 
     ${Themed.media.sm.max} {
-      font-size: 1.625em;
+      font-size: 1.5em;
     }
   }
 
   h4& {
-    font-weight: 400;
-    font-size: 1.5em;
+    font-weight: 500;
+    font-size: 1.3em;
     line-height: 1.25;
     
     ${Themed.media.sm.max} {
-      font-size: 1.25em;
+      font-size: 1.1em;
     }
   }
 
@@ -104,7 +104,7 @@ const StyledTitle = styled.div<{ isCentered: boolean }>`
     line-height: 1.3;
     
     ${Themed.media.sm.max} {
-      font-size: 1.125em;
+      font-size: 1.1em;
     }
   }
 

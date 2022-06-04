@@ -4,13 +4,35 @@ import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import { UiInputProps } from '@/components/Ui/Input'
 
 interface Props extends UiInputProps<string | null> {
+  /**
+   * Text of the input label.
+   */
   label?: string
+
+  /**
+   * The type of the input.
+   */
   type?: 'text' | 'password'
+
+  /**
+   * Text of the input placeholder.
+   */
   placeholder?: string
+
+  /**
+   * Content used for displaying advanced input options.
+   */
   children?: ReactNode
+
+  /**
+   * Event caused by clicking on the advanced input options.
+   */
   onClick?: () => void
 }
 
+/**
+ * `UiTextInput` is an input component for a text values.
+ */
 const UiTextInput: React.VFC<Props> = ({
   value,
   placeholder = '',
@@ -71,7 +93,7 @@ const StyledInput = styled.input<{ hasChildren: boolean }>`
   outline: none;
   width: 100%;
   height: 38px;
-  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.activeClosed.contrast};
   font-family: ${({ theme }) => theme.fonts.body};
 
   ${({ hasChildren }) => hasChildren && css`
@@ -88,7 +110,7 @@ const AdditionalInput = styled.div<{ isClickable: boolean }>`
   background: ${({ theme }) => theme.colors.primary.value};
   margin-top: 0.25rem;
   outline: none;
-  border: 1px solid ${({ theme }) => theme.colors.light.contrast};
+  border: 1px solid ${({ theme }) => theme.colors.activeClosed.contrast};
   border-radius: 0 0.5rem 0.5rem 0;
   width: 40px;
   height: 38px;
