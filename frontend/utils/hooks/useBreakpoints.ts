@@ -11,6 +11,27 @@ type Options<T> = {
 
 const breakpointNames = Object.keys(defaultTheme.breakpoints)
 
+/**
+ * `useBreakpoint` is a React hook that resolves to a value based on the current breakpoint.
+ * If a breakpoint has no mapped value, the next-lower breakpoint will be used instead.
+ *
+ * @param options A mapping from breakpoint to value.
+ * @param deps The dependencies which can cause the hook to re-resolve.
+ *
+ * @example
+ *
+ * // Will resolve to:
+ * // - 'mobile' on xs
+ * // - 'tablet' on sm and md
+ * // - 'notebook' on lg
+ * // - 'desktop' on xl and xxl
+ * const deviceName = useBreakpoint(() => ({
+ *   xs: 'mobile',
+ *   sm: 'tablet',
+ *   lg: 'notebook',
+ *   xl: 'desktop',
+ * }))
+ */
 const useBreakpoint = <T>(options: () => Options<T>, deps: unknown[] = []): T => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const mappedOptions = useMemo(() => fillAllOptions(options()), deps)
@@ -19,6 +40,10 @@ const useBreakpoint = <T>(options: () => Options<T>, deps: unknown[] = []): T =>
 }
 export default useBreakpoint
 
+/**
+ * `useBreakpointName` is a React hook that returns the current breakpoint.
+ * The hook will re-render when the breakpoint changes.
+ */
 export const useBreakpointName = (): Breakpoint => {
   const { width } = useWindowSize()
   const { breakpoints } = useTheme()
