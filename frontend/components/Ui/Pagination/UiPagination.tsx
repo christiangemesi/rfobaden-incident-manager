@@ -5,23 +5,23 @@ import styled, { css } from 'styled-components'
 
 interface Props {
   /**
-   * The current offset indicates which page is currently active.
+   * The current offset, indicating which page is currently active.
    */
   currentOffset: number
 
   /**
-   * The amount of all pages.
+   * The total amount of pages.
    */
   totalPages: number
 
   /**
-   * Event caused by creating a path to its resource.
+   * Creates the path which link to the page at a specific offset.
    */
   makeHref: (offset: number) => string
 }
 
 /**
- * `UiPagination` is a component that indicates a series of related content exists across multiple pages.
+ * `UiPagination` is a component that links a series of related content across multiple pages.
  */
 const UiPagination: React.VFC<Props> = ({ currentOffset, totalPages, makeHref }) => {
   const more = <MorePlaceholder><UiIcon.More size={0.8} /></MorePlaceholder>
