@@ -15,10 +15,16 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+    /**
+     * List of {@link Incident incidents}.
+     */
     incidents: Incident[]
   }
 }
 
+/**
+ * `HomePage` is the landing page.
+ */
 const HomePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
@@ -101,7 +107,6 @@ const CardColumn: React.VFC<CardProps> = ({
 const Subtitle = styled.div`
   width: 100%;
   text-align: center;
-  //margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 `

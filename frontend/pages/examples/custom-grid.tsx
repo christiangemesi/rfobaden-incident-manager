@@ -4,6 +4,9 @@ import UiTitle from '@/components/Ui/Title/UiTitle'
 import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 
+/**
+ * `MediaQueriesExample` is an example page showing how to create media queries.
+ */
 const MediaQueriesExample: React.VFC = () => {
   return (
     <UiContainer>

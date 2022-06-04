@@ -2,7 +2,7 @@ import NextApp, { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import Head from 'next/head'
 import styled, { createGlobalStyle, css, ThemeProvider } from 'styled-components'
-import { defaultTheme, Theme } from '@/theme'
+import { defaultTheme, Theme, Themed } from '@/theme'
 import { useEffectOnce, useMountedState } from 'react-use'
 import BackendService, { loadSessionFromRequest, ServerSideSessionHolder } from '@/services/BackendService'
 import SessionStore, { useSession } from '@/stores/SessionStore'
@@ -109,6 +109,10 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     :root {
       font-size: ${theme.fonts.sizes.root};
       font-family: ${theme.fonts.body};
+
+      ${Themed.media.sm.max} {
+        font-size: ${theme.fonts.sizes.small};
+      }
     }
     
     body {
