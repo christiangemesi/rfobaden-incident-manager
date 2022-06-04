@@ -114,7 +114,7 @@ export type Theme = {
   animations: {
 
     /**
-     * with this i need help
+     * CSS animation definitions.
      */
     [K in AnimationName]: Animation
   }
