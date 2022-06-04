@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import ScrollHelper from '@/utils/helpers/ScrollHelper'
-import { useUpdateEffect } from 'react-use'
 import { ElementProps } from '@/utils/helpers/StyleHelper'
 import { noop } from '@/utils/control-flow'
 import { getGlobalLevel } from '@/components/Ui/Modal/Like/UiModalLike'
@@ -31,17 +29,6 @@ const UiOverlay: React.VFC<Props> = ({
   ...elementProps
 }) => {
   const ref = useRef<HTMLDivElement | null>(null)
-  useUpdateEffect(() => {
-    if (ref.current === null) {
-      return
-    }
-    if (isOpen) {
-      ScrollHelper.disableScroll(ref.current)
-    } else {
-      ScrollHelper.enableScroll(ref.current)
-    }
-  }, [isOpen])
-  
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === ref.current) {
       handleClickCallback(e)
