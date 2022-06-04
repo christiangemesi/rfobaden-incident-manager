@@ -21,7 +21,7 @@ interface Props {
 }
 
 /**
- * `EreignissePage` displays all {@link Incident incidents}.
+ * `EreignissePage` displays all open {@link Incident incidents}.
  */
 const EreignissePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
