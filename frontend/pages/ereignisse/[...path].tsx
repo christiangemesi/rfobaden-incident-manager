@@ -45,7 +45,7 @@ interface Props {
     transports: Transport[]
 
     /**
-     * The list of {@link User} that are involved.
+     * The list of {@link User users} that are involved.
      */
     users: User[]
 
