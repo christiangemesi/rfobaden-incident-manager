@@ -40,7 +40,7 @@ interface Props {
     reports: Report[]
 
     /**
-     * The list of {@link Transport} that are involved.
+     * The list of {@link Transport transports} that are involved.
      */
     transports: Transport[]
 
