@@ -4,7 +4,19 @@ import { useCallback, useRef } from 'react'
 import { useGetSet, useUnmount } from 'react-use'
 import { noop } from '@/utils/control-flow'
 
-
+/**
+ * `useHeight` is a React hook that monitors the height of a HTML element.
+ * It re-renders when the height changes.
+ *
+ * @example
+ *
+ * const [elementRef, elementHeight] = useHeight<HTMLDivElement>()
+ * return (
+ *   <div ref={elementRef}>
+ *     This element has a height of {elementHeight} pixels.
+ *   </div>
+ * )
+ */
 const useHeight = <E extends HTMLElement>(): [(ref: E | null) => void, number] => {
   if (typeof window === 'undefined') {
     return [noop, 0]
