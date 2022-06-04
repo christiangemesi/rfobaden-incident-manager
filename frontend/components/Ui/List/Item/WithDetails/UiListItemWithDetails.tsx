@@ -48,7 +48,7 @@ interface Props extends UiListItemProps {
   isSmall?: boolean
 
   /**
-   * Signals that the title will be displayed above the assignee.
+   * Signals that the title will be displayed beneath the assignee.
    */
   isTitleSwitched?: boolean
 }
