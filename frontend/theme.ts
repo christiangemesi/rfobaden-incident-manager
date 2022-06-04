@@ -89,12 +89,12 @@ export type Theme = {
     [K in Breakpoint]: {
 
       /**
-       * minimum breakpoint size.
+       * The minimum breakpoint size.
        */
       min: number
 
       /**
-       * maximum breakpoint size.
+       * The maximum breakpoint size.
        */
       max: number
     }
