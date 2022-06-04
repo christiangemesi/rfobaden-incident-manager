@@ -18,18 +18,47 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * {@code Generator} is an abstract base class for defining generators.
+ * A generator is able to produce random sample data for testing purposes.
+ *
+ * @param <T> The type of the generated values.
+ */
 @Component
 @Import(TestConfig.class)
 public abstract class Generator<T> {
+    /**
+     * Faker instance used to generate fake values.
+     */
     @Autowired
     protected Faker faker;
 
+    /**
+     * Generate a value.
+     *
+     * @return The generated value.
+     */
     public abstract T generate();
 
+    /**
+     * Generate a list of values.
+     *
+     * @param amount The amount of values to generate.
+     * @return The list of generated values.
+     */
     public final List<T> generate(int amount) {
         return generate(amount, this::generate);
     }
 
+    /**
+     * Generates a list of values, using a specific {@link Supplier} to generate the values.
+     *
+     * @param amount The amount of values to generate.
+     * @param generate The supplier generating the values.
+     * @return The list of generated values.
+     *
+     * @param <T> The type of the generated values.
+     */
     protected static <T> List<T> generate(int amount, Supplier<T> generate) {
         var records = new ArrayList<T>(amount);
         for (int i = 0; i < amount; i++) {
@@ -63,6 +92,12 @@ public abstract class Generator<T> {
         return null;
     }
 
+    /**
+     * Generates a random datetime.
+     * It is guaranteed to be either now or in the past.
+     *
+     * @return The generated datetime.
+     */
     public LocalDateTime randomDateTime() {
         return LocalDateTime.now()
             .withNano(0)
@@ -119,6 +154,12 @@ public abstract class Generator<T> {
         }
     }
 
+    /**
+     * Extracts the readable and writable properties of an object.
+     *
+     * @param value The object.
+     * @return A mapping from property name to property value.
+     */
     public Map<String, Property<T, ?>> getProperties(T value) {
         var clazz = value.getClass();
         var methods = Arrays.stream(clazz.getMethods())
@@ -175,6 +216,12 @@ public abstract class Generator<T> {
         return properties;
     }
 
+    /**
+     * {@code Property} represents a readable and writable value on an object.
+     *
+     * @param <T> The type of the object.
+     * @param <TValue> The type of the property.
+     */
     public interface Property<T, TValue> {
         Class<TValue> getType();
 
