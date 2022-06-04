@@ -2,48 +2,15 @@ import { makeChildPatcher, makeChildUpdater, Patcher, toUpdate } from '@/utils/u
 import { useGetSet, useUpdateEffect } from 'react-use'
 import { useStatic } from '@/utils/hooks/useStatic'
 
-/**
- * `UiFormBaseState` is the base state for a form.
- */
 export interface UiFormBaseState<T> extends UpdatablePart {
-  /**
-   * The form's current value.
-   */
   value: T
-
-  /**
-   * The form's default value, used when creating a new record.
-   */
   defaultValue: T
-
-  /**
-   * The form's fields.
-   */
   fields: UiFormState<T>
-
-  /**
-   * Whether all fields of the form are currently valid.
-   */
   isValid: boolean
-
-  /**
-   * Callback invoked when the form is submitted.
-   */
   onSubmit: ((value: T) => void | Promise<void>) | null
-
-  /**
-   * Callback invoked when the form is cancelled.
-   */
   onCancel: (() => void | Promise<void>) | null
 }
 
-/**
- * `UiFormState` contains nested fields of a form.
- * <p>
- *  {@link UiFormValue Primitive values} use {@link UiFormStateField} as value,
- *  any other complex values use a nested {@link UiFormState}.
- * </p>
- */
 export type UiFormState<T> = {
   [K in keyof T]:
     Exclude<T[K], null | undefined> extends UiFormValue
@@ -51,72 +18,23 @@ export type UiFormState<T> = {
       : UiFormState<T[K]>
 }
 
-/**
- * `UiFormStateField` contains the state of a single, non-nested form field..
- */
 export interface UiFormStateField<T, K extends keyof T> extends UpdatablePart {
-  /**
-   * The errors that make the field invalid.
-   * This being empty makes the field valid.
-   */
   errors: string[]
-
-  /**
-   * Whether the field has been changed since the form has been initialized.
-   */
   hasChanged: boolean
-
-  /**
-   * Whether this field should be skipped in the next validation cycle.
-   * Used to display custom errors not caused by the default validators.
-   */
   skipNextValidation: boolean
-
-  /**
-   * The field's current value.
-   */
   value: T[K]
-
-  /**
-   * Sets the field's value.
-   *
-   * @param value The new value.
-   */
   setValue(value: T[K]): void
 }
 
-/**
- * `UpdatablePart` defines an object whose field values can be freely updated.
- */
 interface UpdatablePart {
-  /**
-   * A {@link Patcher} updating the object.
-   */
   update: Patcher<this>
 }
 
-/**
- * `UiFormValue` is a collection of all types which are handled as non-nested values by forms.
- *  They represent the values that can be modified by the user via input field.
- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type UiFormValue = boolean | string | number | bigint | any[] | Date | File
 
-/**
- * `useForm` is a React hook that creates a new form.
- *
- * @param values The form's default values.
- */
 export function useForm<T>(values: () => T): UiFormState<T>
-
-/**
- * `useForm` is a React hook that creates a new form.
- * @param base The record that is being edited, if it exists.
- * @param values The form's default values.
- */
 export function useForm<T>(base: T | null, values: () => T): UiFormState<T>
-
-// Implementation of `useForm`.
 export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined?: () => T): UiFormState<T> {
   const [base, makeValues] = valuesOrUndefined === undefined ? (
     [null, baseOrValues as () => T]
@@ -160,13 +78,6 @@ export function useForm<T>(baseOrValues: T | null | (() => T), valuesOrUndefined
   return form.fields
 }
 
-/**
- * `useSubmit` is a React hook that accepts a function which is invoked
- * when a form is being submitted.
- *
- * @param form The form.
- * @param callback The submit callback.
- */
 export const useSubmit = <T>(
   form: UiFormState<T>,
   callback: ((value: T) => void | Promise<void>) | undefined | null,
@@ -174,13 +85,6 @@ export const useSubmit = <T>(
   getFormBaseState(form).onSubmit = callback ?? null
 }
 
-/**
- * `useCancel` is a React hook that accepts a function which is invoked
- * when a form is being cancelled.
- *
- * @param form The form.
- * @param callback The cancel callback.
- */
 export const useCancel = <T>(
   form: UiFormState<T>,
   callback: (() => void | Promise<void>) | undefined | null,
@@ -188,11 +92,6 @@ export const useCancel = <T>(
   getFormBaseState(form).onCancel = callback ?? null
 }
 
-/**
- * Clears a form by resetting it to its default state.
- *
- * @param form The form to clear.
- */
 export const clearForm = (form: UiFormState<unknown>): void => {
   const baseForm = getFormBaseState(form)
   baseForm.update((prev) => ({
@@ -202,12 +101,6 @@ export const clearForm = (form: UiFormState<unknown>): void => {
   }))
 }
 
-/**
- * Sets the field values of a {@link UiFormState} to the values of a specific default value.
- *
- * @param state The state whose values are replaced.
- * @param defaultValue The value containing the new field values.
- */
 const setFieldValues = <T>(state: UiFormState<T>, defaultValue: T): UiFormState<T> => {
   const newState = {} as UiFormState<T>
   for (const fieldName of Object.keys(state)) {
@@ -222,12 +115,6 @@ const setFieldValues = <T>(state: UiFormState<T>, defaultValue: T): UiFormState<
   return newState
 }
 
-/**
- * Sets the value of a specific {@link UiFormStateField}, resetting the field to its initial state.
- *
- * @param field The field to reset.
- * @param defaultValue The default value for the field.
- */
 const setFieldValue = <T>(field: UiFormStateField<T, keyof T>, defaultValue: T[keyof T]): typeof field => {
   return {
     ...field,
@@ -237,13 +124,6 @@ const setFieldValue = <T>(field: UiFormStateField<T, keyof T>, defaultValue: T[k
   }
 }
 
-/**
- * Creates a {@link UiFormState} whose field values are read from and written to a specific value.
- *
- * @param value The value to read from and write to.
- * @param updateValue A {@link Patcher} updating the {@code value}.
- * @param update A {@link Patcher} updating the {@link UiFormState} itself.
- */
 const mapValueToState = <T>(
   value: T,
   updateValue: Patcher<T>,
@@ -273,13 +153,6 @@ const mapValueToState = <T>(
   return fields
 }
 
-/**
- * Creates a {@link UiFormStateField} whose value is read from and written to a specific value.
- *
- * @param value The value to read from and write to.
- * @param setValue Replaces the value.
- * @param update A {@link Patcher} updating the {@link UiFormStateField} itself.
- */
 const mapValueToStateField = <T, K extends keyof T>(
   value: T[K],
   setValue: (value: T[K]) => void,
@@ -303,12 +176,6 @@ const mapValueToStateField = <T, K extends keyof T>(
   }
 }
 
-/**
- * Updates fields of a {@link UiFormStateField}.
- *
- * @param field The field to update.
- * @param patch The new fields.
- */
 export const setFormField = <T, K extends keyof T>(
   field: UiFormStateField<T, K>,
   patch: Partial<{ value: T[K], errors: string[] }>
@@ -327,16 +194,8 @@ export const setFormField = <T, K extends keyof T>(
   }
 }
 
-/**
- * The key under which private form values are stored.
- */
 const formKey = Symbol('form')
 
-/**
- * Extracts the {@link UiFormBaseState base state} of a {@link UiFormState}.
- *
- * @param base The {@link UiFormStateField} whose base state is extracted.
- */
 export const getFormBaseState = <T>(base: UiFormState<T>): UiFormBaseState<T> => {
   if (!(formKey in base)) {
     throw new Error(`fields does not contain form: ${base}`)
@@ -344,20 +203,10 @@ export const getFormBaseState = <T>(base: UiFormState<T>): UiFormBaseState<T> =>
   return (base as unknown as { [formKey]: UiFormBaseState<T> })[formKey]
 }
 
-/**
- * Checks whether a form field value is a {@link UiFormStateField}.
- *
- * @param field The field to check.
- */
 export const isFormFieldState = <T, K extends keyof T>(field: UiFormStateField<T, K> | UiFormState<T[K]>): field is UiFormStateField<T, K> => {
   return field != null && typeof field == 'object' && 'value' in field && 'setValue' in field
 }
 
-/**
- * Checks whether a form field value is a {@link UiFormValue}.
- *
- * @param value The field to check.
- */
 const isFormValue = (value: unknown): value is UiFormValue => {
   const isPrimitive = value == null || typeof value !== 'object' && typeof value !== 'function'
   return isPrimitive || value instanceof Date || value instanceof File || Array.isArray(value)
