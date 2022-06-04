@@ -49,7 +49,7 @@ const DocumentImageDrawer: React.VFC<Props> = ({
 }) => {
 
   return (
-    <UiDrawer size="full">
+    <UiDrawer size="full" align="top">
       <UiDrawer.Trigger>{({ open }) => (
         <UiCaption onClick={open}>
           {images.length}

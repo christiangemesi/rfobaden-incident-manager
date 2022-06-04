@@ -1,7 +1,7 @@
 import React from 'react'
 import { UiInputProps } from '@/components/Ui/Input'
 import styled, { css } from 'styled-components'
-import { contrastDark, defaultTheme } from '@/theme'
+import { defaultTheme } from '@/theme'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 import UiInputErrors from '@/components/Ui/Input/Errors/UiInputErrors'
 import Priority from '@/models/Priority'
@@ -99,7 +99,7 @@ const IconContainer = styled.div`
   
   width: 120px;
   height: 40px;
-  border: 1px solid ${contrastDark};
+  border: 1px solid ${({ theme }) => theme.colors.activeClosed.contrast};
   border-radius: 10px;
   z-index: 1;
 `
