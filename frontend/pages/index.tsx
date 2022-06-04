@@ -15,10 +15,16 @@ import Page from '@/components/Page/Page'
 
 interface Props {
   data: {
+    /**
+     * List of {@link Incident incidents}.
+     */
     incidents: Incident[]
   }
 }
 
+/**
+ * `HomePage` is the landing page.
+ */
 const HomePage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
     IncidentStore.saveAll(data.incidents.map(parseIncident))
