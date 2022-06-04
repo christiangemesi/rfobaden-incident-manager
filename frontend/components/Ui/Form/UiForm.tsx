@@ -4,10 +4,20 @@ import { getFormBaseState, UiFormState } from '@/components/Ui/Form/index'
 import { FormEvent, ReactNode, useCallback } from 'react'
 
 interface Props<T> {
+  /**
+   * The form state.
+   */
   form: UiFormState<T>
+
+  /**
+   * The form inputs.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiForm` acting as container for {@link useForm form} inputs.
+ */
 const UiForm = <T,>({ form, children }: Props<T>) => {
   const baseForm = getFormBaseState(form)
   const handleSubmit = useCallback(async (e: FormEvent) => {
