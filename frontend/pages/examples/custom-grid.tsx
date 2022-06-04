@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 import { Themed } from '@/theme'
 
 /**
- * `MediaQueriesExample` is an example page for the {@link Grid} component.
+ * `MediaQueriesExample` is an example page showing how to create media queries.
  */
 const MediaQueriesExample: React.VFC = () => {
   return (
