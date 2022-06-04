@@ -19,7 +19,7 @@ interface Props extends ElementProps<HTMLDivElement> {
   children: ReactNode
 
   /**
-   * Whether the drawer's content are closed.
+   * Whether the drawer's contents are closed.
    */
   isClosed: boolean
 }
