@@ -7,57 +7,57 @@ export type Theme = {
   colors: {
 
     /**
-     * primary color used by the application.
+     * The primary color.
      */
     primary: Color
 
     /**
-     * secondary color used by the application.
+     * The secondary color.
      */
     secondary: Color
 
     /**
-     * tertiary color used by the application.
+     * The tertiary color.
      */
     tertiary: Color
 
     /**
-     * light color used by the application.
+     * A lighter color, used for contrasts.
      */
     light: Color
 
     /**
-     * success color used by the application.
+     * The success color.
      */
     success: Color
 
     /**
-     * error color used by the application.
+     * The error color.
      */
     error: Color
 
     /**
-     * warning color used by the application.
+     * The warning color.
      */
     warning: Color
 
     /**
-     * info color used by the application.
+     * The info color.
      */
     info: Color
 
     /**
-     * grey color used by the application.
+     * A grey color, used for disabled or less relevant elements.
      */
     grey: Color
 
     /**
-     * active color used by the application.
+     * The active color, used for currently selected elements.
      */
     active: Color
 
     /**
-     * activeClosed color used by the application.
+     * The activeClosed color, used for currently selected elements that are already closed.
      */
     activeClosed: Color
   }
