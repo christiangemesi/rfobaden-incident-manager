@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+import { Themed } from '@/theme'
 
 interface Props extends StyledProps {
 
@@ -31,6 +32,10 @@ export default styled(UiCaption)``
 const Caption = styled.div<{ isEmphasis?: boolean, onClick?: () => void }>`
   font-size: ${({ theme }) => theme.fonts.sizes.small};
   opacity: 0.7;
+
+  ${Themed.media.sm.max} {
+    font-size: ${({ theme }) => (theme.fonts.sizes.smaller)};
+  }
   
   ${({ onClick }) => onClick !== undefined  && css`
     :hover {

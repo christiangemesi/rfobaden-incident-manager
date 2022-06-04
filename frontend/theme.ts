@@ -20,6 +20,7 @@ export type Theme = {
     sizes: {
       root: string,
       small: string,
+      smaller: string,
     }
   }
   breakpoints: {
@@ -129,6 +130,7 @@ export const defaultTheme: Theme = {
     sizes: {
       root: '16px',
       small: '0.9em',
+      smaller: '0.8em',
     },
   },
   breakpoints: {
