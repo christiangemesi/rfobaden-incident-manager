@@ -102,12 +102,12 @@ export type Theme = {
   transitions: {
 
     /**
-     * SlideIn type and time used for the slide.
+     * Transition used for sliding something into view.
      */
     slideIn: string;
 
     /**
-     * SlideOut type and time used for the slide.
+     * Transition used for sliding something out of view.
      */
     slideOut: string;
   }
