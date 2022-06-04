@@ -64,23 +64,23 @@ export type Theme = {
   fonts: {
 
     /**
-     * heading font used by the application.
+     * The font used for headings and titles.
      */
     heading: string
 
     /**
-     * body font used by the application.
+     * The font used for any normal text.
      */
     body: string
     sizes: {
 
       /**
-       * root size used by the application.
+       * The root font size.
        */
       root: string,
 
       /**
-       * small size used by the application.
+       * Small font size in relation to the root size.
        */
       small: string,
     }
