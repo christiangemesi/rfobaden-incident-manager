@@ -8,7 +8,7 @@ import { useEffectOnce, useGetSet } from 'react-use'
 
 interface Props {
   /**
-   * The dropdown's layout.
+   * The dropdown's content.
    */
   children: ReactNode
 }
