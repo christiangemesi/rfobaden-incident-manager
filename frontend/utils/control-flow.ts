@@ -1,5 +1,5 @@
 /**
- * Runs a function and returns the result
+ * Runs a function and returns the result.
  *
  * @param action The function to execute.
  */
