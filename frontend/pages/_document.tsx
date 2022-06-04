@@ -4,6 +4,9 @@ import Document, { Head, Html, Main, NextScript, DocumentContext } from 'next/do
 import { resetServerContext } from 'react-beautiful-dnd'
 import { DocumentInitialProps } from 'next/dist/shared/lib/utils'
 
+/**
+ * `AppDocument` is the NextJs document providing the main HTML layout for all pages.
+ */
 class AppDocument extends Document {
   render(): JSX.Element {
     return (
