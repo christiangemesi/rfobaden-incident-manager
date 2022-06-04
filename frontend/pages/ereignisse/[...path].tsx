@@ -50,7 +50,7 @@ interface Props {
     users: User[]
 
     /**
-     * The list of {@link Organization} that are involved.
+     * The list of {@link Organization organizations} that are involved.
      */
     organizations: Organization[]
   }
