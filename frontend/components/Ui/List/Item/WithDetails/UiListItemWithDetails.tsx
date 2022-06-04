@@ -7,17 +7,55 @@ import UiPriority from '@/components/Ui/Priority/UiPriority'
 import { Themed } from '@/theme'
 
 interface Props extends UiListItemProps {
+  /**
+   * The item's {@link Priority}.
+   */
   priority: Priority
+
+  /**
+   * The item's title.
+   */
   title: string
+
+  /**
+   * The {@link User} assigned to the item.
+   */
   user: string
+
+  /**
+   * The item's description.
+   */
   description?: string
+
+  /**
+   * The item's content.
+   */
   body?: ReactNode
+
+  /**
+   * The item's caption.
+   */
   caption?: ReactNode
+
+  /**
+   * Sets the item to be closed.
+   */
   isClosed?: boolean
+
+  /**
+   * Signals that the item should be displayed more compactly.
+   */
   isSmall?: boolean
+
+  /**
+   * Signals that the title will be displayed beneath the assignee.
+   */
   isTitleSwitched?: boolean
 }
 
+/**
+ * `UiListItemWithDetails` is a component that displays information based on a {@link UiListItem}.
+ */
 const UiListItemWithDetails: React.VFC<Props> = ({
   priority,
   title,

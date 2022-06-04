@@ -10,7 +10,7 @@ import Priority from '@/models/Priority'
 import UiButton from '@/components/Ui/Button/UiButton'
 
 /**
- * `UiListContainerExample` is an example page for the {@link UiListContainer} component.
+ * `UiListContainerExample` is an example page for the {@link UiList} component.
  */
 const UiListContainerExample: React.VFC = () => {
   return (
