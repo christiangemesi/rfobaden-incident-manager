@@ -57,7 +57,7 @@ interface Props {
 }
 
 /**
- * `IncidentPage` displays information of a {@link Incident}.
+ * `IncidentPage` displays detailed information about an {@link Incident}.
  */
 const IncidentPage: React.VFC<Props> = ({ data }) => {
   useEffectOnce(() => {
