@@ -5,11 +5,31 @@ import { useUpdateEffect } from 'react-use'
 import { usePersist } from '@/components/Ui/Persist/UiPersist'
 
 interface Props<T, K extends keyof T> {
+  /**
+   * The form field whose value is handled.
+   */
   field: UiFormStateField<T, K>
+
+  /**
+   * Values which should cause re-renders when changed.
+   * <p>
+   *   The {@link UiFormField} component is memoized and does by default only re-render when the
+   *   {@link field} changes. These `deps` add further values which can cause such re-renders.
+   * </p>
+   */
   deps?: unknown[]
+
+  /**
+   * A function rendering the input element.
+   *
+   * @param inputProps The props defining what the input should display.
+   */
   children: (inputProps: UiInputProps<T[K] | null>) => ReactNode
 }
 
+/**
+ * `UiFormField` is a component providing utilities to easily handle form inputs.
+ */
 const UiFormField = <T, K extends keyof T>({
   field,
   children,
@@ -39,6 +59,9 @@ const UiFormField = <T, K extends keyof T>({
     </React.Fragment>
   )
 }
+
+// Memoize the component, so changes to other form field values
+// do not cause performance issues.
 export default memo(UiFormField, (prev, next) => {
   if (prev.field !== next.field) {
     return false
