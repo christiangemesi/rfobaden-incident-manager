@@ -49,43 +49,46 @@ const OrganizationList: React.VFC<Props> = ({ organizations, hasCreateButton = f
   }))
 
   return (
-    <OuterScroll>
-      <InnerScroll>
-        {isAdmin(currentUser) && hasCreateButton && (
-          <UiDrawer title="Organisation erfassen" size="fixed">
-            <UiDrawer.Trigger>{({ open }) => (
-              <UiCreatButton onClick={open}>
-                <UiIcon.CreateAction size={1.4} />
-              </UiCreatButton>
-            )}</UiDrawer.Trigger>
-            <UiDrawer.Body>{({ close }) => (
-              <OrganizationForm onClose={close} />
-            )}</UiDrawer.Body>
-          </UiDrawer>
-        )}
-        <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
-          <UiGrid.Col size={7}>
-            <UiSortButton field={sort.name}>
-              <UiTitle level={6}>Organisation</UiTitle>
-            </UiSortButton>
-          </UiGrid.Col>
-          <UiGrid.Col textAlign="right" size={4}>
-            <UiSortButton field={sort.userCount}>
-              <UiTitle level={6}>Anzahl Benutzer</UiTitle>
-            </UiSortButton>
-          </UiGrid.Col>
-        </UiGrid>
+    <React.Fragment>
+      {isAdmin(currentUser) && hasCreateButton && (
+        <UiDrawer title="Organisation erfassen" size="fixed">
+          <UiDrawer.Trigger>{({ open }) => (
+            <UiCreatButton onClick={open}>
+              <UiIcon.CreateAction size={1.4} />
+            </UiCreatButton>
+          )}</UiDrawer.Trigger>
+          <UiDrawer.Body>{({ close }) => (
+            <OrganizationForm onClose={close} />
+          )}</UiDrawer.Body>
+        </UiDrawer>
+      )}
 
-        <UiList>
-          {sortedOrganizations.map((organization) => (
-            <OrganizationListItem
-              key={organization.id}
-              organization={organization}
-            />
-          ))}
-        </UiList>
-      </InnerScroll>
-    </OuterScroll>
+      <OuterScroll>
+        <InnerScroll>
+          <UiGrid style={{ padding: '0.5rem 0.5rem 0rem 0.5rem' }} gapH={0.5}>
+            <UiGrid.Col size={7}>
+              <UiSortButton field={sort.name}>
+                <UiTitle level={6}>Organisation</UiTitle>
+              </UiSortButton>
+            </UiGrid.Col>
+            <UiGrid.Col textAlign="right" size={4}>
+              <UiSortButton field={sort.userCount}>
+                <UiTitle level={6}>Anzahl Benutzer</UiTitle>
+              </UiSortButton>
+            </UiGrid.Col>
+          </UiGrid>
+
+          <UiList>
+            {sortedOrganizations.map((organization) => (
+              <OrganizationListItem
+                key={organization.id}
+                organization={organization}
+              />
+            ))}
+          </UiList>
+        </InnerScroll>
+      </OuterScroll>
+    </React.Fragment>
   )
 }
 export default OrganizationList
