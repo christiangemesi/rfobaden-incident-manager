@@ -19,9 +19,16 @@ import { useRouter } from 'next/router'
 import { useModalReset } from '@/components/Ui/Modal/Like/UiModalLike'
 
 interface Props extends AppProps {
+  /**
+   * The current session's user, if present.
+   */
   user: User | null
 }
 
+/**
+ * `App` is the component wrapping all page components.
+ * See {@link https://nextjs.org/docs/advanced-features/custom-app} for more information.
+ */
 const App: React.FC<Props> = ({ Component, pageProps, user }) => {
   useEffectOnce(() => {
     if (user === null) {
@@ -134,6 +141,10 @@ const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   }
 `
 
+/**
+ * `BreakpointOverlay` is a component that displays the current breakpoint
+ * on top of the screen. It should only be used in development.
+ */
 const BreakpointOverlay: React.VFC = () => {
   const breakpoint = useBreakpointName()
   const isMounted = useMountedState()
