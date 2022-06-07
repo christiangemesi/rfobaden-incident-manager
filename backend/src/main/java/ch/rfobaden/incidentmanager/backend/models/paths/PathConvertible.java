@@ -8,7 +8,7 @@ import ch.rfobaden.incidentmanager.backend.models.Model;
  * <p>
  *   Note that although the path specifies where an entity can be found,
  *   the {@link TPath} does not uniquely identify the entity itself -
- *   that's what the {@link Model#getId() id} is for.
+ *   that is what the {@link Model#getId() id} is for.
  *   Rather than that, the path groups entities together that can be found at the same location.
  * </p>
  *

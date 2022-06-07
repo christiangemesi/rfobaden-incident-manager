@@ -12,6 +12,9 @@ const initialState: SessionState = {
   session: null,
 }
 
+/**
+ * `SessionStore` manage the current {@link Session}.
+ */
 const SessionStore = createStore(initialState, (getState, setState) => ({
   setCurrentUser(currentUser: User) {
     UserStore.save(currentUser)
@@ -32,7 +35,12 @@ const SessionStore = createStore(initialState, (getState, setState) => ({
 }))
 export default SessionStore
 
-
+/**
+ * `useSession` is a React hook which loads the session from {@link SessionStore}.
+ * It re-renders whenever the session is changed.
+ *
+ * @return The session.
+ */
 export const useSession = (): Session => {
   const { session } = useStore(SessionStore)
   return session === null
@@ -40,6 +48,12 @@ export const useSession = (): Session => {
     : session
 }
 
+/**
+ * `useCurrentUser` is a React hook that loads the current user from the {@link Session}.
+ * It will cause an error if there is no active session.
+ *
+ * @return The current user.
+ */
 export const useCurrentUser = (): User => {
   const { currentUser } = useSession()
   if (currentUser === null) {

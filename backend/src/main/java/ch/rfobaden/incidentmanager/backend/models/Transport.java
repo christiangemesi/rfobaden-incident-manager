@@ -35,7 +35,7 @@ public final class Transport extends TrackableModel implements PathConvertible<T
     private long peopleInvolved;
 
     /**
-     * The name of the person which will drive the vehicle of this tranport.
+     * The name of the person which will drive the vehicle of this transport.
      */
     @Size(min = 1, max = 100)
     private String driver;

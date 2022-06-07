@@ -3,7 +3,6 @@ package ch.rfobaden.incidentmanager.backend.controllers;
 import ch.rfobaden.incidentmanager.backend.controllers.base.ModelController;
 import ch.rfobaden.incidentmanager.backend.controllers.helpers.SessionHelper;
 import ch.rfobaden.incidentmanager.backend.errors.ApiException;
-import ch.rfobaden.incidentmanager.backend.models.Incident;
 import ch.rfobaden.incidentmanager.backend.models.User;
 import ch.rfobaden.incidentmanager.backend.models.paths.EmptyPath;
 import ch.rfobaden.incidentmanager.backend.services.OrganizationService;
@@ -59,10 +58,9 @@ public class UserController extends ModelController.Basic<User, UserService> {
      * Updates a user's password.
      *
      * @param response The http response object.
-     * @param id The id of the user whose password gets updated.
-     * @param data The new password data.
+     * @param id       The id of the user whose password gets updated.
+     * @param data     The new password data.
      * @return The updated user.
-     *
      * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching user exists.
      */
     @PutMapping("/{id}/password")
@@ -87,9 +85,8 @@ public class UserController extends ModelController.Basic<User, UserService> {
      * Sets a user's password to a new randomly generated value.
      *
      * @param response The http response object.
-     * @param id The id of the user whose password gets reset.
+     * @param id       The id of the user whose password gets reset.
      * @return The updated user.
-     *
      * @throws ApiException {@link HttpStatus#NOT_FOUND} if no matching user exists.
      */
     @PostMapping("/{id}/reset")

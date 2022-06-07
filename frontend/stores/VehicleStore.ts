@@ -3,7 +3,7 @@ import { parseVehicle } from '@/models/Vehicle'
 import { createUseRecord, createUseRecords } from '@/stores/base/hooks'
 
 /**
- * {@code VehicleStore} manages all loaded {@link Vehicle vehicles}.
+ * `VehicleStore manages all loaded {@link Vehicle vehicles}.
  */
 const VehicleStore = createModelStore(parseVehicle, {
   sortBy: (vehicle) => [
@@ -13,7 +13,7 @@ const VehicleStore = createModelStore(parseVehicle, {
 export default VehicleStore
 
 /**
- * {@code useVehicle} is a React hook which loads a specific vehicle from {@link VehicleStore}.
+ * `useVehicle` is a React hook which loads a specific vehicle from {@link VehicleStore}.
  * It re-renders whenever the vehicle is changed.
  *
  * @param id The id of the vehicle.
@@ -22,7 +22,7 @@ export default VehicleStore
 export const useVehicle = createUseRecord(VehicleStore)
 
 /**
- * {@code useVehicles} is a React hook that loads all vehicles from {@link VehicleStore}.
+ * `useVehicles` is a React hook that loads all vehicles from {@link VehicleStore}.
  * It re-renders whenever the store is modified.
  *
  * @param idsOrTransform? An list of ids to load, or a function that modifies the returned list.
