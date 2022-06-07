@@ -1,39 +1,23 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import StringHelper from '@/utils/helpers/StringHelper'
 
-class StyleHelper {
-  tag<P>(name: keyof JSX.IntrinsicElements): React.VFC<P & StyledProps & { children?: ReactNode }>
-  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps & { children?: ReactNode }>
-  tag<P, K extends keyof JSX.IntrinsicElements>(name: K, mapProps?: (props: P) => Partial<JSX.IntrinsicElements[K]>): React.VFC<P & StyledProps & { children?: ReactNode }> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const Tag = name as any
-    const StyledTag: React.VFC<P & StyledProps & { children?: ReactNode }> = (props) => {
-      const {
-        className = props.className,
-        style = props.style,
-        children = props.children,
-        ...mappedProps
-      } = mapProps ? mapProps(props) : { className: props.className, style: props.style, children: props.children }
-      return (
-        <Tag className={className} style={style} {...mappedProps}>
-          {children}
-        </Tag>
-      )
-    }
-    StyledTag.displayName = `Styled${StringHelper.capitalize(name)}`
-    return StyledTag
-  }
-}
-export default new StyleHelper()
-
+/**
+ * `StyledProps` defines the props which are used to style a component using CSS.
+ */
 export interface StyledProps {
   className?: string
   style?: CSSProperties
 }
 
+/**
+ * `ElementProps` extracts the props of a specific HTML element.
+ */
 export type ElementProps<E extends Element> = React.DetailedHTMLProps<React.HTMLAttributes<E>, E>
 
-
+/**
+ * `StyledVFC` marks a React component as styled.
+ *
+ * @see {@link asStyled}.
+ */
 type StyledVFC<T extends React.VFC<never>> =
   T extends React.VFC<infer P>
     ? P extends StyledProps
@@ -41,6 +25,16 @@ type StyledVFC<T extends React.VFC<never>> =
       : never
     : never
 
+/**
+ * Mark a React component as styled, meaning that it accepts a `className` prop
+ * and can be used inside other styled-component definitions.
+ * <p>
+ *   Note that this is a type-level modification,
+ *   and does not have any effect on the actual component.
+ * </p>
+ *
+ * @param fc The component to mark.
+ */
 export const asStyled = <T extends React.VFC<never>>(fc: T): StyledVFC<T> => (
   fc as StyledVFC<T>
 )

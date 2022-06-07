@@ -1,5 +1,12 @@
-
+/**
+ * `DateHelper` contains helper functions to work with {@link Date} values.
+ */
 class DateHelper {
+  /**
+   * Checks if a date's time points to midnight.
+   *
+   * @param date The date to check.
+   */
   isMidnight(date: Date): boolean {
     return date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0
   }
