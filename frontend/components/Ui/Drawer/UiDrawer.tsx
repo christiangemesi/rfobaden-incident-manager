@@ -32,6 +32,10 @@ interface Props extends UiModalLikeProps {
   align?: 'top' | 'center'
 }
 
+/**
+ * `UiDrawer` is a component that displays an overlay menu that slides in from the side of the screen.
+ * It can be used as an alternative to normal modals.
+ */
 const UiDrawer: React.VFC<Props> = ({
   title = null,
   size = 'auto',
@@ -83,7 +87,7 @@ const Content = styled.div`
     margin: unset;
   }
 `
-const Container = styled.div<{
+const Container = styled.aside<{
   isOpen: boolean
   size: 'auto' | 'full' | 'fixed'
   position: 'left' | 'right'
