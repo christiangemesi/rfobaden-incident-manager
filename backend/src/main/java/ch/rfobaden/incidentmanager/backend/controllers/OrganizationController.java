@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@code OrganizationController} is a {@link ModelController} for {@link Organization organizations}.
+ * {@code OrganizationController} is a {@link ModelController}
+ * for {@link Organization organizations}.
  */
 @RestController
 @RequestMapping(path = "api/v1/organizations")

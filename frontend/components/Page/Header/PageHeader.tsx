@@ -7,7 +7,6 @@ import UiIcon from '@/components/Ui/Icon/UiIcon'
 import { Themed } from '@/theme'
 import UserPasswordForm from '@/components/User/PasswordForm/UserPasswordForm'
 import UiDropDown from '@/components/Ui/DropDown/UiDropDown'
-import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIconButton from '@/components/Ui/Icon/Button/UiIconButton'
 import UserEmailForm from '@/components/User/EmailForm/UserEmailForm'
 import BackendService from '@/services/BackendService'
@@ -17,6 +16,9 @@ import PageHeaderAssignments from '@/components/Page/Header/Assignments/PageHead
 import PageHeaderItem from '@/components/Page/Header/Item/PageHeaderItem'
 import UiDrawer from '@/components/Ui/Drawer/UiDrawer'
 
+/**
+ * `PageHeader` represents the header at the top of each page.
+ */
 const PageHeader: React.VFC = () => {
   const { currentUser } = useSession()
 
@@ -27,7 +29,9 @@ const PageHeader: React.VFC = () => {
     if (error !== null) {
       throw error
     }
+
     SessionStore.clear({ silent: true })
+
     await router.push('/anmelden')
   }, [router])
 
@@ -40,13 +44,16 @@ const PageHeader: React.VFC = () => {
           </UiLink>
         </ImageContainer>
       </NavContainer>
+
       <ButtonList>
         {currentUser !== null && (
           <PageHeaderAssignments currentUser={currentUser} />
         )}
+
         <PageHeaderItem href="/changelog" title="Changelog">
           <UiIcon.Changelog />
         </PageHeaderItem>
+
         {currentUser !== null && (
           <LoggedInUser>
             <UiDropDown>
@@ -58,10 +65,13 @@ const PageHeader: React.VFC = () => {
                   <UiIcon.UserInCircle />
                 </IconButton>
               )}</UiDropDown.Trigger>
+
+              {/* Account action menu */}
               <UiDropDown.Menu>
                 <DropDownUsername>
                   {currentUser.firstName} {currentUser.lastName}
                 </DropDownUsername>
+
                 <UiDrawer title="Passwort bearbeiten" position="right">
                   <UiDrawer.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>Passwort bearbeiten</UiDropDown.Item>
@@ -70,6 +80,7 @@ const PageHeader: React.VFC = () => {
                     <UserPasswordForm user={currentUser} onClose={close} />
                   )}</UiDrawer.Body>
                 </UiDrawer>
+
                 <UiDrawer title="E-Mail ändern" position="right">
                   <UiDrawer.Trigger>{({ open }) => (
                     <UiDropDown.Item onClick={open}>E-Mail bearbeiten</UiDropDown.Item>
@@ -78,6 +89,7 @@ const PageHeader: React.VFC = () => {
                     <UserEmailForm user={currentUser} onClose={close} />
                   )}</UiDrawer.Body>
                 </UiDrawer>
+
                 <UiDropDown.Item onClick={logout}>Abmelden</UiDropDown.Item>
               </UiDropDown.Menu>
             </UiDropDown>
@@ -106,9 +118,11 @@ const Header = styled.header`
     top: 0;
   }
 `
+
 const NavContainer = styled.div`
   display: flex;
 `
+
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -120,6 +134,7 @@ const ImageContainer = styled.div`
     transform: scale(1.05);
   }
 `
+
 const ButtonList = styled.div`
   display: flex;
   gap: 2rem;
@@ -133,6 +148,7 @@ const LoggedInUser = styled.div`
   display: flex;
   align-items: center;
 `
+
 const Username = styled.span`
   font-size: 1em;
   margin-right: 0.25rem;
@@ -141,12 +157,14 @@ const Username = styled.span`
     display: none;
   }
 `
+
 const IconButton = styled(UiIconButton)`
   :hover {
     background-color: transparent;
     transform: scale(1.05);
   }
 `
+
 const DropDownUsername = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey.value};
   padding: 0.5rem 1rem;
