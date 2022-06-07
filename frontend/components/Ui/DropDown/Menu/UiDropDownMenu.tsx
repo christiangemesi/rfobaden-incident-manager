@@ -7,9 +7,15 @@ import ReactDOM from 'react-dom'
 import { run } from '@/utils/control-flow'
 
 interface Props {
+  /**
+   * The dropdown items.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiDropDownMenu` is a component that acts as a container for the items of a dropdown.
+ */
 const UiDropDownMenu: React.VFC<Props> = ({ children }) => {
   const context = useContext(UiDropDownContext)
   const containerRef = useRef<HTMLDivElement | null>(null)

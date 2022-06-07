@@ -3,10 +3,20 @@ import styled, { css } from 'styled-components'
 import UiDropDownContext from '@/components/Ui/DropDown/Context/UiDropDownContext'
 
 interface Props {
+  /**
+   * Event caused by clicking on the item.
+   */
   onClick?: () => void
+
+  /**
+   * The item's contents.
+   */
   children: ReactNode
 }
 
+/**
+ * `UiDropDownItem` is an item displayed in a dropdown menu.
+ */
 const UiDropDownItem: React.VFC<Props> = ({ onClick: handleClick, children }) => {
   const context = useContext(UiDropDownContext)
   const click = useCallback(() => {
