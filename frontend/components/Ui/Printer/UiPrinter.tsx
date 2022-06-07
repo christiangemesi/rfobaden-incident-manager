@@ -6,15 +6,36 @@ import UiModal from '@/components/Ui/Modal/UiModal'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
 
 interface Props {
+  /**
+   * Renders the content that will be printed.
+   */
   renderContent: () => ReactNode
+
+  /**
+   * Load data required inside {@link renderContent}.
+   * Invoked right before printing.
+   */
   loadData?: () => void | Promise<void>
+
+  /**
+   * Renders elements that can control the print behavior.
+   */
   children: (props: ChildProps) => ReactNode
 }
 
+/**
+ * `ChildProps` are properties passed to the {@link Props.children} of a {@link UiPrinter}.
+ */
 interface ChildProps {
+  /**
+   * Causes the content to be printed.
+   */
   trigger: () => void
 }
 
+/**
+ * `UiPrinter` is a component that allows React elements to be printed.
+ */
 const UiPrinter: React.VFC<Props> = ({ renderContent, loadData, children }) => {
   const contentRef = useRef<HTMLDivElement | null>(null)
 
