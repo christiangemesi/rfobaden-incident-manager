@@ -76,10 +76,6 @@ const Container = styled.div`
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.secondary.hover};
   }
-
-  :active:not(&[disabled]) {
-    // TODO
-  }
 `
 
 const ItemTitle = styled(UiTitle)`
