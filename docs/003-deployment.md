@@ -19,6 +19,17 @@ For the IncidentManager to function and there to be communication between the fr
 
 ![traefikDiagram](../docs/assets/traefikDiagram.png)
 
+
+
+## External Routing
+
+The traefik reverse proxy runs on the ports `4000` (http) and `4001` (https).
+However, when accessing the IncidentManager via `im.rfobaden.ch`, the normal HTTP(s) ports `80` and `443` are used. On the deployment server, these two ports are routed via a nginx reverse proxy.
+
+The nginx configuration can be found at `/etc/nginx/`. This configuration has been modified to include a rewrite from `http://im.rfobaden.ch` and `https://im.rfobaden.ch` to `localhost:4000` and `locahost:4001`, respectively.
+
+Besides this rewrite, the nginx is also responsive for providing valid SSL certificates.
+
 ## RFOBaden specifics
 
 You can access the web interface of the NAS at: [https://portal.rfo-baden.ch:5001/](https://portal.rfo-baden.ch:5001/)
