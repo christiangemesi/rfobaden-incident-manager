@@ -1,6 +1,5 @@
 import Incident from '@/models/Incident'
-import React, { useMemo } from 'react'
-import { useReportsOfIncident } from '@/stores/ReportStore'
+import React from 'react'
 import UiGrid from '@/components/Ui/Grid/UiGrid'
 import UiBadge from '@/components/Ui/Badge/UiBadge'
 import UiIcon from '@/components/Ui/Icon/UiIcon'
@@ -15,11 +14,6 @@ interface IncidentCardProps {
 }
 
 const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
-  const reports = useReportsOfIncident(incident.id)
-  const keyMessageCount = useMemo(() => (
-    reports.filter(({ isKeyReport }) => isKeyReport).length
-  ), [reports])
-
   return (
     <UiLink href={`/ereignisse/${incident.id}`}>
       <Container>
@@ -27,7 +21,11 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
           <UiGrid align="stretch">
             <UiGrid.Col>
               <ProgressContainer>
-                <UiCircularProgress done={incident.closedReportIds.length} total={incident.reportIds.length} isClosed={incident.isClosed} />
+                <UiCircularProgress
+                  done={incident.closedReportIds.length}
+                  total={incident.reportIds.length}
+                  isClosed={incident.isClosed}
+                />
               </ProgressContainer>
             </UiGrid.Col>
             <UiGrid.Col size="auto">
@@ -35,7 +33,7 @@ const IncidentListItem: React.VFC<IncidentCardProps> = ({ incident }) => {
                 <UiBadge value={incident.organizationIds.length}>
                   <UiIcon.Organization />
                 </UiBadge>
-                <UiBadge value={keyMessageCount}>
+                <UiBadge value={incident.numberOfKeyReports}>
                   <UiIcon.KeyMessage />
                 </UiBadge>
               </BadgeContainer>
@@ -80,7 +78,7 @@ const Container = styled.div`
   }
 
   :active:not(&[disabled]) {
-      // TODO
+    // TODO
   }
 `
 
