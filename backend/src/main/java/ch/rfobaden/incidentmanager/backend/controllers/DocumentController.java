@@ -43,6 +43,7 @@ import java.util.function.BiConsumer;
  * </p>
  */
 @RestController
+@RequireAgent
 @RequestMapping(path = "api/v1/documents")
 public class DocumentController implements AppController {
     private final DocumentService documentService;
@@ -115,7 +116,6 @@ public class DocumentController implements AppController {
      * @throws ApiException {@link HttpStatus#BAD_REQUEST} If the owner entity could not be found.
      *                      {@link HttpStatus#BAD_REQUEST} If the type is invalid.
      */
-    @RequireAgent
     @PostMapping
     public Document create(
         @RequestParam MultipartFile file,
@@ -153,7 +153,6 @@ public class DocumentController implements AppController {
      *                      {@link HttpStatus#BAD_REQUEST} If the type is invalid.
      *                      {@link HttpStatus#NOT_FOUND} If no matching document was found.
      */
-    @RequireAgent
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(

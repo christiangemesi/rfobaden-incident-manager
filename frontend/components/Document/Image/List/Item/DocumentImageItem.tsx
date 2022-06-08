@@ -40,7 +40,7 @@ const DocumentImageItem: React.VFC<Props> = ({
       <UiModal.Trigger>{({ open }) => (
         <ImageCard onClick={open}>
           <ImageThumbnail>
-            <Image src={src} width={200} height={200} alt={src} />
+            <Image src={src} width={200} height={200} alt={src} unoptimized />
           </ImageThumbnail>
           <DeleteButton onClick={handleDelete}><UiIcon.Trash /></DeleteButton>
           <ImageName>
@@ -49,7 +49,7 @@ const DocumentImageItem: React.VFC<Props> = ({
         </ImageCard>
       )}</UiModal.Trigger>
       <UiDrawer.Body>
-        <Image src={src} width={1280} height={720} objectFit="contain" alt={src} />
+        <Image src={src} width={1280} height={720} objectFit="contain" alt={src} unoptimized />
       </UiDrawer.Body>
     </UiModal>
   )
