@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The page is no longer scrollable while a modal is open.
 - The vehicle and trailer dropdowns in transport forms now work as expected.
 - Adjusted multiple elements to always be visible on mobile.
+- The user form no longer crashes when clearing the email field.
 
 ## [0.5.0] - 14.05.2022
 ### Added
