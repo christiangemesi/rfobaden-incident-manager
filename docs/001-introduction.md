@@ -15,7 +15,10 @@ The IncidentManager is split in two parts: a backend and a frontend.
   Its source code can be found in the `frontend/` directory.
   An introduction to the frontend can be found [here](./frontend/001-frontend-introduction.md).
 
-## Development
+## Further Reading
 
-See [here](./002-development.md).
+- [development](./002-development.md)
 
+- [deployment](./003-deployment.md)
+
+- [data types](./004-data-types.md)
