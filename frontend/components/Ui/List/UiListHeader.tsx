@@ -1,6 +1,7 @@
 import React, { EventHandler, MouseEvent, ReactNode } from 'react'
 import styled from 'styled-components'
 import { StyledProps } from '@/utils/helpers/StyleHelper'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UiList from '@/components/Ui/List/UiList'
 
 export interface ListHeaderProps extends StyledProps {
