@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Closed records and tasks now show that with a banner.
 - The organization list on the incident page no longer contains an add button.
 - Submit buttons now contain text instead of icons.
+- Forms are now shown in drawers instead of modals.
 
 ### Fixed
 - The page is no longer scrollable while a modal is open.
