@@ -32,6 +32,7 @@
     "react-to-print": "^2.14.6",
     "react-use": "^17.3.1",
     "reset-css": "^5.0.1",
+    "sharp": "^0.30.6",
     "simplebar-react": "^2.3.6",
     "styled-components": "^5.2.1"
   },
