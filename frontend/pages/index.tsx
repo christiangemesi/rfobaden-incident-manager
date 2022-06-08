@@ -54,7 +54,6 @@ const HomePage: React.VFC<Props> = ({ data }) => {
     <Page>
       <UiContainer>
         <UiTitle level={1} isCentered>
-          {/*//TODO make responsive - title does not break yet*/}
           <Bold>INCIDENT</Bold><Light>MANAGER</Light>
         </UiTitle>
         <Subtitle>

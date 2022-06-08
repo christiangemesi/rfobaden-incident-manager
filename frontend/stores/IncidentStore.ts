@@ -47,9 +47,16 @@ ReportStore.onCreate((report) => {
     return
   }
 
+  // Update number of key reports
+  let numberOfKeyReports = incident.numberOfKeyReports
+  if (report.isKeyReport) {
+    numberOfKeyReports++
+  }
+
   // Save the new report in reportIds and if necessary adjust closedReportIds and isDone.
   IncidentStore.save({
     ...incident,
+    numberOfKeyReports,
     reportIds: [...new Set([...incident.reportIds, report.id])],
     closedReportIds:
       report.isClosed || report.isDone
@@ -62,10 +69,18 @@ ReportStore.onCreate((report) => {
 /*
  * After a report update the incident needs to update the `closedReportIds` and `isDone`.
  */
-ReportStore.onUpdate((report) => {
+ReportStore.onUpdate((report, oldReport) => {
   const incident = IncidentStore.find(report.incidentId)
   if (incident === null) {
     return
+  }
+
+  // Update number of key reports
+  let numberOfKeyReports = incident.numberOfKeyReports
+  if (report.isKeyReport && !oldReport.isKeyReport) {
+    numberOfKeyReports++
+  } else if (!report.isKeyReport && oldReport.isKeyReport) {
+    numberOfKeyReports--
   }
 
   // Add/remove the updated report to/from closedReportIds.
@@ -78,6 +93,7 @@ ReportStore.onUpdate((report) => {
 
   IncidentStore.save({
     ...incident,
+    numberOfKeyReports,
     closedReportIds: [...closedReportIds],
     isDone: closedReportIds.size === incident.reportIds.length,
   })
@@ -92,6 +108,12 @@ ReportStore.onRemove((report) => {
     return
   }
 
+  // Update number of key reports
+  let numberOfKeyReports = incident.numberOfKeyReports
+  if (report.isKeyReport) {
+    numberOfKeyReports--
+  }
+
   // Remove the deleted report from reportIds and closedReportIds.
   const reportIds = [...incident.reportIds]
   reportIds.splice(reportIds.indexOf(report.id), 1)
@@ -103,6 +125,7 @@ ReportStore.onRemove((report) => {
 
   IncidentStore.save({
     ...incident,
+    numberOfKeyReports,
     reportIds,
     closedReportIds,
     isDone: reportIds.length > 0 && reportIds.length === closedReportIds.length,
