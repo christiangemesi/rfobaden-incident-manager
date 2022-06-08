@@ -1,6 +1,6 @@
 # Future Features
 
-This documents lists future features for the IncidentManager. These features are mostly ideas, and should give inspiration as to how the IncidentManager can
+This documents lists future features for the IncidentManager. These features are mostly ideas, and should give inspiration as to how the IncidentManager can be expanded in the future.
 
 ## 1. Bug Fixes
 
@@ -42,11 +42,11 @@ The select component does not allow selection of its options via arrow keys. Use
 
 ## 4. Design
 
-### 4.1 Favicon
-
-Add a favicon to the frontend.
-
-### 4.2 Logo
+### 4.1 Logo
 
 Design a unique logo for the IncidentManager.
+
+### 4.2 Favicon
+
+Add a favicon to the frontend using a unique IncidentManager logo.
 
