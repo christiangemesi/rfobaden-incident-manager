@@ -56,7 +56,8 @@ public abstract class ModelGenerator<T extends Model> extends Generator<T> {
 
     /**
      * Creates a copy of a value that appears as if it was persisted by a repository.
-     * This includes giving it an id, and setting its {@link Model#createdAt} and {@link Model#updatedAt} fields.
+     * This includes giving it an id, and setting its {@link Model#createdAt}
+     * and {@link Model#updatedAt} fields.
      *
      * @param record The value to persist.
      * @return A persisted copy of {@code record}.

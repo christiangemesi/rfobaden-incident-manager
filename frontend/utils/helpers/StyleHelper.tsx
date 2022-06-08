@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from 'react'
+import React, { CSSProperties } from 'react'
 
 /**
  * `StyledProps` defines the props which are used to style a component using CSS.

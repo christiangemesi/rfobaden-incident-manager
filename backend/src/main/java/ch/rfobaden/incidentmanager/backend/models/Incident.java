@@ -70,7 +70,7 @@ public class Incident extends Model.Basic
      * This represents the actual time at which the real-life event
      * managed in this entity will start.
      * <p>
-     *     This is used to plan an incident in advance.
+     * This is used to plan an incident in advance.
      * </p>
      */
     private LocalDateTime startsAt;
@@ -158,7 +158,7 @@ public class Incident extends Model.Basic
         return (!getTransports().isEmpty() || !getReports().isEmpty())
             && getTransports().stream().allMatch(Transport::isClosed)
             && (getReports().stream().allMatch(Report::isClosed)
-                || getReports().stream().allMatch(Report::isDone));
+            || getReports().stream().allMatch(Report::isDone));
     }
 
     @JsonIgnore
@@ -210,7 +210,7 @@ public class Incident extends Model.Basic
     public List<Long> getTransportIds() {
         return getTransports().stream().map(Transport::getId).collect(Collectors.toList());
     }
-    
+
     /**
      * Lists the {@link Report#getId() ids} of all closed {@link #getTransports() transports}.
      *
@@ -292,6 +292,19 @@ public class Incident extends Model.Basic
             .map(User::getOrganizationId)
             .filter(Objects::nonNull)
             .collect(Collectors.toUnmodifiableSet());
+    }
+
+    /**
+     * Counts all key {@link Report reports}
+     * that are connected to this incident.
+     *
+     * @return The number of key reports.
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public long getNumberOfKeyReports() {
+        return reports.stream()
+            .filter(Report::isKeyReport)
+            .count();
     }
 
     @Override

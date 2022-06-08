@@ -85,6 +85,12 @@ export default interface Incident extends Model {
   organizationIds: Id<Organization>[]
 
   /**
+   * Number of key {@link Report reports}
+   * that are connected to this incident.
+   */
+  numberOfKeyReports: number
+
+  /**
    * The images attached to the incident, stored as {@link Document} instances.
    */
   images: Document[]
