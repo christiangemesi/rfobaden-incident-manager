@@ -3,6 +3,7 @@ package ch.rfobaden.incidentmanager.backend.test.generators.base;
 import ch.rfobaden.incidentmanager.backend.models.Model;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * {@code ModelGenerator} is an abstract base class for {@link Generator} implementations
@@ -14,7 +15,7 @@ public abstract class ModelGenerator<T extends Model> extends Generator<T> {
     /**
      * The next generated id.
      */
-    private Long nextId = 0L;
+    private static final AtomicLong NEXT_ID = new AtomicLong(0);
 
     /**
      * Generates a random id value.
@@ -23,7 +24,7 @@ public abstract class ModelGenerator<T extends Model> extends Generator<T> {
      * @return The generated id.
      */
     public final Long generateId() {
-        return nextId++;
+        return NEXT_ID.getAndIncrement();
     }
 
     /**
